@@ -26,7 +26,8 @@ class SessionHandler
 		$this->sess_name = '';
 		$this->max_time_online = 300; // 5min
 		$this->db = new SQLLayer($GLOBALS['sys_database_type']);
-		$this->db->connect($GLOBALS['sys_db_host'], $GLOBALS['sys_db_user'], $GLOBALS['sys_db_password'], $GLOBALS['sys_db_name'], $GLOBALS['sys_db_port']);
+		$port = isset($GLOBALS['sys_db_port']) ? $GLOBALS['sys_db_port'] : null;
+		$this->db->connect($GLOBALS['sys_db_host'], $GLOBALS['sys_db_user'], $GLOBALS['sys_db_password'], $GLOBALS['sys_db_name'], $port);
 	} // SessionHandler
 
 	function get_sess_name()
