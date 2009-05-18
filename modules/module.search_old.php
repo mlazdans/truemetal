@@ -5,10 +5,7 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-$search_q = urldecode(join('', $sys_parameters));
-//?search_q=aa&x=22&y=7
-preg_match('/search_q=([^&]*)/i', $search_q, $m);
-$search_q = isset($m[1]) ? $m[1] : '';
+$search_q = get('search_q');
 
 function set_module_search(&$template, &$modules, $path = '')
 {

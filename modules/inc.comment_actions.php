@@ -44,7 +44,7 @@ if(isset($item['art_id']) && $item['art_id'] == $art_id)
 	//$patt = '/(.*)<hr\s+id=editor_splitter>(.*)/ims';
 	//$item['art_data'] = preg_replace($patt, '<b>\\1</b><hr>\\2', $item['art_data'], 1);
 	$patt = '/(.*)(<hr\s+id=editor_splitter>)(.*)/ims';
-	$item['art_data'] = preg_replace($patt, '<b>\1</b><hr>\3', $item['art_data'], 1);
+	$item['art_data'] = preg_replace($patt, '<div style="font-weight: bold;">\1</div><hr>\3', $item['art_data'], 1);
 	//print_r($item);
 	//die();
 

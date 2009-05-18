@@ -232,12 +232,15 @@ function parse_text_data(&$data)
 			$m4 = '';
 		}
 
+		$url = htmlspecialchars($matches[1][$k].$matches[3][$k].$matches[4][$k], ENT_COMPAT, "utf-8");
+		$url_short = htmlspecialchars($matches[1][$k].$m3.$m4);
+
 		# youtube.com
 		if((substr($host, -11) == 'youtube.com') && preg_match('/watch\?v=([^&]*)/i', $url, $url_parts))
 		{
-			$data = str_replace($tokens[$k], '<div><div id="'.uniqid('yt').'" class="youtube '.$url_parts[1].'"><a href="'.$matches[1][$k].$matches[3][$k].$matches[4][$k].'" target="_blank">'.$matches[1][$k].$m3.$m4.'</a></div></div>', $data);
+			$data = str_replace($tokens[$k], '<div><div id="'.uniqid('yt').'" class="youtube '.$url_parts[1].'"><a href="'.$url.'" target="_blank">'.$url_short.'</a></div></div>', $data);
 		} else {
-			$data = str_replace($tokens[$k], '<a href="'.$matches[1][$k].$matches[3][$k].$matches[4][$k].'" target="_blank">'.$matches[1][$k].$m3.$m4.'</a>', $data);
+			$data = str_replace($tokens[$k], '<a href="'.$url.'" target="_blank">'.$url_short.'</a>', $data);
 		}
 	}
 
@@ -853,10 +856,9 @@ function bad_user_sql()
 function _GET()
 {
 	$ret = array();
-	$q = urldecode(join('', $GLOBALS['sys_parameters']));
-	if(preg_match('/\?(.*)$/i', $q, $m))
+	$qs = isset($_SERVER["QUERY_STRING"]) ? $_SERVER["QUERY_STRING"] : '';
+	if($qs)
 	{
-		$qs = $m[1];
 		$pairs = split('&', $qs);
 		foreach($pairs as $kv)
 		{
@@ -869,4 +871,39 @@ function _GET()
 
 	return $ret;
 }
+
+function get($key, $default = '')
+{
+	return isset($_GET[$key]) ? $_GET[$key] : $default;
+} // get
+
+function post($key, $default = '')
+{
+	return isset($_POST[$key]) ? $_POST[$key] : $default;
+} // post
+
+function postget($key, $default = '')
+{
+	return isset($_POST[$key]) ? $_POST[$key] : get($key, $default);
+} // postget
+
+function sess($key, $default = '')
+{
+	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
+} // sess
+
+function cookie($key, $default = '')
+{
+	return isset($_COOKIE[$key]) ? $_COOKIE[$key] : $default;
+} // cookie
+
+function server($key, $default = '')
+{
+	return isset($_SERVER[$key]) ? $_SERVER[$key] : $default;
+} // server
+
+function upload($key, $default = '')
+{
+	return isset($_FILES[$key]) ? $_FILES[$key] : $default;
+} // upload
 

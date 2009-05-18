@@ -99,7 +99,7 @@ class Article {
 		{
 			$sql .= ' ORDER BY '.$this->order;
 		} elseif(isset($this->limit) && $this->limit) {
-			$sql .= ' ORDER BY art_entered DESC LIMIT 0,'.$this->limit;
+			$sql .= ' ORDER BY art_entered DESC LIMIT '.$this->limit;
 		}
 
 		if($art_id) {
@@ -673,5 +673,23 @@ class Article {
 		$template->delete_block('FILE_tmp');
 	} // set_comment_count
 
+	function get_total($art_modid = 0)
+	{
+		global $db, $sys_lang;
+
+		$sql_add = '';
+		$sql = "SELECT COUNT(*) art_count FROM article_$sys_lang a";
+		if($art_modid)
+			$sql_add .= "a.art_modid = $art_modid AND ";
+
+		$sql_add = substr($sql_add, 0, -4);
+
+		if($sql_add)
+			$sql .= " WHERE $sql_add";
+
+		$data = $db->ExecuteSingle($sql);
+
+		return $data['art_count'];
+	} // get_total
 }
 

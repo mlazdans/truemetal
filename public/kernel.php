@@ -93,6 +93,10 @@ if($i_am_admin)
 */
 
 /* dabuujam parametrus no mod_rewrite */
+$parts = explode('?', $_SERVER["REQUEST_URI"]);
+$_SERVER["REQUEST_URI"] = isset($parts[0]) ? $parts[0] : '';
+$_SERVER["QUERY_STRING"] = isset($parts[1]) ? $parts[1] : '';
+
 preg_match_all("/\/([^\/]*)/i", $_SERVER["REQUEST_URI"], $matches);
 $arr_base_dirs = explode('/', $sys_http_root);
 $sys_parameters = array();
@@ -179,6 +183,8 @@ foreach($sys_parameters as $k=>$v)
 	$path[$v] = $_pointer['_data_'];
 	unset($sys_parameters[$k]);
 }
+
+$_GET = _GET();
 
 /* iesleedzam vaidziigo moduli */
 if(file_exists('../modules/module.'.$sys_module.'.php')) {

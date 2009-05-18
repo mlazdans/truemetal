@@ -5,9 +5,7 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-$hl = urldecode(join('', $sys_parameters));
-preg_match('/hl=([^&]*)/i', $hl, $m);
-$hl = isset($m[1]) ? $m[1] : '';
+$hl = get("hl");
 
 require_once('../classes/class.Module.php');
 require_once('../classes/class.MainModule.php');
@@ -33,5 +31,3 @@ $template->set_modules($sys_modules);
 //$template->set_submodules($sys_modules);
 
 $template->out();
-
-?>

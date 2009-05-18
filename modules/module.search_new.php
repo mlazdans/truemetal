@@ -7,11 +7,6 @@
 
 //$sql_cache = 'SQL_NO_CACHE';
 $sql_cache = '';
-/*
-$search_q = urldecode(join('', $sys_parameters));
-preg_match('/search_q=([^&]*)/i', $search_q, $m);
-$search_q = isset($m[1]) ? $m[1] : '';
-*/
 
 if($_SERVER['REQUEST_METHOD'] == "POST")
 {
@@ -23,11 +18,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 	}
 } else {
 	$search_log = false;
-	$G = _GET();
-	if(isset($G['search_q']))
-		$search_q = $G['search_q'];
-	else
-		$search_q = '';
+	$search_q = get('search_q');
 }
 
 require_once('../classes/class.MainModule.php');

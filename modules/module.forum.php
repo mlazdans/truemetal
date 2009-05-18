@@ -141,11 +141,8 @@ function set_forum_items(&$template, &$data, $forum_comments = false)
 require_once('../classes/class.MainModule.php');
 require_once('../classes/class.Forum.php');
 
-$hl = urldecode(join('', $sys_parameters));
-preg_match('/hl=([^&]*)/i', $hl, $m);
-$hl = isset($m[1]) ? $m[1] : '';
-
-$action = isset($_POST['action']) ? $_POST['action'] : '';
+$hl = get("hl");
+$action = post('action');
 
 $fpp = 20;
 $page_id = 1;
