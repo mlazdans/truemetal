@@ -402,9 +402,9 @@ function get_modules($admin = false)
 	global $sys_root;
 
 	if($admin)
-		$path = $sys_root.'/../modules/admin';
+		$path = $sys_root.'/modules/admin';
 	else
-		$path = $sys_root.'/../modules';
+		$path = $sys_root.'/modules';
 
 	$modules = array();
 	if($dir = opendir($path)) {

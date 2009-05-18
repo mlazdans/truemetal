@@ -80,7 +80,7 @@ $searcher = new Searcher;
 if(strlen($search_q) < 3)
 	$template->enable('BLOCK_searcherror');
 else {
-	$f = fopen($sys_root.'/../utils/search.log', 'a');
+	$f = fopen($sys_root.'/utils/search.log', 'a');
 	$login_id = isset($_SESSION['login']['l_id']) ? $_SESSION['login']['l_id'] : 0;
 	fputs($f, '['.date('Y-m-d H:i:s')."] login_id=$login_id\t$_SERVER[REMOTE_ADDR]\t$search_q\n");
 	fclose($f);
