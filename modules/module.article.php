@@ -15,7 +15,15 @@ $art_per_page = 20;
 $art_id = array_shift($sys_parameters);
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 $hl = get("hl");
-$page = (int)get("page");
+
+if($art_id == 'page')
+{
+	$page = (int)array_shift($sys_parameters);
+} else {
+	$page = 0;
+}
+
+$art_id = (int)$art_id;
 
 $article = new Article;
 if(!$art_id)
@@ -109,19 +117,19 @@ if($tc)
 	if(!$page)
 	{
 		$template->enable('BLOCK_article_page_prev');
-		$template->set_var('page', "?page=".$tp, 'BLOCK_article_page_prev');
+		$template->set_var('page', "$module_root/page/$tp/", 'BLOCK_article_page_prev');
 	} else {
 		if($page == $tp){
 			$template->enable('BLOCK_article_page_next');
 			$template->set_var('page', '', 'BLOCK_article_page_next');
 		} else if($page < $tp){
 			$template->enable('BLOCK_article_page_next');
-			$template->set_var('page', "?page=".($page + 1), 'BLOCK_article_page_next');
+			$template->set_var('page', "$module_root/page/".($page + 1)."/", 'BLOCK_article_page_next');
 		}
 
 		if($page > 1){
 			$template->enable('BLOCK_article_page_prev');
-			$template->set_var('page', "?page=".($page - 1), 'BLOCK_article_page_prev');
+			$template->set_var('page', "$module_root/page/".($page - 1)."/", 'BLOCK_article_page_prev');
 		}
 	}
 }
