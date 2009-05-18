@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+<title>[ TRUE METAL {title} ]</title>
+<meta http-equiv="Content-Language" content="lv">
+<meta http-equiv="Content-Type" content="text/html; charset={encoding}">
+<link rel="stylesheet" type="text/css" href="{http_root}/styles.css">
+<script type="text/javascript" src="{http_root}/js/jquery.pack.js"></script>
+<script type="text/javascript" src="{http_root}/js/swfobject.js"></script>
+<script type="text/javascript" src="{http_root}/js/utils.js?v=1.1"></script>
+<script type="text/javascript">
+	img_news = new Image; img_news.src="{http_root}/img/butt_news.gif";
+	img_news_over = new Image; img_news_over.src="{http_root}/img/butt_news_over.gif";
+
+	img_gallery = new Image; img_gallery.src="{http_root}/img/butt_gallery.gif";
+	img_gallery_over = new Image; img_gallery_over.src="{http_root}/img/butt_gallery_over.gif";
+
+	img_video = new Image; img_video.src="{http_root}/img/butt_video.gif";
+	img_video_over = new Image; img_video_over.src="{http_root}/img/butt_video_over.gif";
+
+	img_forum = new Image; img_forum.src="{http_root}/img/butt_forum.gif";
+	img_forum_over = new Image; img_forum_over.src="{http_root}/img/butt_forum_over.gif";
+
+	img_reviews = new Image; img_reviews.src="{http_root}/img/butt_reviews.gif";
+	img_reviews_over = new Image; img_reviews_over.src="{http_root}/img/butt_reviews_over.gif";
+
+	$(document).ready(function(){
+			$('div.youtube').each(ytEmbed);
+	});
+</script>
+</head>
+
+<body id="badii" background="{http_root}/img/image4.gif">
+<table width="750" cellpadding="0" cellspacing="1" border="0" align="center" style="height: 100%;">
+	<tr>
+		<td height="80"><div id="top_img"><a href="{http_root}/"><img src="{http_root}/img/logo4.gif" width="575" height="80" alt="TRUE METAL" border="0"></a></div></td>
+		<!-- BEGEIN BLOCK_banner_top -->
+		<td rowspan="2" bgcolor="#330000"><a href="{banner_href}"><img src="{http_root}/img/{banner_img}" width="170" height="113" alt="{banner_alt}" border="0"></a></td>
+		<!-- END BLOCK_banner_top -->
+	</tr>
+	<tr>
+		<td>
+			<table cellpadding="5" cellspacing="1" border="0">
+				<tr>
+					<td bgcolor="#330000"><a class="A-article" href="{http_root}/news/"><img src="{http_root}/img/butt_news.gif" alt="JAUNUMI" border="0" onMouseOver="this.src=img_news_over.src" onMouseOut="this.src=img_news.src"></a></td>
+					<td bgcolor="#330000"><a class="A-article" href="{http_root}/forum/"><img src="{http_root}/img/butt_forum.gif" alt="FORUMS" border="0" onMouseOver="this.src=img_forum_over.src" onMouseOut="this.src=img_forum.src"></a></td>
+					<td bgcolor="#330000"><a class="A-article" href="{http_root}/gallery/"><img src="{http_root}/img/butt_gallery.gif" alt="GALERIJA" border="0" onMouseOver="this.src=img_gallery_over.src" onMouseOut="this.src=img_gallery.src"></a></td>
+					<td bgcolor="#330000"><a class="A-article" href="{http_root}/video/"><img src="{http_root}/img/butt_video.gif" alt="VIDEO" border="0" onMouseOver="this.src=img_video_over.src" onMouseOut="this.src=img_video.src"></a></td>
+					<td bgcolor="#330000"><a class="A-article" href="{http_root}/reviews/"><img src="{http_root}/img/butt_reviews.gif" alt="ALBUMU RECENZIJAS" border="0" onMouseOver="this.src=img_reviews_over.src" onMouseOut="this.src=img_reviews.src"></a></td>
+					<td bgcolor="#330000" width="100%">&nbsp;</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top" height="100%" width="580" bgcolor="black"><!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle --></td>
+		<td valign="top" width="170" height="100%"><!-- BEGIN BLOCK_right disabled --><!-- END BLOCK_right --></td>
+	</tr>
+	<tr>
+		<td align="center">hosted by <a href="http://dqdp.net/">dqdp.net</a><br>
+		<a href="mailto:info@truemetal.lv">info@truemetal.lv</a></td>
+		<td></td>
+	</tr>
+</table>
+</body>
+</html>

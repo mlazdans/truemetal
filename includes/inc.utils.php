@@ -1,0 +1,872 @@
+<?php
+// Hackers.lv Web Engine v2.0
+//
+// contacts:
+// http://www.hackers.lv/
+// mailto:marrtins@hackers.lv
+
+// dazaadas paliigfunkcijas
+
+define('REMOVE_TABLE', 1);
+define('REMOVE_FONT', 2);
+
+function invalid($value)
+{
+	return ereg("[^a-z^A-Z^0-9_]", $value) or !$value;
+} // invalid
+
+function valid($value)
+{
+	return !invalid($value);
+} // valid
+
+function parse_params($data)
+{
+	reset($data);
+	foreach($data as $key=>$value) {
+		$value = rawurldecode($value);
+		$data[$key] = $value;
+		//$data[$key] = preg_replace('/[^a-zA-Z0-9_ ]/i', '', $value);
+	}
+	return $data;
+} // parse_params
+
+
+function my_strip_tags(&$text)
+{
+	$text = htmlspecialchars(stripslashes($text), ENT_QUOTES);
+} // my_strip_tags
+
+function remove_shit(&$data, $filter = 0)
+{
+	$filter = (integer)$filter;
+	$patt = array();
+	$repl = array();
+
+	if($filter & REMOVE_TABLE) {
+		$patt = array_merge($patt,
+			array(
+				'/<table([^<]*)>/imsU',
+				'/<\/table>/imsU',
+				'/<tbody([^<])*>/imsU',
+				'/<\/tbody>/imsU',
+				'/<tr([^<])*>/imsU',
+				'/<\/tr>/imsU',
+				'/<td([^<])*>/imsU',
+				'/<\/td>/imsU'
+			)
+		);
+		$repl = array_merge($repl, array_fill(0, 8, ''));
+	}
+
+	$patt[] = '/<p([^<]*)>/imsU';
+	$repl[] = '<p>';
+
+	if($filter & REMOVE_FONT) {
+		$patt = array_merge($patt,
+			array(
+				'/<font([^<]*)>/imsU',
+				'/<\/font>/imsU'
+			)
+		);
+		$repl = array_merge($repl, array_fill(0, 2, ''));
+	}
+
+	$patt = array_merge($patt,
+		array(
+			'/<span([^<]*)>/imsU',
+			'/<\/span>/imsU',
+			'/<strong([^<]*)>/imsU',
+			'/<\/strong>/imsU',
+			'/<o:p>/imsU',
+			'/<\/o:p>/imsU',
+			'/<p>(&nbsp;)*<\/P>/imsU',
+			'/<\?xml([^<]*)\/>/imsU',
+			'/<.:([^<]*)>/imsU',
+			'/<\/.:([^<]*)>/imsU',
+			'/(\t)+/',
+			'/(\t\n)/',
+			'/(\n)+/',
+			'/(\r\n)+/'
+		)
+	);
+	$repl = array_merge($repl,
+		array(
+			'',
+			'',
+			'',
+			'',
+			'',
+			'',
+			'',
+			'',
+			'',
+			'',
+			'',
+			'',
+			"\r\n",
+			"\r\n"
+		)
+	);
+
+	$data = preg_replace($patt, $repl, $data);
+} // remove_shit
+
+function proc_date($date)
+{
+	//printr($date);
+	/* $date format Y:M:D:H:M - 2002:07:27:23:12 */
+	$M = array(
+		'janvārī',
+		'februārī',
+		'martā',
+		'aprīlī',
+		'maijā',
+		'jūnijā',
+		'jūlijā',
+		'augustā',
+		'septembrī',
+		'oktobrī',
+		'novembrī',
+		'decembrī'
+	);
+	$D = array(
+		'šodien',
+		'vakar',
+		'aizvakar'
+	);
+
+	//$date_now = date("Y:m:j:H:i");
+	//$date_TS = strtotime($date);
+	//$now_TS = time();
+	//$diff = ($now_TS - $date_TS) / (3600 * 24);
+	$date_now = date("Y:m:j:H:i");
+	@list($y0, $m0, $d0, $h0, $min0) = split(":", date("Y:m:j:H:i", strtotime($date)));
+	@list($y1, $m1, $d1, $h1, $min1) = split(":", $date_now);
+	// mktime ( [int hour [, int minute [, int second [, int month [, int day [, int year [, int is_dst]]]]]]])
+	$dlong0 = mktime($h0, $min0, 0, $m0, $d0, $y0);
+	$dlong1 = mktime($h1, $min1, 0, $m1, $d1, $y1);
+	$diff = date('z', $dlong1) - date('z', $dlong0);
+	//list($y0, $m0, $d0, $h0, $min0) = split(":", date("Y:m:j:H:i", $date_TS));
+	//$y1 = date('Y', $now_TS);
+
+	$retdate = '';
+
+	if( ($diff < 3) && ($y1 == $y0) )
+	//if( ($diff < 3) /*&& ($y1 == $y0)*/ )
+	{
+		$retdate .= $D[$diff];
+	} else {
+		if($y1 != $y0)
+			$retdate .= "$y0. gada ";
+		$retdate.= "$d0. ".$M[$m0 - 1];
+	}
+
+	if((integer)$h0 || (integer)$min0)
+		$retdate .= ", plkst. $h0:$min0";
+
+	return $retdate;
+} // proc_date
+
+function parse_text_data(&$data)
+{
+	// proc url's - 1pass
+	$url_patt = $path_patt = '';
+	$patt = "/(http(s?):\/\/|ftp:\/\/|telnet:\/\/|dchub:\/\/|ed2k:\/\/|mailto:|callto:)([^\/\s\t\n\r\!\'\<>(\)]".$url_patt."*)([^\s\t\n\r\!\'\<>(\)]".$path_patt."*)/is";
+	if(preg_match_all($patt, $data, $matches)) {
+		$tokens = array();
+		foreach($matches[0] as $k=>$v) {
+			$tokens[$k] = ' '.substr(md5(uniqid(rand(),1)), 0, FORUM_MAXWORDSIZE - 1).' ';
+			$data = str_replace($matches[0][$k], $tokens[$k], $data);
+		}
+	}
+
+	// proc words
+	preg_match_all('/(.\s)(\1{'.(integer)(FORUM_MAXWORDSIZE / 2).',})/U', $data, $tmp);
+	$data = preg_replace(
+		'/(.\s)(\1{'.(integer)(FORUM_MAXWORDSIZE / 2).',})/e',
+		"mb_substr('$1', 0, FORUM_MAXWORDSIZE).\"...\"",
+		$data
+	);
+
+	$data = preg_replace('/(\n|\r\n){3,}/', '\1\1', $data);
+
+	preg_match_all('/([^\s]*)(\s|$)/', $data, $tmp);
+
+	$last_matched = false;
+	if(isset($tmp[0])) {
+		$c = count($tmp[0]);
+		for($r = 0; $r < $c; ++$r) {
+			if($tmp[1][$r] && preg_match('/^(!|\?){5,}/', $tmp[1][$r])) {
+				if($last_matched)
+					$tmp[2][$r] = $tmp[1][$r] = $tmp[0][$r] = '';
+
+				$last_matched = true;
+			} else
+				$last_matched = false;
+
+			if(strlen($tmp[1][$r]) > FORUM_MAXWORDSIZE)
+				$tmp[1][$r] = substr($tmp[1][$r], 0, FORUM_MAXWORDSIZE)."...".$tmp[2][$r];
+			else
+				$tmp[1][$r] .= $tmp[2][$r];
+		}
+	}
+
+	$w_count = count($tmp[1]);
+	array_splice($tmp[1], FORUM_MAXWORDS * 2);
+
+	$data = join("", $tmp[1]);
+	my_strip_tags($data);
+	$data = preg_replace('/(\r\n|\n)/', '<br>\1', $data);
+
+	// proc urls - 2pass
+	foreach($matches[0] as $k=>$v) {
+		$host = $m3 = $matches[3][$k];
+		$url = $m4 = $matches[4][$k];
+
+		if(strlen($m4) > 10)
+			$m4 = substr($m4, 0, 10).'...';
+
+		if(strlen($m3) > 40) {
+			$m3 = substr($m3, 0, 40).'...';
+			$m4 = '';
+		}
+
+		# youtube.com
+		if((substr($host, -11) == 'youtube.com') && preg_match('/watch\?v=([^&]*)/i', $url, $url_parts))
+		{
+			$data = str_replace($tokens[$k], '<div><div id="'.uniqid('yt').'" class="youtube '.$url_parts[1].'"><a href="'.$matches[1][$k].$matches[3][$k].$matches[4][$k].'" target="_blank">'.$matches[1][$k].$m3.$m4.'</a></div></div>', $data);
+		} else {
+			$data = str_replace($tokens[$k], '<a href="'.$matches[1][$k].$matches[3][$k].$matches[4][$k].'" target="_blank">'.$matches[1][$k].$m3.$m4.'</a>', $data);
+		}
+	}
+
+	// ja pa daudz ievadiits
+	if($w_count > FORUM_MAXWORDS * 2)
+		$data .= '...';
+
+	$data = addslashes($data);
+} // parse_text_data
+
+function set_forum(&$template, $forum_id)
+{
+	global $forum;
+
+	$tree = $forum->get_tree($forum_id);
+	$template->enable('BLOCK_forum_path');
+	$forum_path = '';
+
+	foreach($tree as $key=>$item)
+	{
+		if(isset($tree[$key + 0]))
+		{
+			$forum_path = $item['forum_id'].'/';
+			$template->set_var('forum1_id', $item['forum_id'], 'BLOCK_middle');
+			$template->set_var('forum1_name', $item['forum_name'], 'BLOCK_middle');
+			$template->set_var('forum1_path', $forum_path, 'BLOCK_middle');
+			$template->parse_block('BLOCK_forum_path', TMPL_APPEND);
+		}
+	}
+
+} // set_forum
+
+function getmicrotime()
+{
+	return microtime(true);
+} // getmicrotime
+
+function set_editor(&$template, $editor_id, $data_module, $editor_data_id = 0)
+{
+	$template->set_var('editor_id', $editor_id);
+	$template->set_var('editor_data_module', $data_module);
+	$template->set_var('editor_data_id', $editor_data_id);
+	$template->set_file('FILE_editor', 'editor/tmpl.editor.php');
+	$template->copy_block('BLOCK_editor', 'FILE_editor');
+	if($editor_data_id)
+		$template->enable('BLOCK_html_clear');
+} // set_editor
+
+function last_insert_id()
+{
+	global $db;
+
+	$sql = "SELECT LAST_INSERT_ID() last_id";
+	$ret = $db->ExecuteSingle($sql);
+
+	return isset($ret['last_id']) ? $ret['last_id'] : 0;
+} // last_insert_id
+
+function valid_date($date)
+{
+	list($d, $m, $y) = split('\.', $date);
+	return checkdate($m, $d, $y);
+} // valid_date
+
+function tolower($str, $enc_convert = false)
+{
+	return _tocase('strtolower', $str, $enc_convert);
+}
+
+function toupper($str, $enc_convert = false)
+{
+	return _tocase('strtoupper', $str, $enc_convert);
+}
+
+function substitute_change($str)
+{
+	$patt = array(
+		"'Ā'", "'Č'", "'Ē'", "'Ģ'", "'Ī'", "'Ķ'", "'Ļ'", "'Ņ'", "'Ō'", "'Ŗ'", "'Š'", "'Ū'", "'Ž'",
+		"'ā'", "'č'", "'ē'", "'ģ'", "'ī'", "'ķ'", "'ļ'", "'ņ'", "'ō'", "'ŗ'", "'š'", "'ū'", "'ž'",
+	);
+	$repl = array(
+		"A", "C", "E", "G", "I", "K", "L", "N", "O", "R", "S", "U", "Z",
+		"a", "c", "e", "g", "i", "k", "l", "n", "o", "r", "s", "u", "z",
+	);
+
+	return preg_replace($patt, $repl, $str);
+} // substitute_change
+
+function substitute($str)
+{
+	$patt = array(
+		"/([ĀČĒĢĪĶĻŅŌŖŠŪŽ])/iue"
+	);
+	$repl = array(
+		"'[$1|'.substitute_change('$1').']'"
+	);
+	return preg_replace($patt, $repl, $str);
+} // substitute
+
+function _tocase($func, $str, $enc_convert = false)
+{
+	global $sys_lang, $sys_encoding;
+
+	if($sys_lang == 'en')
+		return $func($str);
+
+	if($enc_convert) {
+		if($sys_lang == 'lv')
+			$enc = 'windows-1257';
+
+		if($sys_lang == 'ru')
+			$enc = 'windows-1251';
+
+		return iconv($enc, $sys_encoding, $func(iconv($sys_encoding, $enc, $str)));
+	} else {
+		if($func == 'strtolower') {
+			$patt = array(
+				"'Ā'", "'Č'", "'Ē'", "'Ģ'", "'Ī'", "'Ķ'", "'Ļ'", "'Ņ'", "'Ō'", "'Ŗ'", "'Š'", "'Ū'", "'Ž'", "/[A-Z]/e"
+			);
+			$repl = array(
+				"ā", "č", "ē", "ģ", "ī", "ķ", "ļ", "ņ", "ō", "ŗ", "š", "ū", "ž", "$func('\\0')"
+			);
+		} else {
+			$patt = array(
+				"'ā'", "'č'", "'ē'", "'ģ'", "'ī'", "'ķ'", "'ļ'", "'ņ'", "'ō'", "'ŗ'", "'š'", "'ū'", "'ž'", "/[a-z]/e"
+			);
+			$repl = array(
+				"Ā", "Č", "Ē", "Ģ", "Ī", "Ķ", "Ļ", "Ņ", "Ō", "Ŗ", "Š", "Ū", "Ž", "$func('\\0')"
+			);
+		}
+		return preg_replace($patt, $repl, $str);
+	}
+} // tolower
+
+function valid_host($host)
+{
+	$testip = gethostbyname($host);
+	$test1 = ip2long($testip);
+	$test2 = long2ip($test1);
+
+	return ($testip == $test2);
+} // valid_host
+
+function valid_email($email)
+{
+	if(!$email)
+		return false;
+
+	$parts = split('@', $email);
+
+	if(count($parts) != 2)
+		return false;
+
+	list($username, $domain) = $parts;
+
+	return ($username and $domain and (valid_host($domain) || checkdnsrr($domain)));
+	//return $username and $domain and valid_host($domain);
+} // valid_email
+
+function get_modules($admin = false)
+{
+	global $sys_root;
+
+	if($admin)
+		$path = $sys_root.'/../modules/admin';
+	else
+		$path = $sys_root.'/../modules';
+
+	$modules = array();
+	if($dir = opendir($path)) {
+		while($file = readdir($dir))
+			if(filetype($path.'/'.$file) != 'dir') {
+				if(preg_match('/^module\.(.*).php/i', $file, $m))
+					$modules[] = $m[1];
+			}
+	} // open dir
+
+	sort($modules);
+	return $modules;
+} // get_modules
+
+function image_resample(&$in_im, $w = 0, $h = 0, $percent = 0)
+{
+	$im_h = imagesy($in_im);
+	$im_w = imagesx($in_im);
+	$koef = $im_h / $im_w;
+
+	// izkalkuleejam izmeerus atkariibaa no parametriem
+	if(!$w && !$h)
+	{
+		if(!$percent)
+			die('[FATAL] Missing configuration ($w,$h,$percent)!');
+		else
+		{
+			$w = $im_w * ($percent / 100);
+			$h = $im_h * ($percent / 100);
+		}
+	} elseif($w && !$h) { // !$w && 1$h
+		$h = $w * $koef;
+	} elseif(!$w) {
+		$w = $h / $koef;
+	} else {
+		if($im_w > $w && $im_h > $h)
+		{
+			if($im_w / $w > $im_h / $h)
+			{
+				$h = $w * $koef;
+				$w = $h / $koef;
+			}	else {
+				$w = $h / $koef;
+				$h = $w * $koef;
+			}
+		} elseif($im_w > $w)
+			$h = $w * $koef;
+		elseif($im_h > $h)
+			$w = $h / $koef;
+	}
+
+	$w_tmp = $w;
+	$h_tmp = $h;
+	if($koef > 1) // ja augstums liel_ks, attieciigi pret garumu izmainam augstumu
+		$h_tmp = $w_tmp * $koef;
+	elseif($koef < 1) // un otraadi
+		$w_tmp = $h_tmp / $koef; // dala, jo koef tiek reekinaats attieciibaa pret augstumu
+
+	// gatavaa bilde
+	$out_im = imagecreatetruecolor($w, $h);
+
+	// temporary bilde, lai tiktu saglabaatas proporcijas, lai nesanaak skiiba
+	$tmp_im = imagecreatetruecolor($w_tmp, $h_tmp);
+
+	// samazinam/palielinam
+	imagecopyresampled($tmp_im, $in_im, 0,0, 0,0, $w_tmp,$h_tmp, $im_w,$im_h);
+
+	// izgriezham peec defineetajiem izmeeriem iecentreetu
+	$startx = ($w_tmp - $w) / 2;
+	$starty = ($h_tmp - $h) / 2;
+	imagecopyresized($out_im, $tmp_im, 0,0, $startx,$starty, $w,$h, $w,$h);
+
+	return $out_im;
+} // image_resample
+
+function image_save(&$image, $file, $type, $quality = 80)
+{
+	if($type == IMAGETYPE_GIF)
+		imagegif($image, $file);
+	elseif($type == IMAGETYPE_JPEG)
+		imagejpeg($image, $file, $quality);
+	else
+		return FALSE;
+
+	return TRUE;
+} // image_save
+
+function image_load(&$image, $file)
+{
+	global $image_load_error;
+
+	$image_load_error = '';
+
+	$data = getimagesize($file);
+	$type = $data[2];
+
+	if($type == IMAGETYPE_GIF)
+	{
+		if(function_exists('imagegif'))
+			$image = imagecreatefromgif($file);
+		else {
+			$image_load_error = 'Nav GIF failu atbalsta!';
+			return false;
+		}
+	} elseif($type == IMAGETYPE_JPEG) {
+		if(function_exists('imagejpeg'))
+			$image = imagecreatefromjpeg($file);
+		else {
+			$image_load_error = 'Nav JPEG failu atbalsta!';
+			return false;
+		}
+	} elseif($type == IMAGETYPE_PNG) {
+		if(function_exists('imagepng'))
+			$image = imagecreatefrompng ($file);
+		else {
+			$image_load_error = 'Nav PNG failu atbalsta!';
+			return false;
+		}
+	} else {
+		$image_load_error = 'Nezināms fails!';
+		return false;
+	}
+
+	return $type;
+} // image_load
+
+function strip_script(&$data, &$keys, &$scripts)
+{
+	$patts = array(
+		'/<script[^>]*>([^<]*)<\/script>/imsU',
+		'/<title[^>]*>([^<]*)<\/title>/imsU',
+		'/<head[^>]*>([^<]*)<\/head>/imsU',
+		'/<style[^>]*>([^<]*)<\/style>/imsU',
+		'/<object[^>]*>([^<]*)<\/object>/imsU',
+		'/&[^;]*;/sU'
+		//&nbsp;
+	);
+	foreach($patts as $patt) {
+		preg_match_all($patt, $data, $m);
+		for($r = 0; $r < count($m[0]); ++$r) {
+			$token = '<'.md5(uniqid(rand(),1)).'>';
+			$keys[] = $token;
+			$scripts[] = $m[0][$r];
+			$data = str_replace($m[0][$r], $token, $data);
+		}
+		//print_r($m);
+	}
+} // strip_script
+
+function unstrip_script(&$data, &$keys, &$scripts)
+{
+	for($r = 0; $r < count($keys); ++$r)
+		$data = str_replace($keys[$r], $scripts[$r], $data);
+} // unstrip_script
+
+function parse_search_q($q)
+{
+	$q = preg_quote($q);
+	//$q = preg_replace('/[\h\v]/ims', ' ', $q);
+	//$q = preg_replace('/[\pPSZ]/uims', ' ', $q);
+	$q = preg_replace('/[\pP\pZ\pS\pC}]/uims', ' ', $q);
+	//$q = preg_replace('/(\n\r|\n)+/ims', ' ', $q);
+	$q = preg_replace('/(\s)+/uims', ' ', $q);
+
+	return trim($q);
+} // parse_search_q
+
+function parse_mysql_search_q($q)
+{
+	return preg_replace('/[%\'_]/', '\$1', parse_search_q($q));
+} // parse_mysql_search_q
+
+/*
+function hl(&$data, $kw)
+{
+	strip_script($data, $keys, $scripts);
+	$colors = array('white', 'white', 'black', 'white');
+	$bg = array('red', 'blue', 'yellow', 'magenta');
+	$cc = count($colors);
+	$bc = count($bg);
+
+	$words = split(' ', $kw);
+	// duplikaati nafig
+	$words = array_unique($words);
+
+	foreach($words as $index=>$word) {
+		$color = $colors[$index % $cc];
+		$bgcolor = $bg[$index % $bc];
+		$data = ">$data<";
+		$patt = "/(>[^<]*)(".$word.")([^>]*)<?/imsU";
+		$data = preg_replace($patt, "$1<font style=\"background-color: $bgcolor\" color=\"$color\"><b>$2</b></font>$3", substr($data, 1, strlen($data)-2));
+	}
+	unstrip_script($data, $keys, $scripts);
+} // hl
+*/
+function hl(&$data, $kw)
+{
+	strip_script($data, $keys, $scripts);
+	$colors = array('white', 'white', 'black', 'white');
+	$bg = array('red', 'blue', 'yellow', 'magenta');
+	$cc = count($colors);
+	$bc = count($bg);
+
+	$words = split(' ', $kw);
+	// duplikaati nafig
+	$words = array_unique($words);
+
+	//$tokens = array();
+	foreach($words as $index=>$word)
+	{
+		$word = preg_replace('/[<>]/', '', $word);
+		$color = $colors[$index % $cc];
+		$bgcolor = $bg[$index % $bc];
+		$data = ">$data<";
+		$patt = "/(>[^<]*)(".substitute(preg_quote($word)).")([^>]*)<?/imsUu";
+		$data = preg_replace($patt, "$1<font style=\"background-color: $bgcolor\" color=\"$color\"><b>$2</b></font>$3", $data);
+		$data = mb_substr($data, 1, mb_strlen($data)-2);
+	}
+	unstrip_script($data, $keys, $scripts);
+} // hl
+
+function search_to_sql($q, $fields)
+{
+	$words = split(' ', $q);
+	if(!is_array($fields))
+		$fields = array($fields);
+
+	$match = '';
+	foreach($words as $word)
+	{
+		$tmp = '';
+		foreach($fields as $field)
+			if($field)
+				$tmp .= "$field REGEXP '".addslashes(preg_quote($word))."' OR ";
+		$tmp = substr($tmp, 0, -4);
+		if($tmp)
+			$match .= "($tmp) AND ";
+	}
+	$match = substr($match, 0, -5);
+	if($match)
+		return "($match)";
+	//$match = ",(module_name REGEXP '$q' OR module_data REGEXP '$q') score";
+} // search_to_sql
+
+function search_to_spider($q, $fields)
+{
+	$ret = array();
+
+	$words = split(' ', $q);
+	if(!is_array($fields))
+		$fields = array($fields);
+
+	$match = '';
+//	$words = array_unique($words);
+	foreach($words as $word)
+	{
+		$tmp = '';
+		foreach($fields as $field)
+			if($field)
+				$tmp .= "$field = '".addslashes(preg_quote($word))."' OR ";
+		$tmp = substr($tmp, 0, -4);
+		if($tmp)
+			$match .= "($tmp) OR ";
+	}
+	$match = substr($match, 0, -4);
+
+	if($match)
+	{
+		$ret['match'] = "($match)";
+		$ret['words'] = $words;
+
+		return $ret;
+	}
+} // search_to_spider
+
+function set_area(&$template, $block = 'BLOCK_area', $area_id = 0)
+{
+	global $area;
+
+	foreach($area as $k=>$v) {
+		$template->set_var('area_id', $k + 1);
+		$template->set_var('area_value', $v);
+		if($area_id && ($area_id == $k + 1))
+			$template->set_var('area_selected', ' selected');
+		else
+			$template->set_var('area_selected', '');
+		$template->parse_block($block, TMPL_APPEND);
+	}
+
+} // set_area
+
+function email($to, $subj, $msg)
+{
+	global $mail_from;
+
+	$headers = "FROM: $mail_from\n";
+	$ret = @mail($to, $subj, $msg, $headers);
+	if(!$ret)
+	{
+		$GLOBALS['php_errormsg'] = $php_errormsg;
+	}
+
+	return $ret;
+} // email
+
+function set_parts(&$template)
+{
+	global $_contacts, $_banner1, $_banner2;
+	// kontakti
+	if(isset($_contacts))
+		$template->set_var('contacts', $_contacts['module_data']);
+	if(isset($_banner1))
+		$template->set_var('banner1', $_banner1['module_data']);
+	if(isset($_banner2))
+		$template->set_var('banner2', $_banner2['module_data']);
+} // set_parts
+
+function user_loged()
+{
+	return isset($_SESSION['login']['l_id']) && $_SESSION['login']['l_id'];
+} // user_loged
+
+function parse_form_data_array(&$data)
+{
+	foreach($data as $k=>$v)
+	{
+		if(is_array($v))
+		{
+			parse_form_data_array($v);
+			$data[$k] = $v;
+		} else
+			$data[$k] = parse_form_data($v);
+	}
+} // parse_form_data_array
+
+function parse_form_data($data)
+{
+	global $config;
+
+	if(get_magic_quotes_gpc())
+		$data = stripslashes($data);
+
+	return htmlspecialchars($data, ENT_COMPAT, $GLOBALS['sys_encoding']);
+} // parse_form_data
+
+function save_file($id, $save_path)
+{
+	$some_file = isset($_FILES[$id]) ? $_FILES[$id] : array();
+	if(!$some_file)
+		return false;
+
+	$ct = $some_file['type'];
+	if(move_uploaded_file($some_file['tmp_name'], $save_path))
+	{
+		return $ct;
+	}
+
+	return false;
+} // save_file
+
+function update_cache_module($module_id)
+{
+	global $db;
+
+	$db->Execute("INSERT IGNORE INTO cache_modules (module_id, last_update) VALUES ('$module_id', NOW())");
+	$db->Execute("UPDATE IGNORE cache_modules SET last_update = NOW() WHERE module_id = '$module_id'");
+} // update_cache_modules
+
+function update_cache_item($key)
+{
+	global $db;
+
+	$db->Execute("INSERT IGNORE INTO cache_items (item_id, last_update) VALUES ('$key', NOW())");
+	$db->Execute("UPDATE IGNORE cache_items SET last_update = NOW() WHERE item_id = '$key'");
+} // update_cache_item
+
+function to_int($val)
+{
+	if(ereg('[^0-9]', trim($val)))
+	{
+		$val = 0;
+	} else {
+		settype($val, 'integer');
+	}
+
+	return $val;
+} // to_int
+
+function to_float($val)
+{
+	if(ereg('[^0-9\.]', trim($val)))
+	{
+		$val = 0;
+	} else {
+		$parts = split('\.', $val);
+		if(count($parts) > 2)
+		{
+			$val = 0;
+		} else {
+			settype($val, 'float');
+		}
+	}
+
+	return $val;
+} // to_float
+
+function to_range($val, $range, $default = '')
+{
+	$range_a = preg_split('//', $range);
+	if(!$val || !in_array($val, $range_a))
+	{
+		$val = $default;
+	}
+
+	return $val;
+} // to_range
+
+function printr(&$data)
+{
+	print "<pre>";
+	print_r($data);
+	print "</pre>";
+} // printr
+
+function bad_user_ids()
+{
+	global $db;
+
+	$bad_ids = array();
+	if($bad_users = $db->Execute("SELECT * FROM forum_badusers"))
+	{
+		foreach($bad_users as $item)
+		{
+			$bad_ids[] = $item['user_id'];
+		}
+	}
+
+	return $bad_ids;
+} // bad_user_ids
+
+function bad_user_sql()
+{
+	return join(',', bad_user_ids());
+}
+
+function _GET()
+{
+	$ret = array();
+	$q = urldecode(join('', $GLOBALS['sys_parameters']));
+	if(preg_match('/\?(.*)$/i', $q, $m))
+	{
+		$qs = $m[1];
+		$pairs = split('&', $qs);
+		foreach($pairs as $kv)
+		{
+			$parts = split('=', $kv);
+			$k = isset($parts[0]) ? $parts[0] : false;
+			$v = isset($parts[1]) ? $parts[1] : false;
+			$ret[$k] = $v;
+		}
+	}
+
+	return $ret;
+}
+

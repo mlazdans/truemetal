@@ -1,0 +1,169 @@
+body {
+	font-family: "Verdana", arial, serif;
+	font-size: 8pt;
+	color: white;
+	background-color: black;
+	font-weight: normal;
+	margin: 0pt;
+}
+
+.img-thumb {
+	border: 1px dotted #660000;
+}
+
+.error {
+	color: red;
+	font-weight: bold;
+}
+
+.error-form {
+	color: white;
+	font-weight: bold;
+}
+
+HR {
+	color: #330000;
+	height: 1px;
+}
+
+TD {
+	font-size: 8pt;
+	font-weight: normal;
+}
+
+TH {
+	font-size: 9pt;
+	font-weight: bold;
+	background-color: #EFC964;
+}
+
+SMALL {
+	font-size: 8pt;
+}
+
+A:link, A:visited, A:active {
+	color: red;
+	text-decoration: underline;
+	font-size: 8pt;
+	font-weight: normal;
+}
+
+A:hover {
+	color: red;
+	text-decoration: none;
+	font-size: 8pt;
+	font-weight: normal;
+}
+
+.A-small:link, .A-small:visited, .A-small:active {
+	color: red;
+	text-decoration: underline;
+	font-size: 7pt;
+	font-weight: normal;
+}
+
+.A-small:hover {
+	color: red;
+	text-decoration: none;
+	font-size: 7pt;
+	font-weight: normal;
+}
+
+.A-cat:link, .A-cat:visited, .A-cat:active {
+	color: white;
+	text-decoration: underline;
+	font-size: 9pt;
+	font-weight: bold;
+}
+
+.A-cat:hover {
+	color: white;
+	text-decoration: none;
+	font-size: 9pt;
+	font-weight: bold;
+}
+
+.box-red {
+	background-color: #990000;
+}
+
+.TD-date {
+	text-align: left;
+	color: white;
+	font-weight: bold;
+}
+
+.TD-cat {
+	background-color: #660000;
+	color: white;
+	font-weight: bold;
+	padding-left: 3px;
+	padding-top: 3px;
+	padding-right: 4px;
+	padding-bottom: 4px;
+	border-left: 1px solid white;
+	border-top: 1px solid white;
+	border-right: 1px solid #444444;
+	border-bottom: 1px solid #444444;
+	cursor: default;
+}
+
+.TD-weekend {
+	background-color: #990000;
+}
+
+.TD-current {
+	background-color: #000000;
+}
+
+.TD-cal-day {
+	background-color: #660000;
+	padding: 3px;
+	text-align: center;
+}
+
+.TD-cal, .TD-cal-furth {
+	background-color: #660000;
+	padding: 2px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	text-align: center;
+}
+
+.TD-cal-furth {
+	color: silver;
+}
+
+.TD-forum-cat {
+	background-color: #660000;
+}
+
+.TD-search {
+	background-color: #660000;
+}
+
+.button, input, textarea {
+	padding-top: 1px;
+	padding-right: 1px;
+	border: 1px solid white;
+	background-color: #660000;
+	font-size: 10pt;
+	color: white;
+	font-weight: normal;
+}
+
+.cbox {
+	border: none;
+	background-color: #660000;
+	color: #660000;
+}
+
+table {
+	border�collapse: collapse;
+}
+
+.Comment-Vote, .Comment-Vote-plus, .Comment-Vote-minus { font-weight: bold; text-align: right; }
+
+.Comment-Vote { color: #676767; }
+.Comment-Vote-plus { color: #00a400; }
+.Comment-Vote-minus { color: #c70000; }
