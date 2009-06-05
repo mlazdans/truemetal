@@ -29,18 +29,23 @@ $path = array('map'=>array('module_id'=>'login', 'module_name'=>'LOGIN'));
 if(isset($_POST['data']))
 {
 	$my_login = new Logins;
-	$data = &$_POST['data'];
-	if($data = $my_login->login($data['login'], $data['password']))
+	$data = post('data');
+	if($login_data = $my_login->login($data['login'], $data['password']))
 	{
 		//$template->set_var('error_msg', 'Pēc lapas lietošanas vēlams nospiest "LOG OFF"');
-		if($data['l_sessiondata'])
+		if($login_data['l_sessiondata'])
 		{
-			session_decode($data['l_sessiondata']);
+			session_decode($login_data['l_sessiondata']);
 		}
 
-		unset($data['l_sessiondata']);
-		$_SESSION['login'] = $data;
-		header("Location: $sys_http_root/profile/");
+		unset($login_data['l_sessiondata']);
+		$_SESSION['login'] = $login_data;
+
+		if(empty($data['referer']))
+			header("Location: $sys_http_root/profile/");
+		else
+			header("Location: ".urldecode($data['referer']));
+
 		return;
 	} else {
 		$template->set_var('error_msg', $my_login->error_msg);

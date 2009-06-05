@@ -29,7 +29,7 @@ $actions = array('delete_multiple', 'activate_multiple', 'deactivate_multiple');
 
 if(in_array($action, $actions)) {
 	if($logins->process_action($_POST, $action))
-		if($p_id)
+		if(!empty($p_id))
 			header("Location: $module_root/$p_id/");
 		else
 			header("Location: $module_root/");

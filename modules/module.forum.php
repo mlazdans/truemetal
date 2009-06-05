@@ -14,7 +14,19 @@ if(!empty($_SESSION['login']['l_disable_bobi']))
 
 function set_forum_items(&$template, &$data, $forum_comments = false)
 {
-	global $forum, $page_id, $fpp, $pages_visible_to_sides, $hl, $forum_count;
+	global $forum, $page_id, $fpp, $pages_visible_to_sides, $hl, $forum_count,
+		$i_am_admin, $sys_user_root, $sys_user_http_root,
+		$user_pic_tw, $user_pic_th, $user_pic_w, $user_pic_h;
+
+	$is_block_paged = $template->block_isset('BLOCK_is_pages');
+	$is_block_avatar = $template->block_isset('BLOCK_forum_avatar');
+	$is_block_profile = $template->block_isset('BLOCK_profile_link');
+	$is_block_vote = $template->block_isset('BLOCK_forum_comment_vote');
+	$is_block_data = $template->block_isset('BLOCK_forum_data');
+	$is_block_email = $template->block_isset('BLOCK_email');
+	$is_block_username = $template->block_isset('BLOCK_username');
+	$user_loged = user_loged();
+	$enable_avatars = empty($_SESSION['login']['l_disable_avatars']);
 
 	if($forum_count)
 	{
@@ -26,8 +38,7 @@ function set_forum_items(&$template, &$data, $forum_comments = false)
 	$total_pages = ceil($forum_count / $fpp);
 	$is_forum = is_object($forum);
 
-	$is_paged = $template->block_isset('BLOCK_is_pages');
-	if($is_paged)
+	if($is_block_paged)
 	{
 		include('inc.forum_pages.php');
 	}
@@ -36,20 +47,6 @@ function set_forum_items(&$template, &$data, $forum_comments = false)
 	foreach($data as $item)
 	{
 		$c++;
-		/*
-		if($is_paged)
-		{
-			if($c <= ($page_id - 1) * $fpp)
-			{
-				continue;
-			}
-
-			if($c > $page_id * $fpp)
-			{
-				break;
-			}
-		}*/
-
 		if($forum_comments && $is_forum)
 		{
 			$forum_childcount = $item['forum_childcount'];
@@ -80,7 +77,7 @@ function set_forum_items(&$template, &$data, $forum_comments = false)
 			}
 		}
 
-		if($template->block_isset('BLOCK_profile_link'))
+		if($is_block_profile)
 		{
 			if($item['forum_userlogin'])
 				$template->set_var('user_login_id', $item['forum_userlogin'], 'FILE_forum');
@@ -94,7 +91,7 @@ function set_forum_items(&$template, &$data, $forum_comments = false)
 		}
 
 		# balsošana
-		if(user_loged() && $template->block_isset('BLOCK_forum_comment_vote'))
+		if($is_block_vote && $user_loged)
 		{
 			$template->enable('BLOCK_forum_comment_vote');
 			if($item['forum_votes'] > 0)
@@ -111,24 +108,44 @@ function set_forum_items(&$template, &$data, $forum_comments = false)
 			}
 		}
 
-		if($item['forum_datacompiled'] && $template->block_isset('BLOCK_forum_data'))
-		{
+		if($item['forum_datacompiled'] && $is_block_data)
 			$template->enable('BLOCK_forum_data');
-		}
 
-		if($template->block_isset('BLOCK_email'))
+		if($is_block_email)
 		{
 			if($item['forum_useremail'])
 			{
 				$template->enable('BLOCK_email');
-				if($template->block_isset('BLOCK_username'))
+				if($is_block_username)
 					$template->disable('BLOCK_username');
 				$template->set_var('forum_useremail', $item['forum_useremail'], 'FILE_forum');
 			} else {
-				if($template->block_isset('BLOCK_username'))
+				if($is_block_username)
 					$template->enable('BLOCK_username');
 				$template->disable('BLOCK_email');
 			}
+		}
+
+		# Avatāri
+		if($user_loged && $is_block_avatar && $enable_avatars)
+		{
+			$at_id = (int)$item['forum_userid'];
+
+			$pic_path = "$sys_user_root/pic/thumb/$at_id.jpg";
+			$pic_http_path = "$sys_user_http_root/pic/thumb/$at_id.jpg";
+
+			if(file_exists($pic_path))
+			{
+				$template->enable('BLOCK_forum_avatar');
+				$template->set_var('avatar_path', $pic_http_path, 'BLOCK_forum_avatar');
+				$template->set_var('avatar_w', $user_pic_tw / 2, 'BLOCK_forum_avatar');
+				$template->set_var('avatar_h', $user_pic_th, 'BLOCK_forum_avatar');
+				$template->set_var('pic_w', $user_pic_w, 'BLOCK_forum_avatar');
+				$template->set_var('pic_h', $user_pic_h, 'BLOCK_forum_avatar');
+			} else {
+				//$template->set_var('pic_path', $sys_http_root.'/img/1x1.gif');
+			}
+			//$template->set_var('avatar_path');
 		}
 
 		$template->set_array($item, 'BLOCK_forum');
@@ -141,7 +158,7 @@ function set_forum_items(&$template, &$data, $forum_comments = false)
 require_once('../classes/class.MainModule.php');
 require_once('../classes/class.Forum.php');
 
-$hl = get("hl");
+$hl = urldecode(get("hl"));
 $action = post('action');
 
 $fpp = 20;
@@ -201,7 +218,9 @@ if($forum_id)
 		return;
 	}
 
-	$forum_title .= ' - '.$forum_data['forum_name'];
+	$forum_title .= ' - '.$forum_data['forum_name'].($hl ? sprintf(", meklēšana: %s", $hl) : "");
+	if($page_id > 1)
+		$forum_title .= " - $page_id. lapa";
 
 	$template->set_var('current_forum_id', $forum_id, 'BLOCK_middle');
 	if($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS)
@@ -256,7 +275,7 @@ if($forum_id)
 			($_SESSION['login']['l_forumsort_themes'] == FORUM_SORT_LAST_COMMENT)
 		)
 		{
-			//# NOTE: labāka performance, ja sortē no bāzes tabulas, jo ID tāpat pieaug
+			//# !WRONG! NOTE: labāka performance, ja sortē no bāzes tabulas, jo ID tāpat pieaug
 			//$item_data = $forum_items->load(0, $forum_id, FORUM_ACTIVE, "f.forum_id DESC");
 			$item_data = $forum_items->load(0, $forum_id, FORUM_ACTIVE, "fm.forum_lastcommentdate$field_b DESC");
 			$template->enable('BLOCK_info_sort_C');

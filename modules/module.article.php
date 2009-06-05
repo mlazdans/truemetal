@@ -14,7 +14,7 @@ $art_per_page = 20;
 # GET/POST
 $art_id = array_shift($sys_parameters);
 $action = isset($_POST['action']) ? $_POST['action'] : '';
-$hl = get("hl");
+$hl = urldecode(get("hl"));
 
 if($art_id == 'page')
 {
@@ -139,12 +139,20 @@ if($tc)
 //	tmpl_cache_store($TMPL_CACHE_ID, $template);
 //}
 
+$art_title = '';
 if($_pointer['_data_']['module_name'])
-	$template->set_title($_pointer['_data_']['module_name']);
-else {
-	$template->set_title('Jaunumi');
+{
+	$art_title = $_pointer['_data_']['module_name'].($hl ? sprintf(", meklēšana: %s", $hl) : "");
+} else {
+	$art_title = 'Jaunumi';
+
 	$path = array('jaunumi'=>array('module_id'=>'', 'module_name'=>'JAUNUMI'));
 }
+
+if($page && ($page <= $tp))
+	$art_title .= sprintf(" %d. lapa ", $page);
+
+$template->set_title($art_title);
 
 if($tmpl != 'tmpl.registrated.php')
 if($art_id) {

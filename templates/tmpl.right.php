@@ -1,13 +1,19 @@
 <table cellpadding="0" cellspacing="0" border="0" width="100%" style="height: 100%;" bgcolor="#330000">
-<!--
 <tr>
 	<td class="TD-cat">Aktuāli</td>
 </tr>
 <tr>
 	<td bgcolor="#330000">
+
 		<table cellpadding="2" cellspacing="1" border="0" width="100%">
 		<tr>
-			<td style="background: #660000 url(/img/bums.gif);"><a href="/article/567/" title="10. maijs, svētdiena, klubs &quot;Melnā Piektdiena&quot;">ARIA (АРИЯ)</a></td>
+			<td style="background: #660000 url(/img/bums.gif);"><a href="/article/572/" title="12-13. jūnijs, piektdiena-sestdiena, Lietuva, Jonišķis, &quot;Plūgo Broliai&quot;">KILKIM ŽAIBU X</a></td>
+		</tr>
+		<tr>
+			<td style="background: #660000 url(/img/bums.gif);"><a href="/article/571/" title="12. jūnijs, piektdiena, klubs &quot;Melnā Piektdiena&quot;">TREPANĀCIJA</a></td>
+		</tr>
+		<tr>
+			<td style="background: #660000;"><a href="/article/569/" title="25. jūnijs, ceturtdiena, klubs &quot;Melnā Piektdiena&quot;">THE BLACK DAHLIA MURDER</a></td>
 		</tr>
 		</table>
 	</td>
@@ -15,7 +21,6 @@
 <tr>
 	<td>&nbsp;</td>
 </tr>
--->
 <!-- BEGIN BLOCK_right_item -->
 {right_item_data}
 <tr>
@@ -48,6 +53,9 @@
 		</tr>
 		<tr>
 			<td align="center"><a href="{http_root}/links/">Saites</a></td>
+		</tr>
+		<tr>
+			<td align="center"><a href="{http_root}/logo/">truemetal.lv logo</a></td>
 		</tr>
 		</table>
 	</td>

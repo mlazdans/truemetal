@@ -35,6 +35,12 @@ return;
 
 require_once('../includes/inc.config.php');
 
+if(isset($sys_banned[$ip]))
+{
+	print "Banned: ".$sys_banned[$ip];
+	return;
+}
+
 /*
 if($i_am_admin)
 {
@@ -196,11 +202,13 @@ if(file_exists('../modules/module.'.$sys_module.'.php')) {
 $my_login = new Logins;
 $my_login->save_session_data();
 
+/*
 if($i_am_admin)
 {
 	$sys_end_time = getmicrotime();
 	print 'Finished: '.number_format(($sys_end_time - $sys_start_time), 2, '.', '');
 }
+*/
 
 /* kompreseejam HTML contentu, ja vaig */
 if($sys_use_compression)

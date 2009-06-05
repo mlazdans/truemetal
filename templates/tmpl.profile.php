@@ -102,6 +102,9 @@ TrueMetal!
 			<td colspan="2"><input id="l_disable_bobi" type="checkbox" name="data[l_disable_bobi]"{l_disable_bobi_checked}><label for="l_disable_bobi">Nerādīt bobijsxxx komentārus</label></td>
 		</tr>
 		<tr>
+			<td colspan="2"><input id="l_disable_avatars" type="checkbox" name="data[l_disable_avatars]"{l_disable_avatars_checked}><label for="l_disable_avatars">Nerādīt avatārus</label></td>
+		</tr>
+		<tr>
 			<td class="TD-cat" colspan="2">Palīdzība</td>
 		</tr>
 		<tr>

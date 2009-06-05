@@ -64,6 +64,8 @@ elseif($section == 'user')
 		}
 	}
 
+	$template->set_title(" - ".$login_data["l_nick"]);
+
 	if($login_data)
 	{
 		if($login_data['l_emailvisible'] == LOGIN_EMAIL_VISIBLE)

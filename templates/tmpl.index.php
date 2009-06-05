@@ -5,6 +5,7 @@
 <title>[ TRUE METAL {title} ]</title>
 <meta http-equiv="Content-Language" content="lv">
 <meta http-equiv="Content-Type" content="text/html; charset={encoding}">
+<meta name="verify-v1" content="1T6p5COcolqsK65q0I6uXdMjPuPskp2jyWjFMTOW/LY=" />
 <link rel="stylesheet" type="text/css" href="{http_root}/styles.css">
 <script type="text/javascript" src="{http_root}/js/jquery.pack.js"></script>
 <script type="text/javascript" src="{http_root}/js/swfobject.js"></script>
@@ -58,8 +59,10 @@
 		<td valign="top" width="170" height="100%"><!-- BEGIN BLOCK_right disabled --><!-- END BLOCK_right --></td>
 	</tr>
 	<tr>
-		<td align="center">hosted by <a href="http://dqdp.net/">dqdp.net</a><br>
-		<a href="mailto:info@truemetal.lv">info@truemetal.lv</a></td>
+		<td align="center">
+			<a href="http://dqdp.net/">dqdp.net hostings</a><br>
+			<a href="mailto:info@truemetal.lv">info@truemetal.lv</a><br>
+		</td>
 		<td></td>
 	</tr>
 </table>

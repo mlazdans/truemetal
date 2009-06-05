@@ -16,9 +16,11 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 	{
 		$search_log = false;
 	}
+	if(get_magic_quotes_gpc())
+		$search_q = stripslashes($search_q);
 } else {
 	$search_log = false;
-	$search_q = get('search_q');
+	$search_q = urldecode(get('search_q'));
 }
 
 require_once('../classes/class.MainModule.php');
@@ -30,7 +32,9 @@ $template->set_array($sys_lang_def, 'BLOCK_middle');
 $template->copy_block('BLOCK_middle', 'FILE_search');
 
 $special_search_q = urlencode($search_q);
-$template->set_var('search_q', htmlspecialchars($search_q));
+$ent_search_q = ent($search_q);
+
+$template->set_var('search_q', $ent_search_q);
 
 $search_msg = array();
 
@@ -295,7 +299,7 @@ if($search_msg)
 $path = array('archive'=>array('module_id'=>'search', 'module_name'=>'MEKLĒT'));
 
 $template->set_right();
-$template->set_search(htmlspecialchars($search_q));
+$template->set_search($ent_search_q);
 $template->set_reviews();
 $template->set_poll();
 $template->set_online();

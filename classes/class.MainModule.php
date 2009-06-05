@@ -165,6 +165,10 @@ class MainModule extends Template
 			//$this->set_var('login_lastname', $_SESSION['login']['l_lastname']);
 		} else {
 			$this->enable('BLOCK_login_form');
+			$referer = $_SERVER["REQUEST_URI"];
+			if(!empty($_SERVER["QUERY_STRING"]))
+				$referer .= "?".$_SERVER["QUERY_STRING"];
+			$this->set_var("referer", urlencode($referer), 'BLOCK_login_form');
 		}
 
 		$this->parse_block('FILE_login_form');

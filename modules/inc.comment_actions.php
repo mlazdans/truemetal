@@ -1,4 +1,5 @@
-<?
+<?php
+
 if(isset($item['art_id']) && $item['art_id'] == $art_id)
 {
 	if($action == 'add_comment' && ($item['art_comments'] == ARTICLE_COMMENTS) && user_loged())
@@ -50,7 +51,7 @@ if(isset($item['art_id']) && $item['art_id'] == $art_id)
 
 	$item['art_date'] = proc_date($item['art_entered']);
 	$template->set_array($item);
-	$template->set_title('Komentāri - '.$item['art_name']);
+	$template->set_title('Komentāri - '.$item['art_name'].($hl ? sprintf(", meklēšana: %s", $hl) : ""));
 
 	$comment_count = $article->comment_count($art_id);
 
@@ -118,4 +119,4 @@ if(isset($item['art_id']) && $item['art_id'] == $art_id)
 	} else
 		$template->enable('BLOCK_nocomment');
 } // isset $art_id ....
-?>
+

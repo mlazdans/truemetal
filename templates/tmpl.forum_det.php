@@ -41,7 +41,21 @@ function forumVote(forumId, value)
 	<td class="TD-forum-cat"><a href="{module_root}/{forum1_id}/#comment{forum_id}">[Link]</a></td>
 </tr>
 <tr>
-	<td colspan="6" bgcolor="#444444" width="100%">{forum_datacompiled}</td>
+	<td colspan="6" bgcolor="#444444" width="100%">
+	<!-- BEGIN BLOCK_forum_avatar disabled -->
+	<a
+		href="/profile/view/{forum_userid}/"
+		onclick="pop('/profile/view/{forum_userid}/', {pic_w}, {pic_h}); return false;"
+	><img
+		width="{avatar_w}"
+		src="{avatar_path}"
+		alt="Bilde: {forum_username}"
+		border="0"
+		align="left"
+	></a>
+	<!-- END BLOCK_forum_avatar -->
+	{forum_datacompiled}
+	</td>
 </tr>
 <tr>
 	<td colspan="6" width="100%">&nbsp;</td>

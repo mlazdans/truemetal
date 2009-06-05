@@ -618,7 +618,7 @@ function hl(&$data, $kw)
 	//$tokens = array();
 	foreach($words as $index=>$word)
 	{
-		$word = preg_replace('/[<>]/', '', $word);
+		$word = preg_replace('/[<>\/]/', '', $word);
 		$color = $colors[$index % $cc];
 		$bgcolor = $bg[$index % $bc];
 		$data = ">$data<";
@@ -752,6 +752,11 @@ function parse_form_data($data)
 
 	return htmlspecialchars($data, ENT_COMPAT, $GLOBALS['sys_encoding']);
 } // parse_form_data
+
+function ent($v)
+{
+	return htmlentities($v, ENT_COMPAT, 'UTF-8');
+} // ent
 
 function save_file($id, $save_path)
 {

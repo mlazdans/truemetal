@@ -4,8 +4,9 @@
 </tr>
 <tr>
 	<td bgcolor="#330000" align="center">
-		<table cellpadding="0" cellspacing="1" border="0" align="center">
 		<form action="{http_root}/login/" method="post" name="login_form">
+		<input type="hidden" name="data[referer]" value="{referer}">
+		<table cellpadding="0" cellspacing="1" border="0" align="center">
 		<tr>
 			<td><input type="text" name="data[login]" class="input" style="width: 100%" value="Lietotāja vārds" onFocus="this.value=''"></td>
 		</tr>
@@ -26,8 +27,8 @@
 				</table>
 			</td>
 		</tr>
-		</form>
 		</table>
+		</form>
 	</td>
 </tr>
 <!-- END BLOCK_login_form -->
