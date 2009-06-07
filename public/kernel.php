@@ -131,8 +131,9 @@ $sys_http_root_base = $sys_http_root;
 // ja nav ne1 modulis selekteets
 if(!$sys_module_id && $sys_first_module)
 {
-	header('Location: '.$sys_http_root.'/'.$sys_first_module.'/');
-	exit;
+	$sys_module_id = $sys_first_module;
+	//header('Location: '.$sys_http_root.'/'.$sys_first_module.'/');
+	//exit;
 }
 
 $module_root = $sys_http_root.'/'.$sys_module_id;

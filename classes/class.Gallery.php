@@ -46,11 +46,22 @@ class Gallery extends Admin
 		$gd_id = (integer)$gd_id;
 		$gd_galid = (integer)$gd_galid;
 
+		$sql = "";
 		$sql_add = 'gd.gd_galid = g.gal_id AND ';
-		$sql = 'SELECT gd.* FROM truemetal_gallery.gallery_data gd, gallery g';
+		if(!$gd_id)
+			$sql .= "SET @gd_pos = 0;";
+
+		$sql = "SELECT gd.*";
 
 		if($gd_id)
-			 $sql_add .= "gd.gd_id = $gd_id AND ";
+			$sql .= ", (SELECT COUNT(*) FROM truemetal_gallery.gallery_data WHERE gd_galid = g.gal_id AND gd_id <= gd.gd_id) gd_pos";
+		else
+			$sql .= ", (@gd_pos := @gd_pos + 1) AS gd_pos";
+
+		$sql .= " FROM truemetal_gallery.gallery_data gd, gallery g";
+
+		if($gd_id)
+			$sql_add .= "gd.gd_id = $gd_id AND ";
 
 		if($gd_galid)
 			$sql_add .= "gd.gd_galid = $gd_galid AND ";
@@ -101,9 +112,14 @@ class Gallery extends Admin
 		$gal_id = (integer)$gal_id;
 
 		$sql_add = '';
-		$sql = 'SELECT * FROM gallery';
+		$sql = "
+SELECT
+	*,
+	(SELECT COUNT(*) FROM truemetal_gallery.gallery_data WHERE gd_galid = gallery.gal_id) gd_count
+FROM gallery
+";
 		if($gal_id)
-			 $sql_add .= "gal_id = $gal_id AND ";
+			$sql_add .= "gal_id = $gal_id AND ";
 
 		if($gal_active)
 			$sql_add .= "gal_active = '$gal_active' AND ";
@@ -325,3 +341,4 @@ class Gallery extends Admin
 	} // validate
 
 } // Gallery
+

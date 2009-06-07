@@ -753,9 +753,16 @@ function parse_form_data($data)
 	return htmlspecialchars($data, ENT_COMPAT, $GLOBALS['sys_encoding']);
 } // parse_form_data
 
-function ent($v)
+function ent($data)
 {
-	return htmlentities($v, ENT_COMPAT, 'UTF-8');
+	if(is_array($data))
+	{
+		foreach($data as $k=>$v)
+			$data[$k] = ent($v);
+		return $data;
+	} else {
+		return htmlentities($data, ENT_COMPAT, 'UTF-8');
+	}
 } // ent
 
 function save_file($id, $save_path)

@@ -16,9 +16,10 @@ $calendar = new Calendar;
 $calendar->parse_date($y, $m, $d);
 
 $date = "$y-$m-$d 23:59:59";
+$date_f = date("d.m.Y", mktime(0,0,0, $m, $d, $y));
 
 $template = new MainModule($sys_template_root, $sys_module_id);
-$template->set_title('Arhīvs');
+$template->set_title("Arhīvs $date_f");
 $template->set_file('FILE_archive', 'tmpl.archive.php');
 $template->copy_block('BLOCK_middle', 'FILE_archive');
 

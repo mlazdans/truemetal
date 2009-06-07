@@ -25,14 +25,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 
 require_once('../classes/class.MainModule.php');
 
-$template = new MainModule($sys_template_root, $sys_module_id, 'tmpl.index.php');
-$template->set_file('FILE_search', 'tmpl.search_new.php');
-$template->set_title($sys_lang_def['search']);
-$template->set_array($sys_lang_def, 'BLOCK_middle');
-$template->copy_block('BLOCK_middle', 'FILE_search');
-
 $special_search_q = urlencode($search_q);
 $ent_search_q = ent($search_q);
+
+$template = new MainModule($sys_template_root, $sys_module_id, 'tmpl.index.php');
+$template->set_file('FILE_search', 'tmpl.search_new.php');
+$template->set_title($sys_lang_def['search'].": $ent_search_q");
+$template->set_array($sys_lang_def, 'BLOCK_middle');
+$template->copy_block('BLOCK_middle', 'FILE_search');
 
 $template->set_var('search_q', $ent_search_q);
 

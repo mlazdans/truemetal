@@ -15,6 +15,9 @@
 		<tr>
 			<td style="background: #660000;"><a href="/article/569/" title="25. jūnijs, ceturtdiena, klubs &quot;Melnā Piektdiena&quot;">THE BLACK DAHLIA MURDER</a></td>
 		</tr>
+		<tr>
+			<td style="background: #660000;"><a href="/article/573/" title="27. jūnijs, sestdiena, &quot;Grīvas mēbeles&quot;">NEUROSIS</a></td>
+		</tr>
 		</table>
 	</td>
 </tr>

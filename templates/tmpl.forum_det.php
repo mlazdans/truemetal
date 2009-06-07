@@ -122,6 +122,7 @@ function forumVote(forumId, value)
 				<li>http://www.youtube.com/watch?v=EwTZ2xpQwpA</li>
 			</ul>
 		</li>
+		<li>Stulbs tēmas nosaukums garantē tēmas izdzēšanu</li>
 	</ul>
 	</td>
 </tr>

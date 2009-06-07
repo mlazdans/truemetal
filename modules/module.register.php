@@ -11,7 +11,7 @@ require_once('../classes/class.MainModule.php');
 $action = array_shift($sys_parameters);
 
 $template = new MainModule($sys_template_root, $sys_module_id, 'tmpl.index.php');
-$template->set_title($_pointer['_data_']['module_name']);
+$template->set_title("Reģistrācija");
 $template->set_file('FILE_register', 'tmpl.register.php');
 $template->copy_block('BLOCK_middle', 'FILE_register');
 

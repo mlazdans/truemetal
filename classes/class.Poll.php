@@ -5,7 +5,7 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-// 
+//
 
 require_once('../classes/class.Ban.php');
 require_once('../classes/class.Permission.php');
@@ -359,6 +359,7 @@ class Poll
 
 		$total_votes = $this->count_votes($poll['poll_id']);
 		$template->set_var('total_votes_b', $total_votes, 'BLOCK_middle');
+		$template->set_title(ent("Balsošana: $poll[poll_name] rezultāti"));
 
 		// atbildes
 		$data = $this->load(0, $poll['poll_id']);
@@ -561,7 +562,7 @@ class Poll
 			FROM
 				poll_votes
 			WHERE
-				pv_entered >= DATE_SUB(NOW(), INTERVAL ".$this->insert_period." SECOND) AND 
+				pv_entered >= DATE_SUB(NOW(), INTERVAL ".$this->insert_period." SECOND) AND
 				pv_userip='$ip'";
 
 			$rate = $db->ExecuteSingle($sql);

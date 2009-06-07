@@ -59,5 +59,3 @@ if($action == 'results')
 
 	$template->out();
 }
-
-?>

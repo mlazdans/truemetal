@@ -127,25 +127,30 @@ function set_forum_items(&$template, &$data, $forum_comments = false)
 		}
 
 		# Avatāri
-		if($user_loged && $is_block_avatar && $enable_avatars)
+		if($is_block_avatar)
 		{
-			$at_id = (int)$item['forum_userid'];
-
-			$pic_path = "$sys_user_root/pic/thumb/$at_id.jpg";
-			$pic_http_path = "$sys_user_http_root/pic/thumb/$at_id.jpg";
-
-			if(file_exists($pic_path))
+			if($user_loged && $enable_avatars)
 			{
-				$template->enable('BLOCK_forum_avatar');
-				$template->set_var('avatar_path', $pic_http_path, 'BLOCK_forum_avatar');
-				$template->set_var('avatar_w', $user_pic_tw / 2, 'BLOCK_forum_avatar');
-				$template->set_var('avatar_h', $user_pic_th, 'BLOCK_forum_avatar');
-				$template->set_var('pic_w', $user_pic_w, 'BLOCK_forum_avatar');
-				$template->set_var('pic_h', $user_pic_h, 'BLOCK_forum_avatar');
+				$at_id = (int)$item['forum_userid'];
+
+				$pic_path = "$sys_user_root/pic/thumb/$at_id.jpg";
+				$pic_http_path = "$sys_user_http_root/pic/thumb/$at_id.jpg";
+
+				if(file_exists($pic_path))
+				{
+					$template->enable('BLOCK_forum_avatar');
+					$template->set_var('avatar_path', $pic_http_path, 'BLOCK_forum_avatar');
+					$template->set_var('avatar_w', $user_pic_tw / 2, 'BLOCK_forum_avatar');
+					$template->set_var('avatar_h', $user_pic_th, 'BLOCK_forum_avatar');
+					$template->set_var('pic_w', $user_pic_w, 'BLOCK_forum_avatar');
+					$template->set_var('pic_h', $user_pic_h, 'BLOCK_forum_avatar');
+				} else {
+					$template->disable('BLOCK_forum_avatar');
+					//$template->set_var('pic_path', $sys_http_root.'/img/1x1.gif');
+				}
 			} else {
-				//$template->set_var('pic_path', $sys_http_root.'/img/1x1.gif');
+				$template->disable('BLOCK_forum_avatar');
 			}
-			//$template->set_var('avatar_path');
 		}
 
 		$template->set_array($item, 'BLOCK_forum');

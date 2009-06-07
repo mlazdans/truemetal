@@ -44,7 +44,7 @@
 		<td>
 			<table cellpadding="5" cellspacing="1" border="0">
 				<tr>
-					<td bgcolor="#330000"><a class="A-article" href="{http_root}/news/"><img src="{http_root}/img/butt_news.gif" alt="JAUNUMI" border="0" onMouseOver="this.src=img_news_over.src" onMouseOut="this.src=img_news.src"></a></td>
+					<td bgcolor="#330000"><a class="A-article" href="{http_root}/"><img src="{http_root}/img/butt_news.gif" alt="JAUNUMI" border="0" onMouseOver="this.src=img_news_over.src" onMouseOut="this.src=img_news.src"></a></td>
 					<td bgcolor="#330000"><a class="A-article" href="{http_root}/forum/"><img src="{http_root}/img/butt_forum.gif" alt="FORUMS" border="0" onMouseOver="this.src=img_forum_over.src" onMouseOut="this.src=img_forum.src"></a></td>
 					<td bgcolor="#330000"><a class="A-article" href="{http_root}/gallery/"><img src="{http_root}/img/butt_gallery.gif" alt="GALERIJA" border="0" onMouseOver="this.src=img_gallery_over.src" onMouseOut="this.src=img_gallery.src"></a></td>
 					<td bgcolor="#330000"><a class="A-article" href="{http_root}/video/"><img src="{http_root}/img/butt_video.gif" alt="VIDEO" border="0" onMouseOver="this.src=img_video_over.src" onMouseOut="this.src=img_video.src"></a></td>

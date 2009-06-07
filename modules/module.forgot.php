@@ -11,7 +11,7 @@ require_once('../classes/class.MainModule.php');
 $action = array_shift($sys_parameters);
 
 $template = new MainModule($sys_template_root, $sys_module_id, 'tmpl.index.php');
-$template->set_title($_pointer['_data_']['module_name']);
+$template->set_title("Aizmirsu paroli");
 $template->set_file('FILE_forgot', 'tmpl.forgot.php');
 $template->copy_block('BLOCK_middle', 'FILE_forgot');
 
@@ -49,7 +49,7 @@ if($action == 'request')
 				$found = true;
 			}
 		}
-	
+
 		if(!$found && $data['l_email'])
 		{
 			if($test_data = $logins->load_by_email($data['l_email']))
@@ -57,7 +57,7 @@ if($action == 'request')
 				$found = true;
 			}
 		}
-	
+
 		if($found)
 		{
 			$l_login = $test_data['l_login'];
@@ -142,4 +142,3 @@ $template->set_array($data, 'BLOCK_forgot_form');
 
 $template->out();
 
-?>
