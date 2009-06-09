@@ -24,7 +24,14 @@ if($section == 'view')
 	$atteli_http_root = $sys_user_http_root.'/pic';
 	$atteli_http_troot = $sys_user_http_root.'/pic/thumb';
 
+	$login = new Logins;
 	$at_id = (int)array_shift($sys_parameters);
+	$login_data = $login->load_by_id($at_id);
+	if(!$login_data)
+	{
+		return;
+	}
+
 	$template = new MainModule($sys_template_root, 'atteli', 'tmpl.attels_single.php');
 
 	$pic_path = $atteli_http_root.'/'.$at_id.'.jpg';
@@ -36,6 +43,8 @@ if($section == 'view')
 	} else {
 		$template->set_var('pic_path', $sys_http_root.'/img/1x1.gif');
 	}
+
+	$template->set_title(" - $login_data[l_nick] bilde");
 
 	$template->out();
 	return;

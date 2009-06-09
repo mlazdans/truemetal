@@ -919,3 +919,8 @@ function upload($key, $default = '')
 	return isset($_FILES[$key]) ? $_FILES[$key] : $default;
 } // upload
 
+function cdn_domain($src)
+{
+	return 'i'.(abs(crc32($src)) % 4 + 1).'.truemetal.lv';
+} // cdn_domain
+

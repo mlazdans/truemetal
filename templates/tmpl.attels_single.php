@@ -2,7 +2,7 @@
 
 <html>
 <head>
-<title>www.truemetal.lv</title>
+<title>[ TRUE METAL {title} ]</title>
 <meta http-equiv="Pragma" content="no-cache">
 <style type="text/css"><!--
 body {

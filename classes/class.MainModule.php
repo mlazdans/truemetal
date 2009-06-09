@@ -67,7 +67,30 @@ class MainModule extends Template
 
 	function out()
 	{
+		global $i_am_admin, $sys_http_root;
+
 		print $this->parse_file('FILE_index');
+		/*
+		if($i_am_admin)
+		{
+			$dom = new DOMDocument('1.0', 'utf-8');
+			@$dom->loadHTML($this->parse_file('FILE_index'));
+			//$dom->normalizeDocument();
+			$xdom = simplexml_import_dom($dom);
+
+			if($els = $xdom->xpath("//img"))
+			{
+				foreach($els as $item)
+				{
+					$src = parse_url($item->attributes()->src, PHP_URL_PATH);
+					$item->attributes()->src = 'http://'.cdn_domain($src).$src;
+				}
+			}
+			print $dom->saveHTML();
+		} else {
+			print $this->parse_file('FILE_index');
+		}
+		*/
 		//$content = $this->parse_file('FILE_index');
 		//$variable_pattern = '[a-zA-z0-9_^}]{1,}';
 		//print preg_replace('/{'.$variable_pattern.'}/U', '', $content);

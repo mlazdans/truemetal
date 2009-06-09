@@ -2,30 +2,15 @@
 
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset={encoding}">
 <title>[ TRUE METAL {title} ]</title>
 <meta http-equiv="Content-Language" content="lv">
-<meta http-equiv="Content-Type" content="text/html; charset={encoding}">
 <meta name="verify-v1" content="1T6p5COcolqsK65q0I6uXdMjPuPskp2jyWjFMTOW/LY=" />
 <link rel="stylesheet" type="text/css" href="{http_root}/styles.css">
 <script type="text/javascript" src="{http_root}/js/jquery.pack.js"></script>
 <script type="text/javascript" src="{http_root}/js/swfobject.js"></script>
 <script type="text/javascript" src="{http_root}/js/utils.js?v=1.1"></script>
 <script type="text/javascript">
-	img_news = new Image; img_news.src="{http_root}/img/butt_news.gif";
-	img_news_over = new Image; img_news_over.src="{http_root}/img/butt_news_over.gif";
-
-	img_gallery = new Image; img_gallery.src="{http_root}/img/butt_gallery.gif";
-	img_gallery_over = new Image; img_gallery_over.src="{http_root}/img/butt_gallery_over.gif";
-
-	img_video = new Image; img_video.src="{http_root}/img/butt_video.gif";
-	img_video_over = new Image; img_video_over.src="{http_root}/img/butt_video_over.gif";
-
-	img_forum = new Image; img_forum.src="{http_root}/img/butt_forum.gif";
-	img_forum_over = new Image; img_forum_over.src="{http_root}/img/butt_forum_over.gif";
-
-	img_reviews = new Image; img_reviews.src="{http_root}/img/butt_reviews.gif";
-	img_reviews_over = new Image; img_reviews_over.src="{http_root}/img/butt_reviews_over.gif";
-
 	$(document).ready(function(){
 			$('div.youtube').each(ytEmbed);
 	});
@@ -44,11 +29,11 @@
 		<td>
 			<table cellpadding="5" cellspacing="1" border="0">
 				<tr>
-					<td bgcolor="#330000"><a class="A-article" href="{http_root}/"><img src="{http_root}/img/butt_news.gif" alt="JAUNUMI" border="0" onMouseOver="this.src=img_news_over.src" onMouseOut="this.src=img_news.src"></a></td>
-					<td bgcolor="#330000"><a class="A-article" href="{http_root}/forum/"><img src="{http_root}/img/butt_forum.gif" alt="FORUMS" border="0" onMouseOver="this.src=img_forum_over.src" onMouseOut="this.src=img_forum.src"></a></td>
-					<td bgcolor="#330000"><a class="A-article" href="{http_root}/gallery/"><img src="{http_root}/img/butt_gallery.gif" alt="GALERIJA" border="0" onMouseOver="this.src=img_gallery_over.src" onMouseOut="this.src=img_gallery.src"></a></td>
-					<td bgcolor="#330000"><a class="A-article" href="{http_root}/video/"><img src="{http_root}/img/butt_video.gif" alt="VIDEO" border="0" onMouseOver="this.src=img_video_over.src" onMouseOut="this.src=img_video.src"></a></td>
-					<td bgcolor="#330000"><a class="A-article" href="{http_root}/reviews/"><img src="{http_root}/img/butt_reviews.gif" alt="ALBUMU RECENZIJAS" border="0" onMouseOver="this.src=img_reviews_over.src" onMouseOut="this.src=img_reviews.src"></a></td>
+					<td bgcolor="#330000"><a class="A-article" href="{http_root}/"><img src="{http_root}/img/butt_news.gif" alt="JAUNUMI" border="0" onmouseover="$(this).attr('src', '{http_root}/img/butt_news_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_news.gif')"></a></td>
+					<td bgcolor="#330000"><a class="A-article" href="{http_root}/forum/"><img src="{http_root}/img/butt_forum.gif" alt="FORUMS" border="0" onmouseover="$(this).attr('src', '{http_root}/img/butt_forum_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_forum.gif')"></a></td>
+					<td bgcolor="#330000"><a class="A-article" href="{http_root}/gallery/"><img src="{http_root}/img/butt_gallery.gif" alt="GALERIJA" border="0" onmouseover="$(this).attr('src', '{http_root}/img/butt_gallery_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_gallery.gif')"></a></td>
+					<td bgcolor="#330000"><a class="A-article" href="{http_root}/video/"><img src="{http_root}/img/butt_video.gif" alt="VIDEO" border="0" onmouseover="$(this).attr('src', '{http_root}/img/butt_video_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_video.gif')"></a></td>
+					<td bgcolor="#330000"><a class="A-article" href="{http_root}/reviews/"><img src="{http_root}/img/butt_reviews.gif" alt="ALBUMU RECENZIJAS" border="0" onmouseover="$(this).attr('src', '{http_root}/img/butt_reviews_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_reviews.gif')"></a></td>
 					<td bgcolor="#330000" width="100%">&nbsp;</td>
 				</tr>
 			</table>
