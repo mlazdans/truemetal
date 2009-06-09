@@ -30,8 +30,9 @@ if(!$art_id)
 	$article->date_format='%d.%m.%Y';
 
 $tc = 0;
-if($_pointer['_data_']['mod_id'])
-{
+if($art_id) {
+	$articles = $article->load($art_id);
+} elseif($_pointer['_data_']['mod_id']) {
 	$tc = $article->get_total($_pointer['_data_']['mod_id']);
 	$tp = floor($tc / $art_per_page);
 	$art_align = $art_per_page - ($tc - $tp * $art_per_page);
@@ -47,8 +48,6 @@ if($_pointer['_data_']['mod_id'])
 	else
 		$article->set_limit($art_per_page);
 	$articles = $article->load($art_id, $_pointer['_data_']['mod_id']);
-} elseif($art_id) {
-	$articles = $article->load($art_id);
 } else {
 	$articles = array();
 }

@@ -471,5 +471,24 @@ class TemplateBlock
 		return $this->content = $content;
 	} // set_block_string
 
+	/* ----------------------------------------------------------- */
+	/* TemplateBlock
+	/*	delete_block (string block_id)
+	/* -----------------------------------------------------------
+	/* izdzēš bloku
+	/* ----------------------------------------------------------- */
+	function delete_block($ID)
+	{
+		unset($this->blocks[$ID]);
+		/*
+		if($this->block_isset($ID))
+		{
+			return true;
+		} else {
+			$this->halt('delete_block: block ['.$ID.'] not found');
+			return false;
+		}
+		*/
+	} // delete_block
 }
 

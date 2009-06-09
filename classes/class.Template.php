@@ -120,6 +120,7 @@ class Template extends TemplateBlock
 			if($file_exists = file_exists($file_path))
 				$modtime = filemtime($file_path);
 
+			/*
 			if($this->blocks[$ID] =& $this->cache_fetch($key))
 			{
 				if($modtime && ($modtime == $this->blocks[$ID]->modtime))
@@ -130,6 +131,7 @@ class Template extends TemplateBlock
 					print "Reload<br>";
 				}
 			}
+			*/
 
 			$str_content = '';
 			if($file_exists)
@@ -256,13 +258,13 @@ class Template extends TemplateBlock
 	{
 		if( !($block1 =& $this->get_block($ID_from)) )
 		{
-			$this->halt('block_copy: block ['.$ID_from.'] not found!');
+			$this->halt('copy_block: block ['.$ID_from.'] not found!');
 			return false;
 		}
 
 		if( ! ($block2 =& $this->get_block($ID_to)) )
 		{
-			$this->halt('block_copy: block ['.$ID_to.'] not found!');
+			$this->halt('copy_block: block ['.$ID_to.'] not found!');
 			return false;
 		}
 
@@ -304,9 +306,9 @@ class Template extends TemplateBlock
 	/* ----------------------------------------------------------- */
 	function reset_block($ID, $bln_parent_only = false)
 	{
-		if($block =& $this->get_block($ID))
+		if($block =& $this->get_block($ID)) {
 			return $block->reset_block($bln_parent_only);
-		else {
+		} else {
 			$this->halt('reset_block: block ['.$ID.'] not found!');
 			return false;
 		}
@@ -321,10 +323,11 @@ class Template extends TemplateBlock
 	/* ----------------------------------------------------------- */
 	function set_attribute($ID, $str_attribute, $value)
 	{
-		if($block =& $this->get_block($ID))
+		if($block =& $this->get_block($ID)) {
 			return $block->set_attribute($str_attribute, $value);
-		else
+		} else {
 			$this->halt('set_attribute: block ['.$ID.'] not found!');
+		}
 
 		return false;
 	} // set_attribute
@@ -351,9 +354,9 @@ class Template extends TemplateBlock
 	/* ----------------------------------------------------------- */
 	function set_block_string($ID, $content = '')
 	{
-		if($block =& $this->get_block($ID))
+		if($block =& $this->get_block($ID)) {
 			return $block->set_block_string($content);
-		else {
+		} else {
 			$this->halt('set_block_string: block ['.$ID.'] not found!');
 			return false;
 		}
@@ -376,18 +379,6 @@ class Template extends TemplateBlock
 		} else {
 			$this->blocks[$ID] = new TemplateBlock($ID, $content, $this->undefined);
 			return true;
-		}
-	}
-
-	function delete_block($ID)
-	{
-		if($this->block_isset($ID))
-		{
-			unset($this->blocks[$ID]);
-			return true;
-		} else {
-			$this->halt('delete_block: file ['.$ID.'] does not exists');
-			return false;
 		}
 	}
 
