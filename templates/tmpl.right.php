@@ -7,16 +7,16 @@
 
 		<table cellpadding="2" cellspacing="1" border="0" width="100%">
 		<tr>
-			<td style="background: #660000 url(/img/bums.gif);"><a href="/article/572/" title="12-13. jūnijs, piektdiena-sestdiena, Lietuva, Jonišķis, &quot;Plūgo Broliai&quot;">KILKIM ŽAIBU X</a></td>
-		</tr>
-		<tr>
-			<td style="background: #660000 url(/img/bums.gif);"><a href="/article/571/" title="12. jūnijs, piektdiena, klubs &quot;Melnā Piektdiena&quot;">TREPANĀCIJA</a></td>
-		</tr>
-		<tr>
-			<td style="background: #660000;"><a href="/article/569/" title="25. jūnijs, ceturtdiena, klubs &quot;Melnā Piektdiena&quot;">THE BLACK DAHLIA MURDER</a></td>
+			<td style="background: #660000 url(/img/bums.gif);"><a href="/article/569/" title="25. jūnijs, ceturtdiena, klubs &quot;Melnā Piektdiena&quot;">THE BLACK DAHLIA MURDER</a></td>
 		</tr>
 		<tr>
 			<td style="background: #660000;"><a href="/article/573/" title="27. jūnijs, sestdiena, &quot;Grīvas mēbeles&quot;">NEUROSIS</a></td>
+		</tr>
+		<tr>
+			<td style="background: #660000;"><a href="/article/575/" title="3. jūlijs, piektdiena, &quot;Sava Republika&quot;">RŪSA</a></td>
+		</tr>
+		<tr>
+			<td style="background: #660000;"><a href="/article/576/" title="17.-19. jūlijs, piektdiena-svētdiena, Lietuva, Anyksciai">DEVILSTONE OPEN AIR 2009</a></td>
 		</tr>
 		</table>
 	</td>

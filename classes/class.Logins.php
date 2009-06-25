@@ -116,7 +116,11 @@ class Logins
 			//$sql = "SELECT * FROM logins WHERE l_logedin = 'Y' AND $dt < l_lastaccess";
 		}
 		*/
-		$sql = "SELECT * FROM logins WHERE l_logedin = 'Y' AND NOW() - 600 < l_lastaccess";
+		//$sql = "SELECT * FROM logins WHERE l_logedin = 'Y' AND NOW() - 600 < l_lastaccess";
+		$sql = sprintf(
+			"SELECT * FROM logins WHERE l_logedin = 'Y' AND '%s' < l_lastaccess",
+			date('Y-m-d H:i:s', time() - 600)
+			);
 
 		return $db->Execute($sql);
 	} // get_active
@@ -438,7 +442,7 @@ class Logins
 
 		if(!$msg)
 		{
-			$msg = "Aizmirsi paroli?\n\nUzpied uz http://$sys_domain/forgot/accept/$code/ un ievadi jaunu!\n\nIP:$_SERVER[REMOTE_ADDR]";
+			$msg = "Aizmirsi paroli?\n\nLogin: $login\nParole: uzpied uz http://$sys_domain/forgot/accept/$code/ un ievadi jaunu!\n\nIP:$_SERVER[REMOTE_ADDR]";
 		}
 
 		if(!$subj)

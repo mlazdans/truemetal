@@ -440,11 +440,16 @@ class MainModule extends Template
 				'alt'=>'KREATOR',
 				'href'=>'/article/525/',
 			),
-*/
 			array(
 				'img'=>'banner_apocalyptica_2009.gif',
 				'alt'=>'APOCALYPTICA',
 				'href'=>'/article/562/',
+			),
+*/
+			array(
+				'img'=>'banner_devilstone_open_air_2009.gif',
+				'alt'=>'DEVILSTONE OPEN AIR 2009',
+				'href'=>'/article/576/',
 			),
 );
 
