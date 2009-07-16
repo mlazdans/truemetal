@@ -445,13 +445,18 @@ class MainModule extends Template
 				'alt'=>'APOCALYPTICA',
 				'href'=>'/article/562/',
 			),
+			array(
+				'img'=>'banner_metalshow2009.jpg',
+				'alt'=>'METALSHOW 2009',
+				'href'=>'/article/580/',
+			),
 */
 			array(
 				'img'=>'banner_devilstone_open_air_2009.gif',
 				'alt'=>'DEVILSTONE OPEN AIR 2009',
 				'href'=>'/article/576/',
 			),
-);
+		);
 
 		$ban_id = mt_rand(0, count($banners) - 1);
 		$banner =$banners[$ban_id];

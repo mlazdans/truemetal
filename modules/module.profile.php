@@ -73,16 +73,16 @@ elseif($section == 'user')
 		}
 	}
 
-	$template->set_title(" - ".$login_data["l_nick"]);
-
 	if($login_data)
 	{
+		$template->set_title(" - $login_data[l_nick]");
 		if($login_data['l_emailvisible'] == LOGIN_EMAIL_VISIBLE)
 		{
 			$template->enable('BLOCK_public_email');
 		}
 		$template->set_profile($login_data);
 	} else {
+		$template->set_title("$l_id - neeksistējošs profils");
 		$template->enable('BLOCK_no_suck_login');
 	}
 

@@ -7,16 +7,19 @@
 
 		<table cellpadding="2" cellspacing="1" border="0" width="100%">
 		<tr>
-			<td style="background: #660000 url(/img/bums.gif);"><a href="/article/569/" title="25. jūnijs, ceturtdiena, klubs &quot;Melnā Piektdiena&quot;">THE BLACK DAHLIA MURDER</a></td>
-		</tr>
-		<tr>
-			<td style="background: #660000;"><a href="/article/573/" title="27. jūnijs, sestdiena, &quot;Grīvas mēbeles&quot;">NEUROSIS</a></td>
-		</tr>
-		<tr>
-			<td style="background: #660000;"><a href="/article/575/" title="3. jūlijs, piektdiena, &quot;Sava Republika&quot;">RŪSA</a></td>
+			<td style="background: #660000 url(/img/bums.gif);"><a href="/article/578/" title="16. jūlijs, ceturtdiena, Igaunija">OBITUARY TALLINNĀ</a></td>
 		</tr>
 		<tr>
 			<td style="background: #660000;"><a href="/article/576/" title="17.-19. jūlijs, piektdiena-svētdiena, Lietuva, Anyksciai">DEVILSTONE OPEN AIR 2009</a></td>
+		</tr>
+		<tr>
+			<td style="background: #660000;"><a href="/article/582/" title="24.-25. jūlijs, piektdiena-sestdiena, &quot;Zirņu pagasta Dzilnās&quot;">ZVĒRĀ 2009</a></td>
+		</tr>
+		<tr>
+			<td style="background: #660000;"><a href="/article/577/" title="6.-8. augusts, ceturdiena-sestdiena, &quot;Čehija&quot;">BRUTAL ASSAULT OPEN AIR 2009</a></td>
+		</tr>
+		<tr>
+			<td style="background: #660000;"><a href="/article/581/" title="24. septembris, ceturtdiena, klubs &quot;Melnā Piektdiena&quot;">CHIMAIRA</a></td>
 		</tr>
 		</table>
 	</td>
