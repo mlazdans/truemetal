@@ -1,4 +1,4 @@
-<?
+<?php
 
 interface SpiderResource
 {
@@ -8,4 +8,3 @@ interface SpiderResource
 	public function navigate($url);
 }
 
-?>

@@ -1,4 +1,4 @@
-<?
+<?php
 
 class SpiderArticle implements SpiderResource
 {
@@ -150,4 +150,3 @@ GROUP BY
 
 } // class SpiderArticle
 
-?>

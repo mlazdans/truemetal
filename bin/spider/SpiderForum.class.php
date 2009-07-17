@@ -1,4 +1,4 @@
-<?
+<?php
 
 class SpiderForum implements SpiderResource
 {
@@ -108,4 +108,3 @@ WHERE
 
 } // class SpiderForum
 
-?>

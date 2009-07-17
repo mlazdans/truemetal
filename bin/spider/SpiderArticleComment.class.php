@@ -1,4 +1,4 @@
-<?
+<?php
 
 class SpiderArticleComment implements SpiderResource
 {
@@ -46,7 +46,7 @@ SELECT
 FROM
 	article_comments_$this->sys_lang ac
 JOIN article_$this->sys_lang a ON a.art_id = ac.ac_artid
-WHERE 
+WHERE
 	ac.ac_visible = '%s' AND
 	a.art_active = '%s' AND
 	a.art_visible = '%s'
@@ -106,4 +106,3 @@ WHERE
 
 } // class SpiderArticleComment
 
-?>

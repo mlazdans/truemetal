@@ -11,8 +11,8 @@ SQL_NO_CACHE
 * Vārdu statistika
 	SELECT *
 	FROM `spider_words`
-	ORDER BY `spider_words`.`sw_urls` DESC 
-	
+	ORDER BY `spider_words`.`sw_urls` DESC
+
 	SLOW++
 	------
 	SELECT sw.sw_word, w2u.word_count FROM `spider_words2urls` w2u
@@ -326,4 +326,3 @@ printr($item);
 
 //spider_crawl($indexes);
 
-?>
