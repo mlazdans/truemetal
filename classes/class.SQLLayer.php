@@ -262,7 +262,7 @@ class SQLLayer
 	function __query_mysqli($str_sql)
 	{
 		if( !($res_q = @mysqli_query($this->res_db_conn, $str_sql)) )
-			user_error(mysql_error().($GLOBALS['sys_debug'] ? $str_sql : ''), E_USER_WARNING);
+			user_error(mysqli_error($this->res_db_conn).($GLOBALS['sys_debug'] ? $str_sql : ''), E_USER_WARNING);
 
 		return $res_q;
 	} // __query_mysql
@@ -271,13 +271,25 @@ class SQLLayer
 	{
 		switch( $this->int_db_type ) {
 			case DB_MYSQLI:
-				return mysqli_fetch_array($res_q, MYSQL_ASSOC);
+				return mysqli_fetch_assoc($res_q);
 				break;
 			default:
 				return false;
 				break;
 		}
 	} // FetchAssoc
+
+	function FetchObject($res_q)
+	{
+		switch( $this->int_db_type ) {
+			case DB_MYSQLI:
+				return mysqli_fetch_object($res_q);
+				break;
+			default:
+				return false;
+				break;
+		}
+	} // FetchObject
 
 	function LastID()
 	{
