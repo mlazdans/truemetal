@@ -59,13 +59,18 @@ class Forum
 		if(isset($params['forum_allowchilds']))
 			$sql_add[] = sprintf("f.forum_allowchilds = '%s'", $params['forum_allowchilds']);
 
+		//(SELECT COUNT(c_id) FROM comment JOIN comment_connect ON cc_c_id = c_id WHERE cc_table = 'forum' AND cc_table_id = f.forum_id) forum_comment_count,
+		//(SELECT MAX(c_entered) FROM comment JOIN comment_connect ON cc_c_id = c_id WHERE cc_table = 'forum' AND cc_table_id = f.forum_id) forum_lastcommentdate
+		//$sql_add[] = "cm_table_id = f.forum_id";
 		$sql = "
 SELECT
 	f.*,
-	(SELECT COUNT(c_id) FROM comment JOIN comment_connect ON cc_c_id = c_id WHERE cc_table = 'forum' AND cc_table_id = f.forum_id) forum_comment_count,
-	(SELECT MAX(c_entered) FROM comment JOIN comment_connect ON cc_c_id = c_id WHERE cc_table = 'forum' AND cc_table_id = f.forum_id) forum_lastcommentdate
+	COALESCE(cm_comment_count, 0) AS forum_comment_count,
+	cm_comment_lastdate AS forum_lastcommentdate,
+	(SELECT COUNT(*) FROM forum f2 WHERE f2.forum_forumid = f.forum_id) forum_themecount
 FROM
-	forum f";
+	forum f
+LEFT JOIN comment_meta ON (cm_table = 'forum') AND (cm_table_id = f.forum_id)";
 
 		if($sql_add)
 			$sql .= " WHERE ".join(" AND ", $sql_add);

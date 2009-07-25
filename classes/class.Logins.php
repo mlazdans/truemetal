@@ -158,19 +158,19 @@ class Logins
 		$template->enable('BLOCK_profile');
 		$template->set_array($login);
 
-		$template->set_var('l_forumsort_themes_'.$login['l_forumsort_themes'], ' checked');
-		$template->set_var('l_forumsort_msg_'.$login['l_forumsort_msg'], ' checked');
+		$template->set_var('l_forumsort_themes_'.$login['l_forumsort_themes'], ' checked="checked"');
+		$template->set_var('l_forumsort_msg_'.$login['l_forumsort_msg'], ' checked="checked"');
 
 		if(!empty($login['l_disable_bobi']))
 		{
-			$template->set_var('l_disable_bobi_checked', ' checked');
+			$template->set_var('l_disable_bobi_checked', ' checked="checked"');
 		} else {
 			$template->set_var('l_disable_bobi_checked', '');
 		}
 
 		if(!empty($login['l_disable_avatars']))
 		{
-			$template->set_var('l_disable_avatars_checked', ' checked');
+			$template->set_var('l_disable_avatars_checked', ' checked="checked"');
 		} else {
 			$template->set_var('l_disable_avatars_checked', '');
 		}
@@ -179,7 +179,7 @@ class Logins
 		{
 			$template->set_var('l_emailvisible', '');
 		} else {
-			$template->set_var('l_emailvisible', ' checked');
+			$template->set_var('l_emailvisible', ' checked="checked"');
 		}
 
 		if(file_exists($pic_localpath) && file_exists($tpic_localpath))
@@ -252,7 +252,7 @@ class Logins
 			// check login status
 			if($l_data['l_active'] != LOGIN_ACTIVE || $l_data['l_accepted'] != LOGIN_ACCEPTED)
 			{
-				$error_msg .= 'Nevar saglabāt neatktīvu profilu!<br>';
+				$error_msg .= 'Nevar saglabāt neatktīvu profilu!<br />';
 			}
 
 			// check pass match
@@ -260,7 +260,7 @@ class Logins
 			{
 				if($data['l_password'] != $data['l_password2'])
 				{
-					$error_msg .= 'Paroles nesakrīt!<br>';
+					$error_msg .= 'Paroles nesakrīt!<br />';
 				} elseif(invalid($data['l_password']) || strlen($data['l_password']) < 5) {
 					$error_msg .= 'Nepareiza vai īsa parole!';
 				}
@@ -273,7 +273,7 @@ class Logins
 			}
 
 		} else {
-			$error_msg .= 'Nevar saglabāt neatktīvu kontu!<br>';
+			$error_msg .= 'Nevar saglabāt neatktīvu kontu!<br />';
 		}
 
 		if(!$error_msg)
@@ -318,7 +318,7 @@ class Logins
 								$this->accept_login($accept_code);
 								// rollback (god damn, mehehehheee)
 								$db->Execute("UPDATE logins SET $osql WHERE l_id = $l_id");
-								$this->error_msg = 'Nevar nosutit kodu uz "'.$data['l_email'].'"<br>('.$GLOBALS['php_errormsg'].')';
+								$this->error_msg = 'Nevar nosutit kodu uz "'.$data['l_email'].'"<br />('.$GLOBALS['php_errormsg'].')';
 								return false;
 							}
 						}
@@ -548,7 +548,7 @@ class Logins
 
 		if(!$this->valid_login($l_login))
 		{
-			$this->error_msg = 'Nav norādīts vai nepareizs lietotāja logins<br>';
+			$this->error_msg = 'Nav norādīts vai nepareizs lietotāja logins<br />';
 			return false;
 		}
 
@@ -584,10 +584,10 @@ class Logins
 		$error_msg = '';
 
 		if(!$data['l_login'])
-			$error_msg .= 'Nav norādīts lietotāja logins<br>';
+			$error_msg .= 'Nav norādīts lietotāja logins<br />';
 
 		if(!$data['l_firstname'] || !$data['l_lastname'])
-			$error_msg .= 'Nav norādīts lietotāja vārds/uzvārds<br>';
+			$error_msg .= 'Nav norādīts lietotāja vārds/uzvārds<br />';
 
 		if(!$error_msg)
 		{

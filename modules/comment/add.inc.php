@@ -1,5 +1,7 @@
 <?php
 
+require_once('../classes/class.CommentConnect.php');
+
 $data = post('data');
 if(!$data['c_data'])
 {

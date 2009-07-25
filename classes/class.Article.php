@@ -66,17 +66,21 @@ class Article {
 
 		$sql_add = '';
 		$art_table = "article_$sys_lang";
+		//(SELECT COUNT(c_id) FROM comment JOIN comment_connect ON cc_c_id = c_id WHERE cc_table = '$art_table' AND cc_table_id = a.art_id) art_comment_count,
 		$sql = "
 SELECT
 	a.*,
 	DATE_FORMAT(a.art_entered, '$this->date_format') art_date $sql_add1,
-	(SELECT COUNT(c_id) FROM comment JOIN comment_connect ON cc_c_id = c_id WHERE cc_table = '$art_table' AND cc_table_id = a.art_id) art_comment_count,
-	m.*
+	m.*,
+	COALESCE(cm_comment_count, 0) AS art_comment_count,
+	cm_comment_lastdate AS art_comment_lastdate
 FROM
-	$art_table a, modules_$sys_lang m
+	$art_table a
+JOIN modules_$sys_lang m ON (a.art_modid = m.mod_id)
+LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 ";
 
-		$sql_add .= 'a.art_modid = m.mod_id AND ';
+		//$sql_add .= ' ';
 
 		if($q)
 			$sql_add .= "$search AND ";

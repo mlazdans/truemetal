@@ -6,7 +6,7 @@
 <!-- BEGIN BLOCK_forum disabled -->
 <tr>
 	<td class="Forum-cat Forum-Theme-name Forum-Theme-0"><a href="{module_root}/{forum_id}/" title="Datums: {forum_date}"><b>{forum_name}</b></a></td>
-	<td class="Forum-cat Forum-Theme-childcount Forum-Theme-0<!-- BEGIN BLOCK_comments_new disabled --> Comment-new<!-- END BLOCK_comments_new -->">{forum_comment_count}</td>
+	<td class="Forum-cat Forum-Theme-childcount Forum-Theme-0<!-- BEGIN BLOCK_comments_new disabled --> Comment-new<!-- END BLOCK_comments_new -->">{forum_themecount}</td>
 </tr>
 <tr>
 	<td colspan="2" class="Forum-descr">{forum_datacompiled}</td>

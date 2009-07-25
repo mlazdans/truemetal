@@ -1,5 +1,17 @@
 <?php
 
+if(($action == 'add_comment') && user_loged())
+{
+	$table = 'forum';
+	$table_id = $forum_id;
+	if($c_id = include('../modules/comment/add.inc.php'))
+	{
+		$CommentConnect->db->Commit();
+		header("Location: $sys_http_root/forum/$forum_id/#comment$c_id");
+		return;
+	}
+}
+
 require_once('../classes/class.CommentConnect.php');
 
 $CC = new CommentConnect('forum');

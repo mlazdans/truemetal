@@ -294,7 +294,7 @@ if($forum_id)
 
 $template->set_title($forum_title);
 $template->set_right();
-//$template->set_recent_forum();
+$template->set_recent_forum();
 $template->set_login();
 $template->set_poll();
 $template->set_search();
