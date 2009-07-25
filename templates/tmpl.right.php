@@ -1,12 +1,9 @@
 <div class="TD-cat">Aktuāli</div>
 <div class="List-item actual">
-	<a href="/article/578/" title="16. jūlijs, ceturtdiena, Igaunija">OBITUARY TALLINNĀ</a>
-</div>
-<div class="List-item">
-	<a href="/article/576/" title="17.-19. jūlijs, piektdiena-svētdiena, Lietuva, Anyksciai">DEVILSTONE OPEN AIR 2009</a>
-</div>
-<div class="List-item">
 	<a href="/article/582/" title="24.-25. jūlijs, piektdiena-sestdiena, &quot;Zirņu pagasta Dzilnās&quot;">ZVĒRĀ 2009</a>
+</div>
+<div class="List-item">
+	<a href="/article/579/" title="30. jūlijs - 1. augusts, ceturtdiena-sestdiena, &quot;Vācija, Vakena&quot;">WACKEN OPEN AIR 2009</a>
 </div>
 <div class="List-item">
 	<a href="/article/577/" title="6.-8. augusts, ceturdiena-sestdiena, &quot;Čehija&quot;">BRUTAL ASSAULT OPEN AIR 2009</a>
@@ -24,11 +21,11 @@
 
 
 <div style="text-align: center; background: black; padding: 15px 0 15px 0;">
-	<a href="http://www.myspace.com/trepanationsquad" target="_blank"><img src="{http_root}/img/banner_trepanationsquad.gif" border="0" alt="Trepanation Squad: banner" title="Trepanation Squad" /></a>
+	<a href="http://www.myspace.com/trepanationsquad"><img src="{http_root}/img/banner_trepanationsquad.gif" alt="Trepanation Squad: banner" title="Trepanation Squad" /></a>
 </div>
 
 <div>
-	<a href="http://www.evildist.com/" target="_blank"><img src="{http_root}/img/banner_evildist.gif" border="0" alt="www.evildist.com banner" title="www.evildist.com" /></a>
+	<a href="http://www.evildist.com/"><img src="{http_root}/img/banner_evildist.gif" alt="www.evildist.com banner" title="www.evildist.com" /></a>
 </div>
 
 <div class="List-item-sep"></div>

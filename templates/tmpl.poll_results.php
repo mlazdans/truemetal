@@ -2,22 +2,22 @@
 	Jautājums
 </div>
 
-<div>
-<table cellpadding="0" cellspacing="1">
+<div class="List-item">
+<table cellpadding="0" cellspacing="0">
 <tr>
-	<td colspan="2" bgcolor="#660000"><b>{poll_question}</b></td>
+	<td colspan="2"><b>{poll_question}</b></td>
 </tr>
 <!-- BEGIN BLOCK_poll_items disabled -->
 <tr>
-	<td colspan="2" height="5"></td>
+	<td colspan="2" style="height: 5px;"></td>
 </tr>
 <tr>
-	<td style="border-top: 1px dotted red" width="100%" bgcolor="#660000">{poll_name}</td>
-	<td style="border-top: 1px dotted red" bgcolor="#660000">{count_votes}</td>
+	<td style="border: 1px dotted red; width: 100%;">{poll_name}</td>
+	<td style="border: 1px dotted red;">{count_votes}</td>
 </tr>
 <tr>
-	<td bgcolor="#660000"><!-- BEGIN BLOCK_poll_bar --><img src="{http_root}/img/1x1pollchart.gif" width="{poll_width}" height="10" alt="0" /><!-- END BLOCK_poll_bar --></td>
-	<td bgcolor="#660000">{count_percent}%</td>
+	<td><!-- BEGIN BLOCK_poll_bar --><img src="{http_root}/img/1x1pollchart.gif" width="{poll_width}" height="10" alt="0" /><!-- END BLOCK_poll_bar --></td>
+	<td>{count_percent}%</td>
 </tr>
 <!-- END BLOCK_poll_items -->
 <tr>
