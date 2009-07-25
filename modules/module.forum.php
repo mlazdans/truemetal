@@ -203,7 +203,6 @@ if($forum_id)
 		return;
 	}
 
-	$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_comment_count'];
 	$forum_title .= ' - '.$forum_data['forum_name'].($hl ? sprintf(", meklēšana: %s", $hl) : "");
 	if($page_id > 1)
 		$forum_title .= " - $page_id. lapa";

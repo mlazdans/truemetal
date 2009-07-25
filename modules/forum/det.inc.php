@@ -1,5 +1,7 @@
 <?php
 
+$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_comment_count'];
+
 if(($action == 'add_comment') && user_loged())
 {
 	$table = 'forum';

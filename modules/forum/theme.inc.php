@@ -1,5 +1,7 @@
 <?php
 
+$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_themecount'];
+
 if($action == 'add_theme')
 {
 	$error = false;
