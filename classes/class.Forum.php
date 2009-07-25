@@ -22,135 +22,87 @@ define('FORUM_SORT_ASC', 'A');
 
 class Forum
 {
-	var $date_format;
 	var $page;
 	var $fpp = 20;
 
-	function Forum()
+	function __construct()
 	{
-		$this->date_format = '%Y:%m:%e:%H:%i';
-	} // Forum
+	} // __construct
 
 	function setPage($page)
 	{
 		$this->page = $page;
 	} // setPage
 
+	/*
 	function load($forum_id = 0, $forum_forumid = 0, $forum_active = FORUM_ACTIVE, $order = '',
 		$limit = '')
 	{
-		global $db;
-/*
-		if($GLOBALS['i_am_admin'])
-		{
-			$sql_cache = ' SQL_NO_CACHE ';
-		} else {
-			$sql_cache = '';
-		}
-*/
-		$sql_cache = '';
-
-		$field_b = '';
-		$sql_add = '';
-		if(!empty($_SESSION['login']['l_disable_bobi']))
-		{
-			$field_b = '_b';
-			//$sql_add .= "f.forum_userid NOT IN (SELECT user_id FROM forum_badusers) AND ";
-			$sql_add .= "fbu.user_id IS NULL AND ";
-		}
-		if($forum_id)
-		{
-			$sql_add .= "f.forum_id = $forum_id AND ";
-		} else {
-			$sql_add .= "f.forum_forumid = $forum_forumid AND ";
-		}
-		if($forum_active)
-		{
-			$sql_add .= "f.forum_active = '$forum_active' AND ";
-		}
-		$sql_add = substr($sql_add, 0, -5);
-
-		$sql = "
-SELECT
-$sql_cache
-	f.*, DATE_FORMAT(f.forum_entered, '".$this->date_format."') forum_date,
-	fm.forum_childcount$field_b forum_childcount,
-	fm.forum_lastcommentdate$field_b forum_lastcommentdate
-FROM
-	forum f
-LEFT JOIN forum_meta fm ON fm.forum_id = f.forum_id";
-
-		if(!empty($_SESSION['login']['l_disable_bobi']))
-		{
-			$sql .= "
-LEFT OUTER JOIN forum_badusers fbu ON fbu.user_id = f.forum_userid";
-		}
-
-		if($sql_add)
-		{
-			$sql .= "
-WHERE
-	$sql_add";
-		}
-
-
-/*
-		$sql.='
-		GROUP BY
-			f.forum_id,f.forum_forumid,f.forum_name,f.forum_active,f.forum_allowchilds,f.forum_data,f.forum_datacompiled,f.forum_entered,f.forum_username,f.forum_useremail,f.forum_userip';
-*/
-/*
-		$sql.='
-		GROUP BY
-			f.forum_id
-		';
-*/
-		if($order)
-		{
-			$sql .= "
-ORDER BY
-	$order";
-		} else {
-			$sql .= "
-ORDER BY
-	f.forum_entered DESC";
-		}
-
-		if($limit)
-		{
-			$sql .= ' '.$limit;
-		} elseif($this->page) {
-			$sql .= sprintf(" LIMIT %s,%s", ($this->page - 1) * $this->fpp, $this->fpp);
-		}
-
-		//if($GLOBALS['i_am_admin'])
-		//{
-		//	printr($sql);
-		//}
-
-		if($forum_id)
-		{
-			return $db->ExecuteSingle($sql);
-		} else {
-			return $db->Execute($sql);
-		}
-	} // load
-
-	function getCount($forum_id = 0, $forum_forumid = 0, $forum_active = FORUM_ACTIVE, $order = '',
-		$limit = '')
+	*/
+	function load(Array $params = array())
 	{
 		global $db;
 
-		$sql = "SELECT * FROM forum_meta fm WHERE fm.forum_id = $forum_forumid";
+		$sql_add = array();
+
+		if(isset($params['forum_id']))
+			$sql_add[] = "f.forum_id = $params[forum_id]";
+
+		if(isset($params['forum_forumid']))
+			$sql_add[] = "f.forum_forumid = $params[forum_forumid]";
+
+		if(isset($params['forum_active']))
+			$sql_add[] = "f.forum_active = '$forum_active'";
+		else
+			$sql_add[] = sprintf("f.forum_active = '%s'", FORUM_ACTIVE);
+
+		if(isset($params['forum_allowchilds']))
+			$sql_add[] = sprintf("f.forum_allowchilds = '%s'", $params['forum_allowchilds']);
+
+		$sql = "
+SELECT
+	f.*,
+	(SELECT COUNT(c_id) FROM comment JOIN comment_connect ON cc_c_id = c_id WHERE cc_table = 'forum' AND cc_table_id = f.forum_id) forum_comment_count,
+	(SELECT MAX(c_entered) FROM comment JOIN comment_connect ON cc_c_id = c_id WHERE cc_table = 'forum' AND cc_table_id = f.forum_id) forum_lastcommentdate
+FROM
+	forum f";
+
+		if($sql_add)
+			$sql .= " WHERE ".join(" AND ", $sql_add);
+
+		$sql .= (empty($params['order']) ? " ORDER BY f.forum_entered DESC " : " ORDER BY $params[order] ");
+
+		if(empty($params['limit']))
+		{
+			if($this->page)
+				$sql .= sprintf(" LIMIT %s,%s", ($this->page - 1) * $this->fpp, $this->fpp);
+		} else {
+			$sql .= ' '.$params['limit'];
+		}
+
+		return (isset($params['forum_id']) ? $db->ExecuteSingle($sql) : $db->Execute($sql));
+	} // load
+
+	function getThemeCount($forum_id = 0, $forum_active = FORUM_ACTIVE)
+	{
+		global $db;
+
+		$sql = "
+SELECT
+	COUNT(forum_id) AS forum_comment_count
+FROM
+	forum
+WHERE
+	forum_forumid = $forum_id AND
+	forum_active = '$forum_active'";
+
 		if($data = $db->ExecuteSingle($sql))
 		{
-			return empty($_SESSION['login']['l_disable_bobi']) ? $data['forum_childcount'] : $data['forum_childcount_b'];
+			return $data['forum_comment_count'];
 		} else {
 			return 0;
 		}
-
-		return $data ? (int)$data['item_count'] : 0;
-	} // getCount
+	} // getThemeCount
 
 	function setItemsPerPage($fpp)
 	{
@@ -159,12 +111,14 @@ ORDER BY
 
 	function get_tree($forum_id)
 	{
-		$forum_id = (integer)$forum_id;
+		$forum_id = (int)$forum_id;
 
 		if(!$forum_id)
 			return;
 
-		$data = $this->load($forum_id);
+		$data = $this->load(array(
+			"forum_id"=>$forum_id,
+			));
 
 		$data2 = array();
 		if(isset($data['forum_forumid']))
@@ -184,10 +138,15 @@ ORDER BY
 			return array();
 		}
 
-		$forum_id = (integer)$forum_id;
+		$forum_id = (int)$forum_id;
 
 		$data2 = array();
-		if($data = $this->load(0, $forum_id))
+		//if($data = $this->load(0, $forum_id))
+		$data = $this->load(array(
+			"forum_forumid"=>$forum_id
+			));
+
+		if($data)
 		{
 			foreach($data as $item)
 			{
@@ -232,7 +191,7 @@ ORDER BY
 			}
 		}
 	} // set_all_tree
-
+/*
 	function load_by_userid($userid)
 	{
 		global $db;
@@ -243,7 +202,7 @@ ORDER BY
 
 		return $db->Execute($sql);
 	} // load_by_userid
-
+*/
 	function add($forum_id, &$data, $validate = FORUM_DONTVALIDATE)
 	{
 		global $db, $ip;
@@ -257,10 +216,11 @@ ORDER BY
 		if($validate)
 			$this->validate($data);
 
-		$forum_id = (integer)$forum_id;
-//print "$forum_id:<br>";
-		$forum = $this->load($forum_id);
-//printr($forum);
+		$forum_id = (int)$forum_id;
+		$forum = $this->load(array(
+			"forum_id"=>$forum_id
+			));
+
 		// ja apaksteema
 		if($forum_id)
 		{
@@ -323,7 +283,7 @@ ORDER BY
 
 		$data = $db->ExecuteSingle($sql);
 
-		return (integer)$data['comment_count'];
+		return (int)$data['comment_count'];
 	} // comment_count
 	*/
 /*
@@ -381,7 +341,7 @@ ORDER BY
 	{
 		global $db;
 
-		$forum_id = (integer)$forum_id;
+		$forum_id = (int)$forum_id;
 
 		if(!$forum_id)
 			return true;
@@ -402,7 +362,7 @@ ORDER BY
 	{
 		global $db;
 
-		$forum_id = (integer)$forum_id;
+		$forum_id = (int)$forum_id;
 
 		if(!$forum_id)
 			return true;
@@ -418,7 +378,7 @@ ORDER BY
 	{
 		global $db;
 
-		$forum_id = (integer)$forum_id;
+		$forum_id = (int)$forum_id;
 		$sql = 'UPDATE forum SET forum_active = "Y" WHERE forum_id = '.$forum_id;
 
 		return $db->Execute($sql);
@@ -428,7 +388,7 @@ ORDER BY
 	{
 		global $db;
 
-		$forum_id = (integer)$forum_id;
+		$forum_id = (int)$forum_id;
 		$sql = 'UPDATE forum SET forum_active = "N" WHERE forum_id = '.$forum_id;
 
 		return $db->Execute($sql);
@@ -438,8 +398,8 @@ ORDER BY
 	{
 		global $db;
 
-		$forum_id = (integer)$forum_id;
-		$new_forum_forumid = (integer)$new_forum_forumid;
+		$forum_id = (int)$forum_id;
+		$new_forum_forumid = (int)$new_forum_forumid;
 		$sql = 'UPDATE forum SET forum_forumid = '.$new_forum_forumid.' WHERE forum_id = '.$forum_id;
 
 		return $db->Execute($sql);
@@ -528,65 +488,12 @@ ORDER BY
 	{
 		global $db;
 
-/*
-		$sql_add1 = '';
-		$sql_add2 = '';
-		if(!empty($_SESSION['login']['l_disable_bobi']))
-		{
-			$sql_add1 .= " AND f.forum_userid NOT IN (".join(',', $bobijs).")";
-			$sql_add2 .= " AND f2.forum_userid NOT IN (".join(',', $bobijs).")";
-		}
-		$sql = '
-			SELECT
-				f.forum_forumid, f2.forum_name up_forum, MAX(f.forum_entered) max_date,
-				COUNT(f2.forum_forumid) comment_count
-			FROM
-				forum f USE INDEX ( forum_forumid )
-			JOIN forum f2 ON (f2.forum_id = f.forum_forumid AND f2.forum_active = "'.FORUM_ACTIVE.'" AND f2.forum_allowchilds = "'.FORUM_PROHIBITCHILDS.'"'.$sql_add2.')
-			WHERE
-				f.forum_active = "'.FORUM_ACTIVE.'" AND f.forum_allowchilds = "'.FORUM_PROHIBITCHILDS.'"'.$sql_add1.'
-			GROUP BY
-				f.forum_forumid, f2.forum_name
-			ORDER BY
-				max_date DESC
-			LIMIT 0,10
-		';
-*/
-		$joins = '';
-		$field_b = '';
-		$sql_add = '';
-		if(!empty($_SESSION['login']['l_disable_bobi']))
-		{
-			$joins .= "LEFT OUTER JOIN forum_badusers fbu ON fbu.user_id = f.forum_userid\n";
-			//$sql_add .= " AND f.forum_userid NOT IN (SELECT user_id FROM forum_badusers)";
-			$sql_add .= "fbu.user_id IS NULL AND ";
-			$field_b = '_b';
-		}
+		$data = $this->load(array(
+			"order"=>'forum_lastcommentdate DESC',
+			"limit"=>'LIMIT 0,10',
+			"forum_allowchilds"=>FORUM_PROHIBITCHILDS,
+			));
 
-		$sql = "
-SELECT
-	f.forum_id, f.forum_forumid, f.forum_name,
-	fm.forum_childcount$field_b forum_childcount,
-	fm.forum_lastcommentdate$field_b forum_lastcommentdate
-FROM
-	forum_meta fm
-JOIN forum f ON f.forum_id = fm.forum_id
-$joins
-WHERE
-	$sql_add
-	f.forum_active = '".FORUM_ACTIVE."' AND
-	f.forum_allowchilds = '".FORUM_PROHIBITCHILDS."'
-ORDER BY
-	fm.forum_lastcommentdate$field_b DESC
-LIMIT 0,10
-		";
-		$data = $db->Execute($sql);
-/*
-if($GLOBALS['sys_debug'])
-{
-	printr($sql);
-}
-*/
 		if(count($data))
 		{
 			$template->set_file('FILE_r_forum', 'tmpl.forum_recent.php');
@@ -595,7 +502,7 @@ if($GLOBALS['sys_debug'])
 			{
 				$template->set_var('forum_r_name', $item['forum_name'], 'FILE_r_forum');
 				//$template->set_var('forum_r_comment_count', $this->comment_count($item['forum_forumid']));
-				$template->set_var('forum_r_comment_count', $item['forum_childcount'], 'FILE_r_forum');
+				$template->set_var('forum_r_comment_count', $item['forum_comment_count'], 'FILE_r_forum');
 				$template->set_var('forum_r_path', "forum/".$item['forum_id'], 'FILE_r_forum');
 				$template->parse_block('BLOCK_forum_r_items', TMPL_APPEND);
 			}
@@ -604,8 +511,8 @@ if($GLOBALS['sys_debug'])
 			$template->set_var('right_item_data', $template->get_parsed_content('FILE_r_forum'), 'BLOCK_right_item');
 			$template->parse_block('BLOCK_right_item', TMPL_APPEND);
 		}
-	} // set_forum
-
+	} // set_recent_forum
+/*
 	function search($q)
 	{
 		global $db;
@@ -637,6 +544,6 @@ if($GLOBALS['sys_debug'])
 
 		return $data;
 	}
-
+*/
 } // Forum
 

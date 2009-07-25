@@ -35,7 +35,7 @@ if($allowed)
 		$template->parse_block('BLOCK_search_log', TMPL_APPEND);
 	}
 } else {
-	$template->enable('BLOCK_search_log_denied');
+	//$template->enable('BLOCK_search_log_denied');
 }
 
 $template->set_right();
@@ -43,7 +43,6 @@ $template->set_search();
 $template->set_reviews();
 $template->set_poll();
 $template->set_online();
-$template->set_calendar();
 
 $template->out();
 

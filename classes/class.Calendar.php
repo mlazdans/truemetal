@@ -38,19 +38,19 @@ class Calendar
 		$curr_m = date('n');
 		$curr_d = date('j');
 
-	$y = (!$y || $y < $this->min_year || $y > $curr_y) ? $curr_y : $y;
-	$m = (!$m || $m > 12 || $m < 1) ? $curr_m : $m;
-		$days_in_month = date('t', mktime(0, 0, 0, $m, 1, $y));
-	$d = (!$d || $d > $days_in_month || $d < 1) ? $curr_d : $d;
+		$y = (!$y || $y < $this->min_year || $y > $curr_y) ? $curr_y : $y;
+		$m = (!$m || $m > 12 || $m < 1) ? $curr_m : $m;
+			$days_in_month = date('t', mktime(0, 0, 0, $m, 1, $y));
+		$d = (!$d || $d > $days_in_month || $d < 1) ? $curr_d : $d;
 
-	  if($m > $curr_m and $y >= $curr_y)
+		if($m > $curr_m and $y >= $curr_y)
 			$m = $curr_m;
 
-	if($d > $curr_d and $m >= $curr_m and $y >= $curr_y) {
+		if($d > $curr_d and $m >= $curr_m and $y >= $curr_y) {
 			$d = $curr_d;
 			$m = $curr_m;
 			$y = $curr_y;
-	}
+		}
 	} // parse_date
 
 	function generate($y = 0, $m = 0, $d = 0)
@@ -97,11 +97,11 @@ class Calendar
 		else
 			$p_m = '<td><a href="'.$sys_http_root.'/archive/'.($y - 1).'/12/'.($d <= $prevm_day ? $d : $d - $prevm_day).'/"><b>«</b></a></td>';
 
-		$str = '<table border="0" cellpadding="2" cellspacing="1" align="center" width="100%">';
-		$str .= '<tr>'.$p_m.'<td valign="bottom" align="center" colspan="5" width="100%"><b>'.$this->months[(integer)$m].'</b></td>'.$n_m.'</tr>';
+		$str = '<table border="0" cellpadding="2" cellspacing="1">';
+		$str .= '<tr>'.$p_m.'<td valign="bottom" align="center" colspan="5" style="width: 100%"><b>'.$this->months[(integer)$m].'</b></td>'.$n_m.'</tr>';
 		$str .= '<tr><td class="TD-cal-day">P</td><td class="TD-cal-day">O</td><td class="TD-cal-day">T</td><td class="TD-cal-day">C</td><td class="TD-cal-day">P</td><td class="TD-cal-day">S</td><td class="TD-cal-day">Sv</td></tr>';
 		$str .= '</table>';
-		$str .= '<table border="0" cellpadding="2" cellspacing="1" align="center" width="100%">';
+		$str .= '<table border="0" cellpadding="2" cellspacing="1" style="width: 100%">';
 
 		// cik laucinji pa visam
 		$total = $weeks * 7;
@@ -157,8 +157,8 @@ class Calendar
 		if($y > $this->min_year)
 			$p_y = '<td><a href="'.$sys_http_root.'/archive/'.($y - 1)."/$m/".($d <= $prevm_day ? $d : $d - $prevm_day).'/"><b>«</b></a></td>';
 
-		$str .= '<table border="0" cellpadding="2" cellspacing="1" align="center"><tr><td colspan="3" height="5"></td>';
-		$str .= '<tr>'.$p_y.'<td align="center" width="100%"><b>'.$y.'</b></td>'.$n_y.'</tr>';
+		$str .= '<table border="0" cellpadding="2" cellspacing="1"><tr><td colspan="3" style="height: 5px"></td></tr>';
+		$str .= '<tr>'.$p_y.'<td align="center" style="width: 100%"><b>'.$y.'</b></td>'.$n_y.'</tr>';
 		$str .= "</table>";
 
 		return $str;

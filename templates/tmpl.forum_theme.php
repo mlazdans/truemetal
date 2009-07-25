@@ -30,7 +30,7 @@
 <!-- END BLOCK_is_pages -->
 
 
-<table cellpadding="2" cellspacing="1">
+<table class="Forum-Theme" cellpadding="2" cellspacing="1">
 <tr>
 	<td class="Forum-cat">Tēma</td>
 	<td class="Forum-cat">Kom.</td>
@@ -42,13 +42,10 @@
 		<a href="{module_root}/{forum_id}/" title="Datums: {forum_date}"><b>{forum_name}</b></a>
 	</td>
 	<td class="Forum-Theme-childcount<!-- BEGIN BLOCK_comments_new disabled --> Comment-new<!-- END BLOCK_comments_new -->">
-		{forum_childcount}
+		{forum_comment_count}
 	</td>
 	<td class="Forum-Theme-username">
-		<!-- BEGIN BLOCK_email disabled -->
-		<a href="mailto:{forum_useremail}" class="A-small">{forum_username}</a>
-		<!-- END BLOCK_email -->
-		<!-- BEGIN BLOCK_username disabled -->{forum_username}<!-- END BLOCK_username -->
+		{forum_username}
 	</td>
 </tr>
 <!-- END BLOCK_forum -->
@@ -57,12 +54,12 @@
 
 <!-- BEGIN BLOCK_info_sort_T disabled -->
 <div class="List-item">
-	Tēmas sakārtotas pēc ievadīšanas datuma.
+	Tēmas sakārtotas pēc ievadīšanas datuma
 </div>
 <!-- END BLOCK_info_sort_T -->
 <!-- BEGIN BLOCK_info_sort_C disabled -->
 <div class="List-item">
-	Tēmas sakārtotas pēc pēdējā komentāra datuma.
+	Tēmas sakārtotas pēc pēdējā komentāra datuma
 </div>
 <!-- END BLOCK_info_sort_C -->
 
@@ -74,44 +71,40 @@
 
 <div class="Forum-sep"></div>
 
-<!-- BEGIN BLOCK_forum_form disabled -->
-<form action="{module_root}/{forum1_id}/#add_theme" method="post">
-<input type="hidden" name="action" value="add_theme">
-<a name="add_theme"></a>
-<table width="100%" cellpadding="2" cellspacing="1" border="0" align="center">
-	<tr>
-		<td colspan="2" nowrap class="TD-cat">Pievienot jaunu tēmu:</td>
-	</tr>
+<div class="TD-cat">
+	Pievienot jaunu tēmu
+</div>
+
 <!-- BEGIN BLOCK_notloggedin disabled -->
-	<tr>
-		<td>
-<table width="100%" cellpadding="2" cellspacing="1" border="0" align="center" bgcolor="#330000">
-	<tr>
-		<td width="100%"><br><br>Pievienot jaunu tēmu var tikai reģistrēti lietotāji, tapēc, ielogojies vai <a href="{http_root}/register/">reģistrējies</a>!<br><br><br><br></td>
-	</tr>
-</table>
-		</td>
-	</tr>
+<div class="Info">
+	Pievienot jaunu tēmu var tikai reģistrēti lietotāji, tapēc, ielogojies vai <a href="{http_root}/register/">reģistrējies</a>!
+</div>
 <!-- END BLOCK_notloggedin -->
+
 <!-- BEGIN BLOCK_loggedin disabled -->
-	<tr>
-		<td nowrap align="right">Vārds:</td>
-		<td>{forumd_username}</td>
-	</tr>
-	<tr>
-		<td nowrap align="right"<!-- BEGIN BLOCK_forumname_error disabled --> class="error-form"<!-- END BLOCK_forumname_error -->>Jauna tēma:</td>
-		<td><input type="text" name="data[forum_name]" maxlength="64" size="64" value="{forumd_name}"></td>
-	</tr>
-	<tr>
-		<td align="right" valign="top"<!-- BEGIN BLOCK_forumdata_error disabled --> class="error-form"<!-- END BLOCK_forumdata_error -->>Ziņa:</td>
-		<td><textarea name="data[forum_data]" cols="50" rows="10">{forumd_data}</textarea></td>
-	</tr>
-	<tr>
-		<td align="right">&nbsp;</td>
-		<td width="100%"><input type="submit" value="Pievienot"></td>
-	</tr>
-<!-- END BLOCK_loggedin -->
+<a name="add_theme"></a>
+<form action="{module_root}/{forum1_id}/#add_theme" method="post">
+<table class="Forum-Theme-form" cellpadding="2" cellspacing="1">
+<tr>
+	<td align="right">
+		<input type="hidden" name="action" value="add_theme" />
+		Vārds:
+	</td>
+	<td>{forumd_username}</td>
+</tr>
+<tr>
+	<td align="right"<!-- BEGIN BLOCK_forumname_error disabled --> class="error-form"<!-- END BLOCK_forumname_error -->>Jauna tēma:</td>
+	<td><input style="width: 95%;" type="text" name="data[forum_name]" maxlength="64" size="64" value="{forumd_name}" /></td>
+</tr>
+<tr>
+	<td align="right" valign="top"<!-- BEGIN BLOCK_forumdata_error disabled --> class="error-form"<!-- END BLOCK_forumdata_error -->>Ziņa:</td>
+	<td><textarea style="width: 95%;" name="data[forum_data]" cols="50" rows="10">{forumd_data}</textarea></td>
+</tr>
+<tr>
+	<td align="right">&nbsp;</td>
+	<td><input type="submit" value="Pievienot" /></td>
+</tr>
 </table>
 </form>
-<!-- END BLOCK_forum_form -->
+<!-- END BLOCK_loggedin -->
 

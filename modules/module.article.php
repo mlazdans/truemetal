@@ -5,33 +5,56 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
+// There are 1065 DOM elements on the page
+
 require_once('../classes/class.MainModule.php');
 require_once('../classes/class.Article.php');
 require_once('../classes/class.Module.php');
+require_once('../classes/class.CommentConnect.php');
 
 $art_per_page = 20;
 
 # GET/POST
 $art_id = array_shift($sys_parameters);
-$action = isset($_POST['action']) ? $_POST['action'] : '';
+$action = post('action');
 $hl = urldecode(get("hl"));
-
-if($art_id == 'page')
-{
-	$page = (int)array_shift($sys_parameters);
-} else {
-	$page = 0;
-}
-
+$page = ($art_id == 'page' ? (int)array_shift($sys_parameters) : 0);
 $art_id = (int)$art_id;
 
-$article = new Article;
+# Template
+$template = new MainModule($sys_template_root, $sys_module_id);
+$template->set_file('FILE_article', 'tmpl.article.php');
+$template->copy_block('BLOCK_middle', 'FILE_article');
+if($art_id)
+{
+	$template->set_file('FILE_article_comments', 'tmpl.comments.php');
+	$template->copy_block('BLOCK_article_comments', 'FILE_article_comments');
+}
+
 if(!$art_id)
-	$article->date_format='%d.%m.%Y';
+	$template->set_var('block_middle_class', 'light');
+
+# Loading
+$article = new Article;
 
 $tc = 0;
 if($art_id) {
-	$articles = $article->load($art_id);
+	$template->enable('BLOCK_article_comments_head');
+	$articles = (($art = $article->load($art_id)) ? array($art) : array());
+	$item = $art;
+
+	if(($action == 'add_comment') && ($item['art_comments'] == ARTICLE_COMMENTS) && user_loged())
+	{
+		$table = 'article_'.$sys_lang;
+		$table_id = $art_id;
+		if($ac_id = include('../modules/comment/add.inc.php'))
+		{
+			$CommentConnect->db->Commit();
+			$np = join('/', array_keys($path));
+			header("Location: $sys_http_root/$np/$art_id/#comment$ac_id");
+			return;
+		}
+	}
 } elseif($_pointer['_data_']['mod_id']) {
 	$tc = $article->get_total($_pointer['_data_']['mod_id']);
 	$tp = floor($tc / $art_per_page);
@@ -52,65 +75,32 @@ if($art_id) {
 	$articles = array();
 }
 
-# ++ cache
-/*
-$cache_id = $sys_module_id;
-if(!$art_id && (($data = $template->get_cache($sys_module_id, $cache_id)) !== false) && $data)
-{
-	$template->create_file('FILE_article', $data);
-	$article->set_comment_count($template, $articles);
-	$template->set_right();
-	$template->set_login();
-	$template->set_reviews();
-	$template->set_poll();
-	$template->set_search();
-	$template->set_online();
-	$template->set_calendar();
-
-	$template->out();
-	return;
-}
-*/
-# -- cache
-
 // no chekojam vai registreeta *sadalja/raksts*
+/*
+if(
+	!user_loged() &&
+	($_pointer['_data_']['registrated'] == MOD_TYPE_REGISTRATED ||
+	$_pointer['_data_']['module_type'] == MOD_TYPE_REGISTRATED)
+)
+	$tmpl = 'tmpl.registrated.php';
+else
+	$tmpl = 'tmpl.article.php';
+*/
+# Comments
 if($art_id)
 {
-	if(
-		!user_loged() &&
-		($articles['art_type'] == ARTICLE_TYPE_REGISTRATED ||
-		$_pointer['_data_']['registrated'] == MOD_TYPE_REGISTRATED ||
-		$_pointer['_data_']['module_type'] == MOD_TYPE_REGISTRATED)
-	)
-		$tmpl = 'tmpl.registrated.php';
-	else
-		$tmpl = 'tmpl.comments.php';
-} else
-	if(
-		!user_loged() &&
-		($_pointer['_data_']['registrated'] == MOD_TYPE_REGISTRATED ||
-		$_pointer['_data_']['module_type'] == MOD_TYPE_REGISTRATED)
-	)
-		$tmpl = 'tmpl.registrated.php';
-	else
-		$tmpl = 'tmpl.article.php';
-
-// ielaadee visus rakstu zem visaam apakskategorijaam
-//if(!count($articles))
-//	$articles = $article->load_under($_pointer);
-
-//$TMPL_CACHE_ID = "$sys_module_id:$tmpl";
-//if(!$sys_tmpl_cache || !($template =& tmpl_cache_fetch($TMPL_CACHE_ID)))
-{
-	$template = new MainModule($sys_template_root, $sys_module_id);
-	$template->set_file('FILE_article', $tmpl);
-	$template->copy_block('BLOCK_middle', 'FILE_article');
+	$_SESSION['comments']['viewed'][$art_id] = $articles[0]['art_comment_count'];
+	$CC = new CommentConnect('article_'.$sys_lang);
+	$CC->setDb($db);
+	$comments = $CC->get(array(
+		'cc_table_id'=>$art_id
+		));
+	include("comment/list.inc.php");
 }
 
 # Pages
 if($tc)
 {
-	//print ("\$tc=$tc:\$tp=$tp:\$art_align=$art_align");
 	$template->enable('BLOCK_article_page');
 
 	if(!$page)
@@ -133,11 +123,7 @@ if($tc)
 	}
 }
 
-//if($sys_tmpl_cache)
-//{
-//	tmpl_cache_store($TMPL_CACHE_ID, $template);
-//}
-
+# Title
 $art_title = '';
 if($_pointer['_data_']['module_name'])
 {
@@ -153,7 +139,8 @@ if($page && ($page <= $tp))
 
 $template->set_title($art_title);
 
-if($tmpl != 'tmpl.registrated.php')
+//if($tmpl != 'tmpl.registrated.php')
+/*
 if($art_id) {
 	if(user_loged() || $articles['art_type'] == ARTICLE_TYPE_OPEN)
 	{
@@ -163,7 +150,19 @@ if($art_id) {
 		$item = $articles;
 		include('../modules/inc.comment_actions.php');
 	}
-} elseif(count($articles)) {
+} else
+*/
+$tidy_config = array(
+	'doctype' => 'strict',
+	'clean' => true,
+	'output-xhtml' => true,
+	'show-body-only' => true,
+	'wrap' => 0,
+	'alt-text' => ''
+	);
+
+if(count($articles))
+{
 	$module = new Module;
 	$template->enable('BLOCK_article');
 	//$template->set_ad();
@@ -171,10 +170,23 @@ if($art_id) {
 	foreach($articles as $item)
 	{
 		++$c;
-		//if($c <= ARTICLE_TO_SHOW)
-		//{
-			// ja ir atdaliitaajs (ivads->turpinaajums)
-			$patt = '/<hr\s+id=editor_splitter>.*/ims';
+
+		$tidy = tidy_parse_string($item['art_data'], $tidy_config, 'UTF8');
+		$tidy->cleanRepair();
+		//$root = tidy_get_root($tidy);
+		//printr($root);
+		//die;
+		$item['art_data'] = $tidy;
+
+		$item['art_date'] = date('d.m.Y', strtotime($item['art_entered']));
+		if($art_id)
+		{
+			$patt = '/(.*)(<hr\s+id="editor_splitter" \/>)(.*)/ims';
+			$item['art_data'] = preg_replace($patt, '<div style="font-weight: bold;">\1</div><hr/>\3', $item['art_data'], 1);
+			$item['art_date_f'] = proc_date($item['art_entered']);
+			$template->enable('BLOCK_art_data_formatted');
+		} else {
+			$patt = '/<hr\s+id="editor_splitter" \/>.*/ims';
 			if(preg_match($patt, $item['art_data']))
 			{
 				$item['art_data'] = preg_replace($patt, '', $item['art_data'], 1);
@@ -182,14 +194,8 @@ if($art_id) {
 			} else {
 				$template->disable('BLOCK_art_cont');
 			}
-		/*
-		} else {
-			$item['art_date'] = '';
-			$template->disable('BLOCK_art_cont');
-			$template->disable('BLOCK_art_data');
-		}*/
+		}
 
-		//$item['art_date'] = proc_date($item['art_date']);
 		if($item['art_comments'] == ARTICLE_NOCOMMENTS)
 			$template->disable('BLOCK_is_comments');
 		else
@@ -201,31 +207,9 @@ if($art_id) {
 	}
 	$article->set_comment_count($template, $articles);
 } else {
-	if($tmpl == 'tmpl.article.php')
-		$template->enable('BLOCK_noarticle');
-	//$template->set_var('module_data', $_pointer['_data_']['module_data']);
+	//if($tmpl == 'tmpl.article.php')
+	$template->enable('BLOCK_noarticle');
 }
-
-$tmp = $_pointer2;
-if(isset($tmp['_data_']))
-	unset($tmp['_data_']);
-
-if(count($tmp))
-{
-	$template->enable('BLOCK_subcat_top');
-	$template->enable('BLOCK_subcat_bottom');
-}
-
-/*
-set_parts($template);
-//$template->set_label($path);
-$template->set_right($sys_modules, $sys_modules);
-$template->set_modules($sys_modules);
-//$template->set_submodules($_pointer2);
-$template->set_poll();
-$template->set_login();
-$template->set_calendar();
-*/
 
 $template->set_right();
 $template->set_login();
@@ -233,18 +217,6 @@ $template->set_reviews(13);
 $template->set_poll();
 $template->set_search();
 $template->set_online();
-$template->set_calendar();
 
 $template->out();
 
-# ++ cache
-/*
-if(!$art_id)
-{
-	$template->parse_file('FILE_article');
-	$template->set_cache($sys_module_id, $cache_id, $template->get_parsed_content('FILE_article'));
-}
-*/
-# -- cache
-
-?>

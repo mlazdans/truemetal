@@ -12,11 +12,11 @@
 	<a href="/article/581/" title="24. septembris, ceturtdiena, klubs &quot;Melnā Piektdiena&quot;">CHIMAIRA</a>
 </div>
 
-<div class="List-item-sep"></div>
+<div class="List-sep"></div>
 
 <!-- BEGIN BLOCK_right_item -->
 {right_item_data}
-<div class="List-item-sep"></div>
+<div class="List-sep"></div>
 <!-- END BLOCK_right_item -->
 
 
@@ -28,10 +28,13 @@
 	<a href="http://www.evildist.com/"><img src="{http_root}/img/banner_evildist.gif" alt="www.evildist.com banner" title="www.evildist.com" /></a>
 </div>
 
-<div class="List-item-sep"></div>
+<div class="List-sep"></div>
 
 
 <div class="TD-cat">Viskas</div>
+<div class="List-item">
+	<a href="{http_root}/archive/">Arhīvs</a>
+</div>
 <div class="List-item">
 	<a href="{http_root}/links/">Saites</a>
 </div>

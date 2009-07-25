@@ -272,7 +272,8 @@ class MainModule extends Template
 			foreach($data as $item)
 			{
 				$this->set_var('review_r_name', $item['art_name'], 'BLOCK_review_r_items');
-				$this->set_var('review_r_comment_count', $article->comment_count($item['art_id']), 'BLOCK_review_r_items');
+				//$this->set_var('review_r_comment_count', $article->comment_count($item['art_id']), 'BLOCK_review_r_items');
+				$this->set_var('review_r_comment_count', $item['art_comment_count'], 'BLOCK_review_r_items');
 				$this->set_var('review_r_path', "article/".$item['art_id'], 'BLOCK_review_r_items');
 				//$comment->show_comments($this, $item['art_id']);
 				$this->parse_block('BLOCK_review_r_items', TMPL_APPEND);

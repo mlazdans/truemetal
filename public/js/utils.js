@@ -106,14 +106,6 @@ function pop(theURL,w,h,name)
 	window.open(theURL, name, 'fullscreen=0,toolbar=0,status=0,scrollbars=0,menubar=0,location=0,resizable=0,channelmode=0,directories=0,width=' + w + ',height=' + h + ',top=' + t +',left=' + l);
 }
 
-function checkLogOff()
-{
-	if(confirm('Tu ko?! Nezini, kas ir Amorphis???'))
-	{
-		location.href = '/login/logoff/';
-	}
-}
-
 function checkDel(form, selName, msg)
 {
 	if(!msg)
@@ -134,21 +126,26 @@ function checkDelSimple(msg)
 	return confirm(msg);
 }
 
-function Vote(cat, catId, value, voteXpath)
+function Vote(cId, value, voteXpath)
 {
-	$.getJSON("/vote/" + value + "/" + cat + "/" + catId + "/json/",
+	$.getJSON("/vote/" + value + "/" + cId + "/json/",
 		function(data)
 		{
-			if(!data || !data.forumVotes)
+			if(!data || !data.Votes)
+			{
+				if(data.msg)
+				{
+					alert(data.msg);
+				}
 				return false;
+			}
 
-			//var forumVotes = '#forumVotes' + forumId;
-			if(data.forumVotes > 0)
-				$(voteXpath).html('+' + data.forumVotes).removeClass("Comment-Vote-minus").addClass("Comment-Vote-plus");
-			else if(data.forumVotes < 0)
-				$(voteXpath).html(data.forumVotes).addClass("Comment-Vote-minus").removeClass("Comment-Vote-plus");
+			if(data.Votes > 0)
+				$(voteXpath).html('+' + data.Votes).removeClass("Comment-Vote-minus").addClass("Comment-Vote-plus");
+			else if(data.Votes < 0)
+				$(voteXpath).html(data.Votes).addClass("Comment-Vote-minus").removeClass("Comment-Vote-plus");
 			else
-				$(voteXpath).html(data.forumVotes).removeClass("Comment-Vote-minus").removeClass("Comment-Vote-plus");
+				$(voteXpath).html(data.Votes).removeClass("Comment-Vote-minus").removeClass("Comment-Vote-plus").addClass("Comment-Vote");
 		});
 } // Vote
 

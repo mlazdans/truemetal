@@ -114,8 +114,8 @@ function remove_shit(&$data, $filter = 0)
 
 function proc_date($date)
 {
-	//printr($date);
-	/* $date format Y:M:D:H:M - 2002:07:27:23:12 */
+	# $date - strtotime acceptable date
+	# XXX: NOT TRUE $date format Y:M:D:H:M - 2002:07:27:23:12
 	$M = array(
 		'janvārī',
 		'februārī',
@@ -136,10 +136,6 @@ function proc_date($date)
 		'aizvakar'
 	);
 
-	//$date_now = date("Y:m:j:H:i");
-	//$date_TS = strtotime($date);
-	//$now_TS = time();
-	//$diff = ($now_TS - $date_TS) / (3600 * 24);
 	$date_now = date("Y:m:j:H:i");
 	@list($y0, $m0, $d0, $h0, $min0) = split(":", date("Y:m:j:H:i", strtotime($date)));
 	@list($y1, $m1, $d1, $h1, $min1) = split(":", $date_now);
@@ -147,8 +143,6 @@ function proc_date($date)
 	$dlong0 = mktime($h0, $min0, 0, $m0, $d0, $y0);
 	$dlong1 = mktime($h1, $min1, 0, $m1, $d1, $y1);
 	$diff = date('z', $dlong1) - date('z', $dlong0);
-	//list($y0, $m0, $d0, $h0, $min0) = split(":", date("Y:m:j:H:i", $date_TS));
-	//$y1 = date('Y', $now_TS);
 
 	$retdate = '';
 
@@ -217,7 +211,7 @@ function parse_text_data(&$data)
 
 	$data = join("", $tmp[1]);
 	my_strip_tags($data);
-	$data = preg_replace('/(\r\n|\n)/', '<br>\1', $data);
+	$data = preg_replace('/(\r\n|\n)/', '<br />\1', $data);
 
 	// proc urls - 2pass
 	foreach($matches[0] as $k=>$v) {
@@ -238,9 +232,9 @@ function parse_text_data(&$data)
 		# youtube.com
 		if((substr($host, -11) == 'youtube.com') && preg_match('/watch\?v=([^&]*)/i', $url, $url_parts))
 		{
-			$data = str_replace($tokens[$k], '<div><div id="'.uniqid('yt').'" class="youtube '.$url_parts[1].'"><a href="'.$url.'" target="_blank">'.$url_short.'</a></div></div>', $data);
+			$data = str_replace($tokens[$k], '<div><div id="'.uniqid('yt').'" class="youtube '.$url_parts[1].'"><a href="'.$url.'">'.$url_short.'</a></div></div>', $data);
 		} else {
-			$data = str_replace($tokens[$k], '<a href="'.$url.'" target="_blank">'.$url_short.'</a>', $data);
+			$data = str_replace($tokens[$k], '<a href="'.$url.'">'.$url_short.'</a>', $data);
 		}
 	}
 

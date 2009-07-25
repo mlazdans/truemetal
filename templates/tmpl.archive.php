@@ -1,20 +1,21 @@
-<table width="100%" cellpadding="2" cellspacing="1" border="0" align="center">
-	<!-- BEGIN BLOCK_archive_items -->
+<!-- BEGIN BLOCK_archive_items -->
+	<!-- BEGIN BLOCK_archive_sep disabled -->
+	<div class="List-sep"></div>
+	<!-- END BLOCK_archive_sep -->
 	<!-- BEGIN BLOCK_archive_date disabled -->
-	<tr>
-		<td width="100%">&nbsp;</td>
-	</tr>
-	<tr>
-		<td width="100%"><b><u>{art_date}</u></b></td>
-	</tr>
+	<div class="TD-cat">
+		{art_date}
+	</div>
 	<!-- END BLOCK_archive_date -->
-	<tr>
-		<td width="100%"><a href="{http_root}/article/{art_id}/">{art_name}</td>
-	</tr>
-	<!-- END BLOCK_archive_items -->
-	<!-- BEGIN BLOCK_no_archive disabled -->
-	<tr>
-		<td width="100%">Diemžēl šajā datumā nav ierakstu!</td>
-	</tr>
-	<!-- END BLOCK_no_archive -->
-</table>
+	<div class="List-item">
+		<a href="{http_root}/{art_module_id}/{art_id}/">{art_name}</a>
+	</div>
+
+<!-- END BLOCK_archive_items -->
+
+<!-- BEGIN BLOCK_no_archive disabled -->
+<div class="Info">
+	Diemžēl šajā datumā nav ierakstu!
+</div>
+<!-- END BLOCK_no_archive -->
+

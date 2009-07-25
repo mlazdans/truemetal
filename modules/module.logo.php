@@ -17,6 +17,5 @@ $template->set_login();
 $template->set_poll();
 $template->set_search();
 $template->set_online();
-$template->set_calendar();
 
 $template->out();

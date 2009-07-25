@@ -1,9 +1,5 @@
 <a name="comments"></a>
 
-<div class="TD-cat">
-	Komentāri:
-</div>
-
 <!-- BEGIN BLOCK_comment disabled -->
 <table class="Comments" cellpadding="2" cellspacing="1">
 <!-- BEGIN BLOCK_comment_list -->
@@ -33,21 +29,20 @@
 </div>
 <!-- END BLOCK_nocomment -->
 
+<div class="TD-cat">
+	Pievienot komentāru
+</div>
+
 <!-- BEGIN BLOCK_notloggedin disabled -->
 <div class="Info">
-	Komentārus rakstīt var tikai reģistrēti lietotāji, tapēc, ielogojies vai
+	Komentārus rakstīt var tikai reģistrēti lietotāji, tapēc ielogojies vai
 	<a href="{http_root}/register/">reģistrējies</a>!
 </div>
 <!-- END BLOCK_notloggedin -->
 
 <!-- BEGIN BLOCK_addcomment disabled -->
-<a name="add_comments"></a>
 
-<div class="TD-cat">
-	Pievienot komentāru:
-</div>
-
-<form action="#add_comments" method="post">
+<form action="#add_comment" method="post" id="add_comment">
 <table width="100%" cellpadding="2" cellspacing="0">
 <!-- BEGIN BLOCK_comment_error disabled -->
 <tr>

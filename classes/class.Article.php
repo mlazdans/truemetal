@@ -22,9 +22,6 @@ define('ARTICLE_COMMENTS', 'Y');
 define('ARTICLE_NOCOMMENTS', 'N');
 define('ARTICLE_TYPE_OPEN', 'O');
 define('ARTICLE_TYPE_REGISTRATED', 'R');
-define('COMMENT_VISIBLE', 'Y');
-define('COMMENT_INVISIBLE', 'N');
-define('COMMENT_ALL', false);
 
 class Article {
 	var $date_format;
@@ -34,7 +31,7 @@ class Article {
 
 	function Article() {
 		//$this->date_format = '%d.%m.%Y %H:%i';
-		$this->set_date_format('%Y:%m:%d:%H:%i');
+		//$this->set_date_format('%Y:%m:%d:%H:%i');
 		$this->set_limit(ARTICLE_LIMIT);
 	}
 
@@ -68,7 +65,16 @@ class Article {
 			$sql_add1 = '';
 
 		$sql_add = '';
-		$sql = 'SELECT a.*, DATE_FORMAT(a.art_entered, \''.$this->date_format.'\') art_date'.$sql_add1.', m.* FROM article_'.$sys_lang.' a, modules_'.$sys_lang.' m';
+		$art_table = "article_$sys_lang";
+		$sql = "
+SELECT
+	a.*,
+	DATE_FORMAT(a.art_entered, '$this->date_format') art_date $sql_add1,
+	(SELECT COUNT(c_id) FROM comment JOIN comment_connect ON cc_c_id = c_id WHERE cc_table = '$art_table' AND cc_table_id = a.art_id) art_comment_count,
+	m.*
+FROM
+	$art_table a, modules_$sys_lang m
+";
 
 		$sql_add .= 'a.art_modid = m.mod_id AND ';
 
@@ -171,24 +177,6 @@ class Article {
 			return last_insert_id();
 		} else
 			return false;
-	}
-
-	function comment_count($art_id, $ac_visible = COMMENT_VISIBLE)
-	{
-		global $db, $sys_lang;
-
-		if(!$art_id)
-			return 0;
-
-		$sql1 = '';
-		if($ac_visible)
-			$sql1 =  "ac_visible='".COMMENT_VISIBLE."' AND ";
-
-		$sql = "SELECT COUNT(*) comment_count FROM article_comments_$sys_lang WHERE $sql1 ac_artid = $art_id";
-
-		$data = $db->ExecuteSingle($sql);
-
-		return (integer)$data['comment_count'];
 	}
 
 	function update($art_id, &$data, $validate = ARTICLE_VALIDATE)
@@ -349,6 +337,7 @@ class Article {
 		return $ret;
 	}
 
+	/*
 	function comment_del($ac_id = 0, $art_id = 0)
 	{
 		global $db, $sys_lang;
@@ -449,35 +438,12 @@ class Article {
 		return $ret;
 	}
 
-	function load_comment($ac_id, $ac_visible = COMMENT_VISIBLE)
-	{
-		global $db, $sys_lang;
-
-		$sql1 = '';
-		if($ac_visible)
-			$sql1 =  "ac.ac_visible='".COMMENT_VISIBLE."' AND ";
-
-		$sql = "SELECT ac.*, DATE_FORMAT(ac.ac_entered, '".$this->date_format."') ac_date FROM article_comments_$sys_lang ac WHERE $sql1 ac_id = $ac_id";
-
-		return $db->ExecuteSingle($sql);
-	} // load_comment
-
-	function load_comments($art_id, $ac_visible = COMMENT_VISIBLE)
-	{
-		global $db, $sys_lang;
-
-		$sql1 = '';
-		if($ac_visible)
-			$sql1 =  "ac.ac_visible='".COMMENT_VISIBLE."' AND ";
-
-		$sql = "SELECT ac.*, DATE_FORMAT(ac.ac_entered, '".$this->date_format."') ac_date FROM article_comments_$sys_lang ac WHERE $sql1 ac_artid = $art_id ORDER BY ac.ac_entered ";
-
-		return $db->Execute($sql);
-	}
-
 	function add_comment($art_id, &$data, $validate = ARTICLE_VALIDATE)
 	{
-		global $ip, $db, $sys_lang;
+		//global $ip, $db, $sys_lang;
+		//global $ip, $sys_lang, $sys_database_type, $sys_db_host, $sys_db_user,
+		//$sys_db_password, $sys_db_name, $sys_db_port;
+		global $ip, $sys_lang;
 
 		if(!user_loged())
 		{
@@ -501,25 +467,18 @@ class Article {
 		$user_id = $_SESSION['login']['l_id'];
 		$user_login = $_SESSION['login']['l_login'];
 
-		$sql = "
-		INSERT INTO article_comments_$sys_lang (
-			ac_artid, ac_userid, ac_userlogin, ac_username,
-			ac_useremail, ac_data, ac_datacompiled,
-			ac_userip, ac_entered
-		) VALUES (
-			$art_id, $user_id, '$user_login', '$data[ac_username]',
-			'$data[ac_useremail]', '$data[ac_data]', '$data[ac_datacompiled]',
-			'$ip', ".$db->now()."
-		)";
+		$cData = array(
+			'user_id'=>$user_id,
+			'user_login'=>$user_login,
+			'user_name'=>$data['ac_username'],
+			'user_email'=>$data['ac_useremail'],
+			'data'=>$data['ac_data'],
+			'data_compiled'=>$data['ac_datacompiled'],
+			'ip'=>$ip,
+			);
 
-		if($db->Execute($sql))
-		{
-			$_SESSION['user']['username'] = $data['ac_username'];
-			$_SESSION['user']['useremail'] = $data['ac_useremail'];
-			$this->update_cache(0, $art_id);
-			return last_insert_id();
-		} else
-			return false;
+		$CommentConnect = new CommentConnect('article_'.$sys_lang);
+		$CommentConnect->add($art_id, $cData);
 	}
 
 	function validate_comment(&$data)
@@ -546,6 +505,7 @@ class Article {
 
 		parse_text_data($data['ac_datacompiled']);
 	}
+	*/
 
 	function validate(&$data)
 	{
@@ -649,7 +609,8 @@ class Article {
 		reset($articles);
 		foreach($articles as $item)
 		{
-			$comment_count = $this->comment_count($item['art_id']);
+			//$comment_count = $this->comment_count($item['art_id']);
+			$comment_count = $item['art_comment_count'];
 			$old_comment_count =
 				isset($_SESSION['comments']['viewed'][$item['art_id']]) ?
 				$_SESSION['comments']['viewed'][$item['art_id']] :

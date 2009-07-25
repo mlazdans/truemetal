@@ -14,7 +14,7 @@
 	</table>
 </div>
 
-<div class="List-item-sep"></div>
+<div class="List-sep"></div>
 
 <div class="TD-cat">
 	Baltijas Saule 2004
@@ -48,7 +48,7 @@
 	</table>
 </div>
 
-<div class="List-item-sep"></div>
+<div class="List-sep"></div>
 
 <div class="TD-cat">
 	Skyforger live in Parnu
@@ -65,7 +65,7 @@
 	</table>
 </div>
 
-<div class="List-item-sep"></div>
+<div class="List-sep"></div>
 
 <div class="TD-cat">
 	Impaled Nazarene live in Riga
@@ -83,7 +83,7 @@
 	</table>
 </div>
 
-<div class="List-item-sep"></div>
+<div class="List-sep"></div>
 
 <div class="TD-cat">
 	Intervijas ar Obtest un Skyforger sadarbībā ar Andi un Artūru
@@ -108,7 +108,7 @@
 	</table>
 </div>
 
-<div class="List-item-sep"></div>
+<div class="List-sep"></div>
 
 <div class="TD-cat">
 	Baltijas Saule 2003, filmē Artūrs (mepisins)
@@ -133,7 +133,7 @@
 	</table>
 </div>
 
-<div class="List-item-sep"></div>
+<div class="List-sep"></div>
 
 <div class="TD-cat">
 	Baltijas Saule 2002, no Trejasmens materiāliem

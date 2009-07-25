@@ -6,12 +6,8 @@
 // mailto:marrtins@hackers.lv
 
 // ----------------------------------------------------------------------------
-$field_b = '';
-if(!empty($_SESSION['login']['l_disable_bobi']))
-{
-	$field_b = '_b';
-}
 
+/*
 function set_forum_items(&$template, &$data, $forum_comments = false)
 {
 	global $forum, $page_id, $fpp, $pages_visible_to_sides, $hl, $forum_count,
@@ -22,7 +18,7 @@ function set_forum_items(&$template, &$data, $forum_comments = false)
 	$is_block_avatar = $template->block_isset('BLOCK_forum_avatar');
 	$is_block_profile = $template->block_isset('BLOCK_profile_link');
 	$is_block_vote = $template->block_isset('BLOCK_forum_comment_vote');
-	$is_block_data = $template->block_isset('BLOCK_forum_data');
+	//$is_block_data = $template->block_isset('BLOCK_forum_data');
 	$is_block_email = $template->block_isset('BLOCK_email');
 	$is_block_username = $template->block_isset('BLOCK_username');
 	$user_loged = user_loged();
@@ -54,7 +50,7 @@ function set_forum_items(&$template, &$data, $forum_comments = false)
 
 			// iekraaso komentaarus
 			$template->disable('BLOCK_comments_new');
-			$template->enable('BLOCK_comments_old');
+			//$template->enable('BLOCK_comments_old');
 			if($forum_childcount)
 			{
 				$old_forum_childcount =
@@ -63,12 +59,12 @@ function set_forum_items(&$template, &$data, $forum_comments = false)
 				0;
 
 				$template->disable('BLOCK_comments_new');
-				$template->disable('BLOCK_comments_old');
+				//$template->disable('BLOCK_comments_old');
 
 				if($forum_childcount > $old_forum_childcount)
 					$template->enable('BLOCK_comments_new');
-				else
-					$template->enable('BLOCK_comments_old');
+				//else
+					//$template->enable('BLOCK_comments_old');
 			} // session forum viewed
 		} else { // if forum_comments
 			if($hl)
@@ -108,8 +104,8 @@ function set_forum_items(&$template, &$data, $forum_comments = false)
 			}
 		}
 
-		if($item['forum_datacompiled'] && $is_block_data)
-			$template->enable('BLOCK_forum_data');
+		//if($item['forum_datacompiled'] && $is_block_data)
+		//	$template->enable('BLOCK_forum_data');
 
 		if($is_block_email)
 		{
@@ -158,6 +154,7 @@ function set_forum_items(&$template, &$data, $forum_comments = false)
 		$template->parse_block('BLOCK_forum', TMPL_APPEND);
 	}
 }
+*/
 
 // ----------------------------------------------------------------------------
 require_once('../classes/class.MainModule.php');
@@ -168,53 +165,36 @@ $action = post('action');
 
 $fpp = 20;
 $page_id = 1;
-$forum = new Forum();
-$forum_id = (integer)array_shift($sys_parameters);
-$pages_visible_to_sides = 5;
-
+$pages_visible_to_sides = 8;
+$forum_id = (int)array_shift($sys_parameters);
 $page = array_shift($sys_parameters);
 if($page == 'page')
-{
-	$page_id = (integer)array_shift($sys_parameters);
-}
+	$page_id = (int)array_shift($sys_parameters);
 
 if(!$page_id)
-{
 	$page_id = 1;
-}
 
+$forum = new Forum();
 if($forum_id == 0)
 {
-	$forum_data = $forum->load($forum_id, 0, FORUM_ACTIVE, "forum_id ASC");
+	$forum_data = $forum->load(array(
+		"forum_forumid"=>0,
+		"order"=>"forum_id ASC",
+		));
+	//$forum_data = $forum->load($forum_id, 0, FORUM_ACTIVE, "forum_id ASC");
 } else {
-	$forum_data = $forum->load($forum_id);
+	//$forum_data = $forum->load($forum_id);
+	$forum_data = $forum->load(array(
+		"forum_id"=>$forum_id,
+		));
 }
-//printr($forum_data);
-
-//$forum_path = join('/', $forums);
-//$forum_path .= $forum_path ? '/' : '';
-
-//$_pointer = &$sys_modules[$sys_module_id];
 
 $template = new MainModule($sys_template_root, $sys_module_id);
-//$template->set_var('forum_path', $forum_path);
-//$template->enable('BLOCK_addressbar');
-
-/*
-// jau kaukas nau
-if($forum_id)
-{
-	if(!isset($forum_data['forum_id']) || (isset($forum_data['forum_id']) && $forum_data['forum_id'] != $forum_id))
-	{
-//		header("Location: $module_root/");
-//		exit;
-	}
-}
-*/
 
 // ---------------------------------------------
 // ja izveeleets forums, paraadam teemu sarakstu
 $forum_title = 'Diskusijas';
+
 if($forum_id)
 {
 	if(!$forum_data)
@@ -223,24 +203,29 @@ if($forum_id)
 		return;
 	}
 
+	$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_comment_count'];
 	$forum_title .= ' - '.$forum_data['forum_name'].($hl ? sprintf(", meklēšana: %s", $hl) : "");
 	if($page_id > 1)
 		$forum_title .= " - $page_id. lapa";
 
 	$template->set_var('current_forum_id', $forum_id, 'BLOCK_middle');
+	# Subtēma TODO: jānotestē
 	if($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS)
 	{
-		$template->set_file('FILE_forum', 'tmpl.forum_theme.php');
-		$template->copy_block('BLOCK_middle', 'FILE_forum');
-		$template->enable('BLOCK_forum_form');
+		include("forum/theme.inc.php");
 	} else {
-		//$forum_data = $forum->load($forum_id);
-		$template->set_file('FILE_forum', 'tmpl.forum_det.php');
-		$template->copy_block('BLOCK_middle', 'FILE_forum');
+		include("forum/det.inc.php");
 	}
-	$template->enable('BLOCK_addressbar');
-	$forum_childcount = $forum_data['forum_childcount'];
-	$_SESSION['forums']['viewed'][$forum_id] = $forum_childcount;
+} else {
+	include("forum/root.inc.php");
+}
+
+/*
+if($forum_id)
+{
+	return;
+	//$template->enable('BLOCK_addressbar');
+	$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_comment_count'];
 
 	// ja useris saglabaats
 	if(user_loged())
@@ -282,7 +267,7 @@ if($forum_id)
 		{
 			//# !WRONG! NOTE: labāka performance, ja sortē no bāzes tabulas, jo ID tāpat pieaug
 			//$item_data = $forum_items->load(0, $forum_id, FORUM_ACTIVE, "f.forum_id DESC");
-			$item_data = $forum_items->load(0, $forum_id, FORUM_ACTIVE, "fm.forum_lastcommentdate$field_b DESC");
+			$item_data = $forum_items->load(0, $forum_id, FORUM_ACTIVE, "fm.forum_lastcommentdate DESC");
 			$template->enable('BLOCK_info_sort_C');
 		} else {
 			$item_data = $forum_items->load(0, $forum_id);
@@ -304,25 +289,16 @@ if($forum_id)
 // --------------------------------------------------
 // ja nekas nav izveeleets, paraadaam forumu sarakstu
 } else {
-	$forum_count = count($forum_data);
-	$template->set_file('FILE_forum', 'tmpl.forum.php');
-	$template->copy_block('BLOCK_middle', 'FILE_forum');
-
-	// forumu saraksts
-	set_forum_items($template, $forum_data, FORUM_COMMENTS);
-
 } // forum_id
+*/
 
 $template->set_title($forum_title);
-//$template->set_var('login_id', $_SESSION['login']['l_id']);
 $template->set_right();
-$template->set_recent_forum();
+//$template->set_recent_forum();
 $template->set_login();
 $template->set_poll();
 $template->set_search();
 $template->set_online();
-$template->set_calendar();
-//print_r($template);
-//die;
+
 $template->out();
 

@@ -45,7 +45,7 @@
 	<a href="http://www.umbramortis.com/">Nycticorax</a>
 </div>
 
-<div class="List-item-sep"></div>
+<div class="List-sep"></div>
 
 <div class="TD-cat">Raidījumi</div>
 <div class="List-item">
@@ -58,7 +58,7 @@
 	<a href="http://www.naba.lv/">Radio NABA</a>
 </div>
 
-<div class="List-item-sep"></div>
+<div class="List-sep"></div>
 
 <div class="TD-cat">Metāla lapas</div>
 <div class="List-item">
@@ -74,7 +74,7 @@
 	<a href="http://panaceja.aeons.lv/">Panaceja</a>
 </div>
 
-<div class="List-item-sep"></div>
+<div class="List-sep"></div>
 
 <div class="TD-cat">Ārzemju lapas</div>
 <div class="List-item">
@@ -87,7 +87,7 @@
 	<a href="http://hell.music.lt/">Metal from Lithuania</a> - Lietuvas <i>broļuki</i>
 </div>
 
-<div class="List-item-sep"></div>
+<div class="List-sep"></div>
 
 <div class="List-item">
 	Ja arī Tev ir zināms kāds links, kas, pēc Tavām domām, varētu atrasties arī šeit - droši sūti ziņu uz <a href="mailto:info@truemetal.lv">info@truemetal.lv</a>

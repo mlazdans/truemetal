@@ -23,5 +23,3 @@ if(count($articles)) {
 }
 
 header("Location: $sys_http_root/");
-
-?>

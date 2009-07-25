@@ -14,11 +14,9 @@ $articles = $article->load();
 
 if(count($articles)) {
 	foreach($articles as $item) {
-		$comment_count = $article->comment_count($item['art_id']);
+		$comment_count = $item['art_comment_count'];
 		$_SESSION['comments']['viewed'][$item['art_id']] = $comment_count;
 	}
 }
 
 header("Location: $sys_http_root/");
-
-?>

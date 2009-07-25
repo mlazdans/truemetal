@@ -192,5 +192,5 @@ if($gal_id)
 $template->set_right();
 $template->set_poll();
 $template->set_online();
-$template->set_calendar();
 $template->out();
+

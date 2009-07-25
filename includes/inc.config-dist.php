@@ -77,7 +77,7 @@ $sys_use_compression = 0;
 $sys_default_module = 'article';
 
 /* modulis, kas atveras saakumaa (ja nav noraadiits neviens) */
-$sys_first_module = 'news';
+$sys_first_module = 'article';
 
 /* memcache */
 $sys_use_chache = false;

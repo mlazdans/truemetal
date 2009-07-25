@@ -303,7 +303,6 @@ $template->set_search($ent_search_q);
 $template->set_reviews();
 $template->set_poll();
 $template->set_online();
-$template->set_calendar();
 
 $template->out();
 

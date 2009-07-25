@@ -23,7 +23,6 @@ $template->set_reviews();
 $template->set_poll();
 $template->set_search();
 $template->set_online();
-$template->set_calendar();
 
 $logins = new Logins;
 
