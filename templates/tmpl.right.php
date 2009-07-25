@@ -1,78 +1,47 @@
-<table cellpadding="0" cellspacing="0" border="0" width="100%" style="height: 100%;" bgcolor="#330000">
-<tr>
-	<td class="TD-cat">Aktuāli</td>
-</tr>
-<tr>
-	<td bgcolor="#330000">
+<div class="TD-cat">Aktuāli</div>
+<div class="List-item actual">
+	<a href="/article/578/" title="16. jūlijs, ceturtdiena, Igaunija">OBITUARY TALLINNĀ</a>
+</div>
+<div class="List-item">
+	<a href="/article/576/" title="17.-19. jūlijs, piektdiena-svētdiena, Lietuva, Anyksciai">DEVILSTONE OPEN AIR 2009</a>
+</div>
+<div class="List-item">
+	<a href="/article/582/" title="24.-25. jūlijs, piektdiena-sestdiena, &quot;Zirņu pagasta Dzilnās&quot;">ZVĒRĀ 2009</a>
+</div>
+<div class="List-item">
+	<a href="/article/577/" title="6.-8. augusts, ceturdiena-sestdiena, &quot;Čehija&quot;">BRUTAL ASSAULT OPEN AIR 2009</a>
+</div>
+<div class="List-item">
+	<a href="/article/581/" title="24. septembris, ceturtdiena, klubs &quot;Melnā Piektdiena&quot;">CHIMAIRA</a>
+</div>
 
-		<table cellpadding="2" cellspacing="1" border="0" width="100%">
-		<tr>
-			<td style="background: #660000 url(/img/bums.gif);"><a href="/article/578/" title="16. jūlijs, ceturtdiena, Igaunija">OBITUARY TALLINNĀ</a></td>
-		</tr>
-		<tr>
-			<td style="background: #660000;"><a href="/article/576/" title="17.-19. jūlijs, piektdiena-svētdiena, Lietuva, Anyksciai">DEVILSTONE OPEN AIR 2009</a></td>
-		</tr>
-		<tr>
-			<td style="background: #660000;"><a href="/article/582/" title="24.-25. jūlijs, piektdiena-sestdiena, &quot;Zirņu pagasta Dzilnās&quot;">ZVĒRĀ 2009</a></td>
-		</tr>
-		<tr>
-			<td style="background: #660000;"><a href="/article/577/" title="6.-8. augusts, ceturdiena-sestdiena, &quot;Čehija&quot;">BRUTAL ASSAULT OPEN AIR 2009</a></td>
-		</tr>
-		<tr>
-			<td style="background: #660000;"><a href="/article/581/" title="24. septembris, ceturtdiena, klubs &quot;Melnā Piektdiena&quot;">CHIMAIRA</a></td>
-		</tr>
-		</table>
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-</tr>
+<div class="List-item-sep"></div>
+
 <!-- BEGIN BLOCK_right_item -->
 {right_item_data}
-<tr>
-	<td>&nbsp;</td>
-</tr>
+<div class="List-item-sep"></div>
 <!-- END BLOCK_right_item -->
-<tr>
-	<td align="center" style="background: black; padding: 15px 0 15px 0;"><a href="http://www.myspace.com/trepanationsquad" target="_blank"><img src="{http_root}/img/banner_trepanationsquad.gif" border="0" alt="Trepanation Squad: banner" title="Trepanation Squad"></a></td>
-</tr>
-<tr>
-	<td><a href="http://www.evildist.com/" target="_blank"><img src="{http_root}/img/banner_evildist.gif" border="0" alt="www.evildist.com banner" title="www.evildist.com"></a></td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td class="TD-cat">Viskas</td>
-</tr>
-<tr>
-	<td bgcolor="#330000">
-		<table cellpadding="2" cellspacing="1" border="0" width="100%">
-		<tr>
-			<td align="center"><a href="http://www.metalshow.lv/" target="_blank">metalshow.lv</a></td>
-		</tr>
-		<tr>
-			<td align="center"><a href="http://www.metalmusic.lv/" target="_blank">metalmusic.lv</a></td>
-		</tr>
-		<tr>
-			<td align="center">&nbsp;</td>
-		</tr>
-		<tr>
-			<td align="center"><a href="{http_root}/links/">Saites</a></td>
-		</tr>
-		<tr>
-			<td align="center"><a href="{http_root}/logo/">truemetal.lv logo</a></td>
-		</tr>
-		</table>
-	</td>
-</tr>
-<tr>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td bgcolor="#330000" align="center"><script type="text/javascript" src="http://cc3121.counter.hackers.lv/cc.php"></script><noscript><div><a href="http://counter.hackers.lv/"><img src="http://counter.hackers.lv/counter.php?uid=3121" alt="hackers counter system" /></a></div></noscript></td>
-</tr>
-<tr>
-	<td height="100%"></td>
-</tr>
-</table>
+
+
+<div style="text-align: center; background: black; padding: 15px 0 15px 0;">
+	<a href="http://www.myspace.com/trepanationsquad" target="_blank"><img src="{http_root}/img/banner_trepanationsquad.gif" border="0" alt="Trepanation Squad: banner" title="Trepanation Squad" /></a>
+</div>
+
+<div>
+	<a href="http://www.evildist.com/" target="_blank"><img src="{http_root}/img/banner_evildist.gif" border="0" alt="www.evildist.com banner" title="www.evildist.com" /></a>
+</div>
+
+<div class="List-item-sep"></div>
+
+
+<div class="TD-cat">Viskas</div>
+<div class="List-item">
+	<a href="{http_root}/links/">Saites</a>
+</div>
+<div class="List-item">
+	<a href="{http_root}/logo/">Truemetal.lv logo</a>
+</div>
+<div class="List-item" style="text-align: center;">
+	<script type="text/javascript" src="http://cc3121.counter.hackers.lv/cc.php"></script><noscript><div><a href="http://counter.hackers.lv/"><img src="http://counter.hackers.lv/counter.php?uid=3121" alt="hackers counter system" /></a></div></noscript>
+</div>
+

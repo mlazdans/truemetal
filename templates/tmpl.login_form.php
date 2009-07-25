@@ -1,49 +1,47 @@
 <!-- BEGIN BLOCK_login_form disabled -->
+<div class="TD-cat" title="Pieslēgties sistēmai">
+	Pieslēgties
+</div>
+
+<div class="List-item">
+<form action="{http_root}/login/" method="post" name="login_form">
+<input type="hidden" name="data[referer]" value="{referer}" />
+
+<table cellpadding="0" cellspacing="1" border="0" width="100%">
 <tr>
-	<td class="TD-cat" title="Pieslēties sistēmai">Pieslēgties</td>
+	<td colspan="2"><input style="width: 158px;" type="text" name="data[login]" value="Lietotāja vārds" onfocus="if(this.value=='Lietotāja vārds')this.value=''" /></td>
 </tr>
 <tr>
-	<td bgcolor="#330000" align="center">
-		<form action="{http_root}/login/" method="post" name="login_form">
-		<input type="hidden" name="data[referer]" value="{referer}">
-		<table cellpadding="0" cellspacing="1" border="0" align="center">
-		<tr>
-			<td><input type="text" name="data[login]" class="input" style="width: 100%" value="Lietotāja vārds" onFocus="this.value=''"></td>
-		</tr>
-		<tr>
-			<td>
-				<table cellpadding="0" cellspacing="0" border="0">
-				<tr>
-					<td><input type="password" style="width: 129px" name="data[password]" class="input" size="13"></td>
-					<td>&nbsp;</td>
-					<td><input type="submit" class="input" value=" OK "></td>
-				</tr>
-				<tr>
-					<td colspan="3" align="center"><a href="{http_root}/register/">Reģistrācija</a></td>
-				</tr>
-				<tr>
-					<td colspan="3" align="center"><a href="{http_root}/forgot/">Aizmirsu paroli</a></td>
-				</tr>
-				</table>
-			</td>
-		</tr>
-		</table>
-		</form>
-	</td>
+	<td><input style="width: 120px;" type="password" name="data[password]" size="13" /></td>
+	<td><input type="submit" class="input" value=" OK " /></td>
 </tr>
+</table>
+</form>
+</div>
+
+<div class="List-item">
+	<a href="{http_root}/register/">Reģistrācija</a>
+</div>
+<div class="List-item">
+	<a href="{http_root}/forgot/">Aizmirsu paroli</a>
+</div>
 <!-- END BLOCK_login_form -->
+
 <!-- BEGIN BLOCK_login_data disabled -->
-<tr>
-	<td class="TD-cat" title="Pieslēties sistēmai">Login</td>
-</tr>
-<tr>
-	<td>
-		<table cellpadding="0" cellspacing="1" border="0">
-		<tr><td>{login_nick}</td></tr>
-		<tr><td><a href="javascript:checkLogOff()">Log Off</a></td></tr>
-		<tr><td><a href="{http_root}/profile/" title="Lietotāja profils">Tavs profils</a></td></tr>
-		<tr><td><a href="{http_root}/mark/" title="Iezīmēt visus komentārus kā izlasītus">Mark all as read</a></td></tr>
-		</table>
-	</td>
-</tr>
+<div class="TD-cat" title="Pieslēgties sistēmai">
+	Login
+</div>
+<div class="List-item">
+	{login_nick}
+</div>
+<div class="List-item">
+	<a href="javascript:checkLogOff()">Log Off</a>
+</div>
+<div class="List-item">
+	<a href="{http_root}/profile/" title="Lietotāja profils">Tavs profils</a>
+</div>
+<div class="List-item">
+	<a href="{http_root}/mark/" title="Iezīmēt visus komentārus kā izlasītus">Mark all as read</a>
+</div>
 <!-- END BLOCK_login_data -->
+

@@ -1,18 +1,18 @@
-<hr>
-<table width="50%" cellpadding="0" cellspacing="1" border="0" align="center" bgcolor="#330000">
-<tr>
-	<td colspan="2"><b>{poll_question_b}</b></td>
-</tr>
+<div class="TD-cat" title="Atbildes jautājumam: {poll_question_b}">
+	{poll_question_b}
+</div>
+
+<table width="95%" cellpadding="0" cellspacing="2" border="0" align="center" bgcolor="#330000">
 <!-- BEGIN BLOCK_poll_r_items disabled -->
-<tr>
-	<td colspan="2" height="5"></td>
-</tr>
 <tr>
 	<td colspan="2">{poll_name_b}</td>
 </tr>
 <tr>
-	<td width="100%" bgcolor="#660000"><!-- BEGIN BLOCK_poll_r_bar --><img src="{http_root}/img/1x1pollchart.gif" style="width: {count_percent_b}%" height="10" alt="0"><!-- END BLOCK_poll_r_bar --></td>
+	<td width="100%" bgcolor="#660000"><!-- BEGIN BLOCK_poll_r_bar --><img src="{http_root}/img/1x1pollchart.gif" style="width: {count_percent_b}%" height="10" alt="0" /><!-- END BLOCK_poll_r_bar --></td>
 	<td nowrap>{count_votes_b} ({count_percent_b}%)</td>
+</tr>
+<tr>
+	<td colspan="2" height="15"></td>
 </tr>
 <!-- END BLOCK_poll_r_items -->
 <tr>
@@ -25,14 +25,14 @@
 </table>
 
 <!-- BEGIN BLOCK_poll_archive disabled -->
-<hr>
-<table cellpadding="0" cellspacing="1" border="0">
-<!-- BEGIN BLOCK_poll_archive_item -->
-<tr>
-	<td><a href="{module_root}/results/{poll_id_a}/">{poll_name_a}</a></td>
-</tr>
-<!-- END BLOCK_poll_archive_item -->
-</table>
+<div class="TD-cat">
+	Pārējie jautājumi
+</div>
 
+<!-- BEGIN BLOCK_poll_archive_item -->
+<div class="List-item">
+	<a href="{module_root}/results/{poll_id_a}/">{poll_name_a}</a>
+</div>
+<!-- END BLOCK_poll_archive_item -->
 <!-- END BLOCK_poll_archive -->
 

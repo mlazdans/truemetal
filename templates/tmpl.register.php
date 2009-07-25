@@ -1,41 +1,39 @@
 <!-- BEGIN BLOCK_register_error disabled --><font class="error-form">{error_msg}</font><!-- END BLOCK_register_error -->
 <!-- BEGIN BLOCK_register_form disabled -->
-<form method="post">
-<table cellpadding="1" cellspacing="1" border="0" width="100%">
-<tr>
-	<td class="TD-cat" colspan="2">Reģistrācija</td>
-</tr>
-</table>
+<div class="TD-cat">
+	Reģistrācija
+</div>
 
-<table cellpadding="0" cellspacing="1" border="0" width="100%" bgcolor="#330000">
+<form method="post" action="">
+<table width="100%">
 <tr>
 	<td align="right"{error_l_login}>Login:</td>
-	<td><input type="text" name="data[l_login]" value="{l_login}"></td>
+	<td><input type="text" name="data[l_login]" value="{l_login}" /></td>
 	<td>Vismaz 5 simboli (a-z0-9_)</td>
 </tr>
 <tr>
 	<td align="right"{error_l_password}>Parole:</td>
-	<td><input type="password" name="data[l_password]"></td>
+	<td><input type="password" name="data[l_password]" /></td>
 	<td>Vismaz 5 simboli (a-z0-9_)</td>
 </tr>
 <tr>
 	<td align="right"{error_l_password} nowrap>Parole 2x:</td>
-	<td><input type="password" name="data[l_password2]"></td>
+	<td><input type="password" name="data[l_password2]" /></td>
 	<td></td>
 </tr>
 <tr>
 	<td align="right"{error_l_email}>Niks:</td>
-	<td><input type="text" name="data[l_nick]" value="{l_nick}"></td>
+	<td><input type="text" name="data[l_nick]" value="{l_nick}" /></td>
 	<td></td>
 </tr>
 <tr>
 	<td align="right"{error_l_email}>E-pasts:</td>
-	<td><input type="text" name="data[l_email]" value="{l_email}"></td>
+	<td><input type="text" name="data[l_email]" value="{l_email}" /></td>
 	<td>Jānorāda pareiza e-pasta adrese, uz kuru tiks nosūtīts pārbaudes kods.</td>
 </tr>
 <tr>
 	<td></td>
-	<td><input type="submit" value=" OK "></td>
+	<td><input type="submit" value=" OK " /></td>
 	<td width="100%"></td>
 </tr>
 </table>

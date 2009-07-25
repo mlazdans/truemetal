@@ -7,21 +7,21 @@
 </tr>
 </table>
 
-<table cellpadding="2" cellspacing="2" width="100%" bgcolor="#330000">
+<table width="100%">
 <tr>
-	<td colspan="2">Ievadi savu loginu vai e-pastu!</ts>
+	<td colspan="2">Ievadi savu loginu vai e-pastu!</td>
 </tr>
 <tr>
 	<td align="right"{error_l_login}>Login:</td>
-	<td><input type="text" name="data[l_login]" value="{l_login}"></td>
+	<td><input type="text" name="data[l_login]" value="{l_login}" /></td>
 </tr>
 <tr>
 	<td align="right"{error_l_email}>E-pasts:</td>
-	<td><input type="text" name="data[l_email]" value="{l_email}"></td>
+	<td><input type="text" name="data[l_email]" value="{l_email}" /></td>
 </tr>
 <tr>
 	<td></td>
-	<td><input type="submit" value=" Pieprasīt jaunu paroli "></td>
+	<td><input type="submit" value=" Pieprasīt jaunu paroli " /></td>
 </tr>
 </table>
 </form>
@@ -41,7 +41,7 @@
 
 <!-- BEGIN BLOCK_forgot_passw disabled -->
 <form method="post" action="{module_root}/accept/{f_code}/">
-<input type="hidden" name="change_passw" value="1">
+<input type="hidden" name="change_passw" value="1" />
 <table cellpadding="1" cellspacing="1" width="100%">
 <tr>
 	<td colspan="3" class="TD-cat">Aizmirsu paroli</td>
@@ -63,17 +63,17 @@
 </tr>
 <tr>
 	<td align="right"{error_l_password}>Parole:</td>
-	<td><input type="password" name="data[l_password]"></td>
+	<td><input type="password" name="data[l_password]" /></td>
 	<td width="100%">Vismaz 5 simboli (a-z0-9_)</td>
 </tr>
 <tr>
 	<td align="right"{error_l_password} nowrap>Parole 2x:</td>
-	<td><input type="password" name="data[l_password2]"></td>
+	<td><input type="password" name="data[l_password2]" /></td>
 	<td></td>
 </tr>
 <tr>
 	<td></td>
-	<td><input type="submit" value=" Nomainīt paroli "></td>
+	<td><input type="submit" value=" Nomainīt paroli " /></td>
 </tr>
 </table>
 </form>
