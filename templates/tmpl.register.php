@@ -17,7 +17,7 @@
 	<td>Vismaz 5 simboli (a-z0-9_)</td>
 </tr>
 <tr>
-	<td align="right"{error_l_password} nowrap>Parole 2x:</td>
+	<td align="right"{error_l_password} style="white-space: nowrap;">Parole 2x:</td>
 	<td><input type="password" name="data[l_password2]" /></td>
 	<td></td>
 </tr>
@@ -34,7 +34,7 @@
 <tr>
 	<td></td>
 	<td><input type="submit" value=" OK " /></td>
-	<td width="100%"></td>
+	<td></td>
 </tr>
 </table>
 </form>

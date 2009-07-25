@@ -1,12 +1,11 @@
-<!-- BEGIN BLOCK_forgot_error disabled --><font class="error-form" style="color:red;">{error_msg}</font><!-- END BLOCK_forgot_error -->
+<div class="TD-cat">
+	Aizmirsu paroli
+</div>
+
+<!-- BEGIN BLOCK_forgot_error disabled --><div class="error">{error_msg}</div><!-- END BLOCK_forgot_error -->
+
 <!-- BEGIN BLOCK_forgot_form disabled -->
 <form method="post" action="{module_root}/request/">
-<table cellpadding="1" cellspacing="1" width="100%">
-<tr>
-	<td class="TD-cat" colspan="2">Aizmirsu paroli</td>
-</tr>
-</table>
-
 <table width="100%">
 <tr>
 	<td colspan="2">Ievadi savu loginu vai e-pastu!</td>
