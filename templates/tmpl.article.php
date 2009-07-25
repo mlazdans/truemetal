@@ -3,10 +3,10 @@
 	<div class="TD-cat">
 		<table cellpadding="0" cellspacing="0" border="0">
 			<tr>
-				<td class="TD-date">{art_date}</td>
-				<td align="center" style="width: 100%;"><a href="{http_root}/article/{art_id}/" class="A-cat">{art_name}</a></td>
+				<td valign="top" class="TD-date">{art_date}</td>
+				<td valign="top" align="center" style="width: 100%;"><a href="{http_root}/article/{art_id}/" class="A-cat">{art_name}</a></td>
 				<!-- BEGIN BLOCK_is_comments -->
-				<td align="right" style="white-space: nowrap;">
+				<td valign="top" align="right" style="white-space: nowrap;">
 					<a href="{http_root}/article/{art_id}/#comments">Komentāri</a><span style="\{comment_style_{art_id}}">(\{comment_count_{art_id}})</span>
 				</td>
 				<!-- END BLOCK_is_comments -->
@@ -37,9 +37,7 @@
 <div>Not found</div>
 <!-- END BLOCK_noarticle  -->
 
-<!-- BEGIN BLOCK_article_comments disabled -->
-Comments
-<!-- END BLOCK_article_comments -->
+<!-- BEGIN BLOCK_article_comments --><!-- END BLOCK_article_comments -->
 
 
 <!-- BEGIN BLOCK_article_page disabled -->

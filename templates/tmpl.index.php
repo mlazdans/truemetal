@@ -40,7 +40,7 @@
 
 	<div class="colmask rightmenu">
 		<div class="colleft">
-			<div class="col1">
+			<div class="col1 {block_middle_class}">
 			<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->
 			</div>
 			<div class="col2">

@@ -36,7 +36,7 @@
 	{login_nick}
 </div>
 <div class="List-item">
-	<a href="javascript:checkLogOff()">Log Off</a>
+	<a href="/login/logoff/" onclick="return confirm('Tu ko?! Nezini, kas ir Amorphis???');">Log Off</a>
 </div>
 <div class="List-item">
 	<a href="{http_root}/profile/" title="Lietotāja profils">Tavs profils</a>
