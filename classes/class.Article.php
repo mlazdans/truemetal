@@ -65,7 +65,6 @@ class Article {
 			$sql_add1 = '';
 
 		$sql_add = '';
-		$art_table = "article_$sys_lang";
 		//(SELECT COUNT(c_id) FROM comment JOIN comment_connect ON cc_c_id = c_id WHERE cc_table = '$art_table' AND cc_table_id = a.art_id) art_comment_count,
 		$sql = "
 SELECT
@@ -75,9 +74,9 @@ SELECT
 	COALESCE(cm_comment_count, 0) AS art_comment_count,
 	cm_comment_lastdate AS art_comment_lastdate
 FROM
-	$art_table a
+	`article` a
 JOIN modules_$sys_lang m ON (a.art_modid = m.mod_id)
-LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
+LEFT JOIN comment_meta ON (cm_table = 'article') AND (cm_table_id = a.art_id)
 ";
 
 		//$sql_add .= ' ';
@@ -167,13 +166,13 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 			$date = "'$data[art_entered]'";
 
 		$sql = "
-		INSERT INTO article_$sys_lang (
+		INSERT INTO article (
 			art_name, art_username, art_useremail, art_userip, art_entered,
-			art_modid, art_data, art_active, art_visible,
+			art_modid, art_data, art_intro, art_active, art_visible,
 			art_comments, art_type
 		) VALUES (
 			'$data[art_name]', '$data[art_username]', '$data[art_useremail]', '$ip', ".$date.",
-			$data[art_modid], '$data[art_data]', '$data[art_active]', '$data[art_visible]',
+			$data[art_modid], '$data[art_data]', '$data[art_intro]', '$data[art_active]', '$data[art_visible]',
 			'$data[art_comments]', '$data[art_type]'
 		)";
 
@@ -197,12 +196,14 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 		$sql = 'UPDATE article_'.$sys_lang.' SET ';
 		$sql .= $data['art_name'] ? "art_name = '$data[art_name]', " : '';
 		$sql .= $data['art_entered'] ? "art_entered = '$data[art_entered]', " : '';
-		$sql .= $data['art_data'] ? "art_data = '$data[art_data]', " : '';
+		//$sql .= $data['art_data'] ? "art_data = '$data[art_data]', " : '';
+		//$sql .= $data['art_intro'] ? "art_intro = '$data[art_intro]', " : '';
 		$sql .= "art_active = '$data[art_active]', ";
 		$sql .= "art_visible = '$data[art_visible]', ";
 		$sql .= "art_comments = '$data[art_comments]', ";
 		$sql .= "art_type = '$data[art_type]', ";
 		$sql .= "art_data = '$data[art_data]', ";
+		$sql .= "art_intro = '$data[art_intro]', ";
 		$sql = substr($sql, 0, -2);
 		$sql .= ' WHERE art_id = '.$art_id;
 
@@ -213,7 +214,7 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 	{
 		$this->validate($data);
 
-		$art_id = (integer)$art_id;
+		$art_id = (int)$art_id;
 		$error_msg = '';
 
 		if(!$data['art_modid'])
@@ -366,10 +367,13 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 		if(!isset($data['art_useremail']))
 			$data['art_useremail'] = '';
 
-		if(!isset($data['editor_data']))
-			$data['editor_data'] = '';
+		if(!isset($data['art_data']))
+			$data['art_data'] = '';
 
-		$data['art_data'] = &$data['editor_data'];
+		if(!isset($data['art_intro']))
+			$data['art_intro'] = '';
+
+		//$data['art_data'] = &$data['editor_data'];
 
 		if(!isset($data['art_entered']))
 			$data['art_entered'] = '';
@@ -458,7 +462,7 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 		global $db, $sys_lang;
 
 		$sql_add = '';
-		$sql = "SELECT COUNT(*) art_count FROM article_$sys_lang a";
+		$sql = "SELECT COUNT(*) art_count FROM `article` a";
 		if($art_modid)
 			$sql_add .= "a.art_modid = $art_modid AND ";
 

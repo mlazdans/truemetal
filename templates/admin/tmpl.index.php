@@ -8,11 +8,12 @@
 <link rel="stylesheet" type="text/css" href="{http_root}/admin_styles.css?{script_version}" />
 <script type="text/javascript" src="{http_root}/js/jquery.js?{script_version}"></script>
 <script type="text/javascript" src="{http_root}/js/utils.js?{script_version}"></script>
+<script type="text/javascript" src="/tiny_mce/tiny_mce.js?{script_version}"></script>
 </head>
 <body>
 
 <div id="header">
-	<h1>Admin: {USER_name} ({lang})</h1>
+	<h1>Admin: {USER_name}</h1>
 </div>
 
 <div id="menu">

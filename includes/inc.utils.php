@@ -219,7 +219,7 @@ function parse_text_data(&$data)
 		$url = $m4 = $matches[4][$k];
 
 		if(strlen($m4) > 10)
-			$m4 = substr($m4, 0, 10).'...';
+			$m4 = substr($m4, 0, 20).'...';
 
 		if(strlen($m3) > 40) {
 			$m3 = substr($m3, 0, 40).'...';
@@ -227,19 +227,29 @@ function parse_text_data(&$data)
 		}
 
 		$url = htmlspecialchars($matches[1][$k].$matches[3][$k].$matches[4][$k], ENT_COMPAT, "utf-8");
-		$url_short = htmlspecialchars($matches[1][$k].$m3.$m4);
+		$url_short = htmlspecialchars($m3.$m4);
 
 		# youtube.com
 		if((substr($host, -11) == 'youtube.com') && preg_match('/watch\?v=([^&]*)/i', $url, $url_parts))
 		{
 			$data = str_replace($tokens[$k], '<div><div id="'.uniqid('yt').'" class="youtube '.$url_parts[1].'"><a href="'.$url.'">'.$url_short.'</a></div></div>', $data);
+		# truemetal.lv
+		} elseif(
+			(substr($host, -12) == 'truemetal.lv') ||
+			(substr($host, -11) == 'metal.id.lv')
+			)
+		{
+			$url = htmlspecialchars($matches[4][$k], ENT_COMPAT, "utf-8");
+			$url_short = $url;
+			$data = str_replace($tokens[$k], '<a href="'.$url.'">'.$url_short.'</a>', $data);
+		# others
 		} else {
 			$data = str_replace($tokens[$k], '<a href="'.$url.'">'.$url_short.'</a>', $data);
 		}
-	}
 
+	}
 	// ja pa daudz ievadiits
-	if($w_count > FORUM_MAXWORDS * 2)
+	if($w_count > FORUM_MAXWORDS)
 		$data .= '...';
 
 	$data = addslashes($data);

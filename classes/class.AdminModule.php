@@ -81,4 +81,11 @@ class AdminModule extends Template
 		print Template::parse_file("FILE_index");
 	} // out
 
+	function init_editor($to_block = 'BLOCK_editor_init')
+	{
+		$this->set_file('FILE_editor', 'tmpl.tiny_mce_init.php');
+		$this->copy_block($to_block, 'FILE_editor');
+	} // init_editor
+
 } // AdminModule
+

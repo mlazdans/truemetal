@@ -119,6 +119,7 @@ table.Main td:last-child, table.Main th:last-child {
 	width: 100%;
 }
 table.Main th {
+	white-space: nowrap;
 	text-align: left;
 	background: #bbbbbb;
 	font-size: normal;
@@ -138,5 +139,10 @@ table.Main th {
 
 .nowrap {
 	white-space: nowrap;
+}
+
+textarea.edit {
+	width: 650px;
+	height: 490px;
 }
 
