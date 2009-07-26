@@ -83,7 +83,7 @@ Nav nevienas tēmas
 <form action="" method="post" id="forum_themes">
 <table class="Main">
 <tr>
-	<td class="TD-cat"><input type="checkbox" name="forum_check_all" onclick="checkAll(this.form, this)" /></td>
+	<td class="TD-cat"><input type="checkbox" name="forum_check_all" onclick="Truemetal.checkAll(this);" /></td>
 	<td colspan="2" class="TD-cat">Tēmas</td>
 </tr>
 <!-- BEGIN BLOCK_forum_theme_item -->

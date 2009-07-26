@@ -70,11 +70,11 @@
 <!-- END BLOCK_nopicture -->
 <!-- BEGIN BLOCK_picture disabled -->
 <tr>
-	<td><a href="{module_root}/view/{l_id}/" onclick="pop('{module_root}/view/{l_id}/', {pic_w}, {pic_h}); return false;"><img src="{pic_path}" alt="" border="0"></a></td>
+	<td><a href="{module_root}/view/{l_id}/" onclick="Truemetal.Pop('{module_root}/view/{l_id}/', {pic_w}, {pic_h}); return false;"><img src="{pic_path}" alt="" border="0"></a></td>
 </tr>
 <!-- BEGIN BLOCK_picture_delete disabled -->
 <tr>
-	<td style="text-align: center"><a href="{module_root}/deleteimage/" onclick="return checkDelSimple();">Dzēst</a></td>
+	<td style="text-align: center"><a href="{module_root}/deleteimage/" onclick="return confirm('Pārliecināts?');">Dzēst</a></td>
 </tr>
 <!-- END BLOCK_picture_delete -->
 <!-- END BLOCK_picture -->

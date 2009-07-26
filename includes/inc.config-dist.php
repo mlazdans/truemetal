@@ -83,3 +83,6 @@ $sys_first_module = 'article';
 $sys_use_chache = false;
 $memcache_host = 'localhost';
 $memcache_port = 11211;
+
+$sys_script_version = 1;
+

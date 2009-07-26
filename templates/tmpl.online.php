@@ -4,7 +4,7 @@
 
 <!-- BEGIN BLOCK_online_item disabled -->
 <div class="List-item">
-	<a href="{http_root}/profile/user/{online_login_id}/" onclick="pop('{http_root}/profile/user/{online_login_id}/', 400, 400, 'profile{online_login_id}'); return false;">{online_name}</a>
+	<a href="{http_root}/profile/user/{online_login_id}/" onclick="Truemetal.Pop('{http_root}/profile/user/{online_login_id}/', 400, 400, 'profile{online_login_id}'); return false;">{online_name}</a>
 </div>
 <!-- END BLOCK_online_item -->
 

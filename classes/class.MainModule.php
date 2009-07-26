@@ -48,6 +48,8 @@ class MainModule extends Template
 		$this->set_global('module_root', $GLOBALS['sys_http_root'].'/'.$this->module_name);
 		//$this->set_global('now', $GLOBALS['now']);
 		$this->set_global('sys_lang', $sys_lang);
+		$this->set_global('script_version', $GLOBALS['sys_script_version']);
+
 		$this->set_banner_top();
 		//$this->set_array($sys_lang_def);
 

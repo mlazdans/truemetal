@@ -7,10 +7,14 @@
 	<td class="Comment-cat" style="width: 100%;"><small><b>{c_username}</b><!-- BEGIN BLOCK_email disabled -->, <a href="mailto:{c_useremail}" class="A-small">{c_useremail}</a><!-- END BLOCK_email -->, {c_date}</small></td>
 	<!-- BEGIN BLOCK_comment_vote disabled -->
 	<td class="Comment-cat {comment_vote_class}" id="comment{c_id}">{c_votes}</td>
-	<td class="Comment-cat"><a href="{http_root}/vote/up/{c_id}/" title="Ōjā!" onclick="Vote('{c_id}', 'up', '#comment{c_id}'); return false;">[+]</a></td>
-	<td class="Comment-cat"><a href="{http_root}/vote/down/{c_id}/" title="Dauns..." onclick="Vote('{c_id}', 'down', '#comment{c_id}'); return false;">[&ndash;]</a></td>
+	<td class="Comment-cat"><a href="{http_root}/vote/up/{c_id}/" title="Ōjā!" onclick="Truemetal.Vote('{c_id}', 'up', '#comment{c_id}'); return false;">[+]</a></td>
+	<td class="Comment-cat"><a href="{http_root}/vote/down/{c_id}/" title="Dauns..." onclick="Truemetal.Vote('{c_id}', 'down', '#comment{c_id}'); return false;">[&ndash;]</a></td>
 	<!-- END BLOCK_comment_vote -->
-	<td class="Comment-cat"><!-- BEGIN BLOCK_profile_link disabled --><a href="{http_root}/profile/user/{user_login_id}/" onclick="pop('{http_root}/profile/user/{user_login_id}/', 400, 400, 'profile{user_login_id}'); return false;">[Profils]</a><!-- END BLOCK_profile_link --></td>
+	<td class="Comment-cat">
+		<!-- BEGIN BLOCK_profile_link disabled -->
+		<a href="{http_root}/profile/user/{user_login_id}/" onclick="Truemetal.Pop('{http_root}/profile/user/{user_login_id}/', 400, 400, 'profile{user_login_id}'); return false;">[Profils]</a>
+		<!-- END BLOCK_profile_link -->
+	</td>
 	<td class="Comment-cat"><a href="#comment{c_id}">[Link]</a></td>
 </tr>
 <tr>

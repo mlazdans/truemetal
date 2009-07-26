@@ -5,12 +5,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset={encoding}" />
 <title>{title} ({USER_name})</title>
 <meta http-equiv="Pragma" content="no-cache" />
-<link rel="stylesheet" type="text/css" href="{http_root}/admin_styles.css" />
-<script type="text/javascript">
-var editor_root = '{http_root}/admin/editor/';
-</script>
-<script type="text/javascript" src="{http_root}/js/editor.js"></script>
-<script type="text/javascript" src="{http_root}/js/utils.js"></script>
+<link rel="stylesheet" type="text/css" href="{http_root}/admin_styles.css?{script_version}" />
+<script type="text/javascript" src="{http_root}/js/jquery.js?{script_version}"></script>
+<script type="text/javascript" src="{http_root}/js/utils.js?{script_version}"></script>
 </head>
 <body>
 

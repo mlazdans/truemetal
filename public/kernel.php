@@ -121,8 +121,8 @@ if(!in_array($sys_lang, $sys_languages))
 	$sys_lang = $sys_default_lang;
 }
 
-require_once('../includes/inc.lang_'.$sys_lang.'.php');
-require_once('../includes/inc.locale.php');
+//require_once('../includes/inc.lang_'.$sys_lang.'.php');
+//require_once('../includes/inc.locale.php');
 
 $sys_module_id = array_shift($sys_parameters);
 $sys_http_root_base = $sys_http_root;

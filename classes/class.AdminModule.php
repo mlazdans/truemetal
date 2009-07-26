@@ -44,12 +44,14 @@ class AdminModule extends Template
 		$this->set_global('admin_root', $GLOBALS['admin_root']);
 		$this->set_global('module_root', $GLOBALS['module_root']);
 		$this->set_global('year', date('Y'));
+		$this->set_global('script_version', $GLOBALS['sys_script_version']);
 
 		$this->set_global('USER_name', $_USER['user_name']);
-		$this->set_array($sys_lang_def);
+		//$this->set_array($sys_lang_def);
 
 		reset($admin_modules);
 		foreach($admin_modules as $mod=>$val)
+		{
 			// ja uzstaadiits modulis
 			if($val) {
 				$this->set_var('adminmodule_id', $mod);
@@ -60,6 +62,7 @@ class AdminModule extends Template
 					$this->set_var('adminmodule_class', 'TD-menu');
 				$this->parse_block('BLOCK_adminmodules', TMPL_APPEND);
 			}
+		}
 	} // init
 
 	function set_title($str_title)
