@@ -2,6 +2,9 @@
 
 $_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_themecount'];
 
+$template->set_file('FILE_forum', 'tmpl.forum_theme.php');
+$template->copy_block('BLOCK_middle', 'FILE_forum');
+
 if($action == 'add_theme')
 {
 	$error = false;
@@ -33,33 +36,41 @@ if($action == 'add_theme')
 
 	if(!$error)
 	{
+		$db->AutoCommit(false);
 		if($id = $forum->add($forum_id, $data))
 		{
-			$_SESSION['user']['username'] = $data['forum_username'];
-			$_SESSION['user']['useremail'] = $data['forum_useremail'];
+			$table = 'forum';
+			$table_id = $id;
+			$data['c_data'] = $data['forum_data'];
+
+			if($c_id = include('../modules/comment/add.inc.php'))
+			{
+				$_SESSION['user']['username'] = $data['forum_username'];
+				$_SESSION['user']['useremail'] = $data['forum_useremail'];
+				$db->Commit();
+				header("Location: $module_root/$id/");
+				return;
+			}
 			/*
-			if(isset($forum['forum_allowchilds']) && ($forum['forum_allowchilds'] == FORUM_ALLOWCHILDS))
+			if(isset($forum_data['forum_allowchilds']) && ($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS))
 			{
 				//$data['forum_allowchilds'] = FORUM_PROHIBITCHILDS;
 				$this->add($id, $data);
 			}
 			*/
-			header("Location: $module_root/$id/");
-			return;
+			$db->Commit();
 		}
+		$db->AutoCommit(true);
 	}
-	parse_form_data($data);
-	$template->set_array($data, 'FILE_forum');
+	parse_form_data_array($data);
+	$template->set_array($data, 'BLOCK_loggedin');
 } // add_theme
 
-
-$template->set_file('FILE_forum', 'tmpl.forum_theme.php');
-$template->copy_block('BLOCK_middle', 'FILE_forum');
 
 if(user_loged())
 {
 	$template->enable('BLOCK_loggedin');
-	$template->set_var('forumd_username', $_SESSION['login']['l_nick'], 'FILE_forum');
+	$template->set_var('forum_username', $_SESSION['login']['l_nick'], 'BLOCK_loggedin');
 } else {
 	$template->enable('BLOCK_notloggedin');
 }

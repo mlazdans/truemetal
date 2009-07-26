@@ -1,14 +1,21 @@
 <?php
 
+$template->set_file('FILE_forum', 'tmpl.forum_det.php');
+$template->copy_block('BLOCK_middle', 'FILE_forum');
+
+$template->set_file('FILE_forum_comments', 'tmpl.comments.php');
+$template->copy_block('BLOCK_forum_comments', 'FILE_forum_comments');
+
 $_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_comment_count'];
 
 if(($action == 'add_comment') && user_loged())
 {
 	$table = 'forum';
 	$table_id = $forum_id;
+	$data = post('data');
 	if($c_id = include('../modules/comment/add.inc.php'))
 	{
-		$CommentConnect->db->Commit();
+		$db->Commit();
 		header("Location: $sys_http_root/forum/$forum_id/#comment$c_id");
 		return;
 	}
@@ -18,12 +25,6 @@ require_once('../classes/class.CommentConnect.php');
 
 $CC = new CommentConnect('forum');
 $CC->setDb($db);
-
-$template->set_file('FILE_forum', 'tmpl.forum_det.php');
-$template->copy_block('BLOCK_middle', 'FILE_forum');
-
-$template->set_file('FILE_forum_comments', 'tmpl.comments.php');
-$template->copy_block('BLOCK_forum_comments', 'FILE_forum_comments');
 
 $params = array(
 	'cc_table_id' => $forum_id,

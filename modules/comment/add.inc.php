@@ -2,8 +2,7 @@
 
 require_once('../classes/class.CommentConnect.php');
 
-$data = post('data');
-if(!$data['c_data'])
+if(empty($data['c_data']))
 {
 	$template->enable('BLOCK_comment_error');
 	$template->set_var('error_msg', 'Nekorekti aizpildīta forma!', 'BLOCK_comment_error');
@@ -20,5 +19,6 @@ $cData = array(
 	);
 
 $CommentConnect = new CommentConnect($table);
+$CommentConnect->setDb($db);
 return $CommentConnect->add($table_id, $cData);
 

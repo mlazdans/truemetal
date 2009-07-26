@@ -90,15 +90,15 @@
 		<input type="hidden" name="action" value="add_theme" />
 		Vārds:
 	</td>
-	<td>{forumd_username}</td>
+	<td>{forum_username}</td>
 </tr>
 <tr>
 	<td align="right"<!-- BEGIN BLOCK_forumname_error disabled --> class="error-form"<!-- END BLOCK_forumname_error -->>Jauna tēma:</td>
-	<td><input style="width: 95%;" type="text" name="data[forum_name]" maxlength="64" size="64" value="{forumd_name}" /></td>
+	<td><input style="width: 95%;" type="text" name="data[forum_name]" maxlength="64" size="64" value="{forum_name}" /></td>
 </tr>
 <tr>
 	<td align="right" valign="top"<!-- BEGIN BLOCK_forumdata_error disabled --> class="error-form"<!-- END BLOCK_forumdata_error -->>Ziņa:</td>
-	<td><textarea style="width: 95%;" name="data[forum_data]" cols="50" rows="10">{forumd_data}</textarea></td>
+	<td><textarea style="width: 95%;" name="data[forum_data]" cols="50" rows="10">{forum_data}</textarea></td>
 </tr>
 <tr>
 	<td align="right">&nbsp;</td>

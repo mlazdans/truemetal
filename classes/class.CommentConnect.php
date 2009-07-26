@@ -15,6 +15,7 @@ class CommentConnect
 	function setDb($db)
 	{
 		$this->db = $db;
+		$this->db->AutoCommit(false);
 	} // setDb
 
 	function connect($table_id, $c_id)

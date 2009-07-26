@@ -47,9 +47,10 @@ if($art_id) {
 	{
 		$table = 'article_'.$sys_lang;
 		$table_id = $art_id;
+		$data = post('data');
 		if($ac_id = include('../modules/comment/add.inc.php'))
 		{
-			$CommentConnect->db->Commit();
+			$db->Commit();
 			$np = join('/', array_keys($path));
 			header("Location: $sys_http_root/$np/$art_id/#comment$ac_id");
 			return;
