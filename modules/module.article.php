@@ -12,7 +12,7 @@ require_once('../classes/class.Article.php');
 require_once('../classes/class.Module.php');
 require_once('../classes/class.CommentConnect.php');
 
-$art_per_page = 20;
+$art_per_page = 10;
 
 # GET/POST
 $art_id = array_shift($sys_parameters);

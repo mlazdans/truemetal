@@ -250,6 +250,9 @@ function set_forum(&$template, $forum_id)
 	global $forum;
 
 	$tree = $forum->get_tree($forum_id);
+	if(!$tree)
+		return;
+
 	$template->enable('BLOCK_forum_path');
 	$forum_path = '';
 

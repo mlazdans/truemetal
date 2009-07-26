@@ -21,6 +21,12 @@
 	Profils: {l_nick}
 </div>
 
+<!-- BEGIN BLOCK_public_email disabled -->
+<div class="List-item">
+	<b>E-pasts:</b> <a href="mailto:{l_email}">{l_email}</a>
+</div>
+<!-- END BLOCK_public_email -->
+
 
 <!-- BEGIN BLOCK_private_profile disabled -->
 <form action="" method="post" enctype="multipart/form-data" id="profile_edit">
@@ -29,12 +35,6 @@
 	<td align="right"{error_l_email}><b>Niks:</b></td>
 	<td>{l_nick}</td>
 </tr>
-<!-- BEGIN BLOCK_public_email disabled -->
-<tr>
-	<td align="right"{error_l_email}><b>E-pasts:</b></td>
-	<td><a href="mailto:{l_email}">{l_email}</a></td>
-</tr>
-<!-- END BLOCK_public_email -->
 <tr>
 	<td align="right"{error_l_email}><b>E-pasts:</b></td>
 	<td>

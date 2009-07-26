@@ -52,9 +52,12 @@ class Forum
 			$sql_add[] = "f.forum_forumid = $params[forum_forumid]";
 
 		if(isset($params['forum_active']))
-			$sql_add[] = "f.forum_active = '$forum_active'";
-		else
+		{
+			if($params['forum_active'])
+				$sql_add[] = sprintf("f.forum_active = '%s'", $params['forum_active']);
+		} else {
 			$sql_add[] = sprintf("f.forum_active = '%s'", FORUM_ACTIVE);
+		}
 
 		if(isset($params['forum_allowchilds']))
 			$sql_add[] = sprintf("f.forum_allowchilds = '%s'", $params['forum_allowchilds']);
@@ -208,7 +211,7 @@ WHERE
 		return $db->Execute($sql);
 	} // load_by_userid
 */
-	function add($forum_id, &$data, $validate = FORUM_DONTVALIDATE)
+	function add($forum_id, &$data, $validate = FORUM_DONTVALIDATE, $forum_active = FORUM_ACTIVE)
 	{
 		global $db, $ip;
 
@@ -223,7 +226,8 @@ WHERE
 
 		$forum_id = (int)$forum_id;
 		$forum = $this->load(array(
-			"forum_id"=>$forum_id
+			"forum_id"=>$forum_id,
+			"forum_active"=>$forum_active,
 			));
 
 		// ja apaksteema
@@ -234,26 +238,23 @@ WHERE
 
 			if($forum['forum_id'] != $forum_id)
 				return false;
-
-			if($forum['forum_active'] == FORUM_DEACTIVE)
-				return false;
 		}
 
 		$user_id = $_SESSION['login']['l_id'];
 		$user_login = $_SESSION['login']['l_login'];
 
 		$sql = "
-		INSERT INTO forum (
-			forum_name, forum_username, forum_userid,
-			forum_userlogin, forum_useremail, forum_userip, forum_entered,
-			forum_forumid, forum_data, forum_datacompiled,
-			forum_allowchilds, forum_active
-		) VALUES (
-			'$data[forum_name]', '$data[forum_username]', $user_id,
-			'$user_login', '$data[forum_useremail]', '$ip', ".$db->now().",
-			$forum_id, '$data[forum_data]', '$data[forum_datacompiled]',
-			'$data[forum_allowchilds]', '$data[forum_active]'
-		)";
+INSERT INTO forum (
+	forum_name, forum_username, forum_userid,
+	forum_userlogin, forum_useremail, forum_userip, forum_entered,
+	forum_forumid, forum_data, forum_datacompiled,
+	forum_allowchilds, forum_active
+) VALUES (
+	'$data[forum_name]', '$data[forum_username]', $user_id,
+	'$user_login', '$data[forum_useremail]', '$ip', ".$db->now().",
+	$forum_id, '$data[forum_data]', '$data[forum_datacompiled]',
+	'$data[forum_allowchilds]', '$data[forum_active]'
+)";
 
 		if($db->Execute($sql))
 		{

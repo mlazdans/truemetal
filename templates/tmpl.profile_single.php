@@ -9,6 +9,6 @@
 </head>
 <body>
 <!-- BEGIN BLOCK_profile_data --><!-- END BLOCK_profile_data -->
-<p align="center"><a href="javascript:window.close()">Aizvērt</a></p>
+<p><a href="javascript:window.close()">Aizvērt</a></p>
 </body>
 
