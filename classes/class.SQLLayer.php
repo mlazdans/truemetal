@@ -47,7 +47,7 @@ class SQLLayer
 				break;
 		}
 		return false;
-	} // connect
+	} // Connect
 
 	/* izpildam SQL pieprasiijumu */
 	function Execute($str_sql)
@@ -207,6 +207,18 @@ class SQLLayer
 				break;
 		}
 	} // Quote
+
+	function AutoCommit($bool)
+	{
+		switch( $this->int_db_type ) {
+			case DB_MYSQLI:
+				return mysqli_autocommit($this->conn, $bool);
+				break;
+			default:
+				return false;
+				break;
+		}
+	} // AutoCommit
 
 
 

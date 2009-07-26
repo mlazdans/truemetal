@@ -59,6 +59,35 @@ INSERT INTO comment (
 		return (empty($params['c_id']) ? $this->db->Execute($sql) : $this->db->Executesingle($sql));
 	} // get
 
+	function delete($id)
+	{
+		$sql = sprintf("DELETE FROM `comment` WHERE c_id = %d", $id);
+
+		return $this->db->Execute($sql);
+	} // delete
+
+	function show($id)
+	{
+		$sql = sprintf(
+			"UPDATE `comment` SET c_visible = '%s' WHERE c_id = %d",
+			COMMENT_VISIBLE,
+			$id
+			);
+
+		return $this->db->Execute($sql);
+	} // show
+
+	function hide($id)
+	{
+		$sql = sprintf(
+			"UPDATE `comment` SET c_visible = '%s' WHERE c_id = %d",
+			COMMENT_INVISIBLE,
+			$id
+			);
+
+		return $this->db->Execute($sql);
+	} // hide
+
 	function validate(&$data)
 	{
 		if(!isset($data['c_username']))

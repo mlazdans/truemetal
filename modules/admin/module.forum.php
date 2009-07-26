@@ -47,6 +47,7 @@ function set_themes(&$template, &$data, $d = 0, $c = 0) {
 
 require_once('../classes/class.AdminModule.php');
 require_once('../classes/class.Forum.php');
+require_once('../classes/class.Comment.php');
 require_once('../classes/class.CommentConnect.php');
 
 $forum = new Forum;
@@ -54,10 +55,36 @@ $forum = new Forum;
 $forum_id = (int)array_shift($sys_parameters);
 $action = post('action');
 
+if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
+{
+	$c_ids = post('c_id');
+	if(!is_array($c_ids))
+		$c_ids = array($c_id);
+
+	$ok = true;
+	$func = substr($action, 8);
+
+	$db->AutoCommit(false);
+
+	$Comment = new Comment;
+	$Comment->setDb($db);
+	foreach($c_ids as $c_id)
+		$ok = $Comment->{$func}($c_id) ? $ok : false;
+
+	if($ok)
+	{
+		$db->Commit();
+		if($forum_id)
+			header("Location: $module_root/$forum_id/");
+		else
+			header("Location: $module_root/");
+	}
+
+	return;
+}
+
 if(in_array($action, array('delete_multiple', 'activate_multiple', 'deactivate_multiple', 'move_multiple')))
 {
-	printr($_POST);
-	die;
 	if($forum->process_action($_POST, $action, FORUM_VALIDATE))
 	{
 		if($forum_id)
@@ -126,6 +153,7 @@ if($forum_id)
 			'cc_table_id'=>$forum_id,
 			'c_visible'=>COMMENT_ALL,
 			));
+
 		if($comments) {
 			$template->enable('BLOCK_comments');
 		} else {

@@ -115,7 +115,7 @@ table.Main td {
 	padding: 2px;
 }
 
-table.Main td:last-child {
+table.Main td:last-child, table.Main th:last-child {
 	width: 100%;
 }
 table.Main th {

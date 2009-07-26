@@ -99,8 +99,8 @@ WHERE
 		$sys_db_name, $sys_db_port;
 
 		$this->db = new SQLLayer($sys_database_type);
-		$this->db->connect($sys_db_host, $sys_db_user, $sys_db_password, $sys_db_name, $sys_db_port);
-		mysqli_autocommit($this->db->conn, false);
+		$this->db->Connect($sys_db_host, $sys_db_user, $sys_db_password, $sys_db_name, $sys_db_port);
+		$this->db->AutoCommit(false);
 	} // _db_connect
 
 } // class::CommentConnect

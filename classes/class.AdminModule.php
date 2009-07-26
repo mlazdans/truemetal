@@ -43,6 +43,7 @@ class AdminModule extends Template
 		$this->set_global('http_root', $GLOBALS['sys_http_root']);
 		$this->set_global('admin_root', $GLOBALS['admin_root']);
 		$this->set_global('module_root', $GLOBALS['module_root']);
+		$this->set_global('year', date('Y'));
 
 		$this->set_global('USER_name', $_USER['user_name']);
 		$this->set_array($sys_lang_def);

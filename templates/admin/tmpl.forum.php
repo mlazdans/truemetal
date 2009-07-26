@@ -125,14 +125,17 @@ Nav neviena komentāra
 <form action="" method="post" id="comments">
 <table class="Main">
 <tr>
-	<td class="TD-cat"><input type="checkbox" name="comment_check_all" onclick="checkAll(this.form, this)" /></td>
-	<td colspan="4" class="TD-cat">Komentāri</td>
+	<td class="TD-cat">
+		<input type="checkbox" name="comment_check_all" onclick="checkAll(this.form, this)" />
+	</td>
+	<td colspan="4" class="TD-cat">
+		Komentāri
+	</td>
 </tr>
 <!-- BEGIN BLOCK_comment_item -->
 <tr>
 	<th class="{c_color_class}">
-		<input type="hidden" name="c_id{c_nr}" value="{c_id}" />
-		<input type="checkbox" name="c_checked{c_nr}" />
+		<input type="checkbox" name="c_id[]" value="{c_id}" />
 	</th>
 	<th class="{c_color_class} nowrap">{c_username} ({c_userlogin})</th>
 	<th class="{c_color_class}">{c_userip}</th>
@@ -151,12 +154,11 @@ Nav neviena komentāra
 <!-- END BLOCK_comment_item -->
 <tr>
 	<td colspan="5">
-		<input type="hidden" name="item_count" value="{item_count}" />
 		Iezīmētos: <select name="action">
 		<option value="">---</option>
-		<option value="delete_multiple">Dzēst</option>
-		<option value="activate_multiple">Aktivizēt</option>
-		<option value="deactivate_multiple">Deaktivizēt</option>
+		<option value="comment_delete">Dzēst</option>
+		<option value="comment_show">Aktivizēt</option>
+		<option value="comment_hide">Deaktivizēt</option>
 		</select>
 		<input type="submit" value="  OK  " />
 	</td>

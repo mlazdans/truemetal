@@ -4,7 +4,7 @@ $i_am_admin = true;
 require_once('../includes/inc.dbconnect.php');
 require_once('../includes/inc.utils.php');
 
-mysqli_autocommit($db->conn, false);
+$db->AutoCommit(false);
 
 # LOGINS
 $sql = "SELECT * FROM `comment`";

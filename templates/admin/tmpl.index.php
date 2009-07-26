@@ -40,7 +40,7 @@ var editor_root = '{http_root}/admin/editor/';
 <hr />
 
 <div id="footer">
-	Copyright &copy; Norge Datorsistēmas 2003
+	Copyright &copy; Norge Datorsistēmas 2003-2008; Copyright &copy; dqdp.net 2008-{year}
 </div>
 
 </body>
