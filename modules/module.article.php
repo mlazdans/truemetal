@@ -93,7 +93,7 @@ if($art_id)
 	$CC = new CommentConnect('article_'.$sys_lang);
 	$CC->setDb($db);
 	$comments = $CC->get(array(
-		'cc_table_id'=>$art_id
+		'cc_table_id'=>$art_id,
 		));
 	include("comment/list.inc.php");
 }
@@ -196,16 +196,28 @@ if(count($articles))
 			}
 		}
 
-		if($item['art_comments'] == ARTICLE_NOCOMMENTS)
+		if($item['art_comments'] == ARTICLE_NOCOMMENTS) {
 			$template->disable('BLOCK_is_comments');
-		else
+		} else {
 			$template->enable('BLOCK_is_comments');
+		}
+
+		$old_comment_count =
+			isset($_SESSION['comments']['viewed'][$item['art_id']]) ?
+			$_SESSION['comments']['viewed'][$item['art_id']] :
+			0;
+
+		$template->disable('BLOCK_comments_new');
+		if($item['art_comment_count'] > $old_comment_count)
+		{
+			$template->enable('BLOCK_comments_new');
+		}
 
 		$template->set_array($item, 'BLOCK_article');
 		$template->set_var('art_path', $module->get_path($item['art_modid']), 'BLOCK_article');
 		$template->parse_block('BLOCK_article', TMPL_APPEND);
 	}
-	$article->set_comment_count($template, $articles);
+	//$article->set_comment_count($template, $articles);
 } else {
 	//if($tmpl == 'tmpl.article.php')
 	$template->enable('BLOCK_noarticle');

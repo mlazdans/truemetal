@@ -43,6 +43,14 @@ INSERT INTO comment (
 		if(!empty($params['c_id']))
 			$sql_add[] = sprintf("(c_id = %d)", $params['c_id']);
 
+		if(isset($params['c_visible']))
+		{
+			if($params['c_visible'])
+				$sql_add[] = sprintf("c_visible = '%s'", $params['c_visible']);
+		} else {
+			$sql_add[] = sprintf("c_visible = '%s'", COMMENT_VISIBLE);
+		}
+
 		if($sql_add)
 			$sql .= " WHERE ".join(' AND ', $sql_add);
 

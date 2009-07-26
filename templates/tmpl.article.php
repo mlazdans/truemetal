@@ -7,7 +7,8 @@
 			<td valign="top" align="center" style="width: 100%;"><a href="{http_root}/{module_id}/{art_id}/" class="A-cat">{art_name}</a></td>
 			<!-- BEGIN BLOCK_is_comments -->
 			<td valign="top" align="right" style="white-space: nowrap;">
-				<a href="{http_root}/{module_id}/{art_id}/#comments">Komentāri</a><span style="\{comment_style_{art_id}}">(\{comment_count_{art_id}})</span>
+				<a href="{http_root}/{module_id}/{art_id}/#comments">Komentāri</a>
+				<span<!-- BEGIN BLOCK_comments_new disabled --> class="Comment-new"<!-- END BLOCK_comments_new -->>({art_comment_count})</span>
 			</td>
 			<!-- END BLOCK_is_comments -->
 		</tr>

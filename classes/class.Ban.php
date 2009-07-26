@@ -148,10 +148,7 @@ class Ban extends Admin
 			$data[ub_expires]
 		)";
 
-		if($db->Execute($sql))
-			return last_insert_id();
-		else
-			return false;
+		return ($db->Execute($sql) ? $db->LastID() : false);
 	} // insert
 
 	function update($ub_id, &$data, $validate = BAN_VALIDATE)

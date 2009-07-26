@@ -25,7 +25,7 @@ function set_themes(&$template, &$data, $d = 0, $c = 0) {
 		// ja aktiivs vai nee - kaukaa iekraaso to
 		$template->disable('BLOCK_forum_active');
 		$template->disable('BLOCK_forum_inactive');
-		if($item['forum_active'] == 'Y') {
+		if($item['forum_active'] == FORUM_ACTIVE) {
 			$template->enable('BLOCK_forum_active');
 			$template->set_var('forum_color_class', 'box-normal', 'BLOCK_forum_theme_item');
 		} else {
@@ -47,6 +47,7 @@ function set_themes(&$template, &$data, $d = 0, $c = 0) {
 
 require_once('../classes/class.AdminModule.php');
 require_once('../classes/class.Forum.php');
+require_once('../classes/class.CommentConnect.php');
 
 $forum = new Forum;
 
@@ -55,11 +56,15 @@ $action = post('action');
 
 if(in_array($action, array('delete_multiple', 'activate_multiple', 'deactivate_multiple', 'move_multiple')))
 {
+	printr($_POST);
+	die;
 	if($forum->process_action($_POST, $action, FORUM_VALIDATE))
+	{
 		if($forum_id)
 			header("Location: $module_root/$forum_id/");
 		else
 			header("Location: $module_root/");
+	}
 	return;
 }
 
@@ -101,24 +106,46 @@ $items = $forum->load(array(
 	'forum_active'=>FORUM_ALL,
 	));
 
-// ja skataam foruma zinjas
+# Forums atvērts
 if($forum_id)
 {
 	$forum_data = $forum->load(array(
 		'forum_id'=>$forum_id,
 		'forum_active'=>FORUM_ALL,
 		));
-	//$template->set_file('FILE_forum', 'tmpl.forum_edit.php');
-	//$template->copy_block('BLOCK_middle', 'FILE_forum');
-
-	//$forum_data = $forum->load($forum_id, 0, FORUM_ALL);
-	//set_forum($template, $forum_id);
 
 	if($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS) {
 		set_themes($template, $items);
-		//$template->set_file('FILE_forumdets', 'tmpl.forum_theme.php');
+		// jauna teema
+		$template->enable('BLOCK_forum_theme_new');
 	} else {
-		//$template->set_file('FILE_forumdets', 'tmpl.forum_det.php');
+
+		$CC = new CommentConnect('forum');
+		$CC->setDb($db);
+		$comments = $CC->get(array(
+			'cc_table_id'=>$forum_id,
+			'c_visible'=>COMMENT_ALL,
+			));
+		if($comments) {
+			$template->enable('BLOCK_comments');
+		} else {
+			$template->enable('BLOCK_nocomments');
+		}
+
+		foreach($comments as $item)
+		{
+			$template->set_array($item, 'BLOCK_comment_item');
+			if($item['c_visible'] == COMMENT_VISIBLE) {
+				$template->enable('BLOCK_c_visible');
+				$template->disable('BLOCK_c_invisible');
+				$template->set_var('c_color_class', 'box-normal', 'BLOCK_comment_item');
+			} else {
+				$template->enable('BLOCK_c_invisible');
+				$template->disable('BLOCK_c_visible');
+				$template->set_var('c_color_class', 'box-invisible', 'BLOCK_comment_item');
+			}
+			$template->parse_block('BLOCK_comment_item', TMPL_APPEND);
+		}
 	}
 
 	/*
@@ -144,66 +171,12 @@ if($forum_id)
 	} else {
 		$template->set_var('forum_prohibitchilds_sel', ' selected="selected"', 'BLOCK_forum_edit');
 	}
-/*
-	$template->set_var('forum1_id', $forum_data['forum_id'], 'BLOCK_middle');
-	$template->set_var('forum1_name', $forum_data['forum_name'] ? $forum_data['forum_name'] : '---', 'BLOCK_middle');
-	$template->set_var('forum1_username', $forum_data['forum_username'], 'BLOCK_middle');
-	$template->set_var('forum1_useremail', $forum_data['forum_useremail'], 'BLOCK_middle');
-	$template->set_var('forum1_userip', $forum_data['forum_userip'], 'BLOCK_middle');
-	$template->set_var('forum1_entered', $forum_data['forum_entered'], 'BLOCK_middle');
-	$template->set_var('forum1_data', $forum_data['forum_data'], 'BLOCK_middle');
-
-	if($forum_data['forum_active'] == FORUM_ACTIVE)
-		$template->set_var('forum1_active', ' selected', 'BLOCK_middle');
-	else
-		$template->set_var('forum1_inactive', ' selected', 'BLOCK_middle');
-
-	if($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS)
-		$template->set_var('forum1_allowchilds', ' selected', 'BLOCK_middle');
-	else
-		$template->set_var('forum1_prohibitchilds', ' selected', 'BLOCK_middle');
-
-	if(count($items))
-	{
-		$template->enable('BLOCK_forum');
-		$template->copy_block('BLOCK_forumdets', 'FILE_forumdets');
-	}
-
-	$c = 0;
-	foreach($items as $item)
-	{
-		++$c;
-		$template->set_var('forum_nr', $c);
-		//$item['forum_datacompiled'] = mb_substr($item['forum_datacompiled'], 0, 100).'...';
-
-		$template->set_array($item, 'BLOCK_forum');
-
-		// ja aktiivs vai nee - kaukaa iekraaso to
-		$template->disable('BLOCK_forum_active');
-		$template->disable('BLOCK_forum_inactive');
-		if($item['forum_active'] == 'Y')
-		{
-			$template->enable('BLOCK_forum_active');
-			$template->set_var('forum_color_class', 'box-active', 'BLOCK_forum');
-		} else {
-			$template->enable('BLOCK_forum_inactive');
-			$template->set_var('forum_color_class', 'box-inactive', 'BLOCK_forum');
-		}
-
-		$template->parse_block('BLOCK_forum', TMPL_APPEND);
-	}
-	$template->set_var('item_count', $c);
-	// ja forumu sarakstu
-	*/
 } else {
+	# Root
 	set_themes($template, $items);
-} // forum_id
-
-// jauna teema
-if(!$forum_id || ($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS))
-{
+	// jauna teema
 	$template->enable('BLOCK_forum_theme_new');
-}
+} // forum_id
 
 $template->out();
 

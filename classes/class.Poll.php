@@ -110,10 +110,7 @@ class Poll
 			$poll_pollid, '$data[poll_name]', '$data[poll_active]', ".$db->now()."
 		)";
 
-		if($db->Execute($sql))
-			return last_insert_id();
-		else
-			return false;
+		return ($db->Execute($sql) ? $db->LastID() : false);
 	} // insert
 
 	function update($poll_id, &$data, $validate = POLL_VALIDATE)

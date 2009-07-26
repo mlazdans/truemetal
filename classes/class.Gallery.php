@@ -161,10 +161,7 @@ FROM gallery
 			'$data[gal_data]',  $date, $data[gal_ggid]
 		)";
 
-		if($db->Execute($sql))
-			return last_insert_id();
-		else
-			return false;
+		return ($db->Execute($sql) ? $db->LastID() : false);
 	} // insert
 
 	function update($gal_id, &$data, $validate = GALLERY_VALIDATE)

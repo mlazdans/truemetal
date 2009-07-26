@@ -118,6 +118,7 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 			return $db->Execute($sql);
 	}
 
+/*
 	function load_by_userid($userid)
 	{
 		global $db, $sys_lang;
@@ -128,6 +129,7 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 
 		return $db->Execute($sql);
 	} // load_by_userid
+*/
 
 	function load_under(&$module_tree)
 	{
@@ -175,12 +177,7 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 			'$data[art_comments]', '$data[art_type]'
 		)";
 
-		if($db->Execute($sql))
-		{
-			$this->update_cache($data['art_modid']);
-			return last_insert_id();
-		} else
-			return false;
+		return ($db->Execute($sql) ? $db->LastID() : false);
 	}
 
 	function update($art_id, &$data, $validate = ARTICLE_VALIDATE)
@@ -209,12 +206,7 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 		$sql = substr($sql, 0, -2);
 		$sql .= ' WHERE art_id = '.$art_id;
 
-		if($db->Execute($sql))
-		{
-			$this->update_cache(0, $art_id);
-		}
-
-		return $art_id;
+		return ($db->Execute($sql) ? $art_id : false);
 	}
 
 	function save($art_id, &$data)
@@ -251,8 +243,6 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 			return true;
 		}
 
-		$this->update_cache(0, $art_id);
-
 		$sql = 'DELETE FROM article_'.$sys_lang.' WHERE art_id = '.$art_id;
 
 		return $db->Execute($sql);
@@ -265,8 +255,6 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 		$art_id = (integer)$art_id;
 		$sql = 'UPDATE article_'.$sys_lang.' SET art_active = "'.ARTICLE_ACTIVE.'" WHERE art_id = '.$art_id;
 
-		$this->update_cache(0, $art_id);
-
 		return $db->Execute($sql);
 	}
 
@@ -277,7 +265,6 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 		$art_id = (integer)$art_id;
 		$sql = 'UPDATE article_'.$sys_lang.' SET art_active = "'.ARTICLE_INACTIVE.'" WHERE art_id = '.$art_id;
 
-		$this->update_cache(0, $art_id);
 		return $db->Execute($sql);
 	}
 
@@ -288,7 +275,6 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 		$art_id = (integer)$art_id;
 		$sql = 'UPDATE article_'.$sys_lang.' SET art_visible = "'.ARTICLE_VISIBLE.'" WHERE art_id = '.$art_id;
 
-		$this->update_cache(0, $art_id);
 		return $db->Execute($sql);
 	}
 
@@ -299,7 +285,6 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 		$art_id = (integer)$art_id;
 		$sql = 'UPDATE article_'.$sys_lang.' SET art_visible = "'.ARTICLE_INVSIBLE.'" WHERE art_id = '.$art_id;
 
-		$this->update_cache(0, $art_id);
 		return $db->Execute($sql);
 	}
 
@@ -333,183 +318,12 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 				if(isset($data['art_checked'.$r]) && isset($data['art_id'.$r]))
 				{
 					$ret = $ret && $this->{$func}($data['art_id'.$r]);
-					$this->update_cache(0, $data['art_id'.$r]);
 				}
 			}
 		}
 
 		return $ret;
 	}
-
-	/*
-	function comment_del($ac_id = 0, $art_id = 0)
-	{
-		global $db, $sys_lang;
-
-		$ac_id = (integer)$ac_id;
-		$art_id = (integer)$art_id;
-
-		if($art_id)
-		{
-			$sql = 'DELETE FROM article_comments_'.$sys_lang.' WHERE ac_artid = '.$art_id;
-			$this->update_cache(0, $art_id);
-		} elseif($ac_id) {
-			$sql = 'DELETE FROM article_comments_'.$sys_lang.' WHERE ac_id = '.$ac_id;
-			$this->update_cache(0, 0, $ac_id);
-		} else {
-			return false;
-		}
-
-		return $db->Execute($sql);
-	}
-
-	function comment_show($ac_id = 0, $art_id = 0)
-	{
-		global $db, $sys_lang;
-
-		$ac_id = (integer)$ac_id;
-		$art_id = (integer)$art_id;
-
-		if($art_id)
-		{
-			$sql = 'UPDATE article_comments_'.$sys_lang.' SET ac_visible = "'.COMMENT_VISIBLE.'" WHERE ac_artid = '.$art_id;
-			$this->update_cache(0, $art_id);
-		} elseif($ac_id) {
-			$sql = 'UPDATE article_comments_'.$sys_lang.' SET ac_visible = "'.COMMENT_VISIBLE.'" WHERE ac_id = '.$ac_id;
-			$this->update_cache(0, 0, $ac_id);
-		} else {
-			return false;
-		}
-
-		return $db->Execute($sql);
-	}
-
-	function comment_hide($ac_id = 0, $art_id = 0)
-	{
-		global $db, $sys_lang;
-
-		$ac_id = (integer)$ac_id;
-		$art_id = (integer)$art_id;
-
-		if($art_id)
-		{
-			$sql = 'UPDATE article_comments_'.$sys_lang.' SET ac_visible = "'.COMMENT_INVISIBLE.'" WHERE ac_artid = '.$art_id;
-			$this->update_cache(0, $art_id);
-		}
-
-		if($ac_id)
-		{
-			$sql = 'UPDATE article_comments_'.$sys_lang.' SET ac_visible = "'.COMMENT_INVISIBLE.'" WHERE ac_id = '.$ac_id;
-			$this->update_cache(0, 0, $ac_id);
-		} else {
-			return false;
-		}
-
-		return $db->Execute($sql);
-	}
-
-	// komentaaru actionu preprocessors
-	function comment_process_action(&$data, $action)
-	{
-		$ret = true;
-		$func = '';
-
-		if($action == 'comment_delete_multiple')
-			$func = 'comment_del';
-
-		if($action == 'comment_show_multiple')
-			$func = 'comment_show';
-
-		if($action == 'comment_hide_multiple')
-			$func = 'comment_hide';
-
-		//if($action == 'comment_ban_multiple')
-			//$func = 'comment_ban';
-
-		if(isset($data['comment_count']) && $func)
-		{
-			for($r = 1; $r <= $data['comment_count']; ++$r)
-			{
-				// ja iechekots, proceseejam
-				if(isset($data['comment_checked'.$r]) && isset($data['ac_id'.$r]))
-				{
-					$ret = $ret && $this->{$func}($data['ac_id'.$r]);
-					$this->update_cache(0, 0, $data['ac_id'.$r]);
-				}
-			}
-		}
-
-		return $ret;
-	}
-
-	function add_comment($art_id, &$data, $validate = ARTICLE_VALIDATE)
-	{
-		//global $ip, $db, $sys_lang;
-		//global $ip, $sys_lang, $sys_database_type, $sys_db_host, $sys_db_user,
-		//$sys_db_password, $sys_db_name, $sys_db_port;
-		global $ip, $sys_lang;
-
-		if(!user_loged())
-		{
-			$this->error_msg = 'Nav ielogojies!';
-			return false;
-		}
-
-		if(!ereg('[0-9]', $art_id))
-			return false;
-
-		$ban = new Ban;
-		if($ban_info = $ban->banned($ip, 'article'))
-		{
-			$this->error_msg = 'Banned - '.$ban_info['ub_reason'];
-			return false;
-		}
-
-		if($validate)
-			$this->validate_comment($data);
-
-		$user_id = $_SESSION['login']['l_id'];
-		$user_login = $_SESSION['login']['l_login'];
-
-		$cData = array(
-			'user_id'=>$user_id,
-			'user_login'=>$user_login,
-			'user_name'=>$data['ac_username'],
-			'user_email'=>$data['ac_useremail'],
-			'data'=>$data['ac_data'],
-			'data_compiled'=>$data['ac_datacompiled'],
-			'ip'=>$ip,
-			);
-
-		$CommentConnect = new CommentConnect('article_'.$sys_lang);
-		$CommentConnect->add($art_id, $cData);
-	}
-
-	function validate_comment(&$data)
-	{
-		if(!isset($data['ac_username']))
-			$data['ac_username'] = '';
-
-		if(!isset($data['ac_useremail']))
-			$data['ac_useremail'] = '';
-
-		if(!isset($data['ac_data']))
-			$data['ac_data'] = '';
-
-		if(!isset($data['ac_datacompiled']))
-			$data['ac_datacompiled'] = $data['ac_data'];
-
-		if(!isset($data['ac_entered']))
-			$data['ac_entered'] = '';
-
-		if(isset($data['ac_visible']))
-			$data['ac_visible'] = ereg('[^YN]', $data['ac_visible']) ? '' : $data['ac_visible'];
-		else
-			$data['ac_visible'] = COMMENT_VISIBLE;
-
-		parse_text_data($data['ac_datacompiled']);
-	}
-	*/
 
 	function validate(&$data)
 	{
@@ -564,8 +378,8 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 		my_strip_tags($data['art_username']);
 		my_strip_tags($data['art_useremail']);
 
-	}
-
+	} // validate
+/*
 	function search($q)
 	{
 		$this->set_limit(50);
@@ -637,6 +451,7 @@ LEFT JOIN comment_meta ON (cm_table = '$art_table') AND (cm_table_id = a.art_id)
 
 		$template->delete_block('FILE_tmp');
 	} // set_comment_count
+*/
 
 	function get_total($art_modid = 0)
 	{

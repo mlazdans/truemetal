@@ -65,10 +65,7 @@ class GalleryGroup extends Admin
 			'$data[gg_name]', '$data[gg_data]', '$data[gg_date]', $date
 		)";
 
-		if($db->Execute($sql))
-			return last_insert_id();
-		else
-			return false;
+		return ($db->Execute($sql) ? $db->LastID() : false);
 	} // insert
 
 	function update($gg_id, &$data, $validate = GALLERY_GROUP_VALIDATE)

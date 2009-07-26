@@ -286,6 +286,7 @@ function set_editor(&$template, $editor_id, $data_module, $editor_data_id = 0)
 		$template->enable('BLOCK_html_clear');
 } // set_editor
 
+/*
 function last_insert_id()
 {
 	global $db;
@@ -295,6 +296,7 @@ function last_insert_id()
 
 	return isset($ret['last_id']) ? $ret['last_id'] : 0;
 } // last_insert_id
+*/
 
 function valid_date($date)
 {
@@ -776,7 +778,7 @@ function save_file($id, $save_path)
 
 	return false;
 } // save_file
-
+/*
 function update_cache_module($module_id)
 {
 	global $db;
@@ -792,6 +794,7 @@ function update_cache_item($key)
 	$db->Execute("INSERT IGNORE INTO cache_items (item_id, last_update) VALUES ('$key', NOW())");
 	$db->Execute("UPDATE IGNORE cache_items SET last_update = NOW() WHERE item_id = '$key'");
 } // update_cache_item
+*/
 
 function to_int($val)
 {

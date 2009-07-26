@@ -215,12 +215,6 @@ WHERE
 	{
 		global $db, $ip;
 
-		if(!user_loged())
-		{
-			$this->error_msg = 'Nav ielogojies!';
-			return false;
-		}
-
 		if($validate)
 			$this->validate($data);
 
@@ -240,9 +234,6 @@ WHERE
 				return false;
 		}
 
-		$user_id = $_SESSION['login']['l_id'];
-		$user_login = $_SESSION['login']['l_login'];
-
 		$sql = "
 INSERT INTO forum (
 	forum_name, forum_username, forum_userid,
@@ -250,75 +241,14 @@ INSERT INTO forum (
 	forum_forumid, forum_data, forum_datacompiled,
 	forum_allowchilds, forum_active
 ) VALUES (
-	'$data[forum_name]', '$data[forum_username]', $user_id,
-	'$user_login', '$data[forum_useremail]', '$ip', ".$db->now().",
+	'$data[forum_name]', '$data[forum_username]', $data[forum_userid],
+	'$data[forum_userlogin]', '$data[forum_useremail]', '$ip', ".$db->now().",
 	$forum_id, '$data[forum_data]', '$data[forum_datacompiled]',
 	'$data[forum_allowchilds]', '$data[forum_active]'
 )";
 
-		if($db->Execute($sql))
-		{
-			$_SESSION['user']['username'] = $data['forum_username'];
-			$_SESSION['user']['useremail'] = $data['forum_useremail'];
-			$id = last_insert_id();
-
-			// ja pievieno teemu, ieliekam tajaa zinju
-			if(isset($forum['forum_allowchilds']) && ($forum['forum_allowchilds'] == FORUM_ALLOWCHILDS))
-			{
-				//$data['forum_allowchilds'] = FORUM_PROHIBITCHILDS;
-				$this->add($id, $data);
-			}
-//die;
-
-			return $id;
-		} else
-			return false;
+		return ($db->Execute($sql) ? $db->LastID() : false);
 	} // add
-/*
-	function comment_count($forum_id, $forum_active = FORUM_ACTIVE)
-	{
-		global $db;
-
-		if(!$forum_id)
-			return 0;
-
-		$sql = 'SELECT COUNT(*) comment_count FROM forum WHERE forum_forumid = '.$forum_id;
-
-		if($forum_active)
-			$sql .= ' AND forum_active = "'.$forum_active.'"';
-
-		$data = $db->ExecuteSingle($sql);
-
-		return (int)$data['comment_count'];
-	} // comment_count
-	*/
-/*
-	function comment_count($forum_id, $forum_active = FORUM_ACTIVE)
-	{
-		global $db;
-
-		if(!$forum_id)
-			return 0;
-
-		$sql = 'SELECT forum_id, forum_allowchilds, COUNT(*) comment_count FROM forum WHERE forum_forumid = '.$forum_id;
-
-		if($forum_active)
-			$sql .= ' AND forum_active = "'.$forum_active.'"';
-		$sql .= ' GROUP BY forum_id, forum_allowchilds';
-
-		$data = $db->Execute($sql);
-		$count = 0;
-		foreach($data as $item) {
-			print_r($data);
-			die;
-			if($item['forum_allowchilds'] == FORUM_PROHIBITCHILDS)
-				$count += $item['comment_count'];
-			$count += $this->comment_count($item['forum_id']);
-		}
-
-		return $count;
-	} // comment_count
-	*/
 
 	function save(&$data, $validate = FORUM_DONTVALIDATE)
 	{
@@ -442,15 +372,9 @@ INSERT INTO forum (
 
 	function validate(&$data)
 	{
-		if(isset($data['forum_id']))
-			$data['forum_id'] = !ereg('[0-9]', $data['forum_id']) ? 0 : $data['forum_id'];
-		else
-			$data['forum_id'] = 0;
-
-		if(isset($data['forum_forumid']))
-			$data['forum_forumid'] = !ereg('[0-9]', $data['forum_forumid']) ? 0 : $data['forum_forumid'];
-		else
-			$data['forum_forumid'] = 0;
+		$data['forum_id'] = isset($data['forum_id']) ? (int)$data['forum_id'] : 0;
+		$data['forum_forumid'] = isset($data['forum_forumid']) ? (int)$data['forum_forumid'] : 0;
+		$data['forum_userid'] = isset($data['forum_userid']) ? (int)$data['forum_userid'] : 0;
 
 		if(isset($data['forum_active']))
 			$data['forum_active'] = ereg('[^YN]', $data['forum_active']) ? FORUM_ACTIVE : $data['forum_active'];
@@ -462,13 +386,16 @@ INSERT INTO forum (
 		else
 			$data['forum_allowchilds'] = FORUM_PROHIBITCHILDS;
 
-		if(!isset($data['forum_name']))
-			$data['forum_name'] = '';
+		if(isset($data['forum_name']))
+			$data['forum_name'] = mb_strcut($data['forum_name'], 0, 64);
 		else
-			$data['forum_name'] = mb_strcut($data['forum_name'], 0, 60);
+			$data['forum_name'] = '';
 
 		if(!isset($data['forum_username']))
 			$data['forum_username'] = '';
+
+		if(!isset($data['forum_userlogin']))
+			$data['forum_userlogin'] = '';
 
 		if(!isset($data['forum_useremail']))
 			$data['forum_useremail'] = '';
@@ -518,38 +445,6 @@ INSERT INTO forum (
 			$template->parse_block('BLOCK_right_item', TMPL_APPEND);
 		}
 	} // set_recent_forum
-/*
-	function search($q)
-	{
-		global $db;
 
-		$forum_active = FORUM_ACTIVE;
-		if($q)
-			$search = search_to_sql($q, array('f.forum_data'));
-
-		$sql = "
-		SELECT
-			COUNT(f.forum_forumid) matches,
-			f2.forum_forumid,
-			f2.forum_id,
-			f2.forum_name
-		FROM
-			forum f
-		JOIN forum f2 ON f2.forum_forumid = f.forum_id AND f2.forum_active = 'Y'
-		WHERE
-			$search AND f.forum_allowchilds = '".FORUM_PROHIBITCHILDS."'
-		GROUP BY
-			f.forum_forumid, f2.forum_name
-		ORDER BY
-			matches DESC
-		LIMIT
-			0,50
-		";
-
-		$data = $db->Execute($sql);
-
-		return $data;
-	}
-*/
 } // Forum
 

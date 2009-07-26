@@ -86,10 +86,7 @@ class Palidziba
 			'$data[p_notes]'
 		)";
 
-		if($db->Execute($sql)) {
-			return last_insert_id();
-		} else
-			return false;
+		return ($db->Execute($sql) ? $db->LastID() : false);
 	} // insert
 
 	function update($p_id, &$data, $validate = P_VALIDATE) {

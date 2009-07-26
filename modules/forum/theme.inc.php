@@ -7,9 +7,17 @@ if($action == 'add_theme')
 	$error = false;
 	$data = post('data');
 	$forum->validate($data);
+
+	$data['forum_userid'] = $_SESSION['login']['l_id'];
+	$data['forum_userlogin'] = $_SESSION['login']['l_login'];
 	$data['forum_useremail'] = $_SESSION['login']['l_email'];
 	$data['forum_username'] = $_SESSION['login']['l_nick'];
 	$data['forum_allowchilds'] = FORUM_PROHIBITCHILDS;
+
+	if(!user_loged())
+	{
+		$error = true;
+	}
 
 	if(!$data['forum_name'])
 	{
@@ -27,6 +35,15 @@ if($action == 'add_theme')
 	{
 		if($id = $forum->add($forum_id, $data))
 		{
+			$_SESSION['user']['username'] = $data['forum_username'];
+			$_SESSION['user']['useremail'] = $data['forum_useremail'];
+			/*
+			if(isset($forum['forum_allowchilds']) && ($forum['forum_allowchilds'] == FORUM_ALLOWCHILDS))
+			{
+				//$data['forum_allowchilds'] = FORUM_PROHIBITCHILDS;
+				$this->add($id, $data);
+			}
+			*/
 			header("Location: $module_root/$id/");
 			return;
 		}
@@ -50,28 +67,31 @@ if(user_loged())
 $forum_items = new Forum;
 $forum_items->setItemsPerPage($fpp);
 $forum_items->setPage($page_id);
+
 if(
 	isset($_SESSION['login']['l_forumsort_themes']) &&
 	($_SESSION['login']['l_forumsort_themes'] == FORUM_SORT_LAST_COMMENT)
 )
 {
-	//$items = $forum_items->load(0, $forum_id, FORUM_ACTIVE, "forum_lastcommentdate DESC");
 	$items = $forum_items->load(array(
 		"forum_forumid"=>$forum_id,
 		"order"=>"forum_lastcommentdate DESC",
 		));
-	$template->enable('BLOCK_info_sort_C');
+
+	if($items)
+		$template->enable('BLOCK_info_sort_C');
 } else {
-	//$items = $forum_items->load(0, $forum_id);
 	$items = $forum_items->load(array(
 		"forum_forumid"=>$forum_id,
 		));
-	$template->enable('BLOCK_info_sort_T');
+
+	if($items)
+		$template->enable('BLOCK_info_sort_T');
 }
 
 if($items)
 {
-	$template->enable('BLOCK_forum');
+	$template->enable('BLOCK_forum_themes');
 } else {
 	$template->enable('BLOCK_noforum');
 }

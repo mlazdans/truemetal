@@ -68,7 +68,7 @@ class Module
 		$ret = $db->Execute($sql);
 
 		if($ret) {
-			$last_id = last_insert_id();
+			$last_id = $db->LastID();
 			$sql = "UPDATE modules_$sys_lang SET ".
 				"module_pos = module_pos + 1 ".
 				"WHERE ".
@@ -76,7 +76,7 @@ class Module
 				"mod_id != $last_id AND ".
 				"mod_modid = $data[mod_modid]";
 			$db->execute($sql);
-			return last_insert_id();
+			return $last_id;
 		}
 
 		return false;

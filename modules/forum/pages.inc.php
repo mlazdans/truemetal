@@ -73,5 +73,5 @@ if($page_id < $total_pages)
 // --
 
 //$template->parse_block('BLOCK_is_pages');
-$template->set_var('pages_bottom', $template->get_parsed_content('BLOCK_is_pages'), 'BLOCK_middle');
+//$template->set_var('pages_bottom', $template->get_parsed_content('BLOCK_is_pages'), 'BLOCK_middle');
 

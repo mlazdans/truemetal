@@ -29,14 +29,14 @@
 </div>
 <!-- END BLOCK_is_pages -->
 
-
+<!-- BEGIN BLOCK_forum_themes disabled -->
 <table class="Forum-Theme" cellpadding="2" cellspacing="1">
 <tr>
 	<td class="Forum-cat">Tēma</td>
 	<td class="Forum-cat">Kom.</td>
 	<td class="Forum-cat">Uzsāka</td>
 </tr>
-<!-- BEGIN BLOCK_forum disabled -->
+<!-- BEGIN BLOCK_forum -->
 <tr>
 	<td class="Forum-Theme-name">
 		<a href="{module_root}/{forum_id}/" title="Datums: {forum_date}"><b>{forum_name}</b></a>
@@ -50,7 +50,7 @@
 </tr>
 <!-- END BLOCK_forum -->
 </table>
-{pages_bottom}
+<!-- END BLOCK_forum_themes -->
 
 <!-- BEGIN BLOCK_info_sort_T disabled -->
 <div class="List-item">

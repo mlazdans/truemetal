@@ -290,7 +290,7 @@ class MainModule extends Template
 		$logins = new Logins;
 		$logins->set_profile($this, $login_data);
 	} // set_profile
-
+/*
 	function set_cache($module_id, $key, &$data, $compress = false, $expire = 3600)
 	{
 		global $_CACHE, $db, $sys_use_chache;
@@ -331,7 +331,7 @@ class MainModule extends Template
 
 		return $_CACHE->get($key);
 	} // get_cache
-
+*/
 	function set_banner_top()
 	{
 		$banners = array(

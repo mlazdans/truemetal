@@ -74,6 +74,14 @@ WHERE
 		if(!empty($params['cc_table_id']))
 			$sql_add[] = sprintf("(cc_table_id = %d)", $params['cc_table_id']);
 
+		if(isset($params['c_visible']))
+		{
+			if($params['c_visible'])
+				$sql_add[] = sprintf("c_visible = '%s'", $params['c_visible']);
+		} else {
+			$sql_add[] = sprintf("c_visible = '%s'", COMMENT_VISIBLE);
+		}
+
 		if($sql_add)
 			$sql .= " AND ".join(' AND ', $sql_add);
 

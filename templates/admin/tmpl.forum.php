@@ -1,11 +1,9 @@
-<table class="Main">
-<tr>
-	<td class="TD-cat">/ <a class="A-cat" href="{module_root}/">Forums</a><!-- BEGIN BLOCK_forum_path disabled --> / <a class="A-cat" href="{module_root}/{forum1_path}">{forum1_name}</a><!-- END BLOCK_forum_path --> /</td>
-</tr>
-</table>
+<div class="TD-cat">
+	/ <a class="A-cat" href="{module_root}/">Forums</a><!-- BEGIN BLOCK_forum_path disabled --> / <a class="A-cat" href="{module_root}/{forum1_path}">{forum1_name}</a><!-- END BLOCK_forum_path --> /
+</div>
 
 <!-- BEGIN BLOCK_forum_edit disabled -->
-<form method="post" action="{module_root}/{forum_id}/do/">
+<form action="" method="post" id="forum_edit">
 <table class="Main">
 <tr>
 	<td class="TD-cat" colspan="2">
@@ -16,7 +14,7 @@
 </tr>
 <tr>
 	<td style="white-space: nowrap; text-align: right;">Nosaukums:</td>
-	<td><input type="text" name="data[forum_name]" value="{forum_name}" size="32" /></td>
+	<td><input type="text" name="data[forum_name]" value="{forum_name}" size="64" /></td>
 </tr>
 <tr>
 	<td style="white-space: nowrap; text-align: right;">Aktīvs?:</td>
@@ -59,12 +57,30 @@
 </form>
 <!-- END BLOCK_forum_edit -->
 
+<!-- BEGIN BLOCK_forum_theme_new disabled -->
+<form action="" method="post" id="forum_theme_new">
+<table class="Main">
+<tr>
+	<td colspan="3" class="TD-cat">
+		<input type="hidden" name="action" value="add_forum" />
+		Jauna tēma
+	</td>
+</tr>
+<tr>
+	<td>Nosaukums:</td>
+	<td><input type="text" name="data[forum_name]" maxlength="32" size="20" /></td>
+	<td><input type="submit" value="Pievienot" /></td>
+</tr>
+</table>
+</form>
+<!-- END BLOCK_forum_theme_new -->
+
 <!-- BEGIN BLOCK_forum_nothemes disabled -->
 Nav nevienas tēmas
 <!-- END BLOCK_forum_nothemes -->
 
 <!-- BEGIN BLOCK_forum_themes disabled -->
-<form method="post" action="{module_root}/do/" id="forum_theme">
+<form action="" method="post" id="forum_themes">
 <table class="Main">
 <tr>
 	<td class="TD-cat"><input type="checkbox" name="forum_check_all" onclick="checkAll(this.form, this)" /></td>
@@ -101,21 +117,51 @@ Nav nevienas tēmas
 </form>
 <!-- END BLOCK_forum_themes -->
 
-<!-- BEGIN BLOCK_forum_theme_new disabled -->
-<form action="{module_root}/{forum_id}/do/" method="post">
+<!-- BEGIN BLOCK_nocomments disabled -->
+Nav neviena komentāra
+<!-- END BLOCK_nocomments -->
+
+<!-- BEGIN BLOCK_comments disabled -->
+<form action="" method="post" id="comments">
 <table class="Main">
 <tr>
-	<td colspan="3" class="TD-cat">
-		<input type="hidden" name="action" value="add_forum" />
-		Jauna tēma
-	</td>
+	<td class="TD-cat"><input type="checkbox" name="comment_check_all" onclick="checkAll(this.form, this)" /></td>
+	<td colspan="4" class="TD-cat">Komentāri</td>
+</tr>
+<!-- BEGIN BLOCK_comment_item -->
+<tr>
+	<th class="{c_color_class}">
+		<input type="hidden" name="c_id{c_nr}" value="{c_id}" />
+		<input type="checkbox" name="c_checked{c_nr}" />
+	</th>
+	<th class="{c_color_class} nowrap">{c_username} ({c_userlogin})</th>
+	<th class="{c_color_class}">{c_userip}</th>
+	<th class="{c_color_class} nowrap">{c_entered}</th>
+	<th class="{c_color_class}">
+		<!-- BEGIN BLOCK_c_visible disabled -->aktīvs<!-- END BLOCK_c_visible -->
+		<!-- BEGIN BLOCK_c_invisible disabled -->neaktīvs<!-- END BLOCK_c_invisible -->
+	</th>
 </tr>
 <tr>
-	<td>Nosaukums:</td>
-	<td><input type="text" name="data[forum_name]" maxlength="32" size="20" /></td>
-	<td><input type="submit" value="Pievienot" /></td>
+	<td></td>
+	<td class="{c_color_class}" colspan="4">
+		{c_datacompiled}
+	</td>
+</tr>
+<!-- END BLOCK_comment_item -->
+<tr>
+	<td colspan="5">
+		<input type="hidden" name="item_count" value="{item_count}" />
+		Iezīmētos: <select name="action">
+		<option value="">---</option>
+		<option value="delete_multiple">Dzēst</option>
+		<option value="activate_multiple">Aktivizēt</option>
+		<option value="deactivate_multiple">Deaktivizēt</option>
+		</select>
+		<input type="submit" value="  OK  " />
+	</td>
 </tr>
 </table>
 </form>
-<!-- END BLOCK_forum_theme_new -->
+<!-- END BLOCK_comments -->
 
