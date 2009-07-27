@@ -45,7 +45,7 @@ if($art_id) {
 
 	if(($action == 'add_comment') && ($item['art_comments'] == ARTICLE_COMMENTS) && user_loged())
 	{
-		$table = 'article_'.$sys_lang;
+		$table = 'article';
 		$table_id = $art_id;
 		$data = post('data');
 		if($ac_id = include('../modules/comment/add.inc.php'))
@@ -91,7 +91,7 @@ else
 if($art_id)
 {
 	$_SESSION['comments']['viewed'][$art_id] = $articles[0]['art_comment_count'];
-	$CC = new CommentConnect('article_'.$sys_lang);
+	$CC = new CommentConnect('article');
 	$CC->setDb($db);
 	$comments = $CC->get(array(
 		'cc_table_id'=>$art_id,
@@ -153,6 +153,8 @@ if($art_id) {
 	}
 } else
 */
+
+/*
 $tidy_config = array(
 	'doctype' => 'strict',
 	'clean' => true,
@@ -161,6 +163,7 @@ $tidy_config = array(
 	'wrap' => 0,
 	'alt-text' => ''
 	);
+*/
 
 if(count($articles))
 {
@@ -172,22 +175,31 @@ if(count($articles))
 	{
 		++$c;
 
-		$tidy = tidy_parse_string($item['art_data'], $tidy_config, 'UTF8');
-		$tidy->cleanRepair();
-		//$root = tidy_get_root($tidy);
-		//printr($root);
-		//die;
-		$item['art_data'] = $tidy;
+		//$tidy = tidy_parse_string($item['art_data'], $tidy_config, 'UTF8');
+		//$tidy->cleanRepair();
+		//$item['art_data'] = $tidy;
 
 		$item['art_date'] = date('d.m.Y', strtotime($item['art_entered']));
 		if($art_id)
 		{
-			$patt = '/(.*)(<hr\s+id="editor_splitter" \/>)(.*)/ims';
-			$item['art_data'] = preg_replace($patt, '<div style="font-weight: bold;">\1</div><hr/>\3', $item['art_data'], 1);
+			//$patt = '/(.*)(<hr\s+id="editor_splitter" \/>)(.*)/ims';
+			//$item['art_data'] = preg_replace($patt, '<div style="font-weight: bold;">\1</div><hr/>\3', $item['art_data'], 1);
 			$item['art_date_f'] = proc_date($item['art_entered']);
-			$template->enable('BLOCK_art_data_formatted');
+			$item['art_data_display'] = $item['art_intro'].$item['art_data'];
+			$template->enable('BLOCK_art_date_formatted');
+			$template->enable('BLOCK_art_data');
 		} else {
-			$patt = '/<hr\s+id="editor_splitter" \/>.*/ims';
+			//$patt = '/<hr\s+id="editor_splitter" \/>.*/ims';
+
+			$template->enable('BLOCK_art_intro');
+			if($item['art_data'])
+			{
+				$item['art_data_display'] = $item['art_intro'];
+				$template->enable('BLOCK_art_cont');
+			} else {
+				$template->disable('BLOCK_art_cont');
+			}
+			/*
 			if(preg_match($patt, $item['art_data']))
 			{
 				$item['art_data'] = preg_replace($patt, '', $item['art_data'], 1);
@@ -195,6 +207,7 @@ if(count($articles))
 			} else {
 				$template->disable('BLOCK_art_cont');
 			}
+			*/
 		}
 
 		if($item['art_comments'] == ARTICLE_NOCOMMENTS) {

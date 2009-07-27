@@ -46,7 +46,7 @@ WHERE
 $q = $db->Query($sql);
 while($r = $db->FetchObject($q))
 {
-	$db->QuoteArray($r);
+	$db->QuoteObject($r);
 	$c_id = $r->forum_id;
 
 	# Comments
@@ -99,7 +99,7 @@ $q = $db->Query($sql);
 while($r = $db->FetchObject($q))
 {
 	$c_id++;
-	$db->QuoteArray($r);
+	$db->QuoteObject($r);
 
 	# Comments
 	printf($c_sql,
@@ -120,14 +120,14 @@ while($r = $db->FetchObject($q))
 
 	# Connect
 	printf($cc_sql,
-		'article_lv',
+		'article',
 		$r->ac_artid,
 		$c_id
 		);
 
 	# Map
 	printf($cm_sql,
-		'article_lv',
+		'article',
 		$r->ac_id,
 		$c_id
 		);

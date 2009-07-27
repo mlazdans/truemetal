@@ -194,6 +194,9 @@ table.Comments {
 	background: #444444;
 	padding: 0.5em 1em;
 }
+.Article-item .data .intro {
+	font-weight: bold;
+}
 
 
 #content {
@@ -373,9 +376,4 @@ table.Forum-Theme, table.Forum-Theme-form {
 .Info {
 	padding: 3em 1em 4em 1em;
 }
-/* Tidy */
-p.c1 {
-	text-align: center;
-}
-
 

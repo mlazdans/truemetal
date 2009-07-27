@@ -206,7 +206,19 @@ class SQLLayer
 				return false;
 				break;
 		}
-	} // Quote
+	} // QuoteArray
+
+	function QuoteObject($obj)
+	{
+		switch( $this->int_db_type ) {
+			case DB_MYSQLI:
+				return $this->__mysqli_quote_object($obj);
+				break;
+			default:
+				return false;
+				break;
+		}
+	} // QuoteObject
 
 	function AutoCommit($bool)
 	{
@@ -360,12 +372,20 @@ class SQLLayer
 		return mysqli_real_escape_string($this->conn, $str);
 	} // __mysqli_quote_array
 
-	protected function __mysqli_quote_array($r)
+	protected function __mysqli_quote_object($obj)
 	{
-		foreach($r as $k=>$v)
-			$r->{$k} = $this->__mysqli_quote($v);
+		foreach($obj as $k=>$v)
+			$obj->{$k} = $this->__mysqli_quote($v);
 
-		return $r;
+		return $obj;
+	} // __mysqli_quote_array
+
+	protected function __mysqli_quote_array($arr)
+	{
+		foreach($arr as $k=>$v)
+			$arr[$k] = $this->__mysqli_quote($v);
+
+		return $arr;
 	} // __mysqli_quote_array
 
 	/***

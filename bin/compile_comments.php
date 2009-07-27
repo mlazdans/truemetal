@@ -1,5 +1,6 @@
 <?php
 
+$i_am_admin = true;
 require_once('../includes/inc.dbconnect.php');
 require_once('../includes/inc.utils.php');
 

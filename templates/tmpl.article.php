@@ -15,22 +15,31 @@
 		</table>
 	</div>
 
-	<!-- BEGIN BLOCK_art_data -->
+	<!-- BEGIN BLOCK_art_intro disabled -->
 	<div class="data">
-		{art_data}
+		{art_intro}
 		<!-- BEGIN BLOCK_art_cont disabled -->
 		<div>
 			<a href="{http_root}/{module_id}/{art_id}/">..tālāk..</a>
 		</div>
 		<!-- END BLOCK_art_cont -->
 	</div>
+	<!-- END BLOCK_art_intro -->
+
+	<!-- BEGIN BLOCK_art_data disabled -->
+	<div class="data">
+		<div class="intro">
+		{art_intro}
+		</div>
+		{art_data}
+	</div>
 	<!-- END BLOCK_art_data -->
 
-	<!-- BEGIN BLOCK_art_data_formatted disabled -->
+	<!-- BEGIN BLOCK_art_date_formatted disabled -->
 	<div class="List-item">
 		Ievietots: {art_date_f}
 	</div>
-	<!-- END BLOCK_art_data_formatted -->
+	<!-- END BLOCK_art_date_formatted -->
 </div>
 <!-- END BLOCK_article  -->
 

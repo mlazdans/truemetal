@@ -193,7 +193,7 @@ LEFT JOIN comment_meta ON (cm_table = 'article') AND (cm_table_id = a.art_id)
 		if($validate)
 			$this->validate($data);
 
-		$sql = 'UPDATE article_'.$sys_lang.' SET ';
+		$sql = 'UPDATE article SET ';
 		$sql .= $data['art_name'] ? "art_name = '$data[art_name]', " : '';
 		$sql .= $data['art_entered'] ? "art_entered = '$data[art_entered]', " : '';
 		//$sql .= $data['art_data'] ? "art_data = '$data[art_data]', " : '';
@@ -244,7 +244,7 @@ LEFT JOIN comment_meta ON (cm_table = 'article') AND (cm_table_id = a.art_id)
 			return true;
 		}
 
-		$sql = 'DELETE FROM article_'.$sys_lang.' WHERE art_id = '.$art_id;
+		$sql = 'DELETE FROM `article` WHERE art_id = '.$art_id;
 
 		return $db->Execute($sql);
 	}
@@ -254,7 +254,7 @@ LEFT JOIN comment_meta ON (cm_table = 'article') AND (cm_table_id = a.art_id)
 		global $db, $sys_lang;
 
 		$art_id = (integer)$art_id;
-		$sql = 'UPDATE article_'.$sys_lang.' SET art_active = "'.ARTICLE_ACTIVE.'" WHERE art_id = '.$art_id;
+		$sql = 'UPDATE `article` SET art_active = "'.ARTICLE_ACTIVE.'" WHERE art_id = '.$art_id;
 
 		return $db->Execute($sql);
 	}
@@ -264,7 +264,7 @@ LEFT JOIN comment_meta ON (cm_table = 'article') AND (cm_table_id = a.art_id)
 		global $db, $sys_lang;
 
 		$art_id = (integer)$art_id;
-		$sql = 'UPDATE article_'.$sys_lang.' SET art_active = "'.ARTICLE_INACTIVE.'" WHERE art_id = '.$art_id;
+		$sql = 'UPDATE `article` SET art_active = "'.ARTICLE_INACTIVE.'" WHERE art_id = '.$art_id;
 
 		return $db->Execute($sql);
 	}
@@ -274,7 +274,7 @@ LEFT JOIN comment_meta ON (cm_table = 'article') AND (cm_table_id = a.art_id)
 		global $db, $sys_lang;
 
 		$art_id = (integer)$art_id;
-		$sql = 'UPDATE article_'.$sys_lang.' SET art_visible = "'.ARTICLE_VISIBLE.'" WHERE art_id = '.$art_id;
+		$sql = 'UPDATE `article` SET art_visible = "'.ARTICLE_VISIBLE.'" WHERE art_id = '.$art_id;
 
 		return $db->Execute($sql);
 	}
@@ -284,7 +284,7 @@ LEFT JOIN comment_meta ON (cm_table = 'article') AND (cm_table_id = a.art_id)
 		global $db, $sys_lang;
 
 		$art_id = (integer)$art_id;
-		$sql = 'UPDATE article_'.$sys_lang.' SET art_visible = "'.ARTICLE_INVSIBLE.'" WHERE art_id = '.$art_id;
+		$sql = 'UPDATE `article` SET art_visible = "'.ARTICLE_INVSIBLE.'" WHERE art_id = '.$art_id;
 
 		return $db->Execute($sql);
 	}
