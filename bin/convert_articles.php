@@ -56,8 +56,21 @@ $data.
 		unset($el['type']);
 
 	# <img border= align=
+	$els = $xml->xpath("//img");
+	foreach($els as $el)
+	{
+		if(isset($el['align']))
+		{
+			//$GLOBALS['al'][(string)$el['align']]++;
+			# Uzstāda klasi ar tādu pašu nosaukumu kā align
+			$el['class'] = (isset($el['class']) ? $el['class']." " : "").$el['align'];
+			//$el['style'] = (isset($el['style']) ? $el['style'].";" : "")."float: left;";
+		}
+		unset($el['border'], $el['align']);
+	}
+
 	# <table border= align=
-	$els = $xml->xpath("//img | //table");
+	$els = $xml->xpath("//table");
 	foreach($els as $el)
 		unset($el['border'], $el['align']);
 
@@ -87,8 +100,8 @@ foreach($items as $item)
 	$art_intro = array_shift($parts);
 	$art_data = join("", $parts);
 
-	$data .= "<div id=\"art_intro$item[art_id]\">$art_intro</div>\n";
-	$data .= "<div id=\"art_data$item[art_id]\">$art_data</div>\n";
+	$data .= "<div id=\"art_intro$item[art_id]\"><p>$art_intro</div>\n";
+	$data .= "<div id=\"art_data$item[art_id]\"><p>$art_data</div>\n";
 }
 
 $xml = art_clean($data);
@@ -97,11 +110,19 @@ foreach($items as $item)
 {
 	$item_new = $item;
 
-	$els = $xml->xpath("//div[@id='art_intro$item[art_id]']");
-	$item_new['art_intro'] = $els[0]->asXML();
+	$els = $xml->xpath("//div[@id='art_intro$item[art_id]']/*");
+	//print_r($els);
+	$item_new['art_intro'] = '';
+	foreach($els as $el)
+		$item_new['art_intro'] .= $el->asXML()."\n";
 
-	$els = $xml->xpath("//div[@id='art_data$item[art_id]']");
-	$item_new['art_data'] = $els[0]->asXML();
+	$els = $xml->xpath("//div[@id='art_data$item[art_id]']/*");
+	//print_r($els);
+	$item_new['art_data'] = '';
+	foreach($els as $el)
+		$item_new['art_data'] .= $el->asXML()."\n";
+
+	//print_r($item_new);
 
 	$sql = "INSERT INTO `article` (".join(",", array_keys($item_new)).")";
 	$val = $db->QuoteArray(array_values($item_new));
@@ -110,6 +131,5 @@ foreach($items as $item)
 }
 
 $db->Commit();
-
 print $xml->asXML();
 

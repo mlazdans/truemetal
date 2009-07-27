@@ -189,6 +189,7 @@ table.Comments {
 
 .Article-item {
 	margin-bottom: 1em;
+	clear: both;
 }
 .Article-item .data {
 	background: #444444;
@@ -196,6 +197,14 @@ table.Comments {
 }
 .Article-item .data .intro {
 	font-weight: bold;
+}
+.Article-item img.left {
+	float: left;
+	margin: 0 .5em .5em 0;
+}
+.Article-item img.right {
+	float: right;
+	margin: 0 0 .5em .5em;
 }
 
 
