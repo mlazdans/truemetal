@@ -423,7 +423,7 @@ INSERT INTO forum (
 
 		$data = $this->load(array(
 			"order"=>'forum_lastcommentdate DESC',
-			"limit"=>'LIMIT 0,10',
+			"limit"=>'10',
 			"forum_allowchilds"=>FORUM_PROHIBITCHILDS,
 			));
 

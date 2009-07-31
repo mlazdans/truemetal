@@ -19,41 +19,41 @@ $(document).ready(function(){
 
 <body>
 
-	<div id="header">
-		<div class="logo"><a href="{http_root}/"><img src="{http_root}/img/logo5.gif" width="580" height="80" alt="TRUE METAL" /></a></div>
-		<div class="banner">
-			<!-- BEGIN BLOCK_banner_top -->
-			<a href="{banner_href}"><img src="{http_root}/img/{banner_img}" width="170" height="113" alt="{banner_alt}" /></a>
-			<!-- END BLOCK_banner_top -->
-		</div>
-		<div class="menu">
-			<table cellpadding="5" cellspacing="1">
-			<tr>
-				<td><a href="{http_root}/"><img src="{http_root}/img/butt_news.gif" alt="JAUNUMI" onmouseover="$(this).attr('src', '{http_root}/img/butt_news_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_news.gif')" /></a></td>
-				<td><a href="{http_root}/forum/"><img src="{http_root}/img/butt_forum.gif" alt="FORUMS" onmouseover="$(this).attr('src', '{http_root}/img/butt_forum_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_forum.gif')" /></a></td>
-				<td><a href="{http_root}/gallery/"><img src="{http_root}/img/butt_gallery.gif" alt="GALERIJA" onmouseover="$(this).attr('src', '{http_root}/img/butt_gallery_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_gallery.gif')" /></a></td>
-				<td><a href="{http_root}/video/"><img src="{http_root}/img/butt_video.gif" alt="VIDEO" onmouseover="$(this).attr('src', '{http_root}/img/butt_video_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_video.gif')" /></a></td>
-				<td><a href="{http_root}/reviews/"><img src="{http_root}/img/butt_reviews.gif" alt="ALBUMU RECENZIJAS" onmouseover="$(this).attr('src', '{http_root}/img/butt_reviews_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_reviews.gif')" /></a></td>
-			</tr>
-			</table>
-		</div>
+<div id="header">
+	<div class="logo"><a href="{http_root}/"><img src="{http_root}/img/logo5.gif" width="580" height="80" alt="TRUE METAL" /></a></div>
+	<div class="banner">
+		<!-- BEGIN BLOCK_banner_top -->
+		<a href="{banner_href}"><img src="{http_root}/img/{banner_img}" width="170" height="113" alt="{banner_alt}" /></a>
+		<!-- END BLOCK_banner_top -->
 	</div>
+	<div class="menu">
+		<table cellpadding="5" cellspacing="1">
+		<tr>
+			<td><a href="{http_root}/"><img src="{http_root}/img/butt_news.gif" alt="JAUNUMI" onmouseover="$(this).attr('src', '{http_root}/img/butt_news_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_news.gif')" /></a></td>
+			<td><a href="{http_root}/forum/"><img src="{http_root}/img/butt_forum.gif" alt="FORUMS" onmouseover="$(this).attr('src', '{http_root}/img/butt_forum_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_forum.gif')" /></a></td>
+			<td><a href="{http_root}/gallery/"><img src="{http_root}/img/butt_gallery.gif" alt="GALERIJA" onmouseover="$(this).attr('src', '{http_root}/img/butt_gallery_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_gallery.gif')" /></a></td>
+			<td><a href="{http_root}/video/"><img src="{http_root}/img/butt_video.gif" alt="VIDEO" onmouseover="$(this).attr('src', '{http_root}/img/butt_video_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_video.gif')" /></a></td>
+			<td><a href="{http_root}/reviews/"><img src="{http_root}/img/butt_reviews.gif" alt="ALBUMU RECENZIJAS" onmouseover="$(this).attr('src', '{http_root}/img/butt_reviews_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_reviews.gif')" /></a></td>
+		</tr>
+		</table>
+	</div>
+</div>
 
-	<div class="colmask rightmenu">
-		<div class="colleft">
-			<div class="col1 {block_middle_class}">
-			<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->
-			</div>
-			<div class="col2">
-			<!-- BEGIN BLOCK_right disabled --><!-- END BLOCK_right -->
-			</div>
+<div class="colmask rightmenu">
+	<div class="colleft">
+		<div class="col1 {block_middle_class}">
+		<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->
+		</div>
+		<div class="col2">
+		<!-- BEGIN BLOCK_right disabled --><!-- END BLOCK_right -->
 		</div>
 	</div>
+</div>
 
-	<div id="footer">
-		<a href="http://dqdp.net/">dqdp.net hostings</a><br/>
-		<a href="mailto:info@truemetal.lv">info@truemetal.lv</a><br/>
-	</div>
+<div id="footer">
+	<a href="http://dqdp.net/">dqdp.net hostings</a><br/>
+	<a href="mailto:info@truemetal.lv">info@truemetal.lv</a><br/>
+</div>
 
 </body>
 </html>

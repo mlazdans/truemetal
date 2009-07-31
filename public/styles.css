@@ -195,8 +195,12 @@ table.Comments {
 	background: #444444;
 	padding: 0.5em 1em;
 }
+.Article-item .data p {
+	text-align: justify;
+}
 .Article-item .data .intro {
-	font-weight: bold;
+	border-bottom: 1px dotted #220000;
+	margin-bottom: 1em;
 }
 .Article-item img.left {
 	float: left;
@@ -220,7 +224,7 @@ table.Comments {
 	width:100%;
 }
 #header {
-	border-bottom:1px solid #000;
+	border-bottom: 1px solid #000;
 }
 
 /* column container */

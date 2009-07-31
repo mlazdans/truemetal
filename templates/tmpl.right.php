@@ -19,13 +19,12 @@
 <div class="List-sep"></div>
 <!-- END BLOCK_right_item -->
 
+<div>
+	<a href="http://www.evildist.com/"><img src="{http_root}/img/banner_evildist.gif" alt="www.evildist.com banner" title="www.evildist.com" /></a>
+</div>
 
 <div style="text-align: center; background: black; padding: 15px 0 15px 0;">
 	<a href="http://www.myspace.com/trepanationsquad"><img src="{http_root}/img/banner_trepanationsquad.gif" alt="Trepanation Squad: banner" title="Trepanation Squad" /></a>
-</div>
-
-<div>
-	<a href="http://www.evildist.com/"><img src="{http_root}/img/banner_evildist.gif" alt="www.evildist.com banner" title="www.evildist.com" /></a>
 </div>
 
 <div class="List-sep"></div>

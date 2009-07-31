@@ -16,6 +16,8 @@ $tidy_config = array(
 	'enclose-text' => true,
 	'logical-emphasis' => true,
 	'word-2000' => true,
+	'merge-divs' => false,
+	'merge-spans' => false,
 	//'merge-divs' => true,
 	//'merge-spans' => true,
 	);
@@ -33,7 +35,11 @@ $data.
 '</body>'.
 '</html>';
 
-	$tidy = tidy_parse_string($template, $GLOBALS['tidy_config'], 'UTF8');
+	$tidy_config = $GLOBALS['tidy_config'];
+	$tidy_config['join-styles'] = false;
+	$tidy_config['join-classes'] = false;
+	$tidy_config['clean'] = false;
+	$tidy = tidy_parse_string($template, $tidy_config, 'UTF8');
 	$tidy->cleanRepair();
 
 	$doc = new DOMDocument();
@@ -41,7 +47,7 @@ $data.
 	$xml = simplexml_import_dom($doc);
 
 	# <a id= name=
-	$els = $xml->xpath("//a[@name] | a[@id]");
+	$els = $xml->xpath("//a[@name] | //a[@id]");
 	foreach($els as $el)
 		unset($el['name'], $el['id']);
 
@@ -50,10 +56,10 @@ $data.
 	foreach($els as $el)
 		unset($el['align']);
 
-	# <ol type // Dažiem rakstiem
-	$els = $xml->xpath("//ol[@type]");
+	# Dažāda draza
+	$els = $xml->xpath("//ol | //li | //em | //br | //strong | //a | //blockquote");
 	foreach($els as $el)
-		unset($el['type']);
+		unset($el['type'], $el['style'], $el['class']);
 
 	# <img border= align=
 	$els = $xml->xpath("//img");
@@ -79,6 +85,19 @@ $data.
 	foreach($els as $el)
 		unset($el['target']);
 
+	# <* xml:lang=
+	$els = $xml->xpath("//*[@lang]");
+	foreach($els as $el)
+		unset($el['lang'], $el['xml:lang']);
+
+	$tidy_config = $GLOBALS['tidy_config'];
+	$tidy = tidy_parse_string($xml->asXML(), $tidy_config, 'UTF8');
+	$tidy->cleanRepair();
+
+	$doc = new DOMDocument();
+	$doc->loadHTML($tidy);
+	$xml = simplexml_import_dom($doc);
+
 	return $xml;
 } // art_clean
 
@@ -98,7 +117,7 @@ foreach($items as $item)
 {
 	$parts = preg_split('/<hr(.*)>/imsU', $item["art_data"]);
 	$art_intro = array_shift($parts);
-	$art_data = join("", $parts);
+	$art_data = join("<p>", $parts);
 
 	$data .= "<div id=\"art_intro$item[art_id]\"><p>$art_intro</div>\n";
 	$data .= "<div id=\"art_data$item[art_id]\"><p>$art_data</div>\n";
@@ -122,6 +141,7 @@ foreach($items as $item)
 	foreach($els as $el)
 		$item_new['art_data'] .= $el->asXML()."\n";
 
+	unset($item_new['art_visible']);
 	//print_r($item_new);
 
 	$sql = "INSERT INTO `article` (".join(",", array_keys($item_new)).")";
