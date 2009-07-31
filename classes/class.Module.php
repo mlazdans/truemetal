@@ -36,7 +36,7 @@ class Module
 			$where = '';
 
 		$this->data = array();
-		$sql = 'SELECT * FROM modules_'.$sys_lang.$where.' ORDER BY mod_modid, module_pos';
+		$sql = 'SELECT * FROM modules'.$where.' ORDER BY mod_modid, module_pos';
 		$data = $db->execute($sql);
 		$this->data = array();
 		foreach($data as $item)
@@ -55,7 +55,7 @@ class Module
 	{
 		global $db, $sys_lang;
 
-		$sql = "INSERT INTO modules_$sys_lang (".
+		$sql = "INSERT INTO `modules` (".
 			"module_id, mod_modid, module_name,".
 			"module_active, module_pos, module_data, module_entered,".
 			"module_visible, module_type".
@@ -69,7 +69,7 @@ class Module
 
 		if($ret) {
 			$last_id = $db->LastID();
-			$sql = "UPDATE modules_$sys_lang SET ".
+			$sql = "UPDATE `modules` SET ".
 				"module_pos = module_pos + 1 ".
 				"WHERE ".
 				"module_pos >= $data[module_pos] AND ".
@@ -88,7 +88,7 @@ class Module
 
 		$data2 = $this->get_item($data['mod_id']);
 
-		$sql = "UPDATE modules_$sys_lang SET ".
+		$sql = "UPDATE `modules` SET ".
 			"module_id = '$data[module_id]', module_name = '$data[module_name]',".
 			"module_active = '$data[module_active]', module_pos = $data[module_pos],".
 			"module_data = '$data[editor_data]',".
@@ -102,7 +102,7 @@ class Module
 		if($ret) {
 			$sql = '';
 			if($data['module_pos'] > $data2['module_pos'])
-				$sql = "UPDATE modules_$sys_lang SET ".
+				$sql = "UPDATE `modules` SET ".
 					"module_pos = module_pos - 1 ".
 					"WHERE ".
 					"module_pos >= $data2[module_pos] AND ".
@@ -110,7 +110,7 @@ class Module
 					"mod_id != $data[mod_id] AND ".
 					"mod_modid = $data2[mod_modid]";
 			elseif($data['module_pos'] < $data2['module_pos'])
-				$sql = "UPDATE modules_$sys_lang SET ".
+				$sql = "UPDATE `modules` SET ".
 					"module_pos = module_pos + 1 ".
 					"WHERE ".
 					"module_pos <= $data2[module_pos] AND ".
@@ -189,12 +189,12 @@ class Module
 
 		$ret = true;
 
-		$sql = "SELECT mod_id FROM modules_$sys_lang WHERE mod_modid = ".$mod_id;
+		$sql = "SELECT mod_id FROM `modules` WHERE mod_modid = ".$mod_id;
 		$data = $db->Execute($sql);
 		foreach($data as $item)
 			$ret = $ret && $this->del($item['mod_id']);
 
-		$sql = "DELETE FROM modules_$sys_lang WHERE mod_modid = ".$mod_id;
+		$sql = "DELETE FROM `modules` WHERE mod_modid = ".$mod_id;
 
 		return $ret && $db->Execute($sql);
 	} // del_under
@@ -211,11 +211,11 @@ class Module
 
 		$ret = $this->del_under($mod_id);
 
-		$sql = "DELETE FROM modules_$sys_lang WHERE mod_id = $mod_id";
+		$sql = "DELETE FROM `modules` WHERE mod_id = $mod_id";
 		$ret2 = $db->Execute($sql);
 
 		if($ret2) {
-			$sql = "UPDATE modules_$sys_lang SET ".
+			$sql = "UPDATE `modules` SET ".
 				"module_pos = module_pos - 1 ".
 				"WHERE ".
 				"module_pos > $data[module_pos] AND ".
@@ -231,7 +231,7 @@ class Module
 		global $db, $sys_lang;
 
 		$mod_id = (integer)$mod_id;
-		$sql = "UPDATE modules_$sys_lang SET module_active = '".MOD_ACTIVE."' WHERE mod_id = $mod_id";
+		$sql = "UPDATE `modules` SET module_active = '".MOD_ACTIVE."' WHERE mod_id = $mod_id";
 
 		return $db->Execute($sql);
 	} // activate
@@ -241,7 +241,7 @@ class Module
 		global $db, $sys_lang;
 
 		$mod_id = (integer)$mod_id;
-		$sql = "UPDATE modules_$sys_lang SET module_active = '".MOD_INACTIVE."' WHERE mod_id = $mod_id";
+		$sql = "UPDATE `modules` SET module_active = '".MOD_INACTIVE."' WHERE mod_id = $mod_id";
 
 		return $db->Execute($sql);
 	} // deactivate
@@ -251,7 +251,7 @@ class Module
 		global $db, $sys_lang;
 
 		$mod_id = (integer)$mod_id;
-		$sql = "UPDATE modules_$sys_lang SET module_visible = '".MOD_VISIBLE."' WHERE mod_id = $mod_id";
+		$sql = "UPDATE `modules` SET module_visible = '".MOD_VISIBLE."' WHERE mod_id = $mod_id";
 
 		return $db->Execute($sql);
 	} // show
@@ -261,7 +261,7 @@ class Module
 		global $db, $sys_lang;
 
 		$mod_id = (integer)$mod_id;
-		$sql = "UPDATE modules_$sys_lang SET module_visible = '".MOD_INVISIBLE."' WHERE mod_id = $mod_id";
+		$sql = "UPDATE `modules` SET module_visible = '".MOD_INVISIBLE."' WHERE mod_id = $mod_id";
 
 		return $db->Execute($sql);
 	} // hide
@@ -305,7 +305,7 @@ class Module
 			//$match = ",(module_name REGEXP '$q' OR module_data REGEXP '$q') score";
 			//$match = ",MATCH(module_name, module_data) AGAINST('$q') score";
 
-		$sql = "SELECT m.*$match FROM modules_$sys_lang m WHERE mod_modid = $mod_modid AND module_active = '".MOD_ACTIVE."' ORDER BY module_pos";
+		$sql = "SELECT m.*$match FROM `modules` m WHERE mod_modid = $mod_modid AND module_active = '".MOD_ACTIVE."' ORDER BY module_pos";
 		//print "$sql\n";
 		$ret = array();
 		$data = $db->Execute($sql);
@@ -375,7 +375,7 @@ class Module
 	{
 		global $db, $sys_lang;
 
-		$sql = "SELECT module_id, mod_id FROM modules_$sys_lang WHERE mod_modid = $mod_modid";
+		$sql = "SELECT module_id, mod_id FROM `modules` WHERE mod_modid = $mod_modid";
 		$data = $db->Execute($sql);
 
 		if(!count($data))
@@ -447,7 +447,7 @@ class Module
 	{
 		global $db, $sys_lang;
 
-		$sql = "SELECT * FROM modules_$sys_lang WHERE mod_modid = $mod_modid AND module_active = '".MOD_ACTIVE."' AND module_visible = '".MOD_VISIBLE."' ORDER BY module_pos";
+		$sql = "SELECT * FROM `modules` WHERE mod_modid = $mod_modid AND module_active = '".MOD_ACTIVE."' AND module_visible = '".MOD_VISIBLE."' ORDER BY module_pos";
 
 		$data = $db->Execute($sql);
 
@@ -468,7 +468,7 @@ class Module
 	{
 		global $db, $sys_lang;
 
-		$sql = "SELECT * FROM modules_$sys_lang WHERE mod_modid = $mod_modid ORDER BY module_pos";
+		$sql = "SELECT * FROM `modules` WHERE mod_modid = $mod_modid ORDER BY module_pos";
 
 		$data = $db->Execute($sql);
 

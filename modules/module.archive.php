@@ -12,7 +12,8 @@ require_once('../classes/class.Calendar.php');
 $y = array_shift($sys_parameters);
 $m = array_shift($sys_parameters);
 $d = array_shift($sys_parameters);
-$calendar = new Calendar;
+
+$calendar = new Calendar();
 $calendar->parse_date($y, $m, $d);
 
 $date = "$y-$m-$d 23:59:59";
@@ -24,7 +25,11 @@ $template->set_file('FILE_archive', 'tmpl.archive.php');
 $template->copy_block('BLOCK_middle', 'FILE_archive');
 
 $article = new Article();
-$arts = $article->load_date($date);
+$arts = $article->load(array(
+	'end_date'=>$date,
+	'order'=>'art_entered DESC',
+	'limit'=>'50',
+	));
 
 // ja ir kaadi ieraksti shajaa datumaa, paraadam
 // ja nee, tad paraadam attieciigu pazinjojumu

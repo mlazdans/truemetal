@@ -80,12 +80,12 @@ LEFT JOIN comment_meta ON (cm_table = 'forum') AND (cm_table_id = f.forum_id)";
 
 		$sql .= (empty($params['order']) ? " ORDER BY f.forum_entered DESC " : " ORDER BY $params[order] ");
 
-		if(empty($params['limit']))
+		if(isset($params['limit']))
 		{
+			$sql .= " LIMIT $params[limit]";
+		} else {
 			if($this->page)
 				$sql .= sprintf(" LIMIT %s,%s", ($this->page - 1) * $this->fpp, $this->fpp);
-		} else {
-			$sql .= ' '.$params['limit'];
 		}
 
 		return (isset($params['forum_id']) ? $db->ExecuteSingle($sql) : $db->Execute($sql));

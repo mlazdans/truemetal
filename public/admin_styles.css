@@ -90,7 +90,6 @@ hr {
 	font-weight: bold;
 	padding: 3px 8px;
 	color: white;
-	border: 1px dotted #dddddd;
 	white-space: nowrap;
 }
 .TD-menu {
@@ -112,7 +111,7 @@ table.Main {
 	border-spacing: 1px;
 }
 table.Main td {
-	padding: 2px;
+	padding: 3px;
 }
 
 table.Main td:last-child, table.Main th:last-child {
@@ -143,6 +142,5 @@ table.Main th {
 
 textarea.edit {
 	width: 650px;
-	height: 490px;
 }
 

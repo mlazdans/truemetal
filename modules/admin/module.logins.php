@@ -92,12 +92,8 @@ if(!$l_id) {
 			}
 
 			$template->set_var('comment_color_class', 'box-normal');
-			if($item['art_visible'] != ARTICLE_VISIBLE)
-				$template->set_var('art_color_class', 'box-invisible');
 			if($item['art_active'] != ARTICLE_ACTIVE)
 				$template->set_var('art_color_class', 'box-inactive');
-			if($item['art_active'] != ARTICLE_ACTIVE && $item['art_visible'] != ARTICLE_VISIBLE)
-				$template->set_var('art_color_class', 'box-inactive-invisible');
 
 			$template->reset_block('BLOCK_login_article');
 			$template->parse_block('BLOCK_article_c', TMPL_APPEND);

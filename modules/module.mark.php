@@ -9,14 +9,12 @@ require_once('../classes/class.MainModule.php');
 require_once('../classes/class.Article.php');
 
 $article = new Article;
-$article->set_limit(0);
 $articles = $article->load();
 
 if(count($articles)) {
-	foreach($articles as $item) {
-		$comment_count = $item['art_comment_count'];
-		$_SESSION['comments']['viewed'][$item['art_id']] = $comment_count;
-	}
+	foreach($articles as $item)
+		$_SESSION['comments']['viewed'][$item['art_id']] = $item['art_comment_count'];
 }
 
 header("Location: $sys_http_root/");
+

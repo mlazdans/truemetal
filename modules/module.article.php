@@ -35,12 +35,16 @@ if(!$art_id)
 	$template->set_var('block_middle_class', 'light');
 
 # Loading
-$article = new Article;
+$article = new Article();
 
 $tc = 0;
 if($art_id) {
 	$template->enable('BLOCK_article_comments_head');
-	$articles = (($art = $article->load($art_id)) ? array($art) : array());
+
+	$art = $article->load(array(
+		'art_id'=>$art_id
+		));
+	$articles = ($art ? array($art) : array());
 	$item = $art;
 
 	if(($action == 'add_comment') && ($item['art_comments'] == ARTICLE_COMMENTS) && user_loged())
@@ -68,10 +72,14 @@ if($art_id) {
 	}
 
 	if($page)
-		$article->set_limit((($tp - $page + 1) * $art_per_page - $art_align).",$art_per_page");
+		$limit = (($tp - $page + 1) * $art_per_page - $art_align).",$art_per_page";
 	else
-		$article->set_limit($art_per_page);
-	$articles = $article->load($art_id, $_pointer['_data_']['mod_id']);
+		$limit = $art_per_page;
+
+	$articles = $article->load(array(
+		'art_modid'=>$_pointer['_data_']['mod_id'],
+		'limit'=>$limit,
+		));
 } else {
 	$articles = array();
 }

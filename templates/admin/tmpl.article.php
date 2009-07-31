@@ -103,15 +103,6 @@
 	</td>
 </tr>
 <tr>
-	<th>Redzams?</th>
-	<td>
-		<select name="data[art_visible]">
-			<option value="N"{art_visible_n}>Nē</option>
-			<option value="Y"{art_visible_y}>Jā</option>
-		</select>
-	</td>
-</tr>
-<tr>
 	<th>Ievadīšanas datums</th>
 	<td>
 		<input type="text" name="data[art_entered]" value="{art_entered}" size="20" />
@@ -155,7 +146,7 @@
 </tr>
 <tr>
 	<td colspan="2">
-		<textarea class="edit" name="data[art_data]" rows="15" cols="150">
+		<textarea class="edit" name="data[art_data]" rows="35" cols="150">
 			{art_data}
 		</textarea>
 	</td>

@@ -35,13 +35,8 @@ require_once('../classes/class.Poll.php');
 $poll_id = (integer)array_shift($sys_parameters);
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
-if($poll_id)
-	$template = new AdminModule($sys_template_root.'/admin', 'poll_edit');
-else
-	$template = new AdminModule($sys_template_root.'/admin', 'poll');
-
+$template = new AdminModule($sys_template_root.'/admin', 'poll');
 $template->set_var('poll_class', 'TD-menu-active');
-
 $template->set_title('Admin :: jautājumi');
 
 $poll = new Poll;
@@ -125,9 +120,9 @@ if($poll_id) {
 	$template->set_var('poll1_entered', $poll_data['poll_entered']);
 
 	if($poll_data['poll_active'] == POLL_ACTIVE)
-		$template->set_var('poll1_active', ' selected');
+		$template->set_var('poll1_active', ' selected="selected"');
 	else
-		$template->set_var('poll1_inactive', ' selected');
+		$template->set_var('poll1_inactive', ' selected="selected"');
 
 	// atbildes
 	$poll_data = $poll->load(0, $poll_id, POLL_ALL);
@@ -175,5 +170,3 @@ if($poll_id) {
 
 
 $template->out();
-
-?>

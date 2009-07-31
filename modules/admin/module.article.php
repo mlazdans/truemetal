@@ -15,7 +15,6 @@ require_once('../classes/class.Module.php');
 $art_modid = isset($_POST['art_modid']) ? (integer)$_POST['art_modid'] : '';
 
 $article = new Article();
-$article->set_limit(100);
 
 $module = new Module();
 
@@ -85,8 +84,12 @@ if(!$art_id)
 {
 	$template->enable('BLOCK_articles_list');
 
-	$article->set_order('m.mod_id, a.art_entered DESC');
-	$articles = $article->load(0, 0, ARTICLE_ALL, ARTICLE_ALL);
+	//$article->set_order('m.mod_id, a.art_entered DESC');
+	//$articles = $article->load(0, 0, ARTICLE_ALL, ARTICLE_ALL);
+	$articles = $article->load(array(
+		'art_active'=>ARTICLE_ALL,
+		'order'=>'m.mod_id, a.art_entered DESC',
+		));
 
 	if(count($articles))
 		$template->enable('BLOCK_articles');
@@ -103,19 +106,18 @@ if(!$art_id)
 		$template->set_var('module_id', $item['module_id'], 'BLOCK_article_item');
 
 		$template->set_var('art_color_class', 'box-normal', 'BLOCK_article_item');
-		if($item['art_visible'] != ARTICLE_VISIBLE)
-			$template->set_var('art_color_class', 'box-invisible', 'BLOCK_article_item');
 		if($item['art_active'] != ARTICLE_ACTIVE)
 			$template->set_var('art_color_class', 'box-inactive', 'BLOCK_article_item');
-		//ja neaktiivs un neredzams
-		if($item['art_active'] != ARTICLE_ACTIVE && $item['art_visible'] != ARTICLE_VISIBLE)
-			$template->set_var('art_color_class', 'box-inactive-invisible', 'BLOCK_article_item');
 
 		$template->parse_block('BLOCK_article_item', TMPL_APPEND);
 	} // foreach articles
 	$template->set_var('article_count', $article_count);
 # Edit
-} elseif($art = $article->load($art_id, 0, ARTICLE_ALL, ARTICLE_ALL)) {
+} elseif($art = $article->load(array(
+	'art_id'=>$art_id,
+	'art_active'=>ARTICLE_ALL,
+	)))
+{
 	$template->enable('BLOCK_article_edit');
 	$template->set_var('art_name_edit', $art['art_name'], 'BLOCK_article_edit');
 
@@ -133,11 +135,6 @@ if(!$art_id)
 		$template->set_var('art_comments_y', ' selected="selected"');
 	else
 		$template->set_var('art_comments_n', ' selected="selected"');
-
-	if($art['art_visible'] == ARTICLE_VISIBLE)
-		$template->set_var('art_visible_y', ' selected="selected"');
-	else
-		$template->set_var('art_visible_n', ' selected="selected"');
 
 	if($art['art_active'] == ARTICLE_ACTIVE)
 		$template->set_var('art_active_y', ' selected="selected"');

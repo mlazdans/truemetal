@@ -263,9 +263,11 @@ class MainModule extends Template
 		$article = new Article;
 		//$comment = new Comment('article_comments', 'art_id');
 
-		$article->set_limit($limit);
-		$data = $article->load_under($module_tree['reviews']);
-		//$data = $article->load_module('reviews');
+		$data = $article->load(array(
+			'art_modid'=>$module_tree['reviews']['_data_']['mod_id'],
+			'limit'=>$limit,
+			'order'=>'art_entered DESC',
+			));
 
 		if(count($data))
 		{

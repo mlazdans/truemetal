@@ -98,7 +98,7 @@ class Poll
 		$this->error_msg = '';
 
 		if(!$data['poll_name'])
-			$this->error_msg .= 'Nav norādīts nosaukums<br>';
+			$this->error_msg .= 'Nav norādīts nosaukums<br />';
 
 		if($this->error_msg)
 			return false;
@@ -129,10 +129,10 @@ class Poll
 
 		$this->error_msg = '';
 		if(!$poll_id)
-			$this->error_msg .= 'Nav norādīts vai nepareizs ID<br>';
+			$this->error_msg .= 'Nav norādīts vai nepareizs ID<br />';
 
 		if(!$data['poll_name'])
-			$this->error_msg .= 'Nav norādīts nosaukums<br>';
+			$this->error_msg .= 'Nav norādīts nosaukums<br />';
 
 		if($this->error_msg)
 			return false;
