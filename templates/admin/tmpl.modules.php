@@ -48,7 +48,7 @@
 <!-- END BLOCK_modules_error -->
 
 <!-- BEGIN BLOCK_modules_edit disabled -->
-<form action="{module_root}/{mod_id}/save" method="post" name="{editor_id}">
+<form action="{module_root}/{mod_id}/save" method="post" id="module_edit">
 <input type="hidden" name="action" value="module_save">
 <input type="hidden" name="data[mod_id]" value="{mod_id}">
 <input type="hidden" name="data[mod_modid]" value="{mod_modid}">
@@ -86,28 +86,25 @@
 		</select></td>
 	</tr>
 	<tr>
-		<td colspan="2" width="100%"><!-- BEGIN BLOCK_editor --><!-- END BLOCK_editor --></td>
+		<td colspan="2" width="100%">
+			<textarea class="edit" name="data[module_data]" rows="15" cols="150">
+				{module_data}
+			</textarea>
+		</td>
 	</tr>
 </table>
 </form>
-<script language="JavaScript" type="text/javascript">
-function setUpHandler() {
-	if(textEdit{editor_id}.loaded)
-		textEdit{editor_id}.onSubmitHandler = onSubmitHandler;
-	else {
-		setTimeout('setUpHandler()',500);
-	}
-}
-
-setUpHandler();
-
+<script type="text/javascript">
+<!-- BEGIN BLOCK_editor_init --><!-- END BLOCK_editor_init -->
+/*
+# TODO: pieattačot tiny_mce
 function onSubmitHandler() {
 	var form = {editor_id};
 	var err_msg = '';
 
 	if(form.elements["data[module_id]"].value == '')
 		err_msg = err_msg + 'Nav norādīts moduļa ID\n';
-	
+
 	if(form.elements["data[module_name]"].value == '')
 		err_msg = err_msg + 'Nav norādīts moduļa nosaukums\n';
 
@@ -116,11 +113,12 @@ function onSubmitHandler() {
 	else
 		form.submit();
 }
+*/
 </script>
 <!-- END BLOCK_modules_edit -->
 
 <!-- BEGIN BLOCK_modules_under disabled -->
-<form action="{module_root}/set_module" method="post" name="{editor_id}">
+<form action="{module_root}/set_module" method="post">
 	<input type="hidden" name="action" value="module_new">
 Zem:<select name="mod_modid" onChange="this.form.submit();">
 	<option name="">-Izvēlies-</option>

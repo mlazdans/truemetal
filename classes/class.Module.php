@@ -61,7 +61,7 @@ class Module
 			"module_visible, module_type".
 		") VALUES (".
 			"'$data[module_id]', $data[mod_modid], '$data[module_name]',".
-			"'$data[module_active]', $data[module_pos], '$data[editor_data]', NOW(),".
+			"'$data[module_active]', $data[module_pos], '$data[module_data]', NOW(),".
 			"'$data[module_visible]', '$data[module_type]'".
 		")";
 
@@ -91,7 +91,7 @@ class Module
 		$sql = "UPDATE `modules` SET ".
 			"module_id = '$data[module_id]', module_name = '$data[module_name]',".
 			"module_active = '$data[module_active]', module_pos = $data[module_pos],".
-			"module_data = '$data[editor_data]',".
+			"module_data = '$data[module_data]',".
 			"module_visible = '$data[module_visible]',".
 			"module_type = '$data[module_type]'".
 		"WHERE ".

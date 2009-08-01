@@ -93,15 +93,13 @@ if($action == 'cancel') {
 			$template->set_var('module_module_name', $module->data[$mod_modid]['module_name']);
 		}
 		$template->set_var('mod_modid', $mod_modid);
-		set_editor($template, 'module_editor', 'modules', 0);
+		$template->init_editor();
 	} else {
 		$template->enable('BLOCK_modules_under');
 		$module->set_modules_all($template, 0, 'BLOCK_modules_under_list');
 	}
 	set_pos($template, 0, $mod_modid);
 } else {
-	include('../includes/inc.editor_filter.php');
-// saraksts
 	if(!$mod_id) {
 		$template->enable('BLOCK_modules_list');
 		unset($module_count);
@@ -111,13 +109,7 @@ if($action == 'cancel') {
 		if(isset($module->data[$mod_id])) {
 			// redigeeshana
 			$template->enable('BLOCK_modules_edit');
-			set_editor($template, 'module_editor', 'modules', $mod_id);
-/*
-		$template->set_var('editor_id', 'module_editor');
-		$template->set_file('FILE_editor', 'editor/tmpl.editor.php');
-		$template->copy_block('BLOCK_editor', 'FILE_editor');
-*/
-		//$template->enable('BLOCK_html_clear');
+			$template->init_editor();
 			set_pos($template, $module->data[$mod_id]['module_pos'], $module->data[$mod_id]['mod_modid']);
 			if($item = $module->find($module->data[$mod_id]['mod_modid'])) {
 				$template->set_var('module_module_name', $item['module_name']);
@@ -132,5 +124,3 @@ if($action == 'cancel') {
 /* ------------------------------------------------------------------------- */
 
 $template->out();
-
-?>

@@ -285,29 +285,6 @@ function getmicrotime()
 	return microtime(true);
 } // getmicrotime
 
-function set_editor(&$template, $editor_id, $data_module, $editor_data_id = 0)
-{
-	$template->set_var('editor_id', $editor_id);
-	$template->set_var('editor_data_module', $data_module);
-	$template->set_var('editor_data_id', $editor_data_id);
-	$template->set_file('FILE_editor', 'editor/tmpl.editor.php');
-	$template->copy_block('BLOCK_editor', 'FILE_editor');
-	if($editor_data_id)
-		$template->enable('BLOCK_html_clear');
-} // set_editor
-
-/*
-function last_insert_id()
-{
-	global $db;
-
-	$sql = "SELECT LAST_INSERT_ID() last_id";
-	$ret = $db->ExecuteSingle($sql);
-
-	return isset($ret['last_id']) ? $ret['last_id'] : 0;
-} // last_insert_id
-*/
-
 function valid_date($date)
 {
 	list($d, $m, $y) = split('\.', $date);

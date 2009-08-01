@@ -55,18 +55,14 @@ SMALL {
 	font-size: 8pt;
 }
 
-A:link, A:visited, A:active {
+A {
 	color: red;
 	text-decoration: underline;
 	font-size: 8pt;
 	font-weight: normal;
 }
-
 A:hover {
-	color: red;
 	text-decoration: none;
-	font-size: 8pt;
-	font-weight: normal;
 }
 
 .A-small:link, .A-small:visited, .A-small:active {

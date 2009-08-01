@@ -34,10 +34,6 @@ class Article {
 		$this->date_format = $new_date;
 	} // set_date_format
 
-	/*
-	function load($art_id = 0, $art_modid = 0, $art_active = ARTICLE_ACTIVE,
-		$art_visible = ARTICLE_VISIBLE, $end_date = '', $q = '', $art_type = ARTICLE_ALL
-	)*/
 	function load(Array $params = array())
 	{
 		global $db;
@@ -89,8 +85,6 @@ LEFT JOIN `comment_meta` ON (cm_table = 'article') AND (cm_table_id = a.art_id)
 	{
 		global $db, $ip;
 
-		//$mod_id = (integer)$mod_id;
-
 		if($validate)
 			$this->validate($data);
 
@@ -99,15 +93,15 @@ LEFT JOIN `comment_meta` ON (cm_table = 'article') AND (cm_table_id = a.art_id)
 			$date = "'$data[art_entered]'";
 
 		$sql = "
-		INSERT INTO article (
-			art_name, art_username, art_useremail, art_userip, art_entered,
-			art_modid, art_data, art_intro, art_active,
-			art_comments, art_type
-		) VALUES (
-			'$data[art_name]', '$data[art_username]', '$data[art_useremail]', '$ip', ".$date.",
-			$data[art_modid], '$data[art_data]', '$data[art_intro]', '$data[art_active]',
-			'$data[art_comments]', '$data[art_type]'
-		)";
+INSERT INTO article (
+	art_name, art_username, art_useremail, art_userip, art_entered,
+	art_modid, art_data, art_intro, art_active,
+	art_comments, art_type
+) VALUES (
+	'$data[art_name]', '$data[art_username]', '$data[art_useremail]', '$ip', ".$date.",
+	$data[art_modid], '$data[art_data]', '$data[art_intro]', '$data[art_active]',
+	'$data[art_comments]', '$data[art_type]'
+)";
 
 		return ($db->Execute($sql) ? $db->LastID() : false);
 	}
@@ -129,8 +123,6 @@ LEFT JOIN `comment_meta` ON (cm_table = 'article') AND (cm_table_id = a.art_id)
 		$sql = 'UPDATE article SET ';
 		$sql .= $data['art_name'] ? "art_name = '$data[art_name]', " : '';
 		$sql .= $data['art_entered'] ? "art_entered = '$data[art_entered]', " : '';
-		//$sql .= $data['art_data'] ? "art_data = '$data[art_data]', " : '';
-		//$sql .= $data['art_intro'] ? "art_intro = '$data[art_intro]', " : '';
 		$sql .= "art_active = '$data[art_active]', ";
 		$sql .= "art_comments = '$data[art_comments]', ";
 		$sql .= "art_type = '$data[art_type]', ";
@@ -273,8 +265,6 @@ LEFT JOIN `comment_meta` ON (cm_table = 'article') AND (cm_table_id = a.art_id)
 
 		if(!isset($data['art_intro']))
 			$data['art_intro'] = '';
-
-		//$data['art_data'] = &$data['editor_data'];
 
 		if(!isset($data['art_entered']))
 			$data['art_entered'] = '';
