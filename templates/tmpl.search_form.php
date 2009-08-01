@@ -22,6 +22,10 @@
 </div>
 
 <div class="List-item">
+	<a href="{http_root}/search/">Advanced</a>
+</div>
+
+<div class="List-item">
 	<a href="{http_root}/search_log/">Ko mēs meklējam?</a>
 </div>
 

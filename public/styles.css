@@ -1,7 +1,6 @@
 body {
-	width: 751px;
-	margin: 0 auto;
-	padding:0;
+	margin: 0 0 1em 0;
+	padding: 0;
 	border:0;
 	background: url("/img/image4.gif") black;
 	font-family: "Verdana", arial, serif;
@@ -147,21 +146,50 @@ P {
 	color: silver;
 }
 
-.button, input, textarea {
+
+
+
+
+
+dl, dt { padding:0; margin: 0; }
+dt {
+	padding: 2px;
+	background-color: #660000;
+	border-bottom: 1px dotted #220000;
+	font-weight: bold;
+}
+dd {
+	padding: 2px;
+	margin-bottom: 1em;
+}
+
+input, textarea {
 	padding-top: 1px;
 	padding-right: 1px;
 	border: 1px solid white;
 	background-color: #660000;
-	font-size: 10pt;
 	color: white;
 	font-weight: normal;
 }
-
-.cbox {
+input.checkbox {
 	border: none;
 	background-color: #660000;
 	color: #660000;
 }
+
+
+#content {
+	margin: 10px auto;
+	margin-top: 0;
+	width: 752px;
+}
+
+#header {
+	width: 752px;
+	margin: 0 auto;
+	border-bottom: 1px solid #000;
+}
+
 
 .Comment-Vote, .Comment-Vote-plus, .Comment-Vote-minus { font-weight: bold; text-align: right; }
 .Comment-Vote { color: #676767; }
@@ -208,28 +236,15 @@ table.Comments {
 }
 
 
-#content {
-	margin: 10px auto;
-	margin-top: 0;
-	width: 752px;
-}
-
-#header {
-	clear:both;
-	float:left;
-	width:100%;
-}
-#header {
-	border-bottom: 1px solid #000;
-}
-
 /* column container */
 .colmask {
 	position:relative;    /* This fixes the IE7 overflow hidden bug */
 	clear:both;
-	float:left;
-	width:100%;           /* width of whole page */
+	width: 752px;
+	margin: 0 auto;
 	overflow:hidden;      /* This chops off any overhanging divs */
+	padding-bottom: 1em;
+	border-bottom: 1px dotted #660000;
 }
 /* common column settings */
 .colright,
@@ -267,15 +282,13 @@ table.Comments {
 .light {
 	background: none;
 }
-/* Footer styles */
+
 #footer {
 	clear:both;
-	float:left;
-	width:580px;
+	border: 1px solid red;
 	text-align: center;
-	margin-bottom: 1em;
+	margin: 0 auto;
 }
-
 
 #header .logo {
 	width: 580px;
@@ -384,5 +397,20 @@ table.Forum-Theme, table.Forum-Theme-form {
 
 .Info {
 	padding: 3em 1em 4em 1em;
+}
+
+
+table.Main {
+	width: 100%;
+	min-width: 50%;
+	border-collapse: separate;
+	border-spacing: 1px;
+	background-color: #660000;
+	border: 1px solid #220000;
+	border-top: none;
+}
+table.Main td {
+	border-bottom: 1px dotted #220000;
+	padding: 2px;
 }
 

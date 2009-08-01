@@ -50,10 +50,12 @@ $(document).ready(function(){
 	</div>
 </div>
 
+<!--
 <div id="footer">
 	<a href="http://dqdp.net/">dqdp.net hostings</a><br/>
 	<a href="mailto:info@truemetal.lv">info@truemetal.lv</a><br/>
 </div>
+-->
 
 </body>
 </html>

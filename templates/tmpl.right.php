@@ -40,6 +40,13 @@
 <div class="List-item">
 	<a href="{http_root}/logo/">Truemetal.lv logo</a>
 </div>
+<div class="List-item">
+	<a href="http://dqdp.net/">dqdp.net hostings</a>
+</div>
+<div class="List-item">
+	<a href="mailto:info@truemetal.lv">info@truemetal.lv</a>
+</div>
+
 <div class="List-item" style="text-align: center;">
 	<script type="text/javascript" src="http://cc3121.counter.hackers.lv/cc.php"></script><noscript><div><a href="http://counter.hackers.lv/"><img src="http://counter.hackers.lv/counter.php?uid=3121" alt="hackers counter system" /></a></div></noscript>
 </div>
