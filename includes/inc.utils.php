@@ -314,16 +314,6 @@ function valid_date($date)
 	return checkdate($m, $d, $y);
 } // valid_date
 
-function tolower($str, $enc_convert = false)
-{
-	return _tocase('strtolower', $str, $enc_convert);
-}
-
-function toupper($str, $enc_convert = false)
-{
-	return _tocase('strtoupper', $str, $enc_convert);
-}
-
 function substitute_change($str)
 {
 	$patt = array(
@@ -348,41 +338,6 @@ function substitute($str)
 	);
 	return preg_replace($patt, $repl, $str);
 } // substitute
-
-function _tocase($func, $str, $enc_convert = false)
-{
-	global $sys_lang, $sys_encoding;
-
-	if($sys_lang == 'en')
-		return $func($str);
-
-	if($enc_convert) {
-		if($sys_lang == 'lv')
-			$enc = 'windows-1257';
-
-		if($sys_lang == 'ru')
-			$enc = 'windows-1251';
-
-		return iconv($enc, $sys_encoding, $func(iconv($sys_encoding, $enc, $str)));
-	} else {
-		if($func == 'strtolower') {
-			$patt = array(
-				"'Ā'", "'Č'", "'Ē'", "'Ģ'", "'Ī'", "'Ķ'", "'Ļ'", "'Ņ'", "'Ō'", "'Ŗ'", "'Š'", "'Ū'", "'Ž'", "/[A-Z]/e"
-			);
-			$repl = array(
-				"ā", "č", "ē", "ģ", "ī", "ķ", "ļ", "ņ", "ō", "ŗ", "š", "ū", "ž", "$func('\\0')"
-			);
-		} else {
-			$patt = array(
-				"'ā'", "'č'", "'ē'", "'ģ'", "'ī'", "'ķ'", "'ļ'", "'ņ'", "'ō'", "'ŗ'", "'š'", "'ū'", "'ž'", "/[a-z]/e"
-			);
-			$repl = array(
-				"Ā", "Č", "Ē", "Ģ", "Ī", "Ķ", "Ļ", "Ņ", "Ō", "Ŗ", "Š", "Ū", "Ž", "$func('\\0')"
-			);
-		}
-		return preg_replace($patt, $repl, $str);
-	}
-} // tolower
 
 function valid_host($host)
 {

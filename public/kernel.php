@@ -6,32 +6,6 @@
 // mailto:marrtins@hackers.lv
 
 // galvenais fails - kernelis (speeciigi teikts, vai ne? :))
-/*
-if($_SERVER['REMOTE_ADDR'] != '159.148.66.202')
-{
-	die('remonts');
-}
-*/
-/*
-print <<<hend
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-
-<html>
-<head>
-<title>[ TRUE METAL ]</title>
-<meta http-equiv="Content-Language" content="lv">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv='refresh' content='10; URL=http://www.gay.lv/'>
-</head>
-<body>
-<pre>
-WHO`S TRUE? DIENA BEZ, DIRSEEJI, BLLA!
-</pre>
-</body>
-</html>
-hend;
-return;
-*/
 
 require_once('../includes/inc.config.php');
 
@@ -69,11 +43,7 @@ $module_map = array(
 
 /* some includes */
 require_once('../includes/inc.dbconnect.php');
-//require_once('../includes/inc.error_handler.php');
 require_once('../includes/inc.session_handler.php');
-if ($sys_use_compression) {
-	require_once('../includes/inc.compress.php');
-}
 require_once('../includes/inc.utils.php');
 require_once('../classes/class.MainModule.php');
 require_once('../classes/class.Module.php');
@@ -113,20 +83,8 @@ if (isset($matches[1]))
 
 $sys_parameters = parse_params($sys_parameters);
 
-$sys_lang = array_shift($sys_parameters);
-
-if(!in_array($sys_lang, $sys_languages))
-{
-	array_unshift($sys_parameters, $sys_lang);
-	$sys_lang = $sys_default_lang;
-}
-
-//require_once('../includes/inc.lang_'.$sys_lang.'.php');
-//require_once('../includes/inc.locale.php');
-
 $sys_module_id = array_shift($sys_parameters);
 $sys_http_root_base = $sys_http_root;
-//$sys_http_root = $sys_http_root.'/'.$sys_lang;
 
 // ja nav ne1 modulis selekteets
 if(!$sys_module_id && $sys_first_module)
@@ -211,7 +169,4 @@ if($i_am_admin)
 }
 */
 
-/* kompreseejam HTML contentu, ja vaig */
-if($sys_use_compression)
-	gz_doc_out();
 

@@ -28,10 +28,6 @@ $i_am_admin = isset($i_am_admin) ? $i_am_admin : in_array($ip, $sys_admins);
 $now = date("d.m.Y, H:i", time());
 $today = date("d.m.Y");
 
-$sys_languages = array(
-	'lv'
-);
-
 $mail_from = 'info@truemetal.lv';
 $new_login_mail = 'info@truemetal.lv';
 
@@ -73,7 +69,6 @@ $sys_db_name = 'truemetal';
 $sys_db_user = 'truemetal';
 $sys_db_password = 'Truu2Nigga5WoopBitch16';
 
-$sys_use_compression = 0;
 $sys_default_module = 'article';
 
 /* modulis, kas atveras saakumaa (ja nav noraadiits neviens) */

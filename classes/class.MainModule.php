@@ -41,17 +41,14 @@ class MainModule extends Template
 
 	function init()
 	{
-		global $sys_modules, $sys_lang_def, $sys_lang, $sys_encoding;
+		global $sys_modules, $sys_encoding;
 
 		$this->set_global('encoding', $GLOBALS['sys_encoding'], 'FILE_index', true);
 		$this->set_global('http_root', $GLOBALS['sys_http_root']);
 		$this->set_global('module_root', $GLOBALS['sys_http_root'].'/'.$this->module_name);
-		//$this->set_global('now', $GLOBALS['now']);
-		$this->set_global('sys_lang', $sys_lang);
 		$this->set_global('script_version', $GLOBALS['sys_script_version']);
 
 		$this->set_banner_top();
-		//$this->set_array($sys_lang_def);
 
 		return true;
 	} // init

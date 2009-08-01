@@ -28,7 +28,7 @@ class Module
 
 	function load($mod_id = 0)
 	{
-		global $db, $sys_lang;
+		global $db;
 
 		if($mod_id)
 			$where = ' WHERE mod_id = '.$mod_id;
@@ -53,7 +53,7 @@ class Module
 
 	function insert(&$data)
 	{
-		global $db, $sys_lang;
+		global $db;
 
 		$sql = "INSERT INTO `modules` (".
 			"module_id, mod_modid, module_name,".
@@ -84,7 +84,7 @@ class Module
 
 	function update(&$data)
 	{
-		global $db, $sys_lang;
+		global $db;
 
 		$data2 = $this->get_item($data['mod_id']);
 
@@ -180,7 +180,7 @@ class Module
 
 	function del_under($mod_id)
 	{
-		global $db, $sys_lang;
+		global $db;
 
 		$mod_id = (integer)$mod_id;
 
@@ -201,7 +201,7 @@ class Module
 
 	function del($mod_id)
 	{
-		global $db, $sys_lang;
+		global $db;
 
 		$mod_id = (integer)$mod_id;
 		$data = $this->get_item($mod_id);
@@ -228,7 +228,7 @@ class Module
 
 	function activate($mod_id)
 	{
-		global $db, $sys_lang;
+		global $db;
 
 		$mod_id = (integer)$mod_id;
 		$sql = "UPDATE `modules` SET module_active = '".MOD_ACTIVE."' WHERE mod_id = $mod_id";
@@ -238,7 +238,7 @@ class Module
 
 	function deactivate($mod_id)
 	{
-		global $db, $sys_lang;
+		global $db;
 
 		$mod_id = (integer)$mod_id;
 		$sql = "UPDATE `modules` SET module_active = '".MOD_INACTIVE."' WHERE mod_id = $mod_id";
@@ -248,7 +248,7 @@ class Module
 
 	function show($mod_id)
 	{
-		global $db, $sys_lang;
+		global $db;
 
 		$mod_id = (integer)$mod_id;
 		$sql = "UPDATE `modules` SET module_visible = '".MOD_VISIBLE."' WHERE mod_id = $mod_id";
@@ -258,7 +258,7 @@ class Module
 
 	function hide($mod_id)
 	{
-		global $db, $sys_lang;
+		global $db;
 
 		$mod_id = (integer)$mod_id;
 		$sql = "UPDATE `modules` SET module_visible = '".MOD_INVISIBLE."' WHERE mod_id = $mod_id";
@@ -297,7 +297,7 @@ class Module
 
 	function load_tree($mod_modid = 0, $q = '', $registrated = false)
 	{
-		global $db, $sys_lang;
+		global $db;
 
 		$match = '';
 		if($q)
@@ -373,7 +373,7 @@ class Module
 
 	function get_path($mod_id, $mod_modid = 0, $path = '')
 	{
-		global $db, $sys_lang;
+		global $db;
 
 		$sql = "SELECT module_id, mod_id FROM `modules` WHERE mod_modid = $mod_modid";
 		$data = $db->Execute($sql);
@@ -445,7 +445,7 @@ class Module
 	function set_modules(&$template, $mod_id = 0, $block = 'BLOCK_modules',
 		$mod_modid = 0, $d = 0, $module_path = '')
 	{
-		global $db, $sys_lang;
+		global $db;
 
 		$sql = "SELECT * FROM `modules` WHERE mod_modid = $mod_modid AND module_active = '".MOD_ACTIVE."' AND module_visible = '".MOD_VISIBLE."' ORDER BY module_pos";
 
@@ -466,7 +466,7 @@ class Module
 	function set_modules_all(&$template, $mod_id = 0, $block = 'BLOCK_modules',
 		$mod_modid = 0, $d = 0, $module_path = '')
 	{
-		global $db, $sys_lang;
+		global $db;
 
 		$sql = "SELECT * FROM `modules` WHERE mod_modid = $mod_modid ORDER BY module_pos";
 

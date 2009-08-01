@@ -11,7 +11,6 @@ require_once('../classes/class.MainModule.php');
 $template = new MainModule($sys_template_root, $sys_module_id, 'tmpl.index.php');
 $template->set_file('FILE_search', 'tmpl.search_log.php');
 $template->set_title("Ko mēs meklējam");
-$template->set_array($sys_lang_def, 'BLOCK_middle');
 $template->copy_block('BLOCK_middle', 'FILE_search');
 
 $path = array('archive'=>array('module_id'=>'search_log', 'module_name'=>'KO MĒS MEKLĒJAM'));

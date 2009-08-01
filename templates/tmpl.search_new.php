@@ -1,6 +1,6 @@
 <table cellpadding="1" cellspacing="1" border="0" width="100%">
 <tr>
-	<td colspan="2" class="TD-cat">{searched}: {search_q}</td>
+	<td colspan="2" class="TD-cat">Meklēšana: {search_q}</td>
 </tr>
 <!-- BEGIN BLOCK_search_msg disabled -->
 <tr>

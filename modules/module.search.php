@@ -1,13 +1,4 @@
 <?php
 
-include('module.search_new.php');
+include('module.search_sphinx.php');
 
-/*
-if($i_am_admin)
-{
-	include('module.search_new.php');
-} else {
-	include('module.search_old.php');
-}
-*/
-?>

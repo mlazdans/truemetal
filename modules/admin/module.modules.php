@@ -7,14 +7,14 @@
 
 /* ------------------------------------------------------------------------- */
 function set_pos(&$template, $m_pos = 0, $mod_modid = '') {
-	global $db, $sys_lang;
+	global $db;
 
 	$mod_modid = (integer)$mod_modid;
 
 	if($mod_modid)
-		$sql = "SELECT MAX(module_pos) module_pos FROM modules_$sys_lang WHERE mod_modid = $mod_modid";
+		$sql = "SELECT MAX(module_pos) module_pos FROM modules WHERE mod_modid = $mod_modid";
 	else
-		$sql = "SELECT MAX(module_pos) module_pos FROM modules_$sys_lang WHERE mod_modid = 0";
+		$sql = "SELECT MAX(module_pos) module_pos FROM modules WHERE mod_modid = 0";
 
 	$data = $db->ExecuteSingle($sql);
 	$module_pos = $data['module_pos'];

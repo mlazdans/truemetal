@@ -36,7 +36,7 @@ class AdminModule extends Template
 
 	function init()
 	{
-		global $admin_modules, $_USER, $sys_lang_def, $sys_encoding;
+		global $admin_modules, $_USER, $sys_encoding;
 
 		$this->set_global('encoding', $GLOBALS['sys_encoding']);
 		$this->set_global('upload_root', $GLOBALS['sys_upload_http_root']);
@@ -47,7 +47,6 @@ class AdminModule extends Template
 		$this->set_global('script_version', $GLOBALS['sys_script_version']);
 
 		$this->set_global('USER_name', $_USER['user_name']);
-		//$this->set_array($sys_lang_def);
 
 		reset($admin_modules);
 		foreach($admin_modules as $mod=>$val)
