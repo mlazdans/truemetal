@@ -43,6 +43,9 @@ class Article {
 		if(isset($params['art_id']))
 			$sql_add[] = sprintf("art_id = %d", $params['art_id']);
 
+		if(isset($params['art_ids']) && is_array($params['art_ids']))
+			$sql_add[] = sprintf("art_id IN (%s)", join(",", $params['art_ids']));
+
 		if(isset($params['art_active']))
 		{
 			if($params['art_active'])

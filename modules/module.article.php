@@ -44,6 +44,13 @@ if($art_id) {
 	$art = $article->load(array(
 		'art_id'=>$art_id
 		));
+
+	if($hl)
+	{
+		hl($art['art_intro'], $hl);
+		hl($art['art_data'], $hl);
+	}
+
 	$articles = ($art ? array($art) : array());
 	$item = $art;
 

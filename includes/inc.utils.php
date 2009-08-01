@@ -564,7 +564,7 @@ function hl(&$data, $kw)
 		$bgcolor = $bg[$index % $bc];
 		$data = ">$data<";
 		$patt = "/(>[^<]*)(".substitute(preg_quote($word)).")([^>]*)<?/imsUu";
-		$data = preg_replace($patt, "$1<font style=\"background-color: $bgcolor\" color=\"$color\"><b>$2</b></font>$3", $data);
+		$data = preg_replace($patt, "$1<span style=\"background-color: $bgcolor; color: $color; font-weight: bold;\">$2</span>$3", $data);
 		$data = mb_substr($data, 1, mb_strlen($data)-2);
 	}
 	unstrip_script($data, $keys, $scripts);
