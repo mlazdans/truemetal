@@ -125,7 +125,7 @@ if(!$sys_module_id && $sys_default_module)
 $module_root = $sys_http_root.'/'.$sys_module_id;
 
 // nochekojam, vai modulis existee, ja nee tad vai mappings iraid
-if(isset($sys_module_map[$sys_module_id]) && !file_exists('../modules/module.'.$sys_module_id.'.php'))
+if(isset($sys_module_map[$sys_module_id]) && !file_exists("$sys_root/module/$sys_module_id.php"))
 	$sys_module_id = $sys_module_map[$sys_module_id];
 
 $module = new Module;
@@ -133,7 +133,7 @@ $sys_modules = $module_tree = $module->load_tree(0);
 $sys_module = !invalid($sys_module_id) &&
 	(
 		isset($sys_modules[$sys_module_id]) ||
-		file_exists('../modules/module.'.$sys_module_id.'.php') ||
+		file_exists("$sys_root/module/$sys_module_id.php") ||
 		isset($sys_module_map[$sys_module_id])
 	) ?
 	$sys_module_id:
@@ -162,10 +162,10 @@ header("Pragma: ");
 header('Content-Type: text/html; charset='.$sys_encoding);
 
 /* iesleedzam vaidziigo moduli */
-if(file_exists('../modules/module.'.$sys_module.'.php')) {
-	include('../modules/module.'.$sys_module.'.php');
+if(file_exists("$sys_root/module/$sys_module.php")) {
+	include("$sys_root/module/$sys_module.php");
 } else {
-	include('../modules/module.'.$sys_default_module.'.php');
+	include("$sys_root/module/$sys_default_module.php");
 }
 
 $my_login = new Logins;
