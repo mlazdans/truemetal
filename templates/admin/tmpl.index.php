@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset={encoding}" />
 <title>{title} ({USER_name})</title>
 <meta http-equiv="Pragma" content="no-cache" />
-<link rel="stylesheet" type="text/css" href="{http_root}/admin_styles.css?{script_version}" />
+<link rel="stylesheet" type="text/css" href="{http_root}/css/admin_styles.css?{script_version}" />
 <script type="text/javascript" src="{http_root}/js/jquery.js?{script_version}"></script>
 <script type="text/javascript" src="{http_root}/js/utils.js?{script_version}"></script>
 <script type="text/javascript" src="/tiny_mce/tiny_mce.js?{script_version}"></script>

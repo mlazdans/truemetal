@@ -7,7 +7,7 @@ tinyMCE.init({
 	language: 'en',
 	file_browser_callback: "tinyBrowser",
 	relative_urls: false,
-	content_css: "/editor.css",
+	content_css: "/css/tiny_mce.css",
 
 //	plugins : "safari,pagebreak,style,layer,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
 //	plugins: "advhr",
