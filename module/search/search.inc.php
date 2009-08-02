@@ -1,6 +1,6 @@
 <?php
 
-require_once('../classes/sphinxapi.php');
+require_once('lib/sphinxapi.php');
 require_once('lib/Article.php');
 require_once('lib/Forum.php');
 

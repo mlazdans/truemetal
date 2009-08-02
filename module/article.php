@@ -155,31 +155,6 @@ if($page && ($page <= $tp))
 
 $template->set_title($art_title);
 
-//if($tmpl != 'tmpl.registrated.php')
-/*
-if($art_id) {
-	if(user_loged() || $articles['art_type'] == ARTICLE_TYPE_OPEN)
-	{
-		if($hl)
-			hl($articles['art_data'], $hl);
-
-		$item = $articles;
-		include('../modules/inc.comment_actions.php');
-	}
-} else
-*/
-
-/*
-$tidy_config = array(
-	'doctype' => 'strict',
-	'clean' => true,
-	'output-xhtml' => true,
-	'show-body-only' => true,
-	'wrap' => 0,
-	'alt-text' => ''
-	);
-*/
-
 if(count($articles))
 {
 	$module = new Module;
@@ -189,10 +164,6 @@ if(count($articles))
 	foreach($articles as $item)
 	{
 		++$c;
-
-		//$tidy = tidy_parse_string($item['art_data'], $tidy_config, 'UTF8');
-		//$tidy->cleanRepair();
-		//$item['art_data'] = $tidy;
 
 		$item['art_date'] = date('d.m.Y', strtotime($item['art_entered']));
 		if($art_id)
