@@ -4,7 +4,7 @@
 <table class="Comments" cellpadding="2" cellspacing="1">
 <!-- BEGIN BLOCK_comment_list -->
 <tr>
-	<td class="Comment-cat" style="width: 100%;">{c_username}<!-- BEGIN BLOCK_email disabled -->, <a href="mailto:{c_useremail}" class="A-small">{c_useremail}</a><!-- END BLOCK_email -->, {c_date}</td>
+	<td class="Comment-cat" style="width: 100%;"><span class="nick">{c_username}</span><!-- BEGIN BLOCK_email disabled -->, <a href="mailto:{c_useremail}" class="A-small">{c_useremail}</a><!-- END BLOCK_email -->, {c_date}</td>
 	<!-- BEGIN BLOCK_comment_vote disabled -->
 	<td class="Comment-cat {comment_vote_class}" id="comment{c_id}">{c_votes}</td>
 	<td class="Comment-cat"><a href="{http_root}/vote/up/{c_id}/" title="Ōjā!" onclick="Truemetal.Vote('{c_id}', 'up', '#comment{c_id}'); return false;">[+]</a></td>

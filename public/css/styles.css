@@ -95,13 +95,13 @@ P {
 	border-right: 1px solid #220000;
 	cursor: default;
 }
-.TD-cat a {
+.TD-cat a.caption {
 	color: white;
 	font-size: 9pt;
 	font-weight: bold;
 	text-decoration: underline;
 }
-.TD-cat a:hover {
+.TD-cat a.caption:hover {
 	text-decoration: none;
 }
 
@@ -188,6 +188,9 @@ input.checkbox {
 .Comment-cat {
 	background-color: #660000;
 }
+.Comment-cat .nick {
+	font-weight: bold;
+}
 .Comment-data {
 	background-color: #444444;
 }
@@ -234,16 +237,6 @@ table.Comments {
 .Article-item .caption {
 	text-align: center;
 }
-.Article-item .comments a {
-	color: red;
-	text-decoration: underline;
-	font-size: 8pt;
-	font-weight: normal;
-}
-.Article-item .comments a:hover {
-	text-decoration: none;
-}
-
 
 
 /* column container */
