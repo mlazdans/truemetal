@@ -5,8 +5,7 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-//if($_SERVER['REMOTE_ADDR'] != '193.108.185.195')
-//	exit;
+// Admin moduļu kernelis
 
 header('Cache-Control: no-cache');
 header('Pragma: no-cache');
@@ -15,7 +14,7 @@ function identify() {
 	header("WWW-Authenticate: Basic realm=\"Restricted zone!\"");
 	header("HTTP/1.0 401 Unauthorized");
 
-	die("Nepareizs login vai parole!");
+	die("Nepareizs logins vai parole!");
 }
 
 require_once('lib/AdminModule.php');
@@ -68,4 +67,3 @@ if(!file_exists('../modules/admin/module.'.$admin_module.'.php'))
 
 include('../modules/admin/module.'.$admin_module.'.php');
 
-?>
