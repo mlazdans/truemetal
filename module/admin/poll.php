@@ -1,9 +1,9 @@
 <?php
-// Hackers.lv Web Engine v2.0
+// dqdp.net Web Engine v3.0
 //
 // contacts:
-// http://www.hackers.lv/
-// mailto:marrtins@hackers.lv
+// http://dqdp.net/
+// marrtins@dqdp.net
 
 function poll_error($msg, &$template) {
 	$template->enable('BLOCK_poll_error');

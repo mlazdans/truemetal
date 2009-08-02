@@ -1,9 +1,9 @@
 <?php
-// Hackers.lv Web Engine v2.0
+// dqdp.net Web Engine v3.0
 //
 // contacts:
-// http://www.hackers.lv/
-// mailto:marrtins@hackers.lv
+// http://dqdp.net/
+// marrtins@dqdp.net
 
 $template = new AdminModule($sys_template_root.'/admin', $admin_module);
 $template->set_title('Admin :: online');

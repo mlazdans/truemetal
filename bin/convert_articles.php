@@ -1,9 +1,9 @@
 <?php
-// Hackers.lv Web Engine v2.0
+// dqdp.net Web Engine v3.0
 //
 // contacts:
-// http://www.hackers.lv/
-// mailto:marrtins@hackers.lv
+// http://dqdp.net/
+// marrtins@dqdp.net
 
 $KERNEL_LEAVE_AFTER_INIT = true;
 require_once('../public/kernel.php');
