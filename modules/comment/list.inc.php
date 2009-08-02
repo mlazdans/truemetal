@@ -35,6 +35,11 @@ foreach($comments as $item)
 		}
 	}
 
+	if($hl)
+	{
+		hl($item['c_datacompiled'], $hl);
+	}
+
 	$item['c_username'] = parse_form_data($item['c_username']);
 	$template->set_array($item, 'BLOCK_comment');
 	$template->set_var('c_date', proc_date($item['c_entered']));

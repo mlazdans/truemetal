@@ -48,6 +48,9 @@ class Forum
 		if(isset($params['forum_id']))
 			$sql_add[] = "f.forum_id = $params[forum_id]";
 
+		if(isset($params['forum_ids']) && is_array($params['forum_ids']))
+			$sql_add[] = sprintf("f.forum_id IN (%s)", join(",", $params['forum_ids']));
+
 		if(isset($params['forum_forumid']))
 			$sql_add[] = "f.forum_forumid = $params[forum_forumid]";
 

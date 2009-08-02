@@ -12,16 +12,23 @@
 |*	2 - reviews
 |*	3 - forum
 |*
+|*  id_offset - lai dabūtu unikālus id unionā (check sphinx config)
+|*
 |*/
+
+require_once('../classes/class.MainModule.php');
 
 $DOC_SOURCES = array(
 	1=>array(
+		'id_offset'=>0,
 		'name'=>"Ziņas",
 		),
 	2=>array(
+		'id_offset'=>0,
 		'name'=>"Recenzijas",
 		),
 	3=>array(
+		'id_offset'=>10000,
 		'name'=>"Forums",
 		),
 	);
@@ -37,10 +44,6 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 	$search_q = urldecode(get('search_q'));
 }
 
-require_once('../classes/sphinxapi.php');
-require_once('../classes/class.MainModule.php');
-//require_once('../classes/class.Article.php');
-
 $special_search_q = urlencode($search_q);
 $ent_search_q = ent($search_q);
 
@@ -55,91 +58,18 @@ if($search_q && (mb_strlen($search_q) < 3))
 	$search_msg[] = "Kļūda: jāievada vismaz 3 simbolus";
 
 $template->set_var("doc_count", 0, 'BLOCK_search');
+$template->set_var('search_q', $ent_search_q);
+$template->set_var('search_q_name', ": $ent_search_q");
 
 if(mb_strlen($search_q) > 2)
 {
-	$sections = post('sections', array());
-	$template->set_var('search_q', $ent_search_q);
-	$template->set_var('search_q_name', ": $ent_search_q");
-
-	# Log
-	if($search_log)
-	{
-		$sql = sprintf("
-INSERT INTO `search_log` (
-	`sl_userid`, `sl_q`, `sl_ip`, `sl_entered`
-) VALUES (
-	%s, '%s', '%s', NOW()
-);",
-			isset($_SESSION['login']['l_id']) ? $_SESSION['login']['l_id'] : "NULL",
-			addslashes($search_q),
-			$_SERVER['REMOTE_ADDR']
-			);
-		$db->Execute($sql);
-	}
-
-	# Sphinx
-	$cl = new SphinxClient();
-	$cl->SetConnectTimeout(1);
-	$cl->SetLimits(0, 100);
-	$cl->SetMatchMode(SPH_MATCH_BOOLEAN);
-
-	$sources = array();
-	if(in_array('article', $sections))
-	{
-		$template->set_var('section_article_checked', ' checked="checked"', 'BLOCK_middle');
-		$sources[] = 1;
-	}
-	if(in_array('reviews', $sections))
-	{
-		$template->set_var('section_reviews_checked', ' checked="checked"', 'BLOCK_middle');
-		$sources[] = 2;
-	}
-	if(in_array('forum', $sections))
-	{
-		$template->set_var('section_forum_checked', ' checked="checked"', 'BLOCK_middle');
-		$sources[] = 3;
-	}
-
-	$cl->SetSortMode(SPH_SORT_ATTR_DESC, "doc_entered");
-	if($sources)
-		$cl->SetFilter('doc_source_id', $sources);
-
-	if(($res = $cl->Query($search_q, "doc")) === false)
-	{
-		$search_msg[] = "Kļūda: ".$cl->GetLastError();
-		user_error($cl->GetLastError(), E_USER_WARNING);
-	} else {
-		$doc_ids = array_keys($res["matches"]);
-		$sql = "SELECT doc_source_id, doc_real_id, doc_name FROM documents WHERE doc_id IN (".join($doc_ids, ",").")";
-		$items = $db->Execute($sql);
-		//printr($sql);
-		//printr($res);
-		//return;
-		//if ( $cl->GetLastWarning() )
-		//	print "WARNING: " . $cl->GetLastWarning() . "\n\n";
-		$template->set_var("doc_count", $res["total_found"], 'BLOCK_search');
-
-		/*
-		if(isset($res["matches"]) && is_array($res["matches"]))
-		{
-			$art_ids = array_keys($res["matches"]);
-			$Article = new Article();
-			$items = $Article->load(array(
-				'art_ids'=>$art_ids,
-				));
-		} else {
-			$search_msg[] = "Nekas netika atrasts";
-		}
-		*/
-	}
+	include("search/search.inc.php");
 } else {
 	$template->enable('BLOCK_search_help');
 	$template->set_var('section_article_checked', ' checked="checked"', 'BLOCK_middle');
 	$template->set_var('section_reviews_checked', ' checked="checked"', 'BLOCK_middle');
 	$template->set_var('section_forum_checked', ' checked="checked"', 'BLOCK_middle');
 }
-
 
 if($search_msg)
 {
@@ -151,27 +81,6 @@ if($search_msg)
 		$template->parse_block('BLOCK_search_msg', TMPL_APPEND);
 	}
 }
-
-# Articles
-if(isset($items) && $items)
-{
-	$template->enable('BLOCK_search');
-	$template->enable('BLOCK_search_item');
-	foreach($items as $item)
-	{
-		if($item['doc_source_id'] == 1)
-			$doc_url = "/article/$item[doc_real_id]/?hl=$special_search_q";
-		if($item['doc_source_id'] == 2)
-			$doc_url = "/reviews/$item[doc_real_id]/?hl=$special_search_q";
-		if($item['doc_source_id'] == 3)
-			$doc_url = "/forum/$item[doc_real_id]/?hl=$special_search_q";
-		$template->set_var('doc_url', $doc_url, 'BLOCK_search_item');
-		$template->set_var('doc_name', $item['doc_name'], 'BLOCK_search_item');
-		$template->set_var('doc_module_name', $DOC_SOURCES[$item['doc_source_id']]['name'], 'BLOCK_search_item');
-		$template->parse_block('BLOCK_search_item', TMPL_APPEND);
-	}
-}
-
 
 $path = array('archive'=>array('module_id'=>'search', 'module_name'=>'MEKLĒT'));
 
