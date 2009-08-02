@@ -6,7 +6,5 @@
 // mailto:marrtins@hackers.lv
 
 $template = new AdminModule($sys_template_root.'/admin', $admin_module);
-$template->set_title('Admin ::');
+$template->set_title('Admin :: hello');
 $template->out();
-
-?>

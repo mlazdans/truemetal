@@ -125,5 +125,3 @@ if(!$l_id) {
 }
 
 $template->out();
-
-?>

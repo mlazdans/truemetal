@@ -38,5 +38,3 @@ $template->set_var('right_item_data', $template->get_parsed_content('FILE_online
 $template->parse_block('BLOCK_right_item', TMPL_APPEND);
 
 $template->out();
-
-?>

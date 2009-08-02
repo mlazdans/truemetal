@@ -84,5 +84,3 @@ if($dir = @opendir($sys_upload_root)) {
 	print '<b>$sys_upload_root</b> definēto direktoriju nevar atvērt!'." [$sys_upload_root]";
 
 $template->out();
-
-?>
