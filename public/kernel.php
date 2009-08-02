@@ -7,7 +7,7 @@
 
 // galvenais fails - kernelis (speeciigi teikts, vai ne? :))
 
-# Defaults - var overraidot configā
+# DEFAULTS - var overraidot configā
 $sys_start_time        = microtime(true);
 $sys_root              = realpath(dirname(__FILE__).'/../');
 //$sys_root              = str_replace('\\', '/', $sys_root);
@@ -39,6 +39,7 @@ $ip                    = (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR
 $now                   = date("d.m.Y, H:i", time());
 $today                 = date("d.m.Y");
 
+# Config
 require_once('../includes/inc.config.php');
 
 if(!isset($i_am_admin))
@@ -72,11 +73,6 @@ if(isset($sys_banned[$ip]))
 
 //apd_set_pprof_trace();
 
-header("Cache-Control: ");
-header("Expires: ");
-header("Pragma: ");
-header('Content-Type: text/html; charset='.$sys_encoding);
-
 /* some includes */
 require_once('../includes/inc.dbconnect.php');
 require_once('../includes/inc.session_handler.php');
@@ -84,8 +80,6 @@ require_once('lib/utils.php');
 require_once('lib/MainModule.php');
 require_once('lib/Module.php');
 require_once('lib/Logins.php');
-
-
 
 mb_regex_encoding($sys_encoding);
 mb_internal_encoding($sys_encoding);
@@ -159,6 +153,11 @@ foreach($sys_parameters as $k=>$v)
 }
 
 $_GET = _GET();
+
+header("Cache-Control: ");
+header("Expires: ");
+header("Pragma: ");
+header('Content-Type: text/html; charset='.$sys_encoding);
 
 /* iesleedzam vaidziigo moduli */
 if(file_exists('../modules/module.'.$sys_module.'.php')) {
