@@ -81,7 +81,7 @@ LEFT JOIN `comment_meta` ON (cm_table = 'article') AND (cm_table_id = a.art_id)
 			$sql .= " LIMIT $params[limit]";
 
 		return (isset($params['art_id']) ? $db->ExecuteSingle($sql) : $db->Execute($sql));
-	}
+	} // load
 
 	function insert(&$data, $validate = ARTICLE_VALIDATE)
 	{

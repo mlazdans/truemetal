@@ -77,7 +77,7 @@ class AdminModule extends Template
 
 	function out()
 	{
-		print Template::parse_file("FILE_index");
+		print $this->parse_file("FILE_index");
 	} // out
 
 	function init_editor($to_block = 'BLOCK_editor_init')

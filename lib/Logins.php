@@ -23,82 +23,109 @@ class Logins
 {
 	var $error_msg;
 
-	function Logins()
+	function __construct()
 	{
 	} // Logins
 
-	function load($l_login = '', $l_pass = '', $l_active = LOGIN_ACTIVE, $l_accepted = LOGIN_ACCEPTED)
+	//function load($l_login = '', $l_pass = '', $l_active = LOGIN_ACTIVE, $l_accepted = LOGIN_ACCEPTED)
+	function load(Array $params = array())
 	{
 		global $db;
 
-		$sql_add = '';
-		$sql = 'SELECT * FROM logins';
+		$sql_add = array();
 
-		if($this->valid_login($l_login))
-			$sql_add .= "l_login = '$l_login' AND ";
+		if(isset($params['l_id']))
+			$sql_add[] = sprintf("l_id = %d", $params['l_id']);
 
-		if($l_pass)
-			$sql_add .= "(l_password = PASSWORD('$l_pass') OR l_password = OLD_PASSWORD('$l_pass')) AND ";
+		if(isset($params['l_login']))
+			$sql_add[] = sprintf("l_login = '%s'", $params['l_login']);
 
-		if($l_active)
-			$sql_add .= "l_active = '$l_active' AND ";
+		if(isset($params['l_email']))
+			$sql_add[] = sprintf("l_email = '%s'", $params['l_email']);
 
-		if($l_accepted)
-			$sql_add .= "l_accepted = '$l_accepted' AND ";
+		if(isset($params['l_nick']))
+			$sql_add[] = sprintf("l_nick = '%s'", $params['l_nick']);
 
-		$sql_add = substr($sql_add, 0, -4);
+		if(isset($params['l_password']))
+			$sql_add[] = sprintf(
+				"(l_password = PASSWORD('%s') OR l_password = OLD_PASSWORD('%s'))",
+				$params['l_password'],
+				$params['l_password']
+				);
+
+		if(isset($params['l_active']))
+		{
+			if($params['l_active'] != LOGIN_ALL)
+				$sql_add[] = sprintf("l_active = '%s'", $params['l_active']);
+		} else {
+			$sql_add[] = sprintf("l_active = '%s'", LOGIN_ACTIVE);
+		}
+
+		if(isset($params['l_accepted']))
+		{
+			if($params['l_accepted'] != LOGIN_ALL)
+				$sql_add[] = sprintf("l_accepted = '%s'", $params['l_accepted']);
+		} else {
+			$sql_add[] = sprintf("l_accepted = '%s'", LOGIN_ACCEPTED);
+		}
+
+		$sql = "SELECT * FROM logins";
 
 		if($sql_add)
-			$sql .= ' WHERE '.$sql_add;
+			$sql .= " WHERE ".join(" AND ", $sql_add);
 
-		if($l_login)
+		$sql .= (empty($params['order']) ? " ORDER BY l_entered DESC " : " ORDER BY $params[order] ");
+
+		if(isset($params['limit']))
+			$sql .= " LIMIT $params[limit]";
+
+		if(
+			isset($params['l_id']) ||
+			isset($params['l_login']) ||
+			isset($params['l_email']) ||
+			isset($params['single'])
+			)
 		{
 			return $db->ExecuteSingle($sql);
-		} else
+		} else {
 			return $db->Execute($sql);
+		}
 	} // load
 
-	function load_by_id($l_id)
+	static function load_by_id($l_id)
 	{
-		global $db;
+		$Logins = new Logins();
+		return $Logins->load(array(
+			'l_id'=>$l_id,
+			));
 
-		return $db->ExecuteSingle("SELECT * FROM logins WHERE l_id = $l_id");
+		//return $db->ExecuteSingle("SELECT * FROM logins WHERE l_id = $l_id");
 	} // load_by_id
 
-	function load_by_login($l_login)
+	static function load_by_login($l_login)
 	{
+		$Logins = new Logins();
+		return $Logins->load(array(
+			'l_login'=>$l_login,
+			));
+		/*
 		global $db;
 
 		return $this->load($l_login);
+		*/
 	} // load_by_login
 
-	function load_by_login_ex($l_login)
+	static function load_by_email($l_email)
 	{
-		global $db;
-
-		return $this->load($l_login, '', LOGIN_ALL, LOGIN_ALL);
-	} // load_by_login_ex
-
-	function load_by_email($l_email)
-	{
+		return $Logins->load(array(
+			'l_email'=>$l_email,
+			));
+		/*
 		global $db;
 
 		return $db->ExecuteSingle("SELECT * FROM logins WHERE l_email = '$l_email'");
+		*/
 	} // load_by_email
-/*
-	function load_by_login($l_login)
-	{
-		global $db;
-
-		return $db->ExecuteSingle("SELECT * FROM logins WHERE l_login = '$l_login'");
-	} // load_by_login
-*/
-	function load_by_nick($l_nick)
-	{
-		global $db;
-
-		return $db->ExecuteSingle("SELECT * FROM logins WHERE l_nick = '$l_nick'");
-	} // load_by_nick
 
 	function get_active()
 	{
@@ -180,7 +207,7 @@ class Logins
 		}
 	} // set_profile
 
-	function delete_image()
+	static function delete_image()
 	{
 		global $sys_user_root;
 
@@ -360,7 +387,16 @@ class Logins
 	{
 		global $db;
 
-		if($this->valid_login($l_login) && $l_pass && ($data = $this->load($l_login, $l_pass)))
+		//if($this->valid_login($l_login) && $l_pass && ($data = $this->load($l_login, $l_pass)))
+		if(
+			$this->valid_login($l_login) &&
+			$l_pass &&
+			($data = $this->load(array(
+				'l_login'=>$l_login,
+				'l_password'=>$l_pass,
+				))
+				)
+			)
 		{
 			$db->Execute("UPDATE logins SET l_logedin ='Y' WHERE l_id = $data[l_id]");
 			return $data;
@@ -732,7 +768,7 @@ class Logins
 
 	} // validate
 
-	function valid_login($user_login)
+	static function valid_login($user_login)
 	{
 		return valid($user_login) && (strlen($user_login) > 0);
 	} // valid_login
@@ -755,5 +791,5 @@ class Logins
 		return $db->Execute($sql);
 	} // remove_forgot_code
 
-}
+} // class Logins
 

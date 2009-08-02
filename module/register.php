@@ -86,21 +86,33 @@ if(isset($_POST['data']))
 		$data['l_email'] = trim($data['l_email']);
 
 		$error_msg = '';
-		if($test_login = $logins->load_by_login_ex($data['l_login']))
+		if($test_login = $logins->load(array(
+			'l_login'=>$data['l_login'],
+			'l_active'=>LOGIN_ALL,
+			'l_accepted'=>LOGIN_ALL,
+			)))
 		{
 			$error = true;
 			$template->set_var('error_l_login', ' class="error-form"');
 			$error_msg .= 'Šāds login jau eksistē!<br>';
 		} // test login
 
-		if($test_email = $logins->load_by_email($data['l_email']))
+		if($test_email = $logins->load(array(
+			'l_email'=>$data['l_email'],
+			'l_active'=>LOGIN_ALL,
+			'l_accepted'=>LOGIN_ALL,
+			)))
 		{
 			$error = true;
 			$template->set_var('error_l_email', ' class="error-form"');
 			$error_msg .= 'Šāda e-pasta adrese jau eksistē!<br>';
 		} // test email
 
-		if($test_nick = $logins->load_by_nick($data['l_nick']))
+		if($test_nick = $logins->load(array(
+			'l_nick'=>$data['l_nick'],
+			'l_active'=>LOGIN_ALL,
+			'l_accepted'=>LOGIN_ALL,
+			)))
 		{
 			$error = true;
 			$template->set_var('error_l_nick', ' class="error-form"');

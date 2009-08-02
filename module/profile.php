@@ -24,13 +24,11 @@ if($section == 'view')
 	$atteli_http_root = $sys_user_http_root.'/pic';
 	$atteli_http_troot = $sys_user_http_root.'/pic/thumb';
 
-	$login = new Logins;
 	$at_id = (int)array_shift($sys_parameters);
-	$login_data = $login->load_by_id($at_id);
-	if(!$login_data)
-	{
+	//$login = new Logins;
+	//$login_data = $login->load_by_id($at_id);
+	if(!($login_data = Logins::load_by_id($at_id)))
 		return;
-	}
 
 	$template = new MainModule($sys_template_root, 'atteli', 'tmpl.attels_single.php');
 
@@ -52,7 +50,7 @@ if($section == 'view')
 // another user profile
 elseif($section == 'user')
 {
-	$login = new Logins;
+	//$login = new Logins;
 	$l_id = array_shift($sys_parameters);
 	$template = new MainModule($sys_template_root, 'profile', 'tmpl.profile_single.php');
 	$template->set_file('FILE_profile', 'tmpl.profile.php');
@@ -63,13 +61,13 @@ elseif($section == 'user')
 	$login_data = array();
 
 	// ja login
-	if($login->valid_login($l_id))
+	if(Logins::valid_login($l_id))
 	{
-		$login_data = $login->load_by_login($l_id);
+		$login_data = Logins::load_by_login($l_id);
 	} else {
 		if($l_id === strval(intval($l_id)))
 		{
-			$login_data = $login->load_by_id($l_id);
+			$login_data = Logins::load_by_id($l_id);
 		}
 	}
 
@@ -95,8 +93,8 @@ elseif($section == 'user')
 	# del image
 	if($section == 'deleteimage')
 	{
-		$login = new Logins;
-		if($login->delete_image())
+		//$login = new Logins;
+		if(Logins::delete_image())
 		{
 			header("Location: $module_root/");
 			return;

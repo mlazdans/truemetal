@@ -38,7 +38,11 @@ if(in_array($action, $actions)) {
 
 // saraksts
 if(!$l_id) {
-	$l = $logins->load('', '', LOGIN_ALL, LOGIN_ALL);
+	//$l = $logins->load('', '', LOGIN_ALL, LOGIN_ALL);
+	$l = $logins->load(array(
+		'l_active'=>LOGIN_ALL,
+		'l_accepted'=>LOGIN_ALL
+		));
 
 	if(count($l))
 		$template->enable('BLOCK_logins_list');
@@ -60,7 +64,7 @@ if(!$l_id) {
 	$template->set_var('logins_count', $logins_count);
 } else {
 	// view & edit
-	$l = $logins->load_by_id($l_id);
+	$l = Logins::load_by_id($l_id);
 	$template->set_array($l);
 	$template->enable('BLOCK_login_view');
 

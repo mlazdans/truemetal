@@ -43,7 +43,7 @@ if($action == 'request')
 		$found = false;
 		if($data['l_login'])
 		{
-			if($test_data = $logins->load_by_login($data['l_login']))
+			if($test_data = Logins::load_by_login($data['l_login']))
 			{
 				$found = true;
 			}
@@ -51,7 +51,7 @@ if($action == 'request')
 
 		if(!$found && $data['l_email'])
 		{
-			if($test_data = $logins->load_by_email($data['l_email']))
+			if($test_data = Logins::load_by_email($data['l_email']))
 			{
 				$found = true;
 			}
@@ -86,7 +86,7 @@ if($action == 'request')
 
 		$data = isset($_POST['data']) ? $_POST['data'] : array();
 		$change_passw = isset($_POST['change_passw']) ? $_POST['change_passw'] : '';
-		$login_data = $logins->load_by_login($forgot_data['f_login']);
+		$login_data = Logins::load_by_login($forgot_data['f_login']);
 
 		$pass_changed = false;
 		if($change_passw)

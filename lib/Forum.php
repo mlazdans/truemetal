@@ -56,7 +56,7 @@ class Forum
 
 		if(isset($params['forum_active']))
 		{
-			if($params['forum_active'])
+			if($params['forum_active'] != FORUM_ALL)
 				$sql_add[] = sprintf("f.forum_active = '%s'", $params['forum_active']);
 		} else {
 			$sql_add[] = sprintf("f.forum_active = '%s'", FORUM_ACTIVE);

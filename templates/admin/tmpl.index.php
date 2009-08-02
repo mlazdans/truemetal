@@ -38,7 +38,8 @@
 <hr />
 
 <div id="footer">
-	Copyright &copy; Norge Datorsistēmas 2003-2008; Copyright &copy; dqdp.net 2008-{year}
+	Copyright &copy; Norge Datorsistēmas 2003-2008<br/>
+	Copyright &copy; dqdp.net 2008-{year}
 </div>
 
 </body>
