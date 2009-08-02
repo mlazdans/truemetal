@@ -1,4 +1,9 @@
 <?php
+// Hackers.lv Web Engine v2.0
+//
+// contacts:
+// http://www.hackers.lv/
+// mailto:marrtins@hackers.lv
 
 define('COMMENT_VISIBLE', 'Y');
 define('COMMENT_INVISIBLE', 'N');

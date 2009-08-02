@@ -1,4 +1,11 @@
 <?php
+// Hackers.lv Web Engine v2.0
+//
+// contacts:
+// http://www.hackers.lv/
+// mailto:marrtins@hackers.lv
+
+//
 
 $_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_themecount'];
 
@@ -125,7 +132,7 @@ foreach($items as $item)
 }
 
 $forum_count = $forum_items->getThemeCount($forum_id);
-include('pages.inc.php');
+include('module/forum/pages.inc.php');
 
 set_forum($template, $forum_id);
 

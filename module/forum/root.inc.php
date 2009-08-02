@@ -1,4 +1,11 @@
 <?php
+// Hackers.lv Web Engine v2.0
+//
+// contacts:
+// http://www.hackers.lv/
+// mailto:marrtins@hackers.lv
+
+//
 
 $template->set_file('FILE_forum', 'tmpl.forum.php');
 $template->copy_block('BLOCK_middle', 'FILE_forum');

@@ -1,4 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<?php
+// Hackers.lv Web Engine v2.0
+//
+// contacts:
+// http://www.hackers.lv/
+// mailto:marrtins@hackers.lv
+
+?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
 <head>

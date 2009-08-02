@@ -63,7 +63,7 @@ $template->set_var('search_q_name', ": $ent_search_q");
 
 if(mb_strlen($search_q) > 2)
 {
-	include("search/search.inc.php");
+	include("module/search/search.inc.php");
 } else {
 	$template->enable('BLOCK_search_help');
 	$template->set_var('section_article_checked', ' checked="checked"', 'BLOCK_middle');
