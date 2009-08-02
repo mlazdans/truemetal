@@ -7,8 +7,6 @@
 
 //
 
-require_once('../includes/inc.utils.php');
-
 define('USER_ACTIVE', 'Y');
 define('USER_INACTIVE', 'N');
 define('USER_ALL', false);

@@ -8,6 +8,7 @@
 // galvenais fails - kernelis (speeciigi teikts, vai ne? :))
 
 # Defaults - var overraidot configā
+$sys_start_time        = microtime(true);
 $sys_root              = realpath(dirname(__FILE__).'/../');
 //$sys_root              = str_replace('\\', '/', $sys_root);
 $sys_public_root       = $sys_root.'/public';
@@ -25,6 +26,7 @@ $sys_domain            = (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME
 $sys_script_version    = 1;
 $sys_banned            = array();
 $sys_admins            = array('127.0.0.1');
+$sys_module_map        = array();
 
 $sys_mail_from         = (isset($_SERVER['SERVER_ADMIN']) ?
 	$_SERVER['SERVER_ADMIN'] :
@@ -47,10 +49,9 @@ if(!isset($sys_debug))
 ini_set('display_errors', ($sys_debug ? 1 : 0));
 error_reporting($sys_error_reporting);
 
-
+# Include paths
 $include_path = split(PATH_SEPARATOR, ini_get('include_path'));
-# Unset current dir
-foreach($include_path as $k=>$v)
+foreach($include_path as $k=>$v) // Unset current dir
 {
 	if($v == '.' || $v == './')
 		unset($include_path[$k]);
@@ -59,31 +60,15 @@ $paths = array(
 	".",
 	$sys_root,
 	);
-
 $include_path = array_merge($paths, $include_path);
 ini_set('include_path', join(PATH_SEPARATOR, $include_path));
 
+# Bans
 if(isset($sys_banned[$ip]))
 {
 	print "Banned: ".$sys_banned[$ip];
 	return;
 }
-
-/*
-if($i_am_admin)
-{
-print_r($_SERVER);
-	$ru = split('/', $_SERVER['REQUEST_URI']);
-	array_shift($ru);
-	$ru = join('/', $ru);
-	if(isset($_SERVER['HTTP_HOST']))
-		if($_SERVER['HTTP_HOST'] != 'truemetal.lv')
-		{
-			header("Location: http://truemetal.lv/".$ru);
-			return;
-		}
-}
-*/
 
 //apd_set_pprof_trace();
 
@@ -92,21 +77,18 @@ header("Expires: ");
 header("Pragma: ");
 header('Content-Type: text/html; charset='.$sys_encoding);
 
-$module_map = array(
-);
-
 /* some includes */
 require_once('../includes/inc.dbconnect.php');
 require_once('../includes/inc.session_handler.php');
-require_once('../includes/inc.utils.php');
+require_once('lib/utils.php');
 require_once('lib/MainModule.php');
 require_once('lib/Module.php');
 require_once('lib/Logins.php');
 
+
+
 mb_regex_encoding($sys_encoding);
 mb_internal_encoding($sys_encoding);
-
-$sys_start_time = getmicrotime();
 
 # fetch new login data
 // TODO: sataisīt, lai automātiski izlogojas, ja ieķeksē neatktīvs
@@ -141,30 +123,25 @@ $sys_module_id = array_shift($sys_parameters);
 $sys_http_root_base = $sys_http_root;
 
 // ja nav ne1 modulis selekteets
-if(!$sys_module_id && $sys_first_module)
-{
-	$sys_module_id = $sys_first_module;
-	//header('Location: '.$sys_http_root.'/'.$sys_first_module.'/');
-	//exit;
-}
+if(!$sys_module_id && $sys_default_module)
+	$sys_module_id = $sys_default_module;
 
 $module_root = $sys_http_root.'/'.$sys_module_id;
 
 // nochekojam, vai modulis existee, ja nee tad vai mappings iraid
-if(isset($module_map[$sys_module_id]) && !file_exists('../modules/module.'.$sys_module_id.'.php'))
-	$sys_module_id = $module_map[$sys_module_id];
+if(isset($sys_module_map[$sys_module_id]) && !file_exists('../modules/module.'.$sys_module_id.'.php'))
+	$sys_module_id = $sys_module_map[$sys_module_id];
 
 $module = new Module;
 $sys_modules = $module_tree = $module->load_tree(0);
-
 $sys_module = !invalid($sys_module_id) &&
 	(
 		isset($sys_modules[$sys_module_id]) ||
 		file_exists('../modules/module.'.$sys_module_id.'.php') ||
-		isset($module_map[$sys_module_id])
+		isset($sys_module_map[$sys_module_id])
 	) ?
 	$sys_module_id:
-	(isset($sys_modules[$sys_default_module]) ? $sys_default_module : '');
+	$sys_default_module;
 
 $path = array();
 $_pointer = $_pointer2 = &$module_tree[$sys_module_id];
@@ -196,7 +173,7 @@ $my_login->save_session_data();
 /*
 if($i_am_admin)
 {
-	$sys_end_time = getmicrotime();
+	$sys_end_time = microtime(true);
 	print 'Finished: '.number_format(($sys_end_time - $sys_start_time), 2, '.', '');
 }
 */

@@ -280,11 +280,6 @@ function set_forum(&$template, $forum_id)
 
 } // set_forum
 
-function getmicrotime()
-{
-	return microtime(true);
-} // getmicrotime
-
 function valid_date($date)
 {
 	list($d, $m, $y) = split('\.', $date);

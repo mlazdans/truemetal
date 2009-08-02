@@ -10,7 +10,7 @@
 $i_am_admin = true;
 require_once('../includes/inc.config.php');
 require_once('../includes/inc.dbconnect.php');
-require_once('../includes/inc.utils.php');
+require_once('lib/utils.php');
 include_once('../includes/inc.console.php');
 
 $deleted = $errors = 0;

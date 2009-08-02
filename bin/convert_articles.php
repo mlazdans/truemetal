@@ -1,5 +1,9 @@
 <?php
 
+$i_am_admin = true;
+require_once('../includes/inc.dbconnect.php');
+require_once('lib/utils.php');
+
 $tidy_config = array(
 	'doctype' => 'strict',
 	'join-styles' => true,
@@ -100,10 +104,6 @@ $data.
 
 	return $xml;
 } // art_clean
-
-$i_am_admin = true;
-require_once('../includes/inc.dbconnect.php');
-require_once('../includes/inc.utils.php');
 
 $db->AutoCommit(false);
 $db->Execute("TRUNCATE `article`;");
