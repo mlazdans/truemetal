@@ -1,18 +1,12 @@
 <!-- BEGIN BLOCK_article disabled -->
 <div class="Article-item">
 	<div class="TD-cat">
-		<table cellpadding="0" cellspacing="0" border="0">
-		<tr>
-			<td valign="top" class="TD-date">{art_date}</td>
-			<td valign="top" align="center" style="width: 100%;"><a href="{http_root}/{module_id}/{art_id}/" class="A-cat">{art_name}</a></td>
-			<!-- BEGIN BLOCK_is_comments -->
-			<td valign="top" align="right" style="white-space: nowrap;">
-				<a href="{http_root}/{module_id}/{art_id}/#comments">Komentāri</a>
-				<span<!-- BEGIN BLOCK_comments_new disabled --> class="Comment-new"<!-- END BLOCK_comments_new -->>({art_comment_count})</span>
-			</td>
-			<!-- END BLOCK_is_comments -->
-		</tr>
-		</table>
+		<div class="date">{art_date}</div>
+		<div class="comments">
+			<a href="{http_root}/{module_id}/{art_id}/#comments">Komentāri</a>
+			<span<!-- BEGIN BLOCK_comments_new disabled --> class="Comment-new"<!-- END BLOCK_comments_new -->>({art_comment_count})</span>
+		</div>
+		<div class="caption"><a href="{http_root}/{module_id}/{art_id}/">{art_name}</a></div>
 	</div>
 
 	<!-- BEGIN BLOCK_art_intro disabled -->
@@ -23,6 +17,7 @@
 			<a href="{http_root}/{module_id}/{art_id}/">..tālāk..</a>
 		</div>
 		<!-- END BLOCK_art_cont -->
+		<div class="clear"></div>
 	</div>
 	<!-- END BLOCK_art_intro -->
 
@@ -58,16 +53,18 @@
 <!-- BEGIN BLOCK_article_page disabled -->
 <div class="TD-cat">
 	<!-- BEGIN BLOCK_article_page_prev disabled -->
-	<div style="float: left; position: relative;">
-		<a href="{page}" class="A-cat">&lt;&lt; vecāki ieraksti</a>
+	<div style="float: left;">
+		<img src="{http_root}/img/left.png" alt="Vecāki ieraksti" style="vertical-align: middle;" /> <a href="{page}">vecāki ieraksti</a>
 	</div>
 	<!-- END BLOCK_article_page_prev  -->
 
 	<!-- BEGIN BLOCK_article_page_next disabled -->
-	<div style="float: right; position: relative;">
-		<a href="{page}" class="A-cat">jaunāki ieraksti &gt;&gt;</a>
+	<div style="float: right;">
+		<a href="{page}">jaunāki ieraksti</a>
+		<img src="{http_root}/img/right.png" alt="Jaunāki ieraksti" style="vertical-align: middle;" />
 	</div>
 	<!-- END BLOCK_article_page_next -->
+	<div>&nbsp;</div>
 </div>
 <!-- END BLOCK_article_page -->
 

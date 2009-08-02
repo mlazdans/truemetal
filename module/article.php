@@ -196,11 +196,13 @@ if(count($articles))
 			*/
 		}
 
+		/*
 		if($item['art_comments'] == ARTICLE_NOCOMMENTS) {
 			$template->disable('BLOCK_is_comments');
 		} else {
 			$template->enable('BLOCK_is_comments');
 		}
+		*/
 
 		$old_comment_count =
 			isset($_SESSION['comments']['viewed'][$item['art_id']]) ?

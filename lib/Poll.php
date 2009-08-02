@@ -282,6 +282,7 @@ class Poll
 		}
 
 		$template->set_var('poll_question_b', $poll['poll_name'], 'BLOCK_middle');
+		//$template->set_array($poll['poll_name'], 'BLOCK_middle');
 
 		$total_votes = $this->count_votes($poll['poll_id']);
 		$template->set_var('total_votes_b', $total_votes, 'BLOCK_middle');
@@ -300,10 +301,12 @@ class Poll
 			$template->set_var('poll_name_b', $item['poll_name'], 'BLOCK_middle');
 			$template->set_var('count_votes_b', $item_votes, 'BLOCK_middle');
 
+			/*
 			if(!$item_votes)
 				$template->disable('BLOCK_poll_r_bar');
 			else
 				$template->enable('BLOCK_poll_r_bar');
+				*/
 
 			if($total_votes)
 			{

@@ -5,6 +5,8 @@
 <title>[ TRUE METAL {title} ]</title>
 <meta http-equiv="Content-Language" content="lv" />
 <meta name="verify-v1" content="1T6p5COcolqsK65q0I6uXdMjPuPskp2jyWjFMTOW/LY=" />
+<meta name="author" content="Mārtiņš Lazdāns (dqdp.net)" />
+<meta name="description" content="Metāls Latvijā" />
 <link rel="stylesheet" type="text/css" href="{http_root}/styles.css?{script_version}" />
 <link rel="stylesheet" type="text/css" href="{http_root}/article.css?{script_version}" />
 <script type="text/javascript" src="{http_root}/js/swfobject.js?{script_version}"></script>
@@ -42,20 +44,14 @@ $(document).ready(function(){
 <div class="colmask rightmenu">
 	<div class="colleft">
 		<div class="col1 {block_middle_class}">
-		<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->
+			<div class="clear"></div>
+			<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->
 		</div>
 		<div class="col2">
-		<!-- BEGIN BLOCK_right disabled --><!-- END BLOCK_right -->
+			<!-- BEGIN BLOCK_right disabled --><!-- END BLOCK_right -->
 		</div>
 	</div>
 </div>
-
-<!--
-<div id="footer">
-	<a href="http://dqdp.net/">dqdp.net hostings</a><br/>
-	<a href="mailto:info@truemetal.lv">info@truemetal.lv</a><br/>
-</div>
--->
 
 </body>
 </html>

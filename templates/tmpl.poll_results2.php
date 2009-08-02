@@ -2,29 +2,22 @@
 	{poll_question_b}
 </div>
 
-<table width="95%" cellpadding="0" cellspacing="2" border="0" align="center" bgcolor="#330000">
 <!-- BEGIN BLOCK_poll_r_items disabled -->
-<tr>
-	<td colspan="2">{poll_name_b}</td>
-</tr>
-<tr>
-	<td width="100%" bgcolor="#660000"><!-- BEGIN BLOCK_poll_r_bar --><img src="{http_root}/img/1x1pollchart.gif" style="width: {count_percent_b}%" height="10" alt="0" /><!-- END BLOCK_poll_r_bar --></td>
-	<td nowrap>{count_votes_b} ({count_percent_b}%)</td>
-</tr>
-<tr>
-	<td colspan="2" height="15"></td>
-</tr>
+<div class="List-item">
+	{poll_name_b}
+</div>
+<div class="Poll-result">
+	<div class="Poll-bar" style="width: {count_percent_b}%">&nbsp;</div>
+	{count_votes_b} ({count_percent_b}%)
+</div>
 <!-- END BLOCK_poll_r_items -->
-<tr>
-	<td style="text-align: right;">Kopā:</td>
-	<td><b>{total_votes_b}</b></td>
-</tr>
-<tr>
-	<td colspan="2" style="padding-bottom: 7px">&nbsp;</td>
-</tr>
-</table>
+
+<div class="List-item" style="text-align: right;">
+	<strong>Kopā: {total_votes_b}</strong>
+</div>
 
 <!-- BEGIN BLOCK_poll_archive disabled -->
+<div class="List-sep"></div>
 <div class="TD-cat">
 	Pārējie jautājumi
 </div>
