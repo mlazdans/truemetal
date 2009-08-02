@@ -7,7 +7,6 @@
 
 //
 
-require_once('../classes/class.Admin.php');
 require_once('../includes/inc.utils.php');
 
 define('USER_ACTIVE', 'Y');
@@ -16,20 +15,18 @@ define('USER_ALL', false);
 define('USER_VALIDATE', true);
 define('USER_DONTVALIDATE', false);
 
-class User extends Admin
+class User
 {
 	var $error_msg;
 	var $data;
 	var $logged_id;
 
-	function User() {
-		Admin::Admin('user');
+	function __construct()
+	{
+	} // __construct
 
-		if(!$this->CheckPermissions('admin'))
-			return false;
-	}
-
-	function login($user_login = '', $user_pass = '') {
+	function login($user_login = '', $user_pass = '')
+	{
 		if($this->valid_login($user_login) && $user_pass) {
 			$this->data = $this->load($user_login, $user_pass);
 			$this->logged_id = true;
@@ -41,9 +38,10 @@ class User extends Admin
 			return false;
 		}
 
-	}
+	} // login
 
-	function load($user_login = '', $user_pass = '', $user_active = USER_ACTIVE) {
+	function load($user_login = '', $user_pass = '', $user_active = USER_ACTIVE)
+	{
 		global $db;
 
 		$sql_add = '';
@@ -69,9 +67,10 @@ class User extends Admin
 			return $db->ExecuteSingle($sql);
 		} else
 			return $db->Execute($sql);
-	}
+	} // load
 
-	function insert(&$data, $validate = USER_VALIDATE) {
+	function insert(&$data, $validate = USER_VALIDATE)
+	{
 		global $db;
 
 		if($validate)
@@ -98,7 +97,8 @@ class User extends Admin
 			return false;
 	}
 
-	function update($user_login, &$data, $validate = USER_VALIDATE) {
+	function update($user_login, &$data, $validate = USER_VALIDATE)
+	{
 		global $db;
 
 		if(!$this->valid_login($user_login)) {
@@ -123,14 +123,10 @@ class User extends Admin
 		$db->Execute($sql);
 
 		return $user_login;
-	}
+	} // update
 
-	function save($user_login, &$data) {
-		if(!in_array('admin', $this->permissions)) {
-			$this->error_msg = ACCESS_DENIED;
-			return false;
-		}
-
+	function save($user_login, &$data)
+	{
 		$this->validate($data);
 
 		$error_msg = '';
@@ -150,15 +146,11 @@ class User extends Admin
 			$this->error_msg = $error_msg;
 			return false;
 		}
-	}
+	} // save
 
-	function del($user_login) {
+	function del($user_login)
+	{
 		global $db;
-
-		if(!in_array('admin', $this->permissions)) {
-			$this->error_msg = ACCESS_DENIED;
-			return false;
-		}
 
 		if(!$user_login)
 			return true;
@@ -166,36 +158,29 @@ class User extends Admin
 		$sql = "DELETE FROM user WHERE user_login = '$user_login'";
 
 		return $db->Execute($sql);
-	}
+	} // del
 
-	function activate($user_login) {
+	function activate($user_login)
+	{
 		global $db;
-
-		if(!in_array('admin', $this->permissions)) {
-			$this->error_msg = ACCESS_DENIED;
-			return false;
-		}
 
 		$sql = 'UPDATE user SET user_active = "'.USER_ACTIVE.'" WHERE user_login = "'.$user_login.'"';
 
 		return $db->Execute($sql);
-	}
+	} // activate
 
-	function deactivate($user_login) {
+	function deactivate($user_login)
+	{
 		global $db;
-
-		if(!in_array('admin', $this->permissions)) {
-			$this->error_msg = ACCESS_DENIED;
-			return false;
-		}
 
 		$sql = 'UPDATE user SET user_active = "'.USER_INACTIVE.'" WHERE user_login = "'.$user_login.'"';
 
 		return $db->Execute($sql);
-	}
+	} // deactivate
 
-	// actionu preprocessors
-	function process_action(&$data, $action) {
+	# actionu preprocessors
+	function process_action(&$data, $action)
+	{
 
 		$ret = true;
 		$func = '';
@@ -216,9 +201,10 @@ class User extends Admin
 					$ret = $ret && $this->{$func}($data['user_login'.$r]);
 
 		return $ret;
-	}
+	} // process_action
 
-	function validate(&$data) {
+	function validate(&$data)
+	{
 		if(isset($data['user_active']))
 			$data['user_active'] = ereg('[^YN]', $data['user_active']) ? '' : $data['user_active'];
 		else
@@ -241,11 +227,12 @@ class User extends Admin
 
 		if(!isset($data['user_entered']))
 			$data['user_entered'] = '';
-	}
+	} // validate
 
-	function valid_login($user_login) {
-
+	function valid_login($user_login)
+	{
 		return valid($user_login) && (strlen($user_login) > 0);
-	}
+	} // valid_login
 
-}
+} // class User
+

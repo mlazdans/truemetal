@@ -7,8 +7,6 @@
 
 //
 
-require_once('../classes/class.Admin.php');
-
 define('GALLERY_ACTIVE', 'Y');
 define('GALLERY_INACTIVE', 'N');
 define('GALLERY_VISIBLE', 'Y');
@@ -21,27 +19,18 @@ define('GALLERY_DATA_VISIBLE', 'Y');
 define('GALLERY_DATA_INVISIBLE', 'N');
 define('GALLERY_DATA_ALL', false);
 
-class Gallery extends Admin
+class Gallery
 {
 	var $error_msg;
 
-	function Gallery()
+	function __construct()
 	{
-		Admin::Admin('gallery');
-		if(!$this->CheckPermissions(array('read', 'write', 'admin')))
-			return false;
-	} // Gallery
+	} // __construct
 
 	function load_data($gd_id, $gd_galid = 0, $gd_visible = GALLERY_DATA_VISIBLE,
 		$gal_active = GALLERY_ACTIVE)
 	{
 		global $db, $ip;
-
-		$ban = new Ban;
-		if($ban_info = $ban->banned($ip, 'gallery')) {
-			$this->error_msg = "Banned - ".$ban_info['ub_reason'];
-			return false;
-		}
 
 		$gd_id = (integer)$gd_id;
 		$gd_galid = (integer)$gd_galid;
@@ -102,12 +91,6 @@ class Gallery extends Admin
 		$gal_visible = GALLERY_ALL)
 	{
 		global $db, $ip;
-
-		$ban = new Ban;
-		if($ban_info = $ban->banned($ip, 'gallery')) {
-			$this->error_msg = "Banned - ".$ban_info['ub_reason'];
-			return false;
-		}
 
 		$gal_id = (integer)$gal_id;
 
@@ -201,9 +184,6 @@ FROM gallery
 
 	function save($gal_id, &$data)
 	{
-		if(!$this->CheckPermissions(array('write', 'admin')))
-			return false;
-
 		$this->validate($data);
 
 		$gal_id = (integer)$gal_id;

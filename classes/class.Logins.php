@@ -161,13 +161,6 @@ class Logins
 		$template->set_var('l_forumsort_themes_'.$login['l_forumsort_themes'], ' checked="checked"');
 		$template->set_var('l_forumsort_msg_'.$login['l_forumsort_msg'], ' checked="checked"');
 
-		if(!empty($login['l_disable_bobi']))
-		{
-			$template->set_var('l_disable_bobi_checked', ' checked="checked"');
-		} else {
-			$template->set_var('l_disable_bobi_checked', '');
-		}
-
 		if(!empty($login['l_disable_avatars']))
 		{
 			$template->set_var('l_disable_avatars_checked', ' checked="checked"');
@@ -288,7 +281,6 @@ class Logins
 			$sql .= "l_emailvisible = '$data[l_emailvisible]', ";
 			$sql .= $data['l_forumsort_themes'] ? "l_forumsort_themes = '$data[l_forumsort_themes]', " : '';
 			$sql .= $data['l_forumsort_msg'] ? "l_forumsort_msg = '$data[l_forumsort_msg]', " : '';
-			$sql .= "l_disable_bobi = $data[l_disable_bobi], ";
 			$sql .= "l_disable_avatars = $data[l_disable_avatars], ";
 			$osql .= $data['l_email'] ? "l_email = '$l_data[l_email]', " : '';
 			$osql .= $data['l_password'] ? "l_password = '$l_data[l_password], " : '';
@@ -301,8 +293,7 @@ class Logins
 
 			$sql = substr($sql, 0, -2);
 			$osql = substr($osql, 0, -2);
-//printr($sql);
-//die;
+
 			if($sql)
 			{
 				if($db->Execute("UPDATE logins SET $sql WHERE l_id = $l_id"))
@@ -746,11 +737,6 @@ class Logins
 			$data['l_forumsort_msg'] = ereg('[^AD]', $data['l_forumsort_msg']) ? '' : $data['l_forumsort_msg'];
 		else
 			$data['l_forumsort_msg'] = FORUM_SORT_THEME;
-
-		if(isset($data['l_disable_bobi']))
-			$data['l_disable_bobi'] = 1;
-		else
-			$data['l_disable_bobi'] = 0;
 
 		if(isset($data['l_disable_avatars']))
 			$data['l_disable_avatars'] = 1;

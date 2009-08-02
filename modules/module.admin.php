@@ -11,12 +11,12 @@
 header('Cache-Control: no-cache');
 header('Pragma: no-cache');
 
-function identify() { 
+function identify() {
 	header("WWW-Authenticate: Basic realm=\"Restricted zone!\"");
-	header("HTTP/1.0 401 Unauthorized"); 
+	header("HTTP/1.0 401 Unauthorized");
 
-	die("Nepareizs login vai parole!"); 
-} 
+	die("Nepareizs login vai parole!");
+}
 
 require_once('../classes/class.AdminModule.php');
 require_once('../classes/class.User.php');
@@ -49,8 +49,6 @@ $admin_modules = array(
 	'gallery_group'=>'Galeriju grupas',
 	'editor'=>'',
 	'user'=>'Lietotāji',
-	'ban'=>'Ban',
-	'permission'=>'Tiesības',
 	'online'=>'Online',
 	'logins'=>'Logini',
 	'lang'=>'',

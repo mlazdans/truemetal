@@ -5,8 +5,6 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-$module_permissions = array('admin');
-
 require_once('../classes/class.Gallery.php');
 require_once('../classes/class.MainModule.php');
 

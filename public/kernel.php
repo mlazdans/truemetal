@@ -115,19 +115,6 @@ $sys_module = !invalid($sys_module_id) &&
 $path = array();
 $_pointer = $_pointer2 = &$module_tree[$sys_module_id];
 
-$_contacts = &$module_tree['_contacts']['_data_'];
-$_banner1 = &$module_tree['_banner1']['_data_'];
-$_banner2 = &$module_tree['_banner2']['_data_'];
-
-if(isset($_pointer['_contacts']['_data_']))
-	$_contacts = $_pointer['_contacts']['_data_'];
-
-if(isset($_pointer['_banner1']['_data_']))
-	$_banner1 = $_pointer['_banner1']['_data_'];
-
-if(isset($_pointer['_banner2']['_data_']))
-	$_banner2 = $_pointer['_banner2']['_data_'];
-
 if($module_tree[$sys_module_id]['_data_'])
 	$path[$sys_module_id] = $module_tree[$sys_module_id]['_data_'];
 
@@ -135,15 +122,6 @@ foreach($sys_parameters as $k=>$v)
 {
 	if(!isset($_pointer[$v]))
 		break;
-
-	// contacts
-	$_pointer = &$_pointer[$v];
-	if(isset($_pointer['_contacts']))
-		$_contacts = $_pointer['_contacts']['_data_'];
-	if(isset($_pointer['_banner1']))
-		$_banner1 = $_pointer['_banner1']['_data_'];
-	if(isset($_pointer['_banner2']))
-		$_banner2 = $_pointer['_banner2']['_data_'];
 
 	$path[$v] = $_pointer['_data_'];
 	unset($sys_parameters[$k]);

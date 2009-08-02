@@ -7,21 +7,16 @@
 
 //
 
-require_once('../classes/class.Admin.php');
-
 define('GALLERY_GROUP_VALIDATE', true);
 define('GALLERY_GROUP_DONTVALIDATE', false);
 
-class GalleryGroup extends Admin
+class GalleryGroup
 {
 	var $error_msg;
 
-	function GalleryGroup()
+	function __construct()
 	{
-		//Admin::Admin('gallery_group');
-		//if(!$this->CheckPermissions(array('read', 'write', 'admin')))
-			//return false;
-	} // GalleryGroup
+	} // __construct
 
 	function load($gg_id = 0)
 	{
@@ -96,9 +91,6 @@ class GalleryGroup extends Admin
 
 	function save($gg_id, &$data)
 	{
-		//if(!$this->CheckPermissions(array('write', 'admin')))
-			//return false;
-
 		$this->validate($data);
 
 		$gg_id = (integer)$gg_id;

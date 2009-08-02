@@ -654,18 +654,6 @@ function email($to, $subj, $msg)
 	return $ret;
 } // email
 
-function set_parts(&$template)
-{
-	global $_contacts, $_banner1, $_banner2;
-	// kontakti
-	if(isset($_contacts))
-		$template->set_var('contacts', $_contacts['module_data']);
-	if(isset($_banner1))
-		$template->set_var('banner1', $_banner1['module_data']);
-	if(isset($_banner2))
-		$template->set_var('banner2', $_banner2['module_data']);
-} // set_parts
-
 function user_loged()
 {
 	return isset($_SESSION['login']['l_id']) && $_SESSION['login']['l_id'];

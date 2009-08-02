@@ -5,8 +5,6 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-require_once('../classes/class.Ban.php');
-
 $template = new AdminModule($sys_template_root.'/admin', $admin_module);
 $template->set_title('Admin :: online');
 $template->set_file('FILE_online', 'tmpl.online.php');

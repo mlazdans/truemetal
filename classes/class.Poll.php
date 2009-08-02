@@ -7,9 +7,6 @@
 
 //
 
-require_once('../classes/class.Ban.php');
-require_once('../classes/class.Permission.php');
-
 define('POLL_ACTIVE', 'Y');
 define('POLL_INACTIVE', 'N');
 define('POLL_ALL', false);
@@ -22,26 +19,14 @@ class Poll
 	var $error_msg;
 	var $insert_period; // sec
 	var $insert_rate; // rate = $insert_rate / $insert_period
-	var $permissions;
 
-	function Poll()
+	function __construct()
 	{
 		global $_USER;
 
 		$this->date_format = '%d.%m.%Y %H:%i';
 		$this->set_insert_rate(5, 4); // max 5msg in 4sec
-
-		$perm = new Permission;
-		$this->permissions = $perm->user_permissions($_USER['user_login'], 'poll');
-		if(
-			!in_array('admin', $this->permissions) &&
-			!in_array('write', $this->permissions) &&
-			!in_array('read', $this->permissions)
-		) {
-			$this->error_msg = ACCESS_DENIED;
-			return false;
-		}
-	} // Poll
+	} // __construct
 
 	function set_insert_rate($rate, $period)
 	{
@@ -84,14 +69,6 @@ class Poll
 	{
 		global $db;
 
-		if(
-			!in_array('admin', $this->permissions) &&
-			!in_array('write', $this->permissions)
-		) {
-			$this->error_msg = ACCESS_DENIED;
-			return false;
-		}
-
 		if($validate)
 			$this->validate($data);
 
@@ -116,14 +93,6 @@ class Poll
 	function update($poll_id, &$data, $validate = POLL_VALIDATE)
 	{
 		global $db;
-
-		if(
-			!in_array('admin', $this->permissions) &&
-			!in_array('write', $this->permissions)
-		) {
-			$this->error_msg = ACCESS_DENIED;
-			return false;
-		}
 
 		$poll_id = (integer)$poll_id;
 
@@ -155,14 +124,6 @@ class Poll
 	{
 		global $db;
 
-		if(
-			!in_array('admin', $this->permissions) &&
-			!in_array('write', $this->permissions)
-		) {
-			$this->error_msg = ACCESS_DENIED;
-			return false;
-		}
-
 		$poll_id = (integer)$poll_id;
 
 		if(!$poll_id)
@@ -184,14 +145,6 @@ class Poll
 	{
 		global $db;
 
-		if(
-			!in_array('admin', $this->permissions) &&
-			!in_array('write', $this->permissions)
-		) {
-			$this->error_msg = ACCESS_DENIED;
-			return false;
-		}
-
 		$poll_id = (integer)$poll_id;
 
 		if(!$poll_id)
@@ -209,14 +162,6 @@ class Poll
 	{
 		global $db;
 
-		if(
-			!in_array('admin', $this->permissions) &&
-			!in_array('write', $this->permissions)
-		) {
-			$this->error_msg = ACCESS_DENIED;
-			return false;
-		}
-
 		$poll_id = (integer)$poll_id;
 		$poll_pollid = (integer)$poll_pollid;
 
@@ -232,14 +177,6 @@ class Poll
 	{
 		global $db;
 
-		if(
-			!in_array('admin', $this->permissions) &&
-			!in_array('write', $this->permissions)
-		) {
-			$this->error_msg = ACCESS_DENIED;
-			return false;
-		}
-
 		$poll_id = (integer)$poll_id;
 
 		$sql = 'UPDATE poll SET poll_active = "'.POLL_ACTIVE.'" WHERE poll_id = '.$poll_id;
@@ -250,14 +187,6 @@ class Poll
 	function deactivate($poll_id)
 	{
 		global $db;
-
-		if(
-			!in_array('admin', $this->permissions) &&
-			!in_array('write', $this->permissions)
-		) {
-			$this->error_msg = ACCESS_DENIED;
-			return false;
-		}
 
 		$poll_id = (integer)$poll_id;
 
@@ -540,13 +469,6 @@ class Poll
 
 		if(!$poll_id || !$poll_pollid || !user_loged())
 			return false;
-
-		$ban = new Ban;
-		if($ban_info = $ban->banned($ip, 'poll'))
-		{
-			$this->error_msg = "Banned - ".$ban_info['ub_reason'];
-			return false;
-		}
 
 		/*
 		NOTE: Vairs nav aktuāls, jo balso tikai reģistrētie

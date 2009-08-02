@@ -7,7 +7,6 @@
 
 //
 
-require_once('../classes/class.Ban.php');
 require_once('../classes/class.Module.php');
 
 define('ARTICLE_ACTIVE', 'Y');

@@ -5,38 +5,14 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-require_once('../classes/class.Permission.php');
-
 $template = new AdminModule($sys_template_root.'/admin', $admin_module);
 $template->set_title('Admin :: faili');
-
-$perm = new Permission;
-$permissions = $perm->user_permissions($_USER['user_login'], 'upload');
-
-if(!in_array('admin', $permissions))
-	$template->disable('BLOCK_browse');
-
-if(
-	!in_array('admin', $permissions) &&
-	!in_array('write', $permissions) &&
-	!in_array('read', $permissions)
-) {
-	$template->enable('BLOCK_msg');
-	$template->set_var('msg', ACCESS_DENIED);
-	$template->out();
-	exit;
-}
 
 $action = isset($_POST['action']) ? $_POST['action'] : (isset($_GET['action']) ? $_GET['action'] : '');
 $hide = isset($_POST['hide']) ? $_POST['hide'] : '';
 
-if($action == 'upload') {
-	if(!in_array('admin', $permissions)) {
-		$template->enable('BLOCK_msg');
-		$template->set_var('msg', ACCESS_DENIED);
-		$template->out();
-		exit;
-	}
+if($action == 'upload')
+{
 	$template->enable('BLOCK_msg');
 	$some_file = isset($_FILES['some_file']) ? $_FILES['some_file'] : array();
 	if(!isset($some_file['name'])) {
@@ -86,7 +62,7 @@ if($action == 'delete_multiple') {
 	} // loop
 }
 
-// ielaadeejam failu sarakstu un uztaisa sarakstu sakaartotaa seciibaa 
+// ielaadeejam failu sarakstu un uztaisa sarakstu sakaartotaa seciibaa
 $files = array();
 if($dir = @opendir($sys_upload_root)) {
 	while(false !== ($file = readdir($dir)))
