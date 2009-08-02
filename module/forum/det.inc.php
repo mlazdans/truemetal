@@ -13,7 +13,7 @@ if(($action == 'add_comment') && user_loged())
 	$table = 'forum';
 	$table_id = $forum_id;
 	$data = post('data');
-	if($c_id = include('../modules/comment/add.inc.php'))
+	if($c_id = include('module/comment/add.inc.php'))
 	{
 		$db->Commit();
 		header("Location: $sys_http_root/forum/$forum_id/#comment$c_id");
@@ -40,7 +40,7 @@ if(
 }
 
 $comments = $CC->get($params);
-include("../modules/comment/list.inc.php");
+include("module/comment/list.inc.php");
 
 set_forum($template, $forum_id);
 return;

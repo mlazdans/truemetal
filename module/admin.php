@@ -59,11 +59,8 @@ $admin_module = (isset($admin_modules[$admin_module]) ? $admin_module : '');
 $admin_root = "$sys_http_root/admin";
 $module_root = "$admin_root/$admin_module";
 
-if(!$admin_module)
+if(!$admin_module || !file_exists("$sys_root/module/admin/$admin_module.php"))
 	$admin_module = 'start';
 
-if(!file_exists('../modules/admin/module.'.$admin_module.'.php'))
-	$admin_module = 'start';
-
-include('../modules/admin/module.'.$admin_module.'.php');
+include("$sys_root/module/admin/$admin_module.php");
 

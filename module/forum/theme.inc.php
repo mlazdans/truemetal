@@ -43,7 +43,7 @@ if($action == 'add_theme')
 			$table_id = $id;
 			$data['c_data'] = $data['forum_data'];
 
-			if($c_id = include('../modules/comment/add.inc.php'))
+			if($c_id = include('module/comment/add.inc.php'))
 			{
 				$_SESSION['user']['username'] = $data['forum_username'];
 				$_SESSION['user']['useremail'] = $data['forum_useremail'];

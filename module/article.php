@@ -59,7 +59,7 @@ if($art_id) {
 		$table = 'article';
 		$table_id = $art_id;
 		$data = post('data');
-		if($ac_id = include('../modules/comment/add.inc.php'))
+		if($ac_id = include('module/comment/add.inc.php'))
 		{
 			$db->Commit();
 			$np = join('/', array_keys($path));
