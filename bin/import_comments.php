@@ -12,11 +12,11 @@ WHERE
 	);
 */
 
-$i_am_admin = true;
-require_once('../includes/inc.config.php');
-require_once('../includes/inc.dbconnect.php');
+$KERNEL_LEAVE_AFTER_INIT = true;
+require_once('../public/kernel.php');
+require_once('include/console.php');
+require_once('include/dbconnect.php');
 require_once('lib/utils.php');
-include_once('../includes/inc.console.php');
 
 $c_id = 0;
 $c_sql = "INSERT INTO `comment` VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');\n";

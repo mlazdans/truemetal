@@ -405,18 +405,15 @@ class Poll
 		$poll_data = $data[0];
 
 		// ja jau nobalsots
-		//if($GLOBALS['i_am_admin'])
+		$sql = sprintf(
+			"SELECT COUNT(*) vote_count FROM poll_votes WHERE pv_userid = %d AND pv_pollid = %d",
+			$_SESSION['login']['l_id'],
+			$poll_data['poll_id']
+		);
+		$check_votes = $db->ExecuteSingle($sql);
+		if($check_votes['vote_count'] > 0)
 		{
-			$sql = sprintf(
-				"SELECT COUNT(*) vote_count FROM poll_votes WHERE pv_userid = %d AND pv_pollid = %d",
-				$_SESSION['login']['l_id'],
-				$poll_data['poll_id']
-			);
-			$check_votes = $db->ExecuteSingle($sql);
-			if($check_votes['vote_count'] > 0)
-			{
-				return $this->show_results($template);
-			}
+			return $this->show_results($template);
 		}
 		/*
 		else {

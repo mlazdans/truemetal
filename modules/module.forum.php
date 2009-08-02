@@ -11,7 +11,7 @@
 function set_forum_items(&$template, &$data, $forum_comments = false)
 {
 	global $forum, $page_id, $fpp, $pages_visible_to_sides, $hl, $forum_count,
-		$i_am_admin, $sys_user_root, $sys_user_http_root,
+		$sys_user_root, $sys_user_http_root,
 		$user_pic_tw, $user_pic_th, $user_pic_w, $user_pic_h;
 
 	$is_block_paged = $template->block_isset('BLOCK_is_pages');

@@ -7,7 +7,6 @@
 
 // session handling
 
-require_once('../includes/inc.config.php');
 require_once('lib/SQLLayer.php');
 
 class SessionHandler

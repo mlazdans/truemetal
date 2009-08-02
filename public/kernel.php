@@ -40,7 +40,7 @@ $now                   = date("d.m.Y, H:i", time());
 $today                 = date("d.m.Y");
 
 # Config
-require_once('../includes/inc.config.php');
+require_once("$sys_root/include/config.php");
 
 if(!isset($i_am_admin))
 	$i_am_admin = in_array($ip, $sys_admins);
@@ -63,6 +63,8 @@ $paths = array(
 	);
 $include_path = array_merge($paths, $include_path);
 ini_set('include_path', join(PATH_SEPARATOR, $include_path));
+if(!empty($KERNEL_LEAVE_AFTER_INIT))
+	return;
 
 # Bans
 if(isset($sys_banned[$ip]))
@@ -74,8 +76,8 @@ if(isset($sys_banned[$ip]))
 //apd_set_pprof_trace();
 
 /* some includes */
-require_once('../includes/inc.dbconnect.php');
-require_once('../includes/inc.session_handler.php');
+require_once('include/dbconnect.php');
+require_once('include/session_handler.php');
 require_once('lib/utils.php');
 require_once('lib/MainModule.php');
 require_once('lib/Module.php');

@@ -14,27 +14,17 @@ $template->set_title("Ko mēs meklējam");
 $template->copy_block('BLOCK_middle', 'FILE_search');
 
 $path = array('archive'=>array('module_id'=>'search_log', 'module_name'=>'KO MĒS MEKLĒJAM'));
+$template->enable('BLOCK_search_log');
 
-
-//$allowed = $i_am_admin || (strpos(strtolower($_SERVER['HTTP_USER_AGENT']), "google") !== FALSE);
-$allowed = true;
-
-if($allowed)
+$sql = "SELECT DISTINCT sl_q FROM `search_log` ORDER BY `sl_id` DESC LIMIT 0,100";
+$q = $db->Query($sql);
+while($r = $db->FetchAssoc($q))
 {
-	$template->enable('BLOCK_search_log');
-
-	$sql = "SELECT DISTINCT sl_q FROM `search_log` ORDER BY `sl_id` DESC LIMIT 0,100";
-	$q = $db->Query($sql);
-	while($r = $db->FetchAssoc($q))
-	{
-		$template->set_array($r, 'BLOCK_search_log');
-		$template->set_array($r, 'BLOCK_search_log');
-		$template->set_var('sl_q', $r['sl_q']);
-		$template->set_var('sl_q_parsed', urlencode($r['sl_q']));
-		$template->parse_block('BLOCK_search_log', TMPL_APPEND);
-	}
-} else {
-	//$template->enable('BLOCK_search_log_denied');
+	$template->set_array($r, 'BLOCK_search_log');
+	$template->set_array($r, 'BLOCK_search_log');
+	$template->set_var('sl_q', $r['sl_q']);
+	$template->set_var('sl_q_parsed', urlencode($r['sl_q']));
+	$template->parse_block('BLOCK_search_log', TMPL_APPEND);
 }
 
 $template->set_right();

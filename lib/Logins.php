@@ -103,20 +103,7 @@ class Logins
 	function get_active()
 	{
 		global $db;
-/*
-		$dt = date('Y-m-d H:i:s', time() - 600);
-		if($GLOBALS['i_am_admin'])
-		{
-			$sql = "SELECT * FROM logins WHERE l_logedin = 'Y' AND '$dt' < l_lastaccess";
-			print $sql;
-		} else {
-			//$sql = "SELECT * FROM logins WHERE l_logedin = 'Y' AND NOW() - l_lastaccess < 600";
-			$sql = "SELECT * FROM logins WHERE l_logedin = 'Y' AND NOW() - 600 < l_lastaccess";
-			//$dt = time() - 600;
-			//$sql = "SELECT * FROM logins WHERE l_logedin = 'Y' AND $dt < l_lastaccess";
-		}
-		*/
-		//$sql = "SELECT * FROM logins WHERE l_logedin = 'Y' AND NOW() - 600 < l_lastaccess";
+
 		$sql = sprintf(
 			"SELECT * FROM logins WHERE l_logedin = 'Y' AND '%s' < l_lastaccess",
 			date('Y-m-d H:i:s', time() - 600)

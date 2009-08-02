@@ -66,11 +66,11 @@ class MainModule extends Template
 
 	function out()
 	{
-		global $i_am_admin, $sys_http_root;
+		global $sys_http_root;
 
 		print $this->parse_file('FILE_index');
 		/*
-		if($i_am_admin)
+		if($GLOBALS['i_am_admin'])
 		{
 			$dom = new DOMDocument('1.0', 'utf-8');
 			@$dom->loadHTML($this->parse_file('FILE_index'));
