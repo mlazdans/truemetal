@@ -15,8 +15,6 @@ $template->set_title("Reģistrācija");
 $template->set_file('FILE_register', 'tmpl.register.php');
 $template->copy_block('BLOCK_middle', 'FILE_register');
 
-$path = array('map'=>array('module_id'=>'register', 'module_name'=>'REGISTER'));
-
 $template->set_right();
 $template->set_login();
 $template->set_reviews();
@@ -26,75 +24,63 @@ $template->set_online();
 
 $logins = new Logins;
 
+$error_msg = array();
+
 if(isset($_POST['data']))
 {
-	$check = array
-	(
+	$check = array(
 		'l_email',
 		'l_login',
 		'l_nick',
 		'l_password'
 	);
 
-	$data = &$_POST['data'];
+	$data = post('data', array());
 
-	$error = false;
+	$error_field = array();
+	//$template->set_var('error_'.$c, ' class="error-form"');
 	foreach($check as $c)
-		if(!isset($data[$c]) || !$data[$c])
-		{
-			$error = true;
-			$template->set_var('error_'.$c, ' class="error-form"');
-		}
-
-	foreach($data as $k=>$v)
 	{
-		my_strip_tags($v);
-		$template->set_var($k, $v);
+		if(empty($data[$c]))
+			$error_field[] = 'error_'.$c;
 	}
 
 	// nocheko, vai logins jau nav taads
-	if(!$error)
+	//if(!$error_field)
 	{
 		if($data['l_password'] != $data['l_password2'])
 		{
-			$error = true;
-			$template->set_var('error_l_password', ' class="error-form"');
-			$template->set_var('error_l_password2', ' class="error-form"');
-			$template->set_var('error_msg', 'Paroles nesakrīt!');
-			$template->enable('BLOCK_register_error');
+			//$error = true;
+			$error_msg[] = 'Paroles nesakrīt!';
+			$error_field[] = 'l_password';
+			$error_field[] = 'l_password2';
 		} elseif(invalid($data['l_password']) || strlen($data['l_password']) < 5) {
-			$error = true;
-			$template->set_var('error_l_password', ' class="error-form"');
-			$template->set_var('error_msg', 'Nepareiza vai īsa parole!');
-			$template->enable('BLOCK_register_error');
+			$error_msg[] = 'Nepareiza vai īsa parole!';
+			$error_field[] = 'l_password';
 		} elseif(invalid($data['l_login']) || strlen($data['l_login']) < 5) {
-			$error = true;
-			$template->set_var('error_l_login', ' class="error-form"');
-			$template->set_var('error_msg', 'Nepareizs vai īsa logins!');
-			$template->enable('BLOCK_register_error');
+			$error_msg[] = 'Nepareizs vai īss logins!';
+			$error_field[] = 'l_login';
 		} elseif(!valid_email($data['l_email'])) {
-			$error = true;
-			$template->set_var('error_l_email', ' class="error-form"');
-			$template->set_var('error_msg', 'Nekorekta e-pasta adrese!');
-			$template->enable('BLOCK_register_error');
+			$error_msg[] = 'Nekorekta e-pasta adrese!';
+			$error_field[] = 'l_email';
 		}
 	}
 
-	if(!$error)
+	//if(!$error)
 	{
 		$data['l_login'] = strtolower($data['l_login']);
 		$data['l_email'] = trim($data['l_email']);
 
-		$error_msg = '';
 		if($test_login = $logins->load(array(
 			'l_login'=>$data['l_login'],
 			'l_active'=>LOGIN_ALL,
 			'l_accepted'=>LOGIN_ALL,
 			)))
 		{
-			$error = true;
-			$template->set_var('error_l_login', ' class="error-form"');
-			$error_msg .= 'Šāds login jau eksistē!<br>';
+			//$error = true;
+			//$template->set_var('error_l_login', ' class="error-form"');
+			$error_field[] = 'l_login';
+			$error_msg[] = 'Šāds login jau eksistē!';
 		} // test login
 
 		if($test_email = $logins->load(array(
@@ -103,9 +89,10 @@ if(isset($_POST['data']))
 			'l_accepted'=>LOGIN_ALL,
 			)))
 		{
-			$error = true;
-			$template->set_var('error_l_email', ' class="error-form"');
-			$error_msg .= 'Šāda e-pasta adrese jau eksistē!<br>';
+			//$error = true;
+			//$template->set_var('error_l_email', ' class="error-form"');
+			$error_field[] = 'l_email';
+			$error_msg[] = 'Šāda e-pasta adrese jau eksistē!';
 		} // test email
 
 		if($test_nick = $logins->load(array(
@@ -114,42 +101,48 @@ if(isset($_POST['data']))
 			'l_accepted'=>LOGIN_ALL,
 			)))
 		{
-			$error = true;
-			$template->set_var('error_l_nick', ' class="error-form"');
-			$error_msg .= 'Šāds niks jau eksistē!<br>';
+			//$error = true;
+			//$template->set_var('error_l_nick', ' class="error-form"');
+			$error_field[] = 'l_nick';
+			$error_msg[] = 'Šāds niks jau eksistē!';
 		} // test email
 
-		if($error_msg)
-		{
-			$template->set_var('error_msg', $error_msg);
-			$template->enable('BLOCK_register_error');
-		}
 	}
 
-	if(!$error && ($id = $logins->insert($data)))
+	if($error_field)
 	{
+		foreach($error_field as $k)
+			$template->set_var('error_'.$k, ' class="error-form"', 'BLOCK_register_form');
+
+		parse_form_data_array($data);
+		$template->set_array($data, 'BLOCK_register_form');
+	} elseif(($id = $logins->insert($data))) {
 		email($new_login_mail, '[truemetal] jauns lietotajs', "$data[l_login] ($data[l_nick])\n\nIP:$_SERVER[REMOTE_ADDR]");
 		//email($data['l_email'], 'truemetal.lv registacija', "Veiksmigi registrejaties\nGaidiet apstiprinajumu!\n\nwww.lpa.lv");
 		header("Location: $module_root/ok/");
+		return;
 	}
 }
 
 if($action == 'ok')
-	$template->enable('BLOCK_register_ok');
-elseif($action == 'accept')
 {
+	$template->enable('BLOCK_register_ok');
+} elseif($action == 'accept') {
 	$code = array_shift($sys_parameters);
 	if($logins->accept_login($code))
-		$template->enable('BLOCK_register_code_ok');
-	else {
-		$template->set_var('error_msg', "Diemžēl loginu neizdevās apstiprināt!<br><br>Varianti:<br>1) nokavēts 3 x 24h apstiprināšanas termiņš<br>2) nepareizs kods<br>3) logins jau ir apstiprināts<br><br>Ja kas, raksti uz info [at] truemetal.lv");
-		$template->enable('BLOCK_register_error');
+	{
+		$template->enable('BLOCK_accept_ok');
+	} else {
+		$template->enable('BLOCK_accept_error');
 	}
 } else {
 	$template->enable('BLOCK_register_form');
-	$template->set_var("l_login", '', 'BLOCK_register_form');
-	$template->set_var("l_nick", '', 'BLOCK_register_form');
-	$template->set_var("l_email", '', 'BLOCK_register_form');
+}
+
+if($error_msg)
+{
+	$template->enable('BLOCK_register_error');
+	$template->set_var('error_msg', join('<br/>', $error_msg), 'BLOCK_register_error');
 }
 
 $template->out();

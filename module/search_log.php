@@ -13,7 +13,6 @@ $template->set_file('FILE_search', 'tmpl.search_log.php');
 $template->set_title("Ko mēs meklējam");
 $template->copy_block('BLOCK_middle', 'FILE_search');
 
-$path = array('archive'=>array('module_id'=>'search_log', 'module_name'=>'KO MĒS MEKLĒJAM'));
 $template->enable('BLOCK_search_log');
 
 $sql = "SELECT DISTINCT sl_q FROM `search_log` ORDER BY `sl_id` DESC LIMIT 0,100";

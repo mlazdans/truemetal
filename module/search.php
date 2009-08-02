@@ -82,8 +82,6 @@ if($search_msg)
 	}
 }
 
-$path = array('archive'=>array('module_id'=>'search', 'module_name'=>'MEKLĒT'));
-
 $template->set_right();
 $template->set_search($ent_search_q);
 $template->set_reviews();
@@ -91,5 +89,4 @@ $template->set_poll();
 $template->set_online();
 
 $template->out();
-
 

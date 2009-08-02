@@ -24,8 +24,6 @@ $template->set_title($_pointer['_data_']['module_name']);
 $template->set_file('FILE_module', 'tmpl.login.php');
 $template->copy_block('BLOCK_middle', 'FILE_module');
 
-$path = array('map'=>array('module_id'=>'login', 'module_name'=>'LOGIN'));
-
 if(isset($_POST['data']))
 {
 	$my_login = new Logins;

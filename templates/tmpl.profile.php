@@ -70,7 +70,9 @@
 <!-- END BLOCK_nopicture -->
 <!-- BEGIN BLOCK_picture disabled -->
 <tr>
-	<td><a href="{module_root}/view/{l_id}/" onclick="Truemetal.Pop('{module_root}/view/{l_id}/', {pic_w}, {pic_h}); return false;"><img src="{pic_path}" alt="" border="0"></a></td>
+	<td>
+		<a href="{module_root}/view/{l_id}/" onclick="Truemetal.Pop('{module_root}/view/{l_id}/', {pic_w}, {pic_h}); return false;"><img src="{pic_path}" alt="" /></a>
+	</td>
 </tr>
 <!-- BEGIN BLOCK_picture_delete disabled -->
 <tr>
@@ -119,11 +121,11 @@
 	Palīdzība
 </div>
 <ul>
-	<li>Lai nomainītu paroli, tā jāievada abos lauciņos (ja negrib nomainīt - jāatstājs tukšs)</li>
+	<li>Lai nomainītu paroli, tā jāievada abos lauciņos (ja negrib nomainīt - jāatstāj tukšs)</li>
 	<li>Parole datubāzē tiek glabāta šifrēta ar vienvirziena algoritmu - tātad nevienam neizlasāma.</li>
 	<li>Ja tiks mainīts e-pasts, konts kļūs neaktīvs, kamēr tas netiks apstiprināts tāpat kā reģistrējoties (kods tiks saņemts uz jauno e-pastu)</li>
 	<li>Bildes izmēri nedrīksts pārsniegt {user_pic_w} x {user_pic_h}. Ja ja kāda no dimensijām pārsniegs dotos izmērus, tā tiks automātiski samazināta. Mazā bilde tiek ģenerēta automātiski (ne lielāka par {user_pic_tw} x {user_pic_th}). Pieņemti tiek faili 'image/gif', 'image/jpeg', 'image/pjpeg'</li>
-	<li>Aizliegts pievienot XXX, LV likumdošanai neatbildstošas, citu cilvēku bildes un tamldz. drazu!</li>
+	<li>Aizliegts pievienot XXX, LV likumdošanai neatbildstošas, citu cilvēku bildes u.c. drazu!</li>
 </ul>
 
 <div>

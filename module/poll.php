@@ -44,7 +44,6 @@ if($action == 'vote')
 if($action == 'results')
 {
 	$id = (int)array_shift($sys_parameters);
-	$path = array('map'=>array('module_id'=>'poll/results', 'module_name'=>'REZULTĀTI'));
 
 	$template = new MainModule($sys_template_root, $sys_module_id);
 	//$template->set_file('FILE_poll_results', 'tmpl.poll_results2.php');

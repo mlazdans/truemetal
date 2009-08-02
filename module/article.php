@@ -146,8 +146,6 @@ if($_pointer['_data_']['module_name'])
 	$art_title = $_pointer['_data_']['module_name'].($hl ? sprintf(", meklēšana: %s", $hl) : "");
 } else {
 	$art_title = 'Jaunumi';
-
-	$path = array('jaunumi'=>array('module_id'=>'', 'module_name'=>'JAUNUMI'));
 }
 
 if($page && ($page <= $tp))

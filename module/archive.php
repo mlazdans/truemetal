@@ -66,8 +66,6 @@ foreach($arts as $item)
 	$template->parse_block('BLOCK_archive_items', TMPL_APPEND);
 }
 
-$path = array('archive'=>array('module_id'=>'archive', 'module_name'=>'ARHĪVS'));
-
 $template->set_right();
 $template->set_calendar($y, $m, $d);
 $template->set_poll();
