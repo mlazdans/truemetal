@@ -708,23 +708,6 @@ function save_file($id, $save_path)
 
 	return false;
 } // save_file
-/*
-function update_cache_module($module_id)
-{
-	global $db;
-
-	$db->Execute("INSERT IGNORE INTO cache_modules (module_id, last_update) VALUES ('$module_id', NOW())");
-	$db->Execute("UPDATE IGNORE cache_modules SET last_update = NOW() WHERE module_id = '$module_id'");
-} // update_cache_modules
-
-function update_cache_item($key)
-{
-	global $db;
-
-	$db->Execute("INSERT IGNORE INTO cache_items (item_id, last_update) VALUES ('$key', NOW())");
-	$db->Execute("UPDATE IGNORE cache_items SET last_update = NOW() WHERE item_id = '$key'");
-} // update_cache_item
-*/
 
 function to_int($val)
 {

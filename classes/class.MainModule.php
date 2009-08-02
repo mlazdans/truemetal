@@ -291,48 +291,7 @@ class MainModule extends Template
 		$logins = new Logins;
 		$logins->set_profile($this, $login_data);
 	} // set_profile
-/*
-	function set_cache($module_id, $key, &$data, $compress = false, $expire = 3600)
-	{
-		global $_CACHE, $db, $sys_use_chache;
 
-		if(!$sys_use_chache)
-		{
-			return false;
-		}
-
-		if($_CACHE->set($key, $data, $compress, $expire))
-		{
-			update_cache_item($key);
-			return true;
-		} else {
-			return false;
-		}
-	} // set_cache
-
-	function get_cache($module_id, $key)
-	{
-		global $_CACHE, $db, $sys_use_chache;
-
-		if(!$sys_use_chache)
-		{
-			return false;
-		}
-
-		if($item_date = $db->ExecuteSingle("SELECT * FROM cache_items WHERE item_id = '$key'"))
-		{
-			if($module_date = $db->ExecuteSingle("SELECT * FROM cache_modules WHERE module_id = '$module_id'"))
-			{
-				if($module_date['last_update'] > $item_date['last_update'])
-				{
-					return false;
-				}
-			}
-		}
-
-		return $_CACHE->get($key);
-	} // get_cache
-*/
 	function set_banner_top()
 	{
 		$banners = array(
