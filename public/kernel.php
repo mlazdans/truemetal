@@ -5,7 +5,7 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-// galvenais fails - kernelis (speeciigi teikts, vai ne? :))
+// galvenais fails - kernelis :)
 
 # DEFAULTS - var overraidot configā
 $sys_start_time        = microtime(true);

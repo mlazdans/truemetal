@@ -5,8 +5,8 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-//
-//print getcwd();
+// Custom session handleris
+
 require_once('lib/SessionHandler.php');
 $cookie_time = 31536000; // 1 year
 
@@ -30,5 +30,3 @@ session_set_save_handler(
 
 session_set_cookie_params($cookie_time, $sys_http_root.'/');
 session_start();
-
-?>
