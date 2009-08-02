@@ -13,7 +13,7 @@
 	<td>
 		<label for="section_article">
 		<input{section_article_checked} type="checkbox" class="checkbox" name="sections[]" id="section_article" value="article" />
-		Ziņas
+		Jaunumi
 		</label>
 
 		<label for="section_reviews">

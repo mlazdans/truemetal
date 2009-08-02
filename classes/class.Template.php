@@ -275,6 +275,9 @@ class Template extends TemplateBlock
 			return false;
 		}
 
+		//$block1 = $block2;
+		//return;
+
 		/* uzstaadam visiem $block2 apaksblokiem mainiigos
 			ljoti svariiga vieta - bugs bija ;)
 		*/
