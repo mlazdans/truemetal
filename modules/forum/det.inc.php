@@ -21,7 +21,7 @@ if(($action == 'add_comment') && user_loged())
 	}
 }
 
-require_once('../classes/class.CommentConnect.php');
+require_once('lib/CommentConnect.php');
 
 $CC = new CommentConnect('forum');
 $CC->setDb($db);

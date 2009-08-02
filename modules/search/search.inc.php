@@ -1,8 +1,8 @@
 <?php
 
 require_once('../classes/sphinxapi.php');
-require_once('../classes/class.Article.php');
-require_once('../classes/class.Forum.php');
+require_once('lib/Article.php');
+require_once('lib/Forum.php');
 
 # Init classes
 $Article = new Article();

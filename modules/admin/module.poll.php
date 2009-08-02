@@ -29,8 +29,8 @@ function set_poll(&$template, &$item) {
 	}
 }
 
-require_once('../classes/class.AdminModule.php');
-require_once('../classes/class.Poll.php');
+require_once('lib/AdminModule.php');
+require_once('lib/Poll.php');
 
 $poll_id = (integer)array_shift($sys_parameters);
 $action = isset($_POST['action']) ? $_POST['action'] : '';

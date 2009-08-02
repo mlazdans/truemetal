@@ -5,9 +5,9 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-require_once('../classes/class.MainModule.php');
-require_once('../classes/class.Article.php');
-require_once('../classes/class.Calendar.php');
+require_once('lib/MainModule.php');
+require_once('lib/Article.php');
+require_once('lib/Calendar.php');
 
 $y = array_shift($sys_parameters);
 $m = array_shift($sys_parameters);

@@ -49,7 +49,7 @@ $action = isset($_POST['action']) ? $_POST['action'] : '';
 
 $mod_id = array_shift($sys_parameters);
 
-require_once('../classes/class.Module.php');
+require_once('lib/Module.php');
 
 $mod_modid = isset($_POST['mod_modid']) ? (integer)$_POST['mod_modid'] : '';
 

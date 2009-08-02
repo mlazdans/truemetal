@@ -7,12 +7,12 @@
 
 // pats pats...
 
-require_once('../classes/class.Module.php');
-require_once('../classes/class.Article.php');
-require_once('../classes/class.Poll.php');
-require_once('../classes/class.Calendar.php');
-require_once('../classes/class.Logins.php');
-require_once('../classes/class.Template.php');
+require_once('lib/Module.php');
+require_once('lib/Article.php');
+require_once('lib/Poll.php');
+require_once('lib/Calendar.php');
+require_once('lib/Logins.php');
+require_once('lib/Template.php');
 
 class MainModule extends Template
 {

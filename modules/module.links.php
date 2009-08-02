@@ -5,7 +5,7 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-require_once('../classes/class.MainModule.php');
+require_once('lib/MainModule.php');
 
 $template = new MainModule($sys_template_root, $sys_module_id);
 $template->set_title('Linki');

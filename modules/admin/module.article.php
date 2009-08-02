@@ -9,8 +9,8 @@ $action = isset($_POST['action']) ? $_POST['action'] : '';
 
 $art_id = array_shift($sys_parameters);
 
-require_once('../classes/class.Article.php');
-require_once('../classes/class.Module.php');
+require_once('lib/Article.php');
+require_once('lib/Module.php');
 
 $art_modid = isset($_POST['art_modid']) ? (integer)$_POST['art_modid'] : '';
 

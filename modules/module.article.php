@@ -7,10 +7,10 @@
 
 // There are 1065 DOM elements on the page
 
-require_once('../classes/class.MainModule.php');
-require_once('../classes/class.Article.php');
-require_once('../classes/class.Module.php');
-require_once('../classes/class.CommentConnect.php');
+require_once('lib/MainModule.php');
+require_once('lib/Article.php');
+require_once('lib/Module.php');
+require_once('lib/CommentConnect.php');
 
 $art_per_page = 10;
 

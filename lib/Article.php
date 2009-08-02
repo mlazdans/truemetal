@@ -7,7 +7,7 @@
 
 //
 
-require_once('../classes/class.Module.php');
+require_once('lib/Module.php');
 
 define('ARTICLE_ACTIVE', 'Y');
 define('ARTICLE_INACTIVE', 'N');

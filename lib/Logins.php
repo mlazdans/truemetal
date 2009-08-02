@@ -17,7 +17,7 @@ define('LOGIN_DONTVALIDATE', false);
 define('LOGIN_EMAIL_VISIBLE', 'Y');
 define('LOGIN_EMAIL_INVISIBLE', 'N');
 
-require_once('../classes/class.Forum.php');
+require_once('lib/Forum.php');
 
 class Logins
 {

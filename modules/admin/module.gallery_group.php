@@ -5,8 +5,8 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-require_once('../classes/class.AdminModule.php');
-require_once('../classes/class.GalleryGroup.php');
+require_once('lib/AdminModule.php');
+require_once('lib/GalleryGroup.php');
 
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 $gg_id = array_shift($sys_parameters);

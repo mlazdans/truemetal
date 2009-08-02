@@ -5,8 +5,8 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-require_once('../classes/class.Logins.php');
-require_once('../classes/class.MainModule.php');
+require_once('lib/Logins.php');
+require_once('lib/MainModule.php');
 
 // user profile
 $template = new MainModule($sys_template_root, $sys_module_id);

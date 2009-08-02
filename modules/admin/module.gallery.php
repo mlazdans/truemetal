@@ -5,9 +5,9 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-require_once('../classes/class.AdminModule.php');
-require_once('../classes/class.Gallery.php');
-require_once('../classes/class.GalleryGroup.php');
+require_once('lib/AdminModule.php');
+require_once('lib/Gallery.php');
+require_once('lib/GalleryGroup.php');
 
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 $gal_id = array_shift($sys_parameters);
@@ -107,7 +107,7 @@ if($action == 'cancel') {
 				$template->set_var('gal_color_class', 'box-invisible', 'BLOCK_gallery_list');
 			if($item['gal_active'] != GALLERY_ACTIVE)
 				$template->set_var('gal_color_class', 'box-inactive', 'BLOCK_gallery_list');
-			//ja neaktiivs un neredzams 
+			//ja neaktiivs un neredzams
 			if($item['gal_active'] != GALLERY_ACTIVE && $item['gal_visible'] != GALLERY_VISIBLE)
 				$template->set_var('gal_color_class', 'box-inactive-invisible', 'BLOCK_gallery_list');
 
@@ -116,7 +116,7 @@ if($action == 'cancel') {
 				$template->enable('BLOCK_gallery_group');
 			else
 				$template->disable('BLOCK_gallery_group');
-		
+
 			$old_ggid = $item['gal_ggid'];
 
 			$template->parse_block('BLOCK_galleries', TMPL_APPEND);

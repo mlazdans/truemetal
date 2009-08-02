@@ -5,8 +5,8 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-require_once('../classes/class.MainModule.php');
-require_once('../classes/class.Article.php');
+require_once('lib/MainModule.php');
+require_once('lib/Article.php');
 
 $article = new Article;
 $articles = $article->load();

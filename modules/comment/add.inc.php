@@ -1,6 +1,6 @@
 <?php
 
-require_once('../classes/class.CommentConnect.php');
+require_once('lib/CommentConnect.php');
 
 if(empty($data['c_data']))
 {

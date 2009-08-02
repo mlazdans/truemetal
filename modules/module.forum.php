@@ -157,8 +157,8 @@ function set_forum_items(&$template, &$data, $forum_comments = false)
 */
 
 // ----------------------------------------------------------------------------
-require_once('../classes/class.MainModule.php');
-require_once('../classes/class.Forum.php');
+require_once('lib/MainModule.php');
+require_once('lib/Forum.php');
 
 $hl = urldecode(get("hl"));
 $action = post('action');

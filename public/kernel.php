@@ -7,7 +7,61 @@
 
 // galvenais fails - kernelis (speeciigi teikts, vai ne? :))
 
+# Defaults - var overraidot configā
+$sys_root              = realpath(dirname(__FILE__).'/../');
+//$sys_root              = str_replace('\\', '/', $sys_root);
+$sys_public_root       = $sys_root.'/public';
+$sys_http_root         = '';
+$sys_template_root     = $sys_root.'/templates';
+$sys_upload_root       = $sys_public_root.'/data';
+$sys_upload_http_root  = '/data';
+$sys_user_root         = $sys_public_root.'/users';
+$sys_user_http_root    = '/users';
+
+$sys_error_reporting   = E_ALL;
+$sys_default_lang      = 'lv';
+$sys_encoding          = 'utf-8';
+$sys_domain            = (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost');
+$sys_script_version    = 1;
+$sys_banned            = array();
+$sys_admins            = array('127.0.0.1');
+
+$sys_mail_from         = (isset($_SERVER['SERVER_ADMIN']) ?
+	$_SERVER['SERVER_ADMIN'] :
+	ini_get('sendmail_from')
+	);
+if(!$sys_mail_from)
+	$sys_mail_from = 'nobody@localhost';
+
+$ip                    = (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1');
+$now                   = date("d.m.Y, H:i", time());
+$today                 = date("d.m.Y");
+
 require_once('../includes/inc.config.php');
+
+if(!isset($i_am_admin))
+	$i_am_admin = in_array($ip, $sys_admins);
+if(!isset($sys_debug))
+	$sys_debug = ($i_am_admin ? true : false);
+
+ini_set('display_errors', ($sys_debug ? 1 : 0));
+error_reporting($sys_error_reporting);
+
+
+$include_path = split(PATH_SEPARATOR, ini_get('include_path'));
+# Unset current dir
+foreach($include_path as $k=>$v)
+{
+	if($v == '.' || $v == './')
+		unset($include_path[$k]);
+}
+$paths = array(
+	".",
+	$sys_root,
+	);
+
+$include_path = array_merge($paths, $include_path);
+ini_set('include_path', join(PATH_SEPARATOR, $include_path));
 
 if(isset($sys_banned[$ip]))
 {
@@ -45,9 +99,9 @@ $module_map = array(
 require_once('../includes/inc.dbconnect.php');
 require_once('../includes/inc.session_handler.php');
 require_once('../includes/inc.utils.php');
-require_once('../classes/class.MainModule.php');
-require_once('../classes/class.Module.php');
-require_once('../classes/class.Logins.php');
+require_once('lib/MainModule.php');
+require_once('lib/Module.php');
+require_once('lib/Logins.php');
 
 mb_regex_encoding($sys_encoding);
 mb_internal_encoding($sys_encoding);

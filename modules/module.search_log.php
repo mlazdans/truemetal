@@ -6,7 +6,7 @@
 // mailto:marrtins@hackers.lv
 
 //$sql_cache = 'SQL_NO_CACHE';
-require_once('../classes/class.MainModule.php');
+require_once('lib/MainModule.php');
 
 $template = new MainModule($sys_template_root, $sys_module_id, 'tmpl.index.php');
 $template->set_file('FILE_search', 'tmpl.search_log.php');

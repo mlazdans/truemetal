@@ -1,6 +1,6 @@
 <?php
 
-require_once('../classes/class.Comment.php');
+require_once('lib/Comment.php');
 
 class CommentConnect
 {

@@ -6,8 +6,8 @@
 // mailto:marrtins@hackers.lv
 
 // ----------------------------------------------------------------------------
-require_once('../classes/class.MainModule.php');
-require_once('../classes/class.Poll.php');
+require_once('lib/MainModule.php');
+require_once('lib/Poll.php');
 
 $action = array_shift($sys_parameters);
 

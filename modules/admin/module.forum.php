@@ -45,10 +45,10 @@ function set_themes(&$template, &$data, $d = 0, $c = 0) {
 	return $c;
 }
 
-require_once('../classes/class.AdminModule.php');
-require_once('../classes/class.Forum.php');
-require_once('../classes/class.Comment.php');
-require_once('../classes/class.CommentConnect.php');
+require_once('lib/AdminModule.php');
+require_once('lib/Forum.php');
+require_once('lib/Comment.php');
+require_once('lib/CommentConnect.php');
 
 $forum = new Forum;
 

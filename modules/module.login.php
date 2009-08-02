@@ -5,8 +5,8 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-require_once('../classes/class.Logins.php');
-require_once('../classes/class.MainModule.php');
+require_once('lib/Logins.php');
+require_once('lib/MainModule.php');
 
 $action = array_shift($sys_parameters);
 if($action == 'logoff')

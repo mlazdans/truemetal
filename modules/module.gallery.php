@@ -5,8 +5,8 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-require_once('../classes/class.Gallery.php');
-require_once('../classes/class.MainModule.php');
+require_once('lib/Gallery.php');
+require_once('lib/MainModule.php');
 
 function gallery_error($msg, &$template) {
 	$template->enable('BLOCK_gallery_error');

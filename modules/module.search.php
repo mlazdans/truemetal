@@ -16,7 +16,7 @@
 |*
 |*/
 
-require_once('../classes/class.MainModule.php');
+require_once('lib/MainModule.php');
 
 $DOC_SOURCES = array(
 	1=>array(

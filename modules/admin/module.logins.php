@@ -9,10 +9,10 @@ $action = isset($_POST['action']) ? $_POST['action'] : '';
 
 $l_id = array_shift($sys_parameters);
 
-require_once('../classes/class.Logins.php');
-require_once('../classes/class.Module.php');
-require_once('../classes/class.Article.php');
-require_once('../classes/class.Forum.php');
+require_once('lib/Logins.php');
+require_once('lib/Module.php');
+require_once('lib/Article.php');
+require_once('lib/Forum.php');
 
 $logins = new Logins;
 $template = new AdminModule($sys_template_root.'/admin', $admin_module);

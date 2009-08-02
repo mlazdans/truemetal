@@ -7,7 +7,7 @@
 
 // niknaa templashu engine
 
-require_once("class.TemplateBlock.php");
+require_once("lib/TemplateBlock.php");
 
 define('TMPL_APPEND', true);
 

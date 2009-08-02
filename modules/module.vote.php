@@ -8,7 +8,7 @@
 // ----------------------------------------------------------------------------
 
 # TODO: pārlikt uz class
-require_once('../classes/class.CommentConnect.php');
+require_once('lib/CommentConnect.php');
 
 $value = array_shift($sys_parameters);
 $c_id = (int)array_shift($sys_parameters);

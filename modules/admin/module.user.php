@@ -5,7 +5,7 @@
 // http://www.hackers.lv/
 // mailto:marrtins@hackers.lv
 
-require_once('../classes/class.User.php');
+require_once('lib/User.php');
 
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 $user_login = array_shift($sys_parameters);

@@ -18,8 +18,8 @@ function identify() {
 	die("Nepareizs login vai parole!");
 }
 
-require_once('../classes/class.AdminModule.php');
-require_once('../classes/class.User.php');
+require_once('lib/AdminModule.php');
+require_once('lib/User.php');
 
 $user_login = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : '';
 $user_pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
