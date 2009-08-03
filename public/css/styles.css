@@ -464,11 +464,14 @@ table.Forum-Theme, table.Forum-Theme-form {
 
 /* Poll */
 .Poll-result {
+	clear: both;
 	background: #440000;
 	font-weight: bold;
 	text-align: right;
+	margin-bottom: 1em;
 }
 .Poll-bar {
+	float: left;
 	height: auto;
 	background: red;
 }

@@ -10,7 +10,6 @@
 	<div class="List-item">
 		<a href="{http_root}/{art_module_id}/{art_id}/">{art_name}</a>
 	</div>
-
 <!-- END BLOCK_archive_items -->
 
 <!-- BEGIN BLOCK_no_archive disabled -->

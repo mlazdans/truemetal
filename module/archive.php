@@ -41,7 +41,7 @@ else
 $old_date = '';
 foreach($arts as $item)
 {
-	$date = date('d.m.Y', strtotime($item['art_entered']));
+	$date = date('m.Y', strtotime($item['art_entered']));
 	if($old_date && ($old_date != $date))
 	{
 		$template->enable('BLOCK_archive_sep');
@@ -52,7 +52,7 @@ foreach($arts as $item)
 	if($old_date != $date)
 	{
 		$template->enable('BLOCK_archive_date');
-		$template->set_var('art_date', $date, 'BLOCK_archive_items');
+		$template->set_var('art_date', date('M Y', strtotime($item['art_entered'])), 'BLOCK_archive_items');
 		$template->parse_block('BLOCK_archive_date');
 		$old_date = $date;
 	} else {
