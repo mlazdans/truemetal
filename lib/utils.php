@@ -22,13 +22,14 @@ function valid($value)
 
 function parse_params($data)
 {
-	reset($data);
-	foreach($data as $key=>$value) {
-		$value = rawurldecode($value);
-		$data[$key] = $value;
-		//$data[$key] = preg_replace('/[^a-zA-Z0-9_ ]/i', '', $value);
+	$ret = array();
+	foreach($data as $key=>$value)
+	{
+		if(trim($value))
+			$ret[] = rawurldecode($value);
 	}
-	return $data;
+
+	return $ret;
 } // parse_params
 
 

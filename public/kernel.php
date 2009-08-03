@@ -10,7 +10,6 @@
 # DEFAULTS - var overraidot configā
 $sys_start_time        = microtime(true);
 $sys_root              = realpath(dirname(__FILE__).'/../');
-//$sys_root              = str_replace('\\', '/', $sys_root);
 $sys_public_root       = $sys_root.'/public';
 $sys_http_root         = '';
 $sys_template_root     = $sys_root.'/templates';
@@ -102,27 +101,19 @@ if($i_am_admin)
 
 /* dabuujam parametrus no mod_rewrite */
 $parts = explode('?', $_SERVER["REQUEST_URI"]);
-$_SERVER["REQUEST_URI"] = isset($parts[0]) ? $parts[0] : '';
-$_SERVER["QUERY_STRING"] = isset($parts[1]) ? $parts[1] : '';
+$_SERVER["REQUEST_URI"] = array_shift($parts);
+$_SERVER["QUERY_STRING"] = join("?", $parts);
 
-preg_match_all("/\/([^\/]*)/i", $_SERVER["REQUEST_URI"], $matches);
-$arr_base_dirs = explode('/', $sys_http_root);
-$sys_parameters = array();
-if (isset($matches[1]))
-	foreach ($matches[1] as $match)
-		if (!in_array($match, $arr_base_dirs))
-			$sys_parameters[] = $match;
-
+# NOTE: $sys_http_root netiek ņemts vērā, bet vajadzētu
+$sys_parameters = split('/', $_SERVER["REQUEST_URI"]);
 $sys_parameters = parse_params($sys_parameters);
 
 $sys_module_id = array_shift($sys_parameters);
-$sys_http_root_base = $sys_http_root;
-
 // ja nav ne1 modulis selekteets
 if(!$sys_module_id && $sys_default_module)
 	$sys_module_id = $sys_default_module;
 
-$module_root = $sys_http_root.'/'.$sys_module_id;
+$module_root = "$sys_http_root/$sys_module_id";
 
 // nochekojam, vai modulis existee, ja nee tad vai mappings iraid
 if(isset($sys_module_map[$sys_module_id]) && !file_exists("$sys_root/module/$sys_module_id.php"))
@@ -140,7 +131,7 @@ $sys_module = !invalid($sys_module_id) &&
 	$sys_default_module;
 
 $path = array();
-$_pointer = $_pointer2 = &$module_tree[$sys_module_id];
+$_pointer = &$module_tree[$sys_module_id];
 
 if($module_tree[$sys_module_id]['_data_'])
 	$path[$sys_module_id] = $module_tree[$sys_module_id]['_data_'];
