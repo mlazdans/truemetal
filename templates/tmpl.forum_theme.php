@@ -7,7 +7,7 @@
 </div>
 
 <!-- BEGIN BLOCK_is_pages disabled -->
-<div class="Forum-cat">
+<div class="Forum-cat" style="margin-bottom: 0;">
 	<!-- BEGIN BLOCK_page_prev -->
 	<div class="Forum-Page-prev">
 		<a href="{module_root}/{current_forum_id}/page/{prev_page_id}/"><img src="{http_root}/img/left.png" alt="Pa kreisi" /></a>
@@ -90,10 +90,10 @@
 		<input type="hidden" name="action" value="add_theme" />
 		Vārds:
 	</td>
-	<td>{forum_username}</td>
+	<td style="width: 100%;">{forum_username}</td>
 </tr>
 <tr>
-	<td align="right"<!-- BEGIN BLOCK_forumname_error disabled --> class="error-form"<!-- END BLOCK_forumname_error -->>Jauna tēma:</td>
+	<td style="white-space: nowrap;" align="right"<!-- BEGIN BLOCK_forumname_error disabled --> class="error-form"<!-- END BLOCK_forumname_error -->>Jauna tēma:</td>
 	<td><input style="width: 95%;" type="text" name="data[forum_name]" maxlength="64" size="64" value="{forum_name}" /></td>
 </tr>
 <tr>

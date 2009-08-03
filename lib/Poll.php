@@ -254,12 +254,35 @@ class Poll
 		return isset($data['count_votes']) ? $data['count_votes'] : 0;
 	} // count_votes
 
-	function show_results2(&$template, $id = 0)
+	protected function __set_poll(&$template, $poll, $data, $block)
+	{
+		$total_votes = $this->count_votes($poll['poll_id']);
+		foreach($data as $c=>$item)
+		{
+			$item_votes = $this->count_votes($poll['poll_id'], $item['poll_id']);
+			$template->set_var('poll_name', $item['poll_name'], $block);
+			$template->set_var('poll_id', $item['poll_id'], $block);
+			$template->set_var('poll_row', $c % 2, $block);
+			$template->set_var('count_votes', $item_votes, $block);
+
+
+			if($total_votes) {
+				$koef = ($item_votes / $total_votes);
+				$template->set_var('poll_width', (int)($koef * 120), $block);
+				$template->set_var('count_percent', number_format($koef * 100, 0), $block);
+			} else
+				$template->set_var('count_percent', 0, $block);
+
+			$template->parse_block($block, TMPL_APPEND);
+		}
+	} // __set_poll
+
+	function show_archive(&$template, $id = 0)
 	{
 		$now = date('Y-m-d H:i:s');
 
-		$template->set_file('FILE_poll_results2', 'tmpl.poll_results2.php');
-		$template->copy_block('BLOCK_middle', 'FILE_poll_results2');
+		$template->set_file('FILE_poll_archive', 'tmpl.poll_archive.php');
+		$template->copy_block('BLOCK_middle', 'FILE_poll_archive');
 
 		$polls = $this->load(0, 0, POLL_ACTIVE, $now);
 		if(!count($polls))
@@ -281,11 +304,11 @@ class Poll
 			return;
 		}
 
-		$template->set_var('poll_question_b', $poll['poll_name'], 'BLOCK_middle');
+		$template->set_var('poll_question', $poll['poll_name'], 'BLOCK_middle');
 		//$template->set_array($poll['poll_name'], 'BLOCK_middle');
 
 		$total_votes = $this->count_votes($poll['poll_id']);
-		$template->set_var('total_votes_b', $total_votes, 'BLOCK_middle');
+		$template->set_var('total_votes', $total_votes, 'BLOCK_middle');
 		$template->set_title(ent("Balsošana: $poll[poll_name] rezultāti"));
 
 		// atbildes
@@ -293,31 +316,9 @@ class Poll
 		if(count($data))
 		{
 			$template->enable('BLOCK_poll_r_items');
+			$this->__set_poll($template, $poll, $data, 'BLOCK_poll_r_items');
 		}
 
-		foreach($data as $item)
-		{
-			$item_votes = $this->count_votes($poll['poll_id'], $item['poll_id']);
-			$template->set_var('poll_name_b', $item['poll_name'], 'BLOCK_middle');
-			$template->set_var('count_votes_b', $item_votes, 'BLOCK_middle');
-
-			/*
-			if(!$item_votes)
-				$template->disable('BLOCK_poll_r_bar');
-			else
-				$template->enable('BLOCK_poll_r_bar');
-				*/
-
-			if($total_votes)
-			{
-				$koef = ($item_votes / $total_votes);
-				$template->set_var('poll_width', (int)($koef * 120), 'BLOCK_middle');
-				$template->set_var('count_percent_b', number_format($koef * 100, 0), 'BLOCK_middle');
-			} else
-				$template->set_var('count_percent_b', 0, 'BLOCK_middle');
-
-			$template->parse_block('BLOCK_poll_r_items', TMPL_APPEND);
-		}
 
 		if(count($polls) < 2)
 		{
@@ -334,7 +335,7 @@ class Poll
 			$template->parse_block('BLOCK_poll_archive_item', TMPL_APPEND);
 		}
 
-	} // show_results2
+	} // show_archive
 
 	function show_results(&$template)
 	{
@@ -364,28 +365,9 @@ class Poll
 		// atbildes
 		$data = $this->load(0, $poll['poll_id']);
 		if(count($data))
-			$template->enable('BLOCK_poll_items');
-
-		foreach($data as $item)
 		{
-			$item_votes = $this->count_votes($poll['poll_id'], $item['poll_id']);
-			$template->set_var('poll_name', $item['poll_name'], 'FILE_poll');
-			$template->set_var('poll_id', $item['poll_id'], 'FILE_poll');
-			$template->set_var('count_votes', $item_votes, 'FILE_poll');
-
-			if(!$item_votes)
-				$template->disable('BLOCK_poll_bar');
-			else
-				$template->enable('BLOCK_poll_bar');
-
-			if($total_votes) {
-				$koef = ($item_votes / $total_votes);
-				$template->set_var('poll_width', (int)($koef * 120), 'FILE_poll');
-				$template->set_var('count_percent', number_format($koef * 100, 0), 'FILE_poll');
-			} else
-				$template->set_var('count_percent', 0, 'FILE_poll');
-
-			$template->parse_block('BLOCK_poll_items', TMPL_APPEND);
+			$template->enable('BLOCK_poll_items');
+			$this->__set_poll($template, $poll, $data, 'BLOCK_poll_items');
 		}
 
 		$template->parse_block('FILE_poll');
@@ -397,7 +379,8 @@ class Poll
 	{
 		global $db;
 
-		if( !(user_loged() && empty($GLOBALS['poll_results'])) )
+		//if( !(user_loged() && empty($GLOBALS['poll_results'])) )
+		if(!user_loged())
 			return $this->show_results($template);
 
 		$now = date('Y-m-d H:i:s');

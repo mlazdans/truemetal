@@ -149,8 +149,6 @@ dd {
 }
 
 input, textarea {
-	padding-top: 1px;
-	padding-right: 1px;
 	border: 1px solid white;
 	background-color: #660000;
 	color: white;
@@ -160,6 +158,22 @@ input.checkbox {
 	border: none;
 	background-color: #660000;
 	color: #660000;
+}
+
+input[type=submit],
+input[type=button] {
+	padding: 0 1em;
+	border-top: 1px solid white;
+	border-left: 1px solid white;
+	border-right: 1px solid #220000;
+	border-bottom: 1px solid #220000;
+}
+input[type=submit]:active,
+input[type=button]:active {
+	border-top: 1px solid #220000;
+	border-left: 1px solid #220000;
+	border-right: 1px solid white;
+	border-bottom: 1px solid white;
 }
 
 
@@ -399,7 +413,8 @@ table.Forums {
 }
 .Forum-cat {
 	background-color: #660000;
-	padding: 4px;
+	padding: 3px 4px 4px 3px;
+	margin-bottom: 1px;
 }
 .Forum-descr {
 	background-color: #444444;
@@ -412,7 +427,6 @@ table.Forums {
 	position: relative;
 	width: 520px;
 	top: 0;
-	height: 16px;
 	text-align: center;
 	margin: 0 auto;
 }
@@ -450,10 +464,11 @@ table.Forum-Theme, table.Forum-Theme-form {
 
 /* Poll */
 .Poll-result {
+	background: #440000;
+	font-weight: bold;
 	text-align: right;
 }
 .Poll-bar {
-	float: left;
 	height: auto;
 	background: red;
 }

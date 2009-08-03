@@ -1,23 +1,22 @@
-<div class="TD-cat" title="Atbildes jautājumam: {poll_question_b}">
-	{poll_question_b}
+<div class="TD-cat" title="Atbildes jautājumam: {poll_question}">
+	{poll_question}
 </div>
 
 <!-- BEGIN BLOCK_poll_r_items disabled -->
 <div class="List-item">
-	{poll_name_b}
+	{poll_name}
 </div>
 <div class="Poll-result">
-	<div class="Poll-bar" style="width: {count_percent_b}%">&nbsp;</div>
-	{count_votes_b} ({count_percent_b}%)
+	<div class="Poll-bar" style="width: {count_percent}%">&nbsp;</div>
+	{count_votes} ({count_percent}%)
 </div>
 <!-- END BLOCK_poll_r_items -->
 
 <div class="List-item" style="text-align: right;">
-	<strong>Kopā: {total_votes_b}</strong>
+	<strong>Kopā: {total_votes}</strong>
 </div>
 
 <!-- BEGIN BLOCK_poll_archive disabled -->
-<div class="List-sep"></div>
 <div class="TD-cat">
 	Pārējie jautājumi
 </div>

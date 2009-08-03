@@ -285,6 +285,7 @@ class Template extends TemplateBlock
 			//$block2->blocks[$key]->set_array($block1->vars);
 
 		/* paarkopeejam paareejos parametrus */
+		$block1->vars = &$block2->vars;
 		//$block1->vars = array_merge($block1->vars, $block2->vars);
 		# XXX: nekad nav strādājis :D
 		//$this->_copy_vars_byobj($block1, $block2);

@@ -3,28 +3,20 @@
 </div>
 
 <div class="List-item">
-<table cellpadding="0" cellspacing="0">
-<tr>
-	<td colspan="2"><b>{poll_question}</b></td>
-</tr>
+	{poll_question}
+</div>
 <!-- BEGIN BLOCK_poll_items disabled -->
-<tr>
-	<td colspan="2" style="height: 5px;"></td>
-</tr>
-<tr>
-	<td style="border: 1px dotted red; width: 100%;">{poll_name}</td>
-	<td style="border: 1px dotted red;">{count_votes}</td>
-</tr>
-<tr>
-	<td><!-- BEGIN BLOCK_poll_bar --><img src="{http_root}/img/1x1pollchart.gif" width="{poll_width}" height="10" alt="0" /><!-- END BLOCK_poll_bar --></td>
-	<td>{count_percent}%</td>
-</tr>
+<div class="List-item">
+	{poll_name}
+</div>
+<div class="Poll-result">
+	<div class="Poll-bar" style="width: {count_percent}%">&nbsp;</div>
+	{count_votes} ({count_percent}%)
+</div>
 <!-- END BLOCK_poll_items -->
-<tr>
-	<td align="right"><b>Kopā:</b></td>
-	<td><b>{total_votes}</b></td>
-</tr>
-</table>
+
+<div class="List-item" style="text-align: right;">
+	<strong>Kopā: {total_votes}</strong>
 </div>
 
 <div class="List-item">

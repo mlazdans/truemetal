@@ -48,7 +48,7 @@ if($action == 'results')
 	$template = new MainModule($sys_template_root, $sys_module_id);
 	//$template->set_file('FILE_poll_results', 'tmpl.poll_results2.php');
 	//$template->copy_block('BLOCK_middle', 'FILE_poll_results');
-	$poll->show_results2($template, $id);
+	$poll->show_archive($template, $id);
 
 	$template->set_right();
 	$template->set_reviews();

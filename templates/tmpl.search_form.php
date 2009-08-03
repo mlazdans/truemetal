@@ -13,9 +13,11 @@
 <tr>
 	<td>
 		<input id="search_sPPAAMMcheck" type="hidden" name="spam" value="1" />
-		<input type="text" name="search_q" id="search_form_search_q" class="input" style="width: 120px;" value="{search_q}" />
+		<input type="text" name="search_q" id="search_form_search_q" class="input" style="width: 113px;" value="{search_q}" />
 	</td>
-	<td><input type="submit" class="input" value=" OK " /></td>
+	<td>
+		<input type="submit" class="input" value="OK" />
+	</td>
 </tr>
 </table>
 </form>

@@ -7,28 +7,38 @@
 <!-- END BLOCK_poll_error -->
 
 <!-- BEGIN BLOCK_poll disabled -->
-<tr>
-	<td class="TD-cat">Jautājums</td>
-</tr>
-<tr>
-	<td bgcolor="#330000">
-		<form action="{http_root}/poll/vote/" method="post" name="vote_form">
-		<input type="hidden" name="poll_id" value="{poll_question_id}">
-		<table cellpadding="0" cellspacing="1" border="0" width="100%">
-			<tr>
-				<td colspan="2" bgcolor="#660000"><b>{poll_question}</b></td>
-			</tr>
-			<!-- BEGIN BLOCK_poll_items disabled -->
-			<tr>
-				<td bgcolor="#660000"><input type="radio" class="cbox" value="{poll_id}" name="poll_pollid" id="pv{poll_id}"></td>
-				<td width="100%" bgcolor="#660000"><label for="pv{poll_id}">{poll_name}</td>
-			</tr>
-			<!-- END BLOCK_poll_items -->
-			<tr>
-				<td align="right" colspan="2"><input type="submit" value="Balsot">&nbsp;<input type="button" value="Rezultāti" onClick="location.replace('{http_root}/poll/results/')"></td>
-			</tr>
-		</table>
-		</form>
-	</td>
-</tr>
+<div class="TD-cat" title="Ikdienišķais jautājums">
+	Jautājums
+</div>
+<div class="List-item">
+	<form action="{http_root}/poll/vote/" method="post" id="poll_vote_form">
+	<table cellpadding="0" cellspacing="0">
+	<tr>
+		<td colspan="2">
+			<input type="hidden" name="poll_id" value="{poll_question_id}" />
+			<b>{poll_question}</b>
+		</td>
+	</tr>
+	<!-- BEGIN BLOCK_poll_items disabled -->
+	<tr>
+		<td>
+			<input type="radio" class="checkbox" value="{poll_id}" name="poll_pollid" id="pv{poll_id}" />
+		</td>
+		<td style="border: 1px dotted red; width: 100%;">
+			<label for="pv{poll_id}">{poll_name}</label>
+		</td>
+	</tr>
+	<!-- END BLOCK_poll_items -->
+	<tr>
+		<td colspan="2" style="padding-top: 1em;">
+			<input type="submit" value="Balsot" />
+			<input type="button" value="Rezultāti" onclick="location.href='{http_root}/poll/results/';" />
+		</td>
+	</tr>
+	</table>
+	</form>
+</div>
+<div class="List-item">
+	<a href="{http_root}/poll/results/">Jautājumu arhīvs</a>
+</div>
 <!-- END BLOCK_poll -->
