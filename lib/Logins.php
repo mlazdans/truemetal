@@ -98,8 +98,6 @@ class Logins
 		return $Logins->load(array(
 			'l_id'=>$l_id,
 			));
-
-		//return $db->ExecuteSingle("SELECT * FROM logins WHERE l_id = $l_id");
 	} // load_by_id
 
 	static function load_by_login($l_login)
@@ -108,23 +106,14 @@ class Logins
 		return $Logins->load(array(
 			'l_login'=>$l_login,
 			));
-		/*
-		global $db;
-
-		return $this->load($l_login);
-		*/
 	} // load_by_login
 
 	static function load_by_email($l_email)
 	{
+		$Logins = new Logins();
 		return $Logins->load(array(
 			'l_email'=>$l_email,
 			));
-		/*
-		global $db;
-
-		return $db->ExecuteSingle("SELECT * FROM logins WHERE l_email = '$l_email'");
-		*/
 	} // load_by_email
 
 	function get_active()
