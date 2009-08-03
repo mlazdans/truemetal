@@ -68,10 +68,12 @@ INSERT INTO `comment_connect` (
 
 		$sql = "
 SELECT
-	comment.*
+	comment.*,
+	comment_map.cm_old_id
 FROM
 	comment
 JOIN comment_connect ON cc_c_id = c_id
+LEFT JOIN comment_map ON cm_new_id = c_id
 WHERE
 	cc_table = '$this->table'";
 

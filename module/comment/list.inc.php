@@ -38,13 +38,21 @@ foreach($comments as $item)
 		} elseif($item['c_votes'] < 0) {
 			$template->set_var('comment_vote_class', 'minus', 'BLOCK_comment');
 		} else {
-			//$template->set_var('comment_vote_class', 'Comment-Vote', 'BLOCK_comment');
+			$template->set_var('comment_vote_class', '', 'BLOCK_comment');
 		}
 	}
 
 	if($hl)
 	{
 		hl($item['c_datacompiled'], $hl);
+	}
+
+	# Old id
+	if($item['cm_old_id'])
+	{
+		$template->enable('BLOCK_comment_old_id');
+	} else {
+		$template->disable('BLOCK_comment_old_id');
 	}
 
 	$item['c_username'] = parse_form_data($item['c_username']);

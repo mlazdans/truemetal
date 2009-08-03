@@ -2,7 +2,11 @@
 
 <!-- BEGIN BLOCK_comment disabled -->
 <!-- BEGIN BLOCK_comment_list -->
-<div class="Comment">
+
+<!-- BEGIN BLOCK_comment_old_id -->
+<a name="comment{cm_old_id}"></a>
+<!-- END BLOCK_comment_old_id -->
+<div class="Comment" id="comment{c_id}">
 	<div class="header">
 		<div class="nick">{c_username}</div>
 		<!-- BEGIN BLOCK_email disabled -->
@@ -26,7 +30,7 @@
 			<div class="vote">
 				<a href="{http_root}/vote/up/{c_id}/" title="Ōjā!" onclick="Truemetal.Vote('{c_id}', 'up', '#comment{c_id}'); return false;">[+]</a>
 			</div>
-			<div class="vote {comment_vote_class}" id="comment{c_id}">
+			<div class="vote {comment_vote_class}">
 				{c_votes}
 			</div>
 		<!-- END BLOCK_comment_vote -->
