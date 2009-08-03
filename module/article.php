@@ -69,10 +69,11 @@ if($art_id) {
 	}
 } elseif($_pointer['_data_']['mod_id']) {
 	$tc = $article->get_total($_pointer['_data_']['mod_id']);
-	$tp = floor($tc / $art_per_page);
+	$tp = ceil($tc / $art_per_page);
 	$art_align = $art_per_page - ($tc - $tp * $art_per_page);
+	//print "tc=$tc; tp=$tp; align=$art_align";
 
-	if( $page && (($page < 0) || ($page > $tp)) )
+	if( $page && (($page < 0) || ($page >= $tp)) )
 	{
 		header("Location: $module_root/");
 		return;
@@ -122,7 +123,7 @@ if($tc)
 	if(!$page)
 	{
 		$template->enable('BLOCK_article_page_prev');
-		$template->set_var('page', "$module_root/page/$tp/", 'BLOCK_article_page_prev');
+		$template->set_var('page', "$module_root/page/".($tp - 1)."/", 'BLOCK_article_page_prev');
 	} else {
 		if($page == $tp){
 			$template->enable('BLOCK_article_page_next');

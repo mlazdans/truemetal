@@ -548,6 +548,8 @@ function hl(&$data, $kw)
 	$cc = count($colors);
 	$bc = count($bg);
 
+	$kw = trim(preg_replace("/[\*\(\)\-\+]/", " ", $kw));
+
 	$words = split(' ', $kw);
 	// duplikaati nafig
 	$words = array_unique($words);

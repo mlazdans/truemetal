@@ -106,13 +106,12 @@
 				<li>callto:</li>
 			</ul>
 		</li>
-		<li>Lai ieliktu video no Youtube, vajag iekpēt linku (nevis &lt;object&gt;), piemēram:
+		<li>Lai ieliktu video no Youtube, vajag iekopēt linku <strong>(nevis &lt;object&gt;)</strong>, piemēram:
 			<ul>
 				<li>http://www.youtube.com/watch?v=DB_8sxghxis</li>
 				<li>http://www.youtube.com/watch?v=EwTZ2xpQwpA</li>
 			</ul>
 		</li>
-		<li>Stulbs tēmas nosaukums garantē tēmas izdzēšanu</li>
 	</ul>
 </div>
 <!-- END BLOCK_addcomment -->

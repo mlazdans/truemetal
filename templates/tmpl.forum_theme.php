@@ -106,5 +106,9 @@
 </tr>
 </table>
 </form>
+
+<div class="List-item">
+	Atceries - stulbs tēmas nosaukums garantē tēmas izdzēšanu un degsmi mūžīgās elles liesmās!
+</div>
 <!-- END BLOCK_loggedin -->
 

@@ -41,10 +41,12 @@
 <dl>
 	<dt>truemetal</dt>
 		<dd>Atrodam truemetal</dd>
+	<dt>true*</dt>
+		<dd>Atrodam pašu labumu: viss, kas sākas ar true</dd>
 	<dt>truemetal -gay</dt>
 		<dd>Atrodam truemetal, bet tikai bez gejisma</dd>
-	<dt>(true | metal) -gay -emo</dt>
-		<dd>Atrodam true vai metal bez gejisma un bez emo</dd>
+	<dt>(true | metal) -gay -emo*</dt>
+		<dd>Atrodam true vai metal bez gejisma un bez visa, kas sākas ar emo</dd>
 </dl>
 <!-- END BLOCK_search_help -->
 

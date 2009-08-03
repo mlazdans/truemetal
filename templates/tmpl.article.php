@@ -54,13 +54,14 @@
 <div class="TD-cat">
 	<!-- BEGIN BLOCK_article_page_prev disabled -->
 	<div style="float: left;">
-		<img src="{http_root}/img/left.png" alt="Vecāki ieraksti" style="vertical-align: middle;" /> <a href="{page}">vecāki ieraksti</a>
+		<img src="{http_root}/img/left.png" alt="Vecāki ieraksti" style="vertical-align: middle;" />
+		<a class="caption" href="{page}">vecāki ieraksti</a>
 	</div>
 	<!-- END BLOCK_article_page_prev  -->
 
 	<!-- BEGIN BLOCK_article_page_next disabled -->
 	<div style="float: right;">
-		<a href="{page}">jaunāki ieraksti</a>
+		<a class="caption" href="{page}">jaunāki ieraksti</a>
 		<img src="{http_root}/img/right.png" alt="Jaunāki ieraksti" style="vertical-align: middle;" />
 	</div>
 	<!-- END BLOCK_article_page_next -->
