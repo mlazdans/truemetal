@@ -42,11 +42,11 @@ var Truemetal = {
 				}
 
 				if(data.Votes > 0)
-					$(voteXpath).html('+' + data.Votes).removeClass("Comment-Vote-minus").addClass("Comment-Vote-plus");
+					$(voteXpath).html('+' + data.Votes).removeClass("minus").addClass("plus");
 				else if(data.Votes < 0)
-					$(voteXpath).html(data.Votes).addClass("Comment-Vote-minus").removeClass("Comment-Vote-plus");
+					$(voteXpath).html(data.Votes).addClass("minus").removeClass("plus");
 				else
-					$(voteXpath).html(data.Votes).removeClass("Comment-Vote-minus").removeClass("Comment-Vote-plus").addClass("Comment-Vote");
+					$(voteXpath).html(data.Votes).removeClass("minus").removeClass("plus").addClass("Comment-Vote");
 			});
 	}, // Vote
 	ytEmbed: function() {

@@ -176,15 +176,72 @@ input.checkbox {
 }
 
 
+.Comment-new { color: red; }
+.Comment {
+	clear: both;
+	margin-bottom: 1em;
+}
+.Comment .header {
+	margin-bottom: 1px;
+	background-color: #660000;
+}
+.Comment .nick,
+.Comment .date,
+.Comment .center,
+.Comment .vote,
+.Comment .profile,
+.Comment .link {
+	padding: 3px;
+}
+
+.Comment .nick,
+.Comment .date {
+	float: left;
+}
+.Comment .vote,
+.Comment .profile,
+.Comment .link {
+	border-left: 1px solid #220000;
+	float: right;
+}
+.Comment .nick {
+	font-weight: bold;
+	padding-right: 0;
+}
+.Comment .date {
+	padding-left: 0;
+}
+.Comment .center {
+}
+.Comment .vote {
+	color: #676767;
+	font-weight: bold;
+	text-align: right;
+	width: 2em;
+}
+.Comment .plus { color: #00a400; }
+.Comment .minus { color: #c70000; }
+/*
 .Comment-Vote,
 .Comment-Vote-plus,
 .Comment-Vote-minus {
-	font-weight: bold; text-align: right;
+	font-weight: bold;
+	text-align: right;
 }
 .Comment-Vote { color: #676767; }
 .Comment-Vote-plus { color: #00a400; }
 .Comment-Vote-minus { color: #c70000; }
 .Comment-new { color: red; }
+*/
+
+
+.Comment .data {
+	clear: both;
+	padding: 2px;
+	background-color: #444444;
+}
+
+/*
 .Comment-cat {
 	background-color: #660000;
 }
@@ -201,7 +258,7 @@ table.Comments {
 	width: 100%;
 	border-collapse: separate;
 }
-
+*/
 
 /* Article */
 .Article-item {

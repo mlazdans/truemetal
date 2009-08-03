@@ -1,30 +1,42 @@
 <a name="comments"></a>
 
 <!-- BEGIN BLOCK_comment disabled -->
-<table class="Comments" cellpadding="2" cellspacing="1">
 <!-- BEGIN BLOCK_comment_list -->
-<tr>
-	<td class="Comment-cat" style="width: 100%;"><span class="nick">{c_username}</span><!-- BEGIN BLOCK_email disabled -->, <a href="mailto:{c_useremail}" class="A-small">{c_useremail}</a><!-- END BLOCK_email -->, {c_date}</td>
-	<!-- BEGIN BLOCK_comment_vote disabled -->
-	<td class="Comment-cat {comment_vote_class}" id="comment{c_id}">{c_votes}</td>
-	<td class="Comment-cat"><a href="{http_root}/vote/up/{c_id}/" title="Ōjā!" onclick="Truemetal.Vote('{c_id}', 'up', '#comment{c_id}'); return false;">[+]</a></td>
-	<td class="Comment-cat"><a href="{http_root}/vote/down/{c_id}/" title="Dauns..." onclick="Truemetal.Vote('{c_id}', 'down', '#comment{c_id}'); return false;">[&ndash;]</a></td>
-	<!-- END BLOCK_comment_vote -->
-	<td class="Comment-cat">
-		<!-- BEGIN BLOCK_profile_link disabled -->
-		<a href="{http_root}/profile/user/{user_login_id}/" onclick="Truemetal.Pop('{http_root}/profile/user/{user_login_id}/', 400, 400, 'profile{user_login_id}'); return false;">[Profils]</a>
-		<!-- END BLOCK_profile_link -->
-	</td>
-	<td class="Comment-cat"><a href="#comment{c_id}">[Link]</a></td>
-</tr>
-<tr>
-	<td class="Comment-data" colspan="6">{c_datacompiled}</td>
-</tr>
-<tr>
-	<td colspan="6" class="Comment-sep"></td>
-</tr>
+<div class="Comment">
+	<div class="header">
+		<div class="nick">{c_username}</div>
+		<!-- BEGIN BLOCK_email disabled -->
+		, <a href="mailto:{c_useremail}" class="A-small">{c_useremail}</a>
+		<!-- END BLOCK_email -->
+
+		<div class="date">, {c_date}</div>
+
+		<div class="link">
+			<a href="#comment{c_id}">[Link]</a>
+		</div>
+		<div class="profile">
+			<!-- BEGIN BLOCK_profile_link disabled -->
+			<a href="{http_root}/profile/user/{user_login_id}/" onclick="Truemetal.Pop('{http_root}/profile/user/{user_login_id}/', 400, 400, 'profile{user_login_id}'); return false;">[Profils]</a>
+			<!-- END BLOCK_profile_link -->
+		</div>
+		<!-- BEGIN BLOCK_comment_vote disabled -->
+			<div class="vote">
+				<a href="{http_root}/vote/down/{c_id}/" title="Dauns..." onclick="Truemetal.Vote('{c_id}', 'down', '#comment{c_id}'); return false;">[&ndash;]</a>
+			</div>
+			<div class="vote">
+				<a href="{http_root}/vote/up/{c_id}/" title="Ōjā!" onclick="Truemetal.Vote('{c_id}', 'up', '#comment{c_id}'); return false;">[+]</a>
+			</div>
+			<div class="vote {comment_vote_class}" id="comment{c_id}">
+				{c_votes}
+			</div>
+		<!-- END BLOCK_comment_vote -->
+		<div class="center">&nbsp;</div>
+	</div>
+	<div class="data">
+		{c_datacompiled}
+	</div>
+</div>
 <!-- END BLOCK_comment_list -->
-</table>
 <!-- END BLOCK_comment -->
 
 <!-- BEGIN BLOCK_nocomment disabled -->

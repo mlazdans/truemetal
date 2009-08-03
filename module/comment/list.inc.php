@@ -33,12 +33,12 @@ foreach($comments as $item)
 		$template->enable('BLOCK_comment_vote');
 		if($item['c_votes'] > 0)
 		{
-			$template->set_var('comment_vote_class', 'Comment-Vote-plus', 'BLOCK_comment');
+			$template->set_var('comment_vote_class', 'plus', 'BLOCK_comment');
 			$item['c_votes'] = '+'.$item['c_votes'];
 		} elseif($item['c_votes'] < 0) {
-			$template->set_var('comment_vote_class', 'Comment-Vote-minus', 'BLOCK_comment');
+			$template->set_var('comment_vote_class', 'minus', 'BLOCK_comment');
 		} else {
-			$template->set_var('comment_vote_class', 'Comment-Vote', 'BLOCK_comment');
+			//$template->set_var('comment_vote_class', 'Comment-Vote', 'BLOCK_comment');
 		}
 	}
 
