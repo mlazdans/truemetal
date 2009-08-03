@@ -190,7 +190,9 @@ input[type=button]:active {
 }
 
 
-.Comment-new { color: red; }
+.Comment-new {
+	color: red;
+}
 .Comment {
 	clear: both;
 	margin-bottom: 1em;

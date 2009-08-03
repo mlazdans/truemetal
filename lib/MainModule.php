@@ -272,11 +272,20 @@ class MainModule extends Template
 			$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_r_review');
 			foreach($data as $item)
 			{
+				$old_comment_count =
+				isset($_SESSION['comments']['viewed'][$item['art_id']]) ?
+				$_SESSION['comments']['viewed'][$item['art_id']] :
+				0;
+
+				$this->disable('BLOCK_review_r_comments_new');
+				if($item['art_comment_count'] > $old_comment_count)
+				{
+					$this->enable('BLOCK_review_r_comments_new');
+				}
+
 				$this->set_var('review_r_name', $item['art_name'], 'BLOCK_review_r_items');
-				//$this->set_var('review_r_comment_count', $article->comment_count($item['art_id']), 'BLOCK_review_r_items');
 				$this->set_var('review_r_comment_count', $item['art_comment_count'], 'BLOCK_review_r_items');
 				$this->set_var('review_r_path', "article/".$item['art_id'], 'BLOCK_review_r_items');
-				//$comment->show_comments($this, $item['art_id']);
 				$this->parse_block('BLOCK_review_r_items', TMPL_APPEND);
 			}
 

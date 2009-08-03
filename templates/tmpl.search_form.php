@@ -9,7 +9,7 @@
 	action="{http_root}/search/"
 	onsubmit="$('#search_form').attr('action', '{http_root}/search/?search_q=' + $('#search_form_search_q').val()); $('#search_sPPAAMMcheck').val(0);"
 >
-<table cellpadding="0" cellspacing="1" border="0" width="100%">
+<table cellpadding="1" cellspacing="1" width="100%">
 <tr>
 	<td>
 		<input id="search_sPPAAMMcheck" type="hidden" name="spam" value="1" />

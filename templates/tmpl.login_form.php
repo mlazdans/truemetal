@@ -5,15 +5,15 @@
 
 <div class="List-item">
 <form action="{http_root}/login/" method="post">
-<table cellpadding="0" cellspacing="1" border="0" width="100%">
+<table cellpadding="1" cellspacing="1" width="100%">
 <tr>
 	<td colspan="2">
 		<input type="hidden" name="data[referer]" value="{referer}" />
-		<input style="width: 158px;" type="text" name="data[login]" value="Lietotāja vārds" onfocus="if(this.value=='Lietotāja vārds')this.value=''" />
+		<input style="width: 160px;" type="text" name="data[login]" value="Lietotāja vārds" onfocus="if(this.value=='Lietotāja vārds')this.value=''" />
 	</td>
 </tr>
 <tr>
-	<td><input style="width: 120px;" type="password" name="data[password]" size="13" /></td>
+	<td><input style="width: 113px;" type="password" name="data[password]" size="13" /></td>
 	<td><input type="submit" class="input" value=" OK " /></td>
 </tr>
 </table>
