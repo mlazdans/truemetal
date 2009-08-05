@@ -49,15 +49,33 @@ var Truemetal = {
 					$(voteXpath).html(data.Votes).removeClass("minus").removeClass("plus").addClass("Comment-Vote");
 			});
 	}, // Vote
-	ytEmbed: function() {
-		var videoId = this.className.split(" ")[1];
-		if(videoId)
-		{
-			$(this).wrap('<' + 'div style="text-align: center; height: 395px;"' +'><' + '/div>');
-			var params = { allowScriptAccess: "always", wmode: "transparent" };
-			var atts = { align: 'center' };
-			swfobject.embedSWF("http://www.youtube.com/v/" + videoId, this.id, "480", "395", "8", null, null, params, atts);
-		}
-	} // ytEmbed
+	initYouTube: function() {
+		$('div.youtube').each(function(){
+				var videoId = this.className.split(" ")[1];
+				if(videoId)
+				{
+					$(this).wrap('<' + 'div style="text-align: center; height: 395px;"' +'><' + '/div>');
+					var params = { allowScriptAccess: "always", wmode: "transparent" };
+					var atts = { align: 'center' };
+					swfobject.embedSWF("http://www.youtube.com/v/" + videoId, this.id, "480", "395", "8", null, null, params, atts);
+				}
+		});
+	}, // ytEmbed
+	initMenu: function(){
+		$('.menu img').each(function(){
+				var src = this.src;
+				var parts = this.src.split('.');
+				try {
+					var srcOver = parts[0] + "_over.gif";
+					$(this).mouseenter(function(){
+							this.src = srcOver;
+					});
+					$(this).mouseleave(function(){
+							this.src = src;
+					});
+				} catch(e1) {
+				}
+		});
+	}
 };
 

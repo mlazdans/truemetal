@@ -11,10 +11,11 @@
 <link rel="stylesheet" type="text/css" href="{http_root}/css/article.css?{script_version}" />
 <script type="text/javascript" src="{http_root}/js/swfobject.js?{script_version}"></script>
 <script type="text/javascript" src="{http_root}/js/jquery.js?{script_version}"></script>
-<script type="text/javascript" src="{http_root}/js/utils.js?{script_version}"></script>
+<script type="text/javascript" src="{http_root}/js/truemetal.js?{script_version}"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-		$('div.youtube').each(Truemetal.ytEmbed);
+		Truemetal.initMenu();
+		Truemetal.initYouTube();
 });
 </script>
 </head>
@@ -31,11 +32,11 @@ $(document).ready(function(){
 	<div class="menu">
 		<table cellpadding="5" cellspacing="1">
 		<tr>
-			<td><a href="{http_root}/"><img src="{http_root}/img/butt_news.gif" alt="JAUNUMI" onmouseover="$(this).attr('src', '{http_root}/img/butt_news_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_news.gif')" /></a></td>
-			<td><a href="{http_root}/forum/"><img src="{http_root}/img/butt_forum.gif" alt="FORUMS" onmouseover="$(this).attr('src', '{http_root}/img/butt_forum_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_forum.gif')" /></a></td>
-			<td><a href="{http_root}/gallery/"><img src="{http_root}/img/butt_gallery.gif" alt="GALERIJA" onmouseover="$(this).attr('src', '{http_root}/img/butt_gallery_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_gallery.gif')" /></a></td>
-			<td><a href="{http_root}/video/"><img src="{http_root}/img/butt_video.gif" alt="VIDEO" onmouseover="$(this).attr('src', '{http_root}/img/butt_video_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_video.gif')" /></a></td>
-			<td><a href="{http_root}/reviews/"><img src="{http_root}/img/butt_reviews.gif" alt="ALBUMU RECENZIJAS" onmouseover="$(this).attr('src', '{http_root}/img/butt_reviews_over.gif')" onmouseout="$(this).attr('src', '{http_root}/img/butt_reviews.gif')" /></a></td>
+			<td><a href="{http_root}/"><img src="{http_root}/img/butt_news.gif" alt="JAUNUMI" /></a></td>
+			<td><a href="{http_root}/forum/"><img src="{http_root}/img/butt_forum.gif" alt="FORUMS" /></a></td>
+			<td><a href="{http_root}/gallery/"><img src="{http_root}/img/butt_gallery.gif" alt="GALERIJA" /></a></td>
+			<td><a href="{http_root}/video/"><img src="{http_root}/img/butt_video.gif" alt="VIDEO" /></a></td>
+			<td><a href="{http_root}/reviews/"><img src="{http_root}/img/butt_reviews.gif" alt="ALBUMU RECENZIJAS" /></a></td>
 		</tr>
 		</table>
 	</div>

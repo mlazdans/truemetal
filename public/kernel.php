@@ -26,6 +26,8 @@ $sys_script_version    = 1;
 $sys_banned            = array();
 $sys_admins            = array('127.0.0.1');
 $sys_module_map        = array();
+$sys_use_cdn           = false;
+$sys_cdn_func          = '';
 
 $sys_mail_from         = (isset($_SERVER['SERVER_ADMIN']) ?
 	$_SERVER['SERVER_ADMIN'] :
@@ -152,12 +154,25 @@ header("Expires: ");
 header("Pragma: ");
 header('Content-Type: text/html; charset='.$sys_encoding);
 
+//ob_start();
 /* iesleedzam vaidziigo moduli */
 if(file_exists("$sys_root/module/$sys_module.php")) {
 	include("$sys_root/module/$sys_module.php");
 } else {
 	include("$sys_root/module/$sys_default_module.php");
 }
+//$data = ob_get_clean();
+
+/*
+$tidy_config = array(
+	'wrap'=>false,
+	'output-xhtml'=>true,
+	'doctype'=>'strict',
+	);
+$tidy = tidy_parse_string($data, $tidy_config, 'UTF8');
+$tidy->cleanRepair();
+print $tidy;
+*/
 
 $my_login = new Logins;
 $my_login->save_session_data();

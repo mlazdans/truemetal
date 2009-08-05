@@ -66,30 +66,38 @@ class MainModule extends Template
 
 	function out()
 	{
-		global $sys_http_root;
+		global $sys_http_root, $sys_use_cdn, $sys_cdn_func;
 
-		print $this->parse_file('FILE_index');
-		/*
-		if($GLOBALS['i_am_admin'])
+		//print $this->parse_file('FILE_index');
+		if($sys_use_cdn && function_exists($sys_cdn_func))
 		{
 			$dom = new DOMDocument('1.0', 'utf-8');
 			@$dom->loadHTML($this->parse_file('FILE_index'));
-			//$dom->normalizeDocument();
 			$xdom = simplexml_import_dom($dom);
 
-			if($els = $xdom->xpath("//img"))
+			# Images
+			if($els = $xdom->xpath("//img|//script"))
 			{
 				foreach($els as $item)
 				{
 					$src = parse_url($item->attributes()->src, PHP_URL_PATH);
-					$item->attributes()->src = 'http://'.cdn_domain($src).$src;
+					$item->attributes()->src = 'http://'.$sys_cdn_func($src).$src;
+				}
+			}
+
+			# Style
+			if($els = $xdom->xpath("//link[@type=\"text/css\"]"))
+			{
+				foreach($els as $item)
+				{
+					$src = parse_url($item->attributes()->href, PHP_URL_PATH);
+					$item->attributes()->href = 'http://'.$sys_cdn_func($src).$src;
 				}
 			}
 			print $dom->saveHTML();
 		} else {
 			print $this->parse_file('FILE_index');
 		}
-		*/
 		//$content = $this->parse_file('FILE_index');
 		//$variable_pattern = '[a-zA-z0-9_^}]{1,}';
 		//print preg_replace('/{'.$variable_pattern.'}/U', '', $content);

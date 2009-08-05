@@ -4,7 +4,7 @@
 <head>
 <title>[ TRUE METAL {title} ]</title>
 <meta http-equiv="Pragma" content="no-cache">
-<script language="JavaScript" type="text/javascript" src="{http_root}/js/utils.js"></script>
+<script language="JavaScript" type="text/javascript" src="{http_root}/js/truemetal.js"></script>
 <link rel="stylesheet" type="text/css" href="{http_root}/css/styles.css">
 </head>
 <body>
