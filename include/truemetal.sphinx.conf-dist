@@ -1,0 +1,217 @@
+#
+# Sphinx configuration file sample
+#
+# WARNING! While this sample file mentions all available options,
+# it contains (very) short helper descriptions only. Please refer to
+# doc/sphinx.html for details.
+#
+
+#############################################################################
+## data source definition
+#############################################################################
+
+source truemetal
+{
+	# data source type. mandatory, no default value
+	# known types are 'mysql', 'pgsql', 'xmlpipe', 'xmlpipe2'
+	type		= mysql
+
+	#####################################################################
+	## SQL settings (for 'mysql' and 'pgsql' types)
+	#####################################################################
+
+	# some straightforward parameters for SQL source types
+	sql_host	= localhost
+	sql_user	= root
+	sql_pass	=
+	sql_db		= truemetal
+	sql_port	= 53306	# optional, default is 3306
+
+	# UNIX socket name
+	# optional, default is empty (reuse client library defaults)
+	# usually '/var/lib/mysql/mysql.sock' on Linux
+	# usually '/tmp/mysql.sock' on FreeBSD
+	#
+	# sql_sock				= /tmp/mysql.sock
+
+
+	# MySQL specific client connection flags
+	# optional, default is 0
+	#
+	# mysql_connect_flags	= 32 # enable compression
+
+	sql_query_pre = SET NAMES utf8
+	sql_query = SELECT doc_id, view_documents.* FROM view_documents;
+
+	sql_attr_uint        = doc_id
+	sql_attr_uint        = doc_real_id
+	sql_attr_uint        = doc_source_id
+	sql_attr_uint        = doc_comment_count
+	sql_attr_timestamp   = doc_entered
+	sql_attr_timestamp   = doc_comment_lastdate
+}
+
+# inherited source example
+#
+# all the parameters are copied from the parent source,
+# and may then be overridden in this source definition
+#source src1throttled : src1
+#{
+#	sql_ranged_throttle			= 100
+#}
+
+#############################################################################
+## index definition
+#############################################################################
+
+# local index example
+#
+# this is an index which is stored locally in the filesystem
+#
+# all indexing-time options (such as morphology and charsets)
+# are configured per local index
+index doc
+{
+	source			    = truemetal
+	path			    = D:\truemetal\site\sphinx\data\doc
+
+	charset_type		= utf-8
+	enable_star         = 1
+	min_prefix_len      = 3
+	min_word_len		= 1
+	html_strip          = 1
+	docinfo             = inline
+
+	# a list of morphology preprocessors to apply
+	# optional, default is empty
+	#
+	# builtin preprocessors are 'none', 'stem_en', 'stem_ru', 'stem_enru',
+	# 'soundex', and 'metaphone'; additional preprocessors available from
+	# libstemmer are 'libstemmer_XXX', where XXX is algorithm code
+	# (see libstemmer_c/libstemmer/modules.txt)
+	#
+	# morphology 	= stem_en, stem_ru, soundex
+	# morphology	= libstemmer_german
+	# morphology	= libstemmer_sv
+	morphology		    = none
+
+	# charset definition and case folding rules "table"
+	# optional, default value depends on charset_type
+	#
+	# defaults are configured to include English and Russian characters only
+	# you need to change the table to include additional ones
+	# this behavior MAY change in future versions
+	#
+	# 'sbcs' default value is
+	# charset_table		= 0..9, A..Z->a..z, _, a..z, U+A8->U+B8, U+B8, U+C0..U+DF->U+E0..U+FF, U+E0..U+FF
+	#
+	# 'utf-8' default value is
+	# charset_table		= 0..9, A..Z->a..z, _, a..z, U+410..U+42F->U+430..U+44F, U+430..U+44F
+	charset_table = 0..9, A..Z->a..z, _, a..z, U+410..U+42F->U+430..U+44F, U+430..U+44F, \
+		U+0100->U+0101, U+010C->U+010D, U+0112->U+0113, U+0122->U+0123, U+012A->U+012B, \
+		U+0136->U+0137, U+013B->U+013C, U+0145->U+0146, U+014C->U+014D, U+0156->U+0157, \
+		U+0160->U+0161, U+016A->U+016B, U+017D->U+017E, U+0101, U+010D, U+0113, U+0123, U+012B, \
+		U+0137, U+013C, U+0146, U+014D, U+0157, \
+		U+0161, U+016B, U+017E
+
+	# what HTML attributes to index if stripping HTML
+	# optional, default is empty (do not index anything)
+	#
+	# html_index_attrs		= img=alt,title; a=title;
+
+
+	# what HTML elements contents to strip
+	# optional, default is empty (do not strip element contents)
+	#
+	# html_remove_elements	= style, script
+}
+
+# inherited index example
+#
+# all the parameters are copied from the parent index,
+# and may then be overridden in this index definition
+#index test1stemmed : test1
+#{
+#	path			= @CONFDIR@/data/test1stemmed
+#	morphology		= stem_en
+#}
+
+
+#############################################################################
+## indexer settings
+#############################################################################
+
+indexer
+{
+	# memory limit, in bytes, kiloytes (16384K) or megabytes (256M)
+	# optional, default is 32M, max is 2047M, recommended is 256M to 1024M
+	mem_limit			= 256M
+
+	# maximum IO calls per second (for I/O throttling)
+	# optional, default is 0 (unlimited)
+	#
+	# max_iops			= 40
+
+
+	# maximum IO call size, bytes (for I/O throttling)
+	# optional, default is 0 (unlimited)
+	#
+	# max_iosize		= 1048576
+}
+
+#############################################################################
+## searchd settings
+#############################################################################
+
+searchd
+{
+	# IP address to bind on
+	# optional, default is 0.0.0.0 (ie. listen on all interfaces)
+	#
+	address				= 127.0.0.1
+	# address				= 192.168.0.1
+
+
+	# searchd TCP port number
+	# mandatory, default is 3312
+	port				= 3312
+
+	# log file, searchd run info is logged here
+	# optional, default is 'searchd.log'
+	log					= D:\truemetal\site\sphinx\log\searchd.log
+
+	# query log file, all search queries are logged here
+	# optional, default is empty (do not log queries)
+	query_log			= D:\truemetal\site\sphinx\log\query.log
+
+	# client read timeout, seconds
+	# optional, default is 5
+	read_timeout		= 5
+
+	# maximum amount of children to fork (concurrent searches to run)
+	# optional, default is 0 (unlimited)
+	max_children		= 30
+
+	# PID file, searchd process ID file name
+	# mandatory
+	pid_file			= D:\truemetal\site\sphinx\log\searchd.pid
+
+	# max amount of matches the daemon ever keeps in RAM, per-index
+	# WARNING, THERE'S ALSO PER-QUERY LIMIT, SEE SetLimits() API CALL
+	# default is 1000 (just like Google)
+	max_matches			= 1000
+
+	# seamless rotate, prevents rotate stalls if precaching huge datasets
+	# optional, default is 1
+	# seamless_rotate		= 1
+
+	# whether to forcibly preopen all indexes on startup
+	# optional, default is 0 (do not preopen)
+	preopen_indexes		= 0
+
+	# whether to unlink .old index copies on succesful rotation.
+	# optional, default is 1 (do unlink)
+	unlink_old			= 1
+}
+
+# --eof--
