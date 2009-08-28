@@ -320,7 +320,7 @@ table.Comments {
 	margin: 0 auto;
 	overflow:hidden;      /* This chops off any overhanging divs */
 	padding-bottom: 1em;
-	border-bottom: 1px dotted #660000;
+	/*border-bottom: 1px dotted #660000;*/
 }
 /* common column settings */
 .colright,

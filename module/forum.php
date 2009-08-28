@@ -207,7 +207,7 @@ if($forum_id)
 	if($page_id > 1)
 		$forum_title .= " - $page_id. lapa";
 
-	$template->set_var('current_forum_id', $forum_id, 'BLOCK_middle');
+	$template->set_var('current_forum_id', $forum_id);
 	# Subtēma TODO: jānotestē
 	if($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS)
 	{

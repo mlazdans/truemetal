@@ -6,7 +6,7 @@
 <table class="Main">
 <tr>
 	<td>Frāze:</td>
-	<td><input type="text" name="search_q" id="search_q" value="{search_q}" size="48" /></td>
+	<td><input type="text" name="search_q" id="search_q" value="{search_q}" size="64" /></td>
 </tr>
 <tr>
 	<td>Sadaļas:</td>

@@ -65,8 +65,9 @@ var Truemetal = {
 		$('.menu img').each(function(){
 				var src = this.src;
 				var parts = this.src.split('.');
+				var ext = parts.pop();
 				try {
-					var srcOver = parts[0] + "_over.gif";
+					var srcOver = parts.join('.') + "_over.gif";
 					$(this).mouseenter(function(){
 							this.src = srcOver;
 					});
