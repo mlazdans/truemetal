@@ -53,8 +53,8 @@ elseif($section == 'user')
 	//$login = new Logins;
 	$l_id = array_shift($sys_parameters);
 	$template = new MainModule($sys_template_root, 'profile', 'tmpl.profile_single.php');
-	$template->set_file('FILE_profile', 'tmpl.profile.php');
-	$template->copy_block('BLOCK_profile_data', 'FILE_profile');
+	//$template->set_file('FILE_profile', 'tmpl.profile.php');
+	//$template->copy_block('BLOCK_profile_data', 'FILE_profile');
 	$template->set_var('error_l_email', '', 'FILE_profile');
 
 	// ja id

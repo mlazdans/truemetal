@@ -25,12 +25,12 @@
 		</div>
 		<!-- BEGIN BLOCK_comment_vote disabled -->
 			<div class="vote">
-				<a href="{http_root}/vote/down/{c_id}/" title="Dauns..." onclick="Truemetal.Vote('{c_id}', 'down', '#comment{c_id}'); return false;">[&ndash;]</a>
+				<a href="{http_root}/vote/down/{c_id}/" title="Dauns..." onclick="Truemetal.Vote('{c_id}', 'down', '#comment{c_id} .vote-value'); return false;">[&ndash;]</a>
 			</div>
 			<div class="vote">
-				<a href="{http_root}/vote/up/{c_id}/" title="Ōjā!" onclick="Truemetal.Vote('{c_id}', 'up', '#comment{c_id}'); return false;">[+]</a>
+				<a href="{http_root}/vote/up/{c_id}/" title="Ōjā!" onclick="Truemetal.Vote('{c_id}', 'up', '#comment{c_id} .vote-value'); return false;">[+]</a>
 			</div>
-			<div class="vote {comment_vote_class}">
+			<div class="vote {comment_vote_class} vote-value">
 				{c_votes}
 			</div>
 		<!-- END BLOCK_comment_vote -->

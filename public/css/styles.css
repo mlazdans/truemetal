@@ -42,20 +42,21 @@ hr {
 }
 
 TD {
-	font-size: 8pt;
+	/*font-size: 8pt;*/
 	font-weight: normal;
 }
 
 TH {
-	font-size: 9pt;
+	/*font-size: 9pt;*/
 	font-weight: bold;
 	background-color: #EFC964;
 }
 
 A {
+	border: none;
 	color: red;
 	text-decoration: underline;
-	font-size: 8pt;
+	/*font-size: 8pt;*/
 	font-weight: normal;
 }
 A:hover {
@@ -65,14 +66,16 @@ A:hover {
 .A-small:link, .A-small:visited, .A-small:active {
 	color: red;
 	text-decoration: underline;
-	font-size: 7pt;
+	/*font-size: 7pt;*/
+	font-size: smaller;
 	font-weight: normal;
 }
 
 .A-small:hover {
 	color: red;
 	text-decoration: none;
-	font-size: 7pt;
+	/*font-size: 7pt;*/
+	font-size: smaller;
 	font-weight: normal;
 }
 
@@ -97,7 +100,7 @@ P {
 }
 .TD-cat a.caption {
 	color: white;
-	font-size: 9pt;
+	/*font-size: 9pt;*/
 	font-weight: bold;
 	text-decoration: underline;
 }
@@ -149,6 +152,7 @@ dd {
 }
 
 input, textarea {
+	font-size: 10pt;
 	border: 1px solid white;
 	background-color: #660000;
 	color: white;
