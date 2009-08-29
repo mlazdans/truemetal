@@ -255,10 +255,17 @@ input[type=button]:active {
 */
 
 
-.Comment .data {
+.Comment .data,
+.Comment .disabled {
 	clear: both;
 	padding: 2px;
 	background-color: #444444;
+}
+
+.Comment .disabled {
+	background-color: #600000;
+	text-align: center;
+	font-style: italic;
 }
 
 /*

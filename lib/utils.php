@@ -835,3 +835,15 @@ function fix_path($path)
 	return str_replace('\\', '/', $path);
 } // fix_path
 
+function redirect($url = '')
+{
+	$url = $url ? $url : php_self();
+
+	return header("Location: $url");
+} // redirect
+
+function php_self()
+{
+	return isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+} // php_self
+

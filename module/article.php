@@ -38,7 +38,8 @@ if(!$art_id)
 $article = new Article();
 
 $tc = 0;
-if($art_id) {
+if($art_id)
+{
 	$template->enable('BLOCK_article_comments_head');
 
 	$art = $article->load(array(

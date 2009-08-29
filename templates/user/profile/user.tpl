@@ -52,6 +52,19 @@
 	</div>
 	<!-- END BLOCK_public_email -->
 
+	<!-- BEGIN BLOCK_disable_comments disabled -->
+	<form method="post" action="">
+	<input type="hidden" name="action" value="disable_comments" />
+	<div class="List-item">
+		<label for="disable_comments">
+			<input type="checkbox" name="disable_comments" id="disable_comments"{disable_comments_checked} />
+			Nerādīt šī lietotāja komentārus
+		</label>
+		<input type="submit" value="OK" />
+	</div>
+	</form>
+	<!-- END BLOCK_disable_comments -->
+
 	<div class="List-item clear" style="text-align: center;">
 		<a href="#" onclick="window.close(); return false;">Aizvērt</a>
 	</div>

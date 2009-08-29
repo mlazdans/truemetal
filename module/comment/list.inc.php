@@ -7,12 +7,17 @@
 
 //
 
+require_once('lib/CommentDisabled.php');
+
 if(user_loged())
 {
 	$template->enable('BLOCK_addcomment');
 	$template->set_var('acd_username', $_SESSION['login']['l_nick']);
+	$template->set_var('c_username', $_SESSION['login']['l_nick'], 'BLOCK_addcomment');
+	$disabled_users = CommentDisabled::get($_SESSION['login']['l_id']);
 } else {
 	$template->enable('BLOCK_notloggedin');
+	$disabled_users = array();
 }
 
 if($comments)
@@ -21,9 +26,6 @@ if($comments)
 } else {
 	$template->enable('BLOCK_nocomment');
 }
-
-if(user_loged())
-	$template->set_var('c_username', $_SESSION['login']['l_nick'], 'BLOCK_addcomment');
 
 foreach($comments as $item)
 {
@@ -56,6 +58,14 @@ foreach($comments as $item)
 	}
 
 	$item['c_username'] = parse_form_data($item['c_username']);
+	if(empty($disabled_users[$item['c_userid']]))
+	{
+		$template->set_var('c_disabled_user_class', '');
+	} else {
+		$template->set_var('c_disabled_user_class', ' disabled');
+		$item['c_datacompiled'] = '-neredzams komentārs-';
+	}
+
 	$template->set_array($item, 'BLOCK_comment');
 	$template->set_var('c_date', proc_date($item['c_entered']));
 

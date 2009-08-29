@@ -36,7 +36,7 @@
 		<!-- END BLOCK_comment_vote -->
 		<div class="center">&nbsp;</div>
 	</div>
-	<div class="data">
+	<div class="data{c_disabled_user_class}">
 		{c_datacompiled}
 	</div>
 </div>
