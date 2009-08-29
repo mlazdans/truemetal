@@ -158,7 +158,7 @@ class Logins
 		//$save_path = $sys_user_root.'/pic/'.$l_id.'.jpg';
 		//$tsave_path = $sys_user_root.'/pic/thumb/'.$l_id.'.jpg';
 
-		//$template->enable('BLOCK_profile');
+		$template->enable('BLOCK_profile');
 		$template->set_array($login);
 
 		$template->set_var('l_forumsort_themes_'.$login['l_forumsort_themes'], ' checked="checked"');

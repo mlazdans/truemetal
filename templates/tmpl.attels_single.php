@@ -1,19 +1,21 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>[ TRUE METAL {title} ]</title>
-<meta http-equiv="Pragma" content="no-cache">
-<style type="text/css"><!--
-body {
-	font-family: "Verdana", arial, serif;
-	color: black;
-	background-color: white;
-	margin: 0px;
-	padding: 0px;
-}
---></style>
+<meta http-equiv="Content-Language" content="lv" />
+<meta name="verify-v1" content="1T6p5COcolqsK65q0I6uXdMjPuPskp2jyWjFMTOW/LY=" />
+<meta name="author" content="Mārtiņš Lazdāns (dqdp.net)" />
+<meta name="description" content="Metāls Latvijā" />
+<link rel="stylesheet" type="text/css" href="{http_root}/css/styles.css?{script_version}" />
+<link rel="stylesheet" type="text/css" href="{http_root}/css/article.css?{script_version}" />
+<script type="text/javascript" src="{http_root}/js/swfobject.js?{script_version}"></script>
+<script type="text/javascript" src="{http_root}/js/jquery.js?{script_version}"></script>
+<script type="text/javascript" src="{http_root}/js/truemetal.js?{script_version}"></script>
 </head>
+
 <body>
 <img src="{pic_path}" alt="" border="0" onClick="window.close()">
 </body>
+</html>
+

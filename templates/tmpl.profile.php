@@ -21,14 +21,6 @@
 	Profils: {l_nick}
 </div>
 
-<!-- BEGIN BLOCK_public_email disabled -->
-<div class="List-item">
-	<b>E-pasts:</b> <a href="mailto:{l_email}">{l_email}</a>
-</div>
-<!-- END BLOCK_public_email -->
-
-
-<!-- BEGIN BLOCK_private_profile disabled -->
 <form action="" method="post" enctype="multipart/form-data" id="profile_edit">
 <table cellpadding="2" cellspacing="1">
 <tr>
@@ -132,8 +124,5 @@
 	<input type="submit" value=" Saglabāt " />
 </div>
 </form>
-<!-- END BLOCK_private_profile -->
-
-
 <!-- END BLOCK_profile -->
 

@@ -16,6 +16,13 @@
 
 <body>
 
+<!-- BEGIN BLOCK_not_loged disabled -->
+<div class="Info">
+	TrueMetal!
+</div>
+<!-- END BLOCK_not_loged -->
+
+<!-- BEGIN BLOCK_profile disabled -->
 <div style="background: #444444;">
 	<div class="TD-cat">
 		Profils: {l_nick}
@@ -44,6 +51,7 @@
 	</div>
 
 </div>
+<!-- END BLOCK_profile -->
 
 </body>
 </html>
