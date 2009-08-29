@@ -26,7 +26,7 @@ if($action == 'vote')
 		} else {
 			$template = new MainModule($sys_template_root, $sys_module_id);
 			$template->set_title('Balsošanas kļūda!');
-			$template->set_file('FILE_poll', 'tmpl.poll.php');
+			$template->set_file('FILE_poll', 'poll.tpl');
 			$template->copy_block('BLOCK_middle', 'FILE_poll');
 			//die($poll->error_msg);
 			$template->disable('BLOCK_poll');
@@ -46,7 +46,7 @@ if($action == 'results')
 	$id = (int)array_shift($sys_parameters);
 
 	$template = new MainModule($sys_template_root, $sys_module_id);
-	//$template->set_file('FILE_poll_results', 'tmpl.poll_results2.php');
+	//$template->set_file('FILE_poll_results', 'poll_results2.tpl');
 	//$template->copy_block('BLOCK_middle', 'FILE_poll_results');
 	$poll->show_archive($template, $id);
 

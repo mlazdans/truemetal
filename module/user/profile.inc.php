@@ -18,7 +18,7 @@ if($login)
 
 $template = new MainModule($sys_template_root, $sys_module_id);
 $template->set_title('Profils');
-$template->set_file('FILE_module', 'user/profile/tmpl.private.php');
+$template->set_file('FILE_module', 'user/profile/private.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_module');
 
 # View and edit private profile

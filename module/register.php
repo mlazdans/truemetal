@@ -10,9 +10,9 @@ require_once('lib/MainModule.php');
 
 $action = array_shift($sys_parameters);
 
-$template = new MainModule($sys_template_root, $sys_module_id, 'tmpl.index.php');
+$template = new MainModule($sys_template_root, $sys_module_id, 'index.tpl');
 $template->set_title("Reģistrācija");
-$template->set_file('FILE_register', 'tmpl.register.php');
+$template->set_file('FILE_register', 'register.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_register');
 
 $template->set_right();

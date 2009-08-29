@@ -167,7 +167,7 @@ class Calendar
 	function set_calendar(&$template, $y = 0, $m = 0, $d = 0)
 	{
 		$cal = $this->generate($y, $m, $d);
-		$template->set_file('FILE_calendar', 'tmpl.calendar.php');
+		$template->set_file('FILE_calendar', 'calendar.tpl');
 		$template->set_block_string('BLOCK_calendar_items', $cal);
 		$template->parse_block('FILE_calendar');
 		$template->set_var('right_item_data', $template->get_parsed_content('FILE_calendar'), 'BLOCK_right_item');

@@ -70,7 +70,7 @@ if($action == 'add_poll') {
 			else
 				header("Location: $module_root/$newpoll_id/");
 		} else {
-			$template->set_file('FILE_poll', 'tmpl.poll.php');
+			$template->set_file('FILE_poll', 'poll.tpl');
 			$template->copy_block('BLOCK_middle', 'FILE_poll');
 			poll_error($poll->error_msg, $template);
 			$template->out();
@@ -87,7 +87,7 @@ if($action == 'save_poll') {
 			else
 				header("Location: $module_root/");
 		} else {
-			$template->set_file('FILE_poll', 'tmpl.poll.php');
+			$template->set_file('FILE_poll', 'poll.tpl');
 			$template->copy_block('BLOCK_middle', 'FILE_poll');
 			poll_error($poll->error_msg, $template);
 			$template->out();
@@ -99,7 +99,7 @@ if($action == 'save_poll') {
 // ja redigeejam
 if($poll_id) {
 
-	$template->set_file('FILE_poll', 'tmpl.poll_edit.php');
+	$template->set_file('FILE_poll', 'poll_edit.tpl');
 	$template->copy_block('BLOCK_middle', 'FILE_poll');
 
 	// jautaajums
@@ -109,7 +109,7 @@ if($poll_id) {
 
 	// jauna atbilde, ja redigee jautaajumu
 	if(!$poll_data['poll_pollid']) {
-		$template->set_file('FILE_pollnew', 'tmpl.poll_new.php');
+		$template->set_file('FILE_pollnew', 'poll_new.tpl');
 		$template->copy_block('BLOCK_pollnew', 'FILE_pollnew');
 		$template->set_var('poll_new_name', 'Jauna atbilde');
 	}
@@ -128,7 +128,7 @@ if($poll_id) {
 	$poll_data = $poll->load(0, $poll_id, POLL_ALL);
 
 	if(count($poll_data)) {
-		$template->set_file('FILE_polldets', 'tmpl.poll_det.php');
+		$template->set_file('FILE_polldets', 'poll_det.tpl');
 		$template->copy_block('BLOCK_polldets', 'FILE_polldets');
 		$template->enable('BLOCK_poll');
 	}
@@ -146,7 +146,7 @@ if($poll_id) {
 } else {
 	$poll_data = $poll->load(0, 0, POLL_ALL);
 
-	$template->set_file('FILE_poll', 'tmpl.poll.php');
+	$template->set_file('FILE_poll', 'poll.tpl');
 	$template->copy_block('BLOCK_middle', 'FILE_poll');
 
 	if(count($poll_data))
@@ -162,7 +162,7 @@ if($poll_id) {
 	$template->set_var('item_count', $c);
 
 	// jauns jautaajums
-	$template->set_file('FILE_pollnew', 'tmpl.poll_new.php');
+	$template->set_file('FILE_pollnew', 'poll_new.tpl');
 	$template->copy_block('BLOCK_pollnew', 'FILE_pollnew');
 	$template->set_var('poll_new_name', 'Jauns jautājums');
 } // poll_id

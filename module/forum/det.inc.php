@@ -7,10 +7,10 @@
 
 //
 
-$template->set_file('FILE_forum', 'tmpl.forum_det.php');
+$template->set_file('FILE_forum', 'forum_det.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_forum');
 
-$template->set_file('FILE_forum_comments', 'tmpl.comments.php');
+$template->set_file('FILE_forum_comments', 'comments.tpl');
 $template->copy_block('BLOCK_forum_comments', 'FILE_forum_comments');
 
 $_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_comment_count'];

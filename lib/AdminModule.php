@@ -16,7 +16,7 @@ class AdminModule extends Template
 	var $title;
 
 	function AdminModule($template_root, $module_name = '',
-		$str_main_file = 'tmpl.index.php', $str_undefined = 'remove')
+		$str_main_file = 'index.tpl', $str_undefined = 'remove')
 	{
 
 		$this->set_module_name($module_name ? $module_name : get_class($this));
@@ -26,7 +26,7 @@ class AdminModule extends Template
 
 		/* ielaadeejam failus */
 		$this->set_file("FILE_index", $str_main_file);
-		$this->set_file("FILE_middle", "tmpl.".$this->module_name.".php");
+		$this->set_file("FILE_middle", "".$this->module_name.".tpl");
 		$this->copy_block("BLOCK_middle", "FILE_middle");
 
 		$this->init();
@@ -82,7 +82,7 @@ class AdminModule extends Template
 
 	function init_editor($to_block = 'BLOCK_editor_init')
 	{
-		$this->set_file('FILE_editor', 'tmpl.tiny_mce_init.php');
+		$this->set_file('FILE_editor', 'tiny_mce_init.tpl');
 		$this->copy_block($to_block, 'FILE_editor');
 	} // init_editor
 

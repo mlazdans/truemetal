@@ -21,7 +21,7 @@ $date_f = date("d.m.Y", mktime(0,0,0, $m, $d, $y));
 
 $template = new MainModule($sys_template_root, $sys_module_id);
 $template->set_title("Arhīvs $date_f");
-$template->set_file('FILE_archive', 'tmpl.archive.php');
+$template->set_file('FILE_archive', 'archive.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_archive');
 
 $article = new Article();

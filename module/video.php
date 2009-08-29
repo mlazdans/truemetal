@@ -9,7 +9,7 @@ require_once('lib/MainModule.php');
 
 $template = new MainModule($sys_template_root, $sys_module_id);
 $template->set_title('Video');
-$template->set_file('FILE_video', 'tmpl.video.php');
+$template->set_file('FILE_video', 'video.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_video');
 
 $template->set_right();

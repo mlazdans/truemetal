@@ -145,7 +145,7 @@ if($action == 'cancel') {
 		setup_gallery_groups($template, $gal['gal_ggid']);
 
 		// thumbs
-		$template->set_file('FILE_gallery_data', 'tmpl.gallery_data.php');
+		$template->set_file('FILE_gallery_data', 'gallery_data.tpl');
 		$template->set_var('http_root', $sys_http_root);
 		$data = $gallery->load_data(0, $gal_id, GALLERY_DATA_VISIBLE, GALLERY_ACTIVE);
 		if(count($data))

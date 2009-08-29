@@ -7,7 +7,7 @@
 
 $template = new AdminModule($sys_template_root.'/admin', $admin_module);
 $template->set_title('Admin :: online');
-$template->set_file('FILE_online', 'tmpl.online.php');
+$template->set_file('FILE_online', 'online.tpl');
 
 $active_sessions = $sess_handler->get_active();
 

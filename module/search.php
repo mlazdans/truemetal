@@ -49,8 +49,8 @@ $ent_search_q = ent($search_q);
 
 $search_msg = array();
 
-$template = new MainModule($sys_template_root, $sys_module_id, 'tmpl.index.php');
-$template->set_file('FILE_search', 'tmpl.search.php');
+$template = new MainModule($sys_template_root, $sys_module_id, 'index.tpl');
+$template->set_file('FILE_search', 'search.tpl');
 $template->set_title("Meklēšana: $ent_search_q");
 $template->copy_block('BLOCK_middle', 'FILE_search');
 

@@ -21,7 +21,7 @@ class MainModule extends Template
 	var $title;
 
 	function __construct($template_root, $module_name = '',
-		$str_main_file = 'tmpl.index.php', $str_undefined = 'remove')
+		$str_main_file = 'index.tpl', $str_undefined = 'remove')
 	{
 		parent::Template($template_root, $str_undefined);
 
@@ -31,7 +31,7 @@ class MainModule extends Template
 		//$this->set_undefined($str_undefined);
 
 		/* ielaadeejam failus */
-		/* galveno failu un vidus failus, kuram jaasaucas tmpl.<module_name>.php */
+		/* galveno failu un vidus failus, kuram jaasaucas <module_name>.tpl */
 		$this->set_file('FILE_index', $str_main_file);
 
 		$this->init();
@@ -141,7 +141,7 @@ class MainModule extends Template
 		} // while
 	} // set_submodules
 
-	function set_right($file = 'tmpl.right.php', $img = '')
+	function set_right($file = 'right.tpl', $img = '')
 	{
 		$this->set_file('FILE_right', $file);
 		$this->copy_block('BLOCK_right', 'FILE_right');
@@ -184,7 +184,7 @@ class MainModule extends Template
 
 	function set_login()
 	{
-		$this->set_file('FILE_login_form', 'tmpl.login_form.php');
+		$this->set_file('FILE_login_form', 'login_form.tpl');
 		$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_login_form');
 
 		if(isset($_SESSION['login']['l_id']) && $_SESSION['login']['l_id'])
@@ -208,7 +208,7 @@ class MainModule extends Template
 
 	function set_search($search_q = '')
 	{
-		$this->set_file('FILE_search_form', 'tmpl.search_form.php');
+		$this->set_file('FILE_search_form', 'search_form.tpl');
 		$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_search_form');
 		$this->set_var('search_q', $search_q, 'FILE_search_form');
 
@@ -228,7 +228,7 @@ class MainModule extends Template
 		global $db, $sys_http_root;
 
 		$login = new Logins;
-		$this->set_file('FILE_online', 'tmpl.online.php');
+		$this->set_file('FILE_online', 'online.tpl');
 		$this->set_var('http_root', $sys_http_root, 'FILE_online');
 
 		$block = user_loged() ? 'BLOCK_online_item' : 'BLOCK_online_item_notloged';
@@ -276,7 +276,7 @@ class MainModule extends Template
 
 		if(count($data))
 		{
-			$this->set_file('FILE_r_review', 'tmpl.review_recent.php');
+			$this->set_file('FILE_r_review', 'review_recent.tpl');
 			$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_r_review');
 			foreach($data as $item)
 			{

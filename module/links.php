@@ -9,7 +9,7 @@ require_once('lib/MainModule.php');
 
 $template = new MainModule($sys_template_root, $sys_module_id);
 $template->set_title('Linki');
-$template->set_file('FILE_linki', 'tmpl.links.php');
+$template->set_file('FILE_linki', 'links.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_linki');
 
 $template->set_right();

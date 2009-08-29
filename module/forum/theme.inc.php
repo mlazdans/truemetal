@@ -9,7 +9,7 @@
 
 $_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_themecount'];
 
-$template->set_file('FILE_forum', 'tmpl.forum_theme.php');
+$template->set_file('FILE_forum', 'forum_theme.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_forum');
 
 if($action == 'add_theme')

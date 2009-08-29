@@ -5,7 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-$template = new MainModule($sys_template_root, 'profile', 'user/profile/tmpl.user.php');
+$template = new MainModule($sys_template_root, 'profile', 'user/profile/user.tpl');
 $template->set_var('error_l_email', '', 'FILE_profile');
 
 if(!user_loged())

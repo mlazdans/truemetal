@@ -34,7 +34,7 @@ if(($gal_id == 'thumb' || $gal_id == 'image') && $gd_id)
 }
 
 $template = new MainModule($sys_template_root, $sys_module_id);
-$template->set_file('FILE_gallery', 'tmpl.gallery.php');
+$template->set_file('FILE_gallery', 'gallery.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_gallery');
 
 if($gal_id)

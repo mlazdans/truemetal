@@ -281,7 +281,7 @@ class Poll
 	{
 		$now = date('Y-m-d H:i:s');
 
-		$template->set_file('FILE_poll_archive', 'tmpl.poll_archive.php');
+		$template->set_file('FILE_poll_archive', 'poll_archive.tpl');
 		$template->copy_block('BLOCK_middle', 'FILE_poll_archive');
 
 		$polls = $this->load(0, 0, POLL_ACTIVE, $now);
@@ -342,7 +342,7 @@ class Poll
 		$now = date('Y-m-d H:i:s');
 
 		//$template->_copy_vars_byname('FILE_poll', 'FILE_index');
-		$template->set_file('FILE_poll', 'tmpl.poll_results.php');
+		$template->set_file('FILE_poll', 'poll_results.tpl');
 		$template->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_poll');
 		//$template->copy_block('BLOCK_poll', 'FILE_poll');
 		//$template->copy_block('BLOCK_right_item', 'FILE_poll', TMPL_APPEND);
@@ -418,7 +418,7 @@ class Poll
 			}
 		}*/
 
-		$template->set_file('FILE_poll', 'tmpl.poll.php');
+		$template->set_file('FILE_poll', 'poll.tpl');
 		$template->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_poll');
 		$template->enable('BLOCK_poll');
 

@@ -23,11 +23,11 @@ $art_id = (int)$art_id;
 
 # Template
 $template = new MainModule($sys_template_root, $sys_module_id);
-$template->set_file('FILE_article', 'tmpl.article.php');
+$template->set_file('FILE_article', 'article.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_article');
 if($art_id)
 {
-	$template->set_file('FILE_article_comments', 'tmpl.comments.php');
+	$template->set_file('FILE_article_comments', 'comments.tpl');
 	$template->copy_block('BLOCK_article_comments', 'FILE_article_comments');
 }
 
@@ -99,9 +99,9 @@ if(
 	($_pointer['_data_']['registrated'] == MOD_TYPE_REGISTRATED ||
 	$_pointer['_data_']['module_type'] == MOD_TYPE_REGISTRATED)
 )
-	$tmpl = 'tmpl.registrated.php';
+	$tmpl = 'registrated.tpl';
 else
-	$tmpl = 'tmpl.article.php';
+	$tmpl = 'article.tpl';
 */
 # Comments
 if($art_id)
@@ -220,7 +220,7 @@ if(count($articles))
 	}
 	//$article->set_comment_count($template, $articles);
 } else {
-	//if($tmpl == 'tmpl.article.php')
+	//if($tmpl == 'article.tpl')
 	$template->enable('BLOCK_noarticle');
 }
 

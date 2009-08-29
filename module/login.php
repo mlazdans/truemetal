@@ -19,9 +19,9 @@ if($action == 'logoff')
 	}
 }
 
-$template = new MainModule($sys_template_root, $sys_module_id, 'tmpl.index.php');
+$template = new MainModule($sys_template_root, $sys_module_id, 'index.tpl');
 $template->set_title($_pointer['_data_']['module_name']);
-$template->set_file('FILE_module', 'tmpl.login.php');
+$template->set_file('FILE_module', 'login.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_module');
 
 if(isset($_POST['data']))

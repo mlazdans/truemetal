@@ -7,7 +7,7 @@
 
 //
 
-$template->set_file('FILE_forum', 'tmpl.forum.php');
+$template->set_file('FILE_forum', 'forum.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_forum');
 
 if($forum_data)

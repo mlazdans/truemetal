@@ -9,7 +9,7 @@ require_once('lib/MainModule.php');
 
 $template = new MainModule($sys_template_root, $sys_module_id);
 $template->set_title("Logo");
-$template->set_file('FILE_logo', 'tmpl.logo.php');
+$template->set_file('FILE_logo', 'logo.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_logo');
 
 $template->set_right();
