@@ -23,7 +23,7 @@ UNION
 SELECT
 	art_id + 0 AS doc_id,
 	art_id AS doc_real_id,
-	1 AS doc_source_id,
+	2 AS doc_source_id,
 	art_name AS doc_name,
 	CONCAT(art_intro, ' ',  art_data, ' ', GROUP_CONCAT(c_data SEPARATOR " ")) AS doc_content,
 	COALESCE(cm_comment_count, 0) AS doc_comment_count,
