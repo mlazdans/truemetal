@@ -192,7 +192,7 @@ class Logins
 			$template->enable('BLOCK_nopicture');
 		}
 
-		$template->set_var('l_entered_f', date('d. M Y', strtotime($login['l_entered'])));
+		$template->set_var('l_entered_f', strftime('%e. %b %Y', strtotime($login['l_entered'])));
 	} // set_profile
 
 	static function delete_image()

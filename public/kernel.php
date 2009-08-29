@@ -74,7 +74,6 @@ if(isset($sys_banned[$ip]))
 }
 
 //apd_set_pprof_trace();
-
 /* some includes */
 require_once('include/dbconnect.php');
 require_once('include/session_handler.php');
@@ -154,6 +153,12 @@ $_GET = _GET();
 ini_set('expose_php', false);
 header('Content-Type: text/html; charset='.$sys_encoding);
 header('X-Powered-By: TRUEMETAL');
+
+# LOCALE
+if(isset($sys_locale))
+{
+	setlocale(LC_TIME, $sys_locale);
+}
 
 //ob_start();
 /* iesleedzam vaidziigo moduli */

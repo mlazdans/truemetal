@@ -51,8 +51,10 @@ foreach($arts as $item)
 
 	if($old_date != $date)
 	{
+		$art_date = strftime('%B %Y', strtotime($item['art_entered']));
+		$art_date = mb_convert_case($art_date, MB_CASE_TITLE);
 		$template->enable('BLOCK_archive_date');
-		$template->set_var('art_date', date('M Y', strtotime($item['art_entered'])), 'BLOCK_archive_items');
+		$template->set_var('art_date', $art_date, 'BLOCK_archive_items');
 		$template->parse_block('BLOCK_archive_date');
 		$old_date = $date;
 	} else {
