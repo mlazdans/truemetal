@@ -71,7 +71,7 @@ foreach($comments as $item)
 	elseif($item['c_userid'])
 		$template->set_var('user_login_id', $item['c_userid']);
 
-	if($item['c_userlogin'] || $item['c_userid'])
+	if(user_loged() && ($item['c_userlogin'] || $item['c_userid']))
 		$template->enable('BLOCK_profile_link');
 	else
 		$template->disable('BLOCK_profile_link');

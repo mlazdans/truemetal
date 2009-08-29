@@ -155,9 +155,6 @@ class Logins
 		$pic_path = "$sys_http_root/user/image/$login[l_login]/";
 		$tpic_path = "$sys_http_root/user/thumb/$login[l_login]/";
 
-		//$save_path = $sys_user_root.'/pic/'.$l_id.'.jpg';
-		//$tsave_path = $sys_user_root.'/pic/thumb/'.$l_id.'.jpg';
-
 		$template->enable('BLOCK_profile');
 		$template->set_array($login);
 

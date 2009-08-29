@@ -18,11 +18,11 @@
 		<div class="link">
 			<a href="#comment{c_id}">[Link]</a>
 		</div>
+		<!-- BEGIN BLOCK_profile_link disabled -->
 		<div class="profile">
-			<!-- BEGIN BLOCK_profile_link disabled -->
 			<a href="{http_root}/user/profile/{user_login_id}/" onclick="Truemetal.Pop('{http_root}/user/profile/{user_login_id}/', 400, 400, 'profile{user_login_id}'); return false;">[Profils]</a>
-			<!-- END BLOCK_profile_link -->
 		</div>
+		<!-- END BLOCK_profile_link -->
 		<!-- BEGIN BLOCK_comment_vote disabled -->
 			<div class="vote">
 				<a href="{http_root}/vote/down/{c_id}/" title="Dauns..." onclick="Truemetal.Vote('{c_id}', 'down', '#comment{c_id} .vote-value'); return false;">[&ndash;]</a>
