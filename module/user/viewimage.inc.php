@@ -8,7 +8,7 @@
 $login = array_shift($sys_parameters);
 $login_data = Logins::load_by_login($login);
 
-$template = new MainModule($sys_template_root, 'atteli', 'tmpl.attels_single.php');
+$template = new MainModule($sys_template_root, 'atteli', 'user/tmpl.viewimage.php');
 
 if(!user_loged())
 {

@@ -20,7 +20,7 @@ class MainModule extends Template
 	var $module_name;
 	var $title;
 
-	function MainModule($template_root, $module_name = '',
+	function __construct($template_root, $module_name = '',
 		$str_main_file = 'tmpl.index.php', $str_undefined = 'remove')
 	{
 		parent::Template($template_root, $str_undefined);
