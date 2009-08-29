@@ -148,10 +148,12 @@ foreach($sys_parameters as $k=>$v)
 
 $_GET = _GET();
 
-header("Cache-Control: ");
-header("Expires: ");
-header("Pragma: ");
+//header("Cache-Control: ");
+//header("Expires: ");
+//header("Pragma: ");
+ini_set('expose_php', false);
 header('Content-Type: text/html; charset='.$sys_encoding);
+header('X-Powered-By: TRUEMETAL');
 
 //ob_start();
 /* iesleedzam vaidziigo moduli */
