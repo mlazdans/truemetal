@@ -1,15 +1,19 @@
 <?php
 
+/*
 $atteli_root = $sys_user_root.'/pic';
 $atteli_troot = $sys_user_root.'/pic/thumb';
 $atteli_http_root = $sys_user_http_root.'/pic';
 $atteli_http_troot = $sys_user_http_root.'/pic/thumb';
+*/
 
-$at_id = (int)array_shift($sys_parameters);
-//$login = new Logins;
-//$login_data = $login->load_by_id($at_id);
-if(!($login_data = Logins::load_by_id($at_id)))
-	return;
+$login = array_shift($sys_parameters);
+$login_data = Logins::load_by_login($login);
+//if(!())
+//	return;
+
+$pic_path = "$sys_http_root/user/image/$login[l_login]/";
+$tpic_path = "$sys_http_root/user/thumb/$login[l_login]/";
 
 $template = new MainModule($sys_template_root, 'atteli', 'tmpl.attels_single.php');
 if(!user_loged())
@@ -19,10 +23,10 @@ if(!user_loged())
 	return;
 }
 
-$pic_path = $atteli_http_root.'/'.$at_id.'.jpg';
-$pic_localpath = $atteli_root.'/'.$at_id.'.jpg';
+$pic_path = "$sys_http_root/user/image/$login_data[l_login]/";
+//$pic_localpath = $sys_user_root.'/'.$at_id.'.jpg';
 
-if(file_exists($pic_localpath))
+if($login_data)
 {
 	$template->set_var('pic_path', $pic_path);
 } else {

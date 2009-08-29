@@ -146,14 +146,14 @@ class Logins
 
 	function set_profile(&$template, $login)
 	{
-		global $sys_user_root, $sys_user_http_root;
+		global $sys_user_root, $sys_http_root;
 
 		$login['l_forumsort_themes'] = isset($login['l_forumsort_themes']) ? $login['l_forumsort_themes'] : FORUM_SORT_LAST_COMMENT;
 		$login['l_forumsort_msg'] = isset($login['l_forumsort_msg']) ? $login['l_forumsort_msg'] : FORUM_SORT_ASC;
 		$pic_localpath = $sys_user_root.'/pic/'.$login['l_id'].'.jpg';
 		$tpic_localpath = $sys_user_root.'/pic/thumb/'.$login['l_id'].'.jpg';
-		$pic_path = $sys_user_http_root.'/pic/'.$login['l_id'].'.jpg';
-		$tpic_path = $sys_user_http_root.'/pic/thumb/'.$login['l_id'].'.jpg';
+		$pic_path = "$sys_http_root/user/image/$login[l_login]/";
+		$tpic_path = "$sys_http_root/user/thumb/$login[l_login]/";
 
 		//$save_path = $sys_user_root.'/pic/'.$l_id.'.jpg';
 		//$tsave_path = $sys_user_root.'/pic/thumb/'.$l_id.'.jpg';

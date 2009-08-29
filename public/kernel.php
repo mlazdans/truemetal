@@ -15,8 +15,7 @@ $sys_http_root         = '';
 $sys_template_root     = $sys_root.'/templates';
 $sys_upload_root       = $sys_public_root.'/data';
 $sys_upload_http_root  = '/data';
-$sys_user_root         = $sys_public_root.'/users';
-$sys_user_http_root    = '/users';
+$sys_user_root         = $sys_root.'/users';
 
 $sys_error_reporting   = E_ALL;
 $sys_default_lang      = 'lv';

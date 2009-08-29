@@ -36,7 +36,13 @@
 
 	<!-- BEGIN BLOCK_picture disabled -->
 	<div style="margin: 0 2px; float: left;">
-		<a href="{module_root}/view/{l_id}/" onclick="Truemetal.Pop('{module_root}/view/{l_id}/', {pic_w}, {pic_h}); return false;"><img src="{pic_path}" alt="" /></a>
+		<a
+			href="{module_root}/view/{l_login}/"
+			onclick="Truemetal.Pop('{module_root}/view/{l_login}/', {pic_w}, {pic_h}); return false;"
+		><img
+			src="{pic_path}"
+			alt=""
+		/></a>
 	</div>
 	<!-- END BLOCK_picture -->
 

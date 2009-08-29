@@ -15,7 +15,9 @@
 </head>
 
 <body>
-<img src="{pic_path}" alt="" border="0" onClick="window.close()">
+	<div>
+		<img src="{pic_path}" alt="" onclick="window.close()" />
+	</div>
 </body>
 </html>
 
