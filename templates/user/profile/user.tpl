@@ -46,10 +46,11 @@
 	</div>
 	<!-- END BLOCK_picture -->
 
-	<!-- BEGIN BLOCK_public_email disabled -->
 	<div class="List-item">
 		<b>Pievienojies:</b> {l_entered_f}
 	</div>
+
+	<!-- BEGIN BLOCK_public_email disabled -->
 	<div class="List-item">
 		<b>E-pasts:</b> <a href="mailto:{l_email}">{l_email}</a>
 	</div>
