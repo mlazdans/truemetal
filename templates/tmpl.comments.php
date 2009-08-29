@@ -20,7 +20,7 @@
 		</div>
 		<div class="profile">
 			<!-- BEGIN BLOCK_profile_link disabled -->
-			<a href="{http_root}/profile/user/{user_login_id}/" onclick="Truemetal.Pop('{http_root}/profile/user/{user_login_id}/', 400, 400, 'profile{user_login_id}'); return false;">[Profils]</a>
+			<a href="{http_root}/user/profile/{user_login_id}/" onclick="Truemetal.Pop('{http_root}/user/profile/{user_login_id}/', 400, 400, 'profile{user_login_id}'); return false;">[Profils]</a>
 			<!-- END BLOCK_profile_link -->
 		</div>
 		<!-- BEGIN BLOCK_comment_vote disabled -->

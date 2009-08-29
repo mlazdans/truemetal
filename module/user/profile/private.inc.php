@@ -1,4 +1,14 @@
 <?php
+// dqdp.net Web Engine v3.0
+//
+// contacts:
+// http://dqdp.net/
+// marrtins@dqdp.net
+
+$template = new MainModule($sys_template_root, $sys_module_id);
+$template->set_title('Profils');
+$template->set_file('FILE_module', 'tmpl.profile.php');
+$template->copy_block('BLOCK_middle', 'FILE_module');
 
 if(!user_loged())
 {
@@ -52,4 +62,13 @@ $template->set_profile($login_data);
 //$template->enable('BLOCK_picture_delete');
 //$template->enable('BLOCK_private_profile');
 
+
+$template->set_right();
+$template->set_login();
+$template->set_reviews();
+$template->set_poll();
+$template->set_search();
+$template->set_online();
+
+$template->out();
 

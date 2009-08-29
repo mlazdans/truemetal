@@ -1,4 +1,9 @@
 <?php
+// dqdp.net Web Engine v3.0
+//
+// contacts:
+// http://dqdp.net/
+// marrtins@dqdp.net
 
 $login = array_shift($sys_parameters);
 $login_data = Logins::load_by_login($login);

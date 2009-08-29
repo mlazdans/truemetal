@@ -38,7 +38,7 @@
 	<div style="margin: 0 2px; float: left;">
 		<a
 			href="{module_root}/view/{l_login}/"
-			onclick="Truemetal.Pop('{module_root}/view/{l_login}/', {pic_w}, {pic_h}); return false;"
+			onclick="Truemetal.Pop('{http_root}/user/viewimage/{l_login}/', {pic_w}, {pic_h}); return false;"
 		><img
 			src="{pic_path}"
 			alt=""

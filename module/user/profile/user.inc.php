@@ -1,6 +1,10 @@
 <?php
+// dqdp.net Web Engine v3.0
+//
+// contacts:
+// http://dqdp.net/
+// marrtins@dqdp.net
 
-$l_id = array_shift($sys_parameters);
 $template = new MainModule($sys_template_root, 'profile', 'tmpl.profile_single.php');
 $template->set_var('error_l_email', '', 'FILE_profile');
 
@@ -11,21 +15,7 @@ if(!user_loged())
 	return;
 }
 
-// ja id
-$login_data = array();
-
-// ja login
-if(Logins::valid_login($l_id))
-{
-	$login_data = Logins::load_by_login($l_id);
-} else {
-	if($l_id === strval(intval($l_id)))
-	{
-		$login_data = Logins::load_by_id($l_id);
-	}
-}
-
-if($login_data)
+if($login_data = Logins::load_by_login($login))
 {
 	$template->set_title(" - $login_data[l_nick]");
 	if($login_data['l_emailvisible'] == LOGIN_EMAIL_VISIBLE)

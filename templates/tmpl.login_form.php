@@ -39,7 +39,7 @@
 	<a href="/login/logoff/" onclick="return confirm('Tu ko?! Nezini, kas ir Amorphis???');">Log Off</a>
 </div>
 <div class="List-item">
-	<a href="{http_root}/profile/" title="Lietotāja profils">Tavs profils</a>
+	<a href="{http_root}/user/profile/" title="Lietotāja profils">Tavs profils</a>
 </div>
 <div class="List-item">
 	<a href="{http_root}/mark/" title="Iezīmēt visus komentārus kā izlasītus">Mark all as read</a>

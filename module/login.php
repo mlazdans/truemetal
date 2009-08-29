@@ -40,7 +40,7 @@ if(isset($_POST['data']))
 		$_SESSION['login'] = $login_data;
 
 		if(empty($data['referer']))
-			header("Location: $sys_http_root/profile/");
+			header("Location: $sys_http_root/user/profile/");
 		else
 			header("Location: ".urldecode($data['referer']));
 
