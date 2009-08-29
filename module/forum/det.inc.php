@@ -7,7 +7,7 @@
 
 //
 
-$template->set_file('FILE_forum', 'forum_det.tpl');
+$template->set_file('FILE_forum', 'forum/det.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_forum');
 
 $template->set_file('FILE_forum_comments', 'comments.tpl');

@@ -184,7 +184,7 @@ class MainModule extends Template
 
 	function set_login()
 	{
-		$this->set_file('FILE_login_form', 'login_form.tpl');
+		$this->set_file('FILE_login_form', 'right/login_form.tpl');
 		$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_login_form');
 
 		if(isset($_SESSION['login']['l_id']) && $_SESSION['login']['l_id'])
@@ -208,7 +208,7 @@ class MainModule extends Template
 
 	function set_search($search_q = '')
 	{
-		$this->set_file('FILE_search_form', 'search_form.tpl');
+		$this->set_file('FILE_search_form', 'right/search_form.tpl');
 		$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_search_form');
 		$this->set_var('search_q', $search_q, 'FILE_search_form');
 
@@ -228,7 +228,7 @@ class MainModule extends Template
 		global $db, $sys_http_root;
 
 		$login = new Logins;
-		$this->set_file('FILE_online', 'online.tpl');
+		$this->set_file('FILE_online', 'right/online.tpl');
 		$this->set_var('http_root', $sys_http_root, 'FILE_online');
 
 		$block = user_loged() ? 'BLOCK_online_item' : 'BLOCK_online_item_notloged';
@@ -276,7 +276,7 @@ class MainModule extends Template
 
 		if(count($data))
 		{
-			$this->set_file('FILE_r_review', 'review_recent.tpl');
+			$this->set_file('FILE_r_review', 'right/review_recent.tpl');
 			$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_r_review');
 			foreach($data as $item)
 			{

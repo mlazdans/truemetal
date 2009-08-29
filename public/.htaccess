@@ -17,13 +17,13 @@ RewriteCond  %{REQUEST_URI}   !(.*)/kernel.php [NC]
 RewriteCond  %{REQUEST_URI}   !(.*)(gif|jpg|png|ico|js|css|jpeg|avi|wmv|exe|txt|mp3|php|zip|swf|flv|html?|svg)$ [NC]
 RewriteRule ^(.*)$ /kernel.php?$1
 
-Order deny,allow
-<FilesMatch "\.(inc.php)$">
-  Deny from all
-</FilesMatch>
-<FilesMatch "\.(mod.php)$">
-  Deny from all
-</FilesMatch>
+#Order deny,allow
+#<FilesMatch "\.(inc.php)$">
+#  Deny from all
+#</FilesMatch>
+#<FilesMatch "\.(mod.php)$">
+#  Deny from all
+#</FilesMatch>
 
 #<IfModule mod_deflate.c>
 #  SetOutputFilter DEFLATE

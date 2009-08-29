@@ -93,16 +93,6 @@ if($art_id) {
 }
 
 // no chekojam vai registreeta *sadalja/raksts*
-/*
-if(
-	!user_loged() &&
-	($_pointer['_data_']['registrated'] == MOD_TYPE_REGISTRATED ||
-	$_pointer['_data_']['module_type'] == MOD_TYPE_REGISTRATED)
-)
-	$tmpl = 'registrated.tpl';
-else
-	$tmpl = 'article.tpl';
-*/
 # Comments
 if($art_id)
 {

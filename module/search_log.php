@@ -9,7 +9,7 @@
 require_once('lib/MainModule.php');
 
 $template = new MainModule($sys_template_root, $sys_module_id, 'index.tpl');
-$template->set_file('FILE_search', 'search_log.tpl');
+$template->set_file('FILE_search', 'search/log.tpl');
 $template->set_title("Ko mēs meklējam");
 $template->copy_block('BLOCK_middle', 'FILE_search');
 
