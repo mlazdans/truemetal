@@ -5,6 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
+$module_root = "$module_root/profile";
 
 if(!user_loged())
 {
