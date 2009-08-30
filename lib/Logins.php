@@ -273,8 +273,10 @@ class Logins
 
 		if(!$error_msg)
 		{
+			/*
 			$sql = "INSERT INTO logins_change SELECT * FROM logins WHERE l_id = $l_id";
 			$db->Execute($sql);
+			*/
 
 			$osql = $sql = '';
 			$sql .= $data['l_email'] ? "l_email = '$data[l_email]', " : '';
