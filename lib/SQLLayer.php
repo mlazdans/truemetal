@@ -232,6 +232,17 @@ class SQLLayer
 		}
 	} // AutoCommit
 
+	function AffectedRows()
+	{
+		switch( $this->int_db_type ) {
+			case DB_MYSQLI:
+				return mysqli_affected_rows($this->conn);
+				break;
+			default:
+				return false;
+				break;
+		}
+	}
 
 
 
