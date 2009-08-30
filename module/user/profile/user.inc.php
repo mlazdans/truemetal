@@ -12,6 +12,7 @@ $template->set_var('error_l_email', '', 'FILE_profile');
 
 if(!user_loged())
 {
+	header("HTTP/1.1 403 Forbidden");
 	$template->enable('BLOCK_not_loged');
 	$template->out();
 	return;
@@ -41,14 +42,20 @@ if(
 	}
 }
 
-if($disable_comments_checked = CommentDisabled::get($_SESSION['login']['l_id'], $login_data['l_id']))
+if(
+	$login_data &&
+	($disable_comments_checked = CommentDisabled::get($_SESSION['login']['l_id'], $login_data['l_id']))
+	)
 {
 	$template->set_var('disable_comments_checked', ' checked="checked"', 'BLOCK_profile');
 } else {
 	$template->set_var('disable_comments_checked', '', 'BLOCK_profile');
 }
 
-if($_SESSION['login']['l_id'] != $login_data['l_id'])
+if(
+	$login_data &&
+	($_SESSION['login']['l_id'] != $login_data['l_id'])
+	)
 {
 	$template->enable('BLOCK_disable_comments');
 }
@@ -62,8 +69,9 @@ if($login_data)
 	}
 	$template->set_profile($login_data);
 } else {
-	$template->set_title("$l_id - neeksistējošs profils");
-	$template->enable('BLOCK_no_suck_login');
+	header("HTTP/1.0 404 Not Found");
+	$template->set_title("$login - neeksistējošs profils");
+	$template->enable('BLOCK_no_such_login');
 }
 
 $template->out();

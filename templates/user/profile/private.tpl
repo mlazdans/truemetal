@@ -4,12 +4,6 @@
 </div>
 <!-- END BLOCK_not_loged -->
 
-<!-- BEGIN BLOCK_no_suck_login disabled -->
-<div class="Info">
-	Šāds profils neeksitē!
-</div>
-<!-- END BLOCK_no_suck_login -->
-
 <!-- BEGIN BLOCK_profile_error disabled -->
 <div class="error">
 	{error_msg}

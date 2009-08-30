@@ -22,6 +22,12 @@
 </div>
 <!-- END BLOCK_not_loged -->
 
+<!-- BEGIN BLOCK_no_such_login disabled -->
+<div class="Info">
+	Šāds profils neeksitē!
+</div>
+<!-- END BLOCK_no_such_login -->
+
 <!-- BEGIN BLOCK_profile disabled -->
 <div style="background: #444444;">
 	<div class="TD-cat">

@@ -212,6 +212,7 @@ if(count($articles))
 	//$article->set_comment_count($template, $articles);
 } else {
 	//if($tmpl == 'article.tpl')
+	header("HTTP/1.0 404 Not Found");
 	$template->enable('BLOCK_noarticle');
 }
 
