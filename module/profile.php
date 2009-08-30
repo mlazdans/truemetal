@@ -6,6 +6,10 @@ if($section == 'user')
 {
 	$user = array_pop($sys_parameters);
 	header("Location: $sys_http_root/user/profile/$user/", true, 301);
-	return;
+}
+
+if($section == 'view')
+{
+	header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
 }
 
