@@ -194,18 +194,6 @@ if(count($articles))
 		}
 		*/
 
-		/*
-		$old_comment_count =
-			isset($_SESSION['comments']['viewed'][$item['art_id']]) ?
-			$_SESSION['comments']['viewed'][$item['art_id']] :
-			0;
-
-		$template->disable('BLOCK_comments_new');
-		if($item['art_comment_count'] > $old_comment_count)
-		{
-			$template->enable('BLOCK_comments_new');
-		}
-		*/
 		$template->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_comments_new');
 
 		$template->set_array($item, 'BLOCK_article');

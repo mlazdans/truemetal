@@ -437,19 +437,6 @@ INSERT INTO forum (
 			$template->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_r_forum');
 			foreach($data as $item)
 			{
-				/*
-				$old_comment_count =
-				isset($_SESSION['forums']['viewed'][$item['forum_id']]) ?
-				$_SESSION['forums']['viewed'][$item['forum_id']] :
-				0;
-
-				$template->disable('BLOCK_forum_r_comments_new');
-				if($item['forum_comment_count'] > $old_comment_count)
-				{
-					$template->enable('BLOCK_forum_r_comments_new');
-				}
-				*/
-
 				$template->{(Forum::hasNewComments($item) ? "enable" : "disable")}('BLOCK_forum_r_comments_new');
 				$template->set_var('forum_r_name', $item['forum_name'], 'FILE_r_forum');
 				$template->set_var('forum_r_comment_count', $item['forum_comment_count'], 'FILE_r_forum');
@@ -466,27 +453,10 @@ INSERT INTO forum (
 	static function hasNewComments($item)
 	{
 		if(isset($_SESSION['forums']['viewed'][$item['forum_id']]))
-		{
 			return ($item['forum_comment_count'] > $_SESSION['forums']['viewed'][$item['forum_id']]);
-		}
 
 		if(isset($_SESSION['forums']['viewed_before']))
-		{
-			/*
-			if($GLOBALS['i_am_admin'])
-			{
-				if($item['forum_id'] == 121668)
-				{
-					printf("%s:%s",
-						date("Y.m.d H:i:s", $_SESSION['forums']['viewed_before']),
-						date("Y.m.d H:i:s", date(strtotime($item['forum_lastcommentdate'])))
-						);
-				}
-			}
-			*/
-
 			return ($_SESSION['forums']['viewed_before'] < strtotime($item['forum_lastcommentdate']));
-		}
 
 		return true;
 	} // hasNewComments
@@ -494,14 +464,10 @@ INSERT INTO forum (
 	static function hasNewThemes($item)
 	{
 		if(isset($_SESSION['forums']['viewed'][$item['forum_id']]))
-		{
 			return ($item['forum_themecount'] > $_SESSION['forums']['viewed'][$item['forum_id']]);
-		}
 
 		if(isset($_SESSION['forums']['viewed_before']))
-		{
 			return ($_SESSION['forums']['viewed_before'] < strtotime($item['forum_lastthemedate']));
-		}
 
 		return true;
 	} // hasNewThemes

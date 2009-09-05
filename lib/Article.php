@@ -299,17 +299,13 @@ INSERT INTO article (
 	static function hasNewComments($item)
 	{
 		if(isset($_SESSION['comments']['viewed'][$item['art_id']]))
-		{
 			return ($item['art_comment_count'] > $_SESSION['comments']['viewed'][$item['art_id']]);
-		}
 
 		if(isset($_SESSION['comments']['viewed_before']))
-		{
 			return ($_SESSION['comments']['viewed_before'] < strtotime($item['art_comment_lastdate']));
-		}
 
 		return true;
 	} // hasNewComments
 
-}
+} // class::Article
 
