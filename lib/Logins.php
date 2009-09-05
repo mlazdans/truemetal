@@ -247,7 +247,7 @@ class Logins
 			// check login status
 			if($l_data['l_active'] != LOGIN_ACTIVE || $l_data['l_accepted'] != LOGIN_ACCEPTED)
 			{
-				$error_msg .= 'Nevar saglabāt neatktīvu profilu!<br />';
+				$error_msg .= 'Nevar saglabāt neaktīvu profilu!<br />';
 			}
 
 			// check pass match
@@ -268,7 +268,7 @@ class Logins
 			}
 
 		} else {
-			$error_msg .= 'Nevar saglabāt neatktīvu kontu!<br />';
+			$error_msg .= 'Nevar saglabāt neaktīvu kontu!<br />';
 		}
 
 		if(!$error_msg)
@@ -307,13 +307,13 @@ class Logins
 					{
 						if($accept_code = $this->insert_accept_code($l_data['l_login']))
 						{
-							$msg = "Jusu epasts tika mainits!\n\nLudzu apstiprini jauno adresi, nospiezhot uz http://$sys_domain/register/accept/$accept_code/";
-							if(!$this->send_accept_code($l_data['l_login'], $accept_code, $data['l_email'], 'truemetal.lv e-pasta apstiprinasana', $msg))
+							$msg = "Jūsu epasts tika mainīts!\n\nApstiprini jauno e-pasta adresi, atverot saiti http://$sys_domain/register/accept/$accept_code/";
+							if(!$this->send_accept_code($l_data['l_login'], $accept_code, $data['l_email'], 'truemetal.lv e-pasta apstiprināšana', $msg))
 							{
 								$this->accept_login($accept_code);
 								// rollback (god damn, mehehehheee)
 								$db->Execute("UPDATE logins SET $osql WHERE l_id = $l_id");
-								$this->error_msg = 'Nevar nosutit kodu uz "'.$data['l_email'].'"<br />('.$GLOBALS['php_errormsg'].')';
+								$this->error_msg = 'Nevar nosūtīt kodu uz "'.$data['l_email'].'"<br />('.$GLOBALS['php_errormsg'].')';
 								return false;
 							}
 						}
@@ -405,9 +405,9 @@ class Logins
 			$data = $_SESSION['login'];
 			if(isset($data['l_id']) && ($data = $this->load_by_id($data['l_id'])))
 			{
-				$db->Execute("UPDATE logins SET l_logedin ='N' WHERE l_id = $data[l_id]");
 				$this->save_session_data();
 				session_destroy();
+				$db->Execute("UPDATE logins SET l_logedin ='N' WHERE l_id = $data[l_id]");
 
 				return true;
 			}
@@ -469,22 +469,22 @@ class Logins
 
 		if(!$msg)
 		{
-			$msg = "Veiksmiga registracija!\n\nLudzu apstiprini savu registraciju, nospiezhot uz http://$sys_domain/register/accept/$code/";
+			$msg = "Veiksmīga reģistrācija!\n\nApstiprini savu reģistrāciju, atverot šo saiti http://$sys_domain/register/accept/$code/";
 		}
 
 		if(!$subj)
 		{
-			$subj = 'truemetal.lv registracija';
+			$subj = 'truemetal.lv reģistrācija';
 		}
 
 		if(email($email, $subj, $msg))
 		{
 			$sql = "UPDATE login_accept SET la_sent = 'Y' WHERE la_login = '$login'";
 			return $db->Execute($sql);
-		} else
+		} else {
 			return false;
-
-	} // insert_accept_code
+		}
+	} // send_accept_code
 
 	function accept_login($code, $timeout = 259200) // 3*24h
 	{
@@ -502,7 +502,7 @@ class Logins
 		}
 
 		return false;
-	} // load_accept_code
+	} // accept_login
 
 	function get_forgot($code, $timeout = 259200) // 3*24h
 	{
@@ -635,29 +635,32 @@ class Logins
 
 		return $db->Execute($sql);
 	} // deactivate
-
+/*
 	function accept($l_id)
 	{
 		global $db;
 
-		if($l = $this->load_by_id($l_id) && $l['l_accepted'] != LOGIN_ACCEPTED) {
+		if($l = $this->load_by_id($l_id) && $l['l_accepted'] != LOGIN_ACCEPTED)
+		{
 			$sql = 'UPDATE logins SET l_accepted = "'.LOGIN_ACCEPTED.'" WHERE l_id = "'.$l_id.'"';
-			if($db->Execute($sql)) {
+			if($db->Execute($sql))
+			{
 				$this->email_accept($l_id);
 				return true;
 			} else {
 				return false;
 			}
-		} else // load
+		} else {
 			return false;
+		}
 	} // accept
 
 	function email_accept($l_id)
 	{
 		if($l = $this->load_by_id($l_id))
-			email($l['l_email'], 'lpa.lv accept', "Registracija akcepteta!\n\nwww.lpa.lv");
+			email($l['l_email'], 'lpa.lv accept', "Reģistrācija akceptēta!\n\nwww.lpa.lv");
 	} // email_accept
-
+*/
 	function process_action(&$data, $action)
 	{
 		$ret = true;

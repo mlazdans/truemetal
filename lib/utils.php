@@ -638,6 +638,50 @@ function set_area(&$template, $block = 'BLOCK_area', $area_id = 0)
 
 } // set_area
 
+function email($to, $subj, $msg, $attachments = array())
+{
+	global $sys_mail_from, $mail_params;
+
+	require_once('Mail.php');
+	require_once('Mail/mime.php');
+
+	$headers = array(
+		'From'=>$sys_mail_from,
+		'Subject'=>$subj,
+	);
+
+	$mime = new Mail_Mime("\n");
+	$mime->setTxtBody($msg);
+	foreach($attachments as $file)
+	{
+		$filename = $file['tmp_name'];
+		$filename_show = $file['name'];
+		$type = $file['type'];
+		$mime->addAttachment($filename, $type, $filename_show);
+	}
+
+	$body = $mime->get();
+	$hdrs = $mime->headers($headers);
+
+	if(empty($mail_params))
+	{
+		$mail = Mail::factory('mail');
+	} else {
+		$mail = Mail::factory('mail', $mail_params);
+	}
+	$e = $mail->send($to, $hdrs, $body);
+
+	if($e !== TRUE)
+	{
+		$ret = false;
+	} else {
+		$ret = true;
+	}
+
+	return $ret;
+} // email
+
+/*
 function email($to, $subj, $msg)
 {
 	global $sys_mail_from;
@@ -651,6 +695,7 @@ function email($to, $subj, $msg)
 
 	return $ret;
 } // email
+*/
 
 function user_loged()
 {

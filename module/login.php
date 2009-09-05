@@ -39,10 +39,17 @@ if(isset($_POST['data']))
 		unset($login_data['l_sessiondata']);
 		$_SESSION['login'] = $login_data;
 
-		if(empty($data['referer']))
+		$referer = empty($data['referer']) ? false : urldecode($data['referer']);
+		if(
+			empty($data['referer']) ||
+			(strpos($referer, "/register/") !== false) ||
+			(strpos($referer, "/forgot/") !== false)
+			)
+		{
 			header("Location: $sys_http_root/user/profile/");
-		else
-			header("Location: ".urldecode($data['referer']));
+		} else {
+			header("Location: $referer");
+		}
 
 		return;
 	} else {
