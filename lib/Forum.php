@@ -472,7 +472,7 @@ INSERT INTO forum (
 
 		if(isset($_SESSION['forums']['viewed_before']))
 		{
-			$hasNewComments = ($_SESSION['forums']['viewed_before'] < strtotime($item['forum_entered']));
+			$hasNewComments = ($_SESSION['forums']['viewed_before'] < strtotime($item['forum_lastcommentdate']));
 		}
 
 		return $hasNewComments;

@@ -306,7 +306,7 @@ INSERT INTO article (
 
 		if(isset($_SESSION['comments']['viewed_before']))
 		{
-			$hasNewComments = ($_SESSION['comments']['viewed_before'] < strtotime($item['art_date']));
+			$hasNewComments = ($_SESSION['comments']['viewed_before'] < strtotime($item['art_comment_lastdate']));
 		}
 
 		return $hasNewComments;
