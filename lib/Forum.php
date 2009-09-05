@@ -436,6 +436,7 @@ INSERT INTO forum (
 			$template->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_r_forum');
 			foreach($data as $item)
 			{
+				/*
 				$old_comment_count =
 				isset($_SESSION['forums']['viewed'][$item['forum_id']]) ?
 				$_SESSION['forums']['viewed'][$item['forum_id']] :
@@ -446,7 +447,9 @@ INSERT INTO forum (
 				{
 					$template->enable('BLOCK_forum_r_comments_new');
 				}
+				*/
 
+				$template->{(Forum::hasNewComments($item) ? "enable" : "disable")}('BLOCK_forum_r_comments_new');
 				$template->set_var('forum_r_name', $item['forum_name'], 'FILE_r_forum');
 				$template->set_var('forum_r_comment_count', $item['forum_comment_count'], 'FILE_r_forum');
 				$template->set_var('forum_r_path', "forum/".$item['forum_id'], 'FILE_r_forum');
@@ -458,6 +461,38 @@ INSERT INTO forum (
 			$template->parse_block('BLOCK_right_item', TMPL_APPEND);
 		}
 	} // set_recent_forum
+
+	static function hasNewComments($item)
+	{
+		$hasNewComments = true;
+		if(isset($_SESSION['forums']['viewed'][$item['forum_id']]))
+		{
+			$hasNewComments = ($item['forum_comment_count'] > $_SESSION['forums']['viewed'][$item['forum_id']]);
+		}
+
+		if(isset($_SESSION['forums']['viewed_before']))
+		{
+			$hasNewComments = ($_SESSION['forums']['viewed_before'] < strtotime($item['forum_entered']));
+		}
+
+		return $hasNewComments;
+	} // hasNewComments
+
+	static function hasNewThemes($item)
+	{
+		$hasNewComments = true;
+		if(isset($_SESSION['forums']['viewed'][$item['forum_id']]))
+		{
+			$hasNewComments = ($item['forum_themecount'] > $_SESSION['forums']['viewed'][$item['forum_id']]);
+		}
+
+		if(isset($_SESSION['forums']['viewed_before']))
+		{
+			$hasNewComments = ($_SESSION['forums']['viewed_before'] < strtotime($item['forum_entered']));
+		}
+
+		return $hasNewComments;
+	} // hasNewThemes
 
 } // Forum
 

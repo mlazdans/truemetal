@@ -295,5 +295,22 @@ INSERT INTO article (
 
 		return $data['art_count'];
 	} // get_total
+
+	static function hasNewComments($item)
+	{
+		$hasNewComments = true;
+		if(isset($_SESSION['comments']['viewed'][$item['art_id']]))
+		{
+			$hasNewComments = ($item['art_comment_count'] > $_SESSION['comments']['viewed'][$item['art_id']]);
+		}
+
+		if(isset($_SESSION['comments']['viewed_before']))
+		{
+			$hasNewComments = ($_SESSION['comments']['viewed_before'] < strtotime($item['art_date']));
+		}
+
+		return $hasNewComments;
+	} // hasNewComments
+
 }
 

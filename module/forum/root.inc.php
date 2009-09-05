@@ -19,6 +19,7 @@ if($forum_data)
 
 foreach($forum_data as $item)
 {
+	/*
 	$old_forum_childcount =
 	isset($_SESSION['forums']['viewed'][$item['forum_id']]) ?
 	$_SESSION['forums']['viewed'][$item['forum_id']] :
@@ -28,7 +29,9 @@ foreach($forum_data as $item)
 		$template->enable('BLOCK_comments_new');
 	else
 		$template->disable('BLOCK_comments_new');
+		*/
 
+	$template->{(Forum::hasNewThemes($item) ? "enable" : "disable")}('BLOCK_comments_new');
 	$template->set_array($item, 'BLOCK_forum');
 	$template->set_var('forum_date', proc_date($item['forum_entered']), 'BLOCK_forum');
 	$template->parse_block('BLOCK_forum', TMPL_APPEND);
