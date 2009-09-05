@@ -464,34 +464,45 @@ INSERT INTO forum (
 
 	static function hasNewComments($item)
 	{
-		$hasNewComments = true;
 		if(isset($_SESSION['forums']['viewed'][$item['forum_id']]))
 		{
-			$hasNewComments = ($item['forum_comment_count'] > $_SESSION['forums']['viewed'][$item['forum_id']]);
+			return ($item['forum_comment_count'] > $_SESSION['forums']['viewed'][$item['forum_id']]);
 		}
 
 		if(isset($_SESSION['forums']['viewed_before']))
 		{
-			$hasNewComments = ($_SESSION['forums']['viewed_before'] < strtotime($item['forum_lastcommentdate']));
+			/*
+			if($GLOBALS['i_am_admin'])
+			{
+				if($item['forum_id'] == 121668)
+				{
+					printf("%s:%s",
+						date("Y.m.d H:i:s", $_SESSION['forums']['viewed_before']),
+						date("Y.m.d H:i:s", date(strtotime($item['forum_lastcommentdate'])))
+						);
+				}
+			}
+			*/
+
+			return ($_SESSION['forums']['viewed_before'] < strtotime($item['forum_lastcommentdate']));
 		}
 
-		return $hasNewComments;
+		return true;
 	} // hasNewComments
 
 	static function hasNewThemes($item)
 	{
-		$hasNewComments = true;
 		if(isset($_SESSION['forums']['viewed'][$item['forum_id']]))
 		{
-			$hasNewComments = ($item['forum_themecount'] > $_SESSION['forums']['viewed'][$item['forum_id']]);
+			return ($item['forum_themecount'] > $_SESSION['forums']['viewed'][$item['forum_id']]);
 		}
 
 		if(isset($_SESSION['forums']['viewed_before']))
 		{
-			$hasNewComments = ($_SESSION['forums']['viewed_before'] < strtotime($item['forum_entered']));
+			return ($_SESSION['forums']['viewed_before'] < strtotime($item['forum_entered']));
 		}
 
-		return $hasNewComments;
+		return true;
 	} // hasNewThemes
 
 } // Forum

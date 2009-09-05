@@ -298,18 +298,17 @@ INSERT INTO article (
 
 	static function hasNewComments($item)
 	{
-		$hasNewComments = true;
 		if(isset($_SESSION['comments']['viewed'][$item['art_id']]))
 		{
-			$hasNewComments = ($item['art_comment_count'] > $_SESSION['comments']['viewed'][$item['art_id']]);
+			return ($item['art_comment_count'] > $_SESSION['comments']['viewed'][$item['art_id']]);
 		}
 
 		if(isset($_SESSION['comments']['viewed_before']))
 		{
-			$hasNewComments = ($_SESSION['comments']['viewed_before'] < strtotime($item['art_comment_lastdate']));
+			return ($_SESSION['comments']['viewed_before'] < strtotime($item['art_comment_lastdate']));
 		}
 
-		return $hasNewComments;
+		return true;
 	} // hasNewComments
 
 }
