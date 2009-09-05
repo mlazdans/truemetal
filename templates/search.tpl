@@ -6,7 +6,7 @@
 <table class="Main">
 <tr>
 	<td>Frāze:</td>
-	<td><input type="text" name="search_q" id="search_q" value="{search_q}" size="64" /></td>
+	<td><input type="text" name="search_q" id="search_q" value="{search_q}" size="64" style="width: 99%;" /></td>
 </tr>
 <tr>
 	<td>Sadaļas:</td>
@@ -25,6 +25,16 @@
 		<input{section_forum_checked} type="checkbox" class="checkbox" name="sections[]" id="section_forum" value="forum" />
 		Forums
 		</label>
+	</td>
+</tr>
+<tr>
+	<td>
+		<label for="only_titles">
+		Tikai virsrakstos:
+		</label>
+	</td>
+	<td>
+		<input{only_titles_checked} type="checkbox" class="checkbox" name="only_titles" id="only_titles" />
 	</td>
 </tr>
 <tr>

@@ -16,6 +16,7 @@ $Article = new Article();
 $Forum = new Forum();
 
 $sections = post('sections', array());
+$only_titles = post('only_titles', false);
 
 # Log
 if($search_log)
@@ -56,11 +57,18 @@ if(in_array('forum', $sections))
 	$sources[] = 3;
 }
 
+if($only_titles)
+{
+	$template->set_var('only_titles_checked', ' checked="checked"', 'BLOCK_middle');
+}
+
 $cl->SetSortMode(SPH_SORT_ATTR_DESC, "doc_entered");
 if($sources)
 	$cl->SetFilter('doc_source_id', $sources);
 
-if(($res = $cl->Query($search_q, "doc")) === false)
+$index = ($only_titles ? "doc_titles" : "doc");
+
+if(($res = $cl->Query($search_q, $index)) === false)
 {
 	$search_msg[] = "Kļūda: ".$cl->GetLastError();
 	user_error($cl->GetLastError(), E_USER_WARNING);
@@ -91,7 +99,7 @@ if(($res = $cl->Query($search_q, "doc")) === false)
 				));
 			foreach($arts as $item)
 			{
-				$doc_id = $item['art_id'] + $ds['id_offset'];
+				$doc_id = $item['art_id'] + $ds['id_offset'.($only_titles ? "_titles" : "")];
 				$items_temp[$doc_id] = array(
 					'doc_real_id'=>$item['art_id'],
 					'doc_name'=>$item['art_name'],
@@ -110,7 +118,7 @@ if(($res = $cl->Query($search_q, "doc")) === false)
 				));
 			foreach($forums as $item)
 			{
-				$doc_id = $item['forum_id'] + $ds['id_offset'];
+				$doc_id = $item['forum_id'] + $ds['id_offset'.($only_titles ? "_titles" : "")];
 				$items_temp[$doc_id] = array(
 					'doc_real_id'=>$item['forum_id'],
 					'doc_name'=>$item['forum_name'],
