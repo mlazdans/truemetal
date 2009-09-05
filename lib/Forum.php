@@ -73,7 +73,8 @@ SELECT
 	f.*,
 	COALESCE(cm_comment_count, 0) AS forum_comment_count,
 	cm_comment_lastdate AS forum_lastcommentdate,
-	(SELECT COUNT(*) FROM forum f2 WHERE f2.forum_forumid = f.forum_id) forum_themecount
+	(SELECT COUNT(*) FROM forum f2 WHERE f2.forum_forumid = f.forum_id) forum_themecount,
+	(SELECT MAX(forum_entered) FROM forum f3 WHERE f3.forum_forumid = f.forum_id) forum_lastthemedate
 FROM
 	forum f
 LEFT JOIN comment_meta ON (cm_table = 'forum') AND (cm_table_id = f.forum_id)";
@@ -499,7 +500,7 @@ INSERT INTO forum (
 
 		if(isset($_SESSION['forums']['viewed_before']))
 		{
-			return ($_SESSION['forums']['viewed_before'] < strtotime($item['forum_entered']));
+			return ($_SESSION['forums']['viewed_before'] < strtotime($item['forum_lastthemedate']));
 		}
 
 		return true;
