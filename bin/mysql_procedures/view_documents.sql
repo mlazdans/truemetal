@@ -1,7 +1,7 @@
 CREATE OR REPLACE VIEW view_documents
 AS
 SELECT
-	art_id + 0 AS doc_id,
+	/* art_id + 0 AS doc_id, */
 	art_id AS doc_real_id,
 	1 AS doc_source_id,
 	art_name AS doc_name,
@@ -22,7 +22,7 @@ GROUP BY
 	art_id, art_name, art_entered
 UNION
 SELECT
-	art_id + 0 AS doc_id,
+	/* art_id + 0 AS doc_id, */
 	art_id AS doc_real_id,
 	2 AS doc_source_id,
 	art_name AS doc_name,
@@ -43,7 +43,7 @@ GROUP BY
 	art_id, art_name, art_entered
 UNION
 SELECT
-	forum_id + 10000 AS doc_id,
+	/* forum_id + 10000 AS doc_id, */
 	forum_id AS doc_real_id,
 	3 AS doc_source_id,
 	forum_name AS doc_name,

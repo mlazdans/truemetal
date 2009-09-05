@@ -77,18 +77,18 @@ if(($res = $cl->Query($search_q, $index)) === false)
 } else {
 	//if ( $cl->GetLastWarning() )
 	//	print "WARNING: " . $cl->GetLastWarning() . "\n\n";
-	#
 	$ids = array();
 	foreach($res["matches"] as $id=>$doc)
 	{
 		$doc_source_id = $doc['attrs']['doc_source_id'];
 		$doc_real_id = $doc['attrs']['doc_real_id'];
-		$ids[$doc_source_id][$id] = $doc_real_id;
+		$ids[$doc_source_id][$doc_real_id] = $id;
 	}
 
 	$items_temp = array();
-	foreach($ids as $doc_source_id=>$res_ids)
+	foreach($ids as $doc_source_id=>$doc_ids)
 	{
+		$res_ids = array_keys($doc_ids);
 		$ds = $DOC_SOURCES[$doc_source_id];
 
 		# Articles & reviews
@@ -99,12 +99,13 @@ if(($res = $cl->Query($search_q, $index)) === false)
 				));
 			foreach($arts as $item)
 			{
-				$doc_id = $item['art_id'] + $ds['id_offset'.($only_titles ? "_titles" : "")];
+				//$doc_id = $item['art_id'] + $ds['id_offset'.($only_titles ? "_titles" : "")];
+				$doc_id = $doc_ids[$item['art_id']];
 				$items_temp[$doc_id] = array(
 					'doc_real_id'=>$item['art_id'],
 					'doc_name'=>$item['art_name'],
 					'doc_url'=>"/".($doc_source_id == 1 ? "article" : "reviews")."/$item[art_id]/?hl=$special_search_q",
-					'doc_module_name'=>$DOC_SOURCES[$doc_source_id]['name'],
+					'doc_module_name'=>$ds['name'],
 					);
 			}
 			unset($arts);
@@ -118,12 +119,13 @@ if(($res = $cl->Query($search_q, $index)) === false)
 				));
 			foreach($forums as $item)
 			{
-				$doc_id = $item['forum_id'] + $ds['id_offset'.($only_titles ? "_titles" : "")];
+				//$doc_id = $item['forum_id'] + $ds['id_offset'.($only_titles ? "_titles" : "")];
+				$doc_id = $doc_ids[$item['forum_id']];
 				$items_temp[$doc_id] = array(
 					'doc_real_id'=>$item['forum_id'],
 					'doc_name'=>$item['forum_name'],
 					'doc_url'=>"/forum/$item[forum_id]/?hl=$special_search_q",
-					'doc_module_name'=>$DOC_SOURCES[$doc_source_id]['name'],
+					'doc_module_name'=>$ds['name'],
 					);
 			}
 			unset($forums);

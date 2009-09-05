@@ -1,7 +1,7 @@
 CREATE OR REPLACE VIEW view_document_titles
 AS
 SELECT
-	art_id + 10000 + 10000 AS doc_id,
+	/* art_id + 10000 + 10000 AS doc_id, */
 	art_id AS doc_real_id,
 	1 AS doc_source_id,
 	art_name AS doc_name,
@@ -17,7 +17,7 @@ WHERE
 	module_id = 'article'
 UNION
 SELECT
-	art_id + 10000 + 10000 AS doc_id,
+	/* art_id + 10000 + 10000 AS doc_id, */
 	art_id AS doc_real_id,
 	2 AS doc_source_id,
 	art_name AS doc_name,
@@ -33,7 +33,7 @@ WHERE
 	module_id = 'reviews'
 UNION
 SELECT
-	forum_id + 10000 + 10000 + 10000 AS doc_id,
+	/* forum_id + 10000 + 10000 + 10000 AS doc_id, */
 	forum_id AS doc_real_id,
 	3 AS doc_source_id,
 	forum_name AS doc_name,

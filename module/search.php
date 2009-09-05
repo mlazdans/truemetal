@@ -20,18 +20,18 @@ require_once('lib/MainModule.php');
 
 $DOC_SOURCES = array(
 	1=>array(
-		'id_offset'=>0,
-		'id_offset_titles'=>10000 + 10000,
+		//'id_offset'=>0,
+		//'id_offset_titles'=>10000 + 10000,
 		'name'=>"Ziņas",
 		),
 	2=>array(
-		'id_offset'=>0,
-		'id_offset_titles'=>10000 + 10000,
+		//'id_offset'=>0,
+		//'id_offset_titles'=>10000 + 10000,
 		'name'=>"Recenzijas",
 		),
 	3=>array(
-		'id_offset'=>10000,
-		'id_offset_titles'=>10000 + 10000 + 10000,
+		//'id_offset'=>10000,
+		//'id_offset_titles'=>10000 + 10000 + 10000,
 		'name'=>"Forums",
 		),
 	);
