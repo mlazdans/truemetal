@@ -15,7 +15,7 @@ if($action == 'logoff')
 	if($my_login->logoff())
 	{
 		header("Location: $sys_http_root/");
-		exit;
+		return;
 	}
 }
 

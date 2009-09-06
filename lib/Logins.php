@@ -46,6 +46,9 @@ class Logins
 		if(isset($params['l_nick']))
 			$sql_add[] = sprintf("l_nick = '%s'", $params['l_nick']);
 
+		if(isset($params['l_logedin']))
+			$sql_add[] = sprintf("l_logedin = '%s'", $params['l_logedin']);
+
 		if(isset($params['l_password']))
 			$sql_add[] = sprintf(
 				"(l_password = PASSWORD('%s') OR l_password = OLD_PASSWORD('%s'))",
@@ -92,6 +95,15 @@ class Logins
 		}
 	} // load
 
+	static function load_by_id_logged_in($l_id)
+	{
+		$Logins = new Logins();
+		return $Logins->load(array(
+			'l_id'=>$l_id,
+			'l_logedin'=>'Y',
+			));
+	} // load_by_id_logged_in
+
 	static function load_by_id($l_id)
 	{
 		$Logins = new Logins();
@@ -128,19 +140,14 @@ class Logins
 		return $db->Execute($sql);
 	} // get_active
 
-	function save_session_data()
+	static function save_session_data()
 	{
 		global $db;
 
-		if(isset($_SESSION['login']))
+		if(user_loged())
 		{
-			$data = $_SESSION['login'];
-			if(isset($data['l_id']) && ($data = $this->load_by_id($data['l_id'])))
-			{
-				$session_id = session_id();
-				$l_id = $data['l_id'];
-				$db->Execute("UPDATE logins SET l_sessiondata ='".session_encode()."', l_lastaccess = NOW(), l_logedin = 'Y' WHERE l_id = $l_id");
-			}
+			$l_id = $_SESSION['login']['l_id'];
+			$db->Execute("UPDATE logins SET l_sessiondata ='".session_encode()."', l_lastaccess = NOW(), l_logedin = 'Y' WHERE l_id = $l_id");
 		}
 	} // save_session_data
 
@@ -199,11 +206,7 @@ class Logins
 	{
 		global $sys_user_root;
 
-		$l_id = 0;
-		if(isset($_SESSION['login']['l_id']) && $_SESSION['login']['l_id'])
-		{
-			$l_id = (int)$_SESSION['login']['l_id'];
-		}
+		$l_id = user_loged() ? $_SESSION['login']['l_id'] : 0;
 
 		if(!$l_id)
 			return false;
@@ -222,12 +225,7 @@ class Logins
 		if(!$l_id)
 		{
 			$l_id_set = false;
-			$l_id = 0;
-			if(isset($_SESSION['login']['l_id']) && $_SESSION['login']['l_id'])
-			{
-				$l_id = (int)$_SESSION['login']['l_id'];
-			}
-
+			$l_id = user_loged() ? $_SESSION['login']['l_id'] : 0;
 			if(!$l_id)
 			{
 				$this->error_msg = 'Neizdevās saglabāt profilu. Hacking?';
@@ -240,7 +238,7 @@ class Logins
 		$error_msg = '';
 
 		// load data
-		if($l_data = $this->load_by_id($l_id))
+		if($l_data = Logins::load_by_id($l_id))
 		{
 			$this->validate($data);
 
@@ -356,14 +354,14 @@ class Logins
 								}
 							}
 
-							return $this->load_by_id($l_id);
+							return Logins::load_by_id($l_id);
 						} else {
 							$this->error_msg = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
 							return false;
 						} // save file
 					} // $_FILES
 
-					return $this->load_by_id($l_id);
+					return Logins::load_by_id($l_id);
 				} // execute
 			} // sql
 
@@ -397,21 +395,22 @@ class Logins
 
 	} // login
 
-	function logoff()
+	static function logoff()
 	{
 		global $db;
-		if(isset($_SESSION['login']))
-		{
-			$data = $_SESSION['login'];
-			if(isset($data['l_id']) && ($data = $this->load_by_id($data['l_id'])))
-			{
-				$this->save_session_data();
-				session_destroy();
-				$db->Execute("UPDATE logins SET l_logedin ='N' WHERE l_id = $data[l_id]");
 
-				return true;
-			}
+
+		if(user_loged())
+		{
+			$l_id = $_SESSION['login']['l_id'];
+			Logins::save_session_data();
+			session_destroy();
+			$db->Execute("UPDATE logins SET l_logedin ='N' WHERE l_id = $l_id");
+
+			return true;
 		}
+
+		return false;
 	} // logoff
 
 	function insert_accept_code($login)
@@ -635,32 +634,7 @@ class Logins
 
 		return $db->Execute($sql);
 	} // deactivate
-/*
-	function accept($l_id)
-	{
-		global $db;
 
-		if($l = $this->load_by_id($l_id) && $l['l_accepted'] != LOGIN_ACCEPTED)
-		{
-			$sql = 'UPDATE logins SET l_accepted = "'.LOGIN_ACCEPTED.'" WHERE l_id = "'.$l_id.'"';
-			if($db->Execute($sql))
-			{
-				$this->email_accept($l_id);
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	} // accept
-
-	function email_accept($l_id)
-	{
-		if($l = $this->load_by_id($l_id))
-			email($l['l_email'], 'lpa.lv accept', "Reģistrācija akceptēta!\n\nwww.lpa.lv");
-	} // email_accept
-*/
 	function process_action(&$data, $action)
 	{
 		$ret = true;

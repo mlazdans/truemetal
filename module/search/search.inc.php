@@ -27,7 +27,7 @@ INSERT INTO `search_log` (
 ) VALUES (
 %s, '%s', '%s', NOW()
 );",
-		isset($_SESSION['login']['l_id']) ? $_SESSION['login']['l_id'] : "NULL",
+		user_loged() ? $_SESSION['login']['l_id'] : "NULL",
 		addslashes($search_q),
 		$_SERVER['REMOTE_ADDR']
 		);

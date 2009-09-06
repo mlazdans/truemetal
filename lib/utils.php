@@ -699,7 +699,7 @@ function email($to, $subj, $msg)
 
 function user_loged()
 {
-	return isset($_SESSION['login']['l_id']) && $_SESSION['login']['l_id'];
+	return !empty($_SESSION['login']['l_id']);
 } // user_loged
 
 function parse_form_data_array(&$data)

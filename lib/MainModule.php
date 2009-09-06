@@ -187,7 +187,7 @@ class MainModule extends Template
 		$this->set_file('FILE_login_form', 'right/login_form.tpl');
 		$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_login_form');
 
-		if(isset($_SESSION['login']['l_id']) && $_SESSION['login']['l_id'])
+		if(user_loged())
 		{
 			$this->enable('BLOCK_login_data');
 			$this->set_var('login_nick', $_SESSION['login']['l_nick'], 'BLOCK_login_data');

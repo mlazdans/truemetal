@@ -48,6 +48,7 @@ if(!isset($sys_debug))
 	$sys_debug = ($i_am_admin ? true : false);
 
 ini_set('display_errors', ($sys_debug ? 1 : 0));
+ini_set('expose_php', false);
 error_reporting($sys_error_reporting);
 
 # Include paths
@@ -85,19 +86,19 @@ require_once('lib/Logins.php');
 mb_regex_encoding($sys_encoding);
 mb_internal_encoding($sys_encoding);
 
-# fetch new login data
-// TODO: sataisīt, lai automātiski izlogojas, ja ieķeksē neatktīvs
-// TODO: sataisīt, lai !!!BEIDZOT!!! sessijas dati saglabātos korekti! (arī polls!)
-/*
-if($i_am_admin)
+if(user_loged())
 {
-	if(isset($_SESSION['login']['l_login']))
+	if($l = Logins::load_by_id_logged_in($_SESSION['login']['l_id']))
 	{
-		$Login = new Logins;
-		$_SESSION['login'] = $Login->load_by_login($_SESSION['login']['l_login']);
+		//session_decode($l['l_sessiondata']);
+	} else {
+		Logins::logoff();
+		redirect();
+		return;
 	}
 }
-*/
+
+register_shutdown_function("shutdown");
 
 /* dabuujam parametrus no mod_rewrite */
 $parts = explode('?', $_SERVER["REQUEST_URI"]);
@@ -147,10 +148,6 @@ foreach($sys_parameters as $k=>$v)
 
 $_GET = _GET();
 
-//header("Cache-Control: ");
-//header("Expires: ");
-//header("Pragma: ");
-ini_set('expose_php', false);
 header('Content-Type: text/html; charset='.$sys_encoding);
 header('X-Powered-By: TRUEMETAL');
 
@@ -180,8 +177,15 @@ $tidy->cleanRepair();
 print $tidy;
 */
 
-$my_login = new Logins;
-$my_login->save_session_data();
+//$my_login = new Logins;
+//$my_login->save_session_data();
+//Logins::save_session_data();
+
+function shutdown()
+{
+	session_commit();
+	Logins::save_session_data();
+} // shutdown
 
 /*
 if($i_am_admin)

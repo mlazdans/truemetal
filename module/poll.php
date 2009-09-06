@@ -22,7 +22,7 @@ if($action == 'vote')
 		if($poll->vote($poll_id, $poll_pollid))
 		{
 			header("Location: $sys_http_root/");
-			exit;
+			return;
 		} else {
 			$template = new MainModule($sys_template_root, $sys_module_id);
 			$template->set_title('Balsošanas kļūda!');
@@ -33,11 +33,11 @@ if($action == 'vote')
 			$template->enable('BLOCK_poll_error');
 			$template->set_var('error_msg', $poll->error_msg);
 			$template->out();
-			exit;
+			return;
 		}
 	} else {
 		header("Location: $sys_http_root/");
-		exit;
+		return;
 	}
 }
 
