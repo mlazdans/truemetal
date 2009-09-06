@@ -97,12 +97,15 @@ if($art_id)
 # Comments
 if($art_id)
 {
-	$_SESSION['comments']['viewed'][$art_id] = $articles[0]['art_comment_count'];
+	if(user_loged())
+		$_SESSION['comments']['viewed'][$art_id] = $articles[0]['art_comment_count'];
+
 	$CC = new CommentConnect('article');
 	$CC->setDb($db);
 	$comments = $CC->get(array(
 		'cc_table_id'=>$art_id,
 		));
+
 	include("comment/list.inc.php");
 }
 

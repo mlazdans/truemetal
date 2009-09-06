@@ -7,7 +7,8 @@
 
 //
 
-$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_themecount'];
+if(user_loged())
+	$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_themecount'];
 
 $template->set_file('FILE_forum', 'forum/theme.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_forum');

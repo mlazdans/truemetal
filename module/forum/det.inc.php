@@ -13,7 +13,8 @@ $template->copy_block('BLOCK_middle', 'FILE_forum');
 $template->set_file('FILE_forum_comments', 'comments.tpl');
 $template->copy_block('BLOCK_forum_comments', 'FILE_forum_comments');
 
-$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_comment_count'];
+if(user_loged())
+	$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_comment_count'];
 
 if(($action == 'add_comment') && user_loged())
 {
@@ -50,6 +51,15 @@ $comments = $CC->get($params);
 include("module/comment/list.inc.php");
 
 set_forum($template, $forum_id);
+
+
+
+
+
+
+
+
+
 return;
 
 
