@@ -800,27 +800,6 @@ function printr(&$data)
 	print "</pre>";
 } // printr
 
-function bad_user_ids()
-{
-	global $db;
-
-	$bad_ids = array();
-	if($bad_users = $db->Execute("SELECT * FROM forum_badusers"))
-	{
-		foreach($bad_users as $item)
-		{
-			$bad_ids[] = $item['user_id'];
-		}
-	}
-
-	return $bad_ids;
-} // bad_user_ids
-
-function bad_user_sql()
-{
-	return join(',', bad_user_ids());
-}
-
 function _GET()
 {
 	$ret = array();

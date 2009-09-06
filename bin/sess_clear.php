@@ -15,7 +15,7 @@ require_once('lib/utils.php');
 
 $deleted = $errors = 0;
 
-$sql = "SELECT `sess_ip`, COUNT(`sess_ip`) skaits FROM sessions GROUP BY `sess_ip` HAVING skaits > 100 ORDER BY skaits DESC";
+$sql = "SELECT `sess_ip`, COUNT(`sess_ip`) skaits FROM sessions GROUP BY `sess_ip` HAVING skaits > 50 ORDER BY skaits DESC";
 $data = $db->Execute($sql);
 
 foreach($data as $item)
