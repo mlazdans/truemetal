@@ -14,6 +14,16 @@ require_once('lib/CommentConnect.php');
 
 $art_per_page = 10;
 
+# Title
+$art_title = '';
+if($_pointer['_data_']['module_name'])
+{
+	$art_title = $_pointer['_data_']['module_name'];
+} else {
+	$art_title = "Jaunumi";
+}
+
+
 # GET/POST
 $art_id = array_shift($sys_parameters);
 $action = post('action');
@@ -68,6 +78,7 @@ if($art_id)
 			return;
 		}
 	}
+	$art_title .= (isset($item['art_name']) ? " - ".$item['art_name'] : "");
 } elseif($_pointer['_data_']['mod_id']) {
 	$tc = $article->get_total($_pointer['_data_']['mod_id']);
 	$tp = ceil($tc / $art_per_page);
@@ -134,19 +145,8 @@ if($tc)
 	}
 }
 
-# Title
-$art_title = '';
-if($_pointer['_data_']['module_name'])
-{
-	$art_title = $_pointer['_data_']['module_name'].($hl ? sprintf(", meklēšana: %s", $hl) : "");
-} else {
-	$art_title = 'Jaunumi';
-}
-
 if($page && ($page <= $tp))
 	$art_title .= sprintf(" %d. lapa ", $page);
-
-$template->set_title($art_title);
 
 if(count($articles))
 {
@@ -208,6 +208,10 @@ if(count($articles))
 	header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
 	$template->enable('BLOCK_noarticle');
 }
+
+$art_title .= ($hl ? sprintf(" - meklēšana: %s", $hl) : "");
+
+$template->set_title($art_title);
 
 $template->set_right();
 $template->set_login();

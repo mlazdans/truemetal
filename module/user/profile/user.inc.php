@@ -12,7 +12,8 @@ $template->set_var('error_l_email', '', 'FILE_profile');
 
 if(!user_loged())
 {
-	header("HTTP/1.1 403 Forbidden");
+	//header($_SERVER["SERVER_PROTOCOL"]." 403 Forbidden");
+	header($_SERVER["SERVER_PROTOCOL"]." 410 Removed from public eyes");
 	$template->enable('BLOCK_not_loged');
 	$template->out();
 	return;
@@ -69,7 +70,7 @@ if($login_data)
 	}
 	$template->set_profile($login_data);
 } else {
-	header("HTTP/1.0 404 Not Found");
+	header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
 	$template->set_title("$login - neeksistējošs profils");
 	$template->enable('BLOCK_no_such_login');
 }

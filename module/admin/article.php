@@ -15,7 +15,6 @@ require_once('lib/Module.php');
 $art_modid = isset($_POST['art_modid']) ? (integer)$_POST['art_modid'] : '';
 
 $article = new Article();
-
 $module = new Module();
 
 $template = new AdminModule($sys_template_root.'/admin', $admin_module);
@@ -46,20 +45,23 @@ if(in_array($action, $comment_actions)) {
 */
 
 # save
-if($action == 'art_save') {
+if($action == 'art_save')
+{
 	if($id = $article->save($art_id, $_POST['data'])) {
 		header("Location: $module_root/$id/");
 		return;
 	} else {
 		$template->enable('BLOCK_article_error');
-		$template->set_var('error_msg', $msg, 'BLOCK_article_error');
+		$template->set_var('error_msg', $article->error_msg, 'BLOCK_article_error');
 	}
 	$template->out();
 	return;
 }
 
 # new
-if($action == 'art_new') {
+if($action == 'art_new')
+{
+	$module->set_modules_all($template, 0, 'BLOCK_modules_under_list');
 	$template->init_editor();
 	$template->enable('BLOCK_article_edit');
 	$template->set_var('art_name_edit', 'jauns', 'BLOCK_article_edit');

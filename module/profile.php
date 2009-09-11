@@ -10,6 +10,6 @@ if($section == 'user')
 
 if($section == 'view')
 {
-	header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+	header($_SERVER["SERVER_PROTOCOL"]." 410 Removed from public eyes");
 }
 

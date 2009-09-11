@@ -86,10 +86,19 @@
 <form action="{module_root}/{art_id}/save" method="post" id="article_edit">
 <table class="Main">
 <tr>
+	<th>Zem</th>
+	<td>
+		<select name="data[art_modid]">
+		<!-- BEGIN BLOCK_modules_under_list -->
+		<option value="{mod_id}">{module_padding}{module_name}</option>
+		<!-- END BLOCK_modules_under_list -->
+		</select>
+	</td>
+</tr>
+<tr>
 	<th>Nosaukums</th>
 	<td>
 		<input type="hidden" name="action" value="art_save" />
-		<input type="hidden" name="data[art_modid]" value="{art_modid}" />
 		<input type="text" name="data[art_name]" value="{art_name}" size="48" />
 	</td>
 </tr>
@@ -97,8 +106,8 @@
 	<th>Aktīvs?</th>
 	<td>
 		<select name="data[art_active]">
-			<option value="Y"{art_active_y}>Jā</option>
 			<option value="N"{art_active_n}>Nē</option>
+			<option value="Y"{art_active_y}>Jā</option>
 		</select>
 	</td>
 </tr>
@@ -193,21 +202,4 @@
 <!-- END BLOCK_article_comments -->
 
 
-<!-- BEGIN BLOCK_modules_under disabled -->
-<div class="TD-cat">
-	Jauns raksts
-</div>
-
-<form action="{module_root}/set_module" method="post" id="article_new">
-<div>
-	<input type="hidden" name="action" value="art_new" />
-Zem: <select name="art_modid" onchange="this.form.submit();">
-	<option value="">-Izvēlies-</option>
-	<!-- BEGIN BLOCK_modules_under_list -->
-	<option value="{mod_id}">{module_padding}{module_name}</option>
-	<!-- END BLOCK_modules_under_list -->
-	</select>
-</div>
-</form>
-<!-- END BLOCK_modules_under -->
 

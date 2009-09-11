@@ -8,7 +8,8 @@
 <link rel="stylesheet" type="text/css" href="{http_root}/css/admin_styles.css?{script_version}" />
 <script type="text/javascript" src="{http_root}/js/jquery.js?{script_version}"></script>
 <script type="text/javascript" src="{http_root}/js/truemetal.js?{script_version}"></script>
-<script type="text/javascript" src="/tiny_mce/tiny_mce.js?{script_version}"></script>
+<script type="text/javascript" src="{http_root}/tiny_mce/tiny_mce.js?{script_version}"></script>
+<script type="text/javascript" src="{http_root}/tiny_mce/plugins/tinybrowser/tb_tinymce.js.php?{script_version}"></script>
 </head>
 <body>
 
