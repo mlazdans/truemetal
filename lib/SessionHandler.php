@@ -68,7 +68,8 @@ class SessionHandler
 
 	function sess_write($sess_id, $sess_data)
 	{
-//		global $db;
+		if(empty($sess_data))
+			return true;
 
 		$sess = $this->get_sess($sess_id);
 
@@ -84,8 +85,6 @@ class SessionHandler
 
 	function sess_read($sess_id)
 	{
-//		global $db;
-
 		$sess = $this->get_sess($sess_id);
 
 		if(!count($sess))
@@ -104,8 +103,6 @@ class SessionHandler
 
 	function sess_destroy($sess_id)
 	{
-//		global $db;
-
 		unset($this->sess_name);
 		unset($_SESSION);
 
@@ -120,8 +117,6 @@ class SessionHandler
 
 	function sess_gc($maxlifetime)
 	{
-//		global $db;
-
 		if($this->timeout) {
 			$sql = 'DELETE FROM sessions WHERE sess_lastaccess < (NOW() - '.$this->timeout.')';
 			return $this->db->Execute($sql);
@@ -157,8 +152,6 @@ class SessionHandler
 
 	function get_active()
 	{
-//		global $db;
-
 		$sql = "
 		SELECT
 			sess_data, (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(sess_lastaccess)) sess_period,
@@ -174,3 +167,4 @@ class SessionHandler
 	} // get_active
 
 } // SessionHandler
+
