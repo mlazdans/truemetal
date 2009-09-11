@@ -4,7 +4,7 @@
 	<tr>
 		<td valign="top"><input type="submit" name="do" value="Jauns"></td>
 		<td valign="top"><input type="button" value="Atcelt" onClick="location.replace('{http_root}/admin/modules/')"></td>
-		<td valign="top" width=100%>&nbsp;</td>
+		<td valign="top" width="100%">&nbsp;</td>
 	</tr>
 </table>
 </form>
@@ -94,8 +94,10 @@
 	</tr>
 </table>
 </form>
-<script type="text/javascript">
+
 <!-- BEGIN BLOCK_editor_init --><!-- END BLOCK_editor_init -->
+
+<script type="text/javascript">
 /*
 # TODO: pieattačot tiny_mce
 function onSubmitHandler() {

@@ -55,31 +55,13 @@ $forum = new Forum;
 $forum_id = (int)array_shift($sys_parameters);
 $action = post('action');
 
+# Comment actions
 if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
 {
-	$c_ids = post('c_id');
-	if(!is_array($c_ids))
-		$c_ids = array($c_id);
-
-	$ok = true;
-	$func = substr($action, 8);
-
-	$db->AutoCommit(false);
-
-	$Comment = new Comment;
-	$Comment->setDb($db);
-	foreach($c_ids as $c_id)
-		$ok = $Comment->{$func}($c_id) ? $ok : false;
-
-	if($ok)
+	if(include("module/admin/comment/action.inc.php"))
 	{
-		$db->Commit();
-		if($forum_id)
-			header("Location: $module_root/$forum_id/");
-		else
-			header("Location: $module_root/");
+		header("Location: ".($forum_id ? "$module_root/$forum_id/" : "$module_root"));
 	}
-
 	return;
 }
 
@@ -141,11 +123,14 @@ if($forum_id)
 		'forum_active'=>FORUM_ALL,
 		));
 
-	if($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS) {
+	if($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS)
+	{
 		set_themes($template, $items);
 		// jauna teema
 		$template->enable('BLOCK_forum_theme_new');
 	} else {
+		$template->set_file('FILE_comment_list', 'comment/list.tpl');
+		$template->copy_block('BLOCK_forum_comments', 'FILE_comment_list');
 
 		$CC = new CommentConnect('forum');
 		$CC->setDb($db);
@@ -154,26 +139,7 @@ if($forum_id)
 			'c_visible'=>COMMENT_ALL,
 			));
 
-		if($comments) {
-			$template->enable('BLOCK_comments');
-		} else {
-			$template->enable('BLOCK_nocomments');
-		}
-
-		foreach($comments as $item)
-		{
-			$template->set_array($item, 'BLOCK_comment_item');
-			if($item['c_visible'] == COMMENT_VISIBLE) {
-				$template->enable('BLOCK_c_visible');
-				$template->disable('BLOCK_c_invisible');
-				$template->set_var('c_color_class', 'box-normal', 'BLOCK_comment_item');
-			} else {
-				$template->enable('BLOCK_c_invisible');
-				$template->disable('BLOCK_c_visible');
-				$template->set_var('c_color_class', 'box-invisible', 'BLOCK_comment_item');
-			}
-			$template->parse_block('BLOCK_comment_item', TMPL_APPEND);
-		}
+		include("module/admin/comment/list.inc.php");
 	}
 
 	/*

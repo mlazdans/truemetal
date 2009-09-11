@@ -75,9 +75,8 @@
 
 
 <!-- BEGIN BLOCK_article_edit disabled -->
-<script type="text/javascript">
+
 <!-- BEGIN BLOCK_editor_init --><!-- END BLOCK_editor_init -->
-</script>
 
 <div class="TD-cat">
 	Ziņas: rediģēt <em>{art_name_edit}</em>
@@ -99,7 +98,7 @@
 	<th>Nosaukums</th>
 	<td>
 		<input type="hidden" name="action" value="art_save" />
-		<input type="text" name="data[art_name]" value="{art_name}" size="48" />
+		<input type="text" name="data[art_name]" value="{art_name}" size="128" />
 	</td>
 </tr>
 <tr>
@@ -164,42 +163,5 @@
 </form>
 <!-- END BLOCK_article_edit -->
 
-
-<!-- BEGIN BLOCK_article_comments disabled -->
-<form method="post" action="{module_root}/{art_id}/do/" name="comment_list">
-<table width="100%" cellpadding="2" cellspacing="1" border="0" align="center">
-	<tr>
-		<td class="TD-cat"><input type="checkbox" name="article_comments_check_all" onclick="checkAll(this.form, this)"></td>
-		<td width="100%" class="TD-cat">Raksta komentāri</td>
-	</tr>
-	<!-- BEGIN BLOCK_comment -->
-	<input type="hidden" name="ac_id{comment_nr}" value="{ac_id}">
-	<tr>
-		<td class="{comment_color_class}"><input type="checkbox" name="comment_checked{comment_nr}"></td>
-		<td width="100%" class="{comment_color_class}">{ac_username}, {ac_useremail}, {ac_entered}, {ac_userip},
-		<!-- BEGIN BLOCK_comment_active disabled -->aktīvs<!-- END BLOCK_comment_active -->
-		<!-- BEGIN BLOCK_comment_inactive disabled -->neaktīvs<!-- END BLOCK_comment_inactive -->
-		</td>
-	</tr>
-	<tr>
-		<td></td>
-		<td class="{comment_color_class}">{ac_datacompiled}</td>
-	</tr>
-	<!-- END BLOCK_comment -->
-	<tr>
-		<td colspan="2">Iezīmētos: <select name="action">
-		<option value="">---</option>
-		<option value="comment_delete_multiple">Dzēst</option>
-		<option value="comment_show_multiple">Parādīt</option>
-		<option value="comment_hide_multiple">Slēpt</option>
-		</select>
-		<input type="submit" value="  OK  ">
-		</td>
-	</tr>
-</table>
-<input type="hidden" name="comment_count" value="{comment_count}">
-</form>
-<!-- END BLOCK_article_comments -->
-
-
+<!-- BEGIN BLOCK_article_comments --><!-- END BLOCK_article_comments -->
 

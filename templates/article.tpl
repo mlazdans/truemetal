@@ -1,3 +1,7 @@
+<div style="margin-bottom: 2px;">
+{article_page_top}
+</div>
+
 <!-- BEGIN BLOCK_article disabled -->
 <div class="Article-item">
 	<div class="TD-cat">

@@ -5,14 +5,12 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-$action = isset($_POST['action']) ? $_POST['action'] : '';
-
-$art_id = array_shift($sys_parameters);
-
 require_once('lib/Article.php');
 require_once('lib/Module.php');
+require_once('lib/CommentConnect.php');
 
-$art_modid = isset($_POST['art_modid']) ? (integer)$_POST['art_modid'] : '';
+$action = post('action');
+$art_id = array_shift($sys_parameters);
 
 $article = new Article();
 $module = new Module();
@@ -20,9 +18,19 @@ $module = new Module();
 $template = new AdminModule($sys_template_root.'/admin', $admin_module);
 $template->set_title('Admin :: raksti');
 
-$actions = array('delete_multiple', 'activate_multiple', 'deactivate_multiple', 'show_multiple', 'hide_multiple');
+# Comment actions
+if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
+{
+	if(include("module/admin/comment/action.inc.php"))
+	{
+		header("Location: ".($art_id ? "$module_root/$art_id/" : "$module_root"));
+	}
+	return;
+}
 
-if(in_array($action, $actions)) {
+$actions = array('delete_multiple', 'activate_multiple', 'deactivate_multiple', 'show_multiple', 'hide_multiple');
+if(in_array($action, $actions))
+{
 	if($article->process_action($_POST, $action))
 		if($art_id)
 			header("Location: $module_root/$art_id/");
@@ -30,19 +38,6 @@ if(in_array($action, $actions)) {
 			header("Location: $module_root/");
 	return;
 }
-
-/*
-$comment_actions = array('comment_delete_multiple', 'comment_show_multiple', 'comment_hide_multiple');
-
-if(in_array($action, $comment_actions)) {
-	if($art_id) {
-		if($article->comment_process_action($_POST, $action))
-			header("Location: $module_root/$art_id/");
-	} else
-		header("Location: $module_root/");
-	exit;
-}
-*/
 
 # save
 if($action == 'art_save')
@@ -67,18 +62,6 @@ if($action == 'art_new')
 	$template->set_var('art_name_edit', 'jauns', 'BLOCK_article_edit');
 	$template->out();
 	return;
-	/*
-	if($art_modid) {
-		$template->enable('BLOCK_article_edit');
-		//$template->set_var('module_name', $module->data[$art_modid]['module_name']);
-
-		$template->set_var('art_modid', $art_modid);
-		$template->init_editor();
-	} else {
-		$template->enable('BLOCK_modules_under');
-		//$module->set_modules_all($template, 0, 'BLOCK_modules_under_list');
-	}
-	*/
 }
 
 # List
@@ -120,6 +103,7 @@ if(!$art_id)
 	'art_active'=>ARTICLE_ALL,
 	)))
 {
+	$module->set_modules_all($template, $art['art_modid'], 'BLOCK_modules_under_list');
 	$template->enable('BLOCK_article_edit');
 	$template->set_var('art_name_edit', $art['art_name'], 'BLOCK_article_edit');
 
@@ -147,33 +131,17 @@ if(!$art_id)
 	$template->set_array($art);
 
 	// komentaari
-	/*
-	$comments = $article->load_comments($art_id, COMMENT_ALL);
-	if(count($comments))
-		$template->enable('BLOCK_article_comments');
+	$template->set_file('FILE_comment_list', 'comment/list.tpl');
+	$template->copy_block('BLOCK_article_comments', 'FILE_comment_list');
 
-	$comment_count = 0;
-	foreach($comments as $comment)
-	{
-		++$comment_count;
-		$template->set_array($comment);
+	$CC = new CommentConnect('article');
+	$CC->setDb($db);
+	$comments = $CC->get(array(
+		'cc_table_id'=>$art_id,
+		'c_visible'=>COMMENT_ALL,
+		));
 
-		if($comment['ac_visible'] == COMMENT_VISIBLE)
-		{
-			$template->enable('BLOCK_comment_active');
-			$template->disable('BLOCK_comment_inactive');
-			$template->set_var('comment_color_class', 'box-normal');
-		} else {
-			$template->disable('BLOCK_comment_active');
-			$template->enable('BLOCK_comment_inactive');
-			$template->set_var('comment_color_class', 'box-invisible');
-		}
-
-		$template->set_var('comment_nr', $comment_count);
-		$template->parse_block('BLOCK_comment', TMPL_APPEND);
-	} // foreach comments
-	$template->set_var('comment_count', $comment_count);
-	*/
+	include("module/admin/comment/list.inc.php");
 }
 
 $template->out();

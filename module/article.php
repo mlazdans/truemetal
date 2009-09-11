@@ -125,11 +125,8 @@ if($tc)
 {
 	$template->enable('BLOCK_article_page');
 
-	if(!$page)
+	if($page)
 	{
-		$template->enable('BLOCK_article_page_prev');
-		$template->set_var('page', "$module_root/page/".($tp - 1)."/", 'BLOCK_article_page_prev');
-	} else {
 		if($page == $tp){
 			$template->enable('BLOCK_article_page_next');
 			$template->set_var('page', '', 'BLOCK_article_page_next');
@@ -142,6 +139,15 @@ if($tc)
 			$template->enable('BLOCK_article_page_prev');
 			$template->set_var('page', "$module_root/page/".($page - 1)."/", 'BLOCK_article_page_prev');
 		}
+	} else {
+		$template->enable('BLOCK_article_page_prev');
+		$template->set_var('page', "$module_root/page/".($tp - 1)."/", 'BLOCK_article_page_prev');
+	}
+
+	if($page)
+	{
+		$template->parse_block('BLOCK_article_page');
+		$template->set_var('article_page_top', $template->get_parsed_content('BLOCK_article_page'));
 	}
 }
 

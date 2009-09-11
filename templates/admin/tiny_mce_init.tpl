@@ -1,3 +1,4 @@
+<script type="text/javascript">
 tinyMCE.init({
 	theme: "advanced",
 	mode: "specific_textareas",
@@ -71,4 +72,5 @@ function ajaxfilemanager(field_name, url, type, win) {
 
 	return false;*/
 }
+</script>
 
