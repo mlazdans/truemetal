@@ -1,44 +1,66 @@
+<!-- BEGIN BLOCK_modules_list disabled -->
+<div class="TD-cat">
+	Modļi: saraksts
+</div>
+
 <form action="" method="post">
-<input type="hidden" name="action" value="module_new">
-<table width="100%" cellpadding="2" cellspacing="2" border="0">
-	<tr>
-		<td valign="top"><input type="submit" name="do" value="Jauns"></td>
-		<td valign="top"><input type="button" value="Atcelt" onClick="location.replace('{http_root}/admin/modules/')"></td>
-		<td valign="top" width="100%">&nbsp;</td>
-	</tr>
+<table class="Main">
+<tr>
+	<td valign="top">
+		<input type="hidden" name="action" value="module_new" />
+		<input type="submit" name="do" value="Jauns" />
+	</td>
+	<td valign="top">
+		<input type="button" value="Atcelt" onclick="location.replace('{http_root}/admin/modules/')" />
+	</td>
+	<td valign="top">&nbsp;</td>
+</tr>
 </table>
 </form>
 
-<!-- BEGIN BLOCK_modules_list disabled -->
-<form action="" method="post">
-<table width="100%" cellpadding="2" cellspacing="2" border="0" align="center">
-	<tr>
-		<td class="TD-cat"><input type="checkbox" name="forum_check_all" onClick="checkAll(this.form, this)"></td>
-		<td width="100%" colspan="3" class="TD-cat">Moduļi</td>
-	</tr>
-	<!-- BEGIN BLOCK_modules -->
-	<input type="hidden" name="mod_id{item_count}" value="{mod_id}">
-	<tr>
-		<td class="{module_color_class}"><input type="checkbox" name="mod_checked{item_count}"></td>
-		<td nowrap class="{module_color_class}" valign="top">{module_padding}<a href="{module_root}/{mod_id}/">{module_name}</a></td>
-		<td valign="top">{module_pos}</td>
-		<td width="100%"></td>
-	</tr>
-	<!-- END BLOCK_modules -->
-	<tr>
-		<td colspan="4">Iezīmētos: <select name="action">
-		<option value="">---</option>
-		<option value="delete_multiple">Dzēst</option>
-		<option value="activate_multiple">Aktivizēt</option>
-		<option value="deactivate_multiple">Deaktivizēt</option>
-		<option value="show_multiple">Parādīt</option>
-		<option value="hide_multiple">Slēpt</option>
+<!-- BEGIN BLOCK_nomodules disabled -->
+<div>
+	Moduļu nav
+</div>
+<!-- END BLOCK_nomodules -->
+
+<form action="" method="post" id="module_list">
+<table class="Main">
+<tr>
+	<td class="TD-cat">
+		<input type="hidden" name="module_count" value="{module_count}" />
+		<input type="checkbox" name="module_check_all" onclick="Truemetal.checkAll(this);" />
+	</td>
+	<td class="TD-cat">Nosaukums</td>
+	<td class="TD-cat">Pos</td>
+</tr>
+<!-- BEGIN BLOCK_modules -->
+<tr>
+	<td class="{module_color_class}">
+		<input type="hidden" name="mod_id{module_count}" value="{mod_id}" />
+		<input type="checkbox" name="mod_checked{module_count}" />
+	</td>
+	<td class="{module_color_class}" valign="top" style="white-space: nowrap;">
+		{module_padding}<a href="{module_root}/{mod_id}/">{module_name}</a>
+	</td>
+	<td valign="top">{module_pos}</td>
+</tr>
+<!-- END BLOCK_modules -->
+<tr>
+	<td colspan="3">
+		Iezīmētos:
+		<select name="action">
+			<option value="">---</option>
+			<option value="delete_multiple">Dzēst</option>
+			<option value="activate_multiple">Aktivizēt</option>
+			<option value="deactivate_multiple">Deaktivizēt</option>
+			<option value="show_multiple">Parādīt</option>
+			<option value="hide_multiple">Slēpt</option>
 		</select>
-		<input type="submit" value="  OK  ">
-		</td>
-	</tr>
+		<input type="submit" value="  OK  " />
+	</td>
+</tr>
 </table>
-<input type="hidden" name="item_count" value="{item_count}">
 </form>
 <!-- END BLOCK_modules_list -->
 
@@ -48,50 +70,85 @@
 <!-- END BLOCK_modules_error -->
 
 <!-- BEGIN BLOCK_modules_edit disabled -->
-<form action="{module_root}/{mod_id}/save" method="post" id="module_edit">
-<input type="hidden" name="action" value="module_save">
-<input type="hidden" name="data[mod_id]" value="{mod_id}">
-<input type="hidden" name="data[mod_modid]" value="{mod_modid}">
-<table cellpadding="2" cellspacing="2" border="0" width="100%">
-	<tr>
-		<td>Zem:</th><td width="100%"><a href="{module_root}/{module_mod_id}/">{module_module_name}</a>&nbsp;</td>
-	</tr>
-	<tr>
-		<td>ID</th><td><input type="text" name="data[module_id]" value="{module_id}" size="48"> (pieļaujamie simboli [a-z0-9_])</td>
-	</tr>
-	<tr>
-		<td>Nosaukums</th><td><input type="text" name="data[module_name]" value="{module_name}" size="48"></td>
-	</tr>
-	<tr>
-		<td>Aktīvs?</th><td><select name="data[module_active]">
-		<option value="Y"{module_active_y}>Jā</option>
-		<option value="N"{module_active_n}>Nē</option>
-		</select></td>
-	</tr>
-	<tr>
-		<td>Redzams?</th><td><select name="data[module_visible]">
-		<option value="Y"{module_visible_y}>Jā</option>
-		<option value="N"{module_visible_n}>Nē</option>
-		</select></td>
-	</tr>
-	<tr>
-		<td>Pozīcija</th><td><select name="data[module_pos]">
-		<!-- BEGIN BLOCK_modules_pos --><option value="{pos}"{pos_selected}>{pos_name}</option><!-- END BLOCK_modules_pos -->
-		</select></td>
-	</tr>
-	<tr>
-		<td>Tips</th><td><select name="data[module_type]">
-		<option value="O"{module_type_o}>Atvērts</option>
-		<option value="R"{module_type_r}>Reģistrētiem</option>
-		</select></td>
-	</tr>
-	<tr>
-		<td colspan="2" width="100%">
-			<textarea class="edit" name="data[module_data]" rows="15" cols="150">
-				{module_data}
-			</textarea>
-		</td>
-	</tr>
+<div class="TD-cat">
+	Moduļi: rediģēt <em>{module_name_edit}</em>
+</div>
+
+<form action="" method="post" id="module_edit">
+<table class="Main">
+<tr>
+	<th>Zem</th>
+	<td>
+		<input type="hidden" name="action" value="module_save" />
+		<input type="hidden" name="data[mod_id]" value="{mod_id}" />
+		<select name="data[mod_modid]">
+		<!-- BEGIN BLOCK_modules_under_list -->
+		<option value="{mod_id}">{module_padding}{module_name}</option>
+		<!-- END BLOCK_modules_under_list -->
+		</select>
+	</td>
+</tr>
+<tr>
+	<th>ID</th>
+	<td>
+		<input type="text" name="data[module_id]" value="{module_id}" size="48" /> (pieļaujamie simboli [a-z0-9_])
+	</td>
+</tr>
+<tr>
+	<th>Nosaukums</th>
+	<td>
+		<input type="text" name="data[module_name]" value="{module_name}" size="48" />
+	</td>
+</tr>
+<tr>
+	<th>Aktīvs?</th>
+	<td>
+		<select name="data[module_active]">
+			<option value="Y"{module_active_y}>Jā</option>
+			<option value="N"{module_active_n}>Nē</option>
+		</select>
+	</td>
+</tr>
+<tr>
+	<th>Redzams?</th>
+	<td>
+		<select name="data[module_visible]">
+			<option value="Y"{module_visible_y}>Jā</option>
+			<option value="N"{module_visible_n}>Nē</option>
+		</select>
+	</td>
+</tr>
+<tr>
+	<th>Pozīcija</th>
+	<td>
+		<select name="data[module_pos]">
+		<!-- BEGIN BLOCK_modules_pos -->
+			<option value="{pos}"{pos_selected}>{pos_name}</option>
+		<!-- END BLOCK_modules_pos -->
+		</select>
+	</td>
+</tr>
+<tr>
+	<th>Tips</th>
+	<td>
+		<select name="data[module_type]">
+			<option value="O"{module_type_o}>Atvērts</option>
+			<option value="R"{module_type_r}>Reģistrētiem</option>
+		</select>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">
+		<textarea class="edit" name="data[module_data]" rows="15" cols="150">
+			{module_data}
+		</textarea>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">
+		<input type="submit" value=" Saglabāt " />
+	</td>
+</tr>
 </table>
 </form>
 

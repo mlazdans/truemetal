@@ -286,8 +286,8 @@ class Module
 		if($action == 'hide_multiple')
 			$func = 'hide';
 
-		if(isset($data['item_count']) && $func)
-			for($r = 1; $r <= $data['item_count']; ++$r)
+		if(isset($data['module_count']) && $func)
+			for($r = 1; $r <= $data['module_count']; ++$r)
 				// ja iechekots, proceseejam
 				if(isset($data['mod_checked'.$r]) && isset($data['mod_id'.$r]))
 					$ret = $ret && $this->{$func}($data['mod_id'.$r]);
@@ -407,16 +407,16 @@ class Module
 
 		$template->set_var('module_color_class', 'box-normal');
 		if($module['module_active'] == MOD_ACTIVE)
-			$template->set_var('module_active_y', ' selected');
+			$template->set_var('module_active_y', ' selected="selected"');
 		else {
-			$template->set_var('module_active_n', ' selected');
+			$template->set_var('module_active_n', ' selected="selected"');
 			$template->set_var('module_color_class', 'box-inactive');
 		}
 
 		if($module['module_visible'] == MOD_VISIBLE) {
-			$template->set_var('module_visible_y', ' selected');
+			$template->set_var('module_visible_y', ' selected="selected"');
 		} else {
-			$template->set_var('module_visible_n', ' selected');
+			$template->set_var('module_visible_n', ' selected="selected"');
 			$template->set_var('module_color_class', 'box-invisible');
 		}
 
@@ -431,14 +431,14 @@ class Module
 
 		// type
 		if($module['module_type'] == MOD_TYPE_OPEN)
-			$template->set_var('module_type_o', ' selected');
+			$template->set_var('module_type_o', ' selected="selected"');
 		elseif($module['module_type'] == MOD_TYPE_REGISTRATED)
-			$template->set_var('module_type_r', ' selected');
+			$template->set_var('module_type_r', ' selected="selected"');
 
 		$template->set_var('module_path', $module_path);
 		$template->set_var('module_padding', str_repeat($padding_char, $padding * 3));
 
-		$template->set_var('item_count', $module_count);
+		$template->set_var('module_count', $module_count);
 		$template->parse_block($block, TMPL_APPEND);
 	} // set_module
 

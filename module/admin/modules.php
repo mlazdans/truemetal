@@ -23,7 +23,7 @@ function set_pos(&$template, $m_pos = 0, $mod_modid = '') {
 		$template->set_var('pos', $r);
 		$template->set_var('pos_name', $r);
 		if($m_pos == $r)
-			$template->set_var('pos_selected', ' selected');
+			$template->set_var('pos_selected', ' selected="selected"');
 		else
 			$template->set_var('pos_selected', '');
 		$template->parse_block('BLOCK_modules_pos', TMPL_APPEND);
@@ -31,7 +31,7 @@ function set_pos(&$template, $m_pos = 0, $mod_modid = '') {
 	if(!$m_pos) {
 		$template->set_var('pos', $r);
 		$template->set_var('pos_name', 'Nākamais ['.$r.']');
-		$template->set_var('pos_selected', ' selected');
+		$template->set_var('pos_selected', ' selected="selected"');
 		$template->parse_block('BLOCK_modules_pos', TMPL_APPEND);
 	}
 }
@@ -51,7 +51,7 @@ $mod_id = array_shift($sys_parameters);
 
 require_once('lib/Module.php');
 
-$mod_modid = isset($_POST['mod_modid']) ? (integer)$_POST['mod_modid'] : '';
+//$mod_modid = isset($_POST['mod_modid']) ? (integer)$_POST['mod_modid'] : '';
 
 $module = new Module();
 $template = new AdminModule($sys_template_root.'/admin', $admin_module);
@@ -83,6 +83,11 @@ if($action == 'cancel') {
 		module_error($module->error_msg, $template);
 } elseif($action == 'module_new') {
 // jauns modulis
+	//$module->set_modules_all($template, 0, 'BLOCK_modules_under_list');
+	$template->init_editor();
+	$template->enable('BLOCK_modules_edit');
+	$template->set_var('module_name_edit', 'jauns', 'BLOCK_module_edit');
+/*
 	if($mod_modid) {
 		$module->load($mod_modid);
 		$template->enable('BLOCK_modules_edit');
@@ -96,25 +101,29 @@ if($action == 'cancel') {
 		$template->init_editor();
 	} else {
 		$template->enable('BLOCK_modules_under');
-		$module->set_modules_all($template, 0, 'BLOCK_modules_under_list');
+		$module->set_modules_all($template, 0, 'BLOCK_modules_	_list');
 	}
-	set_pos($template, 0, $mod_modid);
+	*/
+	set_pos($template, 0, 0);
 } else {
-	if(!$mod_id) {
+	if(!$mod_id)
+	{
 		$template->enable('BLOCK_modules_list');
 		unset($module_count);
 		$module->set_modules_all($template);
 	} else {
 		$module->load();
-		if(isset($module->data[$mod_id])) {
+		if(isset($module->data[$mod_id]))
+		{
 			// redigeeshana
 			$template->enable('BLOCK_modules_edit');
 			$template->init_editor();
 			set_pos($template, $module->data[$mod_id]['module_pos'], $module->data[$mod_id]['mod_modid']);
 			if($item = $module->find($module->data[$mod_id]['mod_modid'])) {
-				$template->set_var('module_module_name', $item['module_name']);
-				$template->set_var('module_module_id', $item['module_id']);
-				$template->set_var('module_mod_id', $item['mod_id']);
+				$template->set_var('module_name_edit', $item['module_name'], 'BLOCK_module_edit');
+				$template->set_var('module_module_name', $item['module_name'], 'BLOCK_module_edit');
+				$template->set_var('module_module_id', $item['module_id'], 'BLOCK_module_edit');
+				$template->set_var('module_mod_id', $item['mod_id'], 'BLOCK_module_edit');
 			}
 			$module->set_module($template, $module->data[$mod_id]);
 		}

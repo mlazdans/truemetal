@@ -48,15 +48,17 @@
 </tr>
 <!-- END BLOCK_article_item -->
 <tr>
-	<td colspan="3">Iezīmētos: <select name="action">
-	<option value="">---</option>
-	<option value="delete_multiple">Dzēst</option>
-	<option value="activate_multiple">Aktivizēt</option>
-	<option value="deactivate_multiple">Deaktivizēt</option>
-	<option value="show_multiple">Parādīt</option>
-	<option value="hide_multiple">Slēpt</option>
-	</select>
-	<input type="submit" value="  OK  " />
+	<td colspan="3">
+		Iezīmētos:
+		<select name="action">
+			<option value="">---</option>
+			<option value="delete_multiple">Dzēst</option>
+			<option value="activate_multiple">Aktivizēt</option>
+			<option value="deactivate_multiple">Deaktivizēt</option>
+			<option value="show_multiple">Parādīt</option>
+			<option value="hide_multiple">Slēpt</option>
+		</select>
+		<input type="submit" value="  OK  " />
 	</td>
 </tr>
 </table>
@@ -87,6 +89,7 @@
 <tr>
 	<th>Zem</th>
 	<td>
+		<input type="hidden" name="action" value="art_save" />
 		<select name="data[art_modid]">
 		<!-- BEGIN BLOCK_modules_under_list -->
 		<option value="{mod_id}">{module_padding}{module_name}</option>
@@ -97,7 +100,6 @@
 <tr>
 	<th>Nosaukums</th>
 	<td>
-		<input type="hidden" name="action" value="art_save" />
 		<input type="text" name="data[art_name]" value="{art_name}" size="128" />
 	</td>
 </tr>
