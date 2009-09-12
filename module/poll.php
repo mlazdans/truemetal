@@ -51,9 +51,10 @@ if($action == 'results')
 	$poll->show_archive($template, $id);
 
 	$template->set_right();
-	$template->set_reviews();
 	$template->set_poll();
+	$template->set_login();
 	$template->set_online();
+	$template->set_search();
 
 	$template->out();
 }

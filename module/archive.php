@@ -69,9 +69,9 @@ foreach($arts as $item)
 }
 
 $template->set_right();
-$template->set_calendar($y, $m, $d);
-$template->set_poll();
+$template->set_login();
 $template->set_online();
+$template->set_calendar($y, $m, $d);
 
 $template->out();
 

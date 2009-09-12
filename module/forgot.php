@@ -15,13 +15,6 @@ $template->set_title("Aizmirsu paroli");
 $template->set_file('FILE_forgot', 'forgot.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_forgot');
 
-$template->set_right();
-$template->set_login();
-$template->set_reviews();
-$template->set_poll();
-$template->set_search();
-$template->set_online();
-
 $logins = new Logins;
 
 $empty_data = array(
@@ -49,6 +42,11 @@ if($error_msg)
 
 parse_form_data_array($data);
 $template->set_array($data, 'BLOCK_forgot_form');
+
+$template->set_right();
+$template->set_login();
+$template->set_online();
+$template->set_search();
 
 $template->out();
 

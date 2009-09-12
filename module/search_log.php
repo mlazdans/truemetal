@@ -27,10 +27,9 @@ while($r = $db->FetchAssoc($q))
 }
 
 $template->set_right();
-$template->set_search();
-$template->set_reviews();
-$template->set_poll();
+$template->set_login();
 $template->set_online();
+$template->set_search();
 
 $template->out();
 

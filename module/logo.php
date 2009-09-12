@@ -14,8 +14,7 @@ $template->copy_block('BLOCK_middle', 'FILE_logo');
 
 $template->set_right();
 $template->set_login();
-$template->set_poll();
-$template->set_search();
 $template->set_online();
+$template->set_search();
 
 $template->out();

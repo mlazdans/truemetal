@@ -15,13 +15,6 @@ $template->set_title("Reģistrācija");
 $template->set_file('FILE_register', 'register.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_register');
 
-$template->set_right();
-$template->set_login();
-$template->set_reviews();
-$template->set_poll();
-$template->set_search();
-$template->set_online();
-
 $logins = new Logins;
 
 $error_msg = array();
@@ -144,6 +137,11 @@ if($error_msg)
 	$template->enable('BLOCK_register_error');
 	$template->set_var('error_msg', join('<br/>', $error_msg), 'BLOCK_register_error');
 }
+
+$template->set_right();
+$template->set_login();
+$template->set_online();
+$template->set_search();
 
 $template->out();
 

@@ -87,8 +87,7 @@ if($search_msg)
 
 $template->set_right();
 $template->set_search($ent_search_q);
-$template->set_reviews();
-$template->set_poll();
+$template->set_login();
 $template->set_online();
 
 $template->out();

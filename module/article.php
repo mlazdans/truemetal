@@ -222,9 +222,9 @@ $template->set_title($art_title);
 $template->set_right();
 $template->set_login();
 $template->set_online();
+$template->set_search();
 $template->set_reviews(13);
 $template->set_poll();
-$template->set_search();
 
 $template->out();
 
