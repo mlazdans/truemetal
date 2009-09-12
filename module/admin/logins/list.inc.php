@@ -1,5 +1,8 @@
 <?php
 
+$template = new AdminModule($sys_template_root.'/admin', "logins/list");
+$template->set_title('Admin :: logini :: saraksts');
+
 $logins = $logins->load(array(
 	'limit'=>100,
 	'l_active'=>LOGIN_ALL,
@@ -25,4 +28,6 @@ foreach($logins as $item)
 }
 
 $template->set_var('logins_count', $logins_count, 'BLOCK_logins_list');
+
+$template->out();
 

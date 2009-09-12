@@ -15,7 +15,7 @@ class AdminModule extends Template
 	var $module_name;
 	var $title;
 
-	function AdminModule($template_root, $module_name = '',
+	function __construct($template_root, $module_name = '',
 		$str_main_file = 'index.tpl', $str_undefined = 'remove')
 	{
 
@@ -32,7 +32,7 @@ class AdminModule extends Template
 		$this->init();
 
 		return true;
-	} // AdminModule
+	} // __construct
 
 	function init()
 	{
