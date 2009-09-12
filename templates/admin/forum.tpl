@@ -1,53 +1,60 @@
-<div class="TD-cat">
+<div class="TD-cat-active">
 	/ <a class="A-cat" href="{module_root}/">Forums</a><!-- BEGIN BLOCK_forum_path disabled --> / <a class="A-cat" href="{module_root}/{forum1_path}">{forum1_name}</a><!-- END BLOCK_forum_path --> /
 </div>
 
 <!-- BEGIN BLOCK_forum_edit disabled -->
+<div class="TD-cat-active">
+	Labot forumu <em>{forum_name}</em>
+</div>
+
 <form action="" method="post" id="forum_edit">
 <table class="Main">
 <tr>
-	<td class="TD-cat" colspan="2">
+	<td class="right nowrap">Nosaukums:</td>
+	<td>
 		<input type="hidden" name="action" value="save_forum" />
 		<input type="hidden" name="data[forum_id]" value="{forum_id}" />
-		Labot forumu <em>{forum_name}</em>
+		<input type="text" name="data[forum_name]" value="{forum_name}" size="64" />
 	</td>
 </tr>
 <tr>
-	<td style="white-space: nowrap; text-align: right;">Nosaukums:</td>
-	<td><input type="text" name="data[forum_name]" value="{forum_name}" size="64" /></td>
+	<td class="right nowrap">Aktīvs?:</td>
+	<td>
+		<select name="data[forum_active]">
+			<option value="Y"{forum_active_sel}>Jā</option>
+			<option value="N"{forum_inactive_sel}>Nē</option>
+		</select>
+	</td>
 </tr>
 <tr>
-	<td style="white-space: nowrap; text-align: right;">Aktīvs?:</td>
-	<td><select name="data[forum_active]">
-	<option value="Y"{forum_active_sel}>Jā</option>
-	<option value="N"{forum_inactive_sel}>Nē</option>
-	</select></td>
+	<td class="right nowrap">Var būt apakštēmas?:</td>
+	<td>
+		<select name="data[forum_allowchilds]">
+			<option value="N"{forum_prohibitchilds_sel}>Nē</option>
+			<option value="Y"{forum_allowchilds_sel}>Jā</option>
+		</select>
+	</td>
 </tr>
 <tr>
-	<td style="white-space: nowrap; text-align: right;">Var būt apakštēmas?:</td>
-	<td><select name="data[forum_allowchilds]">
-	<option value="N"{forum_prohibitchilds_sel}>Nē</option>
-	<option value="Y"{forum_allowchilds_sel}>Jā</option>
-	</select></td>
+	<td class="right nowrap">Ievadīts:</td>
+	<td>
+		<input type="text" name="data[forum_entered]" value="{forum_entered}" />
+	</td>
 </tr>
 <tr>
-	<td style="white-space: nowrap; text-align: right;">Ievadīts:</td>
-	<td><input type="text" name="data[forum_entered]" value="{forum_entered}" /></td>
-</tr>
-<tr>
-	<td style="white-space: nowrap; text-align: right;" valign="top">Dati:</td>
+	<td class="right nowrap" valign="top">Dati:</td>
 	<td><textarea style="width: 90%" rows="8" cols="60" name="data[forum_data]">{forum_data}</textarea></td>
 </tr>
 <tr>
-	<td style="white-space: nowrap; text-align: right;">Lietotāja vārds:</td>
+	<td class="right nowrap">Lietotāja vārds:</td>
 	<td><input type="text" name="data[forum_username]" value="{forum_username}" /></td>
 </tr>
 <tr>
-	<td style="white-space: nowrap; text-align: right;">Lietotāja e-pasts:</td>
+	<td class="right nowrap">Lietotāja e-pasts:</td>
 	<td><input type="text" name="data[forum_useremail]" value="{forum_useremail}" /></td>
 </tr>
 <tr>
-	<td style="white-space: nowrap; text-align: right;">Lietotāja IP:</td>
+	<td class="right nowrap">Lietotāja IP:</td>
 	<td><input type="text" name="data[forum_userip]" value="{forum_userip}" /></td>
 </tr>
 <tr>

@@ -1,6 +1,6 @@
 <!-- BEGIN BLOCK_modules_list disabled -->
-<div class="TD-cat">
-	Modļi: saraksts
+<div class="TD-cat-active">
+	Moduļi: saraksts
 </div>
 
 <form action="" method="post">
@@ -70,7 +70,7 @@
 <!-- END BLOCK_modules_error -->
 
 <!-- BEGIN BLOCK_modules_edit disabled -->
-<div class="TD-cat">
+<div class="TD-cat-active">
 	Moduļi: rediģēt <em>{module_name_edit}</em>
 </div>
 

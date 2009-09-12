@@ -1,3 +1,7 @@
+<div class="TD-cat-active">
+	Jautājumi: saraksts
+</div>
+
 <form method="post" action="{module_root}/do/" id="poll_list">
 <table class="Main">
 <tr>
@@ -5,7 +9,7 @@
 		<input type="checkbox" onclick="Truemetal.checkAll(this);" />
 	</td>
 	<td class="TD-cat" colspan="3">
-		Jautājumi
+		Jautājums
 	</td>
 </tr>
 <!-- BEGIN BLOCK_poll disabled -->

@@ -1,5 +1,5 @@
 <!-- BEGIN BLOCK_articles_list disabled -->
-<div class="TD-cat">
+<div class="TD-cat-active">
 	Ziņas: saraksts
 </div>
 
@@ -20,7 +20,7 @@
 
 <!-- BEGIN BLOCK_noarticles disabled -->
 <div>
-	Ziņu nav
+	Nav nevienas ziņas
 </div>
 <!-- END BLOCK_noarticles -->
 
@@ -80,7 +80,7 @@
 
 <!-- BEGIN BLOCK_editor_init --><!-- END BLOCK_editor_init -->
 
-<div class="TD-cat">
+<div class="TD-cat-active">
 	Ziņas: rediģēt <em>{art_name_edit}</em>
 </div>
 

@@ -1,32 +1,54 @@
 <!-- BEGIN BLOCK_logins_list disabled -->
-<form action="" method="post">
-<table cellpadding="2" cellspacing="2" border="0">
-	<tr>
-		<td class="TD-cat"><input type="checkbox" name="logins_check_all" onClick="checkAll(this.form, this)"></td>
-		<td width="100%" class="TD-cat">Logini</td>
-	</tr>
-	<!-- BEGIN BLOCK_logins -->
-	<input type="hidden" name="l_id{logins_nr}" value="{l_id}">
-	<tr>
-		<td class="{l_color_class}"><input type="checkbox" name="l_checked{logins_nr}"></td>
-		<td class="{l_color_class}" valign="top"><a href="{module_root}/{l_id}/">{l_nick} {l_login}</a></td>
-	</tr>
-	<!-- END BLOCK_logins -->
-	<tr>
-		<td colspan="2">Iezīmētos: <select name="action">
-		<option value="">---</option>
-		<option value="activate_multiple">Aktivizēt</option>
-		<option value="deactivate_multiple">Deaktivizēt</option>
-		<option value="delete_multiple">Dzēst</option>
+<div class="TD-cat-active">
+	Logini: saraksts
+</div>
+
+<form action="" method="post" id="logins_list">
+<table class="Main">
+<tr>
+	<td class="TD-cat">
+		<input type="hidden" name="logins_count" value="{logins_count}" />
+		<input type="checkbox" name="logins_check_all" onclick="Truemetal.checkAll(this);" />
+	</td>
+	<td class="TD-cat">Logins</td>
+	<td class="TD-cat">Niks</td>
+	<td class="TD-cat">Pievienojies</td>
+</tr>
+<!-- BEGIN BLOCK_logins -->
+<tr>
+	<td class="{l_color_class}">
+		<input type="hidden" name="l_id{logins_nr}" value="{l_id}" />
+		<input type="checkbox" name="l_checked{logins_nr}" />
+	</td>
+	<td class="{l_color_class}" valign="top">
+		<a href="{module_root}/{l_id}/">{l_login}</a>
+	</td>
+	<td class="{l_color_class}" valign="top">{l_nick}</td>
+	<td class="{l_color_class}" valign="top">{l_entered}</td>
+</tr>
+<!-- END BLOCK_logins -->
+<tr>
+	<td colspan="5">
+		Iezīmētos:
+		<select name="action">
+			<option value="">---</option>
+			<option value="activate_multiple">Aktivizēt</option>
+			<option value="deactivate_multiple">Deaktivizēt</option>
+			<option value="delete_multiple">Dzēst</option>
 		</select>
-		<input type="submit" value="  OK  ">
-		</td>
-	</tr>
+		<input type="submit" value="  OK  " />
+	</td>
+</tr>
 </table>
-<input type="hidden" name="logins_count" value="{logins_count}">
 </form>
 <!-- END BLOCK_logins_list -->
-<!-- BEGIN BLOCK_nologins disabled -->Nav neviena logina<!-- END BLOCK_nologins -->
+
+
+<!-- BEGIN BLOCK_nologins disabled -->
+<div>
+Nav neviena logina
+</div>
+<!-- END BLOCK_nologins -->
 
 <!-- BEGIN BLOCK_logins_error disabled -->
 <span class="error-msg">{error_msg}</span>
@@ -34,18 +56,36 @@
 <!-- END BLOCK_logins_error -->
 
 <!-- BEGIN BLOCK_login_view disabled -->
-<table cellpadding="0" cellspacing="1" border="0">
+<form action="" method="post">
+<div class="TD-cat-active">
+	Logini: rediģēt <em>{l_login}</em>
+</div>
+<table class="Main">
 <tr>
-	<td align="right">IP:</td><td>{l_userip}</td>
+	<td class="right">IP:</td>
+	<td>{l_userip}</td>
 </tr>
 <tr>
-	<td align="right">Login:</td><td><input type="text" name="data[l_login]" value="{l_login}"></td>
+	<td class="right">Login:</td>
+	<td><input type="text" name="data[l_login]" value="{l_login}" /></td>
 </tr>
 <tr>
-	<td align="right">E-pasts:</td><td><input type="text" name="data[l_email]" value="{l_email}"></td>
+	<td class="right">E-pasts:</td>
+	<td><input type="text" name="data[l_email]" value="{l_email}" /></td>
+</tr>
+<tr>
+	<td colspan="2">
+		<input type="submit" value=" Saglabāt " />
+	</td>
 </tr>
 </table>
+</form>
 <!-- END BLOCK_login_view -->
+
+
+
+
+
 
 <!-- BEGIN BLOCK_login_view_comments disabled -->
 <form action="" method="post">
@@ -92,6 +132,7 @@
 <!-- END BLOCK_article_c -->
 </table>
 <!-- END BLOCK_login_view_article_c -->
+
 
 <!-- BEGIN BLOCK_login_view_forum_c disabled -->
 <table cellpadding="2" cellspacing="2" border="0">

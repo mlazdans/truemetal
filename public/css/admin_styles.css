@@ -86,7 +86,7 @@ hr {
 	border: 0;
 }
 
-.TD-menu, .TD-menu-active, .TD-cat {
+.TD-menu, .TD-menu-active, .TD-cat, .TD-cat-active {
 	font-weight: bold;
 	padding: 3px 8px;
 	color: white;
@@ -102,16 +102,24 @@ hr {
 .TD-cat {
 	background-color: #000066;
 }
+.TD-cat-active {
+	background-color: #990000;
+}
 
 table.Main {
 	width: 100%;
-	/*margin: 0 auto;*/
 	min-width: 50%;
 	border-collapse: separate;
 	border-spacing: 1px;
 }
 table.Main td {
 	padding: 3px;
+}
+table.Main td.right {
+	text-align: right;
+}
+table.Main td.nowrap {
+	white-space: nowrap;
 }
 
 table.Main td:last-child, table.Main th:last-child {

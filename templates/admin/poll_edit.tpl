@@ -1,15 +1,14 @@
+<div class="TD-cat-active">
+	Jautājumi: labot <em>{poll1_name_stripped}</em>
+</div>
+
 <form method="post" action="{module_root}/{poll1_id}/do/" id="poll_edit">
 <table class="Main">
 <tr>
-	<td class="TD-cat" colspan="2">
-		<input type="hidden" name="action" value="save_poll" />
-		<input type="hidden" name="data[poll_id]" value="{poll1_id}" />
-		Labot jautājumu <em>{poll1_name_stripped}</em>
-	</td>
-</tr>
-<tr>
 	<th align="right">Nosaukums:</th>
 	<td>
+		<input type="hidden" name="action" value="save_poll" />
+		<input type="hidden" name="data[poll_id]" value="{poll1_id}" />
 		<input type="text" name="data[poll_name]" value="{poll1_name}" size="48" />
 	</td>
 </tr>
