@@ -12,7 +12,7 @@ class CommentConnect
 	var $table = '';
 	var $db = null;
 
-	function __construct($table)
+	function __construct($table = false)
 	{
 		$this->table = $table;
 	} // __construct
@@ -25,6 +25,9 @@ class CommentConnect
 
 	function connect($table_id, $c_id)
 	{
+		if($this->table === false)
+			return false;
+
 		$sql = "
 INSERT INTO `comment_connect` (
 	`cc_table`, `cc_table_id`, `cc_c_id`
@@ -74,10 +77,12 @@ FROM
 	comment
 JOIN comment_connect ON cc_c_id = c_id
 LEFT JOIN comment_map ON cm_new_id = c_id
-WHERE
-	cc_table = '$this->table'";
+";
 
 		$sql_add = array();
+
+		if($this->table !== false)
+			$sql_add[] = "(cc_table = '$this->table')";
 
 		if(!empty($params['cc_table_id']))
 			$sql_add[] = sprintf("(cc_table_id = %d)", $params['cc_table_id']);
@@ -90,8 +95,19 @@ WHERE
 			$sql_add[] = sprintf("c_visible = '%s'", COMMENT_VISIBLE);
 		}
 
+		# IPS
+		if(isset($params['ips']))
+		{
+			if(is_array($params['ips']))
+			{
+				$sql_add[] = sprintf("c_userip IN (%s)", "'".join("','", $params['ips'])."'");
+			} else {
+				$sql_add[] = sprintf("c_userip = '%s'", $params['ips']);
+			}
+		}
+
 		if($sql_add)
-			$sql .= " AND ".join(' AND ', $sql_add);
+			$sql .= " WHERE ".join(' AND ', $sql_add);
 
 		if(empty($params['sort']))
 			$sql .= " ORDER BY c_entered ";

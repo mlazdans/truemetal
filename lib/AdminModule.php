@@ -48,11 +48,11 @@ class AdminModule extends Template
 
 		$this->set_global('USER_name', $_USER['user_name']);
 
-		reset($admin_modules);
 		foreach($admin_modules as $mod=>$val)
 		{
 			// ja uzstaadiits modulis
-			if($val) {
+			if($val)
+			{
 				$this->set_var('adminmodule_id', $mod);
 				$this->set_var('adminmodule_name', $val);
 				if($mod == $this->module_name)

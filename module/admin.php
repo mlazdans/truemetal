@@ -50,6 +50,7 @@ $admin_modules = array(
 	'user'=>'Lietotāji',
 	'online'=>'Online',
 	'logins'=>'Logini',
+	'reports'=>'Reporti',
 	'lang'=>'',
 	'index'=>''
 );

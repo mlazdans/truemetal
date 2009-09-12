@@ -5,9 +5,8 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-$action = isset($_POST['action']) ? $_POST['action'] : '';
-
-$l_id = array_shift($sys_parameters);
+$l_id = (int)array_shift($sys_parameters);
+$action = post('action');
 
 require_once('lib/Logins.php');
 require_once('lib/Module.php');
@@ -18,22 +17,17 @@ $logins = new Logins;
 $template = new AdminModule($sys_template_root.'/admin', $admin_module);
 $template->set_title('Admin :: logini');
 
-/* ------------------------------------------------------------------------- */
-
-function logins_error($msg, &$template) {
-	$template->enable('BLOCK_logins_error');
-	$template->set_var('error_msg', $msg);
-}
-
 $actions = array('delete_multiple', 'activate_multiple', 'deactivate_multiple');
-
-if(in_array($action, $actions)) {
+if(in_array($action, $actions))
+{
 	if($logins->process_action($_POST, $action))
-		if(!empty($p_id))
-			header("Location: $module_root/$p_id/");
-		else
+	{
+		if(empty($p_id))
 			header("Location: $module_root/");
-	exit;
+		else
+			header("Location: $module_root/$p_id/");
+	}
+	return;
 }
 
 if($l_id)

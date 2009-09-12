@@ -871,3 +871,8 @@ function php_self()
 	return isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
 } // php_self
 
+function is_not_empty($v)
+{
+	return !empty($v);
+} // is_not_empty
+
