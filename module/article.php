@@ -37,8 +37,6 @@ $template->set_file('FILE_article', 'article.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_article');
 if($art_id)
 {
-	$template->set_file('FILE_article_comments', 'comments.tpl');
-	$template->copy_block('BLOCK_article_comments', 'FILE_article_comments');
 }
 
 if(!$art_id)
@@ -50,8 +48,6 @@ $article = new Article();
 $tc = 0;
 if($art_id)
 {
-	$template->enable('BLOCK_article_comments_head');
-
 	$art = $article->load(array(
 		'art_id'=>$art_id
 		));
@@ -106,8 +102,12 @@ if($art_id)
 
 // no chekojam vai registreeta *sadalja/raksts*
 # Comments
-if($art_id)
+if($art_id && isset($articles[0]))
 {
+	$template->set_file('FILE_article_comments', 'comments.tpl');
+	$template->copy_block('BLOCK_article_comments', 'FILE_article_comments');
+	$template->enable('BLOCK_article_comments_head');
+
 	if(user_loged())
 		$_SESSION['comments']['viewed'][$art_id] = $articles[0]['art_comment_count'];
 

@@ -55,7 +55,8 @@ class AdminModule extends Template
 			{
 				$this->set_var('adminmodule_id', $mod);
 				$this->set_var('adminmodule_name', $val);
-				if($mod == $this->module_name)
+				//if($mod == $this->module_name)
+				if(preg_match("/^$mod\//", "$this->module_name/"))
 					$this->set_var('adminmodule_class', 'TD-menu-active');
 				else
 					$this->set_var('adminmodule_class', 'TD-menu');

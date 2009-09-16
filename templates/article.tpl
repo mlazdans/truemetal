@@ -43,7 +43,12 @@
 <!-- END BLOCK_article  -->
 
 <!-- BEGIN BLOCK_noarticle disabled -->
-<div>Not found</div>
+<div class="TD-cat">
+Not found
+</div>
+<div class="Info">
+	Resurss nav atrasts
+</div>
 <!-- END BLOCK_noarticle  -->
 
 <!-- BEGIN BLOCK_article_comments_head disabled -->
