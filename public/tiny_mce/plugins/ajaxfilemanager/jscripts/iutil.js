@@ -225,9 +225,9 @@ jQuery.iUtil = {
 			);
 	},
 	fixPNG : function (el, emptyGIF) {
-		var images = jQuery('img[@src*="png"]', el||document), png;
+		var images = jQuery('img[src*="png"]', el||document), png;
 		images.each( function() {
-			png = this.src;				
+			png = this.src;
 			this.src = emptyGIF;
 			this.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + png + "')";
 		});

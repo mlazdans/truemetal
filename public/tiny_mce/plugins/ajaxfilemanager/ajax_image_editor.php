@@ -53,8 +53,8 @@ $imageInfo = $image->getImageInfo($path);
 <script type="text/javascript" src="jscripts/ajaximageeditor_c.js"></script>
 -->
 <script type="text/javascript" src="jscripts/jquery.js"></script>
-<script type="text/javascript" src="jscripts/form.js"></script>
-<script type="text/javascript" src="jscripts/select.js"></script>
+<script type="text/javascript" src="jscripts/jquery.form.js"></script>
+<script type="text/javascript" src="jscripts/jquery.select.js"></script>
 <script type="text/javascript" src="jscripts/jqModal.js"></script>
 <script type="text/javascript" src="jscripts/rotate.js"></script>
 <script type="text/javascript" src="jscripts/interface.js"></script>
@@ -102,20 +102,25 @@ $(document).ready(
 		<p>
 			<input type="hidden" name="file_path" id="file_path" value="<?php echo $_GET['path']; ?>" />
 
-			<label for="mode_resize"><?php echo IMG_MODE_RESIZE; ?></label>
-			<input type="radio" name="mode" value="resize" id="mode_resize" class="input" checked="checked" onclick="return changeMode();"/>
+			<label for="mode_resize"><?php echo IMG_MODE_RESIZE; ?>
+				<input type="radio" name="mode" value="resize" id="mode_resize" class="input" checked="checked" onclick="return changeMode();"/>
+			</label>
 
-			<label for="mode_crop"><?php echo IMG_MODE_CROP; ?></label>
-			<input type="radio" name="mode" value="crop" id="mode_crop" class="input" onclick="return changeMode();" />
+			<label for="mode_crop"><?php echo IMG_MODE_CROP; ?>
+				<input type="radio" name="mode" value="crop" id="mode_crop" class="input" onclick="return changeMode();" />
+			</label>
 
-			<label for="mode_rotate"><?php echo IMG_MODE_ROTATE; ?></label>
-			<input type="radio" name="mode" value="rotate" id="mode_rotate" class="input" onclick="return changeMode();" />
+			<label for="mode_rotate"><?php echo IMG_MODE_ROTATE; ?>
+				<input type="radio" name="mode" value="rotate" id="mode_rotate" class="input" onclick="return changeMode();" />
+			</label>
 
-			<label for="mode_flip"><?php echo IMG_MODE_FLIP; ?></label>
-			<input type="radio" name="mode" value="flip" id="mode_flip" class="input" onclick="return changeMode();" />
+			<label for="mode_flip"><?php echo IMG_MODE_FLIP; ?>
+				<input type="radio" name="mode" value="flip" id="mode_flip" class="input" onclick="return changeMode();" />
+			</label>
 
-			<label for="constraint"><?php echo IMG_CHECKBOX_CONSTRAINT; ?></label>
-			<input type="checkbox" name="constraint" id="constraint" value="1" class="input" checked="checked" onclick="return toggleConstraint();" />
+			<label for="constraint"><?php echo IMG_CHECKBOX_CONSTRAINT; ?>
+				<input type="checkbox" name="constraint" id="constraint" value="1" class="input" checked="checked" onclick="return toggleConstraint();" />
+			</label>
 			<!--
 			<label>Watermark:</label>
 			<input type="radio" name="mode" value="watermark" class="input" onclick="return false;" />

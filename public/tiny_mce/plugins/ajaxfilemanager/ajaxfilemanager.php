@@ -51,8 +51,8 @@ if(!empty($_GET['view']))
 	$view = CONFIG_DEFAULT_VIEW;
 }
 
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -61,8 +61,8 @@ if(!empty($_GET['view']))
 <script type="text/javascript" src="jscripts/ajaxfilemanager_c.js"></script>
 -->
 <script type="text/javascript" src="jscripts/jquery.js"></script>
-<script type="text/javascript" src="jscripts/form.js"></script>
-<script type="text/javascript" src="jscripts/select.js"></script>
+<script type="text/javascript" src="jscripts/jquery.form.js"></script>
+<script type="text/javascript" src="jscripts/jquery.select.js"></script>
 <script type="text/javascript" src="jscripts/thickbox.js"></script>
 <script type="text/javascript" src="jscripts/calendar.js"></script>
 <script type="text/javascript" src="jscripts/contextmenu.js"></script>
@@ -93,8 +93,8 @@ var urls = {
 	rename:        '<?php echo CONFIG_URL_SAVE_NAME; ?>',
 	thumbnail:     '<?php echo CONFIG_URL_IMG_THUMBNAIL;  ?>',
 	create_folder: '<?php echo CONFIG_URL_CREATE_FOLDER; ?>',
-	text_editor:   '<?php echo  CONFIG_URL_TEXT_EDITOR; ?>',
-	image_editor:  '<?php echo  CONFIG_URL_IMAGE_EDITOR; ?>',
+	text_editor:   '<?php echo CONFIG_URL_TEXT_EDITOR; ?>',
+	image_editor:  '<?php echo CONFIG_URL_IMAGE_EDITOR; ?>',
 	download:      '<?php echo CONFIG_URL_DOWNLOAD; ?>',
 	present:       '<?php echo getCurrentUrl(); ?>',
 	home:          '<?php echo CONFIG_URL_HOME; ?>',
@@ -128,6 +128,7 @@ var thickbox = {
 	close:         '<?php echo THICKBOX_CLOSE; ?>'
 };
 
+var searchRequired = false;
 var tb_pathToImage = "theme/<?php echo CONFIG_THEME_NAME; ?>/images/loadingAnimation.gif";
 var msgInvalidFolderName = '<?php echo ERR_FOLDER_FORMAT; ?>';
 var msgInvalidFileName = '<?php echo ERR_FILE_NAME_FORMAT; ?>';
@@ -149,7 +150,6 @@ var numRows = 0;
 var wordCloseWindow = '<?php echo LBL_ACTION_CLOSE; ?>';
 var wordPreviewClick = '<?php echo LBL_CLICK_PREVIEW; ?>';
 
-var searchRequired = false;
 var supporedPreviewExts = '<?php echo CONFIG_VIEWABLE_VALID_EXTS; ?>';
 var supportedUploadExts = '<?php echo CONFIG_UPLOAD_VALID_EXTS; ?>'
 var elementId = <?php  echo (!empty($_GET['elementId'])?"'" . $_GET['elementId'] . "'":'null'); ?>;
@@ -226,7 +226,7 @@ if(file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'jscripts' . DIRECTORY
 			foreach($views as $k=>$v)
 			{
 				?>
-				<input type="radio" name="view" id="view_<?php echo $k ?>" class="radio" onclick="changeView(this);" value="<?php echo $k; ?>" <?php echo ($k==$view?'checked="checked"':''); ?> />
+				<input type="radio" name="view" id="view_<?php echo $k ?>" class="radio" onclick="changeView(this);" value="<?php echo $k; ?>" <?php echo ($k == $view ? 'checked="checked"' : ''); ?> />
 				<label for="view_<?php echo $k ?>"><?php echo $v; ?>&nbsp;&nbsp;</label>
 				<?php
 			}
@@ -296,12 +296,16 @@ if(file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'jscripts' . DIRECTORY
 		</ul>
 	</div>
 
-	<form action="" method="post" name="formAction" id="formAction">
-	<input type="hidden" name="currentFolderPath" id="currentFolderPathVal" value="" />
-	<input type="hidden" name="action_value" value="" id="action_value" /></form>
-	<select name="selectedDoc[]" id="selectedDoc" style="display:none;" multiple="multiple">
-		<option value="0"></option>
-	</select>
+	<form action="" method="post" id="formAction">
+		<div>
+			<input type="hidden" name="currentFolderPath" id="currentFolderPathVal" value="" />
+			<input type="hidden" name="action_value" value="" id="action_value" />
+			<select name="selectedDoc[]" id="selectedDoc" style="display:none;" multiple="multiple">
+				<option value="0"></option>
+			</select>
+		</div>
+	</form>
+
 	<div id="body">
 		<div id="rightCol">
 		<?php
@@ -505,24 +509,24 @@ if(file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'jscripts' . DIRECTORY
 			<a href="#" onclick="tb_remove();"><?php echo LBL_ACTION_CLOSE; ?></a>
 		</div>
 		<div class="jqmBody">
-			<form id="formUpload" name="formUpload" method="post" enctype="multipart/form-data" action="">
+			<form id="formUpload" method="post" enctype="multipart/form-data" action="">
 			<table class="tableForm" cellpadding="0" cellspacing="0">
 			<thead>
-				<tr>
-					<th colspan="2"><?php echo FILE_FORM_TITLE; ?><a class="action" href="#" title="<?php echo FILE_LBL_MORE;  ?>" onclick="return addMoreFile();"><span class="addMore">&nbsp;</span></a></th>
-				</tr>
+			<tr>
+				<th colspan="2"><?php echo FILE_FORM_TITLE; ?><a class="action" href="#" title="<?php echo FILE_LBL_MORE;  ?>" onclick="return addMoreFile();"><span class="addMore">&nbsp;</span></a></th>
+			</tr>
 			</thead>
 			<tfoot>
-				<tr>
-					<th>&nbsp;</th>
-					<td></td>
-				</tr>
+			<tr>
+				<th>&nbsp;</th>
+				<td></td>
+			</tr>
 			</tfoot>
 			<tbody id="fileUploadBody">
-				<tr style="display:none">
-					<th><label><?php echo FILE_LABEL_SELECT; ?></label></th>
-					<td><input type="file" class="input" name="file"  /> <input type="button" class="button" value="<?php echo FILE_LBL_UPLOAD; ?>" /> <a href="#" class="action" title="Cancel" style="display:none" ><span class="cancel">&nbsp;</span></a>  <span class="uploadProcessing" style="display:none">&nbsp;</span></td>
-				</tr>
+			<tr style="display:none">
+				<th><label><?php echo FILE_LABEL_SELECT; ?></label></th>
+				<td><input type="file" class="input" name="file"  /> <input type="button" class="button" value="<?php echo FILE_LBL_UPLOAD; ?>" /> <a href="#" class="action" title="Cancel" style="display:none" ><span class="cancel">&nbsp;</span></a>  <span class="uploadProcessing" style="display:none">&nbsp;</span></td>
+			</tr>
 			</tbody>
 			</table>
 			</form>
@@ -536,25 +540,27 @@ if(file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'jscripts' . DIRECTORY
 			<a href="#" onclick="tb_remove();"><?php echo LBL_ACTION_CLOSE; ?></a>
 		</div>
 		<div class="jqmBody">
-			<form id="formNewFolder" name="formNewFolder" method="post" action="">
-			<input type="hidden" name="currentFolderPath" value="" id="currentNewfolderPath" />
+			<form id="formNewFolder" method="post" action="">
 			<table class="tableForm" cellpadding="0" cellspacing="0">
 			<thead>
-				<tr>
-					<th colspan="2"><?php echo FOLDER_FORM_TITLE; ?></th>
-				</tr>
+			<tr>
+				<th colspan="2">
+					<input type="hidden" name="currentFolderPath" value="" id="currentNewfolderPath" />
+					<?php echo FOLDER_FORM_TITLE; ?>
+				</th>
+			</tr>
 			</thead>
 			<tfoot>
-				<tr>
-					<th>&nbsp;</th>
-					<td><input type="button" value="<?php echo FOLDER_LBL_CREATE; ?>" class="button" onclick="return doCreateFolder();"  /></td>
-				</tr>
+			<tr>
+				<th>&nbsp;</th>
+				<td><input type="button" value="<?php echo FOLDER_LBL_CREATE; ?>" class="button" onclick="return doCreateFolder();"  /></td>
+			</tr>
 			</tfoot>
 			<tbody>
-				<tr>
-					<th><label><?php echo FOLDER_LBL_TITLE; ?></label></th>
-					<td><input type="text" name="new_folder" id="new_folder" value="" class="input" /></td>
-				</tr>
+			<tr>
+				<th><label><?php echo FOLDER_LBL_TITLE; ?></label></th>
+				<td><input type="text" name="new_folder" id="new_folder" value="" class="input" /></td>
+			</tr>
 			</tbody>
 			</table>
 			</form>
@@ -578,33 +584,33 @@ if(file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'jscripts' . DIRECTORY
 			<a href="#" onclick="tb_remove();"><?php echo LBL_ACTION_CLOSE; ?></a>
 		</div>
 		<div class="jqmBody">
-			<form id="formRename" name="formRename" method="post" action="">
-			<input type="hidden" name="original_path" id="original_path" />
-			<input type="hidden" name="num" id="renameNum" value="" />
+			<form id="formRename" method="post" action="">
 			<table class="tableForm" cellpadding="0" cellspacing="0">
 			<thead>
-				<tr>
-					<th colspan="2"><?php echo RENAME_FORM_TITLE; ?></th>
-				</tr>
+			<tr>
+				<th colspan="2">
+					<input type="hidden" name="original_path" id="original_path" />
+					<input type="hidden" name="num" id="renameNum" value="" />
+					<?php echo RENAME_FORM_TITLE; ?>
+				</th>
+			</tr>
 			</thead>
 			<tfoot>
-				<tr>
-					<th>&nbsp;</th>
-					<td><input type="button" value="<?php echo RENAME_LBL_RENAME; ?>" class="button" onclick="return doRename();"  /></td>
-				</tr>
+			<tr>
+				<th>&nbsp;</th>
+				<td><input type="button" value="<?php echo RENAME_LBL_RENAME; ?>" class="button" onclick="return doRename();"  /></td>
+			</tr>
 			</tfoot>
 			<tbody>
-				<tr>
-					<th><label><?php echo RENAME_NEW_NAME; ?></label></th>
-					<td><input type="text" id="renameName" class="input" name="name" style="width:250px" /></td>
-				</tr>
+			<tr>
+				<th><label><?php echo RENAME_NEW_NAME; ?></label></th>
+				<td><input type="text" id="renameName" class="input" name="name" style="width:250px" /></td>
+			</tr>
 			</tbody>
 			</table>
 			</form>
 		</div>
-
 	</div>
-
 </div>
 <div id="winInfo" style="display:none">
 	<div class="jqmContainer">
@@ -615,7 +621,7 @@ if(file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'jscripts' . DIRECTORY
 			<table class="tableInfo" cellpadding="0" cellspacing="0">
 			<tbody>
 				<tr>
-					<th nowrap="nowrap">
+					<th>
 						<label>Author:</label>
 					</th>
 					<td>
@@ -623,7 +629,7 @@ if(file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'jscripts' . DIRECTORY
 					</td>
 				</tr>
 				<tr>
-					<th nowrap="nowrap">
+					<th>
 						<label>Template Designer:</label>
 					</th>
 					<td>
@@ -631,7 +637,7 @@ if(file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'jscripts' . DIRECTORY
 					</td>
 				</tr>
 				<tr>
-					<th nowrap="nowrap">
+					<th>
 						<label>Official Website:</label>
 					</th>
 					<td>
@@ -639,7 +645,7 @@ if(file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'jscripts' . DIRECTORY
 					</td>
 				</tr>
 				<tr>
-					<th nowrap="nowrap">
+					<th>
 						<label>Support Forum:</label>
 					</th>
 					<td>
@@ -647,7 +653,7 @@ if(file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'jscripts' . DIRECTORY
 					</td>
 				</tr>
 				<tr>
-					<th nowrap="nowrap">
+					<th>
 						<label>&copy;Copyright:</label>
 					</th>
 					<td>
