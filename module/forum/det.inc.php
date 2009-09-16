@@ -13,6 +13,16 @@ $template->copy_block('BLOCK_middle', 'FILE_forum');
 $template->set_file('FILE_forum_comments', 'comments.tpl');
 $template->copy_block('BLOCK_forum_comments', 'FILE_forum_comments');
 
+#
+/*
+if($forum_data)
+{
+	$template->enable('BLOCK_forum');
+	$template->set_array($forum_data, 'BLOCK_forum');
+}
+*/
+#
+
 if(user_loged())
 	$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_comment_count'];
 
