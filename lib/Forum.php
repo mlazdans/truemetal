@@ -22,6 +22,9 @@ define('FORUM_SORT_ASC', 'A');
 
 class Forum
 {
+	const DISPLAY_DATACOMPILED = 0;
+	const DISPLAY_DATA = 1;
+
 	var $page;
 	var $fpp = 20;
 
@@ -267,10 +270,13 @@ INSERT INTO forum (
 		$sql = 'UPDATE forum SET ';
 		$sql .= $data['forum_name'] ? "forum_name = '$data[forum_name]', " : '';
 		$sql .= $data['forum_entered'] ? "forum_entered = '$data[forum_entered]', " : '';
+		$sql .= $data['forum_datacompiled'] ? "forum_datacompiled = '$data[forum_datacompiled]', " : '';
 		$sql .= "forum_data = '$data[forum_data]', ";
 		$sql .= "forum_allowchilds = '$data[forum_allowchilds]', ";
+		$sql .= "forum_display = $data[forum_display], ";
+		$sql .= "forum_showmainpage = $data[forum_showmainpage], ";
+
 		$sql .= "forum_active = '$data[forum_active]', ";
-		$sql .= $data['forum_datacompiled'] ? "forum_datacompiled = '$data[forum_datacompiled]', " : '';
 		$sql = substr($sql, 0, -2);
 		$sql .= 'WHERE forum_id = '.$data['forum_id'];
 
@@ -379,6 +385,8 @@ INSERT INTO forum (
 		$data['forum_id'] = isset($data['forum_id']) ? (int)$data['forum_id'] : 0;
 		$data['forum_forumid'] = isset($data['forum_forumid']) ? (int)$data['forum_forumid'] : 0;
 		$data['forum_userid'] = isset($data['forum_userid']) ? (int)$data['forum_userid'] : 0;
+		$data['forum_display'] = isset($data['forum_display']) ? (int)$data['forum_display'] : 0;
+		$data['forum_showmainpage'] = isset($data['forum_showmainpage']) ? 1 : 0;
 
 		if(isset($data['forum_active']))
 			$data['forum_active'] = ereg('[^YN]', $data['forum_active']) ? FORUM_ACTIVE : $data['forum_active'];

@@ -13,16 +13,28 @@ require_once('lib/utils.php');
 
 $db->AutoCommit(false);
 
-# LOGINS
+# COMMENTS
 $sql = "SELECT * FROM `comment`";
 $q = $db->Query($sql);
 while($item = $db->FetchAssoc($q))
 {
 	if(($item['c_id'] % 1000 == 0))
-		print "$item[c_id]\n";
+		print "Comment: $item[c_id]\n";
 	$item['c_datacompiled'] = $item['c_data'];
 	parse_text_data($item['c_datacompiled']);
 	$db->Execute("UPDATE `comment` SET `c_datacompiled` = '$item[c_datacompiled]' WHERE `c_id` = $item[c_id]");
+}
+
+# FORUM
+$sql = "SELECT * FROM `forum`";
+$q = $db->Query($sql);
+while($item = $db->FetchAssoc($q))
+{
+	if(($item['forum_id'] % 1000 == 0))
+		print "Forum: $item[forum_id]\n";
+	$item['forum_datacompiled'] = $item['forum_data'];
+	parse_text_data($item['forum_datacompiled']);
+	$db->Execute("UPDATE `forum` SET `forum_datacompiled` = '$item[forum_datacompiled]' WHERE `forum_id` = $item[forum_id]");
 }
 
 $db->Commit();

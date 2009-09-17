@@ -13,7 +13,11 @@ $template->copy_block('BLOCK_middle', 'FILE_forum');
 $template->set_file('FILE_forum_comments', 'comments.tpl');
 $template->copy_block('BLOCK_forum_comments', 'FILE_forum_comments');
 
-#
+# TODO: Vajag uztaisīt:
+# 1) lai rāda foruma datus
+# 2) uztaisīt balsošanu par articles un forum
+# 3) pārkopēt foruma pirmā komenta votes uz foruma votēm
+# 4) izvākt pirmo foruma komentu
 /*
 if($forum_data)
 {
@@ -58,40 +62,14 @@ if(
 }
 
 $comments = $CC->get($params);
+
+# XXX : hack, vajag rādīt pa taisno foruma ierakstu
+if(($forum_data['forum_display'] == Forum::DISPLAY_DATA) && !empty($comments[0]))
+{
+	$comments[0]['c_datacompiled'] = $forum_data['forum_data'];
+}
+
 include("module/comment/list.inc.php");
-
-set_forum($template, $forum_id);
-
-
-
-
-
-
-
-
-
-return;
-
-
-//$forum_count = count($items);
-//set_forum_items($template, $item_data);
-
-if($items)
-{
-	$template->enable('BLOCK_forum');
-} else {
-	$template->enable('BLOCK_noforum');
-}
-
-foreach($items as $item)
-{
-	$template->set_array($item, 'BLOCK_forum');
-	$template->set_var('forum_date', proc_date($item['forum_entered']), 'BLOCK_forum');
-	$template->parse_block('BLOCK_forum', TMPL_APPEND);
-}
-
-//$forum_count = $forum_items->getThemeCount($forum_id);
-//include('pages.inc.php');
 
 set_forum($template, $forum_id);
 

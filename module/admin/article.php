@@ -57,7 +57,6 @@ if($action == 'art_save')
 if($action == 'art_new')
 {
 	$module->set_modules_all($template, 0, 'BLOCK_modules_under_list');
-	$template->init_editor();
 	$template->enable('BLOCK_article_edit');
 	$template->set_var('art_name_edit', 'jauns', 'BLOCK_article_edit');
 	$template->out();
@@ -106,9 +105,6 @@ if(!$art_id)
 	$module->set_modules_all($template, $art['art_modid'], 'BLOCK_modules_under_list');
 	$template->enable('BLOCK_article_edit');
 	$template->set_var('art_name_edit', $art['art_name'], 'BLOCK_article_edit');
-
-	// editor
-	$template->init_editor();
 
 	//$template->set_var('art_comments', $art['art_comments'] == 'Y' ? ' checked' : '');
 

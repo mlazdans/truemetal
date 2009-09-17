@@ -42,8 +42,37 @@
 	</td>
 </tr>
 <tr>
+	<td class="right nowrap">Rādīt:</td>
+	<td>
+		<select name="data[forum_display]">
+			<option value="0"{forum_display_0_selected}>Data Compiled</option>
+			<option value="1"{forum_display_1_selected}>Data</option>
+		</select>
+	</td>
+</tr>
+<tr>
+	<td class="right nowrap"><label for="forum_showmainpage">Rādīt sākumlapā:</label></td>
+	<td>
+		<input id="forum_showmainpage" type="checkbox" name="data[forum_showmainpage]"{forum_showmainpage_checked}/>
+	</td>
+</tr>
+<tr>
 	<td class="right nowrap" valign="top">Dati:</td>
-	<td><textarea style="width: 90%" rows="8" cols="60" name="data[forum_data]">{forum_data}</textarea></td>
+	<td>
+		<textarea id="forum_data" name="data[forum_data]" rows="15" cols="150">{forum_data}</textarea>
+		<p><input
+			type="button"
+			value="Editor"
+			onclick="
+if($('#forum_data').hasClass('edit'))
+{
+	tinyMCE.get('forum_data').remove();
+	$('#forum_data').removeClass('edit');
+} else {
+	$('#forum_data').addClass('edit'); initEditor();
+}"
+		/></p>
+	</td>
 </tr>
 <tr>
 	<td class="right nowrap">Lietotāja vārds:</td>
@@ -58,7 +87,9 @@
 	<td><input type="text" name="data[forum_userip]" value="{forum_userip}" /></td>
 </tr>
 <tr>
-	<td colspan="2"><input type="submit" value="Saglabāt" /></td>
+	<td colspan="2">
+		<input type="submit" value="Saglabāt" />
+	</td>
 </tr>
 </table>
 </form>
@@ -111,11 +142,12 @@ Nav nevienas tēmas
 <tr>
 	<td colspan="3">
 		<input type="hidden" name="item_count" value="{item_count}" />
-		Iezīmētos: <select name="action">
-		<option value="">---</option>
-		<option value="delete_multiple">Dzēst</option>
-		<option value="activate_multiple">Aktivizēt</option>
-		<option value="deactivate_multiple">Deaktivizēt</option>
+		Iezīmētos:
+		<select name="action">
+			<option value="">---</option>
+			<option value="delete_multiple">Dzēst</option>
+			<option value="activate_multiple">Aktivizēt</option>
+			<option value="deactivate_multiple">Deaktivizēt</option>
 		</select>
 		<input type="submit" value="  OK  " />
 	</td>

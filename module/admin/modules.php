@@ -84,7 +84,6 @@ if($action == 'cancel') {
 } elseif($action == 'module_new') {
 // jauns modulis
 	//$module->set_modules_all($template, 0, 'BLOCK_modules_under_list');
-	$template->init_editor();
 	$template->enable('BLOCK_modules_edit');
 	$template->set_var('module_name_edit', 'jauns', 'BLOCK_module_edit');
 /*
@@ -117,7 +116,6 @@ if($action == 'cancel') {
 		{
 			// redigeeshana
 			$template->enable('BLOCK_modules_edit');
-			$template->init_editor();
 			set_pos($template, $module->data[$mod_id]['module_pos'], $module->data[$mod_id]['mod_modid']);
 			if($item = $module->find($module->data[$mod_id]['mod_modid'])) {
 				$template->set_var('module_name_edit', $item['module_name'], 'BLOCK_module_edit');

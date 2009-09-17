@@ -78,8 +78,6 @@
 
 <!-- BEGIN BLOCK_article_edit disabled -->
 
-<!-- BEGIN BLOCK_editor_init --><!-- END BLOCK_editor_init -->
-
 <div class="TD-cat-active">
 	Ziņas: rediģēt <em>{art_name_edit}</em>
 </div>

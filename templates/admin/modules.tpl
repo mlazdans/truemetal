@@ -152,8 +152,6 @@
 </table>
 </form>
 
-<!-- BEGIN BLOCK_editor_init --><!-- END BLOCK_editor_init -->
-
 <script type="text/javascript">
 /*
 # TODO: pieattačot tiny_mce

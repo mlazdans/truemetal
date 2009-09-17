@@ -151,7 +151,10 @@ if($forum_id)
 	*/
 	//$template->copy_block('BLOCK_forumdets', 'FILE_forumdets');
 	$template->enable('BLOCK_forum_edit');
+
 	$template->set_array($forum_data, 'BLOCK_forum_edit');
+	$template->set_var('forum_data', parse_form_data($forum_data['forum_data']), 'BLOCK_forum_edit');
+
 	if($forum_data['forum_active'] == FORUM_ACTIVE)
 	{
 		$template->set_var('forum_active_sel', ' selected="selected"', 'BLOCK_forum_edit');
@@ -165,6 +168,10 @@ if($forum_id)
 	} else {
 		$template->set_var('forum_prohibitchilds_sel', ' selected="selected"', 'BLOCK_forum_edit');
 	}
+
+	$template->set_var("forum_display_$forum_data[forum_display]_selected", ' selected="selected"', 'BLOCK_forum_edit');
+	if($forum_data['forum_showmainpage'])
+		$template->set_var("forum_showmainpage_checked", ' checked="checked"', 'BLOCK_forum_edit');
 } else {
 	# Root
 	set_themes($template, $items);

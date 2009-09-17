@@ -244,6 +244,24 @@ class SQLLayer
 		}
 	}
 
+	function numRows()
+	{
+		switch( $this->int_db_type ) {
+			case DB_MYSQL:
+				return false;
+				break;
+			case DB_PGSQL:
+				return false;
+				break;
+			case DB_MYSQLI:
+				$d = $this->ExecuteSingle("SELECT FOUND_ROWS() AS fr");
+				return (int)$d['fr'];
+				break;
+			default:
+				return false;
+				break;
+		}
+	} // numRows
 
 
 	/* Sleedzamies klaat mysql */
