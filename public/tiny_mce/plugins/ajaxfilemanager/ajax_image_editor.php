@@ -55,7 +55,7 @@ $imageInfo = $image->getImageInfo($path);
 <script type="text/javascript" src="jscripts/jquery.js"></script>
 <script type="text/javascript" src="jscripts/jquery.form.js"></script>
 <script type="text/javascript" src="jscripts/jquery.select.js"></script>
-<script type="text/javascript" src="jscripts/jqModal.js"></script>
+<script type="text/javascript" src="jscripts/jquery.modal.js"></script>
 <script type="text/javascript" src="jscripts/rotate.js"></script>
 <script type="text/javascript" src="jscripts/interface.js"></script>
 <script type="text/javascript" src="jscripts/ajaximageeditor.js"></script>

@@ -24,6 +24,7 @@ var TINY_OPTIONS = {
 	//elements: "ajaxfilemanager",
 	relative_urls: false,
 	content_css: "/css/tiny_mce.css",
+	entities: "",
 
 	//plugins : "safari,pagebreak,style,layer,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
 	//plugins: "advhr",
