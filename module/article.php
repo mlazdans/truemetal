@@ -72,9 +72,8 @@ if($art_id)
 } elseif($_pointer['_data_']['mod_id']) {
 	$cc = $db->ExecuteSingle("SELECT COUNT(*) AS cc FROM view_mainpage");
 	$tc = (int)$cc['cc'];
-	$tc = $article->get_total($_pointer['_data_']['mod_id']);
 	$tp = ceil($tc / $art_per_page);
-	$art_align = $art_per_page - $tc % $art_per_page + 1;
+	$art_align = $tc % $art_per_page;
 
 	if( $page && (($page < 0) || ($page >= $tp)) )
 	{
@@ -83,11 +82,18 @@ if($art_id)
 	}
 
 	if($page)
-		$limit = (($tp - $page) * $art_per_page - $art_align).",$art_per_page";
+		$limit = (($tp - $page - 1) * $art_per_page + $art_align).",$art_per_page";
+		//$limit = (($tp - $page) * $art_per_page - $art_align).",$art_per_page";
 	else
 		$limit = $art_per_page;
 
 	$sql = "SELECT * FROM view_mainpage ORDER BY art_entered DESC LIMIT $limit";
+	/*
+	if($i_am_admin)
+	{
+		print "art_align=$art_align, tc=$tc, tp=$tp, sql=$sql";
+	}
+	*/
 	$articles = $db->Execute($sql);
 
 // ORDER BY art_entered DESC  LIMIT 10
