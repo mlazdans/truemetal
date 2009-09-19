@@ -1,5 +1,5 @@
-CREATE VIEW view_mainpage AS
-SELECT
+CREATE OR REPLACE VIEW view_mainpage AS
+(SELECT
 	m.module_id,
 	a.art_id,
 	COALESCE(cm_comment_count, 0) AS art_comment_count,
@@ -14,9 +14,9 @@ JOIN `modules` m ON (a.art_modid = m.mod_id)
 LEFT JOIN `comment_meta` ON (cm_table = 'article') AND (cm_table_id = a.art_id)
 WHERE
 	art_active = 'Y' AND
-	art_modid = 1
+	art_modid = 1)
 UNION
-SELECT
+(SELECT
 	'forum' AS module_id,
 	forum_id AS art_id,
 	COALESCE(cm_comment_count, 0) AS art_comment_count,
@@ -30,7 +30,8 @@ FROM
 LEFT JOIN comment_meta ON (cm_table = 'forum') AND (cm_table_id = forum_id)
 WHERE
 	forum_active = 'Y' AND
-	forum_showmainpage = 1
-;
+	forum_showmainpage = 1)
+ORDER BY
+	art_entered DESC;
 --
 

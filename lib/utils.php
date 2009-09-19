@@ -558,6 +558,10 @@ function hl(&$data, $kw)
 	foreach($words as $index=>$word)
 	{
 		$word = preg_replace('/[<>\/]/', '', $word);
+		$word = substitute(preg_quote($word));
+		if(empty($word))
+			continue;
+
 		$color = $colors[$index % $cc];
 		$bgcolor = $bg[$index % $bc];
 		$data = ">$data<";
@@ -565,6 +569,7 @@ function hl(&$data, $kw)
 		$data = preg_replace($patt, "$1<span style=\"background-color: $bgcolor; color: $color; font-weight: bold;\">$2</span>$3", $data);
 		$data = mb_substr($data, 1, mb_strlen($data)-2);
 	}
+
 	unstrip_script($data, $keys, $scripts);
 } // hl
 
