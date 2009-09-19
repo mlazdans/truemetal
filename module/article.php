@@ -87,14 +87,17 @@ if($art_id)
 	else
 		$limit = $art_per_page;
 
-	$sql = "SELECT * FROM view_mainpage ORDER BY art_entered DESC LIMIT $limit";
+	//$sql = "SELECT * FROM view_mainpage ORDER BY art_entered DESC LIMIT $limit";
+	$sql = "SELECT * FROM view_mainpage LIMIT $limit";
 	/*
 	if($i_am_admin)
 	{
 		print "art_align=$art_align, tc=$tc, tp=$tp, sql=$sql";
 	}
 	*/
+	//$db->Execute("SET GLOBAL log_queries_not_using_indexes = 0;");
 	$articles = $db->Execute($sql);
+	//$db->Execute("SET GLOBAL log_queries_not_using_indexes = 1;");
 
 // ORDER BY art_entered DESC  LIMIT 10
 /*

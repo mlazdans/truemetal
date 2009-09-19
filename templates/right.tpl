@@ -1,11 +1,5 @@
 <div class="TD-cat">Aktuāli</div>
 <div class="List-item actual">
-	<a href="/forum/121679/" title="18. septembris, piektdiena, Pērnavas 25">FRAILTY Open Rehersal</a>
-</div>
-<div class="List-item actual">
-	<a href="/forum/121699/" title="18. septembris, piektdiena, klubs &quot;Melnā Piektdiena&quot;">FRESH BLOOD</a>
-</div>
-<div class="List-item">
 	<a href="/article/581/" title="24. septembris, ceturtdiena, klubs &quot;Melnā Piektdiena&quot;">CHIMAIRA</a>
 </div>
 <div class="List-item">
