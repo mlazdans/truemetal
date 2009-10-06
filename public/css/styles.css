@@ -236,8 +236,12 @@ input[type=button]:active {
 .Comment .vote {
 	color: #676767;
 	font-weight: bold;
-	text-align: right;
+	text-align: center;
 	width: 2em;
+}
+.Comment .vote-value {
+	width: 3em;
+	text-align: right;
 }
 .Comment .plus { color: #00a400; }
 .Comment .minus { color: #c70000; }
