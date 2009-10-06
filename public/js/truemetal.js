@@ -49,7 +49,41 @@ var Truemetal = {
 					$(voteXpath).html(data.Votes).removeClass("minus").removeClass("plus").addClass("Comment-Vote");
 			});
 	}, // Vote
+	wrapYouTube: function(el){
+		var videoId = el.className.split(" ")[1];
+		if(videoId)
+		{
+			$(el).wrap('<' + 'div style="text-align: center; height: 395px;"' +'><' + '/div>');
+			var params = { allowScriptAccess: "always", wmode: "transparent" };
+			var atts = { align: 'center' };
+			swfobject.embedSWF("http://www.youtube.com/v/" + videoId, el.id, "480", "395", "8", null, null, params, atts);
+		}
+	},
+	scrollYouTube: function(e){
+		var yt = (typeof e.data == 'object' ? e.data : e);
+		var scrollY = $(window).attr('scrollY');
+		var WH = $(window).height();
+
+		yt.each(function(i, el){
+				if(yt[i].yt === true)
+				{
+					return;
+				}
+
+				var p = $(el).position();
+				var h = $(el).height();
+				if( (p.top >= scrollY) && ((p.top + h) <= (scrollY + WH)) )
+				{
+					Truemetal.wrapYouTube(el);
+					yt[i].yt = true;
+				}
+		});
+	},
 	initYouTube: function() {
+		var yt = $('div.youtube');
+		$(window).bind('scroll', yt, Truemetal.scrollYouTube);
+		Truemetal.scrollYouTube(yt);
+		/*
 		$('div.youtube').each(function(){
 				var videoId = this.className.split(" ")[1];
 				if(videoId)
@@ -60,6 +94,7 @@ var Truemetal = {
 					swfobject.embedSWF("http://www.youtube.com/v/" + videoId, this.id, "480", "395", "8", null, null, params, atts);
 				}
 		});
+		*/
 	}, // ytEmbed
 	initMenu: function(){
 		$('.menu img').each(function(){
