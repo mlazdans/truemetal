@@ -70,8 +70,36 @@ if($art_id)
 	}
 	$art_title .= (isset($item['art_name']) ? " - ".$item['art_name'] : "");
 } elseif($_pointer['_data_']['mod_id']) {
-	$cc = $db->ExecuteSingle("SELECT COUNT(*) AS cc FROM view_mainpage");
-	$tc = (int)$cc['cc'];
+	# Articles
+	if($_pointer['_data_']['module_id'] == 'article')
+	{
+		$cc = $db->ExecuteSingle("SELECT COUNT(*) AS cc FROM view_mainpage");
+		$tc = (int)$cc['cc'];
+	} else {
+	# Reviews
+		$tc = $article->get_total($_pointer['_data_']['mod_id']);
+		$tp = ceil($tc / $art_per_page);
+		/*
+		$art_align = $art_per_page - ($tc - $tp * $art_per_page);
+
+		if( $page && (($page < 0) || ($page >= $tp)) )
+		{
+			header("Location: $module_root/");
+			return;
+		}
+
+		if($page)
+			$limit = (($tp - $page + 1) * $art_per_page - $art_align).",$art_per_page";
+		else
+			$limit = $art_per_page;
+
+		$articles = $article->load(array(
+			'art_modid'=>$_pointer['_data_']['mod_id'],
+			'limit'=>$limit,
+			));
+		*/
+	}
+
 	$tp = ceil($tc / $art_per_page);
 	$art_align = $tc % $art_per_page;
 
@@ -83,52 +111,22 @@ if($art_id)
 
 	if($page)
 		$limit = (($tp - $page - 1) * $art_per_page + $art_align).",$art_per_page";
-		//$limit = (($tp - $page) * $art_per_page - $art_align).",$art_per_page";
 	else
 		$limit = $art_per_page;
 
-	//$sql = "SELECT * FROM view_mainpage ORDER BY art_entered DESC LIMIT $limit";
-	$sql = "SELECT * FROM view_mainpage LIMIT $limit";
-	/*
-	if($i_am_admin)
+	# Articles
+	if($_pointer['_data_']['module_id'] == 'article')
 	{
-		print "art_align=$art_align, tc=$tc, tp=$tp, sql=$sql";
-	}
-	*/
-	//$db->Execute("SET GLOBAL log_queries_not_using_indexes = 0;");
-	$articles = $db->Execute($sql);
-	//$db->Execute("SET GLOBAL log_queries_not_using_indexes = 1;");
-
-// ORDER BY art_entered DESC  LIMIT 10
-/*
-	$articles = array();
-	$sql = "
-	SELECT * FROM (
-	) AS docs
-	ORDER BY art_date
-";*/
-/*
-	$tc = $article->get_total($_pointer['_data_']['mod_id']);
-	$tp = ceil($tc / $art_per_page);
-	$art_align = $art_per_page - ($tc - $tp * $art_per_page);
-	//print "tc=$tc; tp=$tp; align=$art_align";
-
-	if( $page && (($page < 0) || ($page >= $tp)) )
-	{
-		header("Location: $module_root/");
-		return;
+		$sql = "SELECT * FROM view_mainpage LIMIT $limit";
+		$articles = $db->Execute($sql);
+	} else {
+	# Reviews
+		$articles = $article->load(array(
+			'art_modid'=>$_pointer['_data_']['mod_id'],
+			'limit'=>$limit,
+			));
 	}
 
-	if($page)
-		$limit = (($tp - $page + 1) * $art_per_page - $art_align).",$art_per_page";
-	else
-		$limit = $art_per_page;
-
-	$articles = $article->load(array(
-		'art_modid'=>$_pointer['_data_']['mod_id'],
-		'limit'=>$limit,
-		));
-		*/
 } else {
 	$articles = array();
 }
@@ -283,6 +281,20 @@ $template->set_online();
 $template->set_search();
 $template->set_reviews(13);
 $template->set_poll();
+
+if($art_id && $art)
+{
+	$template->set_descr($art["art_name"]." - ".$art["art_intro"].' '.$art["art_data"]);
+} else {
+	# Articles
+	if($_pointer['_data_']['module_id'] == 'article')
+	{
+		$template->set_descr("Metāliskie jaunumi: gaidāmie un pagājušie konči, citi jaunumi");
+	} else {
+	# Reviews
+		$template->set_descr("Metāliskās recenzijas: labumi un draņķi");
+	}
+}
 
 $template->out();
 

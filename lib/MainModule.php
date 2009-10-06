@@ -47,6 +47,7 @@ class MainModule extends Template
 		$this->set_global('http_root', $GLOBALS['sys_http_root']);
 		$this->set_global('module_root', $GLOBALS['sys_http_root'].'/'.$this->module_name);
 		$this->set_global('script_version', $GLOBALS['sys_script_version']);
+		$this->set_descr("Metāls Latvijā");
 
 		$this->set_banner_top();
 
@@ -58,6 +59,74 @@ class MainModule extends Template
 		$this->title = $str_title;
 		$this->set_global('title', $this->title, 'FILE_index', true);
 	} // set_title
+
+	function set_descr($descr)
+	{
+		global $i_am_admin;
+
+		$descr = preg_replace("/(\r\n)/", "\n", $descr);
+
+		//if($i_am_admin)
+		{
+			$dd = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title></title>
+</head>
+<body>'.
+$descr.
+'</body>'.
+'</html>';
+			$doc = new DOMDocument();
+			$doc->loadHTML($dd);
+			$xml = simplexml_import_dom($doc);
+
+			$els = $xml->xpath("//a");
+			//if($i_am_admin)
+				//printr($els);
+			foreach($els as $el)
+			{
+				if(isset($el[0]))
+					$el = $el[0];
+				//unset($el[0]);
+			}
+
+			$els = $xml->xpath("//br");
+			foreach($els as $el)
+				$el[0] = "\n";
+
+			$descr = $xml->asXML();
+		}
+
+		$descr = strip_tags($descr);
+		$descr = preg_replace("/[\s\s+]/", " ", $descr);
+		$descr = preg_replace("/\s+/", " ", $descr);
+
+		$parts = preg_split("/([\.\?\!])/U", $descr, -1, PREG_SPLIT_DELIM_CAPTURE);
+		$meta_descr = '';
+		foreach($parts as $p)
+		{
+			$meta_descr .= $p;
+			if(mb_strlen($meta_descr) >= 250)
+				break;
+		}
+
+		if(mb_strlen($meta_descr) >= 250)
+		{
+			$parts = preg_split("/(\s)/U", $meta_descr, -1, PREG_SPLIT_DELIM_CAPTURE);
+			$meta_descr = '';
+			foreach($parts as $p)
+			{
+				$meta_descr .= $p;
+				if(mb_strlen($meta_descr) >= 250)
+					break;
+			}
+		}
+
+		if($meta_descr = parse_form_data(trim($meta_descr)))
+			$this->set_global("meta_descr", $meta_descr);
+	} // set_descr
 
 	function set_module_name($module_name)
 	{

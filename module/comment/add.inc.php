@@ -16,6 +16,27 @@ if(empty($data['c_data']))
 	return;
 }
 
+# Nočeko vai iepostēts tikai links
+$c_data = $data['c_data'];
+$url_pattern = url_pattern();
+if(preg_match_all($url_pattern, $c_data, $matches))
+{
+	foreach($matches[0] as $k=>$v)
+		$c_data = str_replace($matches[0][$k], '', $c_data);
+}
+
+$c_data = trim($c_data);
+
+if(empty($c_data))
+{
+	$template->enable('BLOCK_comment_error');
+	$template->set_var('error_msg', 'Pārāk pliks tas komentārs - links bez teksta!', 'BLOCK_comment_error');
+
+	$template->set_var('c_data', $data['c_data'], 'BLOCK_addcomment');
+	return;
+}
+#
+
 $cData = array(
 	'c_userid'=>$_SESSION['login']['l_id'],
 	'c_userlogin'=>$_SESSION['login']['l_login'],
@@ -27,5 +48,6 @@ $cData = array(
 
 $CommentConnect = new CommentConnect($table);
 $CommentConnect->setDb($db);
+
 return $CommentConnect->add($table_id, $cData);
 

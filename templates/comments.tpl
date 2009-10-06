@@ -81,7 +81,7 @@
 	<td colspan="2" valign="top">Ziņa:</td>
 </tr>
 <tr>
-	<td colspan="2" style="padding-left: 16px; padding-right: 16px;"><textarea name="data[c_data]" cols="50" rows="15" style="width: 100%;"></textarea></td>
+	<td colspan="2" style="padding-left: 16px; padding-right: 16px;"><textarea name="data[c_data]" cols="50" rows="15" style="width: 100%;">{c_data}</textarea></td>
 </tr>
 <tr>
 	<td colspan="2" style="padding-left: 16px; padding-right: 16px;">

@@ -25,3 +25,5 @@ foreach($forum_data as $item)
 	$template->parse_block('BLOCK_forum', TMPL_APPEND);
 }
 
+$template->set_descr("Metāliskais forums: mūzika, koncerti, tirgus, un pārsvarā ne par tēmu");
+

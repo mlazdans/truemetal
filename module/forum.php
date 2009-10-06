@@ -168,6 +168,7 @@ $page_id = 1;
 $pages_visible_to_sides = 8;
 $forum_id = (int)array_shift($sys_parameters);
 $page = array_shift($sys_parameters);
+
 if($page == 'page')
 	$page_id = (int)array_shift($sys_parameters);
 
@@ -181,9 +182,7 @@ if($forum_id == 0)
 		"forum_forumid"=>0,
 		"order"=>"forum_id ASC",
 		));
-	//$forum_data = $forum->load($forum_id, 0, FORUM_ACTIVE, "forum_id ASC");
 } else {
-	//$forum_data = $forum->load($forum_id);
 	$forum_data = $forum->load(array(
 		"forum_id"=>$forum_id,
 		));
@@ -208,6 +207,7 @@ if($forum_id)
 		$forum_title .= " - $page_id. lapa";
 
 	$template->set_var('current_forum_id', $forum_id);
+
 	# Subtēma TODO: jānotestē
 	if($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS)
 	{

@@ -163,11 +163,16 @@ function proc_date($date)
 	return $retdate;
 } // proc_date
 
+function url_pattern()
+{
+	$url_patt = $path_patt = '';
+	return "/(http(s?):\/\/|ftp:\/\/|telnet:\/\/|dchub:\/\/|ed2k:\/\/|mailto:|callto:)([^\/\s\t\n\r\!\'\<>(\)]".$url_patt."*)([^\s\t\n\r\!\'\<>(\)]".$path_patt."*)/is";
+} // url_pattern
+
 function parse_text_data(&$data)
 {
 	// proc url's - 1pass
-	$url_patt = $path_patt = '';
-	$patt = "/(http(s?):\/\/|ftp:\/\/|telnet:\/\/|dchub:\/\/|ed2k:\/\/|mailto:|callto:)([^\/\s\t\n\r\!\'\<>(\)]".$url_patt."*)([^\s\t\n\r\!\'\<>(\)]".$path_patt."*)/is";
+	$patt = url_pattern();
 	if(preg_match_all($patt, $data, $matches)) {
 		$tokens = array();
 		foreach($matches[0] as $k=>$v) {

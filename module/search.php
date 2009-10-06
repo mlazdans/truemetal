@@ -55,6 +55,7 @@ $search_msg = array();
 $template = new MainModule($sys_template_root, $sys_module_id, 'index.tpl');
 $template->set_file('FILE_search', 'search.tpl');
 $template->set_title("Meklēšana: $ent_search_q");
+$template->set_descr("Metāliskais meklētājs: sameklē kaut ko nebūt īstu");
 $template->copy_block('BLOCK_middle', 'FILE_search');
 
 if($search_q && (mb_strlen($search_q) < 3))

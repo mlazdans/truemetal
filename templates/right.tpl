@@ -1,21 +1,9 @@
 <div class="TD-cat">Aktuāli</div>
 <div class="List-item actual">
-	<a href="/article/581/" title="24. septembris, ceturtdiena, klubs &quot;Melnā Piektdiena&quot;">CHIMAIRA</a>
+	<a href="/article/587/" title="16. oktobris, piektdiena, klubs &quot;Melnā Piektdiena&quot;">DARKSIDE'S EVOLUTION</a>
 </div>
 <div class="List-item">
-	<a href="/forum/121685/" title="25. septembris, piektdiena, klubs &quot;Melnā Piektdiena&quot;">ROCK &amp; METAL Karaoke</a>
-</div>
-<div class="List-item">
-	<a href="/forum/121713/" title="26. septembris, sestdiena, klubs &quot;Melnā Piektdiena&quot;">COSS-MOSS 2699</a>
-</div>
-<div class="List-item">
-	<a href="/forum/121705/" title="27. septembris, svētdiena, Tallina, klubs &quot;Rock Cafe&quot;">ENSIFERUM - Tallinā</a>
-</div>
-<div class="List-item">
-	<a href="/article/586/" title="30. septembris, trešdiena, Polija, Bydgoszcz">PROGRESSIVE NATION 2009 Polijā</a>
-</div>
-<div class="List-item">
-	<a href="/forum/121678/" title="8. novembris, svētdiena, klubs Spīķeru koncertzālē">ISIS Rīgā</a>
+	<a href="/forum/121678/" title="8. novembris, svētdiena, Spīķeru koncertzālē">ISIS Rīgā</a>
 </div>
 
 <div class="List-sep"></div>
