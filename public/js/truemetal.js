@@ -61,7 +61,7 @@ var Truemetal = {
 	},
 	scrollYouTube: function(e){
 		var yt = (typeof e.data == 'object' ? e.data : e);
-		var scrollY = $(window).attr('scrollY');
+		var scrollY = $(document.documentElement).attr('scrollTop');
 		var WH = $(window).height();
 
 		yt.each(function(i, el){
