@@ -57,7 +57,7 @@ class MainModule extends Template
 	function set_title($str_title)
 	{
 		$this->title = $str_title;
-		$this->set_global('title', $this->title, 'FILE_index', true);
+		$this->set_global('title', addslashes($this->title), 'FILE_index', true);
 	} // set_title
 
 	function set_descr($descr)

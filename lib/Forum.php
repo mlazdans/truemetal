@@ -446,7 +446,7 @@ INSERT INTO forum (
 			foreach($data as $item)
 			{
 				$template->{(Forum::hasNewComments($item) ? "enable" : "disable")}('BLOCK_forum_r_comments_new');
-				$template->set_var('forum_r_name', $item['forum_name'], 'FILE_r_forum');
+				$template->set_var('forum_r_name', addslashes($item['forum_name']), 'FILE_r_forum');
 				$template->set_var('forum_r_comment_count', $item['forum_comment_count'], 'FILE_r_forum');
 				$template->set_var('forum_r_path', "forum/".$item['forum_id'], 'FILE_r_forum');
 				$template->parse_block('BLOCK_forum_r_items', TMPL_APPEND);

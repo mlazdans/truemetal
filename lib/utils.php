@@ -278,7 +278,7 @@ function set_forum(&$template, $forum_id)
 		{
 			$forum_path = $item['forum_id'].'/';
 			$template->set_var('forum1_id', $item['forum_id'], 'BLOCK_middle');
-			$template->set_var('forum1_name', $item['forum_name'], 'BLOCK_middle');
+			$template->set_var('forum1_name', addslashes($item['forum_name']), 'BLOCK_middle');
 			$template->set_var('forum1_path', $forum_path, 'BLOCK_middle');
 			$template->parse_block('BLOCK_forum_path', TMPL_APPEND);
 		}

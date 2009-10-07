@@ -139,9 +139,14 @@ class TemplateBlock
 		//if(count($this->blocks) > 0) {
 			foreach($this->blocks as $block_id => $object) {
 				$block_content = $object->parse(false);
-				//$patt = '/<!--\s+BEGIN\s+' . $block_id . '\s+-->(.*)<!--\s+END\s+' . $block_id . '\s+-->/sm';
-				$patt = '/<!--\s+BEGIN\s+' . $block_id . '\s+([^<]*)-->(.*)<!--\s+END\s+' . $block_id . '\s+-->/smi';
-				$this->parsed_content[$current_parsed_content] = preg_replace($patt, $block_content, $this->parsed_content[$current_parsed_content]);
+				//$patt = '/<!--\s+BEGIN\s+' . $block_id . '\s+([^<]*)-->(.*)<!--\s+END\s+' . $block_id . '\s+-->/smi';
+				//$this->parsed_content[$current_parsed_content] = preg_replace($patt, $block_content, $this->parsed_content[$current_parsed_content]);
+				$patt = '/<!--\s+BEGIN\s+' . $block_id . '\s+[^<]*-->.*<!--\s+END\s+' . $block_id . '\s+-->/smi';
+				preg_match_all($patt, $this->parsed_content[$current_parsed_content], $m);
+				foreach($m[0] as $mm)
+				{
+					$this->parsed_content[$current_parsed_content] = str_replace($mm, $block_content, $this->parsed_content[$current_parsed_content]);
+				}
 			}
 		//}
 
@@ -159,12 +164,6 @@ class TemplateBlock
 		return implode('', $this->parsed_content);
 	} // __get_parsed_content
 
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	__parse_vars()
-	/* -----------------------------------------------------------
-	/*  saliek mainiigo veertiibas
-	/* ----------------------------------------------------------- */
 	function find_var($k, $d = 0)
 	{
 		/*
@@ -182,6 +181,12 @@ class TemplateBlock
 		return '';
 	} // find_var
 
+	/* ----------------------------------------------------------- */
+	/* TemplateBlock
+	/*	__parse_vars()
+	/* -----------------------------------------------------------
+	/*  saliek mainiigo veertiibas
+	/* ----------------------------------------------------------- */
 	function __parse_vars()
 	{
 		$content = $this->content;
@@ -194,11 +199,14 @@ class TemplateBlock
 
 		$patt = array();
 		$repl = array();
+		$slash = chr(92).chr(92);
 		foreach($this->block_vars as $k)
 		{
 			$patt[] = '/{'.$k.'}/';
-			$repl[] = $this->find_var($k);
-			//$repl[] = isset($this->vars[$k]) ? $this->vars[$k] : false;
+			//$repl[] = $this->find_var($k);
+			$p = array("/([$slash])+/", "/([\$])+/");
+			$r = array("\\\\$1", "\\\\$1");
+			$repl[] = preg_replace($p, $r, $this->find_var($k));
 		}
 		/*
 		if(count($this->block_vars) < count($this->vars))
@@ -229,12 +237,14 @@ class TemplateBlock
 		*/
 		//printr($this->vars);
 		//$content = preg_replace(array_keys($this->vars), array_values($this->vars), $content);
+
 		$content = preg_replace($patt, $repl, $content);
+
 		//$content = preg_replace('/(\n{1}|\r\n{1})?{'.$str_var_id.'}/', $value, $content);
 
 		//$variable_pattern = '[a-zA-z0-9_x\F7-\xFF^}]{1,}';
-		$variable_pattern = '[a-zA-z0-9_^}]{1,}';
-		$content = preg_replace('/\\\{('.$variable_pattern.')}/', '{\1}', $content);
+		//$variable_pattern = '[a-zA-z0-9_^}]{1,}';
+		//$content = preg_replace('/\\\{('.$variable_pattern.')}/', '{\1}', $content);
 		/*
 		switch ($this->undefined)
 		{
