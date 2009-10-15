@@ -1,4 +1,5 @@
 <form action="" method="post">
+<input type="hidden" name="action" value="save" />
 <div class="TD-cat-active">
 	Logini: rediģēt <em>{l_login}</em>
 </div>

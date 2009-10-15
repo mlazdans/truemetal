@@ -66,10 +66,13 @@
 			onclick="
 if($('#forum_data').hasClass('edit'))
 {
+	$('#forum_data').attr('rows', 15);
 	tinyMCE.get('forum_data').remove();
 	$('#forum_data').removeClass('edit');
 } else {
-	$('#forum_data').addClass('edit'); initEditor();
+	$('#forum_data').attr('rows', 25);
+	$('#forum_data').addClass('edit');
+	initEditor();
 }"
 		/></p>
 	</td>

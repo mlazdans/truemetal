@@ -24,6 +24,15 @@ if(in_array($action, $actions))
 	return;
 }
 
+if($action == 'save')
+{
+	if($logins->update($_POST['data'], LOGIN_DONTVALIDATE))
+		header("Location: $module_root/");
+	else
+		print $logins->error_msg;
+	return;
+}
+
 if($l_id)
 {
 	include("module/admin/logins/edit.inc.php");

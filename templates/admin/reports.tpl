@@ -11,7 +11,7 @@
 <tr>
 	<td>
 		<input type="hidden" name="report" value="ip" />
-		<textarea name="data[ips]" rows="10" cols="80">{ips}</textarea>
+		<textarea name="ips" rows="10" cols="80">{ips}</textarea>
 	</td>
 </tr>
 <tr>

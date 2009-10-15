@@ -72,7 +72,22 @@ class Logins
 			$sql_add[] = sprintf("l_accepted = '%s'", LOGIN_ACCEPTED);
 		}
 
-		$sql = "SELECT * FROM logins";
+		if(isset($params['q']))
+		{
+			$search_sql = search_to_sql($params['q'], array('l_nick', 'l_login', 'l_email', 'l_userip'));
+			if($search_sql)
+				$sql_add[] = $search_sql;
+		}
+
+		$sql = " SELECT * ";
+
+		if(!empty($params['get_votes']))
+		{
+			$sql .= ", (SELECT SUM(c_votes) FROM comment WHERE c_userid = l_id AND c_votes > 0) votes_plus ";
+			$sql .= ", (SELECT SUM(c_votes) FROM comment WHERE c_userid = l_id AND c_votes < 0) votes_minus ";
+		}
+
+		$sql .= " FROM logins ";
 
 		if($sql_add)
 			$sql .= " WHERE ".join(" AND ", $sql_add);
@@ -81,6 +96,9 @@ class Logins
 
 		if(isset($params['limit']))
 			$sql .= " LIMIT $params[limit]";
+
+		//if($GLOBALS['i_am_admin'])
+		//	printr($sql);
 
 		if(
 			isset($params['l_id']) ||
@@ -544,12 +562,11 @@ class Logins
 			return false;
 	} // insert
 
-/*
-	function update($l_login, &$data, $validate = LOGIN_VALIDATE)
+	function update($data, $validate = LOGIN_VALIDATE)
 	{
 		global $db;
 
-		if(!$this->valid_login($l_login))
+		if(!$this->valid_login($data['l_login']))
 		{
 			$this->error_msg = 'Nav norādīts vai nepareizs lietotāja logins<br />';
 			return false;
@@ -559,27 +576,22 @@ class Logins
 			$this->validate($data);
 
 		$sql = 'UPDATE logins SET ';
-		$sql .= $data['l_entered'] ? "l_entered = '$data[l_entered]', " : '';
-		$sql .= "l_password = PASSWORD('$data[l_password]'), ";
-		$sql .= "l_firstname = '$data[l_firstname]', ";
-		$sql .= "l_lastname = '$data[l_lastname]', ";
-		$sql .= "l_phone = '$data[l_phone]', ";
+		$sql .= "l_nick = '$data[l_nick]', ";
 		$sql .= "l_email = '$data[l_email]', ";
-		$sql .= "l_birth = '$data[l_birth]', ";
-		$sql .= "l_type = $data[l_type], ";
-		$sql .= "l_spec = $data[l_spec], ";
-		$sql .= "l_sertnr = '$data[l_sertnr]', ";
-		$sql .= "l_sertexpire = '$data[l_sertexpire]', ";
 		$sql .= "l_active = '$data[l_active]', ";
 		$sql .= "l_accepted = '$data[l_accepted]', ";
+		$sql .= "l_emailvisible = '$data[l_emailvisible]', ";
+		$sql .= "l_logedin = '$data[l_logedin]', ";
+		//$sql .= $data['l_entered'] ? "l_entered = '$data[l_entered]', " : '';
+		//$sql .= "l_password = PASSWORD('$data[l_password]'), ";
 		$sql = substr($sql, 0, -2);
-		$sql .= " WHERE l_login = '$l_login'";
+		$sql .= " WHERE l_login = '$data[l_login]'";
 
 		$db->Execute($sql);
 
-		return $l_login;
+		return $data['l_login'];
 	} // update
-
+/*
 	function save($l_login, &$data)
 	{
 		$this->validate($data);

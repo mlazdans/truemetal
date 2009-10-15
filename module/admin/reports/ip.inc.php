@@ -11,12 +11,12 @@ require_once('lib/Forum.php');
 require_once('lib/Comment.php');
 require_once('lib/CommentConnect.php');
 
-$data = post('data', array());
-$ips = array_filter(preg_split("/[\s,]/", $data['ips']), 'is_not_empty');
+$data = postget('ips', array());
+$ips = array_filter(preg_split("/[\s,]/", $data), 'is_not_empty');
 if(!$ips)
 	return;
 
-$template->set_var('ips', $data['ips'], 'BLOCK_report_ip');
+$template->set_var('ips', $data, 'BLOCK_report_ip');
 //$ip_sql = "'".join("','", $ip)."'";
 
 $template->set_file('FILE_comment_list', 'comment/list.tpl');

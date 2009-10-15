@@ -3,7 +3,7 @@
 $template = new AdminModule($sys_template_root.'/admin', $admin_module);
 $template->set_title('Admin :: reporti');
 
-$report = post('report');
+$report = postget('report');
 
 if($report == 'ip')
 {
