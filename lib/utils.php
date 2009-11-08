@@ -189,6 +189,7 @@ function parse_text_data(&$data)
 		$data
 	);
 
+	// proc new lines
 	$data = preg_replace('/(\n|\r\n){3,}/', '\1\1', $data);
 
 	preg_match_all('/([^\s]*)(\s|$)/', $data, $tmp);
@@ -218,6 +219,16 @@ function parse_text_data(&$data)
 	$data = join("", $tmp[1]);
 	my_strip_tags($data);
 	$data = preg_replace('/(\r\n|\n)/', '<br />\1', $data);
+
+	// proc pre
+	if(preg_match_all('/\[pre\](.*)\[\/pre\]/ims', $data, $m))
+	{
+		foreach($m[0] as $k=>$search)
+		{
+			$m[1][$k] = str_replace("<br />", "", $m[1][$k]);
+			$data = str_replace($search, "<pre>{$m[1][$k]}</pre>", $data);
+		}
+	}
 
 	// proc urls - 2pass
 	foreach($matches[0] as $k=>$v) {
