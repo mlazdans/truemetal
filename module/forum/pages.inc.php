@@ -28,7 +28,8 @@ if($total_pages > 1)
 	for($p = 1; $p <= $total_pages; $p++)
 	{
 		$p_id = ($total_pages > 10) && ($p < 10) ? "0$p" : $p;
-		$template->set_var('page_id', $p_id, 'BLOCK_is_pages');
+		$template->set_var('p_id', $p_id, 'BLOCK_is_pages');
+		$template->set_var('page_id', $p, 'BLOCK_is_pages');
 
 		# atziimee, tekoshu page
 		if($p == $page_id)

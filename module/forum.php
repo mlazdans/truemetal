@@ -193,6 +193,7 @@ $template = new MainModule($sys_template_root, $sys_module_id);
 // ---------------------------------------------
 // ja izveeleets forums, paraadam teemu sarakstu
 $forum_title = 'Diskusijas';
+$forum_descr = "Metāliskās diskusijas";
 
 if($forum_id)
 {
@@ -203,8 +204,12 @@ if($forum_id)
 	}
 
 	$forum_title .= ' - '.$forum_data['forum_name'].($hl ? sprintf(", meklēšana: %s", $hl) : "");
-	if($page_id > 1)
+	$forum_descr .= ($hl ? sprintf(", meklēšana: %s", $hl) : "").' - '.$forum_data['forum_name'];
+	if($page == 'page')
+	{
 		$forum_title .= " - $page_id. lapa";
+		$forum_descr .= " - $page_id. lapa";
+	}
 
 	$template->set_var('current_forum_id', $forum_id);
 
@@ -292,6 +297,7 @@ if($forum_id)
 */
 
 $template->set_title($forum_title);
+$template->set_descr($forum_descr);
 
 $template->set_right();
 $template->set_recent_forum();

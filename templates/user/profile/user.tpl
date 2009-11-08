@@ -24,7 +24,7 @@
 
 <!-- BEGIN BLOCK_no_such_login disabled -->
 <div class="Info">
-	Šāds profils neeksitē!
+	Šāds profils neeksitē vai ir bloķēts!
 </div>
 <!-- END BLOCK_no_such_login -->
 
@@ -51,6 +51,10 @@
 		/></a>
 	</div>
 	<!-- END BLOCK_picture -->
+
+	<div class="List-item">
+		<b>Manīts:</b> {l_lastaccess_f}{l_lastaccess_days}
+	</div>
 
 	<div class="List-item">
 		<b>Pievienojies:</b> {l_entered_f}

@@ -38,69 +38,64 @@ if(isset($_POST['data']))
 			$error_field[] = 'error_'.$c;
 	}
 
-	// nocheko, vai logins jau nav taads
-	//if(!$error_field)
+	if(empty($data['l_login']))
+		$data['l_login'] = '';
+
+	if($data['l_password'] != $data['l_password2'])
 	{
-		if($data['l_password'] != $data['l_password2'])
-		{
-			//$error = true;
-			$error_msg[] = 'Paroles nesakrīt!';
-			$error_field[] = 'l_password';
-			$error_field[] = 'l_password2';
-		} elseif(invalid($data['l_password']) || strlen($data['l_password']) < 5) {
-			$error_msg[] = 'Nepareiza vai īsa parole!';
-			$error_field[] = 'l_password';
-		} elseif(invalid($data['l_login']) || strlen($data['l_login']) < 5) {
-			$error_msg[] = 'Nepareizs vai īss logins!';
-			$error_field[] = 'l_login';
-		} elseif(!valid_email($data['l_email'])) {
-			$error_msg[] = 'Nekorekta e-pasta adrese!';
-			$error_field[] = 'l_email';
-		}
+		//$error = true;
+		$error_msg[] = 'Paroles nesakrīt!';
+		$error_field[] = 'l_password';
+		$error_field[] = 'l_password2';
+	} elseif(invalid($data['l_password']) || strlen($data['l_password']) < 5) {
+		$error_msg[] = 'Nepareiza vai īsa parole!';
+		$error_field[] = 'l_password';
+	} elseif(invalid($data['l_login']) || strlen($data['l_login']) < 5) {
+		$error_msg[] = 'Nepareizs vai īss logins!';
+		$error_field[] = 'l_login';
+	} elseif(!valid_email($data['l_email'])) {
+		$error_msg[] = 'Nekorekta e-pasta adrese!';
+		$error_field[] = 'l_email';
 	}
 
-	//if(!$error)
+	$data['l_login'] = strtolower($data['l_login']);
+	$data['l_email'] = trim($data['l_email']);
+
+	if($test_login = $logins->load(array(
+		'l_login'=>$data['l_login'],
+		'l_active'=>LOGIN_ALL,
+		'l_accepted'=>LOGIN_ALL,
+		)))
 	{
-		$data['l_login'] = strtolower($data['l_login']);
-		$data['l_email'] = trim($data['l_email']);
+		//$error = true;
+		//$template->set_var('error_l_login', ' class="error-form"');
+		$error_field[] = 'l_login';
+		$error_msg[] = 'Šāds login jau eksistē!';
+	} // test login
 
-		if($test_login = $logins->load(array(
-			'l_login'=>$data['l_login'],
-			'l_active'=>LOGIN_ALL,
-			'l_accepted'=>LOGIN_ALL,
-			)))
-		{
-			//$error = true;
-			//$template->set_var('error_l_login', ' class="error-form"');
-			$error_field[] = 'l_login';
-			$error_msg[] = 'Šāds login jau eksistē!';
-		} // test login
+	if($test_email = $logins->load(array(
+		'l_email'=>$data['l_email'],
+		'l_active'=>LOGIN_ALL,
+		'l_accepted'=>LOGIN_ALL,
+		)))
+	{
+		//$error = true;
+		//$template->set_var('error_l_email', ' class="error-form"');
+		$error_field[] = 'l_email';
+		$error_msg[] = 'Šāda e-pasta adrese jau eksistē!';
+	} // test email
 
-		if($test_email = $logins->load(array(
-			'l_email'=>$data['l_email'],
-			'l_active'=>LOGIN_ALL,
-			'l_accepted'=>LOGIN_ALL,
-			)))
-		{
-			//$error = true;
-			//$template->set_var('error_l_email', ' class="error-form"');
-			$error_field[] = 'l_email';
-			$error_msg[] = 'Šāda e-pasta adrese jau eksistē!';
-		} // test email
-
-		if($test_nick = $logins->load(array(
-			'l_nick'=>$data['l_nick'],
-			'l_active'=>LOGIN_ALL,
-			'l_accepted'=>LOGIN_ALL,
-			)))
-		{
-			//$error = true;
-			//$template->set_var('error_l_nick', ' class="error-form"');
-			$error_field[] = 'l_nick';
-			$error_msg[] = 'Šāds niks jau eksistē!';
-		} // test email
-
-	}
+	if($test_nick = $logins->load(array(
+		'l_nick'=>$data['l_nick'],
+		'l_active'=>LOGIN_ALL,
+		'l_accepted'=>LOGIN_ALL,
+		)))
+	{
+		//$error = true;
+		//$template->set_var('error_l_nick', ' class="error-form"');
+		$error_field[] = 'l_nick';
+		$error_msg[] = 'Šāds niks jau eksistē!';
+	} // test email
 
 	if($error_field)
 	{

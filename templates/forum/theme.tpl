@@ -22,7 +22,7 @@
 	<div class="Forum-Pager">
 	<!-- BEGIN BLOCK_page -->{page_seperator}
 		<!-- BEGIN BLOCK_page_switcher -->
-			<a href="{module_root}/{current_forum_id}/page/{page_id}/"{page_style}>[{page_id}]</a>
+			<a href="{module_root}/{current_forum_id}/page/{page_id}/"{page_style}>[{p_id}]</a>
 		<!-- END BLOCK_page_switcher -->
 	<!-- END BLOCK_page -->
 	</div>

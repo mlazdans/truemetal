@@ -66,6 +66,12 @@ $comments = $CC->get($params);
 # XXX : hack, vajag rādīt pa taisno foruma ierakstu
 if(($forum_data['forum_display'] == Forum::DISPLAY_DATA) && !empty($comments[0]))
 {
+	# Ja sakārtots dilstoši, tad jāaiztiek ir pēdējais komments
+	if($_SESSION['login']['l_forumsort_msg'] == FORUM_SORT_DESC)
+	{
+		array_unshift($comments, array_pop($comments));
+		//$comments = array_merge(array(array_pop($comments)), $comments);
+	}
 	$comments[0]['c_datacompiled'] = $forum_data['forum_data'];
 }
 

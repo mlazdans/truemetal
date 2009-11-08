@@ -19,3 +19,12 @@ A:hover {
 	text-decoration: none;
 }
 
+img.left {
+	float: left;
+	margin: 0 .5em .5em 0;
+}
+img.right {
+	float: right;
+	margin: 0 0 .5em .5em;
+}
+

@@ -16,10 +16,10 @@ var TINY_OPTIONS = {
 
 	//plugins : "safari,pagebreak,style,layer,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
 	//plugins: "advhr",
-	plugins: "advimage,advlink,media,contextmenu,print,visualchars,fullscreen,advhr,paste",
+	plugins: "style,advimage,advlink,media,contextmenu,print,visualchars,fullscreen,advhr,paste",
 
 	theme_advanced_buttons1: "undo,redo,|,forecolor,backcolor,|,bold,italic,underline,strikethrough,sub,sup,|,justifyleft,justifycenter,justifyright,justifyfull,|,outdent,indent,blockquote,|,bullist,numlist,|,hr,|,cut,copy,paste,pastetext,pasteword",
-	theme_advanced_buttons2: "link,unlink,anchor,image,media,|,removeformat,cleanup,visualchars,|,charmap,|,print,fullscreen,code",
+	theme_advanced_buttons2: "link,unlink,anchor,image,media,styleselect,|,removeformat,cleanup,visualchars,|,charmap,|,print,fullscreen,code",
 	theme_advanced_buttons3: "",
 	/*
 	theme_advanced_buttons1: "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
@@ -35,6 +35,29 @@ var TINY_OPTIONS = {
 		o.content = o.content.replace(/<br>(&nbsp;)*<br>/gi, repl);
 		o.content = o.content.replace(/<br>\s*<br>/gi, repl);
 		o.content = '<P>'+o.content+'</P>';
+	},
+	setup: function(ed)
+	{
+		ed.onKeyDown.add(function(ed, e){
+				if(e.altKey && e.ctrlKey)
+				{
+					var text = ed.selection.getContent();
+					var bm = ed.selection.getBookmark();
+
+					// Down
+					if(e.keyCode == 40)
+					{
+						ed.selection.setContent(text.toLowerCase());
+						ed.selection.moveToBookmark(bm);
+					}
+					// Up
+					if(e.keyCode == 38)
+					{
+						ed.selection.setContent(text.toUpperCase());
+						ed.selection.moveToBookmark(bm);
+					}
+				}
+		});
 	}
 };
 

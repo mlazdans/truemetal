@@ -218,6 +218,17 @@ class Logins
 		}
 
 		$template->set_var('l_entered_f', strftime('%e. %b %Y', strtotime($login['l_entered'])));
+		$template->set_var('l_lastaccess_f', strftime('%e. %b %Y', strtotime($login['l_lastaccess'])));
+		$days = floor((time() - strtotime($login['l_lastaccess'])) / (3600 * 24));
+		if($days)
+		{
+			$days_lv = "dienām";
+			if($days % 10 == 1)
+				$days_lv = "dienas";
+			$template->set_var('l_lastaccess_days', " (pirms $days $days_lv)");
+		} else {
+			$template->set_var('l_lastaccess_days', " (šodien)");
+		}
 	} // set_profile
 
 	static function delete_image()

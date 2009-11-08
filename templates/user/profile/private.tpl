@@ -57,7 +57,7 @@
 <!-- BEGIN BLOCK_picture disabled -->
 <tr>
 	<td>
-		<a href="{module_root}/view/{l_id}/" onclick="Truemetal.Pop('{module_root}/view/{l_id}/', {pic_w}, {pic_h}); return false;"><img src="{pic_path}" alt="" /></a>
+		<a href="{http_root}/user/viewimage/{l_login}/" onclick="Truemetal.Pop('{http_root}/user/viewimage/{l_login}/', {pic_w}, {pic_h}); return false;"><img src="{pic_path}" alt="" /></a>
 	</td>
 </tr>
 <!-- BEGIN BLOCK_picture_delete disabled -->

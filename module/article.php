@@ -284,12 +284,12 @@ $template->set_poll();
 
 if($art_id && $art)
 {
-	$template->set_descr($art["art_name"]." - ".$art["art_intro"].' '.$art["art_data"]);
+	$template->set_descr((empty($hl) ? "" : sprintf("(Meklēšana: %s) ", trim($hl))).$art["art_name"]." - ".$art["art_intro"].' '.$art["art_data"]);
 } else {
 	# Articles
 	if($_pointer['_data_']['module_id'] == 'article')
 	{
-		$template->set_descr("Metāliskie jaunumi: gaidāmie un pagājušie konči, citi jaunumi");
+		$template->set_descr("Metāliskie jaunumi: gaidāmie un pagājušie konči, cita infa");
 	} else {
 	# Reviews
 		$template->set_descr("Metāliskās recenzijas: labumi un draņķi");
