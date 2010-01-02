@@ -35,7 +35,9 @@ $(document).ready(function(){
 			<td><a href="{http_root}/"><img src="{http_root}/img/butt_news.gif" alt="JAUNUMI" /></a></td>
 			<td><a href="{http_root}/forum/"><img src="{http_root}/img/butt_forum.gif" alt="FORUMS" /></a></td>
 			<td><a href="{http_root}/gallery/"><img src="{http_root}/img/butt_gallery.gif" alt="GALERIJA" /></a></td>
+			<!--
 			<td><a href="{http_root}/video/"><img src="{http_root}/img/butt_video.gif" alt="VIDEO" /></a></td>
+			-->
 			<td><a href="{http_root}/reviews/"><img src="{http_root}/img/butt_reviews.gif" alt="ALBUMU RECENZIJAS" /></a></td>
 		</tr>
 		</table>

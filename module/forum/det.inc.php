@@ -51,15 +51,12 @@ $CC->setDb($db);
 $params = array(
 	'cc_table_id' => $forum_id,
 	);
-if(
+
+$params['sort'] =
 	isset($_SESSION['login']['l_forumsort_msg']) &&
 	($_SESSION['login']['l_forumsort_msg'] == FORUM_SORT_DESC)
-)
-{
-	$params['sort'] = "c_entered DESC";
-} else {
-	$params['sort'] = "c_entered";
-}
+	? "c_entered DESC"
+	: "c_entered";
 
 $comments = $CC->get($params);
 
@@ -67,7 +64,10 @@ $comments = $CC->get($params);
 if(($forum_data['forum_display'] == Forum::DISPLAY_DATA) && !empty($comments[0]))
 {
 	# Ja sakārtots dilstoši, tad jāaiztiek ir pēdējais komments
-	if($_SESSION['login']['l_forumsort_msg'] == FORUM_SORT_DESC)
+	if(
+		isset($_SESSION['login']['l_forumsort_msg']) &&
+		($_SESSION['login']['l_forumsort_msg'] == FORUM_SORT_DESC)
+		)
 	{
 		array_unshift($comments, array_pop($comments));
 		//$comments = array_merge(array(array_pop($comments)), $comments);

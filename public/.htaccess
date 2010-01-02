@@ -15,7 +15,7 @@ php_flag session.bug_compat_warn off
 RewriteEngine on
 RewriteCond  %{REQUEST_URI}   !(.*)/kernel.php [NC]
 RewriteCond  %{REQUEST_URI}   !^/tiny_mce/(.*) [NC]
-RewriteCond  %{REQUEST_URI}   !(.*)(gif|jpg|png|ico|js|css|jpeg|avi|wmv|exe|txt|mp3|php|zip|swf|flv|html?|svg)$ [NC]
+RewriteCond  %{REQUEST_URI}   !(.*)(gif|jpg|png|ico|js|css|jpeg|avi|wmv|exe|txt|mp3|php|zip|swf|flv|html?|svg|xspf)$ [NC]
 RewriteRule ^(.*)$ /kernel.php?$1
 
 #Order deny,allow

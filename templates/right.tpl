@@ -1,21 +1,7 @@
 <div class="TD-cat">Aktuāli</div>
+
 <div class="List-item actual">
-	<a href="/forum/121678/" title="8. novembris, svētdiena, Spīķeru koncertzālē">ISIS Rīgā</a>
-</div>
-<div class="List-item">
-	<a href="/forum/121845/" title="11. novembris, trešdiena, klubs &quot;Melnā Piektdiena&quot;">LĀČPLĒŠA DIENA</a>
-</div>
-<div class="List-item">
-	<a href="/forum/121799/" title="13. novembris, piekdiena, klubs &quot;Melnā Piektdiena&quot;">MELNĀ PIEKTDIENA 13.11</a>
-</div>
-<div class="List-item">
-	<a href="/article/588/" title="19.-21. novembris">DEATH`N`ROLL MEMBERS 2009</a>
-</div>
-<div class="List-item">
-	<a href="/forum/121816/" title="4. decembris, piektdiena, klubs &quot;Melnā Piektdiena&quot;">UNDER THE BLACK METAL SIEGE</a>
-</div>
-<div class="List-item">
-	<a href="/forum/121831/" title="11. decembris, piektdiena, Lietuva">ŠIAURĖS LIETUVOS METALO FRONTAS</a>
+	<a href="/forum/122004/" title="30. decembris, trešdiena, klubs &quot;Melnā Piektdiena&quot;">ROCK &amp; METAL KARAOKE – gada pēdējais māviens</a>
 </div>
 
 
