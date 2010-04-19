@@ -26,7 +26,7 @@ while($item = $db->FetchAssoc($q))
 }
 
 # FORUM
-$sql = "SELECT * FROM `forum`";
+$sql = "SELECT * FROM `forum` WHERE `forum_display` != 1"; // manuāli formatētos ierakstu neaiztiekam (pagaidām)
 $q = $db->Query($sql);
 while($item = $db->FetchAssoc($q))
 {
