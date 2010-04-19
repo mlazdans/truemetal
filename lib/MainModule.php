@@ -47,7 +47,7 @@ class MainModule extends Template
 		$this->set_global('http_root', $GLOBALS['sys_http_root']);
 		$this->set_global('module_root', $GLOBALS['sys_http_root'].'/'.$this->module_name);
 		$this->set_global('script_version', $GLOBALS['sys_script_version']);
-		$this->set_global('disable_youtube', (empty($_SESSION['login']['l_nick']) ? 0 : 1));
+		$this->set_global('disable_youtube', (empty($_SESSION['login']['l_disable_youtube']) ? 0 : 1));
 		$this->set_descr("Metāls Latvijā");
 
 		$this->set_banner_top();
