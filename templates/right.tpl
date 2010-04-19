@@ -1,7 +1,35 @@
 <div class="TD-cat">Aktuāli</div>
 
 <div class="List-item actual">
-	<a href="/forum/122004/" title="30. decembris, trešdiena, klubs &quot;Melnā Piektdiena&quot;">ROCK &amp; METAL KARAOKE – gada pēdējais māviens</a>
+	<a href="/forum/122367/" title="16. aprīlis, piektdiena, klubs &quot;Nabaklab&quot;">NABAKLAB: FRAILTY un SOUNDARCADE</a>
+</div>
+
+<div class="List-item">
+	<a href="/forum/122342/" title="1. maijs, sestdiena, klubs &quot;Melnā Piektdiena&quot;">BLACK MAGIC TOUR II: Oculus Infame</a>
+</div>
+
+<div class="List-item">
+	<a href="/forum/122332/" title="8. maijs, sestdiena, klubs &quot;Sapņu Fabrika&quot;">SKYFORGER albuma &quot;KURBADS&quot; prezentācija</a>
+</div>
+
+<div class="List-item">
+	<a href="/article/595/" title="18. augusts, trešdiena, klubs &quot;Melnā Piektdiena&quot;">CANNIBAL CORPSE</a>
+</div>
+
+<div class="List-sep"></div>
+
+<div class="TD-cat">Braucieni</div>
+
+<div class="List-item">
+	<a href="/forum/122209/" title="11. maijs, otrdiena, Varšava">BOLT THROWER Varšavā</a>
+</div>
+
+<div class="List-item">
+	<a href="/article/594/" title="27. maijs, ceturdiena, Varšava">AC/DC Varšavā</a>
+</div>
+
+<div class="List-item">
+	<a href="/article/593/" title="16. jūnijs, trešdiena, Varšava">SONISPHERE FESTIVAL Varšavā</a>
 </div>
 
 

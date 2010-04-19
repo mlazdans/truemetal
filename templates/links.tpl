@@ -65,6 +65,9 @@
 	<a href="http://www.metalshow.lv/">Metalshow</a>
 </div>
 <div class="List-item">
+	<a href="http://karametals.lv/">Karametāls!</a>
+</div>
+<div class="List-item">
 	<a href="http://www.metalmusic.lv/">Metalmusic</a>
 </div>
 <div class="List-item">
@@ -73,6 +76,7 @@
 <div class="List-item">
 	<a href="http://panaceja.aeons.lv/">Panaceja</a>
 </div>
+
 
 <div class="List-sep"></div>
 

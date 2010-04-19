@@ -15,26 +15,26 @@
 
 		<div class="date">, {c_date}</div>
 
-		<div class="link">
+		<div class="link unselectable">
 			<a href="#comment{c_id}">[Link]</a>
 		</div>
 		<!-- BEGIN BLOCK_profile_link disabled -->
-		<div class="profile">
+		<div class="profile unselectable">
 			<a href="{http_root}/user/profile/{user_login_id}/" onclick="Truemetal.Pop('{http_root}/user/profile/{user_login_id}/', 400, 400, 'profile{user_login_id}'); return false;">[Profils]</a>
 		</div>
 		<!-- END BLOCK_profile_link -->
 		<!-- BEGIN BLOCK_comment_vote disabled -->
-			<div class="vote">
+			<div class="vote unselectable">
 				<a href="{http_root}/vote/down/{c_id}/" title="Dauns..." onclick="Truemetal.Vote('{c_id}', 'down', '#comment{c_id} .vote-value'); return false;">[&ndash;]</a>
 			</div>
-			<div class="vote">
+			<div class="vote unselectable">
 				<a href="{http_root}/vote/up/{c_id}/" title="Ōjā!" onclick="Truemetal.Vote('{c_id}', 'up', '#comment{c_id} .vote-value'); return false;">[+]</a>
 			</div>
-			<div class="vote {comment_vote_class} vote-value">
+			<div class="vote {comment_vote_class} vote-value unselectable">
 				{c_votes}
 			</div>
 		<!-- END BLOCK_comment_vote -->
-		<div class="center">&nbsp;</div>
+		<div class="center unselectable">&nbsp;</div>
 	</div>
 	<div class="data{c_disabled_user_class}">
 		{c_datacompiled}

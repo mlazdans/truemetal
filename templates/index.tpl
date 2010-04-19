@@ -20,6 +20,7 @@ $(document).ready(function(){
 		Truemetal.initMenu();
 		if(!User.disableYoutube)
 			Truemetal.initYouTube();
+		Truemetal.initUnselectable();
 });
 </script>
 </head>
