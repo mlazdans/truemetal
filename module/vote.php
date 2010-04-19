@@ -47,13 +47,43 @@ if(!$comment_data || ($cv_user_id == $user_id))
 		else
 			$retJson->msg = "Comment not found";
 		print json_encode($retJson);
-		return;
+	} else {
+		if(empty($_SERVER['HTTP_REFERER']))
+		{
+			header("Location: $sys_http_root/");
+		} else {
+			header("Location: $_SERVER[HTTP_REFERER]");
+		}
 	}
-	header("Location: $sys_http_root/");
 	return;
 }
 
+# Check count
+$date = date('Y-m-d H:i:s', time() - 24 * 3600); // 24h
+$check_sql = sprintf(
+	"SELECT COUNT(*) cv_count FROM comment_votes WHERE cv_userid = %d AND cv_entered >= '%s'",
+	$user_id,
+	$date
+);
+$countCheck = $db->ExecuteSingle($check_sql);
+if($countCheck['cv_count'] >= 24)
+{
+	if($json)
+	{
+		$retJson->msg = "Pārsniegtiņš 24 stundiņu limitiņš balsošaniņai.";
+		print json_encode($retJson);
+	} else {
+		if(empty($_SERVER['HTTP_REFERER']))
+		{
+			header("Location: $sys_http_root/");
+		} else {
+			header("Location: $_SERVER[HTTP_REFERER]");
+		}
+	}
+	return;
+}
 
+# Insert
 $insert_sql = sprintf(
 	"INSERT IGNORE INTO comment_votes (cv_c_id, cv_userid, cv_value, cv_userip, cv_entered) VALUES (%d, %d, %d, '%s', NOW())",
 	$c_id,

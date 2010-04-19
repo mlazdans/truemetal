@@ -372,6 +372,9 @@ $descr.
 
 	function set_banner_top()
 	{
+		if(empty($GLOBALS['top_banners']))
+			return;
+
 		$banners = $GLOBALS['top_banners'];
 
 		$ban_id = mt_rand(0, count($banners) - 1);
