@@ -106,6 +106,9 @@ LEFT JOIN comment_map ON cm_new_id = c_id
 			}
 		}
 
+		if(!empty($params['c_userid']))
+			$sql_add[] = sprintf("(c_userid = %d)", $params['c_userid']);
+
 		if($sql_add)
 			$sql .= " WHERE ".join(' AND ', $sql_add);
 

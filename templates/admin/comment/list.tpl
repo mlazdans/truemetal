@@ -1,5 +1,6 @@
 <!-- BEGIN BLOCK_nocomments disabled -->
-Nav neviena komentāra
+<div class="TD-cat">Komentāri</div>
+<div>Nav neviena komentāra</div>
 <!-- END BLOCK_nocomments -->
 
 <!-- BEGIN BLOCK_comments disabled -->

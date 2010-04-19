@@ -1,6 +1,6 @@
 <form action="" method="post">
-<input type="hidden" name="action" value="save" />
 <div class="TD-cat-active">
+	<input type="hidden" name="action" value="save" />
 	Logini: rediģēt <em>{l_login}</em>
 </div>
 <table class="Main">
@@ -75,4 +75,6 @@
 </tr>
 </table>
 </form>
+
+<!-- BEGIN BLOCK_login_comments --><!-- END BLOCK_login_comments -->
 

@@ -1,5 +1,7 @@
 <?php
 
+require_once('lib/Comment.php');
+
 $c_ids = post('c_id');
 if(!is_array($c_ids))
 	$c_ids = array($c_id);
