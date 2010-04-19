@@ -87,6 +87,16 @@ class Logins
 			$sql .= ", (SELECT SUM(c_votes) FROM comment WHERE c_userid = l_id AND c_votes < 0) votes_minus ";
 		}
 
+		if(!empty($params['get_comment_count']))
+		{
+			$sql .= ", (SELECT COUNT(*) FROM comment WHERE c_userid = l_id) comment_count ";
+		}
+
+		if(!empty($params['get_all_ips']))
+		{
+			$sql .= ", (SELECT GROUP_CONCAT(DISTINCT c_userip) FROM comment WHERE c_userid = l_id) all_ips ";
+		}
+
 		$sql .= " FROM logins ";
 
 		if($sql_add)
@@ -793,6 +803,75 @@ class Logins
 
 		return $db->Execute($sql);
 	} // remove_forgot_code
+
+	static function collectUsersByIP($ips, $exclude_l_ids = array(), $exclude_ips = array(), $d = 0)
+	{
+		global $db;
+
+		if($d > 3)
+			return false;
+
+		if(!is_array($ips))
+			$ips = array($ips);
+
+		if(!is_array($exclude_l_ids) && $exclude_l_ids)
+			$exclude_l_ids = array($exclude_l_ids);
+
+		if(!is_array($exclude_ips) && $exclude_ips)
+			$exclude_ips = array($exclude_ips);
+
+		$sql_add = '';
+		if($exclude_l_ids)
+			$sql_add .= " AND c.c_userid NOT IN (".join(",", $exclude_l_ids).")";
+
+		if($exclude_ips)
+			$sql_add .= " AND c.c_userip NOT IN ('".join("','", $exclude_ips)."')";
+
+		$ips_sql  = join("','", $ips);
+		$exclude_sql = join("','", array_merge($ips, $exclude_ips));
+
+		$sql = "
+SELECT
+	l.l_id,
+	l.l_login,
+	l.l_nick,
+	l.l_active,
+	COUNT(*) comment_count
+FROM
+	`comment` c
+JOIN logins l ON l.l_id = c.c_userid
+WHERE
+	c.c_userip IN ('$ips_sql')
+	$sql_add
+GROUP BY
+	l.l_id
+";
+//printr($sql);
+//die;
+		if($alsoUsers = $db->Execute($sql))
+		{
+			return $alsoUsers;
+			//printr($alsoUsers);
+			//print "-----------------------------<br/>";
+			//die;
+			/*
+			$ret = $alsoUsers;
+			foreach($alsoUsers as $item)
+			{
+				$new_ips = split(',', $item['ips']);
+				$exclude_ips = array_merge($exclude_ips, $ips);
+				$exclude_l_ids[] = $item['l_id'];
+				if($a = Logins::collectUsersByIP($new_ips, $exclude_l_ids, $exclude_ips, $d+1))
+				{
+					$ret = array_merge($ret, $a);
+				}
+			}
+			return $ret;
+			*/
+		} else {
+			return false;
+		}
+	} // collectUsersByIP
 
 } // class Logins
 

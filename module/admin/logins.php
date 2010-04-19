@@ -27,9 +27,10 @@ if(in_array($action, $actions))
 if($action == 'save')
 {
 	if($logins->update($_POST['data'], LOGIN_DONTVALIDATE))
-		header("Location: $module_root/");
+		header("Location: $module_root/".($l_id ? "$l_id/" : ""));
 	else
 		print $logins->error_msg;
+
 	return;
 }
 

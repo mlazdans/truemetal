@@ -35,6 +35,7 @@ Nav neviena logina
 	<td class="TD-cat">Logins</td>
 	<td class="TD-cat">Niks</td>
 	<td class="TD-cat">Reitings</td>
+	<td class="TD-cat">Komentāri</td>
 	<td class="TD-cat">E-pasts</td>
 	<td class="TD-cat" title="Aktīvs">Akt</td>
 	<td class="TD-cat" title="Akceptēts">Akc</td>
@@ -53,6 +54,7 @@ Nav neviena logina
 	</td>
 	<td class="{l_color_class}">{l_nick}</td>
 	<td class="{l_color_class}">{votes}({votes_plus}-{votes_minus})</td>
+	<td class="{l_color_class}">{comment_count}</td>
 	<td class="{l_color_class}">
 		<a href="mailto:{l_email}">{l_email}</a>
 	</td>

@@ -1,3 +1,4 @@
+<!-- BEGIN BLOCK_login_edit -->
 <form action="" method="post">
 <div class="TD-cat-active">
 	<input type="hidden" name="action" value="save" />
@@ -69,12 +70,36 @@
 	<td>{l_userip}</td>
 </tr>
 <tr>
+	<td class="right nowrap">Manīts no:</td>
+	<td>
+		<a href="{http_root}/admin/reports/?report=ip&amp;ips={all_ips}">{all_ips_view}</a>
+	</td>
+</tr>
+<tr>
 	<td colspan="2">
 		<input type="submit" value=" Saglabāt " />
 	</td>
 </tr>
 </table>
 </form>
+<!-- END BLOCK_login_edit -->
+
+<!-- BEGIN BLOCK_logins_also disabled -->
+<div class="TD-cat-active">
+	IP adrese manīta arī šādiem fruktiem
+</div>
+<table class="Main">
+<!-- BEGIN BLOCK_logins_also_list -->
+<tr>
+	<td class="{l_color_class}">
+		<a href="{http_root}/admin/logins/{l_id}/" style="font-weight: bold;">{l_login}</a>
+	</td>
+	<td class="{l_color_class}">{l_nick}</td>
+	<td class="{l_color_class}">{comment_count}</td>
+</tr>
+<!-- END BLOCK_logins_also_list -->
+</table>
+<!-- END BLOCK_logins_also -->
 
 <!-- BEGIN BLOCK_login_comments --><!-- END BLOCK_login_comments -->
 

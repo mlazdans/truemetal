@@ -117,6 +117,9 @@ LEFT JOIN comment_map ON cm_new_id = c_id
 		else
 			$sql .= " ORDER BY $params[sort] ";
 
+		if(!empty($params['limit']))
+			$sql .= " LIMIT ".$params['limit'];
+
 		return $this->db->Execute($sql);
 	} // get
 

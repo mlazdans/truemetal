@@ -8,6 +8,7 @@ $template->set_title('Admin :: logini :: saraksts');
 $params = array(
 	'limit'=>100,
 	'get_votes'=>true,
+	'get_comment_count'=>true,
 	'l_active'=>LOGIN_ALL,
 	'l_accepted'=>LOGIN_ALL,
 	);

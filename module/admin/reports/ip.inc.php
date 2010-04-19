@@ -27,6 +27,8 @@ $CC->setDb($db);
 $comments = $CC->get(array(
 	'ips'=>$ips,
 	'c_visible'=>COMMENT_ALL,
+	'sort'=>'c_entered DESC',
+	'limit'=>100,
 	));
 
 include("module/admin/comment/list.inc.php");
