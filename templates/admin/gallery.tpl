@@ -4,7 +4,7 @@
 	<tr>
 		<td valign="top"><input type="submit" name="do" value="Jauns"></td>
 		<td valign="top"><input type="button" value="Atcelt" onClick="location.replace('{http_root}/admin/gallery/')"></td>
-		<td valign="top" width=100%>&nbsp;</td>
+		<td valign="top" width="100%">&nbsp;</td>
 	</tr>
 </table>
 </form>
@@ -12,8 +12,8 @@
 <!-- BEGIN BLOCK_gallery_list disabled -->
 <form action="" method="post">
 <table cellpadding="2" cellspacing="2" border="0">
-	<tr>	
-		<td class="TD-cat"><input type="checkbox" name="gallery_check_all" onClick="checkAll(this.form, this)"></td>
+	<tr>
+		<td class="TD-cat"><input type="checkbox" name="gallery_check_all" onClick="Truemetal.checkAll(this)"></td>
 		<td colspan="2" width="100%" class="TD-cat">Galerijas</td>
 	</tr>
 	<!-- BEGIN BLOCK_galleries -->

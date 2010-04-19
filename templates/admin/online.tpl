@@ -1,6 +1,6 @@
 <table cellpadding="2" cellspacing="2" border="0">
 	<tr>
-		<td class="TD-cat"><input type="checkbox" name="online_check_all" onClick="checkAll(this.form, this)"></td>
+		<td class="TD-cat"><input type="checkbox" name="online_check_all" onClick="Truemetal.checkAll(this)"></td>
 		<td width="100%" class="TD-cat">Online</td>
 	</tr>
 	<!-- BEGIN BLOCK_online_item -->

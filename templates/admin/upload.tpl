@@ -6,7 +6,7 @@
 	<!-- END BLOCK_msg -->
 	<form action="" method="post">
 	<tr>
-		<td class="TD-cat"><input type="checkbox" name="file_check_all" onClick="checkAll(this.form, this)"></td>
+		<td class="TD-cat"><input type="checkbox" name="file_check_all" onClick="Truemetal.checkAll(this)"></td>
 		<td width="100%" class="TD-cat">Faili</td>
 	</tr>
 <!-- BEGIN BLOCK_file_list disabled -->

@@ -4,7 +4,7 @@
 	<tr>
 		<td valign="top"><input type="submit" name="do" value="Jauns"></td>
 		<td valign="top"><input type="button" value="Atcelt" onClick="location.replace('{http_root}/admin/user/')"></td>
-		<td valign="top" width=100%>&nbsp;</td>
+		<td valign="top" width="100%">&nbsp;</td>
 	</tr>
 </table>
 </form>
@@ -18,7 +18,7 @@
 <form action="" method="post">
 <table cellpadding="2" cellspacing="2" border="0">
 	<tr>
-		<td class="TD-cat"><input type="checkbox" name="user_check_all" onClick="checkAll(this.form, this)"></td>
+		<td class="TD-cat"><input type="checkbox" name="user_check_all" onClick="Truemetal.checkAll(this)"></td>
 		<td width="100%" class="TD-cat">Lietotāji</td>
 	</tr>
 	<!-- BEGIN BLOCK_users -->

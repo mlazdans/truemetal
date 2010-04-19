@@ -8,7 +8,7 @@
 <table class="Main">
 <tr>
 	<td class="TD-cat">
-		<input type="checkbox" name="comment_check_all" onclick="checkAll(this.form, this)" />
+		<input type="checkbox" name="comment_check_all" onclick="Truemetal.checkAll(this)" />
 	</td>
 	<td colspan="4" class="TD-cat">
 		Komentāri
