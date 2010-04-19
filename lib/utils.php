@@ -247,9 +247,9 @@ function parse_text_data(&$data)
 		$url_short = htmlspecialchars($m3.$m4);
 
 		# youtube.com
-		if((substr($host, -11) == 'youtube.com') && preg_match('/watch\?v=([^&]*)/i', $url, $url_parts))
+		if(FALSE && (substr($host, -11) == 'youtube.com') && preg_match('/watch\?v=([^&]*)/i', $url, $url_parts))
 		{
-			$data = str_replace($tokens[$k], '<div><div id="'.uniqid('yt').'" class="youtube '.$url_parts[1].'"><a href="'.$url.'">'.$url_short.'</a></div></div>', $data);
+			$data = str_replace($tokens[$k], '<div><div class="youtube"><a href="'.$url.'">'.$url_short.'</a></div></div>', $data);
 		# truemetal.lv
 		} elseif(
 			(substr($host, -12) == 'truemetal.lv') ||

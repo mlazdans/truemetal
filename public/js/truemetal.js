@@ -1,12 +1,4 @@
 var Truemetal = {
-	/*
-	checkAll: function(form, what){
-		for (var i = 0; i < form.elements.length; i++){
-			var e = form.elements[i];
-			if (e.type == 'checkbox')
-				e.checked = form[what.name].checked;
-		}
-	},*/
 	checkAll: function(form, ref){
 		if(form && ref)
 		{
@@ -50,18 +42,29 @@ var Truemetal = {
 			});
 	}, // Vote
 	wrapYouTube: function(el){
-		var videoId = el.className.split(" ")[1];
+		var videoId = Truemetal.getUrlVars($(el).attr("href")).v;
 		if(videoId)
 		{
+			$(el).attr("id", "yt-" + videoId);
 			$(el).wrap('<' + 'div style="text-align: center; height: 395px;"' +'><' + '/div>');
 			var params = { allowScriptAccess: "always", wmode: "transparent" };
 			var atts = { align: 'center' };
-			swfobject.embedSWF("http://www.youtube.com/v/" + videoId, el.id, "480", "395", "8", null, null, params, atts);
+			swfobject.embedSWF("http://www.youtube.com/v/" + videoId, "yt-" + videoId, "480", "395", "8", null, null, params, atts);
 		}
+		/*
+		var videoId = Truemetal.getUrlVars($("a", el).attr("href")).v;
+		if(videoId)
+		{
+			$(el).attr("id", "yt-" + videoId);
+			$(el).wrap('<' + 'div style="text-align: center; height: 395px;"' +'><' + '/div>');
+			var params = { allowScriptAccess: "always", wmode: "transparent" };
+			var atts = { align: 'center' };
+			swfobject.embedSWF("http://www.youtube.com/v/" + videoId, "yt-" + videoId, "480", "395", "8", null, null, params, atts);
+		}
+		*/
 	},
 	scrollYouTube: function(e){
 		var yt = (typeof e.data == 'object' ? e.data : e);
-		//var scrollY = $(document.documentElement).attr('scrollTop');
 		var scrollY = $(window).scrollTop();
 		var WH = $(window).height();
 
@@ -81,22 +84,31 @@ var Truemetal = {
 		});
 	},
 	initYouTube: function() {
+		$('.col1 a').each(function(i,a){
+				// youtube.com
+				if(a.hostname.match(/youtube.com$/i))
+				{
+					$(a).addClass("youtube");
+					/*
+					Truemetal.wrapYouTube(a);
+					var params = Truemetal.getUrlVars(a.href);
+					if(params.v)
+					{
+						//var el = $(a).wrap('<' + 'div class="youtube"><' + '/div>');
+						//Truemetal.wrapYouTube(el);
+					}
+					*/
+				}
+		});
+		/*
 		var yt = $('div.youtube');
 		$(window).bind('scroll', yt, Truemetal.scrollYouTube);
 		Truemetal.scrollYouTube(yt);
-		/*
-		$('div.youtube').each(function(){
-				var videoId = this.className.split(" ")[1];
-				if(videoId)
-				{
-					$(this).wrap('<' + 'div style="text-align: center; height: 395px;"' +'><' + '/div>');
-					var params = { allowScriptAccess: "always", wmode: "transparent" };
-					var atts = { align: 'center' };
-					swfobject.embedSWF("http://www.youtube.com/v/" + videoId, this.id, "480", "395", "8", null, null, params, atts);
-				}
-		});
 		*/
-	}, // ytEmbed
+		var ytA = $("a.youtube");
+		$(window).bind('scroll', ytA, Truemetal.scrollYouTube);
+		Truemetal.scrollYouTube(ytA);
+	},
 	initMenu: function(){
 		$('.menu img').each(function(){
 				var src = this.src;
@@ -113,6 +125,16 @@ var Truemetal = {
 				} catch(e1) {
 				}
 		});
-	}
+	}, //initMenu
+	getUrlVars: function(url){
+		var vars = {}, hash;
+		var hashes = url.slice(url.indexOf('?') + 1).split('&');
+		for(var i = 0; i < hashes.length; i++)
+		{
+			hash = hashes[i].split('=');
+			vars[hash[0]] = hash[1];
+		}
+		return vars;
+	} // getUrlVars
 };
 

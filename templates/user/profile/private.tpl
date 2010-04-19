@@ -99,6 +99,12 @@
 		<label for="l_disable_avatars">Nerādīt avatārus</label>
 	</td>
 </tr>
+<tr>
+	<td colspan="2">
+		<input id="l_disable_youtube" type="checkbox" name="data[l_disable_youtube]"{l_disable_youtube_checked} />
+		<label for="l_disable_youtube">Nerādīt Youtube klipus</label>
+	</td>
+</tr>
 </table>
 
 <div class="List-sep"></div>

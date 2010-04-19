@@ -13,9 +13,13 @@
 <script type="text/javascript" src="{http_root}/js/jquery.js?{script_version}"></script>
 <script type="text/javascript" src="{http_root}/js/truemetal.js?{script_version}"></script>
 <script type="text/javascript">
+var User = {
+	disableYoutube: parseInt('{disable_youtube}')
+};
 $(document).ready(function(){
 		Truemetal.initMenu();
-		Truemetal.initYouTube();
+		if(!User.disableYoutube)
+			Truemetal.initYouTube();
 });
 </script>
 </head>
