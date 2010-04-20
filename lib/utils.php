@@ -833,7 +833,17 @@ function _GET()
 			$parts = split('=', $kv);
 			$k = isset($parts[0]) ? $parts[0] : false;
 			$v = isset($parts[1]) ? $parts[1] : false;
-			$ret[$k] = $v;
+
+			# Arrays
+			if(substr($k, -2) == '[]')
+			{
+				$ka = substr($k, 0, -2);
+				if(empty($ret[$ka]))
+					$ret[$ka] = array();
+				$ret[$ka][] = $v;
+			} else {
+				$ret[$k] = $v;
+			}
 		}
 	}
 

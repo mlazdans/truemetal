@@ -95,6 +95,7 @@ if($json)
 	//$jsonData->l_nick = $login_data['l_nick'];
 	$jsonData->title = "[ TRUE METAL ".$template->get_title()." ]";
 	$jsonData->html = $html;
+	header('Content-Type: text/javascript; charset='.$sys_encoding);
 	print json_encode($jsonData);
 	return;
 } else {
