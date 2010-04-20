@@ -1,3 +1,36 @@
+/**
+* @author Samele Artuso <samuele.a@gmail.com>
+*/
+(function($) {
+	$.fn.unselectable = function() {
+		return this.each(function() {
+
+			$(this)
+				.css('-moz-user-select', 'none')		// FF
+				.css('-khtml-user-select', 'none')		// Safari, Google Chrome
+				.css('user-select', 'none');			// CSS 3
+
+			if ($.browser.msie) {						// IE
+				$(this).each(function() {
+					this.ondrag = function() {
+						return false;
+					};
+				});
+				$(this).each(function() {
+					this.onselectstart = function() {
+						return (false);
+					};
+				});
+			} else if($.browser.opera) {
+				$(this).attr('unselectable', 'on');
+			}
+		});
+	};
+})(jQuery);
+
+/**
+* @author Martins Lazdans <marrtins@dqdp.net>
+*/
 var Truemetal = {
 	checkAll: function(form, ref){
 		if(form && ref)
@@ -142,37 +175,54 @@ var Truemetal = {
 			hash = hashes[i].split('=');
 			vars[hash[0]] = hash[1];
 		}
+
 		return vars;
-	} // getUrlVars
-};
-
-/**
- * @author Samele Artuso <samuele.a@gmail.com>
- */
-(function($) {
-	$.fn.unselectable = function() {
-		return this.each(function() {
-
-			$(this)
-				.css('-moz-user-select', 'none')		// FF
-				.css('-khtml-user-select', 'none')		// Safari, Google Chrome
-				.css('user-select', 'none');			// CSS 3
-
-			if ($.browser.msie) {						// IE
-				$(this).each(function() {
-					this.ondrag = function() {
-						return false;
-					};
-				});
-				$(this).each(function() {
-					this.onselectstart = function() {
-						return (false);
-					};
-				});
-			} else if($.browser.opera) {
-				$(this).attr('unselectable', 'on');
+	}, // getUrlVars
+	viewProfile: function(login){
+		var dOptions = {
+			modal: true,
+			width: 400,
+			dialogClass: "loading",
+			buttons: {
+					"Aizvērt": function(){
+						$(this).dialog("destroy");
+					}
 			}
+		};
+
+		var dialog = $('<div/>').dialog(dOptions);
+		$.ajax({
+				url: "/user/profile/" + login + "/?json=1",
+				dataType: 'json',
+				success: function(data){
+					$(dialog).dialog("option", "title", data.title);
+					$(dialog).dialog("option", "dialogClass", "");
+					$(dialog).html(data.html);
+				}
 		});
-	};
-})(jQuery);
+	},
+	viewProfileImage: function(login, w, h, nick){
+		var dOptions = {
+			width: w + 20,
+			//height: h + 35,
+			dialogClass: "loading"
+		};
+
+		var dialog = $('<div/>').dialog(dOptions);
+		$('<img/>', {
+				src: "/user/image/" + login + "/",
+				width: w,
+				height: h,
+				border: 0,
+				click: function(){
+					$(dialog).dialog("destroy");
+				},
+				load: function(){
+					if(nick)
+						$(dialog).dialog("option", "title", "[ TRUE METAL " + nick + " bilde ]");
+					$(dialog).dialog("option", "dialogClass", "");
+				}
+		}).appendTo(dialog);
+	}
+};
 

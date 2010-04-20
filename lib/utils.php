@@ -897,3 +897,31 @@ function is_not_empty($v)
 	return !empty($v);
 } // is_not_empty
 
+function innerHTML(&$dom, &$node, $html = false)
+{
+	## if html parameter not specified, return the current contents of $node
+	if($html === false)
+	{
+		$doc = new DOMDocument();
+		foreach ($node->childNodes as $child)
+		$doc->appendChild($doc->importNode($child, true));
+
+		return $doc->saveHTML();
+	} else {
+		## get rid of all current children
+		foreach ($node->childNodes as $child)
+			$node->removeChild($child);
+
+		## if html is empty, we are done.
+		if($html == '')
+			return;
+
+		## load up $html as DOM fragment, append it to our now-empty $node
+		$f = $dom->createDocumentFragment();
+		$f->appendXML($html);
+		$node->appendChild( $f );
+	}
+} // innerHTML
+
+
+

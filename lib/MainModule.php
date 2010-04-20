@@ -61,6 +61,11 @@ class MainModule extends Template
 		$this->set_global('title', addslashes($this->title), 'FILE_index', true);
 	} // set_title
 
+	function get_title()
+	{
+		return $this->title;
+	} // get_title
+
 	function set_descr($descr)
 	{
 		global $i_am_admin;
@@ -373,7 +378,12 @@ $descr.
 	function set_banner_top()
 	{
 		if(empty($GLOBALS['top_banners']))
+		{
+			if($this->block_exists('BLOCK_banner_top'))
+				$this->disable('BLOCK_banner_top');
+
 			return;
+		}
 
 		$banners = $GLOBALS['top_banners'];
 

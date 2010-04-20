@@ -9,8 +9,10 @@
 <meta name="description" content="{meta_descr}" />
 <link rel="stylesheet" type="text/css" href="{http_root}/css/styles.css?{script_version}" />
 <link rel="stylesheet" type="text/css" href="{http_root}/css/article.css?{script_version}" />
+<link rel="stylesheet" type="text/css" href="{http_root}/css/jquery-ui/truemetal/jquery-ui.css?{script_version}" />
 <script type="text/javascript" src="{http_root}/js/swfobject.js?{script_version}"></script>
 <script type="text/javascript" src="{http_root}/js/jquery.js?{script_version}"></script>
+<script type="text/javascript" src="{http_root}/js/jquery-ui.js?{script_version}"></script>
 <script type="text/javascript" src="{http_root}/js/truemetal.js?{script_version}"></script>
 <script type="text/javascript">
 var User = {

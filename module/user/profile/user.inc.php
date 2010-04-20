@@ -7,7 +7,15 @@
 
 require_once('lib/CommentDisabled.php');
 
-$template = new MainModule($sys_template_root, 'profile', 'user/profile/user.tpl');
+$action = post('action');
+$json = get('json');
+
+if($json)
+{
+	$template = new MainModule($sys_template_root, 'profile', 'user/profile/user.json.tpl');
+} else {
+	$template = new MainModule($sys_template_root, 'profile', 'user/profile/user.tpl');
+}
 $template->set_var('error_l_email', '', 'FILE_profile');
 
 if(!user_loged())
@@ -19,7 +27,6 @@ if(!user_loged())
 	return;
 }
 
-$action = post('action');
 $login_data = Logins::load_by_login($login);
 
 # Disable comments
@@ -38,7 +45,10 @@ if(
 
 	if($ret)
 	{
-		redirect();
+		if(isset($_SERVER['HTTP_REFERER']))
+			redirect($_SERVER['HTTP_REFERER']);
+		else
+			redirect();
 		return;
 	}
 }
@@ -75,5 +85,19 @@ if($login_data)
 	$template->enable('BLOCK_no_such_login');
 }
 
-$template->out();
+if($json)
+{
+	ob_start();
+	$template->out();
+	$html = ob_get_clean();
+
+	$jsonData = new StdClass;
+	//$jsonData->l_nick = $login_data['l_nick'];
+	$jsonData->title = "[ TRUE METAL ".$template->get_title()." ]";
+	$jsonData->html = $html;
+	print json_encode($jsonData);
+	return;
+} else {
+	$template->out();
+}
 

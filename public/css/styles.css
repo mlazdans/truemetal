@@ -515,3 +515,10 @@ table.Main td {
 div.clear {
 	clear: both;
 }
+
+div.loading {
+	background-image: url("/img/loading1.gif");
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
