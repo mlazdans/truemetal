@@ -49,6 +49,9 @@ class Logins
 		if(isset($params['l_logedin']))
 			$sql_add[] = sprintf("l_logedin = '%s'", $params['l_logedin']);
 
+		if(isset($params['l_lastaccess']))
+			$sql_add[] = sprintf("l_lastaccess = '%s'", $params['l_lastaccess']);
+
 		if(isset($params['l_password']))
 			$sql_add[] = sprintf(
 				"(l_password = PASSWORD('%s') OR l_password = OLD_PASSWORD('%s'))",

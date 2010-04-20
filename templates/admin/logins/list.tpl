@@ -19,6 +19,7 @@ Nav neviena logina
 &nbsp;
 <label for="ls_l_accepted_y"><input type="checkbox" name="l_accepted_y" id="ls_l_accepted_y" {ls_l_accepted_y_checked}/> akceptētie</label>
 <label for="ls_l_active_y"><input type="checkbox" name="l_active_y" id="ls_l_active_y" {ls_l_active_y_checked}/> aktīvie</label>
+<label for="ls_l_notloggedever"><input type="checkbox" name="l_notloggedever" id="ls_l_notloggedever" {ls_l_notloggedever_checked}/> nemanītie</label>
 <input type="submit" value="Meklēt"/>
 </div>
 </form>

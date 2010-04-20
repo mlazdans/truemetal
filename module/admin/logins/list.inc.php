@@ -36,6 +36,14 @@ if($action == 'search')
 		$template->set_var('ls_l_accepted_n_checked', 'checked="checked"');
 	}
 
+	if(post('l_notloggedever'))
+	{
+		$params['l_lastaccess'] = '0000-00-00 00:00:00';
+		$template->set_var('ls_l_notloggedever_checked', 'checked="checked"');
+	} else {
+		$template->set_var('ls_l_notloggedever_checked', '');
+	}
+
 	$template->set_var('q', parse_form_data($q), "BLOCK_logins_search_from");
 }
 
