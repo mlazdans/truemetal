@@ -10,12 +10,13 @@ if(substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip'))
 header("Content-type: text/javascript");
 header("Expires: ".gmdate("D, d M Y H:i:s", time() + (7 * 24 * 3600)) . " GMT");
 
-$SCRIPTS = get('s');
-
-foreach($SCRIPTS as $js)
+if($SCRIPTS = get('s'))
 {
-	if(is_file("js/$js"))
-		readfile("js/$js");
+	foreach($SCRIPTS as $js)
+	{
+		if(is_file("js/$js"))
+			readfile("js/$js");
+	}
 }
 
 ob_end_flush();

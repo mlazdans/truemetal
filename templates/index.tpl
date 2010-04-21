@@ -10,18 +10,6 @@
 <link rel="stylesheet" type="text/css" href="{http_root}/css/styles.css?{script_version}" />
 <link rel="stylesheet" type="text/css" href="{http_root}/css/article.css?{script_version}" />
 <link rel="stylesheet" type="text/css" href="{http_root}/css/jquery-ui/truemetal/jquery-ui.css?{script_version}" />
-<script type="text/javascript" src="{http_root}/jsload/?s[]=swfobject.js&amp;s[]=jquery.js&amp;s[]=jquery-ui.js&amp;s[]=truemetal.js"></script>
-<script type="text/javascript">
-var User = {
-	disableYoutube: parseInt('{disable_youtube}')
-};
-$(document).ready(function(){
-		Truemetal.initMenu();
-		if(!User.disableYoutube)
-			Truemetal.initYouTube();
-		Truemetal.initUnselectable();
-});
-</script>
 </head>
 
 <body>
@@ -60,5 +48,17 @@ $(document).ready(function(){
 	</div>
 </div>
 
+<script type="text/javascript" src="{http_root}/jsload/?s[]=swfobject.js&amp;s[]=jquery.js&amp;s[]=jquery-ui.js&amp;s[]=truemetal.js"></script>
+<script type="text/javascript">
+var User = {
+	disableYoutube: parseInt('{disable_youtube}')
+};
+$(document).ready(function(){
+		Truemetal.initMenu();
+		if(!User.disableYoutube)
+			Truemetal.initYouTube();
+		Truemetal.initUnselectable();
+});
+</script>
 </body>
 </html>

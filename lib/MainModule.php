@@ -141,7 +141,7 @@ $descr.
 
 	function out()
 	{
-		global $sys_http_root, $sys_use_cdn, $sys_cdn_func;
+		global $sys_http_root, $sys_use_cdn, $sys_cdn_func, $sys_domain;
 
 		//print $this->parse_file('FILE_index');
 		if($sys_use_cdn && function_exists($sys_cdn_func))
@@ -155,8 +155,20 @@ $descr.
 			{
 				foreach($els as $item)
 				{
-					$src = parse_url($item->attributes()->src, PHP_URL_PATH);
-					$item->attributes()->src = 'http://'.$sys_cdn_func($src).$src;
+					$parts = parse_url($item->attributes()->src);
+
+					# Outsite site
+					if(!empty($parts['host']) && ($parts['host'] != $sys_domain))
+						continue;
+
+					$parts['host'] = $sys_cdn_func($parts['path']);
+
+					//print http_build_url(false, $parts)."!<br>";
+					//$item->attributes()->src = http_build_url(false, $parts);
+					/*
+					if(empty($host) || ($host == $sys_domain))
+						$item->attributes()->src = 'http://'.$sys_cdn_func($src).$src;
+					*/
 				}
 			}
 
@@ -166,7 +178,9 @@ $descr.
 				foreach($els as $item)
 				{
 					$src = parse_url($item->attributes()->href, PHP_URL_PATH);
-					$item->attributes()->href = 'http://'.$sys_cdn_func($src).$src;
+					$host = parse_url($item->attributes()->src, PHP_URL_HOST);
+					if(empty($host) || ($host == $sys_domain))
+						$item->attributes()->href = 'http://'.$sys_cdn_func($src).$src;
 				}
 			}
 			print $dom->saveHTML();
