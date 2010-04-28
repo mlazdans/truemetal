@@ -29,9 +29,9 @@
 			<!--
 			<td><a href="{http_root}/gallery/"><img src="{http_root}/img/buttons/gallery.gif" alt="GALERIJA" /></a></td>
 			<td><a href="{http_root}/video/"><img src="{http_root}/img/buttons/video.gif" alt="VIDEO" /></a></td>
-			<td><a href="{http_root}/interviews/"><img src="{http_root}/img/buttons/interviews{menu_active_interviews}.gif?{script_version}" alt="INTERVIJAS" /></a></td>
 			-->
 			<td><a href="{http_root}/reviews/"><img src="{http_root}/img/buttons/reviews{menu_active_reviews}.gif?{script_version}" alt="ALBUMU RECENZIJAS" /></a></td>
+			<td><a href="{http_root}/interviews/"><img src="{http_root}/img/buttons/interviews{menu_active_interviews}.gif?{script_version}" alt="INTERVIJAS" /></a></td>
 		</tr>
 		</table>
 	</div>

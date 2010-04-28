@@ -47,10 +47,12 @@ function set_themes(&$template, &$data, $d = 0, $c = 0) {
 
 require_once('lib/AdminModule.php');
 require_once('lib/Forum.php');
+require_once('lib/Module.php');
 require_once('lib/Comment.php');
 require_once('lib/CommentConnect.php');
 
-$forum = new Forum;
+$forum = new Forum();
+$module = new Module();
 
 $forum_id = (int)array_shift($sys_parameters);
 $action = post('action');
@@ -169,9 +171,12 @@ if($forum_id)
 		$template->set_var('forum_prohibitchilds_sel', ' selected="selected"', 'BLOCK_forum_edit');
 	}
 
+	$module->set_modules_all($template, $forum_data['forum_modid'], 'BLOCK_modules_under_list');
+	/*
 	$template->set_var("forum_display_$forum_data[forum_display]_selected", ' selected="selected"', 'BLOCK_forum_edit');
 	if($forum_data['forum_showmainpage'])
 		$template->set_var("forum_showmainpage_checked", ' checked="checked"', 'BLOCK_forum_edit');
+	*/
 } else {
 	# Root
 	set_themes($template, $items);

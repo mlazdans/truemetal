@@ -41,6 +41,7 @@
 		<input type="text" name="data[forum_entered]" value="{forum_entered}" />
 	</td>
 </tr>
+<!--
 <tr>
 	<td class="right nowrap">Rādīt:</td>
 	<td>
@@ -54,6 +55,18 @@
 	<td class="right nowrap"><label for="forum_showmainpage">Rādīt sākumlapā:</label></td>
 	<td>
 		<input id="forum_showmainpage" type="checkbox" name="data[forum_showmainpage]"{forum_showmainpage_checked}/>
+	</td>
+</tr>
+-->
+<tr>
+	<td class="right nowrap">Rādīt arī zem</td>
+	<td>
+		<select name="data[forum_modid]">
+		<option value="" style="font-style: italic;">-nerādīt-</option>
+		<!-- BEGIN BLOCK_modules_under_list -->
+		<option value="{mod_id}"{module_selected}>{module_padding}{module_name}</option>
+		<!-- END BLOCK_modules_under_list -->
+		</select>
 	</td>
 </tr>
 <tr>

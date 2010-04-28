@@ -37,14 +37,18 @@ $template->set_file('FILE_article', 'article.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_article');
 
 # Loading
-$article = new Article();
+//$article = new Article();
 
 $tc = 0;
 if($art_id)
 {
+	/*
 	$art = $article->load(array(
 		'art_id'=>$art_id
 		));
+	*/
+
+	$art = $db->ExecuteSingle("SELECT * FROM `view_mainpage` WHERE `art_id` = $art_id");
 
 	if($hl)
 	{
@@ -57,7 +61,8 @@ if($art_id)
 
 	if(($action == 'add_comment') && ($item['art_comments'] == ARTICLE_COMMENTS) && user_loged())
 	{
-		$table = 'article';
+		//$table = 'article';
+		$table = $item['cm_table'];
 		$table_id = $art_id;
 		$data = post('data');
 		if($ac_id = include('module/comment/add.inc.php'))
@@ -70,6 +75,9 @@ if($art_id)
 	}
 	$art_title .= (isset($item['art_name']) ? " - ".$item['art_name'] : "");
 } elseif($_pointer['_data_']['mod_id']) {
+	$cc = $db->ExecuteSingle("SELECT COUNT(*) AS cc FROM `view_mainpage` WHERE `module_id` = '$sys_module_id'");
+	$tc = (int)$cc['cc'];
+	/*
 	# Articles
 	if($_pointer['_data_']['module_id'] == 'article')
 	{
@@ -80,6 +88,7 @@ if($art_id)
 		$tc = $article->get_total($_pointer['_data_']['mod_id']);
 		$tp = ceil($tc / $art_per_page);
 	}
+	*/
 
 	$tp = ceil($tc / $art_per_page);
 	$art_align = $tc % $art_per_page;
@@ -95,6 +104,9 @@ if($art_id)
 	else
 		$limit = $art_per_page;
 
+	$sql = "SELECT * FROM `view_mainpage` WHERE `module_id` = '$sys_module_id' LIMIT $limit";
+	$articles = $db->Execute($sql);
+	/*
 	# Articles
 	if($_pointer['_data_']['module_id'] == 'article')
 	{
@@ -107,6 +119,7 @@ if($art_id)
 			'limit'=>$limit,
 			));
 	}
+	*/
 } else {
 	$articles = array();
 }
@@ -121,7 +134,8 @@ if($art_id && isset($articles[0]))
 	if(user_loged())
 		$_SESSION['comments']['viewed'][$art_id] = $articles[0]['art_comment_count'];
 
-	$CC = new CommentConnect('article');
+	//$CC = new CommentConnect('article');
+	$CC = new CommentConnect($item['cm_table']);
 	$CC->setDb($db);
 	$comments = $CC->get(array(
 		'cc_table_id'=>$art_id,
@@ -178,6 +192,31 @@ if($articles)
 		++$c;
 
 		$item['art_date'] = date('d.m.Y', strtotime($item['art_entered']));
+
+		# Nočeko datus/intro
+		if($item['cm_table'] == 'forum')
+		{
+			$data_parts = preg_split("/<hr(\s+)?\/?>/", $item['art_data']);
+
+			if(isset($data_parts[0]))
+				$item['art_intro'] = $data_parts[0];
+
+			if(isset($data_parts[1]))
+			{
+				$item['art_data'] = $data_parts[1];
+			} else {
+				$item['art_data'] = '';
+			}
+		}
+		$template->enable('BLOCK_art_intro');
+		if($item['art_data'])
+		{
+			$item['art_data_display'] = $item['art_intro'];
+			$template->enable('BLOCK_art_cont');
+		} else {
+			$template->disable('BLOCK_art_cont');
+		}
+
 		if($art_id)
 		{
 			//$patt = '/(.*)(<hr\s+id="editor_splitter" \/>)(.*)/ims';
@@ -185,32 +224,11 @@ if($articles)
 			$item['art_date_f'] = proc_date($item['art_entered']);
 			$item['art_data_display'] = $item['art_intro'].$item['art_data'];
 			$template->enable('BLOCK_art_date_formatted');
-			$template->enable('BLOCK_art_data');
+			//$template->enable('BLOCK_art_data');
 		} else {
 			//$patt = '/<hr\s+id="editor_splitter" \/>.*/ims';
 
-			if($item['module_id'] == 'forum')
-			{
-				$data_parts = preg_split("/<hr(\s+)?\/?>/", $item['art_data']);
-				if(isset($data_parts[0]))
-					$item['art_intro'] = $data_parts[0];
-
-				if(isset($data_parts[1]))
-				{
-					$item['art_data'] = $data_parts[1];
-				} else {
-					$item['art_data'] = '';
-				}
-			}
-
-			$template->enable('BLOCK_art_intro');
-			if($item['art_data'])
-			{
-				$item['art_data_display'] = $item['art_intro'];
-				$template->enable('BLOCK_art_cont');
-			} else {
-				$template->disable('BLOCK_art_cont');
-			}
+			//if($item['module_id'] == 'forum')
 			/*
 			if(preg_match($patt, $item['art_data']))
 			{
@@ -230,7 +248,9 @@ if($articles)
 		}
 		*/
 
-		if($item['module_id'] == 'forum')
+		//if($item['module_id'] == 'forum')
+		/*
+		if($item['cm_table'] == 'forum')
 		{
 			$itemF = $item;
 			$itemF['forum_id'] = $item['art_id'];
@@ -240,6 +260,8 @@ if($articles)
 		} else {
 			$template->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_comments_new');
 		}
+		*/
+		$template->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_comments_new');
 
 		$template->set_array($item, 'BLOCK_article');
 		//$template->set_var('art_path', $module->get_path($item['art_modid']), 'BLOCK_article');
