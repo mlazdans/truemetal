@@ -148,7 +148,13 @@ var Truemetal = {
 				var parts = this.src.split('.');
 				var ext = parts.pop();
 				try {
-					var srcOver = parts.join('.') + "_over.gif";
+					var srcOver = parts.join('.');
+					if(srcOver.substr(-5) != '_over')
+					{
+						srcOver = srcOver + "_over." + ext;
+					} else {
+						srcOver = srcOver + "." + ext;
+					}
 					$(this).mouseenter(function(){
 							this.src = srcOver;
 					});

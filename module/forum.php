@@ -305,5 +305,6 @@ $template->set_login();
 $template->set_online();
 $template->set_search();
 
+$template->set_var("menu_active_forum", "_over");
 $template->out();
 

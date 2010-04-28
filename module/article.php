@@ -276,5 +276,6 @@ if($art_id && $art)
 	}
 }
 
+$template->set_var("menu_active_".$_pointer['_data_']['module_id'], "_over");
 $template->out();
 

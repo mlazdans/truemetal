@@ -82,6 +82,7 @@
 		<input type="hidden" name="action" value="module_save" />
 		<input type="hidden" name="data[mod_id]" value="{mod_id}" />
 		<select name="data[mod_modid]">
+		<option value="0">/</option>
 		<!-- BEGIN BLOCK_modules_under_list -->
 		<option value="{mod_id}">{module_padding}{module_name}</option>
 		<!-- END BLOCK_modules_under_list -->

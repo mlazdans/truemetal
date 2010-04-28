@@ -24,13 +24,14 @@
 	<div class="menu">
 		<table cellpadding="5" cellspacing="1">
 		<tr>
-			<td><a href="{http_root}/"><img src="{http_root}/img/butt_news.gif" alt="JAUNUMI" /></a></td>
-			<td><a href="{http_root}/forum/"><img src="{http_root}/img/butt_forum.gif" alt="FORUMS" /></a></td>
+			<td><a href="{http_root}/"><img src="{http_root}/img/buttons/article{menu_active_article}.gif?{script_version}" alt="JAUNUMI" /></a></td>
+			<td><a href="{http_root}/forum/"><img src="{http_root}/img/buttons/forum{menu_active_forum}.gif?{script_version}" alt="FORUMS" /></a></td>
 			<!--
-			<td><a href="{http_root}/gallery/"><img src="{http_root}/img/butt_gallery.gif" alt="GALERIJA" /></a></td>
-			<td><a href="{http_root}/video/"><img src="{http_root}/img/butt_video.gif" alt="VIDEO" /></a></td>
+			<td><a href="{http_root}/gallery/"><img src="{http_root}/img/buttons/gallery.gif" alt="GALERIJA" /></a></td>
+			<td><a href="{http_root}/video/"><img src="{http_root}/img/buttons/video.gif" alt="VIDEO" /></a></td>
 			-->
-			<td><a href="{http_root}/reviews/"><img src="{http_root}/img/butt_reviews.gif" alt="ALBUMU RECENZIJAS" /></a></td>
+			<td><a href="{http_root}/reviews/"><img src="{http_root}/img/buttons/reviews{menu_active_reviews}.gif?{script_version}" alt="ALBUMU RECENZIJAS" /></a></td>
+			<td><a href="{http_root}/interviews/"><img src="{http_root}/img/buttons/interviews{menu_active_interviews}.gif?{script_version}" alt="INTERVIJAS" /></a></td>
 		</tr>
 		</table>
 	</div>

@@ -130,6 +130,8 @@ INSERT INTO article (
 		$sql .= "art_type = '$data[art_type]', ";
 		$sql .= "art_data = '$data[art_data]', ";
 		$sql .= "art_intro = '$data[art_intro]', ";
+		if(!empty($data['art_modid']))
+			$sql .= "art_modid = $data[art_modid], ";
 		$sql = substr($sql, 0, -2);
 		$sql .= ' WHERE art_id = '.$art_id;
 

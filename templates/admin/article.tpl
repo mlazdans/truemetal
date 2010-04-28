@@ -90,7 +90,7 @@
 		<input type="hidden" name="action" value="art_save" />
 		<select name="data[art_modid]">
 		<!-- BEGIN BLOCK_modules_under_list -->
-		<option value="{mod_id}">{module_padding}{module_name}</option>
+		<option value="{mod_id}"{module_selected}>{module_padding}{module_name}</option>
 		<!-- END BLOCK_modules_under_list -->
 		</select>
 	</td>

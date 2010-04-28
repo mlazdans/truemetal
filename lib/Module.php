@@ -475,12 +475,17 @@ class Module
 		if($d > 5)
 			return;
 
-		foreach($data as $module) {
-			if(($mod_id && $module['mod_id'] == $mod_id) || !$mod_id) {
+		foreach($data as $module)
+		{
+			if($mod_id && ($module['mod_id'] == $mod_id))
+				$template->set_var("module_selected", ' selected="selected"', $block);
+			else
+				$template->set_var("module_selected", '', $block);
+			//if(($mod_id && $module['mod_id'] == $mod_id) || !$mod_id) {
 				$new_module_path = $module_path.$module['module_id'].'/';
 				$this->set_module($template, $module, $block, $new_module_path, $d);
 				$this->set_modules_all($template, $mod_id, $block, $module['mod_id'], $d + 1, $new_module_path);
-			}
+			//}
 		}
 	} // set_modules_all
 

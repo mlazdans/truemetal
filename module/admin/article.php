@@ -102,7 +102,6 @@ if(!$art_id)
 	'art_active'=>ARTICLE_ALL,
 	)))
 {
-	$module->set_modules_all($template, $art['art_modid'], 'BLOCK_modules_under_list');
 	$template->enable('BLOCK_article_edit');
 	$template->set_var('art_name_edit', $art['art_name'], 'BLOCK_article_edit');
 
@@ -125,6 +124,8 @@ if(!$art_id)
 
 	parse_form_data_array($art);
 	$template->set_array($art);
+
+	$module->set_modules_all($template, $art['art_modid'], 'BLOCK_modules_under_list');
 
 	// komentaari
 	$template->set_file('FILE_comment_list', 'comment/list.tpl');
