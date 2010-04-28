@@ -28,6 +28,13 @@
 	<a href="/article/593/" title="16. jūnijs, trešdiena, Varšava">SONISPHERE FESTIVAL Varšavā</a>
 </div>
 
+<div class="List-item">
+	<a href="/article/597/" title="5.-7. augusts, Wacken, Vācija">WACKEN OPEN AIR 2010</a>
+</div>
+
+<div class="List-item">
+	<a href="/article/598/" title="12.-14. augusts, Čehija">BRUTAL ASSAULT OPEN AIR 2010</a>
+</div>
 
 <div class="List-sep"></div>
 

@@ -49,7 +49,7 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="{http_root}/jsload/?s[]=swfobject.js&amp;s[]=jquery.js&amp;s[]=jquery-ui.js&amp;s[]=truemetal.js"></script>
+<script type="text/javascript" src="{http_root}/jsload/{script_version}/?s[]=swfobject.js&amp;s[]=jquery.js&amp;s[]=jquery-ui.js&amp;s[]=truemetal.js"></script>
 <script type="text/javascript">
 var User = {
 	disableYoutube: parseInt('{disable_youtube}')

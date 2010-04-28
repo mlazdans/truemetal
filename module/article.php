@@ -224,7 +224,7 @@ if($articles)
 			$item['art_date_f'] = proc_date($item['art_entered']);
 			$item['art_data_display'] = $item['art_intro'].$item['art_data'];
 			$template->enable('BLOCK_art_date_formatted');
-			//$template->enable('BLOCK_art_data');
+			$template->enable('BLOCK_art_data');
 		} else {
 			//$patt = '/<hr\s+id="editor_splitter" \/>.*/ims';
 
@@ -249,7 +249,6 @@ if($articles)
 		*/
 
 		//if($item['module_id'] == 'forum')
-		/*
 		if($item['cm_table'] == 'forum')
 		{
 			$itemF = $item;
@@ -260,10 +259,18 @@ if($articles)
 		} else {
 			$template->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_comments_new');
 		}
-		*/
-		$template->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_comments_new');
+		//$template->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_comments_new');
 
 		$template->set_array($item, 'BLOCK_article');
+
+		# XXX: fix module_id
+		if($item['cm_table'] == 'forum')
+		{
+			$template->set_var('module_id', "forum", 'BLOCK_article');
+		} else {
+			$template->set_var('module_id', $item['module_id'], 'BLOCK_article');
+		}
+
 		//$template->set_var('art_path', $module->get_path($item['art_modid']), 'BLOCK_article');
 		$template->parse_block('BLOCK_article', TMPL_APPEND);
 	}
