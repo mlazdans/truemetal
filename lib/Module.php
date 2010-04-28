@@ -56,11 +56,11 @@ class Module
 		global $db;
 
 		$sql = "INSERT INTO `modules` (".
-			"module_id, mod_modid, module_name,".
+			"module_id, mod_modid, module_name, module_descr,".
 			"module_active, module_pos, module_data, module_entered,".
 			"module_visible, module_type".
 		") VALUES (".
-			"'$data[module_id]', $data[mod_modid], '$data[module_name]',".
+			"'$data[module_id]', $data[mod_modid], '$data[module_name]', '$data[module_descr]',".
 			"'$data[module_active]', $data[module_pos], '$data[module_data]', NOW(),".
 			"'$data[module_visible]', '$data[module_type]'".
 		")";
@@ -89,7 +89,7 @@ class Module
 		$data2 = $this->get_item($data['mod_id']);
 
 		$sql = "UPDATE `modules` SET ".
-			"module_id = '$data[module_id]', module_name = '$data[module_name]',".
+			"module_id = '$data[module_id]', module_name = '$data[module_name]', module_descr = '$data[module_descr]',".
 			"module_active = '$data[module_active]', module_pos = $data[module_pos],".
 			"module_data = '$data[module_data]',".
 			"module_visible = '$data[module_visible]',".
@@ -402,6 +402,7 @@ class Module
 
 		foreach($module as $key => $val)
 			$template->set_var($key, $val);
+
 		if($module['module_name'] == '')
 			$template->set_var('module_name', '-nezināms-');
 

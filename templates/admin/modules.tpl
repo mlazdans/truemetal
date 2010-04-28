@@ -102,6 +102,12 @@
 	</td>
 </tr>
 <tr>
+	<th>Apraksts</th>
+	<td>
+		<input type="text" name="data[module_descr]" value="{module_descr}" size="96" />
+	</td>
+</tr>
+<tr>
 	<th>Aktīvs?</th>
 	<td>
 		<select name="data[module_active]">
