@@ -79,25 +79,6 @@ if($art_id)
 	# Reviews
 		$tc = $article->get_total($_pointer['_data_']['mod_id']);
 		$tp = ceil($tc / $art_per_page);
-		/*
-		$art_align = $art_per_page - ($tc - $tp * $art_per_page);
-
-		if( $page && (($page < 0) || ($page >= $tp)) )
-		{
-			header("Location: $module_root/");
-			return;
-		}
-
-		if($page)
-			$limit = (($tp - $page + 1) * $art_per_page - $art_align).",$art_per_page";
-		else
-			$limit = $art_per_page;
-
-		$articles = $article->load(array(
-			'art_modid'=>$_pointer['_data_']['mod_id'],
-			'limit'=>$limit,
-			));
-		*/
 	}
 
 	$tp = ceil($tc / $art_per_page);
@@ -126,7 +107,6 @@ if($art_id)
 			'limit'=>$limit,
 			));
 	}
-
 } else {
 	$articles = array();
 }

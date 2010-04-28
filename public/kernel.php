@@ -169,8 +169,12 @@ if(file_exists("$sys_root/module/$sys_module.php")) {
 /*
 $tidy_config = array(
 	'wrap'=>false,
+	'hide-comments'=>true,
+	'indent-spaces'=>false,
 	'output-xhtml'=>true,
 	'doctype'=>'strict',
+	'preserve-entities'=>true,
+	'newline'=>' ',
 	);
 $tidy = tidy_parse_string($data, $tidy_config, 'UTF8');
 $tidy->cleanRepair();
