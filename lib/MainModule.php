@@ -10,7 +10,6 @@
 require_once('lib/Module.php');
 require_once('lib/Article.php');
 require_once('lib/Poll.php');
-require_once('lib/Calendar.php');
 require_once('lib/Logins.php');
 require_once('lib/Template.php');
 
@@ -258,12 +257,6 @@ $descr.
 			$this->parse_block('BLOCK_label', TMPL_APPEND);
 		}
 	}
-
-	function set_calendar($y = 0, $m = 0, $d = 0)
-	{
-		$calendar = new Calendar;
-		$calendar->set_calendar($this, $y, $m, $d);
-	} // set_calendar
 
 	function set_poll()
 	{

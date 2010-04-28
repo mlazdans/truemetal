@@ -55,9 +55,11 @@ var User = {
 };
 $(document).ready(function(){
 		Truemetal.initMenu();
-		if(!User.disableYoutube)
-			Truemetal.initYouTube();
 		Truemetal.initUnselectable();
+		if(!User.disableYoutube)
+		{
+			Truemetal.initYouTube();
+		}
 });
 </script>
 </body>

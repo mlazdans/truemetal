@@ -7,31 +7,14 @@
 
 require_once('lib/MainModule.php');
 require_once('lib/Article.php');
-require_once('lib/Calendar.php');
-
-$y = array_shift($sys_parameters);
-$m = array_shift($sys_parameters);
-$d = array_shift($sys_parameters);
-$limit = 50;
-
-$calendar = new Calendar();
-$calendar->parse_date($y, $m, $d);
-
-$date = "$y-$m-$d 23:59:59";
-$date_f = date("d.m.Y", mktime(0,0,0, $m, $d, $y));
 
 $template = new MainModule($sys_template_root, $sys_module_id);
-$template->set_title("Arhīvs".($date_f ? ": $limit notikumi līdz $date_f" : ""));
+$template->set_title("Arhīvs: visi notikumi līdz šim");
 $template->set_file('FILE_archive', 'archive.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_archive');
-$template->set_descr("Metāliskais arhīvs".($date_f ? ": $limit notikumi līdz $date_f" : ""));
+$template->set_descr("Metāliskais arhīvs: visi notikumi līdz šim");
 
-$article = new Article();
-$arts = $article->load(array(
-	'end_date'=>$date,
-	'order'=>'art_entered DESC',
-	'limit'=>$limit,
-	));
+$arts = $db->Execute("SELECT * FROM view_mainpage");
 
 // ja ir kaadi ieraksti shajaa datumaa, paraadam
 // ja nee, tad paraadam attieciigu pazinjojumu
@@ -73,7 +56,6 @@ foreach($arts as $item)
 $template->set_right();
 $template->set_login();
 $template->set_online();
-$template->set_calendar($y, $m, $d);
 
 $template->out();
 
