@@ -43,6 +43,13 @@
 </tr>
 <!--
 <tr>
+	<td class="right nowrap"><label for="forum_showmainpage">Rādīt sākumlapā:</label></td>
+	<td>
+		<input id="forum_showmainpage" type="checkbox" name="data[forum_showmainpage]"{forum_showmainpage_checked}/>
+	</td>
+</tr>
+-->
+<tr>
 	<td class="right nowrap">Rādīt:</td>
 	<td>
 		<select name="data[forum_display]">
@@ -51,13 +58,6 @@
 		</select>
 	</td>
 </tr>
-<tr>
-	<td class="right nowrap"><label for="forum_showmainpage">Rādīt sākumlapā:</label></td>
-	<td>
-		<input id="forum_showmainpage" type="checkbox" name="data[forum_showmainpage]"{forum_showmainpage_checked}/>
-	</td>
-</tr>
--->
 <tr>
 	<td class="right nowrap">Rādīt arī zem</td>
 	<td>

@@ -186,7 +186,6 @@ var Truemetal = {
 	}, // getUrlVars
 	viewProfile: function(login){
 		var dOptions = {
-			modal: true,
 			width: 400,
 			dialogClass: "loading",
 			buttons: {
