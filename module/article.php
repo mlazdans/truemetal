@@ -208,10 +208,10 @@ if($articles)
 				$item['art_data'] = '';
 			}
 		}
-		$template->enable('BLOCK_art_intro');
+
 		if($item['art_data'])
 		{
-			$item['art_data_display'] = $item['art_intro'];
+			//$item['art_data_display'] = $item['art_intro'];
 			$template->enable('BLOCK_art_cont');
 		} else {
 			$template->disable('BLOCK_art_cont');
@@ -222,9 +222,10 @@ if($articles)
 			//$patt = '/(.*)(<hr\s+id="editor_splitter" \/>)(.*)/ims';
 			//$item['art_data'] = preg_replace($patt, '<div style="font-weight: bold;">\1</div><hr/>\3', $item['art_data'], 1);
 			$item['art_date_f'] = proc_date($item['art_entered']);
-			$item['art_data_display'] = $item['art_intro'].$item['art_data'];
+			//$item['art_data_display'] = $item['art_intro'].$item['art_data'];
 			$template->enable('BLOCK_art_date_formatted');
 			$template->enable('BLOCK_art_data');
+			$template->disable('BLOCK_art_intro');
 		} else {
 			//$patt = '/<hr\s+id="editor_splitter" \/>.*/ims';
 

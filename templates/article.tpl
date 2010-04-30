@@ -13,7 +13,7 @@
 		<div class="caption"><a class="caption" href="{http_root}/{module_id}/{art_id}/">{art_name}</a></div>
 	</div>
 
-	<!-- BEGIN BLOCK_art_intro disabled -->
+	<!-- BEGIN BLOCK_art_intro -->
 	<div class="data">
 		{art_intro}
 		<!-- BEGIN BLOCK_art_cont disabled -->
