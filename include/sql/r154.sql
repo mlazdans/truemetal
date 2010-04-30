@@ -1,4 +1,4 @@
-RENAME TABLE `gallery`  TO `gallery_group`;
+RENAME TABLE `gallery`  TO `gallery_old`;
 --
 RENAME TABLE `gallery_group`  TO `gallery_group_old`;
 --
