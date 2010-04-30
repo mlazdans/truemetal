@@ -55,8 +55,9 @@ if($art_id)
 		# NOTE: redirektējam uz jaunajām adresēm, pēc gada (2011-04-30) varēs noņemt
 		if($art_name_url && ($test_urlized != $art_id_urlized))
 		{
-			print "$test_urlized\n$art_id_urlized";
-			//header("Location: $new_url", true, 301);
+			$new_url = "$module_root/$test_urlized";
+			//print "$test_urlized\n$art_id_urlized";
+			header("Location: $new_url", true, 301);
 			return;
 		}
 	}
