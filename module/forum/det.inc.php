@@ -38,7 +38,7 @@ if(($action == 'add_comment') && user_loged())
 	if($c_id = include('module/comment/add.inc.php'))
 	{
 		$db->Commit();
-		header("Location: $sys_http_root/forum/$forum_id/#comment$c_id");
+		header("Location: $sys_http_root/forum/$forum_id-".rawurlencode(urlize($forum_data["forum_name"]))."#comment$c_id");
 		return;
 	}
 }

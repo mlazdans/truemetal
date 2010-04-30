@@ -83,7 +83,7 @@
 
 <!-- BEGIN BLOCK_loggedin disabled -->
 <a name="add_theme"></a>
-<form action="{module_root}/{forum1_id}/#add_theme" method="post">
+<form action="{module_root}{forum1_path}#add_theme" method="post">
 <table class="Forum-Theme-form" cellpadding="2" cellspacing="1">
 <tr>
 	<td align="right">

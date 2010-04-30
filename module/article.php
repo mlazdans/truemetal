@@ -51,15 +51,16 @@ if($art_id)
 	$art_name_urlized = '';
 	if($art = $db->ExecuteSingle("SELECT * FROM `view_mainpage` WHERE `art_id` = $art_id"))
 	{
+		# NOTE: redirektējam uz jaunajām adresēm, pēc gada (2011-04-30) varēs noņemt
 		$art_name_urlized = urlize($art['art_name']);
 		$test_urlized = "$art_id-$art_name_urlized";
-		# NOTE: redirektējam uz jaunajām adresēm, pēc gada (2011-04-30) varēs noņemt
 		if($art_name_urlized && ($test_urlized != $art_id_urlized))
 		{
 			$new_url = "$module_root/$test_urlized";
 			header("Location: $new_url", true, 301);
 			return;
 		}
+		#
 	}
 
 	if($hl)

@@ -56,7 +56,7 @@ if($action == 'add_theme')
 				$_SESSION['user']['username'] = $data['forum_username'];
 				$_SESSION['user']['useremail'] = $data['forum_useremail'];
 				$db->Commit();
-				header("Location: $module_root/$id/");
+				header("Location: $module_root/$id-".rawurlencode(urlize($data['forum_name'])));
 				return;
 			}
 			/*

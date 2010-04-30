@@ -166,7 +166,9 @@ $action = post('action');
 $fpp = 20;
 $page_id = 1;
 $pages_visible_to_sides = 8;
-$forum_id = (int)array_shift($sys_parameters);
+$forum_id_urlized = rawurldecode(array_shift($sys_parameters));
+$forum_id = (int)$forum_id_urlized;
+
 $page = array_shift($sys_parameters);
 
 if($page == 'page')
@@ -202,6 +204,17 @@ if($forum_id)
 		header("Location: $module_root/");
 		return;
 	}
+
+	# NOTE: redirektējam uz jaunajām adresēm, pēc gada (2011-04-30) varēs noņemt
+	$forum_name_urlized = urlize($forum_data['forum_name']);
+	$test_urlized = "$forum_id-$forum_name_urlized";
+	if($forum_name_urlized && ($test_urlized != $forum_id_urlized))
+	{
+		$new_url = "$module_root/$test_urlized";
+		header("Location: $new_url", true, 301);
+		return;
+	}
+	#
 
 	$forum_title .= ' - '.$forum_data['forum_name'].($hl ? sprintf(", meklēšana: %s", $hl) : "");
 	$forum_descr .= ($hl ? sprintf(", meklēšana: %s", $hl) : "").' - '.$forum_data['forum_name'];
