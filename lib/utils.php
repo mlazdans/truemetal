@@ -287,7 +287,7 @@ function set_forum(&$template, $forum_id)
 	{
 		if(isset($tree[$key + 0]))
 		{
-			$forum_path = $item['forum_id'].'/';
+			$forum_path = '/'.$item['forum_id'].'-'.rawurlencode(urlize($item['forum_name']));
 			$template->set_var('forum1_id', $item['forum_id'], 'BLOCK_middle');
 			$template->set_var('forum1_name', addslashes($item['forum_name']), 'BLOCK_middle');
 			$template->set_var('forum1_path', $forum_path, 'BLOCK_middle');

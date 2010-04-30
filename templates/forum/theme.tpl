@@ -3,26 +3,26 @@
 </div>
 
 <div class="Forum-cat">
-	<a href="{module_root}/"><b>Forums</b></a><!-- BEGIN BLOCK_forum_path disabled --> / <a href="{module_root}/{forum1_path}">{forum1_name}</a><!-- END BLOCK_forum_path -->
+	<a href="{module_root}/"><b>Forums</b></a><!-- BEGIN BLOCK_forum_path disabled --> / <a href="{module_root}{forum1_path}">{forum1_name}</a><!-- END BLOCK_forum_path -->
 </div>
 
 <!-- BEGIN BLOCK_is_pages disabled -->
 <div class="Forum-cat" style="margin-bottom: 0;">
 	<!-- BEGIN BLOCK_page_prev -->
 	<div class="Forum-Page-prev">
-		<a href="{module_root}/{current_forum_id}/page/{prev_page_id}/"><img src="{http_root}/img/left.png" alt="Pa kreisi" /></a>
+		<a href="{module_root}/{current_forum_id}-{current_forum_name_urlized}/page/{prev_page_id}/"><img src="{http_root}/img/left.png" alt="Pa kreisi" /></a>
 	</div>
 	<!-- END BLOCK_page_prev -->
 
 	<!-- BEGIN BLOCK_page_next -->
 	<div class="Forum-Page-next">
-		<a href="{module_root}/{current_forum_id}/page/{next_page_id}/"><img src="{http_root}/img/right.png" alt="Pa labi" /></a>
+		<a href="{module_root}/{current_forum_id}-{current_forum_name_urlized}/page/{next_page_id}/"><img src="{http_root}/img/right.png" alt="Pa labi" /></a>
 	</div>
 	<!-- END BLOCK_page_next -->
 	<div class="Forum-Pager">
 	<!-- BEGIN BLOCK_page -->{page_seperator}
 		<!-- BEGIN BLOCK_page_switcher -->
-			<a href="{module_root}/{current_forum_id}/page/{page_id}/"{page_style}>[{p_id}]</a>
+			<a href="{module_root}/{current_forum_id}-{current_forum_name_urlized}/page/{page_id}/"{page_style}>[{p_id}]</a>
 		<!-- END BLOCK_page_switcher -->
 	<!-- END BLOCK_page -->
 	</div>
@@ -39,7 +39,7 @@
 <!-- BEGIN BLOCK_forum -->
 <tr>
 	<td class="Forum-Theme-name">
-		<a href="{module_root}/{forum_id}/" title="Datums: {forum_date}"><b>{forum_name}</b></a>
+		<a href="{module_root}/{forum_id}-{forum_name_urlized}" title="Datums: {forum_date}"><b>{forum_name}</b></a>
 	</td>
 	<td class="Forum-Theme-childcount<!-- BEGIN BLOCK_comments_new disabled --> Comment-new<!-- END BLOCK_comments_new -->">
 		{forum_comment_count}

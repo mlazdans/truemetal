@@ -20,6 +20,9 @@ if($forum_data)
 foreach($forum_data as $item)
 {
 	$template->{(Forum::hasNewThemes($item) ? "enable" : "disable")}('BLOCK_comments_new');
+
+	$item['forum_name_urlized'] = rawurlencode(urlize($item['forum_name']));
+
 	$template->set_array($item, 'BLOCK_forum');
 	$template->set_var('forum_date', proc_date($item['forum_entered']), 'BLOCK_forum');
 	$template->parse_block('BLOCK_forum', TMPL_APPEND);
