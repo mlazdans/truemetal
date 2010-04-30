@@ -172,8 +172,8 @@ if($forum_id)
 	}
 
 	$module->set_modules_all($template, $forum_data['forum_modid'], 'BLOCK_modules_under_list');
-	/*
 	$template->set_var("forum_display_$forum_data[forum_display]_selected", ' selected="selected"', 'BLOCK_forum_edit');
+	/*
 	if($forum_data['forum_showmainpage'])
 		$template->set_var("forum_showmainpage_checked", ' checked="checked"', 'BLOCK_forum_edit');
 	*/

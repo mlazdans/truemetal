@@ -6,7 +6,7 @@ $template = new AdminModule($sys_template_root.'/admin', "logins/list");
 $template->set_title('Admin :: logini :: saraksts');
 
 $params = array(
-	'limit'=>100,
+	'limit'=>200,
 	'get_votes'=>true,
 	'get_comment_count'=>true,
 	'l_active'=>LOGIN_ALL,
@@ -39,6 +39,7 @@ if($action == 'search')
 	if(post('l_notloggedever'))
 	{
 		$params['l_lastaccess'] = '0000-00-00 00:00:00';
+		$params['comment_count_equal'] = 0;
 		$template->set_var('ls_l_notloggedever_checked', 'checked="checked"');
 	} else {
 		$template->set_var('ls_l_notloggedever_checked', '');

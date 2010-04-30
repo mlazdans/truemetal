@@ -33,6 +33,7 @@ class Logins
 		global $db;
 
 		$sql_add = array();
+		$sql_having = array();
 
 		if(isset($params['l_id']))
 			$sql_add[] = sprintf("l_id = %d", $params['l_id']);
@@ -104,6 +105,25 @@ class Logins
 
 		if($sql_add)
 			$sql .= " WHERE ".join(" AND ", $sql_add);
+
+		if(!empty($params['get_comment_count']))
+		{
+			if(isset($params['comment_count_more_than']))
+			{
+				$sql_having[] = sprintf("comment_count > %d", $params['comment_count_more_than']);
+			}
+			if(isset($params['comment_count_equal']))
+			{
+				$sql_having[] = sprintf("comment_count = %d", $params['comment_count_equal']);
+			}
+			if(isset($params['comment_count_less_than']))
+			{
+				$sql_having[] = sprintf("comment_count < %d", $params['comment_count_less_than']);
+			}
+		}
+
+		if($sql_having)
+			$sql .= " HAVING ".join(" AND ", $sql_having);
 
 		$sql .= (empty($params['order']) ? " ORDER BY l_entered DESC " : " ORDER BY $params[order] ");
 
