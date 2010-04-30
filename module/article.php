@@ -301,9 +301,9 @@ $template->set_title($art_title);
 $template->set_right();
 $template->set_login();
 $template->set_online();
+$template->set_recent_comments();
 $template->set_search();
 $template->set_recent_reviews();
-$template->set_recent_comments();
 //$template->set_poll();
 
 if($art_id && $art)

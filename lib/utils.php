@@ -564,7 +564,7 @@ function hl(&$data, $kw)
 	$cc = count($colors);
 	$bc = count($bg);
 
-	$kw = trim(preg_replace("/[\*\(\)\-\+]/", " ", $kw));
+	$kw = trim(preg_replace("/[\*\(\)\-\+\/]/", " ", $kw));
 
 	$words = split(' ', $kw);
 	// duplikaati nafig
@@ -1027,7 +1027,7 @@ if (!function_exists('http_build_url'))
 		$new_url = $parse_url;
 
 		return
-			 ((isset($parse_url['scheme'])) ? $parse_url['scheme'] . '://' : '')
+			((isset($parse_url['scheme'])) ? $parse_url['scheme'] . '://' : '')
 			.((isset($parse_url['user'])) ? $parse_url['user'] . ((isset($parse_url['pass'])) ? ':' . $parse_url['pass'] : '') .'@' : '')
 			.((isset($parse_url['host'])) ? $parse_url['host'] : '')
 			.((isset($parse_url['port'])) ? ':' . $parse_url['port'] : '')
@@ -1041,9 +1041,13 @@ if (!function_exists('http_build_url'))
 
 function urlize($name)
 {
+	$name = html_entity_decode($name, ENT_QUOTES, "UTF-8");
 	$name = mb_strtolower($name);
 	$name = strip_tags($name);
+	$name = preg_replace("/[\:\/\?\#\[\]\@\"'\(\)\.,&;\+=]/", " ", $name);
+	$name = trim($name);
 	$name = preg_replace("/\s+/", "-", $name);
+	$name = preg_replace("/-+/", "-", $name);
 
 	return $name;
 } // urlize
