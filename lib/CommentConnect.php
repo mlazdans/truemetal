@@ -72,6 +72,7 @@ INSERT INTO `comment_connect` (
 		$sql = "
 SELECT
 	comment.*,
+	comment_connect.*,
 	comment_map.cm_old_id
 FROM
 	comment
@@ -83,6 +84,9 @@ LEFT JOIN comment_map ON cm_new_id = c_id
 
 		if($this->table !== false)
 			$sql_add[] = "(cc_table = '$this->table')";
+
+		if(!empty($params['tables_exclude']))
+			$sql_add[] = "cc_table NOT IN ('".join("','", $params['tables_exclude'])."')";
 
 		if(!empty($params['cc_table_id']))
 			$sql_add[] = sprintf("(cc_table_id = %d)", $params['cc_table_id']);

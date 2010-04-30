@@ -147,7 +147,6 @@ if($art_id && isset($articles[0]))
 	if(user_loged())
 		$_SESSION['comments']['viewed'][$art_id] = $articles[0]['art_comment_count'];
 
-	//$CC = new CommentConnect('article');
 	$CC = new CommentConnect($item['cm_table']);
 	$CC->setDb($db);
 	$comments = $CC->get(array(
@@ -303,8 +302,9 @@ $template->set_right();
 $template->set_login();
 $template->set_online();
 $template->set_search();
-$template->set_reviews();
-$template->set_poll();
+$template->set_recent_reviews();
+$template->set_recent_comments();
+//$template->set_poll();
 
 if($art_id && $art)
 {

@@ -59,7 +59,13 @@ INSERT INTO comment (
 		if($sql_add)
 			$sql .= " WHERE ".join(' AND ', $sql_add);
 
-		$sql .= " ORDER BY c_entered ";
+		if(empty($params['sort']))
+			$sql .= " ORDER BY c_entered ";
+		else
+			$sql .= " ORDER BY $params[sort] ";
+
+		if(!empty($params['limit']))
+			$sql .= " LIMIT ".$params['limit'];
 
 		return (empty($params['c_id']) ? $this->db->Execute($sql) : $this->db->Executesingle($sql));
 	} // get

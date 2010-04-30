@@ -343,7 +343,7 @@ $descr.
 		$this->parse_block('BLOCK_right_item', TMPL_APPEND);
 	} // set_online
 
-	function set_reviews($limit = 4)
+	function set_recent_reviews($limit = 4)
 	{
 		global $module_tree;
 
@@ -356,25 +356,51 @@ $descr.
 			'order'=>'art_entered DESC',
 			));
 
-		if(count($data))
+		if(empty($data))
+			return;
+
+		$this->set_file('FILE_r_review', 'right/review_recent.tpl');
+		$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_r_review');
+		foreach($data as $item)
 		{
-			$this->set_file('FILE_r_review', 'right/review_recent.tpl');
-			$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_r_review');
-			foreach($data as $item)
-			{
-				$this->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_review_r_comments_new');
+			$this->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_review_r_comments_new');
 
-				$this->set_var('review_r_name', $item['art_name'], 'BLOCK_review_r_items');
-				$this->set_var('review_r_comment_count', $item['art_comment_count'], 'BLOCK_review_r_items');
-				$this->set_var('review_r_path', "reviews/{$item['art_id']}-".urlize($item['art_name']), 'BLOCK_review_r_items');
-				$this->parse_block('BLOCK_review_r_items', TMPL_APPEND);
-			}
-
-			$this->parse_block('FILE_r_review');
-			$this->set_var('right_item_data', $this->get_parsed_content('FILE_r_review'), 'BLOCK_right_item');
-			$this->parse_block('BLOCK_right_item', TMPL_APPEND);
+			$this->set_var('review_r_name', $item['art_name'], 'BLOCK_review_r_items');
+			$this->set_var('review_r_comment_count', $item['art_comment_count'], 'BLOCK_review_r_items');
+			$this->set_var('review_r_path', "reviews/{$item['art_id']}-".urlize($item['art_name']), 'BLOCK_review_r_items');
+			$this->parse_block('BLOCK_review_r_items', TMPL_APPEND);
 		}
-	} // set_reviews
+
+		$this->parse_block('FILE_r_review');
+		$this->set_var('right_item_data', $this->get_parsed_content('FILE_r_review'), 'BLOCK_right_item');
+		$this->parse_block('BLOCK_right_item', TMPL_APPEND);
+	} // set_recent_reviews
+
+	function set_recent_comments($limit = 10)
+	{
+		$Article = new Article;
+
+		$data = $Article->load(array(
+			'order'=>'cm_comment_lastdate DESC',
+			'limit'=>$limit,
+			));
+
+		$this->set_file('FILE_r_comment', 'right/comment_recent.tpl');
+		$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_r_comment');
+		foreach($data as $item)
+		{
+			$this->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_comment_r_comments_new');
+
+			$this->set_var('comment_r_name', $item['art_name'], 'BLOCK_comment_r_items');
+			$this->set_var('comment_r_comment_count', $item['art_comment_count'], 'BLOCK_comment_r_items');
+			$this->set_var('comment_r_path', "{$item['module_id']}/{$item['art_id']}-".urlize($item['art_name']), 'BLOCK_comment_r_items');
+			$this->parse_block('BLOCK_comment_r_items', TMPL_APPEND);
+		}
+
+		$this->parse_block('FILE_r_comment');
+		$this->set_var('right_item_data', $this->get_parsed_content('FILE_r_comment'), 'BLOCK_right_item');
+		$this->parse_block('BLOCK_right_item', TMPL_APPEND);
+	} // set_recent_comments
 
 	function set_profile($login_data)
 	{
