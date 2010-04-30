@@ -1039,12 +1039,12 @@ if (!function_exists('http_build_url'))
 } // http_build_url
 */
 
-function urllize($name)
+function urlize($name)
 {
 	$name = mb_strtolower($name);
 	$name = strip_tags($name);
 	$name = preg_replace("/\s+/", "-", $name);
 
 	return $name;
-} // urllize
+} // urlize
 

@@ -366,7 +366,7 @@ $descr.
 
 				$this->set_var('review_r_name', $item['art_name'], 'BLOCK_review_r_items');
 				$this->set_var('review_r_comment_count', $item['art_comment_count'], 'BLOCK_review_r_items');
-				$this->set_var('review_r_path', "article/".$item['art_id'], 'BLOCK_review_r_items');
+				$this->set_var('review_r_path', "reviews/{$item['art_id']}-".urlize($item['art_name']), 'BLOCK_review_r_items');
 				$this->parse_block('BLOCK_review_r_items', TMPL_APPEND);
 			}
 

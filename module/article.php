@@ -48,15 +48,15 @@ if($art_id)
 		));
 	*/
 
+	$art_name_urlized = '';
 	if($art = $db->ExecuteSingle("SELECT * FROM `view_mainpage` WHERE `art_id` = $art_id"))
 	{
-		$art_name_url = urllize($art['art_name']);
-		$test_urlized = "$art_id-$art_name_url";
+		$art_name_urlized = urlize($art['art_name']);
+		$test_urlized = "$art_id-$art_name_urlized";
 		# NOTE: redirektējam uz jaunajām adresēm, pēc gada (2011-04-30) varēs noņemt
-		if($art_name_url && ($test_urlized != $art_id_urlized))
+		if($art_name_urlized && ($test_urlized != $art_id_urlized))
 		{
 			$new_url = "$module_root/$test_urlized";
-			//print "$test_urlized\n$art_id_urlized";
 			header("Location: $new_url", true, 301);
 			return;
 		}
@@ -81,7 +81,7 @@ if($art_id)
 		{
 			$db->Commit();
 			$np = join('/', array_keys($path));
-			header("Location: $sys_http_root/$np/$art_id/#comment$ac_id");
+			header("Location: $sys_http_root/$np/$art_id-$art_name_urlized#comment$ac_id");
 			return;
 		}
 	}
@@ -274,7 +274,7 @@ if($articles)
 		}
 		//$template->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_comments_new');
 
-		$item['art_name_url'] = rawurlencode(urllize($item['art_name']));
+		$item['art_name_urlized'] = rawurlencode(urlize($item['art_name']));
 		$template->set_array($item, 'BLOCK_article');
 
 		# XXX: fix module_id
