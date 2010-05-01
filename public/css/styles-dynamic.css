@@ -364,10 +364,12 @@ table.Comments {
 	width: 17.0em;
 	position:relative;
 	float: right;
+	text-align: center;
+	background-color: #330000;
 }
 #header .menu {
 	width: 58.0em;
-	position:relative;
+	position: relative;
 	float: left;
 }
 
