@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>[ TRUE METAL {title} ]</title>
+<title>[ TRUEMETAL {title} ]</title>
 <meta http-equiv="Content-Language" content="lv" />
 <meta name="verify-v1" content="1T6p5COcolqsK65q0I6uXdMjPuPskp2jyWjFMTOW/LY=" />
 <meta name="author" content="Mārtiņš Lazdāns (dqdp.net)" />
 <meta name="description" content="{meta_descr}" />
-<link rel="stylesheet" type="text/css" href="{http_root}/css/styles.css?{script_version}" />
+<link rel="stylesheet" type="text/css" href="{http_root}/css/styles-dynamic.css?{script_version}" />
 <link rel="stylesheet" type="text/css" href="{http_root}/css/article.css?{script_version}" />
 <link rel="stylesheet" type="text/css" href="{http_root}/css/jquery-ui/truemetal/jquery-ui.css?{script_version}" />
 </head>
@@ -15,7 +15,7 @@
 <body>
 
 <div id="header">
-	<div class="logo"><a href="{http_root}/"><img src="{http_root}/img/logo5.gif" width="580" height="80" alt="TRUE METAL" /></a></div>
+	<div class="logo"><a href="/" class="logo-inside"></a></div>
 	<div class="banner">
 		<!-- BEGIN BLOCK_banner_top -->
 		<a href="{banner_href}"><img src="{http_root}/img/{banner_img}" width="170" height="113" alt="{banner_alt}" /></a>
