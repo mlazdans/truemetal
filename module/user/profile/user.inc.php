@@ -21,9 +21,22 @@ $template->set_var('error_l_email', '', 'FILE_profile');
 if(!user_loged())
 {
 	//header($_SERVER["SERVER_PROTOCOL"]." 403 Forbidden");
-	header($_SERVER["SERVER_PROTOCOL"]." 410 Removed from public eyes");
 	$template->enable('BLOCK_not_loged');
+	ob_start();
 	$template->out();
+	$html = ob_get_clean();
+
+	if($json)
+	{
+		$jsonData = new StdClass;
+		$jsonData->title = "[ TRUE METAL ".$template->get_title()." ]";
+		$jsonData->html = $html;
+		header('Content-Type: text/javascript; charset='.$sys_encoding);
+		print json_encode($jsonData);
+	} else {
+		header($_SERVER["SERVER_PROTOCOL"]." 410 Removed from public eyes");
+		print $html;
+	}
 	return;
 }
 

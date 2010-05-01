@@ -12,10 +12,13 @@ $template = new MainModule($sys_template_root, 'atteli', 'user/viewimage.tpl');
 
 if(!user_loged())
 {
+	header($_SERVER["SERVER_PROTOCOL"]." 403 Forbidden");
 	$template->enable('BLOCK_not_loged');
 	$template->out();
 	return;
 }
+
+$template->enable("BLOCK_userpic");
 
 if(
 	$login_data &&
