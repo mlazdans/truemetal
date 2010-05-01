@@ -159,9 +159,12 @@ input[type=button]:active {
 }
 
 #header {
+	position: relative;
 	width: 75.2em;
+	height: 11.1em;
 	margin: 0 auto;
-	border-bottom: 0.1em solid #000;
+	padding: 0;
+	/*border-bottom: 0.1em solid #000;*/
 }
 
 
@@ -319,10 +322,10 @@ table.Comments {
 .col1,
 .col2,
 .col3 {
-	float:left;
-	position:relative;
-	padding:0 0 0 0;
-	overflow:hidden;
+	float: left;
+	position: relative;
+	padding: 0 0 0 0;
+	overflow: hidden;
 }
 /* 2 Column (right menu) settings */
 .rightmenu {
@@ -362,13 +365,17 @@ table.Comments {
 }
 #header .banner {
 	width: 17.0em;
-	position:relative;
-	float: right;
+	height: 11em;
+	position: absolute;
+	right: 0.1em;
 	text-align: center;
+	vertical-align: middle;
 	background-color: #330000;
 }
 #header .menu {
 	width: 58.0em;
+	height: 3em;
+	margin-top: 0.1em;
 	position: relative;
 	float: left;
 }

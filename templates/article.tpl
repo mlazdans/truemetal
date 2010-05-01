@@ -1,7 +1,8 @@
+<!-- BEGIN BLOCK_article_page_top disabled -->
 <div style="margin-bottom: 2px;">
 {article_page_top}
 </div>
-
+<!-- END BLOCK_article_page_top -->
 <!-- BEGIN BLOCK_article disabled -->
 <div class="Article-item">
 	<div class="TD-cat">

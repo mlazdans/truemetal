@@ -16,25 +16,17 @@
 
 <div id="header">
 	<div class="logo"><a href="/" class="logo-inside"></a></div>
-	<div class="banner">
-		<!-- BEGIN BLOCK_banner_top -->
-		<a href="{banner_href}"><img src="{http_root}/img/{banner_img}" width="170" height="113" alt="{banner_alt}" /></a>
-		<!-- END BLOCK_banner_top -->
-	</div>
 	<div class="menu">
-		<table cellpadding="5" cellspacing="1">
+		<table cellpadding="5" cellspacing="0">
 		<tr>
 			<td><a href="{http_root}/"><img src="{http_root}/img/buttons/article{menu_active_article}.gif?{script_version}" alt="JAUNUMI" /></a></td>
 			<td><a href="{http_root}/forum/"><img src="{http_root}/img/buttons/forum{menu_active_forum}.gif?{script_version}" alt="FORUMS" /></a></td>
-			<!--
-			<td><a href="{http_root}/gallery/"><img src="{http_root}/img/buttons/gallery.gif" alt="GALERIJA" /></a></td>
-			<td><a href="{http_root}/video/"><img src="{http_root}/img/buttons/video.gif" alt="VIDEO" /></a></td>
-			-->
 			<td><a href="{http_root}/reviews/"><img src="{http_root}/img/buttons/reviews{menu_active_reviews}.gif?{script_version}" alt="ALBUMU RECENZIJAS" /></a></td>
 			<td><a href="{http_root}/interviews/"><img src="{http_root}/img/buttons/interviews{menu_active_interviews}.gif?{script_version}" alt="INTERVIJAS" /></a></td>
 		</tr>
 		</table>
 	</div>
+	<div class="banner"><!-- BEGIN BLOCK_banner_top --><a href="{banner_href}"><img src="{http_root}/img/{banner_img}" width="170" height="113" alt="{banner_alt}" /></a><!-- END BLOCK_banner_top --></div>
 </div>
 
 <div class="colmask rightmenu">
