@@ -224,7 +224,7 @@ var Truemetal = {
 				},
 				load: function(){
 					if(nick)
-						$(dialog).dialog("option", "title", "[ TRUE METAL " + nick + " bilde ]");
+						$(dialog).dialog("option", "title", "[ TRUEMETAL " + nick + " bilde ]");
 					$(dialog).dialog("option", "dialogClass", "");
 				}
 		}).appendTo(dialog);

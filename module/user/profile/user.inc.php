@@ -29,7 +29,7 @@ if(!user_loged())
 	if($json)
 	{
 		$jsonData = new StdClass;
-		$jsonData->title = "[ TRUE METAL ".$template->get_title()." ]";
+		$jsonData->title = "[ TRUEMETAL ".$template->get_title()." ]";
 		$jsonData->html = $html;
 		header('Content-Type: text/javascript; charset='.$sys_encoding);
 		print json_encode($jsonData);
@@ -106,7 +106,7 @@ if($json)
 
 	$jsonData = new StdClass;
 	//$jsonData->l_nick = $login_data['l_nick'];
-	$jsonData->title = "[ TRUE METAL ".$template->get_title()." ]";
+	$jsonData->title = "[ TRUEMETAL ".$template->get_title()." ]";
 	$jsonData->html = $html;
 	header('Content-Type: text/javascript; charset='.$sys_encoding);
 	print json_encode($jsonData);

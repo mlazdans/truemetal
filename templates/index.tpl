@@ -7,9 +7,7 @@
 <meta name="verify-v1" content="1T6p5COcolqsK65q0I6uXdMjPuPskp2jyWjFMTOW/LY=" />
 <meta name="author" content="Mārtiņš Lazdāns (dqdp.net)" />
 <meta name="description" content="{meta_descr}" />
-<link rel="stylesheet" type="text/css" href="{http_root}/css/styles-dynamic.css?{script_version}" />
-<link rel="stylesheet" type="text/css" href="{http_root}/css/article.css?{script_version}" />
-<link rel="stylesheet" type="text/css" href="{http_root}/css/jquery-ui/truemetal/jquery-ui.css?{script_version}" />
+<link href="{http_root}/css/?s[]=styles-dynamic.css&amp;s[]=article.css&amp;s[]=jquery-ui.css&amp;v={script_version}" rel="stylesheet" type="text/css" />
 </head>
 
 <body>

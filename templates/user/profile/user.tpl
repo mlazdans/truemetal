@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>[ TRUE METAL {title} ]</title>
+<title>[ TRUEMETAL {title} ]</title>
 <meta http-equiv="Content-Language" content="lv" />
 <meta name="verify-v1" content="1T6p5COcolqsK65q0I6uXdMjPuPskp2jyWjFMTOW/LY=" />
 <meta name="author" content="Mārtiņš Lazdāns (dqdp.net)" />
