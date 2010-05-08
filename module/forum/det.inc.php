@@ -30,7 +30,7 @@ if($forum_data)
 if(user_loged())
 	$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_comment_count'];
 
-if(($action == 'add_comment') && user_loged())
+if(($forum_data['forum_closed'] == FORUM_OPEN) && ($action == 'add_comment') && user_loged())
 {
 	$table = 'forum';
 	$table_id = $forum_id;
@@ -76,6 +76,12 @@ if(($forum_data['forum_display'] == Forum::DISPLAY_DATA) && !empty($comments[0])
 }
 
 include("module/comment/list.inc.php");
+
+if($forum_data['forum_closed'] == FORUM_CLOSED)
+{
+	$template->disable('BLOCK_addcomment');
+	$template->enable('BLOCK_forum_closed');
+}
 
 set_forum($template, $forum_id);
 

@@ -30,3 +30,8 @@
 <!-- END BLOCK_info_sort_D -->
 
 <!-- BEGIN BLOCK_forum_comments --><!-- END BLOCK_forum_comments -->
+<!-- BEGIN BLOCK_forum_closed disabled -->
+<div class="Info">
+	Tēma slēgta
+</div>
+<!-- END BLOCK_forum_closed -->

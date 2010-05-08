@@ -36,6 +36,15 @@
 	</td>
 </tr>
 <tr>
+	<td class="right nowrap">Slēgts?:</td>
+	<td>
+		<select name="data[forum_closed]">
+			<option value="N"{forum_open_sel}>Nē</option>
+			<option value="Y"{forum_closed_sel}>Jā</option>
+		</select>
+	</td>
+</tr>
+<tr>
 	<td class="right nowrap">Ievadīts:</td>
 	<td>
 		<input type="text" name="data[forum_entered]" value="{forum_entered}" />
@@ -138,7 +147,7 @@ Nav nevienas tēmas
 <table class="Main">
 <tr>
 	<td class="TD-cat"><input type="checkbox" name="forum_check_all" onclick="Truemetal.checkAll(this);" /></td>
-	<td colspan="2" class="TD-cat">Tēmas</td>
+	<td colspan="3" class="TD-cat">Tēmas</td>
 </tr>
 <!-- BEGIN BLOCK_forum_theme_item -->
 <tr>
@@ -150,13 +159,17 @@ Nav nevienas tēmas
 		{forum_padding}<a href="{module_root}/{forum_id}/">{forum_name}</a>
 	</td>
 	<td class="{forum_color_class}">
-		<!-- BEGIN BLOCK_forum_active disabled -->aktīvs<!-- END BLOCK_forum_active -->
+		<!-- BEGIN BLOCK_forum_active disabled --><!-- END BLOCK_forum_active -->
 		<!-- BEGIN BLOCK_forum_inactive disabled -->neaktīvs<!-- END BLOCK_forum_inactive -->
+	</td>
+	<td class="{forum_color_class}">
+		<!-- BEGIN BLOCK_forum_closed disabled -->slēgts<!-- END BLOCK_forum_closed -->
+		<!-- BEGIN BLOCK_forum_open disabled --><!-- END BLOCK_forum_open -->
 	</td>
 </tr>
 <!-- END BLOCK_forum_theme_item -->
 <tr>
-	<td colspan="3">
+	<td colspan="4">
 		<input type="hidden" name="item_count" value="{item_count}" />
 		Iezīmētos:
 		<select name="action">
@@ -164,6 +177,8 @@ Nav nevienas tēmas
 			<option value="delete_multiple">Dzēst</option>
 			<option value="activate_multiple">Aktivizēt</option>
 			<option value="deactivate_multiple">Deaktivizēt</option>
+			<option value="close_multiple">Slēgt</option>
+			<option value="open_multiple">Atvērt</option>
 		</select>
 		<input type="submit" value="  OK  " />
 	</td>

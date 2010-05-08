@@ -19,6 +19,8 @@ define('FORUM_SORT_THEME', 'T');
 define('FORUM_SORT_LAST_COMMENT', 'C');
 define('FORUM_SORT_DESC', 'D');
 define('FORUM_SORT_ASC', 'A');
+define('FORUM_CLOSED', 'Y');
+define('FORUM_OPEN', 'N');
 
 class Forum
 {
@@ -246,12 +248,12 @@ INSERT INTO forum (
 	forum_name, forum_username, forum_userid,
 	forum_userlogin, forum_useremail, forum_userip, forum_entered,
 	forum_forumid, forum_data, forum_datacompiled,
-	forum_allowchilds, forum_active
+	forum_allowchilds, forum_active, forum_closed
 ) VALUES (
 	'$data[forum_name]', '$data[forum_username]', $data[forum_userid],
 	'$data[forum_userlogin]', '$data[forum_useremail]', '$ip', ".$db->now().",
 	$forum_id, '$data[forum_data]', '$data[forum_datacompiled]',
-	'$data[forum_allowchilds]', '$data[forum_active]'
+	'$data[forum_allowchilds]', '$data[forum_active]', '$data[forum_closed]'
 )";
 
 		return ($db->Execute($sql) ? $db->LastID() : false);
@@ -277,6 +279,7 @@ INSERT INTO forum (
 		$sql .= "forum_display = $data[forum_display], ";
 
 		$sql .= "forum_active = '$data[forum_active]', ";
+		$sql .= "forum_closed = '$data[forum_closed]', ";
 		$sql = substr($sql, 0, -2);
 		$sql .= 'WHERE forum_id = '.$data['forum_id'];
 
@@ -319,6 +322,26 @@ INSERT INTO forum (
 
 		return $ret && $db->Execute($sql);
 	} // del
+
+	function open($forum_id)
+	{
+		global $db;
+
+		$forum_id = (int)$forum_id;
+		$sql = 'UPDATE forum SET forum_closed = "'.FORUM_OPEN.'" WHERE forum_id = '.$forum_id;
+
+		return $db->Execute($sql);
+	} // open
+
+	function close($forum_id)
+	{
+		global $db;
+
+		$forum_id = (int)$forum_id;
+		$sql = 'UPDATE forum SET forum_closed = "'.FORUM_CLOSED.'" WHERE forum_id = '.$forum_id;
+
+		return $db->Execute($sql);
+	} // close
 
 	function activate($forum_id)
 	{
@@ -368,6 +391,12 @@ INSERT INTO forum (
 		if($action == 'move_multiple')
 			$func = 'move';
 
+		if($action == 'close_multiple')
+			$func = 'close';
+
+		if($action == 'open_multiple')
+			$func = 'open';
+
 		if(isset($data['item_count']) && $func)
 			for($r = 1; $r <= $data['item_count']; ++$r)
 				// ja iechekots, proceseejam
@@ -392,6 +421,11 @@ INSERT INTO forum (
 			$data['forum_active'] = ereg('[^YN]', $data['forum_active']) ? FORUM_ACTIVE : $data['forum_active'];
 		else
 			$data['forum_active'] = FORUM_ACTIVE;
+
+		if(isset($data['forum_closed']))
+			$data['forum_closed'] = ereg('[^YN]', $data['forum_closed']) ? FORUM_OPEN : $data['forum_closed'];
+		else
+			$data['forum_closed'] = FORUM_OPEN;
 
 		if(isset($data['forum_allowchilds']))
 			$data['forum_allowchilds'] = ereg('[^YN]', $data['forum_allowchilds']) ? FORUM_PROHIBITCHILDS : $data['forum_allowchilds'];

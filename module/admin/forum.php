@@ -25,12 +25,20 @@ function set_themes(&$template, &$data, $d = 0, $c = 0) {
 		// ja aktiivs vai nee - kaukaa iekraaso to
 		$template->disable('BLOCK_forum_active');
 		$template->disable('BLOCK_forum_inactive');
+		$template->disable('BLOCK_forum_closed');
+		$template->disable('BLOCK_forum_open');
 		if($item['forum_active'] == FORUM_ACTIVE) {
 			$template->enable('BLOCK_forum_active');
 			$template->set_var('forum_color_class', 'box-normal', 'BLOCK_forum_theme_item');
 		} else {
 			$template->enable('BLOCK_forum_inactive');
 			$template->set_var('forum_color_class', 'box-inactive', 'BLOCK_forum_theme_item');
+		}
+
+		if($item['forum_closed'] == FORUM_CLOSED) {
+			$template->enable('BLOCK_forum_closed');
+		} else {
+			$template->enable('BLOCK_forum_open');
 		}
 
 		$template->set_var('forum_padding', str_repeat('&nbsp;', 3 * $d));
@@ -67,7 +75,7 @@ if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
 	return;
 }
 
-if(in_array($action, array('delete_multiple', 'activate_multiple', 'deactivate_multiple', 'move_multiple')))
+if(in_array($action, array('delete_multiple', 'activate_multiple', 'deactivate_multiple', 'move_multiple', 'close_multiple', 'open_multiple')))
 {
 	if($forum->process_action($_POST, $action, FORUM_VALIDATE))
 	{
@@ -162,6 +170,13 @@ if($forum_id)
 		$template->set_var('forum_active_sel', ' selected="selected"', 'BLOCK_forum_edit');
 	} else {
 		$template->set_var('forum_inactive_sel', ' selected="selected"', 'BLOCK_forum_edit');
+	}
+
+	if($forum_data['forum_closed'] == FORUM_CLOSED)
+	{
+		$template->set_var('forum_closed_sel', ' selected="selected"', 'BLOCK_forum_edit');
+	} else {
+		$template->set_var('forum_open_sel', ' selected="selected"', 'BLOCK_forum_edit');
 	}
 
 	if($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS)
