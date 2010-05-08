@@ -210,7 +210,8 @@ if($forum_id)
 	$test_urlized = "$forum_id-$forum_name_urlized";
 	if($forum_name_urlized && ($test_urlized != $forum_id_urlized))
 	{
-		$new_url = "$module_root/$test_urlized";
+		$qs = (empty($_SERVER['QUERY_STRING']) ? "" : "?".$_SERVER['QUERY_STRING']);
+		$new_url = "$module_root/$test_urlized$qs";
 		header("Location: $new_url", true, 301);
 		return;
 	}

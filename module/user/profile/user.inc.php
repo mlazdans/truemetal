@@ -93,7 +93,11 @@ if($login_data)
 	}
 	$template->set_profile($login_data);
 } else {
-	header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+	if(!$json)
+	{
+		header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+	}
+
 	$template->set_title("$login - neeksistējošs profils");
 	$template->enable('BLOCK_no_such_login');
 }

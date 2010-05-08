@@ -1,14 +1,6 @@
 <div class="TD-cat">Aktuāli</div>
 
 <div class="List-item actual">
-	<a href="/forum/122316/" title="30. aprīlis, piektdiena, klubs &quot;Melnā Piektdiena&quot;">BULLDOZER WHOREGRIND</a>
-</div>
-
-<div class="List-item actual">
-	<a href="/forum/122342/" title="1. maijs, sestdiena, klubs &quot;Melnā Piektdiena&quot;">BLACK MAGIC TOUR II: Oculus Infame</a>
-</div>
-
-<div class="List-item">
 	<a href="/forum/122332/" title="8. maijs, sestdiena, klubs &quot;Sapņu Fabrika&quot;">SKYFORGER albuma &quot;KURBADS&quot; prezentācija</a>
 </div>
 

@@ -56,7 +56,8 @@ if($art_id)
 		$test_urlized = "$art_id-$art_name_urlized";
 		if($art_name_urlized && ($test_urlized != $art_id_urlized))
 		{
-			$new_url = "$module_root/$test_urlized";
+			$qs = (empty($_SERVER['QUERY_STRING']) ? "" : "?".$_SERVER['QUERY_STRING']);
+			$new_url = "$module_root/$test_urlized$qs";
 			header("Location: $new_url", true, 301);
 			return;
 		}
