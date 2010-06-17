@@ -133,9 +133,11 @@ class Template extends TemplateBlock
 			}
 			*/
 
-			$str_content = '';
-			if($file_exists)
-				$str_content = @implode('', @file($file_path));
+			if($file_exists) {
+				$str_content = file_get_contents($file_path);
+			} else {
+				$str_content = '';
+			}
 
 			$this->blocks[$ID] = new TemplateBlock($ID, $str_content, $this->undefined);
 			$this->blocks[$ID]->block_parent = &$this;

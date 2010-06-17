@@ -161,7 +161,7 @@ class TemplateBlock
 	/* ----------------------------------------------------------- */
 	function __get_parsed_content()
 	{
-		return implode('', $this->parsed_content);
+		return join('', $this->parsed_content);
 	} // __get_parsed_content
 
 	function find_var($k, $d = 0)
@@ -197,6 +197,7 @@ class TemplateBlock
 			$this->block_vars = $m[1];
 		}
 
+		$vars_cache = array();
 		$patt = array();
 		$repl = array();
 		$slash = chr(92).chr(92);
@@ -206,7 +207,10 @@ class TemplateBlock
 			//$repl[] = $this->find_var($k);
 			$p = array("/([$slash])+/", "/([\$])+/");
 			$r = array("\\\\$1", "\\\\$1");
-			$repl[] = preg_replace($p, $r, $this->find_var($k));
+			if(!isset($vars_cache[$k]))
+				$vars_cache[$k] = $this->find_var($k);
+
+			$repl[] = preg_replace($p, $r, $vars_cache[$k]);
 		}
 		/*
 		if(count($this->block_vars) < count($this->vars))
@@ -393,9 +397,7 @@ class TemplateBlock
 	function reset_block($bln_parent_only)
 	{
 		if(empty($this->blocks)) {
-			//$this->blocks = array();
 			$this->parsed_content = array();
-			//$this->vars = array();
 		} else {
 			$this->parsed_content = array();
 			foreach($this->blocks as $block_id => $object)
