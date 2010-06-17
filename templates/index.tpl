@@ -24,7 +24,7 @@
 		</tr>
 		</table>
 	</div>
-	<div class="banner"><!-- BEGIN BLOCK_banner_top --><a href="{banner_href}"><img src="{http_root}/img/{banner_img}" width="170" height="113" alt="{banner_alt}" /></a><!-- END BLOCK_banner_top --></div>
+	<div class="banner"><!-- BEGIN BLOCK_banner_top --><a href="{banner_href}"><img src="{http_root}/img/{banner_img}" width="{banner_width}" height="{banner_height}" alt="{banner_alt}" /></a><!-- END BLOCK_banner_top --></div>
 </div>
 
 <div class="colmask rightmenu">

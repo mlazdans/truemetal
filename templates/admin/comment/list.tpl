@@ -19,8 +19,8 @@
 	<th class="{c_color_class}">
 		<input type="checkbox" name="c_id[]" value="{c_id}" />
 	</th>
-	<th class="{c_color_class} nowrap">{c_username} ({c_userlogin})</th>
-	<th class="{c_color_class}">{c_userip}</th>
+	<th class="{c_color_class} nowrap"><a href="/admin/logins/{c_userid}/">{c_username} ({c_userlogin})</a></th>
+	<th class="{c_color_class}"><a href="/admin/reports/?report=ip&ips={c_userip}">{c_userip}</a></th>
 	<th class="{c_color_class} nowrap">{c_entered}</th>
 	<th class="{c_color_class}">
 		<!-- BEGIN BLOCK_c_visible disabled -->aktīvs<!-- END BLOCK_c_visible -->
@@ -30,6 +30,7 @@
 <tr>
 	<td></td>
 	<td class="{c_color_class}" colspan="4">
+		<div><a href="{c_origin_href}">{c_origin_name}</a></div>
 		{c_datacompiled}
 	</td>
 </tr>

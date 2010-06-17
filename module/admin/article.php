@@ -122,7 +122,9 @@ if(!$art_id)
 	else
 		$template->set_var('art_active_n', ' selected="selected"');
 
-	parse_form_data_array($art);
+	//parse_form_data_array($art);
+	$art['art_intro'] = parse_form_data($art['art_intro']);
+	$art['art_data'] = parse_form_data($art['art_data']);
 	$template->set_array($art);
 
 	$module->set_modules_all($template, $art['art_modid'], 'BLOCK_modules_under_list');

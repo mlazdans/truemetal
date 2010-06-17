@@ -1041,6 +1041,7 @@ if (!function_exists('http_build_url'))
 
 function urlize($name)
 {
+	$name = preg_replace("/[%]/", " ", $name);
 	$name = html_entity_decode($name, ENT_QUOTES, "UTF-8");
 	$name = mb_strtolower($name);
 	$name = strip_tags($name);

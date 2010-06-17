@@ -425,6 +425,16 @@ $descr.
 		$this->set_var('banner_img', $banner['img']);
 		$this->set_var('banner_alt', $banner['alt']);
 		$this->set_var('banner_href', $banner['href']);
+
+		if(isset($banner['width']))
+			$this->set_var('banner_width', $banner['width']);
+		else
+			$this->set_var('banner_width', 170);
+
+		if(isset($banner['height']))
+			$this->set_var('banner_height', $banner['height']);
+		else
+			$this->set_var('banner_height', 113);
 	} // set_banner_top
 
 } // MainModule

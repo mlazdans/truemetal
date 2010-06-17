@@ -40,6 +40,7 @@ $template->copy_block('BLOCK_middle', 'FILE_article');
 //$article = new Article();
 
 $tc = 0;
+$tp = 0;
 if($art_id)
 {
 	/*

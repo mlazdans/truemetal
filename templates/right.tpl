@@ -1,35 +1,39 @@
 <div class="TD-cat">Aktuāli</div>
 
 <div class="List-item actual">
-	<a href="/forum/122332/" title="8. maijs, sestdiena, klubs &quot;Sapņu Fabrika&quot;">SKYFORGER albuma &quot;KURBADS&quot; prezentācija</a>
+	<a href="/forum/122481-heaven-grey-albuma-falling-mist-prezentācija" title="18. jūnijs, piektdiena, klubs &quot;Melnā Piektdiena&quot;">HEAVEN GREY</a>
 </div>
 
 <div class="List-item">
-	<a href="/article/595/" title="18. augusts, trešdiena, klubs &quot;Melnā Piektdiena&quot;">CANNIBAL CORPSE</a>
+	<a href="/forum/122226-metalshow-o-a-2010-hell-in-the-city-informācija" title="2. -4. jūlijs, piektdiena - svētdiena, klubs &quot;Melnā Piektdiena&quot;">METALSHOW OPEN AIR 2010</a>
+</div>
+
+<div class="List-item">
+	<a href="/article/595-cannibal-corpse" title="18. augusts, trešdiena, klubs &quot;Melnā Piektdiena&quot;">CANNIBAL CORPSE</a>
 </div>
 
 <div class="List-sep"></div>
 
 <div class="TD-cat">Braucieni</div>
 
-<div class="List-item">
-	<a href="/forum/122209/" title="11. maijs, otrdiena, Varšava">BOLT THROWER Varšavā</a>
+<div class="List-item actual">
+	<a href="/article/593-brauciens-sonisphere-festival-polijā" title="16. jūnijs, trešdiena, Varšava">SONISPHERE FESTIVAL</a>
 </div>
 
 <div class="List-item">
-	<a href="/article/594/" title="27. maijs, ceturdiena, Varšava">AC/DC Varšavā</a>
+	<a href="/article/601-devilstone-open-air-2010" title="16. - 18. jūlijs, piektdiena-svētdiena, Anyksciai, Lietuva">DEVILSTONE OPEN AIR 2010</a>
 </div>
 
 <div class="List-item">
-	<a href="/article/593/" title="16. jūnijs, trešdiena, Varšava">SONISPHERE FESTIVAL Varšavā</a>
+	<a href="/article/602-brauciens-megadeth-igaunijā" title="16. jūlijs, piektdiena, Haapsalu, Igaunija">MEGADETH</a>
 </div>
 
 <div class="List-item">
-	<a href="/article/597/" title="5.-7. augusts, Wacken, Vācija">WACKEN OPEN AIR 2010</a>
+	<a href="/article/597-brauciens-wacken-open-air-2010" title="5.-7. augusts, Wacken, Vācija">WACKEN OPEN AIR 2010</a>
 </div>
 
 <div class="List-item">
-	<a href="/article/598/" title="12.-14. augusts, Čehija">BRUTAL ASSAULT OPEN AIR 2010</a>
+	<a href="/article/598-brauciens-brutal-assault-open-air-2010" title="12.-14. augusts, Čehija">BRUTAL ASSAULT OPEN AIR 2010</a>
 </div>
 
 <div class="List-sep"></div>

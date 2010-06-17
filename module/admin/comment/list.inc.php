@@ -16,7 +16,10 @@ if($comments)
 
 foreach($comments as $item)
 {
+	$item['c_origin_href'] = "/$item[cc_table]/$item[cc_table_id]/";
+	$item['c_origin_name'] = "/$item[cc_table]/$item[cc_table_id]/";
 	$template->set_array($item, 'BLOCK_comment_item');
+
 	if($item['c_visible'] == COMMENT_VISIBLE)
 	{
 		$template->enable('BLOCK_c_visible');
