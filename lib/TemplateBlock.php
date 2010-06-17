@@ -22,8 +22,11 @@ class TemplateBlock
 	var $block_vars = null;
 
 	var $content = '';
-	var $parsed_content = array();
+	var $parsed_content = '';
+	var $last_parsed_content = '';
+	var $parsed_count = 0;
 
+	var $slash;
 	var $undefined = 'remove';
 	var $attributes = array(
 		'disabled' => false
@@ -38,15 +41,17 @@ class TemplateBlock
 	/* -----------------------------------------------------------
 	/* konstruktors - uzstaada visko vajadziigu
 	/* ----------------------------------------------------------- */
-	function TemplateBlock($ID, $str_content, $str_undefined = 'remove')
+	function __construct($ID, $str_content, $str_undefined = 'remove')
 	{
 		$this->ID = $ID;
+		$this->slash = chr(92).chr(92);
 		$this->set_undefined($str_undefined);
 		$this->content = $str_content;
 		//$this->blocks = $this->__find_blocks();
 		$this->__find_blocks();
+
 		return true;
-	} // TemplateBlock
+	} // __construct
 
 	/* ----------------------------------------------------------- */
 	/* TemplateBlock
@@ -61,8 +66,6 @@ class TemplateBlock
 	/* ----------------------------------------------------------- */
 	function __find_blocks()
 	{
-		//$patt = '/<!--\s+BEGIN\s+([a-zA-Z0-9_]*)\s+-->(.*)<!--\s+END\s+\1\s+-->/sm';
-		//$patt = '/<!--\s+BEGIN\s+([a-zA-Z0-9_]*)\s+([^<]*)-->(.*)<!--\s+END\s+\1\s+-->/sm';
 		$patt = '/<!--\s+BEGIN\s+(.*)\s+(.*)-->(.*)<!--\s+END\s+\1\s+-->/smU';
 		preg_match_all($patt, $this->content, $m);
 
@@ -74,7 +77,7 @@ class TemplateBlock
 			{
 				$id = $m[1][$c];
 				$this->blocks[$id] = new TemplateBlock($id, $m[3][$c], $this->undefined);
-				$this->blocks[$id]->block_parent = &$this;
+				$this->blocks[$id]->block_parent = $this;
 
 				$arr_attributes = split(' ', strtolower($m[2][$c]));
 				$this->blocks[$id]->attributes['disabled'] = in_array('disabled', $arr_attributes);
@@ -111,6 +114,49 @@ class TemplateBlock
 	/* __parse_vars()
 	/* ----------------------------------------------------------- */
 	function parse($bln_append = false)
+	{
+		/* ja bloks sleegts */
+		if($this->attributes['disabled'])
+			return;
+
+		/* reset childs */
+		if($bln_append) {
+			foreach($this->blocks as $block_id => $object) {
+				$object->reset();
+			}
+		}
+
+		/* ja jau noparseets */
+		if($this->parsed_count && !$bln_append) {
+			return $this->__get_parsed_content();
+		}
+
+		/* ja jauna parseeshana */
+		$parsed_content = $this->__parse_vars();
+
+		/* ja blokaa veel ir bloki */
+		foreach($this->blocks as $block_id => $object) {
+			$block_content = $object->parse();
+			$patt = '/<!--\s+BEGIN\s+' . $block_id . '\s+[^<]*-->.*<!--\s+END\s+' . $block_id . '\s+-->/smi';
+			preg_match_all($patt, $parsed_content, $m);
+			foreach($m[0] as $mm) {
+				$parsed_content = str_replace($mm, $block_content, $parsed_content);
+			}
+		}
+
+		if($bln_append) {
+			$this->parsed_content .= $parsed_content;
+		} else {
+			$this->parsed_content = $parsed_content;
+		}
+
+		$this->parsed_count++;
+		$this->last_parsed_content = $parsed_content;
+
+		return $this->__get_parsed_content();
+	} // parse
+
+	function parse_old($bln_append = false)
 	{
 		/* noskaidrojam, cik reizu bloks noparseets */
 		$current_parsed_content = count($this->parsed_content);
@@ -151,7 +197,7 @@ class TemplateBlock
 		//}
 
 		return $this->__get_parsed_content();
-	} // parse
+	} // parse_old
 
 	/* ----------------------------------------------------------- */
 	/* TemplateBlock
@@ -161,22 +207,17 @@ class TemplateBlock
 	/* ----------------------------------------------------------- */
 	function __get_parsed_content()
 	{
-		return join('', $this->parsed_content);
+		return $this->parsed_content;
+		//return join('', $this->parsed_content);
 	} // __get_parsed_content
 
 	function find_var($k, $d = 0)
 	{
-		/*
-		if($k == 'forum1_name')
-		{
-			print str_repeat("&nbsp;", 3 * $d)."$this->ID<br>";
-		}
-		*/
-
-		if(isset($this->vars[$k]))
+		if(isset($this->vars[$k])) {
 			return $this->vars[$k];
-		else if($this->block_parent)
+		} else if($this->block_parent) {
 			return $this->block_parent->find_var($k, $d + 1);
+		}
 
 		return '';
 	} // find_var
@@ -190,6 +231,9 @@ class TemplateBlock
 	function __parse_vars()
 	{
 		$content = $this->content;
+		$patt = array();
+		$repl = array();
+		$vars_cache = array();
 
 		if($this->block_vars === null)
 		{
@@ -197,21 +241,28 @@ class TemplateBlock
 			$this->block_vars = $m[1];
 		}
 
-		$vars_cache = array();
-		$patt = array();
-		$repl = array();
-		$slash = chr(92).chr(92);
+		/*
+		foreach($this->block_vars as $k)
+		{
+			if(!isset($vars_cache[$k]))
+				$vars_cache[$k] = $this->find_var($k);
+
+			$patt[] = '/{'.$k.'}/';
+			$repl[] = $vars_cache[$k];
+		}
+		*/
+
 		foreach($this->block_vars as $k)
 		{
 			$patt[] = '/{'.$k.'}/';
-			//$repl[] = $this->find_var($k);
-			$p = array("/([$slash])+/", "/([\$])+/");
+			$p = array("/([$this->slash])+/", "/([\$])+/");
 			$r = array("\\\\$1", "\\\\$1");
 			if(!isset($vars_cache[$k]))
 				$vars_cache[$k] = $this->find_var($k);
 
 			$repl[] = preg_replace($p, $r, $vars_cache[$k]);
 		}
+
 		/*
 		if(count($this->block_vars) < count($this->vars))
 		{
@@ -390,24 +441,30 @@ class TemplateBlock
 
 	/* ----------------------------------------------------------- */
 	/* TemplateBlock
-	/*	reset_block (boolean parent_only)
+	/*	reset (boolean parent_only)
 	/* -----------------------------------------------------------
 	/* uzstaadam visus mainiigos uz neko :)
 	/* ----------------------------------------------------------- */
-	function reset_block($bln_parent_only)
+	function reset($bln_parent_only = false)
 	{
 		if(empty($this->blocks)) {
-			$this->parsed_content = array();
+			//$this->parsed_content = array();
+			$this->parsed_content = '';
+			$this->last_parsed_content = '';
+			$this->parsed_count = 0;
 		} else {
-			$this->parsed_content = array();
+			//$this->parsed_content = array();
+			$this->parsed_content = '';
+			$this->last_parsed_content = '';
+			$this->parsed_count = 0;
 			foreach($this->blocks as $block_id => $object)
 			{
-				$object->reset_block($bln_parent_only);
+				$object->reset($bln_parent_only);
 			}
 		}
 
 		return true;
-	} // reset_block
+	} // reset
 
 	/* ----------------------------------------------------------- */
 	/* TemplateBlock

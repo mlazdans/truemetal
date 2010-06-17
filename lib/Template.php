@@ -313,7 +313,7 @@ class Template extends TemplateBlock
 	function reset_block($ID, $bln_parent_only = false)
 	{
 		if($block =& $this->get_block($ID)) {
-			return $block->reset_block($bln_parent_only);
+			return $block->reset($bln_parent_only);
 		} else {
 			$this->halt('reset_block: block ['.$ID.'] not found!');
 			return false;
