@@ -9,7 +9,7 @@ CREATE OR REPLACE VIEW view_mainpage AS
 	a.art_data,
 	a.art_entered,
 	a.art_comments,
-	cm_table
+	'article' AS cm_table
 FROM
 	`article` a
 JOIN `modules` m ON (a.art_modid = m.mod_id)
@@ -29,7 +29,7 @@ UNION
 	forum_data as art_data,
 	forum_entered,
 	'Y' AS art_comments,
-	cm_table
+	'forum' AS cm_table
 FROM
 	forum
 LEFT JOIN comment_meta ON (cm_table = 'forum') AND (cm_table_id = forum_id)
