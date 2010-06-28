@@ -96,7 +96,7 @@ LEFT JOIN comment_map ON cm_new_id = c_id
 			if($params['c_visible'])
 				$sql_add[] = sprintf("c_visible = '%s'", $params['c_visible']);
 		} else {
-			$sql_add[] = sprintf("c_visible = '%s'", COMMENT_VISIBLE);
+			$sql_add[] = sprintf("c_visible = '%s'", Comment::VISIBLE);
 		}
 
 		# IPS
@@ -110,8 +110,8 @@ LEFT JOIN comment_map ON cm_new_id = c_id
 			}
 		}
 
-		if(!empty($params['c_userid']))
-			$sql_add[] = sprintf("(c_userid = %d)", $params['c_userid']);
+		if(!empty($params['login_id']))
+			$sql_add[] = sprintf("(login_id = %d)", $params['login_id']);
 
 		if($sql_add)
 			$sql .= " WHERE ".join(' AND ', $sql_add);

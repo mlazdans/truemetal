@@ -146,7 +146,7 @@ if($forum_id)
 		$CC->setDb($db);
 		$comments = $CC->get(array(
 			'cc_table_id'=>$forum_id,
-			'c_visible'=>COMMENT_ALL,
+			'c_visible'=>Comment::ALL,
 			));
 
 		include("module/admin/comment/list.inc.php");

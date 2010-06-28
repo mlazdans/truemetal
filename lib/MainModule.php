@@ -381,7 +381,7 @@ $descr.
 		$Article = new Article;
 
 		$data = $Article->load(array(
-			'order'=>'cm_comment_lastdate DESC',
+			'order'=>'art_comment_lastdate DESC',
 			'limit'=>$limit,
 			));
 

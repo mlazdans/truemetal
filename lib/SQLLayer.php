@@ -263,6 +263,24 @@ class SQLLayer
 		}
 	} // numRows
 
+	function Close()
+	{
+		switch( $this->int_db_type ) {
+			case DB_MYSQL:
+				return false;
+				break;
+			case DB_PGSQL:
+				return false;
+				break;
+			case DB_MYSQLI:
+				return mysqli_close($this->conn);
+				break;
+			default:
+				return false;
+				break;
+		}
+	} // Close
+
 
 	/* Sleedzamies klaat mysql */
 	protected function __connect_mysql($str_db_host = '', $str_db_user = '', $str_db_password = '', $str_db_name = '')

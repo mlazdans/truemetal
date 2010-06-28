@@ -7,6 +7,8 @@
 
 //
 
+require_once('lib/ResComment.php');
+
 $template->set_file('FILE_forum', 'forum/det.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_forum');
 
@@ -32,33 +34,30 @@ if(user_loged())
 
 if(($forum_data['forum_closed'] == FORUM_OPEN) && ($action == 'add_comment') && user_loged())
 {
-	$table = 'forum';
-	$table_id = $forum_id;
+	//$table = 'forum';
+	//$table_id = $forum_id;
+	$res_id = $forum_data['res_id'];
 	$data = post('data');
+	$resDb = $db;
 	if($c_id = include('module/comment/add.inc.php'))
 	{
-		$db->Commit();
+		$resDb->Commit();
 		header("Location: $sys_http_root/forum/$forum_id-".rawurlencode(urlize($forum_data["forum_name"]))."#comment$c_id");
 		return;
 	}
 }
 
-require_once('lib/CommentConnect.php');
-
-$CC = new CommentConnect('forum');
-$CC->setDb($db);
-
 $params = array(
-	'cc_table_id' => $forum_id,
+	'res_id'=>$forum_data['res_id'],
 	);
-
-$params['sort'] =
+$params['order'] =
 	isset($_SESSION['login']['l_forumsort_msg']) &&
 	($_SESSION['login']['l_forumsort_msg'] == FORUM_SORT_DESC)
 	? "c_entered DESC"
 	: "c_entered";
 
-$comments = $CC->get($params);
+$RC = new ResComment();
+$comments = $RC->Get($params);
 
 # XXX : hack, vajag rādīt pa taisno foruma ierakstu
 if(($forum_data['forum_display'] == Forum::DISPLAY_DATA) && !empty($comments[0]))

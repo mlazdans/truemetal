@@ -7,7 +7,7 @@
 
 //
 
-require_once('lib/CommentConnect.php');
+require_once('lib/ResComment.php');
 
 if(empty($data['c_data']))
 {
@@ -15,6 +15,9 @@ if(empty($data['c_data']))
 	$template->set_var('error_msg', 'Nekorekti aizpildīta forma!', 'BLOCK_comment_error');
 	return;
 }
+
+# Safe
+$template->set_var('c_data', parse_form_data($data['c_data']), 'BLOCK_addcomment');
 
 # Nočeko vai iepostēts tikai links
 $c_data = $data['c_data'];
@@ -32,13 +35,12 @@ if(empty($c_data))
 	$template->enable('BLOCK_comment_error');
 	$template->set_var('error_msg', 'Pārāk pliks tas komentārs - links bez teksta!', 'BLOCK_comment_error');
 
-	$template->set_var('c_data', $data['c_data'], 'BLOCK_addcomment');
 	return;
 }
 #
 
 $cData = array(
-	'c_userid'=>$_SESSION['login']['l_id'],
+	'login_id'=>$_SESSION['login']['l_id'],
 	'c_userlogin'=>$_SESSION['login']['l_login'],
 	'c_username'=>$_SESSION['login']['l_nick'],
 	'c_useremail'=>$_SESSION['login']['l_email'],
@@ -46,8 +48,8 @@ $cData = array(
 	'c_userip'=>$ip,
 	);
 
-$CommentConnect = new CommentConnect($table);
-$CommentConnect->setDb($db);
+$ResComment = new ResComment();
+$ResComment->setDb($resDb);
 
-return $CommentConnect->add($table_id, $cData);
+return $ResComment->add($res_id, $cData);
 

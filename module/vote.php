@@ -7,11 +7,13 @@
 
 // ----------------------------------------------------------------------------
 
-# TODO: pārlikt uz class
-require_once('lib/CommentConnect.php');
+require_once('lib/Table.php');
+require_once('lib/Res.php');
+
+# TODO: pārlikt visu šo zem lib
 
 $value = array_shift($sys_parameters);
-$c_id = (int)array_shift($sys_parameters);
+$res_id = (int)array_shift($sys_parameters);
 $json = array_shift($sys_parameters) == 'json';
 $retJson = new StdClass;
 
@@ -27,22 +29,21 @@ if(!user_loged())
 	return;
 }
 
-$user_id = $_SESSION['login']['l_id'];
+$login_id = $_SESSION['login']['l_id'];
 
-$Comment = new Comment;
-$Comment->setDb($db);
-$comment_data = $Comment->get(array(
-	'c_id' => $c_id,
+$Res = new Res();
+$Res->setDb($db);
+$res_data = $Res->Get(array(
+	'res_id'=>$res_id,
 	));
 
-if($comment_data)
-	$cv_user_id = $comment_data['c_userid'];
+$cv_login_id = $res_data['login_id'];
 
-if(!$comment_data || ($cv_user_id == $user_id))
+if(!$res_data || ($cv_login_id == $login_id))
 {
 	if($json)
 	{
-		if($cv_user_id == $user_id)
+		if($cv_login_id == $login_id)
 			$retJson->msg = ($value == 'up' ? ":)" : ">:)");
 		else
 			$retJson->msg = "Comment not found";
@@ -61,8 +62,8 @@ if(!$comment_data || ($cv_user_id == $user_id))
 # Check count
 $date = date('Y-m-d H:i:s', time() - 24 * 3600); // 24h
 $check_sql = sprintf(
-	"SELECT COUNT(*) cv_count FROM comment_votes WHERE cv_userid = %d AND cv_entered >= '%s'",
-	$user_id,
+	"SELECT COUNT(*) cv_count FROM `res_vote` WHERE login_id = %d AND rv_entered >= '%s'",
+	$login_id,
 	$date
 );
 $countCheck = $db->ExecuteSingle($check_sql);
@@ -85,13 +86,12 @@ if($countCheck['cv_count'] >= 24)
 
 # Insert
 $insert_sql = sprintf(
-	"INSERT IGNORE INTO comment_votes (cv_c_id, cv_userid, cv_value, cv_userip, cv_entered) VALUES (%d, %d, %d, '%s', NOW())",
-	$c_id,
-	$user_id,
+	"INSERT IGNORE INTO res_vote (res_id, login_id, rv_value, rv_userip, rv_entered) VALUES (%d, %d, %d, '%s', NOW())",
+	$res_id,
+	$login_id,
 	$value == 'up' ? 1 : -1,
 	$ip
 );
-
 
 if($db->Execute($insert_sql))
 {
@@ -99,11 +99,11 @@ if($db->Execute($insert_sql))
 
 if($json)
 {
-	if($new_comment_data = $Comment->get(array(
-		'c_id' => $c_id,
+	if($new_data = $Res->Get(array(
+		'res_id'=>$res_id,
 		)))
 	{
-		$retJson->Votes = $new_comment_data['c_votes'];
+		$retJson->Votes = $new_data['res_votes'];
 	} else {
 		$retJson->msg = "Comment not found";
 	}
@@ -117,4 +117,5 @@ if($json)
 		header("Location: $_SERVER[HTTP_REFERER]");
 	}
 }
+
 

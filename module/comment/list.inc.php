@@ -30,6 +30,7 @@ if($comments)
 
 foreach($comments as $item)
 {
+	$item['c_votes'] = (int)$item['c_votes'];
 	# balsošana
 	if(user_loged() && $template->block_isset('BLOCK_comment_vote'))
 	{
@@ -59,7 +60,7 @@ foreach($comments as $item)
 	}
 
 	$item['c_username'] = parse_form_data($item['c_username']);
-	if(empty($disabled_users[$item['c_userid']]))
+	if(empty($disabled_users[$item['login_id']]))
 	{
 		$template->set_var('c_disabled_user_class', '');
 	} else {
@@ -79,10 +80,10 @@ foreach($comments as $item)
 
 	if($item['c_userlogin'])
 		$template->set_var('user_login_id', $item['c_userlogin']);
-	elseif($item['c_userid'])
-		$template->set_var('user_login_id', $item['c_userid']);
+	elseif($item['login_id'])
+		$template->set_var('user_login_id', $item['login_id']);
 
-	if(user_loged() && ($item['c_userlogin'] || $item['c_userid']))
+	if(user_loged() && ($item['c_userlogin'] || $item['login_id']))
 		$template->enable('BLOCK_profile_link');
 	else
 		$template->disable('BLOCK_profile_link');

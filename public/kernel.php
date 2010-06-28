@@ -76,7 +76,7 @@ if(isset($sys_banned[$ip]))
 
 //apd_set_pprof_trace();
 /* some includes */
-require_once('include/dbconnect.php');
+require('include/dbconnect.php');
 require_once('include/session_handler.php');
 require_once('lib/utils.php');
 require_once('lib/MainModule.php');

@@ -19,7 +19,8 @@ define('ARTICLE_NOCOMMENTS', 'N');
 define('ARTICLE_TYPE_OPEN', 'O');
 define('ARTICLE_TYPE_REGISTRATED', 'R');
 
-class Article {
+class Article
+{
 	var $date_format;
 	var $limit;
 	var $error_msg;
@@ -64,12 +65,12 @@ SELECT
 	a.*,
 	DATE_FORMAT(a.art_entered, '$this->date_format') art_date,
 	m.*,
-	COALESCE(cm_comment_count, 0) AS art_comment_count,
-	cm_comment_lastdate AS art_comment_lastdate
+	COALESCE(res_comment_count, 0) AS art_comment_count,
+	res_comment_lastdate AS art_comment_lastdate
 FROM
 	`article` a
 JOIN `modules` m ON (a.art_modid = m.mod_id)
-LEFT JOIN `comment_meta` ON (cm_table = 'article') AND (cm_table_id = a.art_id)
+JOIN `res` r ON r.`res_id` = a.`res_id`
 ";
 
 		if($sql_add)
@@ -94,15 +95,17 @@ LEFT JOIN `comment_meta` ON (cm_table = 'article') AND (cm_table_id = a.art_id)
 		if($data['art_entered'])
 			$date = "'$data[art_entered]'";
 
+		$login_id = (int)(isset($_SESSION['login']['l_id']) ? $_SESSION['login']['l_id'] : 0);
+
 		$sql = "
 INSERT INTO article (
 	art_name, art_username, art_useremail, art_userip, art_entered,
 	art_modid, art_data, art_intro, art_active,
-	art_comments, art_type
+	art_comments, art_type, login_id
 ) VALUES (
 	'$data[art_name]', '$data[art_username]', '$data[art_useremail]', '$ip', ".$date.",
 	$data[art_modid], '$data[art_data]', '$data[art_intro]', '$data[art_active]',
-	'$data[art_comments]', '$data[art_type]'
+	'$data[art_comments]', '$data[art_type]', $login_id
 )";
 
 		return ($db->Execute($sql) ? $db->LastID() : false);

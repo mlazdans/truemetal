@@ -87,18 +87,18 @@ class Logins
 
 		if(!empty($params['get_votes']))
 		{
-			$sql .= ", (SELECT SUM(c_votes) FROM comment WHERE c_userid = l_id AND c_votes > 0) votes_plus ";
-			$sql .= ", (SELECT SUM(c_votes) FROM comment WHERE c_userid = l_id AND c_votes < 0) votes_minus ";
+			$sql .= ", (SELECT SUM(c_votes) FROM comment WHERE login_id = l_id AND c_votes > 0) votes_plus ";
+			$sql .= ", (SELECT SUM(c_votes) FROM comment WHERE login_id = l_id AND c_votes < 0) votes_minus ";
 		}
 
 		if(!empty($params['get_comment_count']))
 		{
-			$sql .= ", (SELECT COUNT(*) FROM comment WHERE c_userid = l_id) comment_count ";
+			$sql .= ", (SELECT COUNT(*) FROM comment WHERE login_id = l_id) comment_count ";
 		}
 
 		if(!empty($params['get_all_ips']))
 		{
-			$sql .= ", (SELECT GROUP_CONCAT(DISTINCT c_userip) FROM comment WHERE c_userid = l_id) all_ips ";
+			$sql .= ", (SELECT GROUP_CONCAT(DISTINCT c_userip) FROM comment WHERE login_id = l_id) all_ips ";
 		}
 
 		$sql .= " FROM logins ";
@@ -845,7 +845,7 @@ class Logins
 
 		$sql_add = '';
 		if($exclude_l_ids)
-			$sql_add .= " AND c.c_userid NOT IN (".join(",", $exclude_l_ids).")";
+			$sql_add .= " AND c.login_id NOT IN (".join(",", $exclude_l_ids).")";
 
 		if($exclude_ips)
 			$sql_add .= " AND c.c_userip NOT IN ('".join("','", $exclude_ips)."')";
@@ -862,7 +862,7 @@ SELECT
 	COUNT(*) comment_count
 FROM
 	`comment` c
-JOIN logins l ON l.l_id = c.c_userid
+JOIN logins l ON l.l_id = c.login_id
 WHERE
 	c.c_userip IN ('$ips_sql')
 	$sql_add

@@ -1053,3 +1053,8 @@ function urlize($name)
 	return $name;
 } // urlize
 
+function gettime()
+{
+	return microtime(true);
+} // gettime
+

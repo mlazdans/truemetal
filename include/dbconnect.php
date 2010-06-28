@@ -10,9 +10,16 @@
 require_once('lib/SQLLayer.php');
 
 /* sleedzamies pie datubaazes */
-if($sys_database_type)
+if(!empty($GLOBALS['sys_database_type']))
 {
-	$db = new SQLLayer($sys_database_type);
-	$db->connect($sys_db_host, $sys_db_user, $sys_db_password, $sys_db_name, $sys_db_port);
+	$db = new SQLLayer($GLOBALS['sys_database_type']);
+	$db->connect(
+		$GLOBALS['sys_db_host'],
+		$GLOBALS['sys_db_user'],
+		$GLOBALS['sys_db_password'],
+		$GLOBALS['sys_db_name'], $GLOBALS['sys_db_port']
+		);
+} else {
+	$db = null;
 }
 

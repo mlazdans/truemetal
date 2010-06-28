@@ -5,43 +5,53 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-define('COMMENT_VISIBLE', 'Y');
-define('COMMENT_INVISIBLE', 'N');
-define('COMMENT_ALL', false);
+require_once("lib/Table.php");
+require_once("lib/Res.php");
 
-class Comment
+class Comment extends Res
 {
-	var $db = null;
+	const VISIBLE = 'Y';
+	const INVISIBLE = 'N';
+	const ALL = false;
+
+	protected $table_id = Table::COMMENT;
 
 	function __construct() {
+		parent::__construct();
 	} // __construct
 
-	function setDb($db) {
-		$this->db = $db;
-	} // setDb
-
-	function add($data)
+	function Add($data)
 	{
+		if(!($res_id = parent::Add())) {
+			return false;
+		}
+
 		$this->validate($data);
 
 		$sql = "
 INSERT INTO comment (
-	c_userid, c_userlogin, c_username,
+	res_id, login_id, c_userlogin, c_username,
 	c_useremail, c_data, c_datacompiled,
 	c_visible, c_userip, c_entered
 ) VALUES (
-	$data[c_userid], '$data[c_userlogin]', '$data[c_username]',
+	$res_id, $data[login_id], '$data[c_userlogin]', '$data[c_username]',
 	'$data[c_useremail]', '$data[c_data]', '$data[c_datacompiled]',
 	'$data[c_visible]', '$data[c_userip]', ".$this->db->now()."
 )
 ";
 
 		return $this->db->Execute($sql);
-	} // add
+	} // Add
 
-	function get(Array $params = array())
+	function Get(Array $params = array())
 	{
-		$sql = "SELECT * FROM comment";
+		$sql = "
+SELECT
+	comment.*,
+	r.res_votes AS c_votes
+FROM comment
+JOIN res r ON r.res_id = comment.res_id
+";
 
 		$sql_add = array();
 
@@ -53,7 +63,7 @@ INSERT INTO comment (
 			if($params['c_visible'])
 				$sql_add[] = sprintf("c_visible = '%s'", $params['c_visible']);
 		} else {
-			$sql_add[] = sprintf("c_visible = '%s'", COMMENT_VISIBLE);
+			$sql_add[] = sprintf("c_visible = '%s'", Comment::VISIBLE);
 		}
 
 		if($sql_add)
@@ -68,38 +78,38 @@ INSERT INTO comment (
 			$sql .= " LIMIT ".$params['limit'];
 
 		return (empty($params['c_id']) ? $this->db->Execute($sql) : $this->db->Executesingle($sql));
-	} // get
+	} // Get
 
-	function delete($id)
+	function Delete($id)
 	{
 		$sql = sprintf("DELETE FROM `comment` WHERE c_id = %d", $id);
 
 		return $this->db->Execute($sql);
-	} // delete
+	} // Delete
 
-	function show($id)
+	function Show($id)
 	{
 		$sql = sprintf(
 			"UPDATE `comment` SET c_visible = '%s' WHERE c_id = %d",
-			COMMENT_VISIBLE,
+			Comment::VISIBLE,
 			$id
 			);
 
 		return $this->db->Execute($sql);
-	} // show
+	} // Show
 
-	function hide($id)
+	function Hide($id)
 	{
 		$sql = sprintf(
 			"UPDATE `comment` SET c_visible = '%s' WHERE c_id = %d",
-			COMMENT_INVISIBLE,
+			Comment::INVISIBLE,
 			$id
 			);
 
 		return $this->db->Execute($sql);
-	} // hide
+	} // Hide
 
-	function validate(&$data)
+	function Validate(&$data)
 	{
 		if(!isset($data['c_username']))
 			$data['c_username'] = '';
@@ -116,9 +126,9 @@ INSERT INTO comment (
 		if(isset($data['c_visible']))
 			$data['c_visible'] = ereg('[^YN]', $data['c_visible']) ? '' : $data['c_visible'];
 		else
-			$data['c_visible'] = COMMENT_VISIBLE;
+			$data['c_visible'] = Comment::VISIBLE;
 
-	} // validate
+	} // Validate
 
 } // class::Comment
 

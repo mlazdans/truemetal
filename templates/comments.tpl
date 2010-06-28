@@ -25,10 +25,10 @@
 		<!-- END BLOCK_profile_link -->
 		<!-- BEGIN BLOCK_comment_vote disabled -->
 			<div class="vote unselectable">
-				<a href="{http_root}/vote/down/{c_id}/" title="Dauns..." onclick="Truemetal.Vote('{c_id}', 'down', '#comment{c_id} .vote-value'); return false;">[&ndash;]</a>
+				<a href="{http_root}/vote/down/{res_id}/" title="Dauns..." onclick="Truemetal.Vote('{res_id}', 'down', '#comment{c_id} .vote-value'); return false;">[&ndash;]</a>
 			</div>
 			<div class="vote unselectable">
-				<a href="{http_root}/vote/up/{c_id}/" title="Ōjā!" onclick="Truemetal.Vote('{c_id}', 'up', '#comment{c_id} .vote-value'); return false;">[+]</a>
+				<a href="{http_root}/vote/up/{res_id}/" title="Ōjā!" onclick="Truemetal.Vote('{res_id}', 'up', '#comment{c_id} .vote-value'); return false;">[+]</a>
 			</div>
 			<div class="vote {comment_vote_class} vote-value unselectable">
 				{c_votes}
@@ -81,7 +81,9 @@
 	<td colspan="2" valign="top">Ziņa:</td>
 </tr>
 <tr>
-	<td colspan="2" style="padding-left: 16px; padding-right: 16px;"><textarea name="data[c_data]" cols="50" rows="15" style="width: 100%;">{c_data}</textarea></td>
+	<td colspan="2" style="padding-left: 16px; padding-right: 16px;">
+		<textarea name="data[c_data]" cols="50" rows="15" style="width: 100%;">{c_data}</textarea>
+	</td>
 </tr>
 <tr>
 	<td colspan="2" style="padding-left: 16px; padding-right: 16px;">

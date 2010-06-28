@@ -26,7 +26,7 @@ $CC = new CommentConnect();
 $CC->setDb($db);
 $comments = $CC->get(array(
 	'ips'=>$ips,
-	'c_visible'=>COMMENT_ALL,
+	'c_visible'=>Comment::ALL,
 	'sort'=>'c_entered DESC',
 	'limit'=>100,
 	));

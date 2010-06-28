@@ -47,8 +47,8 @@ $template->copy_block('BLOCK_login_comments', 'FILE_comment_list');
 $CC = new CommentConnect();
 $CC->setDb($db);
 $comments = $CC->get(array(
-	'c_userid'=>$l_id,
-	'c_visible'=>COMMENT_ALL,
+	'login_id'=>$l_id,
+	'c_visible'=>Comment::ALL,
 	'sort'=>'c_entered DESC',
 	'limit'=>500,
 	));

@@ -19,7 +19,7 @@
 	<th class="{c_color_class}">
 		<input type="checkbox" name="c_id[]" value="{c_id}" />
 	</th>
-	<th class="{c_color_class} nowrap"><a href="/admin/logins/{c_userid}/">{c_username} ({c_userlogin})</a></th>
+	<th class="{c_color_class} nowrap"><a href="/admin/logins/{login_id}/">{c_username} ({c_userlogin})</a></th>
 	<th class="{c_color_class}"><a href="/admin/reports/?report=ip&ips={c_userip}">{c_userip}</a></th>
 	<th class="{c_color_class} nowrap">{c_entered}</th>
 	<th class="{c_color_class}">

@@ -76,13 +76,14 @@ class Forum
 		$sql = "
 SELECT
 	f.*,
-	COALESCE(cm_comment_count, 0) AS forum_comment_count,
-	cm_comment_lastdate AS forum_lastcommentdate,
+	COALESCE(res_comment_count, 0) AS forum_comment_count,
+	res_comment_lastdate AS forum_lastcommentdate,
 	(SELECT COUNT(*) FROM forum f2 WHERE f2.forum_forumid = f.forum_id) forum_themecount,
 	(SELECT MAX(forum_entered) FROM forum f3 WHERE f3.forum_forumid = f.forum_id) forum_lastthemedate
 FROM
 	forum f
-LEFT JOIN comment_meta ON (cm_table = 'forum') AND (cm_table_id = f.forum_id)";
+JOIN `res` r ON r.`res_id` = f.`res_id`
+";
 
 		if($sql_add)
 			$sql .= " WHERE ".join(" AND ", $sql_add);

@@ -10,7 +10,7 @@
 require_once('lib/MainModule.php');
 require_once('lib/Article.php');
 require_once('lib/Module.php');
-require_once('lib/CommentConnect.php');
+require_once('lib/ResComment.php');
 
 $art_per_page = 10;
 
@@ -72,23 +72,8 @@ if($art_id)
 	}
 
 	$articles = ($art ? array($art) : array());
-	$item = $art;
 
-	if(($action == 'add_comment') && ($item['art_comments'] == ARTICLE_COMMENTS) && user_loged())
-	{
-		//$table = 'article';
-		$table = $item['cm_table'];
-		$table_id = $art_id;
-		$data = post('data');
-		if($ac_id = include('module/comment/add.inc.php'))
-		{
-			$db->Commit();
-			$np = join('/', array_keys($path));
-			header("Location: $sys_http_root/$np/$art_id-$art_name_urlized#comment$ac_id");
-			return;
-		}
-	}
-	$art_title .= (isset($item['art_name']) ? " - ".$item['art_name'] : "");
+	$art_title .= (isset($art['art_name']) ? " - ".$art['art_name'] : "");
 } elseif($_pointer['_data_']['mod_id']) {
 	$cc = $db->ExecuteSingle("SELECT COUNT(*) AS cc FROM `view_mainpage` WHERE `module_id` = '$sys_module_id'");
 	$tc = (int)$cc['cc'];
@@ -146,13 +131,28 @@ if($art_id && isset($articles[0]))
 	$template->copy_block('BLOCK_article_comments', 'FILE_article_comments');
 	$template->enable('BLOCK_article_comments_head');
 
+	# Add
+	if(($action == 'add_comment') && ($art['art_comments'] == ARTICLE_COMMENTS) && user_loged())
+	{
+		$res_id = $art['res_id'];
+		$data = post('data');
+		$resDb = $db;
+		if($ac_id = include('module/comment/add.inc.php'))
+		{
+			$resDb->Commit();
+			$np = join('/', array_keys($path));
+			header("Location: $sys_http_root/$np/$art_id-$art_name_urlized#comment$ac_id");
+			return;
+		}
+	}
+	#
+
 	if(user_loged())
 		$_SESSION['comments']['viewed'][$art_id] = $articles[0]['art_comment_count'];
 
-	$CC = new CommentConnect($item['cm_table']);
-	$CC->setDb($db);
-	$comments = $CC->get(array(
-		'cc_table_id'=>$art_id,
+	$RC = new ResComment();
+	$comments = $RC->Get(array(
+		'res_id'=>$art['res_id'],
 		));
 
 	include("comment/list.inc.php");
@@ -208,7 +208,7 @@ if($articles)
 		$item['art_date'] = date('d.m.Y', strtotime($item['art_entered']));
 
 		# Nočeko datus/intro
-		if($item['cm_table'] == 'forum')
+		if($item['table_id'] == Table::FORUM)
 		{
 			$data_parts = preg_split("/<hr(\s+)?\/?>/", $item['art_data']);
 
@@ -264,7 +264,7 @@ if($articles)
 		*/
 
 		//if($item['module_id'] == 'forum')
-		if($item['cm_table'] == 'forum')
+		if($item['table_id'] == Table::FORUM)
 		{
 			$itemF = $item;
 			$itemF['forum_id'] = $item['art_id'];
@@ -280,7 +280,7 @@ if($articles)
 		$template->set_array($item, 'BLOCK_article');
 
 		# XXX: fix module_id
-		if($item['cm_table'] == 'forum')
+		if($item['table_id'] == Table::FORUM)
 		{
 			$template->set_var('module_id', "forum", 'BLOCK_article');
 		} else {
