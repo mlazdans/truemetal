@@ -1,4 +1,9 @@
 <?php
+// dqdp.net Web Engine v3.0
+//
+// contacts:
+// http://dqdp.net/
+// marrtins@dqdp.net
 
 # Comment actions
 if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
@@ -10,7 +15,7 @@ if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
 	return;
 }
 
-require_once('lib/CommentConnect.php');
+require_once('lib/ResComment.php');
 
 $template = new AdminModule($sys_template_root.'/admin', "logins/edit");
 $template->set_title('Admin :: logini :: rediģēt');
@@ -44,9 +49,9 @@ $template->set_var('all_ips_view', str_replace(",", ", ", $login['all_ips']), 'B
 $template->set_file('FILE_comment_list', 'comment/list.tpl');
 $template->copy_block('BLOCK_login_comments', 'FILE_comment_list');
 
-$CC = new CommentConnect();
-$CC->setDb($db);
-$comments = $CC->get(array(
+$RC = new ResComment();
+$RC->setDb($db);
+$comments = $RC->get(array(
 	'login_id'=>$l_id,
 	'c_visible'=>Comment::ALL,
 	'sort'=>'c_entered DESC',

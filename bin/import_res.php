@@ -98,7 +98,7 @@ foreach($items as $item)
 	$res = array(
 		'res_id'=>++$res_id,
 		'table_id'=>Table::FORUM,
-		'login_id'=>$item['forum_userid'],
+		'login_id'=>$item['login_id'],
 		'res_entered'=>$item['forum_entered'],
 		'res_old_id'=>$item['forum_id'],
 		);

@@ -7,7 +7,8 @@
 
 require_once('lib/Article.php');
 require_once('lib/Module.php');
-require_once('lib/CommentConnect.php');
+require_once('lib/Comment.php');
+require_once('lib/ResComment.php');
 
 $action = post('action');
 $art_id = array_shift($sys_parameters);
@@ -133,10 +134,9 @@ if(!$art_id)
 	$template->set_file('FILE_comment_list', 'comment/list.tpl');
 	$template->copy_block('BLOCK_article_comments', 'FILE_comment_list');
 
-	$CC = new CommentConnect('article');
-	$CC->setDb($db);
-	$comments = $CC->get(array(
-		'cc_table_id'=>$art_id,
+	$RC = new ResComment();
+	$comments = $RC->Get(array(
+		'res_id'=>$art['res_id'],
 		'c_visible'=>Comment::ALL,
 		));
 

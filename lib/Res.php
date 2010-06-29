@@ -64,19 +64,34 @@ class Res
 
 	function GetAllData($res_id)
 	{
-		$data = $this->Get(array(
+		$res_data = $this->Get(array(
 			'res_id'=>$res_id,
 			));
+
+		if(!$res_data) {
+			return false;
+		}
 
 		switch($res_data['table_id'])
 		{
 			case Table::ARTICLE:
-				break;
+				require_once("lib/Article.php");
+				$D = new Article();
+				return $D->load(array(
+					'res_id'=>$res_data['res_id'],
+					));
 			case Table::FORUM:
+				require_once("lib/Forum.php");
+				$D = new Forum();
+				return $D->load(array(
+					'res_id'=>$res_data['res_id'],
+					));
 				break;
 			case Table::COMMENT:
 				break;
 		}
+
+		return false;
 	} // GetAllData
 
 	protected function InitDb()

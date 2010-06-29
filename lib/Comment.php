@@ -5,9 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once("lib/Table.php");
-require_once("lib/Res.php");
-
 class Comment extends Res
 {
 	const VISIBLE = 'Y';
@@ -48,7 +45,7 @@ INSERT INTO comment (
 		$sql = "
 SELECT
 	comment.*,
-	r.res_votes AS c_votes
+	r.res_votes
 FROM comment
 JOIN res r ON r.res_id = comment.res_id
 ";

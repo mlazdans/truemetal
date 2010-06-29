@@ -10,7 +10,7 @@
 	<td class="TD-cat">
 		<input type="checkbox" name="comment_check_all" onclick="Truemetal.checkAll(this)" />
 	</td>
-	<td colspan="4" class="TD-cat">
+	<td colspan="5" class="TD-cat">
 		Komentāri
 	</td>
 </tr>
@@ -19,8 +19,9 @@
 	<th class="{c_color_class}">
 		<input type="checkbox" name="c_id[]" value="{c_id}" />
 	</th>
+	<th class="{c_color_class} nowrap"><a href="{c_origin_href}">{c_origin_name}</a></th>
 	<th class="{c_color_class} nowrap"><a href="/admin/logins/{login_id}/">{c_username} ({c_userlogin})</a></th>
-	<th class="{c_color_class}"><a href="/admin/reports/?report=ip&ips={c_userip}">{c_userip}</a></th>
+	<th class="{c_color_class}"><a href="/admin/reports/?report=ip&amp;ips={c_userip}">{c_userip}</a></th>
 	<th class="{c_color_class} nowrap">{c_entered}</th>
 	<th class="{c_color_class}">
 		<!-- BEGIN BLOCK_c_visible disabled -->aktīvs<!-- END BLOCK_c_visible -->
@@ -29,14 +30,13 @@
 </tr>
 <tr>
 	<td></td>
-	<td class="{c_color_class}" colspan="4">
-		<div><a href="{c_origin_href}">{c_origin_name}</a></div>
+	<td class="{c_color_class}" colspan="5">
 		{c_datacompiled}
 	</td>
 </tr>
 <!-- END BLOCK_comment_item -->
 <tr>
-	<td colspan="5">
+	<td colspan="6">
 		Iezīmētos: <select name="action">
 		<option value="">---</option>
 		<option value="comment_delete">Dzēst</option>

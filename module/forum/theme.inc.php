@@ -19,7 +19,7 @@ if($action == 'add_theme')
 	$data = post('data');
 	$forum->validate($data);
 
-	$data['forum_userid'] = $_SESSION['login']['l_id'];
+	$data['login_id'] = $_SESSION['login']['l_id'];
 	$data['forum_userlogin'] = $_SESSION['login']['l_login'];
 	$data['forum_useremail'] = $_SESSION['login']['l_email'];
 	$data['forum_username'] = $_SESSION['login']['l_nick'];

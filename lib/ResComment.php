@@ -47,33 +47,26 @@ class ResComment extends Res
 		$sql = "
 SELECT
 	c.*,
-	r.res_votes AS c_votes,
-	cm.cm_old_id
+	r.`res_votes`,
+	cm.`cm_old_id`,
+	r2.`res_id` AS `parent_res_id`,
+	r2.`table_id` AS `parent_table_id`
 FROM
-	res_comment rc
-JOIN comment c ON c.c_id = rc.c_id
-JOIN res r ON r.res_id = c.res_id
-LEFT JOIN comment_map cm ON cm.cm_new_id = c.c_id
+	`res_comment` rc
+JOIN `comment` c ON c.`c_id` = rc.`c_id`
+JOIN `res` r ON r.`res_id` = c.`res_id`
+JOIN `res` r2 ON r2.`res_id` = rc.`res_id`
+LEFT JOIN `comment_map` cm ON cm.`cm_new_id` = c.`c_id`
 ";
 
 		$sql_add = array();
 
-		/*
-		if($this->table !== false)
-			$sql_add[] = "(cc_table = '$this->table')";
-
-		if(!empty($params['tables_exclude']))
-			$sql_add[] = "cc_table NOT IN ('".join("','", $params['tables_exclude'])."')";
-
-		if(!empty($params['cc_table_id']))
-			$sql_add[] = sprintf("(cc_table_id = %d)", $params['cc_table_id']);
-
 		if(isset($params['c_visible']))
 		{
 			if($params['c_visible'])
-				$sql_add[] = sprintf("c_visible = '%s'", $params['c_visible']);
+				$sql_add[] = sprintf("c.c_visible = '%s'", $params['c_visible']);
 		} else {
-			$sql_add[] = sprintf("c_visible = '%s'", COMMENT_VISIBLE);
+			$sql_add[] = sprintf("c.c_visible = '%s'", Comment::VISIBLE);
 		}
 
 		# IPS
@@ -88,8 +81,7 @@ LEFT JOIN comment_map cm ON cm.cm_new_id = c.c_id
 		}
 
 		if(!empty($params['login_id']))
-			$sql_add[] = sprintf("(login_id = %d)", $params['login_id']);
-		*/
+			$sql_add[] = sprintf("(c.login_id = %d)", $params['login_id']);
 
 		if(!empty($params['res_id']))
 			$sql_add[] = sprintf("(rc.res_id = %d)", $params['res_id']);

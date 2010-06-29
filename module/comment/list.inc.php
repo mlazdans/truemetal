@@ -30,16 +30,16 @@ if($comments)
 
 foreach($comments as $item)
 {
-	$item['c_votes'] = (int)$item['c_votes'];
+	$item['res_votes'] = (int)$item['res_votes'];
 	# balsošana
 	if(user_loged() && $template->block_isset('BLOCK_comment_vote'))
 	{
 		$template->enable('BLOCK_comment_vote');
-		if($item['c_votes'] > 0)
+		if($item['res_votes'] > 0)
 		{
 			$template->set_var('comment_vote_class', 'plus', 'BLOCK_comment');
-			$item['c_votes'] = '+'.$item['c_votes'];
-		} elseif($item['c_votes'] < 0) {
+			$item['res_votes'] = '+'.$item['res_votes'];
+		} elseif($item['res_votes'] < 0) {
 			$template->set_var('comment_vote_class', 'minus', 'BLOCK_comment');
 		} else {
 			$template->set_var('comment_vote_class', '', 'BLOCK_comment');

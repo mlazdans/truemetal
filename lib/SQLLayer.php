@@ -52,6 +52,8 @@ class SQLLayer
 	/* izpildam SQL pieprasiijumu */
 	function Execute($str_sql)
 	{
+		//$p_str_sql = "-----------------------------\n$str_sql\n-----------------------------\n";
+		//printr($p_str_sql);
 		switch( $this->int_db_type ) {
 			case DB_MYSQL:
 				return $this->__execute_mysql($str_sql);

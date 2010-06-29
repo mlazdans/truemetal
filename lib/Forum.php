@@ -39,11 +39,6 @@ class Forum
 		$this->page = $page;
 	} // setPage
 
-	/*
-	function load($forum_id = 0, $forum_forumid = 0, $forum_active = FORUM_ACTIVE, $order = '',
-		$limit = '')
-	{
-	*/
 	function load(Array $params = array())
 	{
 		global $db;
@@ -52,6 +47,9 @@ class Forum
 
 		if(isset($params['forum_id']))
 			$sql_add[] = "f.forum_id = $params[forum_id]";
+
+		if(isset($params['res_id']))
+			$sql_add[] = "f.res_id = $params[res_id]";
 
 		if(isset($params['forum_ids']) && is_array($params['forum_ids']))
 			$sql_add[] = sprintf("f.forum_id IN (%s)", join(",", $params['forum_ids']));
@@ -70,12 +68,10 @@ class Forum
 		if(isset($params['forum_allowchilds']))
 			$sql_add[] = sprintf("f.forum_allowchilds = '%s'", $params['forum_allowchilds']);
 
-		//(SELECT COUNT(c_id) FROM comment JOIN comment_connect ON cc_c_id = c_id WHERE cc_table = 'forum' AND cc_table_id = f.forum_id) forum_comment_count,
-		//(SELECT MAX(c_entered) FROM comment JOIN comment_connect ON cc_c_id = c_id WHERE cc_table = 'forum' AND cc_table_id = f.forum_id) forum_lastcommentdate
-		//$sql_add[] = "cm_table_id = f.forum_id";
 		$sql = "
 SELECT
 	f.*,
+	r.*,
 	COALESCE(res_comment_count, 0) AS forum_comment_count,
 	res_comment_lastdate AS forum_lastcommentdate,
 	(SELECT COUNT(*) FROM forum f2 WHERE f2.forum_forumid = f.forum_id) forum_themecount,
@@ -98,7 +94,7 @@ JOIN `res` r ON r.`res_id` = f.`res_id`
 				$sql .= sprintf(" LIMIT %s,%s", ($this->page - 1) * $this->fpp, $this->fpp);
 		}
 
-		return (isset($params['forum_id']) ? $db->ExecuteSingle($sql) : $db->Execute($sql));
+		return (isset($params['forum_id']) || isset($params['res_id']) ? $db->ExecuteSingle($sql) : $db->Execute($sql));
 	} // load
 
 	function getThemeCount($forum_id = 0, $forum_active = FORUM_ACTIVE)
@@ -244,14 +240,16 @@ WHERE
 				return false;
 		}
 
+		$data['login_id'] = $data['login_id'] ? $data['login_id'] : "NULL";
+
 		$sql = "
 INSERT INTO forum (
-	forum_name, forum_username, forum_userid,
+	forum_name, forum_username, login_id,
 	forum_userlogin, forum_useremail, forum_userip, forum_entered,
 	forum_forumid, forum_data, forum_datacompiled,
 	forum_allowchilds, forum_active, forum_closed
 ) VALUES (
-	'$data[forum_name]', '$data[forum_username]', $data[forum_userid],
+	'$data[forum_name]', '$data[forum_username]', $data[login_id],
 	'$data[forum_userlogin]', '$data[forum_useremail]', '$ip', ".$db->now().",
 	$forum_id, '$data[forum_data]', '$data[forum_datacompiled]',
 	'$data[forum_allowchilds]', '$data[forum_active]', '$data[forum_closed]'
@@ -414,7 +412,7 @@ INSERT INTO forum (
 	{
 		$data['forum_id'] = isset($data['forum_id']) ? (int)$data['forum_id'] : 0;
 		$data['forum_forumid'] = isset($data['forum_forumid']) ? (int)$data['forum_forumid'] : 0;
-		$data['forum_userid'] = isset($data['forum_userid']) ? (int)$data['forum_userid'] : 0;
+		$data['login_id'] = isset($data['login_id']) ? (int)$data['login_id'] : 0;
 		$data['forum_modid'] = isset($data['forum_modid']) ? (int)$data['forum_modid'] : 0;
 		$data['forum_display'] = isset($data['forum_display']) ? (int)$data['forum_display'] : 0;
 
@@ -515,5 +513,5 @@ INSERT INTO forum (
 		return true;
 	} // hasNewThemes
 
-} // Forum
+} // Class::Forum
 

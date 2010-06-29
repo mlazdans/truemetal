@@ -57,7 +57,7 @@ require_once('lib/AdminModule.php');
 require_once('lib/Forum.php');
 require_once('lib/Module.php');
 require_once('lib/Comment.php');
-require_once('lib/CommentConnect.php');
+require_once('lib/ResComment.php');
 
 $forum = new Forum();
 $module = new Module();
@@ -142,10 +142,9 @@ if($forum_id)
 		$template->set_file('FILE_comment_list', 'comment/list.tpl');
 		$template->copy_block('BLOCK_forum_comments', 'FILE_comment_list');
 
-		$CC = new CommentConnect('forum');
-		$CC->setDb($db);
-		$comments = $CC->get(array(
-			'cc_table_id'=>$forum_id,
+		$RC = new ResComment();
+		$comments = $RC->Get(array(
+			'res_id'=>$forum_data['res_id'],
 			'c_visible'=>Comment::ALL,
 			));
 

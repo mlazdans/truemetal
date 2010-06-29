@@ -7,9 +7,6 @@
 
 // ----------------------------------------------------------------------------
 
-require_once('lib/Table.php');
-require_once('lib/Res.php');
-
 # TODO: pārlikt visu šo zem lib
 
 $value = array_shift($sys_parameters);

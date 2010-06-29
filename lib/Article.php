@@ -43,6 +43,9 @@ class Article
 		if(isset($params['art_id']))
 			$sql_add[] = sprintf("art_id = %d", $params['art_id']);
 
+		if(isset($params['res_id']))
+			$sql_add[] = sprintf("a.res_id = %d", $params['res_id']);
+
 		if(isset($params['art_ids']) && is_array($params['art_ids']))
 			$sql_add[] = sprintf("art_id IN (%s)", join(",", $params['art_ids']));
 
@@ -63,8 +66,8 @@ class Article
 		$sql = "
 SELECT
 	a.*,
-	DATE_FORMAT(a.art_entered, '$this->date_format') art_date,
 	m.*,
+	r.*,
 	COALESCE(res_comment_count, 0) AS art_comment_count,
 	res_comment_lastdate AS art_comment_lastdate
 FROM
@@ -81,7 +84,7 @@ JOIN `res` r ON r.`res_id` = a.`res_id`
 		if(isset($params['limit']))
 			$sql .= " LIMIT $params[limit]";
 
-		return (isset($params['art_id']) ? $db->ExecuteSingle($sql) : $db->Execute($sql));
+		return (isset($params['art_id']) || isset($params['res_id']) ? $db->ExecuteSingle($sql) : $db->Execute($sql));
 	} // load
 
 	function insert(&$data, $validate = ARTICLE_VALIDATE)

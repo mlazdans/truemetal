@@ -23,8 +23,7 @@ class Logins
 {
 	var $error_msg;
 
-	function __construct()
-	{
+	function __construct() {
 	} // Logins
 
 	//function load($l_login = '', $l_pass = '', $l_active = LOGIN_ACTIVE, $l_accepted = LOGIN_ACCEPTED)
@@ -87,8 +86,30 @@ class Logins
 
 		if(!empty($params['get_votes']))
 		{
+			/*
 			$sql .= ", (SELECT SUM(c_votes) FROM comment WHERE login_id = l_id AND c_votes > 0) votes_plus ";
 			$sql .= ", (SELECT SUM(c_votes) FROM comment WHERE login_id = l_id AND c_votes < 0) votes_minus ";
+			*/
+			$sql .= ",
+			(SELECT
+				COUNT(*)
+			FROM
+				comment c
+			JOIN res_vote rv ON rv.res_id = c.res_id
+			WHERE
+				c.login_id = l_id AND
+				rv.rv_value = 1
+			) AS votes_plus,
+			(SELECT
+				COUNT(*)
+			FROM
+				comment c
+			JOIN res_vote rv ON rv.res_id = c.res_id
+			WHERE
+				c.login_id = l_id AND
+				rv.rv_value = -1
+			) AS votes_minus
+			";
 		}
 
 		if(!empty($params['get_comment_count']))
@@ -130,8 +151,7 @@ class Logins
 		if(isset($params['limit']))
 			$sql .= " LIMIT $params[limit]";
 
-		//if($GLOBALS['i_am_admin'])
-		//	printr($sql);
+		//printr($sql);
 
 		if(
 			isset($params['l_id']) ||
