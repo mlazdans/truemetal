@@ -34,7 +34,7 @@ UNION
 	r.table_id
 FROM
 	forum
-JOIN `res` r ON r.`res_id` = forum.`forum_id`
+JOIN `res` r ON r.`res_id` = forum.`res_id`
 WHERE
 	forum_active = 'Y' AND
 	forum_modid > 0
