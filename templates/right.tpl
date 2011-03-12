@@ -1,41 +1,19 @@
 <div class="TD-cat">Aktuāli</div>
-
 <div class="List-item actual">
-	<a href="/forum/122481-heaven-grey-albuma-falling-mist-prezentācija" title="18. jūnijs, piektdiena, klubs &quot;Melnā Piektdiena&quot;">HEAVEN GREY</a>
+	<a href="/forum/122910-metāla-fantadroms" title="11. marts, piektdiena, klubs &quot;Melnā Piektdiena&quot;">METĀLA FANTADROMS</a>
 </div>
-
-<div class="List-item">
-	<a href="/forum/122226-metalshow-o-a-2010-hell-in-the-city-informācija" title="2. -4. jūlijs, piektdiena - svētdiena, klubs &quot;Melnā Piektdiena&quot;">METALSHOW OPEN AIR 2010</a>
-</div>
-
-<div class="List-item">
-	<a href="/article/595-cannibal-corpse" title="18. augusts, trešdiena, klubs &quot;Melnā Piektdiena&quot;">CANNIBAL CORPSE</a>
-</div>
-
-<div class="List-sep"></div>
-
-<div class="TD-cat">Braucieni</div>
-
 <div class="List-item actual">
-	<a href="/article/593-brauciens-sonisphere-festival-polijā" title="16. jūnijs, trešdiena, Varšava">SONISPHERE FESTIVAL</a>
+	<a href="/forum/122914-skyforger-obscurus-orbis-12-martā-folkklubs-ala" title="12. marts, sestdiena, krogs &quot;ALA&quot;">SKYFORGER</a>
 </div>
-
 <div class="List-item">
-	<a href="/article/601-devilstone-open-air-2010" title="16. - 18. jūlijs, piektdiena-svētdiena, Anyksciai, Lietuva">DEVILSTONE OPEN AIR 2010</a>
+	<a href="/forum/122898-18-03-lv-metal-gada-balva" title="18. marts, piektdiena, klubs &quot;Melnā Piektdiena&quot;">LV metāla Gada Balva</a>
 </div>
-
 <div class="List-item">
-	<a href="/article/602-brauciens-megadeth-igaunijā" title="16. jūlijs, piektdiena, Haapsalu, Igaunija">MEGADETH</a>
+	<a href="/forum/122874-6-maijā-vienīgā-fb-kārta-šosezon" title="6. maijs, piektdiena, klubs &quot;Melnā Piektdiena&quot;">FRESH BLOOD</a>
 </div>
-
 <div class="List-item">
-	<a href="/article/597-brauciens-wacken-open-air-2010" title="5.-7. augusts, Wacken, Vācija">WACKEN OPEN AIR 2010</a>
+	<a href="/forum/122827-10-04-mp-onslaught-suidakra-debauchery" title="10. aprīlis, svētdiena, klubs &quot;Melnā Piektdiena&quot;">ONSLAUGHT / SUIDAKRA / DEBAUCHERY</a>
 </div>
-
-<div class="List-item">
-	<a href="/article/598-brauciens-brutal-assault-open-air-2010" title="12.-14. augusts, Čehija">BRUTAL ASSAULT OPEN AIR 2010</a>
-</div>
-
 <div class="List-sep"></div>
 
 <!-- BEGIN BLOCK_right_item -->
@@ -43,12 +21,17 @@
 <div class="List-sep"></div>
 <!-- END BLOCK_right_item -->
 
-<div>
-	<a href="http://www.evildist.com/"><img src="{http_root}/img/banner_evildist.gif" alt="www.evildist.com banner" title="www.evildist.com" /></a>
+<div class="TD-cat">Ieskaties</div>
+<div style="text-align: center; background: black;">
+	<a href="http://www.evildist.com/"><img src="{http_root}/img/banner_evildist.gif" alt="www.evildist.com banner" title="www.evildist.com" width="170" height="113" /></a>
 </div>
 
 <div style="text-align: center; background: black; padding: 15px 0 15px 0;">
-	<a href="http://www.myspace.com/trepanationsquad"><img src="{http_root}/img/banner_trepanationsquad.gif" alt="Trepanation Squad: banner" title="Trepanation Squad" /></a>
+	<a href="http://www.myspace.com/trepanationsquad"><img src="{http_root}/img/banner_trepanationsquad.gif" alt="Trepanation Squad: banner" title="Trepanation Squad" width="140" height="75" /></a>
+</div>
+
+<div style="text-align: center; background: black; padding: 2px 0 2px 0;">
+	<a href="http://www.rockmetalkaraoke.com/"><img src="{http_root}/img/banner_karaoke.gif" alt="www.rockmetalkaraoke.com banner" title="www.rockmetalkaraoke.com" width="190" height="110" /></a>
 </div>
 
 <div class="List-sep"></div>

@@ -6,12 +6,6 @@
 	<a href="{module_root}/"><b>Forums</b></a><!-- BEGIN BLOCK_forum_path disabled --> / <a href="{module_root}{forum1_path}">{forum1_name}</a><!-- END BLOCK_forum_path -->
 </div>
 
-
-<!-- BEGIN BLOCK_forum disabled -->
-{forum_datacompiled}
-<!-- END BLOCK_forum -->
-
-
 <!-- BEGIN BLOCK_noforum disabled -->
 <div class="Info">
 	Pagaidām šai tēmai nav neviena komentāra!
@@ -30,6 +24,7 @@
 <!-- END BLOCK_info_sort_D -->
 
 <!-- BEGIN BLOCK_forum_comments --><!-- END BLOCK_forum_comments -->
+
 <!-- BEGIN BLOCK_forum_closed disabled -->
 <div class="Info">
 	Tēma slēgta

@@ -37,3 +37,6 @@ RewriteRule ^(.*)$ /kernel.php?$1
 #  AddOutputFilterByType DEFLATE text/javascript
 #  AddOutputFilterByType DEFLATE text/x-javascript
 #</IfModule>
+
+# Mail.ru
+Deny from 217.69.134.0/23

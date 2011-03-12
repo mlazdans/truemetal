@@ -1,4 +1,4 @@
-<?
+<?php
 // Hackers.lv Web Engine v2.0
 //
 // contacts:

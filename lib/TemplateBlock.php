@@ -79,7 +79,7 @@ class TemplateBlock
 				$this->blocks[$id] = new TemplateBlock($id, $m[3][$c], $this->undefined);
 				$this->blocks[$id]->block_parent = $this;
 
-				$arr_attributes = split(' ', strtolower($m[2][$c]));
+				$arr_attributes = explode(' ', strtolower($m[2][$c]));
 				$this->blocks[$id]->attributes['disabled'] = in_array('disabled', $arr_attributes);
 			}
 

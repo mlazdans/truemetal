@@ -16,7 +16,7 @@
 </div>
 
 <form action="" method="post" enctype="multipart/form-data" id="profile_edit">
-<table cellpadding="2" cellspacing="1">
+<table class="Main">
 <tr>
 	<td align="right"{error_l_email}><b>Niks:</b></td>
 	<td>{l_nick}</td>
@@ -48,7 +48,7 @@
 	Bilde:
 </div>
 
-<table cellpadding="0" cellspacing="1">
+<table class="Main">
 <!-- BEGIN BLOCK_nopicture disabled -->
 <tr>
 	<td>Bildes nav!</td>
@@ -73,8 +73,7 @@
 <div class="TD-cat">
 	Forums
 </div>
-
-<table cellpadding="2" cellspacing="1">
+<table class="Main">
 <tr>
 	<td colspan="2"{error_l_forumsort_themes}><b>Tēmas kārtot pēc:</b></td>
 </tr>
@@ -108,6 +107,30 @@
 </table>
 
 <div class="List-sep"></div>
+<!-- BEGIN BLOCK_truecomments disabled -->
+<div class="TD-cat">
+	True-ākie komentāri:
+</div>
+
+<div class="List-item">Trīs visvairāk plusotie un trīs visvairāk mīnusotie komenti</div>
+
+<table class="Main">
+<tr>
+	<td style="width: 100%;" class="TD-cat">Koments</td>
+	<td class="TD-cat">Plusi</td>
+	<td class="TD-cat">Mīnusi</td>
+</tr>
+<!-- BEGIN BLOCK_truecomment_item -->
+<tr>
+	<td><a href="{c_href}">{c_data}</a></td>
+	<td class="vote-plus">{plus_count}</td>
+	<td class="vote-minus">{minus_count}</td>
+</tr>
+<!-- END BLOCK_truecomment_item -->
+</table>
+
+<div class="List-sep"></div>
+<!-- END BLOCK_truecomments -->
 
 <div class="TD-cat">
 	Palīdzība

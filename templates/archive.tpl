@@ -8,7 +8,7 @@
 	</div>
 	<!-- END BLOCK_archive_date -->
 	<div class="List-item">
-		<a href="{http_root}/{art_module_id}/{art_id}/">{art_name}</a>
+		<a href="{http_root}/{art_module_id}/{art_id}-{art_name_urlized}">{art_name}</a>
 	</div>
 <!-- END BLOCK_archive_items -->
 

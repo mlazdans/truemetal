@@ -8,3 +8,8 @@
 </div>
 <!-- END BLOCK_forum_r_items -->
 
+<!-- BEGIN BLOCK_forum_r_more disabled -->
+<div class="List-item">
+	<a style="font-style: italic;" href="{http_root}/whatsnew/">-vairāk-</a>
+</div>
+<!-- END BLOCK_forum_r_more -->

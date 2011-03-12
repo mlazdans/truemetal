@@ -7,7 +7,7 @@
 <meta name="verify-v1" content="1T6p5COcolqsK65q0I6uXdMjPuPskp2jyWjFMTOW/LY=" />
 <meta name="author" content="Mārtiņš Lazdāns (dqdp.net)" />
 <meta name="description" content="{meta_descr}" />
-<link href="{http_root}/css/?s[]=styles-dynamic.css&amp;s[]=article.css&amp;s[]=jquery-ui.css&amp;v={script_version}" rel="stylesheet" type="text/css" />
+<link href="{http_root}/css/?s[]=styles-dynamic&amp;s[]=article&amp;s[]=jquery-ui&amp;v={script_version}" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -39,7 +39,7 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="{http_root}/jsload/{script_version}/?s[]=swfobject.js&amp;s[]=jquery.js&amp;s[]=jquery-ui.js&amp;s[]=truemetal.js"></script>
+<script type="text/javascript" src="{http_root}/jsload/?s[]=swfobject&amp;s[]=jquery&amp;s[]=jquery-ui&amp;s[]=truemetal&amp;v={script_version}"></script>
 <script type="text/javascript">
 var User = {
 	disableYoutube: parseInt('{disable_youtube}')

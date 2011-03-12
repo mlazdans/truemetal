@@ -149,7 +149,7 @@ var Truemetal = {
 				var ext = parts.pop();
 				try {
 					var srcOver = parts.join('.');
-					if(srcOver.substr(-5) != '_over')
+					if(srcOver.substr(srcOver.length-5) != '_over')
 					{
 						srcOver = srcOver + "_over." + ext;
 					} else {

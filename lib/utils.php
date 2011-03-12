@@ -12,7 +12,8 @@ define('REMOVE_FONT', 2);
 
 function invalid($value)
 {
-	return ereg("[^a-z^A-Z^0-9_]", $value) or !$value;
+	return preg_match("/[^a-z^A-Z^0-9_]/", $value) or !$value;
+	//return ereg("[^a-z^A-Z^0-9_]", $value) or !$value;
 } // invalid
 
 function valid($value)
@@ -35,7 +36,8 @@ function parse_params($data)
 
 function my_strip_tags(&$text)
 {
-	$text = htmlspecialchars(stripslashes($text), ENT_QUOTES);
+	//$text = htmlspecialchars(stripslashes($text), ENT_QUOTES);
+	$text = htmlspecialchars($text, ENT_QUOTES);
 } // my_strip_tags
 
 function remove_shit(&$data, $filter = 0)
@@ -138,8 +140,8 @@ function proc_date($date)
 	);
 
 	$date_now = date("Y:m:j:H:i");
-	@list($y0, $m0, $d0, $h0, $min0) = split(":", date("Y:m:j:H:i", strtotime($date)));
-	@list($y1, $m1, $d1, $h1, $min1) = split(":", $date_now);
+	@list($y0, $m0, $d0, $h0, $min0) = explode(":", date("Y:m:j:H:i", strtotime($date)));
+	@list($y1, $m1, $d1, $h1, $min1) = explode(":", $date_now);
 	// mktime ( [int hour [, int minute [, int second [, int month [, int day [, int year [, int is_dst]]]]]]])
 	$dlong0 = mktime($h0, $min0, 0, $m0, $d0, $y0);
 	$dlong1 = mktime($h1, $min1, 0, $m1, $d1, $y1);
@@ -246,14 +248,24 @@ function parse_text_data(&$data)
 		$url = htmlspecialchars($matches[1][$k].$matches[3][$k].$matches[4][$k], ENT_COMPAT, "utf-8");
 		$url_short = htmlspecialchars($m3.$m4);
 
+		$TMs = array(
+			'truemetal.lv',
+			'www.truemetal.lv',
+			'metal.id.lv',
+			'www.metal.id.lv',
+			);
+
 		# youtube.com
 		if(FALSE && (substr($host, -11) == 'youtube.com') && preg_match('/watch\?v=([^&]*)/i', $url, $url_parts))
 		{
 			$data = str_replace($tokens[$k], '<div><div class="youtube"><a href="'.$url.'">'.$url_short.'</a></div></div>', $data);
 		# truemetal.lv
 		} elseif(
+			in_array($host, $TMs)
+			/*
 			(substr($host, -12) == 'truemetal.lv') ||
 			(substr($host, -11) == 'metal.id.lv')
+			*/
 			)
 		{
 			$url = htmlspecialchars($matches[4][$k], ENT_COMPAT, "utf-8");
@@ -269,7 +281,7 @@ function parse_text_data(&$data)
 	if($w_count > FORUM_MAXWORDS)
 		$data .= '...';
 
-	$data = addslashes($data);
+	$data = $data;
 } // parse_text_data
 
 function set_forum(&$template, $forum_id)
@@ -299,7 +311,7 @@ function set_forum(&$template, $forum_id)
 
 function valid_date($date)
 {
-	list($d, $m, $y) = split('\.', $date);
+	list($d, $m, $y) = explode('\.', $date);
 	return checkdate($m, $d, $y);
 } // valid_date
 
@@ -342,7 +354,7 @@ function valid_email($email)
 	if(!$email)
 		return false;
 
-	$parts = split('@', $email);
+	$parts = explode('@', $email);
 
 	if(count($parts) != 2)
 		return false;
@@ -542,7 +554,7 @@ function hl(&$data, $kw)
 	$cc = count($colors);
 	$bc = count($bg);
 
-	$words = split(' ', $kw);
+	$words = explode(' ', $kw);
 	// duplikaati nafig
 	$words = array_unique($words);
 
@@ -566,7 +578,7 @@ function hl(&$data, $kw)
 
 	$kw = trim(preg_replace("/[\*\(\)\-\+\/]/", " ", $kw));
 
-	$words = split(' ', $kw);
+	$words = explode(' ', $kw);
 	// duplikaati nafig
 	$words = array_unique($words);
 
@@ -591,7 +603,7 @@ function hl(&$data, $kw)
 
 function search_to_sql($q, $fields)
 {
-	$words = split(' ', $q);
+	$words = explode(' ', $q);
 	if(!is_array($fields))
 		$fields = array($fields);
 
@@ -616,7 +628,7 @@ function search_to_spider($q, $fields)
 {
 	$ret = array();
 
-	$words = split(' ', $q);
+	$words = explode(' ', $q);
 	if(!is_array($fields))
 		$fields = array($fields);
 
@@ -681,7 +693,11 @@ function email($to, $subj, $msg, $attachments = array())
 		$mime->addAttachment($filename, $type, $filename_show);
 	}
 
-	$body = $mime->get();
+	$param['text_charset'] = 'utf-8';
+	$param['html_charset'] = 'utf-8';
+	$param['head_charset'] = 'utf-8';
+
+	$body = $mime->get($param);
 	$hdrs = $mime->headers($headers);
 
 	if(empty($mail_params))
@@ -701,22 +717,6 @@ function email($to, $subj, $msg, $attachments = array())
 
 	return $ret;
 } // email
-
-/*
-function email($to, $subj, $msg)
-{
-	global $sys_mail_from;
-
-	$headers = "FROM: $sys_mail_from\n";
-	$ret = @mail($to, $subj, $msg, $headers);
-	if(!$ret)
-	{
-		$GLOBALS['php_errormsg'] = $php_errormsg;
-	}
-
-	return $ret;
-} // email
-*/
 
 function user_loged()
 {
@@ -775,6 +775,8 @@ function save_file($id, $save_path)
 
 function to_int($val)
 {
+	return (int)$val;
+	/*
 	if(ereg('[^0-9]', trim($val)))
 	{
 		$val = 0;
@@ -783,15 +785,18 @@ function to_int($val)
 	}
 
 	return $val;
+	*/
 } // to_int
 
 function to_float($val)
 {
+	return (float)$val;
+	/*
 	if(ereg('[^0-9\.]', trim($val)))
 	{
 		$val = 0;
 	} else {
-		$parts = split('\.', $val);
+		$parts = explode('\.', $val);
 		if(count($parts) > 2)
 		{
 			$val = 0;
@@ -801,6 +806,7 @@ function to_float($val)
 	}
 
 	return $val;
+	*/
 } // to_float
 
 function to_range($val, $range, $default = '')
@@ -827,10 +833,10 @@ function _GET()
 	$qs = isset($_SERVER["QUERY_STRING"]) ? $_SERVER["QUERY_STRING"] : '';
 	if($qs)
 	{
-		$pairs = split('&', $qs);
+		$pairs = explode('&', $qs);
 		foreach($pairs as $kv)
 		{
-			$parts = split('=', $kv);
+			$parts = explode('=', $kv);
 			$k = isset($parts[0]) ? $parts[0] : false;
 			$v = isset($parts[1]) ? $parts[1] : false;
 

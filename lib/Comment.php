@@ -5,6 +5,9 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
+require_once('lib/Res.php');
+require_once('lib/Table.php');
+
 class Comment extends Res
 {
 	const VISIBLE = 'Y';
@@ -14,7 +17,11 @@ class Comment extends Res
 	protected $table_id = Table::COMMENT;
 
 	function __construct() {
+		global $db;
+
 		parent::__construct();
+
+		$this->SetDb($db);
 	} // __construct
 
 	function Add($data)
@@ -24,6 +31,7 @@ class Comment extends Res
 		}
 
 		$this->validate($data);
+		$data = $this->db->QuoteArray($data);
 
 		$sql = "
 INSERT INTO comment (
@@ -47,13 +55,16 @@ SELECT
 	comment.*,
 	r.res_votes
 FROM comment
-JOIN res r ON r.res_id = comment.res_id
+LEFT JOIN res r ON r.res_id = comment.res_id
 ";
 
 		$sql_add = array();
 
 		if(!empty($params['c_id']))
 			$sql_add[] = sprintf("(c_id = %d)", $params['c_id']);
+
+		if(isset($params['res_id']))
+			$sql_add[] = sprintf("comment.res_id = %d", $params['res_id']);
 
 		if(isset($params['c_visible']))
 		{
@@ -74,7 +85,7 @@ JOIN res r ON r.res_id = comment.res_id
 		if(!empty($params['limit']))
 			$sql .= " LIMIT ".$params['limit'];
 
-		return (empty($params['c_id']) ? $this->db->Execute($sql) : $this->db->Executesingle($sql));
+		return (isset($params['c_id']) || isset($params['res_id']) ? $this->db->ExecuteSingle($sql) : $this->db->Execute($sql));
 	} // Get
 
 	function Delete($id)

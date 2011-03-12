@@ -748,7 +748,7 @@ class Logins
 	function validate(&$data)
 	{
 		if(isset($data['l_active']))
-			$data['l_active'] = ereg('[^YN]', $data['l_active']) ? '' : $data['l_active'];
+			$data['l_active'] = (preg_match('/[YN]/', $data['l_active']) ? $data['l_active'] : '');
 		else
 			$data['l_active'] = LOGIN_ACTIVE;
 
@@ -779,12 +779,12 @@ class Logins
 			$data['l_birth'] = '';
 
 		if(isset($data['l_type']))
-			$data['l_type'] = !ereg('[0-9]', $data['l_type']) ? 0 : $data['l_type'];
+			$data['l_type'] = (preg_match('/[\d]*/', $data['l_type']) ?  (int)$data['l_type'] : 0);
 		else
 			$data['l_type'] = 0;
 
 		if(isset($data['l_spec']))
-			$data['l_spec'] = !ereg('[0-9]', $data['l_spec']) ? 0 : $data['l_spec'];
+			$data['l_spec'] = (preg_match('/[\d]*/', $data['l_spec']) ? (int)$data['l_spec'] : 0);
 		else
 			$data['l_spec'] = 0;
 
@@ -798,17 +798,17 @@ class Logins
 			$data['l_entered'] = '';
 
 		if(isset($data['l_accepted']))
-			$data['l_accepted'] = ereg('[^YN]', $data['l_accepted']) ? '' : $data['l_accepted'];
+			$data['l_accepted'] = (preg_match('/[YN]/', $data['l_accepted']) ? $data['l_accepted'] : '');
 		else
 			$data['l_accepted'] = LOGIN_NOTACCEPTED;
 
 		if(isset($data['l_forumsort_themes']))
-			$data['l_forumsort_themes'] = ereg('[^TC]', $data['l_forumsort_themes']) ? '' : $data['l_forumsort_themes'];
+			$data['l_forumsort_themes'] = (preg_match('/[TC]/', $data['l_forumsort_themes']) ? $data['l_forumsort_themes'] : '');
 		else
 			$data['l_forumsort_themes'] = FORUM_SORT_THEME;
 
 		if(isset($data['l_forumsort_msg']))
-			$data['l_forumsort_msg'] = ereg('[^AD]', $data['l_forumsort_msg']) ? '' : $data['l_forumsort_msg'];
+			$data['l_forumsort_msg'] = (preg_match('/[AD]/', $data['l_forumsort_msg']) ? $data['l_forumsort_msg'] : '');
 		else
 			$data['l_forumsort_msg'] = FORUM_SORT_THEME;
 
@@ -901,7 +901,7 @@ GROUP BY
 			$ret = $alsoUsers;
 			foreach($alsoUsers as $item)
 			{
-				$new_ips = split(',', $item['ips']);
+				$new_ips = explode(',', $item['ips']);
 				$exclude_ips = array_merge($exclude_ips, $ips);
 				$exclude_l_ids[] = $item['l_id'];
 				if($a = Logins::collectUsersByIP($new_ips, $exclude_l_ids, $exclude_ips, $d+1))

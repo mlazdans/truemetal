@@ -10,7 +10,7 @@
 	<td class="TD-cat">
 		<input type="checkbox" name="comment_check_all" onclick="Truemetal.checkAll(this)" />
 	</td>
-	<td colspan="5" class="TD-cat">
+	<td colspan="6" class="TD-cat">
 		Komentāri
 	</td>
 </tr>
@@ -27,16 +27,17 @@
 		<!-- BEGIN BLOCK_c_visible disabled -->aktīvs<!-- END BLOCK_c_visible -->
 		<!-- BEGIN BLOCK_c_invisible disabled -->neaktīvs<!-- END BLOCK_c_invisible -->
 	</th>
+	<th class="{c_color_class}"><a href="#" onclick="Admin.viewCommentVotes({res_id}); return false;">votes</a></th>
 </tr>
 <tr>
 	<td></td>
-	<td class="{c_color_class}" colspan="5">
+	<td class="{c_color_class}" colspan="6">
 		{c_datacompiled}
 	</td>
 </tr>
 <!-- END BLOCK_comment_item -->
 <tr>
-	<td colspan="6">
+	<td colspan="7">
 		Iezīmētos: <select name="action">
 		<option value="">---</option>
 		<option value="comment_delete">Dzēst</option>

@@ -155,29 +155,6 @@ class Module
 		$data['module_type'] = ereg('[^OR]', $data['module_type']) ? '' : $data['module_type'];
 	} // validate
 
-	/*
-	function del($mod_id) {
-		global $db;
-
-		$mod_id = (integer)$mod_id;
-		$data = $this->get_item($mod_id);
-
-		$sql = "DELETE FROM modules WHERE mod_id = $mod_id";
-		$ret = $db->execute($sql);
-
-		if($ret) {
-			$sql = "UPDATE modules SET ".
-				"module_pos = module_pos - 1 ".
-				"WHERE ".
-				"module_pos > $data[module_pos] AND ".
-				"mod_modid = $data[mod_modid]";
-			$db->execute($sql);
-		}
-
-		return $ret;
-	}
-	*/
-
 	function del_under($mod_id)
 	{
 		global $db;
@@ -318,31 +295,6 @@ class Module
 		return $ret;
 	} // load_tree
 
-	/*
-	function unset_bad(&$data)
-	{
-		$ret = 1;
-		if(isset($data['_data_']))
-		foreach($data as $key=>$item) {
-			if($key == '_data_' && $item['score'] != 0) {
-				$ret = 0;
-				continue;
-			}
-
-			if($key[0] == '_') {
-				array_splice($data, $key, 1);
-				continue;
-			}
-
-			if($this->unset_bad($data[$key])) {
-				array_splice($data, $key, 1);
-			} else
-				$ret = 0;
-		}
-
-		return $ret;
-	}
-*/
 	function search($q)
 	{
 		$data = $this->load_tree(0, $q);
@@ -491,3 +443,4 @@ class Module
 	} // set_modules_all
 
 } // Module
+

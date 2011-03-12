@@ -24,7 +24,5 @@ switch($resource['table_id'])
 		break;
 }
 
-//print $location;
 header("Location: $location");
-
 

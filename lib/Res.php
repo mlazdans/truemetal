@@ -88,6 +88,11 @@ class Res
 					));
 				break;
 			case Table::COMMENT:
+				require_once("lib/Comment.php");
+				$D = new Comment();
+				return $D->Get(array(
+					'res_id'=>$res_data['res_id'],
+					));
 				break;
 		}
 

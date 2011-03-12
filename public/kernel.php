@@ -52,7 +52,7 @@ ini_set('expose_php', false);
 error_reporting($sys_error_reporting);
 
 # Include paths
-$include_path = split(PATH_SEPARATOR, ini_get('include_path'));
+$include_path = explode(PATH_SEPARATOR, ini_get('include_path'));
 foreach($include_path as $k=>$v) // Unset current dir
 {
 	if($v == '.' || $v == './')
@@ -108,7 +108,7 @@ $_SERVER["REQUEST_URI"] = array_shift($parts);
 $_SERVER["QUERY_STRING"] = join("?", $parts);
 
 # NOTE: $sys_http_root netiek ņemts vērā, bet vajadzētu
-$sys_parameters = split('/', $_SERVER["REQUEST_URI"]);
+$sys_parameters = explode('/', $_SERVER["REQUEST_URI"]);
 $sys_parameters = parse_params($sys_parameters);
 
 $sys_module_id = array_shift($sys_parameters);

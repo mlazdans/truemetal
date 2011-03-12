@@ -84,7 +84,7 @@ $descr.
 '</body>'.
 '</html>';
 			$doc = new DOMDocument();
-			$doc->loadHTML($dd);
+			@$doc->loadHTML($dd);
 			$xml = simplexml_import_dom($doc);
 
 			$els = $xml->xpath("//a");
@@ -345,7 +345,7 @@ $descr.
 
 	function set_recent_reviews($limit = 4)
 	{
-		global $module_tree;
+		global $module_tree, $i_am_admin;
 
 		$article = new Article;
 		//$comment = new Comment('article_comments', 'art_id');
@@ -397,6 +397,7 @@ $descr.
 			$this->parse_block('BLOCK_comment_r_items', TMPL_APPEND);
 		}
 
+		$this->enable('BLOCK_comment_r_more');
 		$this->parse_block('FILE_r_comment');
 		$this->set_var('right_item_data', $this->get_parsed_content('FILE_r_comment'), 'BLOCK_right_item');
 		$this->parse_block('BLOCK_right_item', TMPL_APPEND);

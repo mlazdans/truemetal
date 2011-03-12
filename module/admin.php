@@ -49,6 +49,7 @@ $admin_modules = array(
 	'online'=>'Online',
 	'logins'=>'Logini',
 	'reports'=>'Reporti',
+	'comment'=>'',
 	'lang'=>'',
 	'index'=>''
 );

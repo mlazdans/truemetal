@@ -59,8 +59,8 @@ $comments = $RC->get(array(
 	));
 
 # Šmurguļi, kas nāk no vairākā IP un reklamē :E (piemēram, HeavenGrey)
-$alsoUsers = Logins::collectUsersByIP(split(",", $login['all_ips']), $l_id);
-//$ips = join("','", split(",", $login['all_ips']));
+$alsoUsers = Logins::collectUsersByIP(explode(",", $login['all_ips']), $l_id);
+//$ips = join("','", explode(",", $login['all_ips']));
 
 if($alsoUsers)
 {

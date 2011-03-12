@@ -45,17 +45,24 @@ if($action == 'add_theme')
 	if(!$error)
 	{
 		$db->AutoCommit(false);
+		$forum->setDb($db);
 		if($id = $forum->add($forum_id, $data))
 		{
-			$table = 'forum';
-			$table_id = $id;
-			$data['c_data'] = $data['forum_data'];
+			$newforum = new Forum;
+			$new_data = $newforum->load(array(
+				"forum_id"=>$id,
+				));
 
+			//$table = 'forum';
+			//$table_id = $id;
+			$res_id = $new_data['res_id'];
+			$data['c_data'] = $data['forum_data'];
+			$resDb = $db;
 			if($c_id = include('module/comment/add.inc.php'))
 			{
 				$_SESSION['user']['username'] = $data['forum_username'];
 				$_SESSION['user']['useremail'] = $data['forum_useremail'];
-				$db->Commit();
+				$resDb->Commit();
 				header("Location: $module_root/$id-".rawurlencode(urlize($data['forum_name'])));
 				return;
 			}
@@ -66,7 +73,7 @@ if($action == 'add_theme')
 				$this->add($id, $data);
 			}
 			*/
-			$db->Commit();
+			$resDb->Commit();
 		}
 		$db->AutoCommit(true);
 	}

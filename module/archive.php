@@ -50,6 +50,7 @@ foreach($arts as $item)
 	$template->set_var('art_id', $item['art_id'], 'BLOCK_archive_items');
 	$template->set_var('art_name', $item['art_name'], 'BLOCK_archive_items');
 	$template->set_var('art_module_id', $item['module_id'], 'BLOCK_archive_items');
+	$template->set_var('art_name_urlized', rawurlencode(urlize($item['art_name'])), 'BLOCK_archive_items');
 	$template->parse_block('BLOCK_archive_items', TMPL_APPEND);
 }
 

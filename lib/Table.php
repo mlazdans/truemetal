@@ -12,5 +12,18 @@ class Table
 	const FORUM = 2;
 	const COMMENT = 3;
 
+	static function getName($id)
+	{
+		if($id == Table::COMMENT){
+			return 'comment';
+		}
+		if($id == Table::ARTICLE){
+			return 'article';
+		}
+		if($id == Table::FORUM){
+			return 'forum';
+		}
+		return false;
+	}
 } // class::Table
 

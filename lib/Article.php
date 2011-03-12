@@ -8,6 +8,8 @@
 //
 
 require_once('lib/Module.php');
+require_once('lib/Res.php');
+require_once('lib/Table.php');
 
 define('ARTICLE_ACTIVE', 'Y');
 define('ARTICLE_INACTIVE', 'N');
@@ -19,14 +21,22 @@ define('ARTICLE_NOCOMMENTS', 'N');
 define('ARTICLE_TYPE_OPEN', 'O');
 define('ARTICLE_TYPE_REGISTRATED', 'R');
 
-class Article
+class Article extends Res
 {
 	var $date_format;
 	var $limit;
 	var $error_msg;
 	var $order;
 
-	function __construct() {
+	protected $table_id = Table::ARTICLE;
+
+	function __construct()
+	{
+		global $db;
+
+		parent::__construct();
+
+		$this->SetDb($db);
 	} // __construct
 
 	function set_date_format($new_date)
@@ -36,7 +46,7 @@ class Article
 
 	function load(Array $params = array())
 	{
-		global $db;
+		//global $db;
 
 		$sql_add = array();
 
@@ -73,7 +83,7 @@ SELECT
 FROM
 	`article` a
 JOIN `modules` m ON (a.art_modid = m.mod_id)
-JOIN `res` r ON r.`res_id` = a.`res_id`
+LEFT JOIN `res` r ON r.`res_id` = a.`res_id`
 ";
 
 		if($sql_add)
@@ -84,39 +94,46 @@ JOIN `res` r ON r.`res_id` = a.`res_id`
 		if(isset($params['limit']))
 			$sql .= " LIMIT $params[limit]";
 
-		return (isset($params['art_id']) || isset($params['res_id']) ? $db->ExecuteSingle($sql) : $db->Execute($sql));
+		return (isset($params['art_id']) || isset($params['res_id']) ? $this->db->ExecuteSingle($sql) : $this->db->Execute($sql));
 	} // load
 
 	function insert(&$data, $validate = ARTICLE_VALIDATE)
 	{
-		global $db, $ip;
+		//global $db, $ip;
+		global $ip;
+
+		if(!($res_id = parent::Add())) {
+			return false;
+		}
 
 		if($validate)
 			$this->validate($data);
 
-		$date = $db->now();
+		$date = $this->db->now();
 		if($data['art_entered'])
 			$date = "'$data[art_entered]'";
 
-		$login_id = (int)(isset($_SESSION['login']['l_id']) ? $_SESSION['login']['l_id'] : 0);
+		$data2 = $this->db->QuoteArray($data);
+		//$login_id = (int)(isset($_SESSION['login']['l_id']) ? $_SESSION['login']['l_id'] : 0);
+		$login_id = 3;
 
 		$sql = "
 INSERT INTO article (
-	art_name, art_username, art_useremail, art_userip, art_entered,
+	res_id, art_name, art_username, art_useremail, art_userip, art_entered,
 	art_modid, art_data, art_intro, art_active,
 	art_comments, art_type, login_id
 ) VALUES (
-	'$data[art_name]', '$data[art_username]', '$data[art_useremail]', '$ip', ".$date.",
-	$data[art_modid], '$data[art_data]', '$data[art_intro]', '$data[art_active]',
-	'$data[art_comments]', '$data[art_type]', $login_id
+	$res_id, '$data2[art_name]', '$data2[art_username]', '$data2[art_useremail]', '$ip', ".$date.",
+	$data2[art_modid], '$data2[art_data]', '$data2[art_intro]', '$data2[art_active]',
+	'$data2[art_comments]', '$data2[art_type]', $login_id
 )";
 
-		return ($db->Execute($sql) ? $db->LastID() : false);
+		return ($this->db->Execute($sql) ? $this->db->LastID() : false);
 	}
 
 	function update($art_id, &$data, $validate = ARTICLE_VALIDATE)
 	{
-		global $db, $ip;
+		//global $db;
 
 		$art_id = (integer)$art_id;
 		if(!$art_id)
@@ -128,20 +145,22 @@ INSERT INTO article (
 		if($validate)
 			$this->validate($data);
 
+		$data2 = $this->db->QuoteArray($data);
+
 		$sql = 'UPDATE article SET ';
-		$sql .= $data['art_name'] ? "art_name = '$data[art_name]', " : '';
-		$sql .= $data['art_entered'] ? "art_entered = '$data[art_entered]', " : '';
-		$sql .= "art_active = '$data[art_active]', ";
-		$sql .= "art_comments = '$data[art_comments]', ";
-		$sql .= "art_type = '$data[art_type]', ";
-		$sql .= "art_data = '$data[art_data]', ";
-		$sql .= "art_intro = '$data[art_intro]', ";
-		if(!empty($data['art_modid']))
-			$sql .= "art_modid = $data[art_modid], ";
+		$sql .= $data2['art_name'] ? "art_name = '$data2[art_name]', " : '';
+		$sql .= $data2['art_entered'] ? "art_entered = '$data2[art_entered]', " : '';
+		$sql .= "art_active = '$data2[art_active]', ";
+		$sql .= "art_comments = '$data2[art_comments]', ";
+		$sql .= "art_type = '$data2[art_type]', ";
+		$sql .= "art_data = '$data2[art_data]', ";
+		$sql .= "art_intro = '$data2[art_intro]', ";
+		if(!empty($data2['art_modid']))
+			$sql .= "art_modid = $data2[art_modid], ";
 		$sql = substr($sql, 0, -2);
 		$sql .= ' WHERE art_id = '.$art_id;
 
-		return ($db->Execute($sql) ? $art_id : false);
+		return ($this->db->Execute($sql) ? $art_id : false);
 	}
 
 	function save($art_id, &$data)
@@ -171,7 +190,7 @@ INSERT INTO article (
 
 	function del($art_id)
 	{
-		global $db;
+		//global $db;
 
 		if(!$art_id)
 		{
@@ -180,27 +199,27 @@ INSERT INTO article (
 
 		$sql = 'DELETE FROM `article` WHERE art_id = '.$art_id;
 
-		return $db->Execute($sql);
+		return $this->db->Execute($sql);
 	}
 
 	function activate($art_id)
 	{
-		global $db;
+		//global $db;
 
 		$art_id = (integer)$art_id;
 		$sql = 'UPDATE `article` SET art_active = "'.ARTICLE_ACTIVE.'" WHERE art_id = '.$art_id;
 
-		return $db->Execute($sql);
+		return $this->db->Execute($sql);
 	}
 
 	function deactivate($art_id)
 	{
-		global $db;
+		//global $db;
 
 		$art_id = (integer)$art_id;
 		$sql = 'UPDATE `article` SET art_active = "'.ARTICLE_INACTIVE.'" WHERE art_id = '.$art_id;
 
-		return $db->Execute($sql);
+		return $this->db->Execute($sql);
 	}
 
 	// actionu preprocessors
@@ -237,27 +256,27 @@ INSERT INTO article (
 	function validate(&$data)
 	{
 		if(isset($data['art_modid']))
-			$data['art_modid'] = !ereg('[0-9]', $data['art_modid']) ? 0 : $data['art_modid'];
+			$data['art_modid'] = preg_match('/[0-9]/', $data['art_modid']) ? (int)$data['art_modid'] : 0;
 		else
 			$data['art_modid'] = 0;
 
 		if(isset($data['art_modid']))
-			$data['art_modid'] = !ereg('[0-9]', $data['art_modid']) ? 0 : $data['art_modid'];
+			$data['art_modid'] = preg_match('/[0-9]/', $data['art_modid']) ? (int)$data['art_modid'] : 0;
 		else
 			$data['art_modid'] = 0;
 
 		if(isset($data['art_active']))
-			$data['art_active'] = ereg('[^YN]', $data['art_active']) ? '' : $data['art_active'];
+			$data['art_active'] = preg_match('/[YN]/', $data['art_active']) ? $data['art_active'] : ARTICLE_ACTIVE;
 		else
 			$data['art_active'] = ARTICLE_ACTIVE;
 
 		if(isset($data['art_comments']))
-			$data['art_comments'] = ereg('[^YN]', $data['art_comments']) ? '' : $data['art_comments'];
+			$data['art_comments'] = preg_match('/[YN]/', $data['art_comments']) ? $data['art_comments'] : ARTICLE_COMMENTS;
 		else
 			$data['art_comments'] = ARTICLE_COMMENTS;
 
 		if(isset($data['art_type']))
-			$data['art_type'] = ereg('[^OR]', $data['art_type']) ? '' : $data['art_type'];
+			$data['art_type'] = preg_match('/[OR]/', $data['art_type']) ? $data['art_type'] : ARTICLE_TYPE_OPEN;
 		else
 			$data['art_type'] = ARTICLE_TYPE_OPEN;
 
@@ -282,12 +301,11 @@ INSERT INTO article (
 		my_strip_tags($data['art_name']);
 		my_strip_tags($data['art_username']);
 		my_strip_tags($data['art_useremail']);
-
 	} // validate
 
 	function get_total($art_modid = 0)
 	{
-		global $db;
+		//global $db;
 
 		$sql_add = '';
 		$sql = "SELECT COUNT(*) art_count FROM `article` a";
@@ -299,7 +317,7 @@ INSERT INTO article (
 		if($sql_add)
 			$sql .= " WHERE $sql_add";
 
-		$data = $db->ExecuteSingle($sql);
+		$data = $this->db->ExecuteSingle($sql);
 
 		return $data['art_count'];
 	} // get_total

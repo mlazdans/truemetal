@@ -68,7 +68,7 @@ if($countCheck['cv_count'] >= 24)
 {
 	if($json)
 	{
-		$retJson->msg = "Pārsniegtiņš 24 stundiņu limitiņš balsošaniņai.";
+		$retJson->msg = "Pārsniegtiņš divdesmitčetriņu stundiņu limitiņš balsošaniņai.";
 		print json_encode($retJson);
 	} else {
 		if(empty($_SERVER['HTTP_REFERER']))
