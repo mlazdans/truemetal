@@ -9,7 +9,7 @@
 
 require_once('lib/SQLLayer.php');
 
-class SessionHandler
+class SessHandler
 {
 	var $ip;
 	var $sess_name;
@@ -18,7 +18,7 @@ class SessionHandler
 	var $sess_period;
 	var $db;
 
-	function SessionHandler()
+	function __construct()
 	{
 		$this->ip = $GLOBALS["ip"];
 		$this->timeout = 0; // none
@@ -26,7 +26,7 @@ class SessionHandler
 		$this->max_time_online = 300; // 5min
 		$this->db = new SQLLayer($GLOBALS['sys_database_type']);
 		$this->db->connect($GLOBALS['sys_db_host'], $GLOBALS['sys_db_user'], $GLOBALS['sys_db_password'], $GLOBALS['sys_db_name'], $GLOBALS['sys_db_port']);
-	} // SessionHandler
+	} // __construct
 
 	function get_sess_name()
 	{
@@ -166,5 +166,5 @@ class SessionHandler
 		return $this->db->Execute($sql);
 	} // get_active
 
-} // SessionHandler
+} // SessHandler
 

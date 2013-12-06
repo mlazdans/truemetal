@@ -7,7 +7,7 @@
 
 // Custom session handleris
 
-require_once('lib/SessionHandler.php');
+require_once('lib/SessHandler.php');
 $cookie_time = 31536000; // 1 year
 
 ini_set('session.save_handler', 'user');
@@ -17,7 +17,7 @@ ini_set('session.cookie_lifetime', $cookie_time);
 ini_set('session.serialize_handler', 'php');
 ini_set('session.gc_probability', 1);
 
-$sess_handler = new SessionHandler();
+$sess_handler = new SessHandler();
 
 session_set_save_handler(
 	array(&$sess_handler, "sess_open"),

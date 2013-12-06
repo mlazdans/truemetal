@@ -17,7 +17,7 @@ $sys_upload_root       = $sys_public_root.'/data';
 $sys_upload_http_root  = '/data';
 $sys_user_root         = $sys_root.'/users';
 
-$sys_error_reporting   = E_ALL;
+$sys_error_reporting   = E_ALL & ~E_STRICT;
 $sys_default_lang      = 'lv';
 $sys_encoding          = 'utf-8';
 $sys_domain            = (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost');
