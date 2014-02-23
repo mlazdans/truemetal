@@ -11,6 +11,7 @@ class Table
 	const ARTICLE = 1;
 	const FORUM = 2;
 	const COMMENT = 3;
+	const GALLERY = 4;
 
 	static function getName($id)
 	{
@@ -22,6 +23,9 @@ class Table
 		}
 		if($id == Table::FORUM){
 			return 'forum';
+		}
+		if($id == Table::GALLERY){
+			return 'gallery';
 		}
 		return false;
 	}

@@ -59,7 +59,7 @@ $template->set_array($set_vars);
 $template->set_profile($login_data);
 
 # Comment stats
-#if($i_am_admin){
+//if($i_am_admin){
 	$template->enable('BLOCK_truecomments');
 
 	$res = array();
@@ -74,6 +74,7 @@ $template->set_profile($login_data);
 			$v = ''; // To make query fail. Never should though.
 		}
 
+		/*
 		$sql = "
 		SELECT
 			c.*,
@@ -90,6 +91,24 @@ $template->set_profile($login_data);
 			sk DESC
 		LIMIT 3
 		";
+		*/
+
+		$sql = "
+		SELECT
+			c.*,
+			COUNT(*) sk
+		FROM
+			comment c
+		JOIN res_vote cv ON cv.res_id = c.res_id
+		WHERE
+			c.login_id = {$_SESSION['login']['l_id']} AND
+			cv.rv_value = $v
+		GROUP BY
+			c.res_id
+		ORDER BY
+			sk DESC
+		LIMIT 3
+		";
 
 		$res[$r] = $db->Execute($sql);
 
@@ -98,6 +117,7 @@ $template->set_profile($login_data);
 		}
 	}
 
+	/*
 	$sql = "
 	SELECT
 		c.*,
@@ -108,6 +128,19 @@ $template->set_profile($login_data);
 	FROM
 		comment c
 	JOIN comment_connect ON cc_c_id = c_id
+	WHERE
+		c.c_id IN (".join(",", $ids).")
+	";
+	*/
+	$sql = "
+	SELECT
+		c.*,
+		rc.`res_id` AS `parent_res_id`,
+		(SELECT COUNT(*) FROM res_vote rv1 WHERE rv1.res_id = c.res_id AND rv_value = 1) AS plus_count,
+		(SELECT COUNT(*) FROM res_vote rv2 WHERE rv2.res_id = c.res_id AND rv_value = -1) AS minus_count
+	FROM
+		comment c
+	JOIN res_comment rc ON rc.c_id = c.c_id
 	WHERE
 		c.c_id IN (".join(",", $ids).")
 	";
@@ -130,7 +163,9 @@ $template->set_profile($login_data);
 				$c_data = mb_substr($c_data, 0, 70).'...';
 			}
 
-			$c_href = "/{$item_data['cc_table']}/{$item_data['cc_table_id']}/#comment{$item_data['c_id']}";
+			//$table = Table::getName($item_data['table_id']);
+			//$c_href = "/$table/{$item_data['res_id']}/#comment{$item_data['c_id']}";
+			$c_href = "/resroute/{$item_data['parent_res_id']}/?c_id={$item_data['c_id']}";
 
 			$template->set_var('minus_count', $minus_count, 'BLOCK_truecomment_item');
 			$template->set_var('plus_count', $plus_count, 'BLOCK_truecomment_item');
@@ -139,7 +174,7 @@ $template->set_profile($login_data);
 			$template->parse_block('BLOCK_truecomment_item', TMPL_APPEND);
 		}
 	}
-#}
+//}
 
 //$template->enable('BLOCK_picture_delete');
 //$template->enable('BLOCK_private_profile');

@@ -49,9 +49,11 @@ if(!isset($i_am_admin))
 if(!isset($sys_debug))
 	$sys_debug = ($i_am_admin ? true : false);
 
+/*
 if(!$i_am_admin){
 	die('Maintenancē, bļa');
 }
+*/
 
 ini_set('display_errors', ($sys_debug ? 1 : 0));
 ini_set('expose_php', false);
