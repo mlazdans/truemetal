@@ -13,13 +13,25 @@ if(user_loged())
 $template->set_file('FILE_forum', 'forum/theme.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_forum');
 
+if($forum_id == 107488){
+	$template->enable('BLOCK_forumdata_bazar');
+}
+
 if($action == 'add_theme')
 {
 	$error = false;
 	$data = post('data');
 	$forum->validate($data);
 
-	$data['login_id'] = $_SESSION['login']['l_id'];
+	$params = array(
+		'get_votes'=>true,
+		'get_comment_count'=>true,
+		'l_id'=>$_SESSION['login']['l_id'],
+		);
+	$Logins = new Logins();
+	$ldata = $Logins->load($params);
+
+	$data['forum_userid'] = $_SESSION['login']['l_id'];
 	$data['forum_userlogin'] = $_SESSION['login']['l_login'];
 	$data['forum_useremail'] = $_SESSION['login']['l_email'];
 	$data['forum_username'] = $_SESSION['login']['l_nick'];
@@ -40,6 +52,17 @@ if($action == 'add_theme')
 	{
 		$error = true;
 		$template->enable('BLOCK_forumdata_error');
+	}
+
+	# Tirgus
+	if($forum_id == 107488){
+		$entered_days = (time() - strtotime($ldata['l_entered'])) / (3600 * 24);
+		//if(true || ($ldata['comment_count'] < 100) || ($ldata['votes_plus'] - $ldata['votes_minus'] < 100)){
+		if(($entered_days < 10) || ($ldata['votes_plus'] - $ldata['votes_minus'] < 10)){
+			$error = true;
+			$template->enable('BLOCK_forumdata_error_rating');
+			$template->set_var('error_msg', 'Nepietiekams reitings. Jābūt vismaz 10 dienu vecam vai (plusi - mīnusi) vismaz 10', 'BLOCK_forumdata_error_rating');
+		}
 	}
 
 	if(!$error)

@@ -6,7 +6,7 @@
 // marrtins@dqdp.net
 
 $l_id = (int)array_shift($sys_parameters);
-$action = post('action');
+$action = postget('action');
 
 require_once('lib/Logins.php');
 require_once('lib/Module.php');

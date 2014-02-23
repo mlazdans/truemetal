@@ -4,6 +4,9 @@
 	<input type="hidden" name="action" value="save" />
 	Logini: rediģēt <em>{l_login}</em>
 </div>
+<table>
+<tr>
+	<td style="width: 50%;" valign="top">
 <table class="Main">
 <tr>
 	<td class="right nowrap">ID:</td>
@@ -81,6 +84,26 @@
 	</td>
 </tr>
 </table>
+	</td>
+	<td style="width: 50%;" valign="top">
+<table class="Main">
+<tr>
+	<td>Bildes</td>
+</tr>
+<!-- BEGIN BLOCK_logins_pics disabled -->
+<tr>
+	<td>
+		<!-- BEGIN BLOCK_logins_pics_item -->
+		<img src="{http_root}/user/thumb/{l_login}/{l_pic_suffix}/" alt="" />
+		<!-- END BLOCK_logins_pics_item -->
+	</td>
+</tr>
+<!-- END BLOCK_logins_pics -->
+</table>
+	</td>
+</tr>
+</table>
+
 </form>
 <!-- END BLOCK_login_edit -->
 

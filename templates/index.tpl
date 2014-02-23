@@ -39,7 +39,7 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="{http_root}/jsload/?s[]=swfobject&amp;s[]=jquery&amp;s[]=jquery-ui&amp;s[]=truemetal&amp;v={script_version}"></script>
+<script type="text/javascript" src="{http_root}/jsload/?s[]=jquery&amp;s[]=jquery-ui&amp;s[]=truemetal&amp;v={script_version}"></script>
 <script type="text/javascript">
 var User = {
 	disableYoutube: parseInt('{disable_youtube}')
@@ -47,8 +47,7 @@ var User = {
 $(document).ready(function(){
 		Truemetal.initMenu();
 		Truemetal.initUnselectable();
-		if(!User.disableYoutube)
-		{
+		if(!User.disableYoutube){
 			Truemetal.initYouTube();
 		}
 });

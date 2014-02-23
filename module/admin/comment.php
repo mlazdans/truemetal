@@ -42,3 +42,28 @@ WHERE
 	header('Content-Type: text/javascript; charset='.$sys_encoding);
 	print json_encode($jsonData);
 }
+
+if($module == 'original' && $action == 'view')
+{
+	$Comment = new Comment;
+	$Comment->setDb($db);
+	$template = new MainModule($sys_template_root, 'profile', 'admin/comment/original/view.json.tpl');
+
+	$c_id = (int)array_shift($sys_parameters);
+	$data = $Comment->get(array(
+		'c_id'=>$c_id
+		));
+
+	$template->set_array($data);
+
+	ob_start();
+	$template->out();
+	$html = ob_get_clean();
+
+	$jsonData = new StdClass;
+	$jsonData->title = "[ TRUEMETAL ".$template->get_title()." ]";
+	$jsonData->html = $html;
+	header('Content-Type: text/javascript; charset='.$sys_encoding);
+	print json_encode($jsonData);
+}
+

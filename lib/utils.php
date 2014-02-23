@@ -7,6 +7,9 @@
 
 // dazaadas paliigfunkcijas
 
+require_once('Mail.php');
+require_once('Mail/mime.php');
+
 define('REMOVE_TABLE', 1);
 define('REMOVE_FONT', 2);
 
@@ -168,11 +171,13 @@ function proc_date($date)
 function url_pattern()
 {
 	$url_patt = $path_patt = '';
-	return "/(http(s?):\/\/|ftp:\/\/|telnet:\/\/|dchub:\/\/|ed2k:\/\/|mailto:|callto:)([^\/\s\t\n\r\!\'\<>(\)]".$url_patt."*)([^\s\t\n\r\!\'\<>(\)]".$path_patt."*)/is";
+	return "/(http(s?):\/\/|ftp:\/\/|telnet:\/\/|dchub:\/\/|ed2k:\/\/|mailto:|callto:)([^\/\s\t\n\r\!\'\<>\(\)]".$url_patt."*)([^\s\t\n\r\'\<>\(\)]".$path_patt."*)/is";
 } // url_pattern
 
 function parse_text_data(&$data)
 {
+	global $i_am_admin;
+
 	// proc url's - 1pass
 	$patt = url_pattern();
 	if(preg_match_all($patt, $data, $matches)) {
@@ -184,7 +189,7 @@ function parse_text_data(&$data)
 	}
 
 	// proc words
-	preg_match_all('/(.\s)(\1{'.(integer)(FORUM_MAXWORDSIZE / 2).',})/U', $data, $tmp);
+	preg_match_all('/(.\s)(\1{'.(integer)(FORUM_MAXWORDSIZE / 2).',})/Uu', $data, $tmp);
 	$data = preg_replace(
 		'/(.\s)(\1{'.(integer)(FORUM_MAXWORDSIZE / 2).',})/e',
 		"mb_substr('$1', 0, FORUM_MAXWORDSIZE).\"...\"",
@@ -195,6 +200,7 @@ function parse_text_data(&$data)
 	$data = preg_replace('/(\n|\r\n){3,}/', '\1\1', $data);
 
 	preg_match_all('/([^\s]*)(\s|$)/', $data, $tmp);
+	#preg_match_all('/([^\s\p{P}]*)(\s|\p{P}|$)/u', $data, $tmp);
 
 	$last_matched = false;
 	if(isset($tmp[0])) {
@@ -208,8 +214,8 @@ function parse_text_data(&$data)
 			} else
 				$last_matched = false;
 
-			if(strlen($tmp[1][$r]) > FORUM_MAXWORDSIZE)
-				$tmp[1][$r] = substr($tmp[1][$r], 0, FORUM_MAXWORDSIZE)."...".$tmp[2][$r];
+			if(mb_strlen($tmp[1][$r]) > FORUM_MAXWORDSIZE)
+				$tmp[1][$r] = mb_substr($tmp[1][$r], 0, FORUM_MAXWORDSIZE)."...".$tmp[2][$r];
 			else
 				$tmp[1][$r] .= $tmp[2][$r];
 		}
@@ -245,7 +251,7 @@ function parse_text_data(&$data)
 			$m4 = '';
 		}
 
-		$url = htmlspecialchars($matches[1][$k].$matches[3][$k].$matches[4][$k], ENT_COMPAT, "utf-8");
+		$url = htmlspecialchars($matches[1][$k].$matches[3][$k].$matches[4][$k], ENT_COMPAT, "UTF-8");
 		$url_short = htmlspecialchars($m3.$m4);
 
 		$TMs = array(
@@ -277,6 +283,7 @@ function parse_text_data(&$data)
 		}
 
 	}
+
 	// ja pa daudz ievadiits
 	if($w_count > FORUM_MAXWORDS)
 		$data .= '...';
@@ -675,9 +682,6 @@ function email($to, $subj, $msg, $attachments = array())
 {
 	global $sys_mail_from, $mail_params;
 
-	require_once('Mail.php');
-	require_once('Mail/mime.php');
-
 	$headers = array(
 		'From'=>$sys_mail_from,
 		'Subject'=>$subj,
@@ -740,8 +744,8 @@ function parse_form_data($data)
 {
 	global $config;
 
-	if(get_magic_quotes_gpc())
-		$data = stripslashes($data);
+	//if(get_magic_quotes_gpc())
+	//	$data = stripslashes($data);
 
 	return htmlspecialchars($data, ENT_COMPAT, $GLOBALS['sys_encoding']);
 } // parse_form_data
@@ -822,9 +826,12 @@ function to_range($val, $range, $default = '')
 
 function printr(&$data)
 {
-	print "<pre>";
-	print_r($data);
-	print "</pre>";
+	if($GLOBALS['i_am_admin'])
+	{
+		print "<pre>";
+		print_r($data);
+		print "</pre>";
+	}
 } // printr
 
 function _GET()
@@ -1059,8 +1066,73 @@ function urlize($name)
 	return $name;
 } // urlize
 
-function gettime()
+function queryl($format = '', $allowed = array())
 {
-	return microtime(true);
-} // gettime
+	return __query($_SERVER['QUERY_STRING'], $format, '&', $allowed);
+} // queryl
+
+function query($format = '', $allowed = array())
+{
+	return __query($_SERVER['QUERY_STRING'], $format, '&amp;', $allowed);
+} // query
+
+function __query($query_string = '', $format = '', $delim = '&amp;', $allowed = array())
+{
+	$QS = query_split($query_string);
+	$FORMAT = query_split($format);
+
+	# Unset disallowd
+	if($allowed)
+	{
+		foreach($QS as $k=>$v)
+			if(!in_array($k, $allowed))
+				unset($QS[$k]);
+	}
+
+	foreach($FORMAT as $k=>$v)
+	{
+		if($k{0} == '-')
+		{
+			if( ($k2 = substr($k, 1)) && (!$v || ($QS[$k2] == $v)))
+				unset($QS[$k2]);
+		} else
+			$QS[$k] = $v;
+	}
+
+	return query_join($QS, $delim);
+} // __query
+
+function query_split($q)
+{
+	if(!$q)
+		return array();
+
+	# XXX: dirty hack :)
+	$q = str_replace("&amp;", "|||", $q);
+
+	$ret = array();
+	$parts = explode('&', html_entity_decode($q));
+
+	foreach($parts as $val)
+	{
+		$x = explode('=', $val);
+		//admin_print_r($x);
+		$x[0] = str_replace("|||", "&amp;", $x[0]);
+		$x[1] = str_replace("|||", "&amp;", $x[1]);
+		$ret[$x[0]] = $x[1];
+		if(!isset($x[1]))
+			trigger_error("\$x[1] not set $q");
+	}
+
+	return $ret;
+} // query_split
+
+function query_join(Array $QS, $delim)
+{
+	$ret = array();
+	foreach($QS as $k=>$v)
+		$ret[] = "$k=$v";
+
+	return join($delim, $ret);
+} // query_join
 

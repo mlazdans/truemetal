@@ -186,15 +186,21 @@ class SQLLayer
 		}
 	} // Rollback
 
-	function Quote($str)
+	function Quote($p)
 	{
-		switch( $this->int_db_type ) {
-			case DB_MYSQLI:
-				return $this->__mysqli_quote($str);
-				break;
-			default:
-				return false;
-				break;
+		if(is_array($p)){
+			return $this->QuoteArray($p);
+		} elseif(is_object($p)) {
+			return $this->QuoteObject($p);
+		} else {
+			switch( $this->int_db_type ) {
+				case DB_MYSQLI:
+					return $this->__mysqli_quote($p);
+					break;
+				default:
+					return false;
+					break;
+			}
 		}
 	} // Quote
 
@@ -411,7 +417,7 @@ class SQLLayer
 	protected function __query_mysqli($str_sql)
 	{
 		if( !($res_q = @mysqli_query($this->conn, $str_sql)) )
-			user_error(mysqli_error($this->conn).($GLOBALS['sys_debug'] ? $str_sql : ''), E_USER_WARNING);
+			user_error(mysqli_error($this->conn).(true || $GLOBALS['sys_debug'] ? $str_sql : ''), E_USER_WARNING);
 
 		return $res_q;
 	} // __query_mysql

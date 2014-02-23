@@ -42,7 +42,7 @@ if(!user_loged())
 	# Articles
 	$Article = new Article;
 	$data = $Article->load(array(
-		'order'=>'art_comment_lastdate DESC',
+		'order'=>'cm_comment_lastdate DESC',
 		'limit'=>50,
 		));
 

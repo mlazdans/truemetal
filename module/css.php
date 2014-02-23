@@ -12,11 +12,11 @@ if(
 	substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')
 	)
 {
-	ob_start("ob_gzhandler");
+	ini_set('zlib.output_compression', 1);
+	//ob_start("ob_gzhandler");
 } else {
-	ob_start();
+	//ob_start();
 }
-
 
 $expires = (7 * 24 * 3600);
 header("Content-Type: text/css");
@@ -32,4 +32,3 @@ if($SCRIPTS = get('s'))
 	}
 }
 
-ob_end_flush();

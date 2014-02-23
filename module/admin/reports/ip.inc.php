@@ -26,7 +26,7 @@ $comments = $RC->get(array(
 	'ips'=>$ips,
 	'c_visible'=>Comment::ALL,
 	'sort'=>'c_entered DESC',
-	'limit'=>100,
+	'limit'=>1000,
 	));
 
 include("module/admin/comment/list.inc.php");

@@ -47,6 +47,7 @@ class MainModule extends Template
 		$this->set_global('module_root', $GLOBALS['sys_http_root'].'/'.$this->module_name);
 		$this->set_global('script_version', $GLOBALS['sys_script_version']);
 		$this->set_global('disable_youtube', (empty($_SESSION['login']['l_disable_youtube']) ? 0 : 1));
+		$this->set_global('i_am_admin', $GLOBALS['i_am_admin']);
 		$this->set_descr("Metāls Latvijā");
 
 		$this->set_banner_top();
@@ -67,11 +68,8 @@ class MainModule extends Template
 
 	function set_descr($descr)
 	{
-		global $i_am_admin;
-
 		$descr = preg_replace("/(\r\n)/", "\n", $descr);
 
-		//if($i_am_admin)
 		{
 			$dd = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -88,8 +86,6 @@ $descr.
 			$xml = simplexml_import_dom($doc);
 
 			$els = $xml->xpath("//a");
-			//if($i_am_admin)
-				//printr($els);
 			foreach($els as $el)
 			{
 				if(isset($el[0]))
@@ -437,6 +433,58 @@ $descr.
 		else
 			$this->set_var('banner_height', 113);
 	} // set_banner_top
+
+	function set_jubilars()
+	{
+		$Logins = new Logins();
+		$jubs = $Logins->load(array(
+			'jubilars'=>true,
+			));
+
+		$block = user_loged() ? 'BLOCK_jub_item' : 'BLOCK_jub_item_notloged';
+
+		$this->set_file('FILE_jub', 'right/jub.tpl');
+		$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_jub');
+
+		if($jubs) {
+			$this->enable($block);
+		}
+
+		foreach($jubs as $data)
+		{
+			$age = round($data['age'] / 365);
+
+			$jub_year = '';
+			if($age == 0){
+				$jub_year = 'jauniņais';
+			} elseif($age == 1){
+				$jub_year = ' gadiņš';
+			} else {
+				if((substr($age, -2) != 11) && ($age % 10 == 1)){
+					$jub_year = ' gads';
+				} else {
+					$jub_year = ' gadi';
+				}
+			}
+
+			$this->set_var('jub_name', $data['l_nick'], 'FILE_jub');
+			$this->set_var('jub_login_id', $data['l_login'], 'FILE_jub');
+
+			if($age){
+				$this->set_var('jub_info', " ($age $jub_year)", 'FILE_jub');
+			} else {
+				$this->set_var('jub_info', " ($jub_year)", 'FILE_jub');
+			}
+			//$this->set_var('jub_age', $age, 'FILE_jub');
+			//$this->set_var('jub_year', $jub_year, 'FILE_jub');
+
+			$this->parse_block($block, TMPL_APPEND);
+		}
+
+		$this->parse_block('FILE_jub');
+		$this->set_var('right_item_data', $this->get_parsed_content('FILE_jub'), 'BLOCK_right_item');
+		$this->parse_block('BLOCK_right_item', TMPL_APPEND);
+	} // set_jubilars
 
 } // MainModule
 

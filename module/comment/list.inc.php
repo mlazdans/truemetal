@@ -28,8 +28,10 @@ if($comments)
 	$template->enable('BLOCK_nocomment');
 }
 
+$comment_nr = 0;
 foreach($comments as $item)
 {
+	$comment_nr++;
 	$item['res_votes'] = (int)$item['res_votes'];
 	# balsošana
 	if(user_loged() && $template->block_isset('BLOCK_comment_vote'))
@@ -87,6 +89,8 @@ foreach($comments as $item)
 		$template->enable('BLOCK_profile_link');
 	else
 		$template->disable('BLOCK_profile_link');
+
+	$template->set_var('comment_nr', $comment_nr, 'BLOCK_comment');
 
 	$template->parse_block('BLOCK_comment_list', TMPL_APPEND);
 } // foreach

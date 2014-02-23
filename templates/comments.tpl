@@ -16,7 +16,7 @@
 		<div class="date">, {c_date}</div>
 
 		<div class="link unselectable">
-			<a href="#comment{c_id}">[Link]</a>
+			<a href="#comment{c_id}">[#{comment_nr}]</a>
 		</div>
 		<!-- BEGIN BLOCK_profile_link disabled -->
 		<div class="profile unselectable">
@@ -97,23 +97,15 @@
 	<ul>
 		<li>Maksimālais vārda garums: 25</li>
 		<li>Maksimālais komentāra garums: 400 vārdi</li>
-		<li>Lai links kļūtu &quot;spiežams&quot;, tam priekšā ir jāliek kāds no:
-			<ul>
-				<li>http(s?)://</li>
-				<li>ftp://</li>
-				<li>telnet://</li>
-				<li>dchub://</li>
-				<li>ed2k://</li>
-				<li>mailto:</li>
-				<li>callto:</li>
-			</ul>
-		</li>
+		<li>Lai links kļūtu &quot;spiežams&quot;, tam priekšā ir jāliek <strong>http://</strong></li>
 		<li>Lai ieliktu video no Youtube, vajag iekopēt linku <strong>(nevis &lt;object&gt;)</strong>, piemēram:
 			<ul>
 				<li>http://www.youtube.com/watch?v=DB_8sxghxis</li>
 				<li>http://www.youtube.com/watch?v=EwTZ2xpQwpA</li>
+				<li>http://youtu.be/_SjGW-TJ4QE</li>
 			</ul>
 		</li>
+		<li>Tirgojoties obligāti jānorāda cena</li>
 	</ul>
 </div>
 <!-- END BLOCK_addcomment -->

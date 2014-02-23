@@ -34,6 +34,8 @@ class Logins
 		$sql_add = array();
 		$sql_having = array();
 
+		$params = $db->Quote($params);
+
 		if(isset($params['l_id']))
 			$sql_add[] = sprintf("l_id = %d", $params['l_id']);
 
@@ -51,6 +53,15 @@ class Logins
 
 		if(isset($params['l_lastaccess']))
 			$sql_add[] = sprintf("l_lastaccess = '%s'", $params['l_lastaccess']);
+
+		if(!empty($params['jubilars']))
+		{
+			$d0 = date('Y-m-d H:i:s', strtotime("-6 month"));
+			$d1 = date('Y-m-d H:i:s', strtotime("-2 day"));
+			$d2 = date('Y-m-d H:i:s', strtotime("+2 day"));
+			$sql_add[] = "(DATE_FORMAT(l_entered, '%m%d') >= DATE_FORMAT('$d1', '%m%d') AND DATE_FORMAT(l_entered, '%m%d') <= DATE_FORMAT('$d2', '%m%d'))";
+			$sql_add[] = sprintf("l_lastaccess >= '%s'", $d0);
+		}
 
 		if(isset($params['l_password']))
 			$sql_add[] = sprintf(
@@ -112,6 +123,11 @@ class Logins
 			";
 		}
 
+		if(!empty($params['jubilars'])){
+			$sql .= ", DATE_FORMAT(l_entered, '%m%d') AS entered_stamp ";
+			$sql .= ", DATEDIFF(CURRENT_TIMESTAMP, l_entered) AS age ";
+		}
+
 		if(!empty($params['get_comment_count']))
 		{
 			$sql .= ", (SELECT COUNT(*) FROM comment WHERE login_id = l_id) comment_count ";
@@ -146,7 +162,16 @@ class Logins
 		if($sql_having)
 			$sql .= " HAVING ".join(" AND ", $sql_having);
 
-		$sql .= (empty($params['order']) ? " ORDER BY l_entered DESC " : " ORDER BY $params[order] ");
+		if(empty($params['order']))
+		{
+			if(!empty($params['jubilars'])){
+				$sql .= " ORDER BY entered_stamp ASC ";
+			} else {
+				$sql .= " ORDER BY l_entered DESC ";
+			}
+		} else {
+			$sql .= " ORDER BY $params[order] ";
+		}
 
 		if(isset($params['limit']))
 			$sql .= " LIMIT $params[limit]";
@@ -211,14 +236,20 @@ class Logins
 		return $db->Execute($sql);
 	} // get_active
 
-	static function save_session_data()
+	static function save_session_data($data = '')
 	{
-		global $db;
+		global $db, $sess_handler;
 
 		if(user_loged())
 		{
 			$l_id = $_SESSION['login']['l_id'];
-			$db->Execute("UPDATE logins SET l_sessiondata ='".session_encode()."', l_lastaccess = NOW(), l_logedin = 'Y' WHERE l_id = $l_id");
+			if(empty($data)){
+				$data = session_encode();
+			}
+			$sql = "UPDATE logins SET l_sessiondata ='$data', l_lastaccess = NOW(), l_logedin = 'Y' WHERE l_id = $l_id";
+			//$sess_handler->log($sql);
+			$db->Execute($sql);
+			$db->Commit();
 		}
 	} // save_session_data
 
@@ -300,10 +331,14 @@ class Logins
 		if(!$l_id)
 			return false;
 
+		$ts = date('YmdHis');
 		$save_path = $sys_user_root.'/pic/'.$l_id.'.jpg';
 		$tsave_path = $sys_user_root.'/pic/thumb/'.$l_id.'.jpg';
 
-		return unlink($save_path) && unlink($tsave_path);
+		$save_path1 = $sys_user_root.'/pic/'.$l_id.'-'.$ts.'.jpg';
+		$tsave_path1 = $sys_user_root.'/pic/thumb/'.$l_id.'-'.$ts.'.jpg';
+
+		return rename($save_path, $save_path1) && rename($tsave_path, $tsave_path1);
 	} // delete_image
 
 	function update_profile($data, $l_id = 0)
@@ -409,6 +444,7 @@ class Logins
 
 					if($_FILES['l_picfile']['tmp_name'])
 					{
+						Logins::delete_image();
 						// handle image
 						$save_path = $sys_user_root.'/pic/'.$l_id.'.jpg';
 						$tsave_path = $sys_user_root.'/pic/thumb/'.$l_id.'.jpg';
@@ -609,6 +645,8 @@ class Logins
 		if($validate)
 			$this->validate($data);
 
+		$data = $db->Quote($data);
+
 		$date = $db->now();
 		if($data['l_entered'])
 			$date = "'$data[l_entered]'";
@@ -700,6 +738,15 @@ class Logins
 
 		return $db->Execute($sql);
 	} // del
+
+	function accept($l_id)
+	{
+		global $db;
+
+		$sql = 'UPDATE logins SET l_accepted = "'.LOGIN_ACCEPTED.'" WHERE l_id = "'.$l_id.'"';
+
+		return $db->Execute($sql);
+	} // accept
 
 	function activate($l_id)
 	{

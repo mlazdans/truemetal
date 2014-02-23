@@ -40,8 +40,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 {
 	$search_log = post('spam') ? false : true;
 	$search_q = post('search_q');
-	if(get_magic_quotes_gpc())
-		$search_q = stripslashes($search_q);
+	//if(get_magic_quotes_gpc())
+	//	$search_q = stripslashes($search_q);
 } else {
 	$search_log = false;
 	$search_q = urldecode(get('search_q'));

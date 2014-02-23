@@ -18,7 +18,7 @@
 	<a href="http://www.flaying.net/">Flaying</a>
 </div>
 <div class="List-item">
-	<a href="http://www.fraily.lv/">Fraily</a>
+	<a href="http://www.frailty.lv/">Fraitly</a>
 </div>
 <div class="List-item">
 	<a href="http://infected.alternative.lv/">Infected</a>

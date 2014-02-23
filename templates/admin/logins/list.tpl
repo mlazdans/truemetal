@@ -10,7 +10,7 @@ Nav neviena logina
 
 
 <!-- BEGIN BLOCK_logins_search_from -->
-<form action="" method="post" id="logins_search">
+<form action="" method="get" id="logins_search">
 <div>
 <input type="hidden" name="action" value="search" />
 <label for="ls_q">IP;E-mail;Login;Nick: <input type="text" name="q" id="ls_q" value="{q}" /></label>
@@ -35,14 +35,15 @@ Nav neviena logina
 	</td>
 	<td class="TD-cat">Logins</td>
 	<td class="TD-cat">Niks</td>
-	<td class="TD-cat">Reitings</td>
-	<td class="TD-cat">Komentāri</td>
+	<td class="TD-cat"><a href="?{q_sort_votes}">Reitings</a></td>
+	<td class="TD-cat"><a href="?{q_sort_votes_perc}">Lietderība</a></td>
+	<td class="TD-cat"><a href="?{q_sort_comment_count}">Komentāri</a></td>
 	<td class="TD-cat">E-pasts</td>
 	<td class="TD-cat" title="Aktīvs">Akt</td>
 	<td class="TD-cat" title="Akceptēts">Akc</td>
 	<td class="TD-cat">IP</td>
 	<td class="TD-cat">Manīts</td>
-	<td class="TD-cat">Pievienojies</td>
+	<td class="TD-cat"><a href="?{q_sort_l_entered}">Pievienojies</a></td>
 </tr>
 <!-- BEGIN BLOCK_logins -->
 <tr>
@@ -55,6 +56,7 @@ Nav neviena logina
 	</td>
 	<td class="{l_color_class}">{l_nick}</td>
 	<td class="{l_color_class}">{votes}({votes_plus}-{votes_minus})</td>
+	<td class="{l_color_class}">{votes_perc}%</td>
 	<td class="{l_color_class}">{comment_count}</td>
 	<td class="{l_color_class}">
 		<a href="mailto:{l_email}">{l_email}</a>
@@ -69,7 +71,7 @@ Nav neviena logina
 </tr>
 <!-- END BLOCK_logins -->
 <tr>
-	<td colspan="10">
+	<td colspan="11">
 		Iezīmētos:
 		<select name="action">
 			<option value="">---</option>

@@ -26,7 +26,7 @@ foreach($data as $item)
 		++$errors;
 }
 
-$sql = "DELETE FROM `sessions` WHERE sess_data = ''";
+$sql = "DELETE FROM `sessions` WHERE sess_data = '' OR sess_data = 'login|a:0:{}'";
 $db->Execute($sql);
 $deleted += $db->AffectedRows();
 

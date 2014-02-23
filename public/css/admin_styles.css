@@ -86,11 +86,15 @@ hr {
 	border: 0;
 }
 
-.TD-menu, .TD-menu-active, .TD-cat, .TD-cat-active {
+.TD-menu, .TD-menu-active, .TD-cat, .TD-cat-active,
+.TD-menu a, .TD-menu-active a, .TD-cat a, .TD-cat-active a
+{
 	font-weight: bold;
-	padding: 3px 8px;
 	color: white;
 	white-space: nowrap;
+}
+.TD-menu, .TD-menu-active, .TD-cat, .TD-cat-active{
+	padding: 3px 8px;
 }
 .TD-menu {
 	background-color: #000066;

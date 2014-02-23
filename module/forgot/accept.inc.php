@@ -24,7 +24,7 @@ $template->set_var('f_code', $code, 'BLOCK_forgot_passw');
 
 $data = post('data', array());
 $change_passw = (int)post('change_passw');
-$login_data = Logins::load_by_login($forgot_data['f_login']);
+$login_data = Logins::load_by_login($forgot_data['f_login'], array('l_accepted'=>LOGIN_ALL));
 
 $pass_changed = false;
 if($change_passw)
@@ -39,6 +39,7 @@ if($change_passw)
 	if(
 		!$error_msg &&
 		$logins->update_password($login_data['l_login'], $data['l_password']) &&
+		$logins->accept($login_data['l_id']) &&
 		$logins->remove_forgot_code($code)
 		)
 	{

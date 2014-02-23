@@ -7,12 +7,14 @@
 
 $thumb = (isset($thumb) ? $thumb : "");
 $login = array_shift($sys_parameters);
+$suffix = array_shift($sys_parameters);
 $login_data = Logins::load_by_login($login);
 
+$suffix = preg_replace('/[^-\d]/', '', $suffix);
 if(
 	user_loged() &&
 	$login_data &&
-	($pic_localpath = "$sys_user_root/pic$thumb/$login_data[l_id].jpg") &&
+	($pic_localpath = "$sys_user_root/pic$thumb/$login_data[l_id]$suffix.jpg") &&
 	($info = getimagesize($pic_localpath)))
 {
 	$last_modified_time = filemtime($pic_localpath);

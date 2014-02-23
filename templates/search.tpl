@@ -72,11 +72,14 @@
 </div>
 <!-- END BLOCK_search_msg -->
 
+<table class="Main">
 <!-- BEGIN BLOCK_search_item disabled -->
-<div class="List-item">
-	{doc_module_name} &gt;
-	<a href="{doc_url}">{doc_name}&nbsp;</a>
-</div>
+<tr>
+	<td>{doc_module_name}</td>
+	<td style="text-align: left; width: 100%;"><a href="{doc_url}">{doc_name}&nbsp;</a> ({doc_comment_count})</td>
+	<td style="text-align: right;">{doc_date}</td>
+</tr>
 <!-- END BLOCK_search_item -->
+</table>
 <!-- END BLOCK_search -->
 

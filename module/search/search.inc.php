@@ -106,6 +106,8 @@ if(($res = $cl->Query($search_q, $index)) === false)
 					'doc_name'=>$item['art_name'],
 					'doc_url'=>"/".($doc_source_id == 1 ? "article" : "reviews")."/$item[art_id]-".rawurlencode(urlize($item["art_name"]))."?hl=$special_search_q",
 					'doc_module_name'=>$ds['name'],
+					'doc_date'=>date('d.m.Y', strtotime($item['art_entered'])),
+					'doc_comment_count'=>$item['art_comment_count'],
 					);
 			}
 			unset($arts);
@@ -121,11 +123,14 @@ if(($res = $cl->Query($search_q, $index)) === false)
 			{
 				//$doc_id = $item['forum_id'] + $ds['id_offset'.($only_titles ? "_titles" : "")];
 				$doc_id = $doc_ids[$item['forum_id']];
+				//printr($item);
 				$items_temp[$doc_id] = array(
 					'doc_real_id'=>$item['forum_id'],
 					'doc_name'=>$item['forum_name'],
 					'doc_url'=>"/forum/$item[forum_id]-".rawurlencode(urlize($item["forum_name"]))."?hl=$special_search_q",
 					'doc_module_name'=>$ds['name'],
+					'doc_date'=>date('d.m.Y', strtotime($item['forum_entered'])),
+					'doc_comment_count'=>$item['forum_comment_count'],
 					);
 			}
 			unset($forums);
@@ -140,15 +145,14 @@ if(($res = $cl->Query($search_q, $index)) === false)
 }
 
 # Docs
+//printr($items);
 if(isset($items) && $items)
 {
 	$template->enable('BLOCK_search');
 	$template->enable('BLOCK_search_item');
 	foreach($items as $item)
 	{
-		$template->set_var('doc_url', $item['doc_url'], 'BLOCK_search_item');
-		$template->set_var('doc_name', $item['doc_name'], 'BLOCK_search_item');
-		$template->set_var('doc_module_name', $item['doc_module_name'], 'BLOCK_search_item');
+		$template->set_array($item, 'BLOCK_search_item');
 		$template->parse_block('BLOCK_search_item', TMPL_APPEND);
 	}
 }

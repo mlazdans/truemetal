@@ -68,9 +68,6 @@ class SessHandler
 
 	function sess_write($sess_id, $sess_data)
 	{
-		if(empty($sess_data))
-			return true;
-
 		$sess = $this->get_sess($sess_id);
 
 		if(isset($sess['sess_id']) && ($sess['sess_id'] == $sess_id))
@@ -79,6 +76,7 @@ class SessHandler
 			$sql = "INSERT INTO sessions (sess_id, sess_data, sess_ip, sess_lastaccess, sess_entered) VALUES ('$sess_id', '$sess_data', '$this->ip', NOW(), NOW())";
 
 		$this->db->Execute($sql);
+		$this->db->Commit();
 
 		return true;
 	} // sess_write

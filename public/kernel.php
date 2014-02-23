@@ -17,7 +17,7 @@ $sys_upload_root       = $sys_public_root.'/data';
 $sys_upload_http_root  = '/data';
 $sys_user_root         = $sys_root.'/users';
 
-$sys_error_reporting   = E_ALL & ~E_STRICT;
+$sys_error_reporting   = E_ALL & ~(E_NOTICE | E_STRICT);
 $sys_default_lang      = 'lv';
 $sys_encoding          = 'utf-8';
 $sys_domain            = (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost');
@@ -27,6 +27,8 @@ $sys_admins            = array('127.0.0.1');
 $sys_module_map        = array();
 $sys_use_cdn           = false;
 $sys_cdn_func          = '';
+
+$sys_nosess_modules    = array('css', 'jsload', 'apc', 'info');
 
 $sys_mail_from         = (isset($_SERVER['SERVER_ADMIN']) ?
 	$_SERVER['SERVER_ADMIN'] :
@@ -46,6 +48,10 @@ if(!isset($i_am_admin))
 	$i_am_admin = in_array($ip, $sys_admins);
 if(!isset($sys_debug))
 	$sys_debug = ($i_am_admin ? true : false);
+
+if(!$i_am_admin){
+	die('Maintenancē, bļa');
+}
 
 ini_set('display_errors', ($sys_debug ? 1 : 0));
 ini_set('expose_php', false);
@@ -76,33 +82,21 @@ if(isset($sys_banned[$ip]))
 
 //apd_set_pprof_trace();
 /* some includes */
+require_once('include/dbconnect.php');
 require_once('lib/utils.php');
-require('include/dbconnect.php');
-require_once('include/session_handler.php');
-require_once("lib/Table.php");
-require_once("lib/Res.php");
 require_once('lib/MainModule.php');
 require_once('lib/Module.php');
 require_once('lib/Logins.php');
 
 mb_regex_encoding($sys_encoding);
 mb_internal_encoding($sys_encoding);
-
-if(user_loged())
-{
-	if($l = Logins::load_by_id_logged_in($_SESSION['login']['l_id']))
-	{
-		//session_decode($l['l_sessiondata']);
-	} else {
-		Logins::logoff();
-		redirect();
-		return;
-	}
-}
-
-register_shutdown_function("shutdown");
+//printr($_SERVER);
 
 /* dabuujam parametrus no mod_rewrite */
+if(!isset($_SERVER["SERVER_PROTOCOL"]))
+	$_SERVER["SERVER_PROTOCOL"] = "HTTP/1.0";
+if(!isset($_SERVER["REQUEST_URI"]))
+	$_SERVER["REQUEST_URI"] = "http://truemetal.lv/forum/122131-d%C4%ABvaini-cilv%C4%93ku-v%C4%81rdi-uzv%C4%81rdi";
 $parts = explode('?', $_SERVER["REQUEST_URI"]);
 $_SERVER["REQUEST_URI"] = array_shift($parts);
 $_SERVER["QUERY_STRING"] = join("?", $parts);
@@ -115,6 +109,33 @@ $sys_module_id = array_shift($sys_parameters);
 // ja nav ne1 modulis selekteets
 if(!$sys_module_id && $sys_default_module)
 	$sys_module_id = $sys_default_module;
+
+if(!in_array($sys_module_id, $sys_nosess_modules)){
+	require_once('include/session_handler.php');
+}
+if(user_loged())
+{
+	register_shutdown_function("shutdown");
+	if($l = Logins::load_by_id($_SESSION['login']['l_id']))
+	{
+		/*
+		if($_SESSION['login']['l_nick'] == 'graff'){
+			ob_start();
+			print_r($_SERVER);
+			$h = ob_get_clean();
+			file_put_contents('/tmp/graff.txt', "[$now]\n$h\n",  FILE_APPEND |  LOCK_EX);
+		}
+		*/
+		session_decode($l['l_sessiondata']);
+		//printr($l['l_sessiondata']);
+		//printr($_SESSION);
+	} else {
+		Logins::logoff();
+		redirect();
+		return;
+	}
+}
+
 
 $module_root = "$sys_http_root/$sys_module_id";
 
@@ -189,16 +210,15 @@ print $tidy;
 
 function shutdown()
 {
-	session_commit();
 	Logins::save_session_data();
+	session_commit();
 } // shutdown
 
 /*
 if($i_am_admin)
 {
 	$sys_end_time = microtime(true);
-	print 'Finished: '.number_format(($sys_end_time - $sys_start_time), 2, '.', '');
+	print '<!-- Finished: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec -->';
 }
 */
-
 

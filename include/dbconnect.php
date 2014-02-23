@@ -21,5 +21,6 @@ if(!empty($GLOBALS['sys_database_type']))
 		);
 } else {
 	$db = null;
+	$db->AutoCommit(true);
 }
 

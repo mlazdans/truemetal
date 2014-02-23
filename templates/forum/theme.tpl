@@ -84,6 +84,19 @@
 <!-- BEGIN BLOCK_loggedin disabled -->
 <a name="add_theme"></a>
 <form action="{module_root}{forum1_path}#add_theme" method="post">
+
+<!-- BEGIN BLOCK_forumdata_error_rating disabled -->
+<div class="error">
+	{error_msg}
+</div>
+<!-- END BLOCK_forumdata_error_rating -->
+
+<!-- BEGIN BLOCK_forumdata_bazar disabled -->
+<div class="List-item">
+	Tirgus sadaļā tēmas veidot var sākt, ja reģistrējies vismaz 10 dienas VAI (plusi-mīnusi) >= 10.
+</div>
+<!-- END BLOCK_forumdata_bazar -->
+
 <table class="Forum-Theme-form" cellpadding="2" cellspacing="1">
 <tr>
 	<td align="right">
