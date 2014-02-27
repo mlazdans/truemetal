@@ -81,28 +81,30 @@ if(($res = $cl->Query($search_q, $index)) === false)
 	foreach($res["matches"] as $id=>$doc)
 	{
 		$doc_source_id = $doc['attrs']['doc_source_id'];
-		$doc_real_id = $doc['attrs']['doc_real_id'];
-		$ids[$doc_source_id][$doc_real_id] = $id;
+		$doc_res_id = $doc['attrs']['doc_res_id'];
+		$ids[$doc_source_id][] = $doc_res_id;
 	}
 
-	$items_temp = array();
-	foreach($ids as $doc_source_id=>$doc_ids)
+	$items = array();
+
+	foreach($ids as $doc_source_id=>$res_ids)
 	{
-		$res_ids = array_keys($doc_ids);
 		$ds = $DOC_SOURCES[$doc_source_id];
 
 		# Articles & reviews
 		if( ($doc_source_id == 1) || ($doc_source_id == 2) )
 		{
 			$arts = $Article->load(array(
-				'art_ids'=>$res_ids,
+				'res_ids'=>$res_ids,
 				));
+
 			foreach($arts as $item)
 			{
 				//$doc_id = $item['art_id'] + $ds['id_offset'.($only_titles ? "_titles" : "")];
-				$doc_id = $doc_ids[$item['art_id']];
-				$items_temp[$doc_id] = array(
-					'doc_real_id'=>$item['art_id'],
+				//$doc_id = $res_ids[$item['art_id']];
+				$doc_id = $item['res_id'];
+				$items[$doc_id] = array(
+					'doc_res_id'=>$item['art_id'],
 					'doc_name'=>$item['art_name'],
 					'doc_url'=>"/".($doc_source_id == 1 ? "article" : "reviews")."/$item[art_id]-".rawurlencode(urlize($item["art_name"]))."?hl=$special_search_q",
 					'doc_module_name'=>$ds['name'],
@@ -117,15 +119,15 @@ if(($res = $cl->Query($search_q, $index)) === false)
 		if($doc_source_id == 3)
 		{
 			$forums = $Forum->load(array(
-				'forum_ids'=>$res_ids,
+				'res_ids'=>$res_ids,
 				));
 			foreach($forums as $item)
 			{
 				//$doc_id = $item['forum_id'] + $ds['id_offset'.($only_titles ? "_titles" : "")];
-				$doc_id = $doc_ids[$item['forum_id']];
-				//printr($item);
-				$items_temp[$doc_id] = array(
-					'doc_real_id'=>$item['forum_id'],
+				//$doc_id = $doc_ids[$item['forum_id']];
+				$doc_id = $item['res_id'];
+				$items[$doc_id] = array(
+					'doc_res_id'=>$item['forum_id'],
 					'doc_name'=>$item['forum_name'],
 					'doc_url'=>"/forum/$item[forum_id]-".rawurlencode(urlize($item["forum_name"]))."?hl=$special_search_q",
 					'doc_module_name'=>$ds['name'],
@@ -137,15 +139,10 @@ if(($res = $cl->Query($search_q, $index)) === false)
 		}
 	}
 
-	$items = array();
-	foreach($res["matches"] as $id=>$doc)
-		$items[$id] = $items_temp[$id];
-
 	$template->set_var("doc_count", $res["total_found"], 'BLOCK_search');
 }
 
 # Docs
-//printr($items);
 if(isset($items) && $items)
 {
 	$template->enable('BLOCK_search');

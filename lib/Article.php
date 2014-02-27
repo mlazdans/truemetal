@@ -59,6 +59,9 @@ class Article extends Res
 		if(isset($params['art_ids']) && is_array($params['art_ids']))
 			$sql_add[] = sprintf("art_id IN (%s)", join(",", $params['art_ids']));
 
+		if(isset($params['res_ids']) && is_array($params['res_ids']))
+			$sql_add[] = sprintf("a.res_id IN (%s)", join(",", $params['res_ids']));
+
 		if(isset($params['art_active']))
 		{
 			if($params['art_active'])

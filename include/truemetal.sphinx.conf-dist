@@ -10,22 +10,22 @@
 ## data source definition
 #############################################################################
 
-source truemetal
+source pages
 {
 	# data source type. mandatory, no default value
 	# known types are 'mysql', 'pgsql', 'xmlpipe', 'xmlpipe2'
-	type		= mysql
+	type                 = mysql
 
 	#####################################################################
 	## SQL settings (for 'mysql' and 'pgsql' types)
 	#####################################################################
 
 	# some straightforward parameters for SQL source types
-	sql_host	= localhost
-	sql_user	= root
-	sql_pass	=
-	sql_db		= truemetal
-	sql_port	= 53306	# optional, default is 3306
+	sql_host             = localhost
+	sql_user             = truemetal
+	sql_pass             =
+	sql_db               = truemetal
+	sql_port             = 3306 # optional, default is 3306
 
 	# UNIX socket name
 	# optional, default is empty (reuse client library defaults)
@@ -38,17 +38,22 @@ source truemetal
 	# MySQL specific client connection flags
 	# optional, default is 0
 	#
-	# mysql_connect_flags	= 32 # enable compression
+	# mysql_connect_flags = 32 # enable compression
 
-	sql_query_pre = SET NAMES utf8
-	sql_query = SELECT doc_id, view_documents.* FROM view_documents;
+	sql_query_pre        = SET NAMES utf8
+	sql_query_pre        = SET group_concat_max_len = 4194304
+	sql_query            = SELECT doc_res_id AS doc_id, view_documents.* FROM view_documents;
 
-	sql_attr_uint        = doc_id
-	sql_attr_uint        = doc_real_id
+	sql_attr_uint        = doc_res_id
 	sql_attr_uint        = doc_source_id
 	sql_attr_uint        = doc_comment_count
 	sql_attr_timestamp   = doc_entered
 	sql_attr_timestamp   = doc_comment_lastdate
+}
+
+source titles : pages
+{
+	sql_query            = SELECT doc_res_id AS doc_id, view_document_titles.* FROM view_document_titles;
 }
 
 # inherited source example
@@ -72,15 +77,15 @@ source truemetal
 # are configured per local index
 index doc
 {
-	source			    = truemetal
-	path			    = D:\truemetal\site\sphinx\data\doc
+	source               = pages
+	path                 = /www/truemetal.lv/sphinx/data/doc
 
-	charset_type		= utf-8
-	enable_star         = 1
-	min_prefix_len      = 3
-	min_word_len		= 1
-	html_strip          = 1
-	docinfo             = inline
+	charset_type         = utf-8
+	enable_star          = 1
+	min_prefix_len       = 3
+	min_word_len         = 1
+	html_strip           = 1
+	docinfo              = inline
 
 	# a list of morphology preprocessors to apply
 	# optional, default is empty
@@ -124,6 +129,12 @@ index doc
 	# optional, default is empty (do not strip element contents)
 	#
 	# html_remove_elements	= style, script
+}
+
+index doc_titles : doc
+{
+	source               = titles
+	path                 = /www/truemetal.lv/sphinx/data/doc_titles
 }
 
 # inherited index example
@@ -178,11 +189,11 @@ searchd
 
 	# log file, searchd run info is logged here
 	# optional, default is 'searchd.log'
-	log					= D:\truemetal\site\sphinx\log\searchd.log
+	log					= /www/truemetal.lv/sphinx/log/searchd.log
 
 	# query log file, all search queries are logged here
 	# optional, default is empty (do not log queries)
-	query_log			= D:\truemetal\site\sphinx\log\query.log
+	query_log			= /www/truemetal.lv/sphinx/log/query.log
 
 	# client read timeout, seconds
 	# optional, default is 5
@@ -194,7 +205,7 @@ searchd
 
 	# PID file, searchd process ID file name
 	# mandatory
-	pid_file			= D:\truemetal\site\sphinx\log\searchd.pid
+	pid_file			= /www/truemetal.lv/sphinx/log/searchd.pid
 
 	# max amount of matches the daemon ever keeps in RAM, per-index
 	# WARNING, THERE'S ALSO PER-QUERY LIMIT, SEE SetLimits() API CALL

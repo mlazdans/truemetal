@@ -62,6 +62,9 @@ class Forum extends Res
 		if(isset($params['forum_ids']) && is_array($params['forum_ids']))
 			$sql_add[] = sprintf("f.forum_id IN (%s)", join(",", $params['forum_ids']));
 
+		if(isset($params['res_ids']) && is_array($params['res_ids']))
+			$sql_add[] = sprintf("f.res_id IN (%s)", join(",", $params['res_ids']));
+
 		if(isset($params['forum_forumid']))
 			$sql_add[] = "f.forum_forumid = $params[forum_forumid]";
 

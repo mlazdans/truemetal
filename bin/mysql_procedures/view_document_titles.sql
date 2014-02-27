@@ -1,7 +1,7 @@
 CREATE OR REPLACE VIEW view_document_titles
 AS
 SELECT
-	a.res_id AS doc_real_id,
+	a.res_id AS doc_res_id,
 	1 AS doc_source_id,
 	a.art_name AS doc_name,
 	r.res_comment_count AS doc_comment_count,
@@ -16,7 +16,7 @@ WHERE
 	m.module_id = 'article'
 UNION
 SELECT
-	a.res_id AS doc_real_id,
+	a.res_id AS doc_res_id,
 	1 AS doc_source_id,
 	a.art_name AS doc_name,
 	r.res_comment_count AS doc_comment_count,
@@ -31,7 +31,7 @@ WHERE
 	m.module_id = 'reviews'
 UNION
 SELECT
-	f.res_id AS doc_real_id,
+	f.res_id AS doc_res_id,
 	3 AS doc_source_id,
 	f.forum_name AS doc_name,
 	r.res_comment_count AS doc_comment_count,

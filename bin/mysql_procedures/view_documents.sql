@@ -1,7 +1,7 @@
 CREATE OR REPLACE VIEW view_documents
 AS
 SELECT
-	a.res_id AS doc_real_id,
+	a.res_id AS doc_res_id,
 	1 AS doc_source_id,
 	a.art_name AS doc_name,
 	CONCAT(a.art_intro, ' ',  a.art_data, ' ', GROUP_CONCAT(c.c_data SEPARATOR " ")) AS doc_content,
@@ -21,7 +21,7 @@ GROUP BY
 	a.art_id, a.art_name, a.art_entered
 UNION
 SELECT
-	a.res_id AS doc_real_id,
+	a.res_id AS doc_res_id,
 	2 AS doc_source_id,
 	a.art_name AS doc_name,
 	CONCAT(a.art_intro, ' ',  a.art_data, ' ', GROUP_CONCAT(c.c_data SEPARATOR " ")) AS doc_content,
@@ -41,7 +41,7 @@ GROUP BY
 	a.art_id, a.art_name, a.art_entered
 UNION
 SELECT
-	f.res_id AS doc_real_id,
+	f.res_id AS doc_res_id,
 	3 AS doc_source_id,
 	f.forum_name AS doc_name,
 	GROUP_CONCAT(c.c_data SEPARATOR " ") AS doc_content,
