@@ -22,9 +22,6 @@
 
  */
 
-if(!$i_am_admin)
-	return;
-
 $VERSION='$Id: apc.php 325483 2012-05-01 00:34:04Z rasmus $';
 
 ////////// READ OPTIONAL CONFIGURATION FILE ////////////
@@ -64,8 +61,7 @@ function defaults($d,$v) {
 
 // rewrite $PHP_SELF to block XSS attacks
 //
-$PHP_SELF= isset($_SERVER['PHP_SELF']) ? htmlentities(strip_tags($_SERVER['PHP_SELF'],''), ENT_QUOTES, 'UTF-8') : '';
-$PHP_SELF='';
+$PHP_SELF = isset($_SERVER['PHP_SELF']) ? htmlentities(strip_tags($_SERVER['PHP_SELF'],''), ENT_QUOTES, 'UTF-8') : '';
 $time = time();
 $host = php_uname('n');
 if($host) { $host = '('.$host.')'; }
