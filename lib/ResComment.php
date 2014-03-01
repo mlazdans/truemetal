@@ -17,7 +17,7 @@ class ResComment extends Res
 	function Connect($res_id, $c_id)
 	{
 		$sql = sprintf(
-			"INSERT INTO `res_comment` (`res_id`, `c_id`) VALUES ('%d', '%d')",
+			"INSERT INTO res_comment (res_id, c_id) VALUES ('%d', '%d')",
 			$res_id,
 			$c_id
 			);
@@ -44,19 +44,35 @@ class ResComment extends Res
 	{
 		$this->InitDb();
 
+		# NOTE: Man liekas, ka comment_map nah nav vajadzīgs, 2014-03-01
+/*
 		$sql = "
 SELECT
 	c.*,
-	r.`res_votes`,
-	cm.`cm_old_id`,
-	r2.`res_id` AS `parent_res_id`,
-	r2.`table_id` AS `parent_table_id`
+	r.res_votes,
+	cm.cm_old_id,
+	r2.res_id AS parent_res_id,
+	r2.table_id AS parent_table_id
 FROM
-	`res_comment` rc
-JOIN `comment` c ON c.`c_id` = rc.`c_id`
-JOIN `res` r ON r.`res_id` = c.`res_id`
-JOIN `res` r2 ON r2.`res_id` = rc.`res_id`
-LEFT JOIN `comment_map` cm ON cm.`cm_new_id` = c.`c_id`
+	res_comment rc
+JOIN comment c ON c.c_id = rc.c_id
+JOIN res r ON r.res_id = c.res_id
+JOIN res r2 ON r2.res_id = rc.res_id
+LEFT JOIN comment_map cm ON cm.cm_new_id = c.c_id
+";
+*/
+		$sql = "
+SELECT
+	c.*,
+	0 as cm_old_id,
+	r.res_votes,
+	r2.res_id AS parent_res_id,
+	r2.table_id AS parent_table_id
+FROM
+	res_comment rc
+JOIN comment c ON c.c_id = rc.c_id
+JOIN res r ON r.res_id = c.res_id
+JOIN res r2 ON r2.res_id = rc.res_id
 ";
 
 		$sql_add = array();

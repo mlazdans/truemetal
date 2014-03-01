@@ -54,12 +54,15 @@ foreach($comments as $item)
 	}
 
 	# Old id
+	# NOTE: Man liekas, ka nah nav vajadzīgs, 2014-03-01
+	/*
 	if($item['cm_old_id'])
 	{
 		$template->enable('BLOCK_comment_old_id');
 	} else {
 		$template->disable('BLOCK_comment_old_id');
 	}
+	*/
 
 	$item['c_username'] = parse_form_data($item['c_username']);
 	if(empty($disabled_users[$item['login_id']]))
