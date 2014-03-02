@@ -190,9 +190,18 @@ function parse_text_data(&$data)
 
 	// proc words
 	preg_match_all('/(.\s)(\1{'.(integer)(FORUM_MAXWORDSIZE / 2).',})/Uu', $data, $tmp);
+	/*
 	$data = preg_replace(
 		'/(.\s)(\1{'.(integer)(FORUM_MAXWORDSIZE / 2).',})/e',
 		"mb_substr('$1', 0, FORUM_MAXWORDSIZE).\"...\"",
+		$data
+	);
+	*/
+	$data = preg_replace_callback(
+		'/(.\s)(\1{'.(integer)(FORUM_MAXWORDSIZE / 2).',})/',
+		function ($m){
+			return mb_substr($m[1], 0, FORUM_MAXWORDSIZE)."...";
+		},
 		$data
 	);
 
@@ -338,6 +347,7 @@ function substitute_change($str)
 
 function substitute($str)
 {
+	/*
 	$patt = array(
 		"/([ĀČĒĢĪĶĻŅŌŖŠŪŽ])/iue"
 	);
@@ -345,6 +355,16 @@ function substitute($str)
 		"'[$1|'.substitute_change('$1').']'"
 	);
 	return preg_replace($patt, $repl, $str);
+	*/
+	$patt = array(
+		"/([ĀČĒĢĪĶĻŅŌŖŠŪŽ])/iu"
+	);
+	return preg_replace_callback(
+		$patt,
+		function($m){
+			return "'[".$m[1]."|'".substitute_change($m[1])."']'";
+		},
+		$str);
 } // substitute
 
 function valid_host($host)
