@@ -146,16 +146,23 @@ if ( !empty($opcache[2]) ) { echo preg_replace('/\<tr\>\<td class\="e"\>[^>]+\<\
 if ( function_exists(CACHEPREFIX.'get_status') && $status=call_user_func(CACHEPREFIX.'get_status') ) {
 	$uptime=array();
 	if ( !empty($status[CACHEPREFIX.'statistics']['start_time']) ) {
-		$uptime['uptime']=time_since($time,$status[CACHEPREFIX.'statistics']['start_time'],1,'');
+		$laststarttime=$status[CACHEPREFIX.'statistics']['start_time'];
+		$uptime['uptime']=time_since($time,$laststarttime,1,'');
 	}
 	if ( !empty($status[CACHEPREFIX.'statistics']['last_restart_time']) ) {
-		$uptime['last_restart']=time_since($time,$status[CACHEPREFIX.'statistics']['last_restart_time']);
+		$laststarttime=$status[CACHEPREFIX.'statistics']['last_restart_time'];
+		$uptime['last_restart']=time_since($time,$laststarttime);
 	}
 	if (!empty($uptime)) {print_table($uptime);}
 
 	if ( !empty($status['cache_full']) ) { $status['memory_usage']['cache_full']=$status['cache_full']; }
 
 	echo '<h2 id="memory">memory</h2>';
+	if(($time - $laststarttime) > 0)
+		$status[CACHEPREFIX.'statistics']['hits_per_sec'] = number_format($status[CACHEPREFIX.'statistics']['hits'] / ($time - $laststarttime), 3, '.', '');
+	else
+		$status[CACHEPREFIX.'statistics']['hits_per_sec'] = 0;
+
 	print_table($status['memory_usage']);
 	unset($status[CACHEPREFIX.'statistics']['start_time'],$status[CACHEPREFIX.'statistics']['last_restart_time']);
 	echo '<h2 id="statistics">statistics</h2>';
