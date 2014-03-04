@@ -23,7 +23,7 @@ if($search_log)
 {
 	$sql = sprintf("
 INSERT INTO `search_log` (
-`sl_userid`, `sl_q`, `sl_ip`, `sl_entered`
+`login_id`, `sl_q`, `sl_ip`, `sl_entered`
 ) VALUES (
 %s, '%s', '%s', NOW()
 );",

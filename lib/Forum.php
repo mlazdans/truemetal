@@ -65,8 +65,13 @@ class Forum extends Res
 		if(isset($params['res_ids']) && is_array($params['res_ids']))
 			$sql_add[] = sprintf("f.res_id IN (%s)", join(",", $params['res_ids']));
 
-		if(isset($params['forum_forumid']))
-			$sql_add[] = "f.forum_forumid = $params[forum_forumid]";
+		if(isset($params['forum_forumid'])){
+			if($params['forum_forumid'] == 0){
+				$sql_add[] = "f.forum_forumid IS NULL";
+			} else {
+				$sql_add[] = "f.forum_forumid = $params[forum_forumid]";
+			}
+		}
 
 		if(isset($params['forum_active']))
 		{
@@ -79,10 +84,13 @@ class Forum extends Res
 		if(isset($params['forum_allowchilds']))
 			$sql_add[] = sprintf("f.forum_allowchilds = '%s'", $params['forum_allowchilds']);
 
-		$sql = "
-SELECT
-	f.*,
-	r.*,
+		if(isset($params['fields'])){
+			$sql = "SELECT ".join(',', $params['fields']);
+		} else {
+			$sql = "SELECT f.*, r.*";
+		}
+
+		$sql .= ",
 	COALESCE(res_comment_count, 0) AS forum_comment_count,
 	res_comment_lastdate AS forum_lastcommentdate,
 	(SELECT COUNT(*) FROM forum f2 WHERE f2.forum_forumid = f.forum_id) forum_themecount,
@@ -110,16 +118,26 @@ LEFT JOIN `res` r ON r.`res_id` = f.`res_id`
 
 	function getThemeCount($forum_id = 0, $forum_active = FORUM_ACTIVE)
 	{
-		//global $db;
+		$sql_add = array();
+
+		if($forum_id === 0){
+			$sql_add[] = "forum_forumid IS NULL";
+		} else {
+			$sql_add[] = "forum_forumid = $forum_id";
+		}
+
+		if($forum_active != FORUM_ALL)
+			$sql_add[] = sprintf("forum_active = '%s'", $forum_active);
 
 		$sql = "
 SELECT
 	COUNT(forum_id) AS forum_comment_count
 FROM
 	forum
-WHERE
-	forum_forumid = $forum_id AND
-	forum_active = '$forum_active'";
+";
+
+		if($sql_add)
+			$sql .= " WHERE ".join(" AND ", $sql_add);
 
 		if($data = $this->db->ExecuteSingle($sql))
 		{
@@ -216,21 +234,9 @@ WHERE
 			}
 		}
 	} // set_all_tree
-/*
-	function load_by_userid($userid)
-	{
-		global $db;
 
-		$userid = (int)$userid;
-
-		$sql = "SELECT f1.*, f2.forum_name u_forum_name, f2.forum_id u_forum_id FROM forum f1, forum f2 WHERE f1.forum_userid = $userid AND f1.forum_forumid = f2.forum_id";
-
-		return $db->Execute($sql);
-	} // load_by_userid
-*/
 	function add($forum_id, &$data, $validate = FORUM_DONTVALIDATE, $forum_active = FORUM_ACTIVE)
 	{
-		//global $db, $ip;
 		global $ip;
 
 		if(!($res_id = parent::Add())) {
@@ -277,8 +283,6 @@ INSERT INTO forum (
 
 	function save(&$data, $validate = FORUM_DONTVALIDATE)
 	{
-		//global $db;
-
 		if($validate)
 			$this->validate($data);
 
@@ -306,8 +310,6 @@ INSERT INTO forum (
 
 	function del_under($forum_id)
 	{
-		//global $db;
-
 		$forum_id = (int)$forum_id;
 
 		if(!$forum_id)
@@ -327,8 +329,6 @@ INSERT INTO forum (
 
 	function del($forum_id)
 	{
-		//global $db;
-
 		$forum_id = (int)$forum_id;
 
 		if(!$forum_id)
@@ -343,8 +343,6 @@ INSERT INTO forum (
 
 	function open($forum_id)
 	{
-		//global $db;
-
 		$forum_id = (int)$forum_id;
 		$sql = 'UPDATE forum SET forum_closed = "'.FORUM_OPEN.'" WHERE forum_id = '.$forum_id;
 
@@ -353,8 +351,6 @@ INSERT INTO forum (
 
 	function close($forum_id)
 	{
-		//global $db;
-
 		$forum_id = (int)$forum_id;
 		$sql = 'UPDATE forum SET forum_closed = "'.FORUM_CLOSED.'" WHERE forum_id = '.$forum_id;
 
@@ -363,8 +359,6 @@ INSERT INTO forum (
 
 	function activate($forum_id)
 	{
-		//global $db;
-
 		$forum_id = (int)$forum_id;
 		$sql = 'UPDATE forum SET forum_active = "Y" WHERE forum_id = '.$forum_id;
 
@@ -373,8 +367,6 @@ INSERT INTO forum (
 
 	function deactivate($forum_id)
 	{
-		//global $db;
-
 		$forum_id = (int)$forum_id;
 		$sql = 'UPDATE forum SET forum_active = "N" WHERE forum_id = '.$forum_id;
 
@@ -383,10 +375,11 @@ INSERT INTO forum (
 
 	function move($forum_id, $new_forum_forumid)
 	{
-		//global $db;
-
 		$forum_id = (int)$forum_id;
 		$new_forum_forumid = (int)$new_forum_forumid;
+		if($new_forum_forumid == 0)
+			$new_forum_forumid = "NULL";
+
 		$sql = 'UPDATE forum SET forum_forumid = '.$new_forum_forumid.' WHERE forum_id = '.$forum_id;
 
 		return $this->db->Execute($sql);
@@ -430,7 +423,7 @@ INSERT INTO forum (
 	function validate(&$data)
 	{
 		$data['forum_id'] = isset($data['forum_id']) ? (int)$data['forum_id'] : 0;
-		$data['forum_forumid'] = isset($data['forum_forumid']) ? (int)$data['forum_forumid'] : 0;
+		$data['forum_forumid'] = isset($data['forum_forumid']) ? (int)$data['forum_forumid'] : "NULL";
 		$data['login_id'] = isset($data['login_id']) ? (int)$data['login_id'] : 0;
 		$data['forum_modid'] = isset($data['forum_modid']) ? (int)$data['forum_modid'] : 0;
 		$data['forum_display'] = isset($data['forum_display']) ? (int)$data['forum_display'] : 0;
@@ -484,6 +477,7 @@ INSERT INTO forum (
 	function set_recent_forum(&$template)
 	{
 		$data = $this->load(array(
+			"fields"=>array('forum_id', 'forum_name'),
 			"order"=>'forum_lastcommentdate DESC',
 			"limit"=>'10',
 			"forum_allowchilds"=>FORUM_PROHIBITCHILDS,

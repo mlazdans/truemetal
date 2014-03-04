@@ -276,14 +276,26 @@ class Module
 	{
 		global $db;
 
+		$sql_add = array(
+			"module_active = '".MOD_ACTIVE."'",
+			);
+
+		if(!$mod_modid){
+			$sql_add[] = "mod_modid IS NULL";
+		} else {
+			$sql_add[] = "mod_modid = $mod_modid";
+		}
+
 		$match = '';
 		if($q)
 			$match = ', '.search_to_sql($q, array('module_name', 'module_data')).' score';
-			//$match = ",(module_name REGEXP '$q' OR module_data REGEXP '$q') score";
-			//$match = ",MATCH(module_name, module_data) AGAINST('$q') score";
 
-		$sql = "SELECT m.*$match FROM `modules` m WHERE mod_modid = $mod_modid AND module_active = '".MOD_ACTIVE."' ORDER BY module_pos";
-		//print "$sql\n";
+
+		$sql = "SELECT m.*$match FROM `modules` m";
+		if($sql_add)
+			$sql .= " WHERE ".join(" AND ", $sql_add);
+		$sql .= " ORDER BY module_pos";
+
 		$ret = array();
 		$data = $db->Execute($sql);
 		foreach($data as $item) {
@@ -327,7 +339,17 @@ class Module
 	{
 		global $db;
 
-		$sql = "SELECT module_id, mod_id FROM `modules` WHERE mod_modid = $mod_modid";
+		$sql_add = array();
+		if(!$mod_modid){
+			$sql_add[] = "mod_modid IS NULL";
+		} else {
+			$sql_add[] = "mod_modid = $mod_modid";
+		}
+
+		$sql = "SELECT module_id, mod_id FROM `modules`";
+		if($sql_add)
+			$sql .= " WHERE ".join(" AND ", $sql_add);
+
 		$data = $db->Execute($sql);
 
 		if(!count($data))
@@ -400,7 +422,21 @@ class Module
 	{
 		global $db;
 
-		$sql = "SELECT * FROM `modules` WHERE mod_modid = $mod_modid AND module_active = '".MOD_ACTIVE."' AND module_visible = '".MOD_VISIBLE."' ORDER BY module_pos";
+		$sql_add = array(
+			"module_active = '".MOD_ACTIVE."'",
+			"module_visible = '".MOD_VISIBLE."'",
+			);
+		if(!$mod_modid){
+			$sql_add[] = "mod_modid IS NULL";
+		} else {
+			$sql_add[] = "mod_modid = $mod_modid";
+		}
+
+		$sql = "SELECT * FROM `modules`";
+		if($sql_add)
+			$sql .= " WHERE ".join(" AND ", $sql_add);
+
+		$sql .= " ORDER BY module_pos";
 
 		$data = $db->Execute($sql);
 
@@ -421,7 +457,17 @@ class Module
 	{
 		global $db;
 
-		$sql = "SELECT * FROM `modules` WHERE mod_modid = $mod_modid ORDER BY module_pos";
+		$sql_add = array();
+		if(!$mod_modid){
+			$sql_add[] = "mod_modid IS NULL";
+		} else {
+			$sql_add[] = "mod_modid = $mod_modid";
+		}
+
+		$sql = "SELECT * FROM `modules`";
+		if($sql_add)
+			$sql .= " WHERE ".join(" AND ", $sql_add);
+		$sql .= " ORDER BY module_pos";
 
 		$data = $db->Execute($sql);
 
