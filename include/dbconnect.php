@@ -7,11 +7,14 @@
 
 //
 
-require_once('lib/SQLLayer.php');
+require_once('lib//SQLLayer.php');
 
 /* sleedzamies pie datubaazes */
-if(!empty($GLOBALS['sys_database_type']))
+if(empty($GLOBALS['sys_database_type']))
 {
+	$db = null;
+	$db->AutoCommit(true);
+} else {
 	$db = new SQLLayer($GLOBALS['sys_database_type']);
 	$db->connect(
 		$GLOBALS['sys_db_host'],
@@ -19,8 +22,8 @@ if(!empty($GLOBALS['sys_database_type']))
 		$GLOBALS['sys_db_password'],
 		$GLOBALS['sys_db_name'], $GLOBALS['sys_db_port']
 		);
-} else {
-	$db = null;
-	$db->AutoCommit(true);
+
+	if(!$db->conn)
+		die('True DB error!');
 }
 

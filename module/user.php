@@ -9,21 +9,21 @@ $section = array_shift($sys_parameters);
 
 if($section == 'image')
 {
-	include("module/user/image.inc.php");
+	include("module//user//image.inc.php");
 }
 
 if($section == 'thumb')
 {
-	include("module/user/thumb.inc.php");
+	include("module//user//thumb.inc.php");
 }
 
 if($section == 'profile')
 {
-	include("module/user/profile.inc.php");
+	include("module//user//profile.inc.php");
 }
 
 if($section == 'viewimage')
 {
-	include("module/user/viewimage.inc.php");
+	include("module//user//viewimage.inc.php");
 }
 

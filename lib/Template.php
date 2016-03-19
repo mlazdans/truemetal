@@ -7,7 +7,7 @@
 
 // niknaa templashu engine
 
-require_once("lib/TemplateBlock.php");
+require_once("lib//TemplateBlock.php");
 
 define('TMPL_APPEND', true);
 
@@ -32,7 +32,7 @@ class Template extends TemplateBlock
 	/* root_dir - dir, kuraa atradiisies template
 	/* undefined - ko dariit ar nedefineetiem mainiigajiem
 	/* ----------------------------------------------------------- */
-	function Template($str_root_dir = '.', $str_undefined = 'remove')
+	function __construct($str_root_dir = '.', $str_undefined = 'remove')
 	{
 		$this->APC = false && extension_loaded("APC");
 		$this->set_root($str_root_dir);
@@ -193,7 +193,8 @@ class Template extends TemplateBlock
 		}
 	} // set_array
 
-	function set_array_prefix($arr_array, $prefix, $ID)
+	//function set_array_prefix($arr_array, $prefix, $ID)
+	function set_array_prefix($arr_array, $prefix, $ID = '')
 	{
 		return $this->set_array($arr_array, $ID, false, $prefix);
 	} // set_array_prefix
@@ -327,8 +328,11 @@ class Template extends TemplateBlock
 	/* uzstaadam blokam ID atribuutu
 	/* vairaak skatiit TemplateBlock::set_attribute
 	/* ----------------------------------------------------------- */
-	function set_attribute($ID, $str_attribute, $value)
+	//function set_attribute($ID, $str_attribute, $value)
+	function set_attribute()
 	{
+		list($ID, $str_attribute, $value) = func_get_args();
+
 		if($block =& $this->get_block($ID)) {
 			return $block->set_attribute($str_attribute, $value);
 		} else {
@@ -358,8 +362,11 @@ class Template extends TemplateBlock
 	/* liidziigi, kaa set_file, tachu datus uzstaada nevis no faila,
 	/* bet no stringa
 	/* ----------------------------------------------------------- */
-	function set_block_string($ID, $content = '')
+	//function set_block_string($ID, $content = '')
+	function set_block_string()
 	{
+		list($ID, $content) = func_get_args();
+
 		if($block =& $this->get_block($ID)) {
 			return $block->set_block_string($content);
 		} else {

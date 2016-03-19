@@ -5,8 +5,12 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib/Logins.php');
-require_once('lib/MainModule.php');
+# Blacklisted
+if(user_blacklisted())
+{
+	print "Blacklisted: $ip";
+	return;
+}
 
 $action = array_shift($sys_parameters);
 if($action == 'logoff')

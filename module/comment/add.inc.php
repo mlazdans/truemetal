@@ -7,7 +7,7 @@
 
 //
 
-require_once('lib/ResComment.php');
+require_once('lib//ResComment.php');
 
 if(empty($data['c_data']))
 {
@@ -34,6 +34,14 @@ if(empty($c_data))
 {
 	$template->enable('BLOCK_comment_error');
 	$template->set_var('error_msg', 'Pārāk pliks tas komentārs - links bez teksta!', 'BLOCK_comment_error');
+
+	return;
+}
+
+if(user_blacklisted())
+{
+	$template->enable('BLOCK_comment_error');
+	$template->set_var('error_msg', "Blacklisted: $ip", 'BLOCK_comment_error');
 
 	return;
 }

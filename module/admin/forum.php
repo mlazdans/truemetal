@@ -53,11 +53,11 @@ function set_themes(&$template, &$data, $d = 0, $c = 0) {
 	return $c;
 }
 
-require_once('lib/AdminModule.php');
-require_once('lib/Forum.php');
-require_once('lib/Module.php');
-require_once('lib/Comment.php');
-require_once('lib/ResComment.php');
+require_once('lib//AdminModule.php');
+require_once('lib//Forum.php');
+require_once('lib//Module.php');
+require_once('lib//Comment.php');
+require_once('lib//ResComment.php');
 
 $forum = new Forum();
 $module = new Module();
@@ -68,7 +68,7 @@ $action = post('action');
 # Comment actions
 if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
 {
-	if(include("module/admin/comment/action.inc.php"))
+	if(include("module//admin//comment//action.inc.php"))
 	{
 		header("Location: ".($forum_id ? "$module_root/$forum_id/" : "$module_root"));
 	}
@@ -148,7 +148,7 @@ if($forum_id)
 			'c_visible'=>Comment::ALL,
 			));
 
-		include("module/admin/comment/list.inc.php");
+		include("module//admin//comment//list.inc.php");
 	}
 
 	/*

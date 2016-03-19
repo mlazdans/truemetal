@@ -7,7 +7,7 @@
 
 // session handling
 
-require_once('lib/SQLLayer.php');
+require_once('lib//SQLLayer.php');
 
 class SessHandler
 {
@@ -68,6 +68,9 @@ class SessHandler
 
 	function sess_write($sess_id, $sess_data)
 	{
+		if(empty($sess_data))
+			return true;
+
 		$sess = $this->get_sess($sess_id);
 
 		if(isset($sess['sess_id']) && ($sess['sess_id'] == $sess_id))
@@ -115,38 +118,20 @@ class SessHandler
 
 	function sess_gc($maxlifetime)
 	{
-		if($this->timeout) {
-			$sql = 'DELETE FROM sessions WHERE sess_lastaccess < (NOW() - '.$this->timeout.')';
-			return $this->db->Execute($sql);
+		$period = date('Y-m-d', mktime(0,0,0, date('m'), date('d') - 180, date('Y')));
+		$sql = array(
+			"DELETE FROM `sessions` WHERE sess_data = '' OR sess_data = 'login|a:0:{}'",
+			"DELETE FROM `sessions` WHERE `sess_lastaccess` < '$period'",
+			"OPTIMIZE TABLE sessions",
+			//"DELETE FROM `sessions` WHERE `sess_ip` IN (SELECT * FROM (SELECT `sess_ip` FROM sessions GROUP BY `sess_ip` HAVING COUNT(`sess_ip`) > 50) AS t)",
+			);
+
+		foreach($sql as $q){
+			$this->db->Execute($q);
 		}
 
 		return true;
 	} // sess_gc
-
-/*
-	function get_vars($sess_data)
-	{
-		$patt = '/([a-zA-z0-9_]*)\|/i';
-		preg_match_all($patt, $sess_data, $m);
-
-//print_r($m);
-		$patt = '';
-		$variables = array();
-		foreach($m[1] as $item) {
-			$patt .= "$item\|(.*)";
-			$variables[] = $item;
-		}
-
-		$patt = "/^$patt$/U";
-		preg_match($patt, $sess_data, $m);
-
-		$ret = array();
-		for($r = 1; $r < count($m); ++$r)
-			$ret[$variables[$r - 1]] = unserialize($m[$r]);
-//die;
-		return $ret;
-	} // get_vars
-*/
 
 	function get_active()
 	{

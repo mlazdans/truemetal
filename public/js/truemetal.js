@@ -10,7 +10,7 @@ var Truemetal = {
 				form = $(form);
 			}
 
-			$('input:checkbox', form).attr('checked', $(ref).attr('checked'));
+			$('input:checkbox', form).prop('checked', $(ref).prop('checked'));
 		} else if(form) {
 			ref = form;
 			form = form.form;

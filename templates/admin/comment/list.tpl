@@ -19,7 +19,7 @@
 	<th class="{c_color_class}">
 		<input type="checkbox" name="c_id[]" value="{c_id}" />
 	</th>
-	<th class="{c_color_class} nowrap"><a href="/admin/logins/{c_userid}/">{c_username} ({c_userlogin})</a></th>
+	<th class="{c_color_class} nowrap"><a href="/admin/logins/{login_id}/">{c_username} ({c_userlogin})</a></th>
 	<th class="{c_color_class}"><a href="/admin/reports/?report=ip&amp;ips={c_userip}">{c_userip}</a></th>
 	<th class="{c_color_class} nowrap">{c_entered}</th>
 	<th class="{c_color_class}">
@@ -27,7 +27,7 @@
 		<!-- BEGIN BLOCK_c_invisible disabled -->neaktīvs<!-- END BLOCK_c_invisible -->
 	</th>
 	<th class="{c_color_class}"><a href="#" onclick="Admin.viewCommentOriginal({res_id}); return false;">orig</a></th>
-	<th class="{c_color_class}"><a href="#" onclick="Admin.viewCommentVotes({res_id}); return false;">votes</a></th>
+	<th class="{c_color_class}"><a href="#" onclick="Admin.viewCommentVotes({res_id}); return false;">Votes: {res_votes}</a></th>
 </tr>
 <tr>
 	<td></td>

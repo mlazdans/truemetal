@@ -17,8 +17,8 @@ function identify() {
 	die("Nepareizs logins vai parole!");
 }
 
-require_once('lib/AdminModule.php');
-require_once('lib/User.php');
+require_once('lib//AdminModule.php');
+require_once('lib//User.php');
 
 $user_login = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : '';
 $user_pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
@@ -46,7 +46,6 @@ $admin_modules = array(
 	'forum'=>'Forums',
 	'editor'=>'',
 	'user'=>'Lietotāji',
-	'online'=>'Online',
 	'logins'=>'Logini',
 	'reports'=>'Reporti',
 	'comment'=>'',
@@ -62,5 +61,5 @@ $module_root = "$admin_root/$admin_module";
 if(!$admin_module || !file_exists("$sys_root/module/admin/$admin_module.php"))
 	$admin_module = 'start';
 
-include("$sys_root/module/admin/$admin_module.php");
+include("$sys_root//module//admin/$admin_module.php");
 

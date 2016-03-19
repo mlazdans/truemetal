@@ -7,7 +7,7 @@
 
 $template->enable('BLOCK_forgot_form');
 
-$data = post('data');
+$data = post('data', array());
 if(empty($data['l_email']) && empty($data['l_login']))
 {
 	$error_msg[] = 'Jānorāda logins vai e-pasts';

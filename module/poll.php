@@ -6,8 +6,7 @@
 // marrtins@dqdp.net
 
 // ----------------------------------------------------------------------------
-require_once('lib/MainModule.php');
-require_once('lib/Poll.php');
+require_once('lib//Poll.php');
 
 $action = array_shift($sys_parameters);
 

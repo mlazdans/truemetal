@@ -7,7 +7,7 @@
 
 //
 
-require_once('lib/ResComment.php');
+require_once('lib//ResComment.php');
 
 $template->set_file('FILE_forum', 'forum/det.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_forum');
@@ -39,7 +39,7 @@ if(($forum_data['forum_closed'] == FORUM_OPEN) && ($action == 'add_comment') && 
 	$res_id = $forum_data['res_id'];
 	$data = post('data');
 	$resDb = $db;
-	if($c_id = include('module/comment/add.inc.php'))
+	if($c_id = include('module//comment//add.inc.php'))
 	{
 		$resDb->Commit();
 		header("Location: $sys_http_root/forum/$forum_id-".rawurlencode(urlize($forum_data["forum_name"]))."#comment$c_id");
@@ -74,7 +74,7 @@ if(($forum_data['forum_display'] == Forum::DISPLAY_DATA) && !empty($comments[0])
 	$comments[0]['c_datacompiled'] = $forum_data['forum_data'];
 }
 
-include("module/comment/list.inc.php");
+include('module//comment//list.inc.php');
 
 if($forum_data['forum_closed'] == FORUM_CLOSED)
 {

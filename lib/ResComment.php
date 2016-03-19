@@ -5,8 +5,8 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib/Comment.php');
-require_once('lib/Res.php');
+require_once('lib//Comment.php');
+require_once('lib//Res.php');
 
 class ResComment extends Res
 {
@@ -25,8 +25,11 @@ class ResComment extends Res
 		return $this->db->Execute($sql);
 	} // Connect
 
-	function Add($res_id, $data)
+	//function Add($res_id, $data)
+	function Add()
 	{
+		list($res_id, $data) = func_get_args();
+
 		$this->InitDb();
 
 		$Comment = new Comment();
@@ -102,6 +105,12 @@ JOIN res r2 ON r2.res_id = rc.res_id
 		if(!empty($params['res_id']))
 			$sql_add[] = sprintf("(rc.res_id = %d)", $params['res_id']);
 
+		if(!empty($params['cres_id']))
+			$sql_add[] = sprintf("(c.res_id = %d)", $params['cres_id']);
+
+		if(!empty($params['c_id']))
+			$sql_add[] = sprintf("(c.c_id = %d)", $params['c_id']);
+
 		if($sql_add)
 			$sql .= " WHERE ".join(' AND ', $sql_add);
 
@@ -113,7 +122,12 @@ JOIN res r2 ON r2.res_id = rc.res_id
 		if(!empty($params['limit']))
 			$sql .= " LIMIT ".$params['limit'];
 
-		return $this->db->Execute($sql);
+		if(!empty($params['c_id']))
+		{
+			return $this->db->ExecuteSingle($sql);
+		} else {
+			return $this->db->Execute($sql);
+		}
 	} // Get
 
 } // class::ResComment

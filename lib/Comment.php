@@ -5,8 +5,8 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib/Res.php');
-require_once('lib/Table.php');
+require_once('lib//Res.php');
+require_once('lib//Table.php');
 
 class Comment extends Res
 {
@@ -24,8 +24,12 @@ class Comment extends Res
 		$this->SetDb($db);
 	} // __construct
 
-	function Add($data)
+	//function Add($data)
+	function Add()
 	{
+		list($data) = func_get_args();
+
+		$this->login_id = $data['login_id'];
 		if(!($res_id = parent::Add())) {
 			return false;
 		}

@@ -5,9 +5,12 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
+require_once('lib//ResComment.php');
+
 class Res
 {
 	protected $table_id;
+	protected $login_id;
 	protected $db = null;
 
 	function __construct() {
@@ -41,8 +44,9 @@ class Res
 		$this->InitDb();
 
 		$sql = sprintf(
-			"INSERT INTO `res` (`table_id`, `res_entered`) VALUES (%s, %s);",
+			"INSERT INTO `res` (`table_id`, `login_id`, `res_entered`) VALUES (%s, %s, %s);",
 			($this->table_id ? $this->table_id : "NULL"),
+			($this->login_id ? $this->login_id : "NULL"),
 			$this->db->now()
 			);
 
@@ -77,22 +81,22 @@ class Res
 			case Table::ARTICLE:
 				require_once("lib/Article.php");
 				$D = new Article();
-				return $D->load(array(
+				return array_merge($res_data, $D->load(array(
 					'res_id'=>$res_data['res_id'],
-					));
+					)));
 			case Table::FORUM:
 				require_once("lib/Forum.php");
 				$D = new Forum();
-				return $D->load(array(
+				return array_merge($res_data, $D->load(array(
 					'res_id'=>$res_data['res_id'],
-					));
+					)));
 				break;
 			case Table::COMMENT:
 				require_once("lib/Comment.php");
 				$D = new Comment();
-				return $D->Get(array(
+				return array_merge($res_data, $D->Get(array(
 					'res_id'=>$res_data['res_id'],
-					));
+					)));
 				break;
 		}
 
@@ -109,6 +113,34 @@ class Res
 		}
 	} // InitDb
 
+	public static function Route($res_id, $c_id = 0)
+	{
+		$location = "/";
+
+		$Res = new Res();
+		if(!($resource = $Res->GetAllData($res_id))){
+			return $location;
+		}
+
+		switch($resource['table_id'])
+		{
+			case Table::ARTICLE:
+				$location = "/$resource[module_id]/$resource[art_id]-".urlize($resource['art_name']).($c_id ? "#comment$c_id" : "");
+				break;
+			case Table::FORUM:
+				$location = "/forum/$resource[forum_id]-".urlize($resource['forum_name']).($c_id ? "#comment$c_id" : "");
+				break;
+			case Table::COMMENT:
+				$RC = new ResComment;
+				$C = $RC->get(array(
+					'c_id'=>$resource['c_id'],
+					));
+				$location = Res::Route($C['parent_res_id'], $c_id);
+				break;
+		}
+
+		return $location;
+	} // Route
 /*
 	public static function genId()
 	{

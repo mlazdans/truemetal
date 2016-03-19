@@ -17,7 +17,7 @@ define('LOGIN_DONTVALIDATE', false);
 define('LOGIN_EMAIL_VISIBLE', 'Y');
 define('LOGIN_EMAIL_INVISIBLE', 'N');
 
-require_once('lib/Forum.php');
+require_once('lib//Forum.php');
 
 class Logins
 {
@@ -95,12 +95,13 @@ class Logins
 
 		$sql = " SELECT * ";
 
+		/*
 		if(!empty($params['get_votes']))
 		{
 			/*
 			$sql .= ", (SELECT SUM(c_votes) FROM comment WHERE login_id = l_id AND c_votes > 0) votes_plus ";
 			$sql .= ", (SELECT SUM(c_votes) FROM comment WHERE login_id = l_id AND c_votes < 0) votes_minus ";
-			*/
+			* /
 			$sql .= ",
 			(SELECT
 				COUNT(*)
@@ -122,16 +123,19 @@ class Logins
 			) AS votes_minus
 			";
 		}
+		*/
 
 		if(!empty($params['jubilars'])){
 			$sql .= ", DATE_FORMAT(l_entered, '%m%d') AS entered_stamp ";
 			$sql .= ", DATEDIFF(CURRENT_TIMESTAMP, l_entered) AS age ";
 		}
 
+		/*
 		if(!empty($params['get_comment_count']))
 		{
 			$sql .= ", (SELECT COUNT(*) FROM comment WHERE login_id = l_id) comment_count ";
 		}
+		*/
 
 		if(!empty($params['get_all_ips']))
 		{
@@ -140,9 +144,26 @@ class Logins
 
 		$sql .= " FROM logins ";
 
+		if(!empty($params['get_comment_count']))
+		{
+			if(isset($params['comment_count_more_than']))
+			{
+				$sql_add[] = sprintf("comment_count > %d", $params['comment_count_more_than']);
+			}
+			if(isset($params['comment_count_equal']))
+			{
+				$sql_add[] = sprintf("comment_count = %d", $params['comment_count_equal']);
+			}
+			if(isset($params['comment_count_less_than']))
+			{
+				$sql_add[] = sprintf("comment_count < %d", $params['comment_count_less_than']);
+			}
+		}
+
 		if($sql_add)
 			$sql .= " WHERE ".join(" AND ", $sql_add);
 
+		/*
 		if(!empty($params['get_comment_count']))
 		{
 			if(isset($params['comment_count_more_than']))
@@ -158,6 +179,7 @@ class Logins
 				$sql_having[] = sprintf("comment_count < %d", $params['comment_count_less_than']);
 			}
 		}
+		*/
 
 		if($sql_having)
 			$sql .= " HAVING ".join(" AND ", $sql_having);
@@ -208,12 +230,21 @@ class Logins
 			));
 	} // load_by_id
 
-	static function load_by_login($l_login)
+	static function load_by_login($l_login, $ADMIN = false)
 	{
 		$Logins = new Logins();
-		return $Logins->load(array(
-			'l_login'=>$l_login,
-			));
+		if($ADMIN)
+		{
+			return $Logins->load(array(
+				'l_login'=>$l_login,
+				'l_active'=>LOGIN_ALL,
+				'l_accepted'=>LOGIN_ALL,
+				));
+		} else {
+			return $Logins->load(array(
+				'l_login'=>$l_login,
+				));
+		}
 	} // load_by_login
 
 	static function load_by_email($l_email)
@@ -338,7 +369,12 @@ class Logins
 		$save_path1 = $sys_user_root.'/pic/'.$l_id.'-'.$ts.'.jpg';
 		$tsave_path1 = $sys_user_root.'/pic/thumb/'.$l_id.'-'.$ts.'.jpg';
 
-		return rename($save_path, $save_path1) && rename($tsave_path, $tsave_path1);
+		if(file_exists($save_path))
+			rename($save_path, $save_path1);
+		if(file_exists($tsave_path))
+			rename($tsave_path, $tsave_path1);
+
+		return true;
 	} // delete_image
 
 	function update_profile($data, $l_id = 0)

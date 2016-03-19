@@ -235,13 +235,12 @@ FROM
 		}
 	} // set_all_tree
 
-	function add($forum_id, &$data, $validate = FORUM_DONTVALIDATE, $forum_active = FORUM_ACTIVE)
+	//function Add($forum_id, &$data, $validate = FORUM_DONTVALIDATE, $forum_active = FORUM_ACTIVE)
+	function Add()
 	{
 		global $ip;
 
-		if(!($res_id = parent::Add())) {
-			return false;
-		}
+		list($forum_id, $data, $validate, $forum_active) = func_get_args();
 
 		if($validate)
 			$this->validate($data);
@@ -264,6 +263,11 @@ FROM
 
 		$data['login_id'] = $data['login_id'] ? $data['login_id'] : "NULL";
 		$data2 = $this->db->QuoteArray($data);
+
+		$this->login_id = $data['login_id'];
+		if(!($res_id = parent::Add())) {
+			return false;
+		}
 
 		$sql = "
 INSERT INTO forum (

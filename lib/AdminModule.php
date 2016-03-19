@@ -7,7 +7,7 @@
 
 // pats pats...
 
-require_once('lib/Template.php');
+require_once('lib//Template.php');
 
 class AdminModule extends Template
 {

@@ -7,10 +7,9 @@
 
 // There are 1065 DOM elements on the page
 
-require_once('lib/MainModule.php');
-require_once('lib/Article.php');
-require_once('lib/Module.php');
-require_once('lib/ResComment.php');
+require_once('lib//Article.php');
+require_once('lib//Module.php');
+require_once('lib//ResComment.php');
 
 $art_per_page = 10;
 
@@ -26,7 +25,7 @@ if($_pointer['_data_']['module_name'])
 # GET/POST
 $art_id = array_shift($sys_parameters);
 $action = post('action');
-$hl = urldecode(get("hl"));
+$hl = get("hl");
 $page = ($art_id == 'page' ? (int)array_shift($sys_parameters) : 0);
 $art_id_urlized = rawurldecode($art_id);
 $art_id = (int)$art_id;
@@ -138,7 +137,7 @@ if($art_id && isset($articles[0]))
 		$res_id = $art['res_id'];
 		$data = post('data');
 		$resDb = $db;
-		if($ac_id = include('module/comment/add.inc.php'))
+		if($ac_id = include('module//comment//add.inc.php'))
 		{
 			$resDb->Commit();
 			$np = join('/', array_keys($path));
@@ -156,7 +155,7 @@ if($art_id && isset($articles[0]))
 		'res_id'=>$art['res_id'],
 		));
 
-	include("comment/list.inc.php");
+	include("comment//list.inc.php");
 }
 
 # Pages

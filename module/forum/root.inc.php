@@ -29,4 +29,3 @@ foreach($forum_data as $item)
 }
 
 $template->set_descr("Metāliskais forums: mūzika, koncerti, tirgus, un pārsvarā ne par tēmu");
-

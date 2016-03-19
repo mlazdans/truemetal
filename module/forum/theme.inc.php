@@ -19,6 +19,13 @@ if($forum_id == 107488){
 
 if($action == 'add_theme')
 {
+	# Blacklisted
+	if(user_blacklisted())
+	{
+		print "Blacklisted: $ip";
+		return;
+	}
+
 	$error = false;
 	$data = post('data');
 	$forum->validate($data);
@@ -31,7 +38,7 @@ if($action == 'add_theme')
 	$Logins = new Logins();
 	$ldata = $Logins->load($params);
 
-	$data['forum_userid'] = $_SESSION['login']['l_id'];
+	$data['login_id'] = $_SESSION['login']['l_id'];
 	$data['forum_userlogin'] = $_SESSION['login']['l_login'];
 	$data['forum_useremail'] = $_SESSION['login']['l_email'];
 	$data['forum_username'] = $_SESSION['login']['l_nick'];
@@ -81,7 +88,7 @@ if($action == 'add_theme')
 			$res_id = $new_data['res_id'];
 			$data['c_data'] = $data['forum_data'];
 			$resDb = $db;
-			if($c_id = include('module/comment/add.inc.php'))
+			if($c_id = include('module//comment//add.inc.php'))
 			{
 				$_SESSION['user']['username'] = $data['forum_username'];
 				$_SESSION['user']['useremail'] = $data['forum_useremail'];
@@ -157,7 +164,7 @@ foreach($items as $item)
 }
 
 $forum_count = $forum_items->getThemeCount($forum_id);
-include('module/forum/pages.inc.php');
+include('module//forum//pages.inc.php');
 
 set_forum($template, $forum_id);
 

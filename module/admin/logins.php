@@ -8,10 +8,10 @@
 $l_id = (int)array_shift($sys_parameters);
 $action = postget('action');
 
-require_once('lib/Logins.php');
-require_once('lib/Module.php');
-require_once('lib/Article.php');
-require_once('lib/Forum.php');
+require_once('lib//Logins.php');
+require_once('lib//Module.php');
+require_once('lib//Article.php');
+require_once('lib//Forum.php');
 
 $logins = new Logins;
 
@@ -36,8 +36,8 @@ if($action == 'save')
 
 if($l_id)
 {
-	include("module/admin/logins/edit.inc.php");
+	include("module//admin//logins//edit.inc.php");
 } else {
-	include("module/admin/logins/list.inc.php");
+	include("module//admin//logins//list.inc.php");
 }
 

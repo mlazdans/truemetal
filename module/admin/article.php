@@ -5,10 +5,10 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib/Article.php');
-require_once('lib/Module.php');
-require_once('lib/Comment.php');
-require_once('lib/ResComment.php');
+require_once('lib//Article.php');
+require_once('lib//Module.php');
+require_once('lib//Comment.php');
+require_once('lib//ResComment.php');
 
 $action = post('action');
 $art_id = array_shift($sys_parameters);
@@ -22,7 +22,7 @@ $template->set_title('Admin :: raksti');
 # Comment actions
 if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
 {
-	if(include("module/admin/comment/action.inc.php"))
+	if(include("module//admin//comment//action.inc.php"))
 	{
 		header("Location: ".($art_id ? "$module_root/$art_id/" : "$module_root"));
 	}
@@ -140,7 +140,7 @@ if(!$art_id)
 		'c_visible'=>Comment::ALL,
 		));
 
-	include("module/admin/comment/list.inc.php");
+	include("module//admin//comment//list.inc.php");
 }
 
 $template->out();

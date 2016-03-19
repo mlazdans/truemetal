@@ -36,7 +36,7 @@ Nav neviena logina
 	<td class="TD-cat">Logins</td>
 	<td class="TD-cat">Niks</td>
 	<td class="TD-cat"><a href="?{q_sort_votes}">Reitings</a></td>
-	<td class="TD-cat"><a href="?{q_sort_votes_perc}">Lietderība</a></td>
+	<td class="TD-cat">Lietderība</td>
 	<td class="TD-cat"><a href="?{q_sort_comment_count}">Komentāri</a></td>
 	<td class="TD-cat">E-pasts</td>
 	<td class="TD-cat" title="Aktīvs">Akt</td>

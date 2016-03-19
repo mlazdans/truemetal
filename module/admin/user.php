@@ -5,7 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib/User.php');
+require_once('lib//User.php');
 
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 $user_login = array_shift($sys_parameters);

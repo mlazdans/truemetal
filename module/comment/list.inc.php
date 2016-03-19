@@ -7,7 +7,7 @@
 
 //
 
-require_once('lib/CommentDisabled.php');
+require_once('lib//CommentDisabled.php');
 
 if(user_loged())
 {

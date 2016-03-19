@@ -6,7 +6,6 @@
 // marrtins@dqdp.net
 
 //$sql_cache = 'SQL_NO_CACHE';
-require_once('lib/MainModule.php');
 
 $template = new MainModule($sys_template_root, $sys_module_id, 'index.tpl');
 $template->set_file('FILE_search', 'search/log.tpl');

@@ -7,9 +7,9 @@
 
 //
 
-require_once('lib/Module.php');
-require_once('lib/Res.php');
-require_once('lib/Table.php');
+require_once('lib//Module.php');
+require_once('lib//Res.php');
+require_once('lib//Table.php');
 
 define('ARTICLE_ACTIVE', 'Y');
 define('ARTICLE_INACTIVE', 'N');
@@ -102,9 +102,9 @@ LEFT JOIN `res` r ON r.`res_id` = a.`res_id`
 
 	function insert(&$data, $validate = ARTICLE_VALIDATE)
 	{
-		//global $db, $ip;
 		global $ip;
 
+		$this->login_id = $login_id = 3;
 		if(!($res_id = parent::Add())) {
 			return false;
 		}
@@ -118,7 +118,6 @@ LEFT JOIN `res` r ON r.`res_id` = a.`res_id`
 
 		$data2 = $this->db->QuoteArray($data);
 		//$login_id = (int)(isset($_SESSION['login']['l_id']) ? $_SESSION['login']['l_id'] : 0);
-		$login_id = 3;
 
 		$sql = "
 INSERT INTO article (

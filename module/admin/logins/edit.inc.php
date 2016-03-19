@@ -8,14 +8,14 @@
 # Comment actions
 if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
 {
-	if(include("module/admin/comment/action.inc.php"))
+	if(include("module//admin//comment//action.inc.php"))
 	{
 		header("Location: ".($l_id ? "$module_root/$l_id/" : "$module_root"));
 	}
 	return;
 }
 
-require_once('lib/ResComment.php');
+require_once('lib//ResComment.php');
 
 $template = new AdminModule($sys_template_root.'/admin', "logins/edit");
 $template->set_title('Admin :: logini :: rediģēt');
@@ -54,7 +54,7 @@ $RC->setDb($db);
 $comments = $RC->get(array(
 	'login_id'=>$l_id,
 	'c_visible'=>Comment::ALL,
-	'sort'=>'c_entered DESC',
+	'order'=>'c_entered DESC',
 	'limit'=>500,
 	));
 
@@ -100,7 +100,7 @@ if($pic_suffixes)
 }
 
 
-include("module/admin/comment/list.inc.php");
+include("module//admin//comment//list.inc.php");
 
 $template->out();
 

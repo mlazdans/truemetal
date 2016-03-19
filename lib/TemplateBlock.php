@@ -368,7 +368,7 @@ class TemplateBlock
 		}
 	} // set_array
 
-	function set_array_prefix($arr_array, $prefix)
+	function set_array_prefix($arr_array, $prefix, $ID = '')
 	{
 		return $this->set_array($arr_array, false, $prefix);
 	} // set_array_prefix
@@ -523,8 +523,11 @@ class TemplateBlock
 	/* nosaukums - veertiibas [defaultaa] - apraksts
 	/* disabled - false/true [false] iespeeja izsleegt
 	/* ----------------------------------------------------------- */
-	function set_attribute($str_attribute, $value)
+	//function set_attribute($str_attribute, $value)
+	function set_attribute()
 	{
+		list($str_attribute, $value) = func_get_args();
+
 		if(isset($this->attributes[$str_attribute]))
 			return $this->attributes[$str_attribute] = $value;
 		else
@@ -541,7 +544,9 @@ class TemplateBlock
 	/* liidziigi, kaa set_file, tachu datus uzstaada nevis no faila,
 	/* bet no stringa
 	/* ----------------------------------------------------------- */
-	function set_block_string($content = '') {
+	//function set_block_string($content = '') {
+	function set_block_string() {
+		list($content) = func_get_args();
 		return $this->content = $content;
 	} // set_block_string
 

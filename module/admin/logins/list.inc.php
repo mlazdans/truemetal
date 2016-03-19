@@ -11,7 +11,7 @@ if(substr($sort, -4) == '_asc')
 
 $sortables = array(
 	"votes",
-	"votes_perc",
+	//"votes_perc",
 	"comment_count",
 	"l_entered"
 	);
@@ -19,13 +19,19 @@ $sortables = array(
 $template = new AdminModule($sys_template_root.'/admin', "logins/list");
 $template->set_title('Admin :: logini :: saraksts');
 
+$sortr = $sort;
+
+if($sort == 'votes'){
+	$sortr = "votes_plus - votes_minus";
+}
+
 $params = array(
 	'limit'=>200,
 	'get_votes'=>true,
 	'get_comment_count'=>true,
 	'l_active'=>LOGIN_ALL,
 	'l_accepted'=>LOGIN_ALL,
-	'order'=>($sort ? $sort.($desc ? " DESC" : " ASC") : ""),
+	'order'=>($sortr ? $sortr.($desc ? " DESC" : " ASC") : ""),
 	);
 
 if($action == 'search')
@@ -87,10 +93,14 @@ $logins_count = 0;
 foreach($logins as $item)
 {
 	$item['votes_plus'] = (int)$item['votes_plus'];
-	$item['votes_minus'] = abs($item['votes_minus']);
-	//$item['votes'] = $item['votes_plus'] - $item['votes_minus'];
-	//$item['votes_perc'] = number_format(($item['votes_plus'] / ($item['votes_plus'] + $item['votes_minus'])) * 100, 2, '.', '');
-	$item['votes_perc'] = number_format($item['votes_perc'], 2, '.', '');
+	$item['votes_minus'] = (int)$item['votes_minus'];
+	$item['votes'] = $item['votes_plus'] - $item['votes_minus'];
+	if($item['votes_plus'] + $item['votes_minus'] != 0){
+		$item['votes_perc'] = number_format(($item['votes_plus'] / ($item['votes_plus'] + $item['votes_minus'])) * 100, 2, '.', '');
+	} else {
+		$item['votes_perc'] = 0;
+	}
+	//$item['votes_perc'] = number_format($item['votes_perc'], 2, '.', '');
 
 	$template->set_array($item, 'BLOCK_logins');
 	$template->set_var('logins_nr', ++$logins_count, 'BLOCK_logins');

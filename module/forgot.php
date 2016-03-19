@@ -5,9 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib/Logins.php');
-require_once('lib/MainModule.php');
-
 $action = array_shift($sys_parameters);
 
 $template = new MainModule($sys_template_root, $sys_module_id, 'index.tpl');
@@ -27,9 +24,9 @@ $error_msg = array();
 
 if($action == 'request')
 {
-	include("module/forgot/request.inc.php");
+	include("module//forgot//request.inc.php");
 } elseif($action == 'accept') {
-	include("module/forgot/accept.inc.php");
+	include("module//forgot//accept.inc.php");
 } else {
 	$template->enable('BLOCK_forgot_form');
 }

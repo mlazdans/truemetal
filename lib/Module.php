@@ -21,7 +21,7 @@ class Module
 	var $error_msg;
 	var $primary_key;
 
-	function Module()
+	function __construct()
 	{
 		$this->primary_key = 'mod_id';
 	} // Module

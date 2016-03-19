@@ -9,7 +9,7 @@ $action = post('action');
 # Comment actions
 if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
 {
-	if(include("module/admin/comment/action.inc.php"))
+	if(include("module//admin//comment//action.inc.php"))
 	{
 		//header("Location: ".($forum_id ? "$module_root/$forum_id/" : "$module_root"));
 		redirect();
@@ -19,7 +19,7 @@ if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
 
 if($report == 'ip')
 {
-	include("module/admin/reports/ip.inc.php");
+	include("module//admin//reports//ip.inc.php");
 }
 
 $template->out();

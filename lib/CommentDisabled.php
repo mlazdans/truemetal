@@ -7,7 +7,7 @@
 
 class CommentDisabled
 {
-	static function get($login_id, $disable_login_id = 0)
+	public static function get($login_id, $disable_login_id = 0)
 	{
 		global $db;
 
@@ -24,7 +24,7 @@ class CommentDisabled
 		return $ret;
 	} // isDisabled
 
-	static function disable($login_id, $disable_login_id)
+	public static function disable($login_id, $disable_login_id)
 	{
 		global $db;
 
@@ -37,7 +37,7 @@ class CommentDisabled
 		return $db->Execute($sql);
 	} // disable
 
-	static function enable($login_id, $disable_login_id)
+	public static function enable($login_id, $disable_login_id)
 	{
 		global $db;
 
@@ -49,6 +49,5 @@ class CommentDisabled
 
 		return $db->Execute($sql);
 	} // enable
-
 } // class::CommentDisabled
 

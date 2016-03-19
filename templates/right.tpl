@@ -1,7 +1,25 @@
 <div class="TD-cat">Aktuāli</div>
 
 <div class="List-item actual">
-	<a href="/forum/123982-14-2-14-tumšais-valentīns-eschatos-devlsy-evestus-uc" title="14. februāris, piektdiena, klubs &quot;Melnā Piektdiena&quot;">TUMŠAIS VALENTĪNS</a>
+	<a href="/forum/124411-31-03-16-nile-melnā-piektdiena-2016" title="31. marts, ceturtdiena">NILE</a>
+</div>
+<div class="List-item">
+	<a href="/forum/124381-incantation-nabaklab-26-04-2016" title="26. aprīlis, otrdiena">INCANTATION</a>
+</div>
+<div class="List-item">
+	<a href="/forum/124429-30-04-16-who-dies-in-siberian-slush-catalepsia" title="30. aprīlis, sestdiena">WHO DIES IN SIBERIAN SLUSH / EPHEMERAL OCEAN / CATALEPSIA / OCEANPATH</a>
+</div>
+<div class="List-item">
+	<a href="/forum/124415-blaze-bayley-02-05-2016-nabaklab" title="2. maijs, pirmdiena">BLAZE BAYLEY</a>
+</div>
+<div class="List-item">
+	<a href="/forum/forum/124434-05-05-16-depo-lacrima-wrathrone" title="5. maijs, ceturtdiena">LACRIMA / WRATHRONE</a>
+</div>
+<div class="List-item">
+	<a href="/forum/124437-hanzel-und-gretyl-in-russia-finland-latvia" title="4. jūnijs, sestdiena">HANZEL UND GRETYL</a>
+</div>
+<div class="List-item">
+	<a href="/forum/124367-brauciens-un-iron-maiden-koncertu-lietuvā" title="23. jūnijs, ceturtdiena">Brauciens: IRON MAIDEN Kauņā</a>
 </div>
 
 <div class="List-sep"></div>
@@ -17,24 +35,9 @@
 <div class="List-sep"></div>
 <!-- END BLOCK_right_item -->
 
-<div class="TD-cat">Ieskaties</div>
-<div style="text-align: center; background: black; padding: 15px 0 15px 0;">
-	<a href="http://www.myspace.com/trepanationsquad"><img src="{http_root}/img/banner_trepanationsquad.gif" alt="Trepanation Squad: banner" title="Trepanation Squad" width="140" height="75" /></a>
-</div>
-
-<div style="text-align: center; background: black; padding: 2px 0 2px 0;">
-	<a href="http://www.rockmetalkaraoke.com/"><img src="{http_root}/img/banner_karaoke.gif" alt="www.rockmetalkaraoke.com banner" title="www.rockmetalkaraoke.com" width="190" height="110" /></a>
-</div>
-
-<div class="List-sep"></div>
-
-
 <div class="TD-cat">Viskas</div>
 <div class="List-item">
 	<a href="{http_root}/archive/">Arhīvs</a>
-</div>
-<div class="List-item">
-	<a href="{http_root}/links/">Saites</a>
 </div>
 <div class="List-item">
 	<a href="{http_root}/logo/">Truemetal.lv logo</a>

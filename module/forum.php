@@ -157,10 +157,10 @@ function set_forum_items(&$template, &$data, $forum_comments = false)
 */
 
 // ----------------------------------------------------------------------------
-require_once('lib/MainModule.php');
-require_once('lib/Forum.php');
+require_once('lib//Forum.php');
 
-$hl = urldecode(get("hl"));
+$hl = rawurldecode(get("hl"));
+
 $action = post('action');
 
 $fpp = 20;
@@ -231,12 +231,12 @@ if($forum_id)
 	# Subtēma TODO: jānotestē
 	if($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS)
 	{
-		include("forum/theme.inc.php");
+		include("forum//theme.inc.php");
 	} else {
-		include("forum/det.inc.php");
+		include("forum//det.inc.php");
 	}
 } else {
-	include("forum/root.inc.php");
+	include("forum//root.inc.php");
 }
 
 /*

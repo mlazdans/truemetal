@@ -5,8 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib/MainModule.php');
-require_once('lib/Article.php');
+require_once('lib//Article.php');
 
 $template = new MainModule($sys_template_root, $sys_module_id);
 $template->set_title("Arhīvs: visi notikumi līdz šim");

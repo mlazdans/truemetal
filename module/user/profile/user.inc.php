@@ -5,7 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib/CommentDisabled.php');
+require_once('lib//CommentDisabled.php');
 
 $action = post('action');
 $json = get('json');

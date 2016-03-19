@@ -17,7 +17,8 @@ $sys_upload_root       = $sys_public_root.'/data';
 $sys_upload_http_root  = '/data';
 $sys_user_root         = $sys_root.'/users';
 
-$sys_error_reporting   = E_ALL & ~(E_NOTICE | E_STRICT);
+//$sys_error_reporting   = E_ALL & ~(E_NOTICE | E_STRICT | E_DEPRECATED);
+$sys_error_reporting   = E_ALL;
 $sys_default_lang      = 'lv';
 $sys_encoding          = 'utf-8';
 $sys_domain            = (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost');
@@ -42,7 +43,7 @@ $now                   = date("d.m.Y, H:i", time());
 $today                 = date("d.m.Y");
 
 # Config
-require_once("$sys_root/include/config.php");
+require_once("$sys_root//include//config.php");
 
 if(!isset($i_am_admin))
 	$i_am_admin = in_array($ip, $sys_admins);
@@ -55,6 +56,7 @@ if(!$i_am_admin){
 }
 */
 
+//ini_set('display_errors', ($sys_debug ? 1 : 0));
 ini_set('display_errors', ($sys_debug ? 1 : 0));
 ini_set('expose_php', false);
 error_reporting($sys_error_reporting);
@@ -84,15 +86,37 @@ if(isset($sys_banned[$ip]))
 
 //apd_set_pprof_trace();
 /* some includes */
-require_once('include/dbconnect.php');
-require_once('lib/utils.php');
-require_once('lib/MainModule.php');
-require_once('lib/Module.php');
-require_once('lib/Logins.php');
+require_once('include//dbconnect.php');
+require_once('lib//utils.php');
+require_once('lib//MainModule.php');
+require_once('lib//Module.php');
+require_once('lib//Logins.php');
+
+# Blacklisted
+/*
+if($_SERVER['REQUEST_METHOD'] == 'POST')
+{
+	if(ip_blacklisted($ip))
+	{
+		print "Blacklisted: $ip";
+		return;
+	}
+}
+*/
+
+/* MySQL tune */
+$db->Execute(sprintf("SET SESSION join_buffer_size=%d", 512*1024));
+
+/*
+if($i_am_admin)
+{
+	print "Backtrace:";
+	debug_print_backtrace();
+}
+*/
 
 mb_regex_encoding($sys_encoding);
 mb_internal_encoding($sys_encoding);
-//printr($_SERVER);
 
 /* dabuujam parametrus no mod_rewrite */
 if(!isset($_SERVER["SERVER_PROTOCOL"]))
@@ -113,31 +137,20 @@ if(!$sys_module_id && $sys_default_module)
 	$sys_module_id = $sys_default_module;
 
 if(!in_array($sys_module_id, $sys_nosess_modules)){
-	require_once('include/session_handler.php');
+	require_once('include//session_handler.php');
 }
+
 if(user_loged())
 {
-	register_shutdown_function("shutdown");
-	if($l = Logins::load_by_id($_SESSION['login']['l_id']))
-	{
-		/*
-		if($_SESSION['login']['l_nick'] == 'graff'){
-			ob_start();
-			print_r($_SERVER);
-			$h = ob_get_clean();
-			file_put_contents('/tmp/graff.txt', "[$now]\n$h\n",  FILE_APPEND |  LOCK_EX);
-		}
-		*/
+	register_shutdown_function("tm_shutdown");
+	if($l = Logins::load_by_id($_SESSION['login']['l_id'])) {
 		session_decode($l['l_sessiondata']);
-		//printr($l['l_sessiondata']);
-		//printr($_SESSION);
 	} else {
 		Logins::logoff();
 		redirect();
 		return;
 	}
 }
-
 
 $module_root = "$sys_http_root/$sys_module_id";
 
@@ -185,9 +198,9 @@ if(isset($sys_locale))
 //ob_start();
 /* iesleedzam vaidziigo moduli */
 if(file_exists("$sys_root/module/$sys_module.php")) {
-	include("$sys_root/module/$sys_module.php");
+	include("$sys_root//module//$sys_module.php");
 } else {
-	include("$sys_root/module/$sys_default_module.php");
+	include("$sys_root//module//$sys_default_module.php");
 }
 //$data = ob_get_clean();
 
@@ -209,12 +222,6 @@ print $tidy;
 //$my_login = new Logins;
 //$my_login->save_session_data();
 //Logins::save_session_data();
-
-function shutdown()
-{
-	Logins::save_session_data();
-	session_commit();
-} // shutdown
 
 /*
 if($i_am_admin)

@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib/MainModule.php');
-
 $template = new MainModule($sys_template_root, $sys_module_id);
 $template->set_title("Logo");
 $template->set_file('FILE_logo', 'logo.tpl');

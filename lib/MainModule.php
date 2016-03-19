@@ -7,11 +7,11 @@
 
 // pats pats...
 
-require_once('lib/Module.php');
-require_once('lib/Article.php');
-require_once('lib/Poll.php');
-require_once('lib/Logins.php');
-require_once('lib/Template.php');
+require_once('lib//Module.php');
+require_once('lib//Article.php');
+require_once('lib//Poll.php');
+require_once('lib//Logins.php');
+require_once('lib//Template.php');
 
 class MainModule extends Template
 {
@@ -22,7 +22,8 @@ class MainModule extends Template
 	function __construct($template_root, $module_name = '',
 		$str_main_file = 'index.tpl', $str_undefined = 'remove')
 	{
-		parent::Template($template_root, $str_undefined);
+		//parent::Template($template_root, $str_undefined);
+		parent::__construct($template_root, $str_undefined);
 
 		$this->set_module_name($module_name ? $module_name : get_class($this));
 

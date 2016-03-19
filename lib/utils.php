@@ -8,7 +8,7 @@
 // dazaadas paliigfunkcijas
 
 require_once('Mail.php');
-require_once('Mail/mime.php');
+require_once('Mail//mime.php');
 
 define('REMOVE_TABLE', 1);
 define('REMOVE_FONT', 2);
@@ -171,7 +171,7 @@ function proc_date($date)
 function url_pattern()
 {
 	$url_patt = $path_patt = '';
-	return "/(http(s?):\/\/|ftp:\/\/|telnet:\/\/|dchub:\/\/|ed2k:\/\/|mailto:|callto:)([^\/\s\t\n\r\!\'\<>\(\)]".$url_patt."*)([^\s\t\n\r\'\<>\(\)]".$path_patt."*)/is";
+	return "/(http(s?):\/\/|ftp:\/\/|telnet:\/\/|dchub:\/\/|ed2k:\/\/|mailto:|callto:)([^\/\s\t\n\r\!\'\<>\(\)]".$url_patt."*)([^\s\t\n\r\'\<>]".$path_patt."*)/is";
 } // url_pattern
 
 function parse_text_data(&$data)
@@ -362,7 +362,10 @@ function substitute($str)
 	return preg_replace_callback(
 		$patt,
 		function($m){
-			return "'[".$m[1]."|'".substitute_change($m[1])."']'";
+			//if(false && $i_am_admin)
+				return "[".$m[1]."|".substitute_change($m[1])."]";
+			//else
+			//	return "'[".$m[1]."|'".substitute_change($m[1])."']'";
 		},
 		$str);
 } // substitute
@@ -545,7 +548,6 @@ function strip_script(&$data, &$keys, &$scripts)
 			$scripts[] = $m[0][$r];
 			$data = str_replace($m[0][$r], $token, $data);
 		}
-		//print_r($m);
 	}
 } // strip_script
 
@@ -613,14 +615,19 @@ function hl(&$data, $kw)
 	foreach($words as $index=>$word)
 	{
 		$word = preg_replace('/[<>\/]/', '', $word);
+		//$word = substitute(preg_quote($word));
 		$word = substitute(preg_quote($word));
+
 		if(empty($word))
 			continue;
 
 		$color = $colors[$index % $cc];
 		$bgcolor = $bg[$index % $bc];
 		$data = ">$data<";
-		$patt = "/(>[^<]*)(".substitute(preg_quote($word)).")([^>]*)<?/imsUu";
+		//$patt = "/(>[^<]*)(".substitute(preg_quote($word)).")([^>]*)<?/imsUu";
+		//$patt = "/(>[^<]*)(".substitute($word).")([^>]*)<?/imsUu";
+		$patt = "/(>[^<]*)(".$word.")([^>]*)<?/imsUu";
+
 		$data = preg_replace($patt, "$1<span style=\"background-color: $bgcolor; color: $color; font-weight: bold;\">$2</span>$3", $data);
 		$data = mb_substr($data, 1, mb_strlen($data)-2);
 	}
@@ -864,8 +871,8 @@ function _GET()
 		foreach($pairs as $kv)
 		{
 			$parts = explode('=', $kv);
-			$k = isset($parts[0]) ? $parts[0] : false;
-			$v = isset($parts[1]) ? $parts[1] : false;
+			$k = isset($parts[0]) ? urldecode($parts[0]) : false;
+			$v = isset($parts[1]) ? urldecode($parts[1]) : false;
 
 			# Arrays
 			if(substr($k, -2) == '[]')
@@ -1155,4 +1162,54 @@ function query_join(Array $QS, $delim)
 
 	return join($delim, $ret);
 } // query_join
+
+function ip_rev($ip)
+{
+	return implode('.', array_reverse(explode('.', $ip)));
+} // ip_rev
+
+function ip_blacklisted($ip)
+{
+	$dnsbl = array(
+		'bl.blocklist.de',
+		'xbl.spamhaus.org',
+		'cbl.abuseat.org',
+		//'l2.apews.org',
+		'all.s5h.net',
+		);
+
+	$iprev = ip_rev($ip);
+	foreach($dnsbl as $bl)
+	{
+		# return 1 - not found; 0 - listed
+		$c = "host -W 1 -t any $iprev.$bl";
+		//$t=time();
+		$ret = exec($c, $o, $rv);
+		//$b="$c:".(time()-$t)."\n";
+		//printr($b);
+		if(!$rv)
+			return true;
+	}
+
+	return false;
+} // ip_blacklisted
+
+function user_blacklisted()
+{
+	$last_access = 0;
+	# 1 week
+	if(user_loged() && (time() - strtotime($_SESSION['login']['l_lastaccess'])) < 604800)
+	{
+		return false;
+	} else {
+		return ip_blacklisted($GLOBALS['ip']);
+	}
+} // user_blacklisted
+
+function tm_shutdown()
+{
+	$_SESSION['login']['l_lastaccess'] = date('Y-m-d H:i:s');
+	Logins::save_session_data();
+	session_commit();
+} // tm_shutdown
 

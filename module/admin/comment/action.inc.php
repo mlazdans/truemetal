@@ -1,6 +1,6 @@
 <?php
 
-require_once('lib/Comment.php');
+require_once('lib//Comment.php');
 
 $c_ids = post('c_id');
 if(!is_array($c_ids))

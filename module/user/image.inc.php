@@ -5,10 +5,36 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
+$ADMIN = false;
+# TODO: rādīt bildes admin daļā, ja useris disablēts
+/*
+$user_login = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : '';
+$user_pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
+
+if($user_login && $user_pass)
+{
+
+	$user = new User();
+	$user->login($user_login, $user_pass);
+	if($user->logged_id) {
+		if(
+			!isset($user->data['user_login']) ||
+			!isset($user->data['user_pass']) ||
+			($user->data['user_login'] != $user_login) ||
+			($user->data['user_pass'] != $user_pass)
+		)
+			$ADMIN = false;
+		else
+			$ADMIN = true;
+	} else
+		$ADMIN = false;
+}
+*/
+
 $thumb = (isset($thumb) ? $thumb : "");
 $login = array_shift($sys_parameters);
 $suffix = array_shift($sys_parameters);
-$login_data = Logins::load_by_login($login);
+$login_data = Logins::load_by_login($login, $ADMIN);
 
 $suffix = preg_replace('/[^-\d]/', '', $suffix);
 if(
