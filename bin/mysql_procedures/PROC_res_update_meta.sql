@@ -4,6 +4,8 @@ DROP PROCEDURE IF EXISTS `res_update_meta` $$
 CREATE PROCEDURE `res_update_meta` (p_res_id INT)
 BEGIN
 	DECLARE v_vote_sum INT DEFAULT 0;
+	DECLARE v_vote_plus_count INT DEFAULT 0;
+	DECLARE v_vote_minus_count INT DEFAULT 0;
 	DECLARE v_comment_count INT DEFAULT 0;
 	DECLARE v_comment_lastdate DATETIME DEFAULT '0000-00-00 00:00:00';
 	DECLARE v_table_id INT DEFAULT 0;
@@ -26,6 +28,8 @@ BEGIN
 
 	/* Vote meta */
 	SELECT SUM(rv_value) INTO v_vote_sum FROM res_vote WHERE res_id = p_res_id;
+	SELECT COUNT(rv_value) INTO v_vote_plus_count FROM res_vote WHERE res_id = p_res_id AND rv_value = 1;
+	SELECT COUNT(rv_value) INTO v_vote_minus_count FROM res_vote WHERE res_id = p_res_id AND rv_value = -1;
 
 	/* login_id */
 	-- Article
@@ -45,11 +49,18 @@ BEGIN
 		login_id = v_login_id,
 		res_comment_count = v_comment_count,
 		res_comment_lastdate = v_comment_lastdate,
-		res_votes = v_vote_sum
+		res_votes = v_vote_sum,
+		res_votes_plus_count = v_vote_plus_count,
+		res_votes_minus_count = v_vote_minus_count
 	WHERE
 		res_id = p_res_id
 	;
 
+	--
+	-- Ja sauc CALL res_update_meta_all(), tad labāk šo aizkomentēt un
+	-- pēc tam izsaukt CALL logins_update_meta_all();
+	--
+	CALL logins_update_meta(v_login_id);
 
 END $$
 
