@@ -6,7 +6,7 @@
 // marrtins@dqdp.net
 
 # Blacklisted
-if(user_blacklisted())
+if(user_blacklisted() || Logins::banned24h($GLOBALS['ip']))
 {
 	print "Blacklisted: $ip";
 	return;

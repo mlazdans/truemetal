@@ -139,7 +139,8 @@ class Logins
 
 		if(!empty($params['get_all_ips']))
 		{
-			$sql .= ", (SELECT GROUP_CONCAT(DISTINCT c_userip) FROM comment WHERE login_id = l_id) all_ips ";
+			$d = date('Y-m-d H:i:s', strtotime('-1 year'));
+			$sql .= ", (SELECT GROUP_CONCAT(DISTINCT c_userip) FROM comment WHERE login_id = l_id AND c_entered > '$d') all_ips ";
 		}
 
 		$sql .= " FROM logins ";
@@ -255,6 +256,17 @@ class Logins
 			));
 	} // load_by_email
 
+	static function banned24h($ip)
+	{
+		global $db;
+
+		$d = date('Y-m-d H:i:s', strtotime('-24 hours'));
+		$sql = "SELECT COUNT(*) banned FROM `logins` WHERE l_active='N' AND l_userip='$ip' AND l_lastaccess > '$d'";
+		$item = $db->ExecuteSingle($sql);
+
+		return $item['banned'] > 0;
+	} // banned24h
+
 	function get_active()
 	{
 		global $db;
@@ -344,10 +356,13 @@ class Logins
 		$days = floor((time() - strtotime($login['l_lastaccess'])) / (3600 * 24));
 		if($days)
 		{
-			$days_lv = "dienām";
-			if($days % 10 == 1)
-				$days_lv = "dienas";
-			$template->set_var('l_lastaccess_days', " (pirms $days $days_lv)");
+			if($days < 365)
+			{
+				$days_lv = "dienām";
+				if($days % 10 == 1)
+					$days_lv = "dienas";
+				$template->set_var('l_lastaccess_days', " (pirms $days $days_lv)");
+			}
 		} else {
 			$template->set_var('l_lastaccess_days', " (šodien)");
 		}
@@ -998,6 +1013,5 @@ GROUP BY
 			return false;
 		}
 	} // collectUsersByIP
-
 } // class Logins
 

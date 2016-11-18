@@ -56,6 +56,58 @@ $params['order'] =
 	? "c_entered DESC"
 	: "c_entered";
 
+$a_events = array(
+	124498,
+	124536
+	);
+
+if(user_loged() && in_array($forum_data['forum_id'], $a_events))
+{
+	$template->enable('BLOCK_attend');
+
+	$template->set_var('res_id', $forum_data['res_id'], 'BLOCK_attend');
+	$sql = sprintf("
+		SELECT
+			a.*, l.l_nick
+		FROM
+			attend a
+		JOIN logins l ON l.l_id = a.l_id
+		WHERE
+			res_id = %d
+		ORDER BY
+			a_entered
+		",
+		$forum_data['res_id']
+		);
+
+	$attended = false;
+	if($data = $db->Execute($sql))
+	{
+		$template->enable('BLOCK_attend_list');
+		$c = count($data);
+		foreach($data as $k=>$item){
+			if($item['a_attended'] && ($_SESSION['login']['l_id'] == $item['l_id'])){
+				$attended = true;
+			}
+			$l_nick = $item['l_nick'];
+			if(!$item['a_attended']){
+				$l_nick = "<strike>$l_nick</strike>";
+			}
+			$l_nick .= ($k+1 < $c ? ', ' : '');
+			$template->set_array($item, 'BLOCK_attend_list');
+			$template->set_var('l_nick_', $l_nick, 'BLOCK_attend_list');
+			$template->parse_block('BLOCK_attend_list', TMPL_APPEND);
+		}
+	}
+
+	if($attended)
+	{
+		$template->enable('BLOCK_attend_off');
+	} else {
+		$template->enable('BLOCK_attend_on');
+	}
+}
+
 $RC = new ResComment();
 $comments = $RC->Get($params);
 

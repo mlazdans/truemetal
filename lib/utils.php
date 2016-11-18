@@ -1196,6 +1196,13 @@ function ip_blacklisted($ip)
 
 function user_blacklisted()
 {
+	global $sys_whitelist;
+
+	if(!empty($sys_whitelist)){
+		if(in_array($GLOBALS['ip'], $sys_whitelist))
+			return false;
+	}
+
 	$last_access = 0;
 	# 1 week
 	if(user_loged() && (time() - strtotime($_SESSION['login']['l_lastaccess'])) < 604800)

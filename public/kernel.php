@@ -92,6 +92,9 @@ require_once('lib//MainModule.php');
 require_once('lib//Module.php');
 require_once('lib//Logins.php');
 
+//$a = search_to_sql('black sabbath', 'song_name');
+//printr($a);
+
 # Blacklisted
 /*
 if($_SERVER['REQUEST_METHOD'] == 'POST')

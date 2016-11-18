@@ -6,6 +6,24 @@
 	<a href="{module_root}/"><b>Forums</b></a><!-- BEGIN BLOCK_forum_path disabled --> / <a href="{module_root}{forum1_path}">{forum1_name}</a><!-- END BLOCK_forum_path -->
 </div>
 
+<!-- BEGIN BLOCK_attend disabled -->
+<div class="Forum-cat">Solās ierasties:
+	<!-- BEGIN BLOCK_attend_list disabled -->{l_nick_}<!-- END BLOCK_attend_list -->
+</div>
+	<!-- BEGIN BLOCK_attend_on disabled -->
+	<div class="List-item">
+		<input type="button" onclick="Truemetal.Attend('{res_id}'); return false;" value="Es ar' nāks!"/>
+	</div>
+	<!-- END BLOCK_attend_on -->
+
+	<!-- BEGIN BLOCK_attend_off disabled -->
+	<div class="List-item">
+		<input type="button" onclick="if(confirm('Tu ko?! Nezini, kas ir Amorphis???'))Truemetal.AttendNo('{res_id}'); return false;" value="Es tomēr nenāks!"/>
+	</div>
+	<!-- END BLOCK_attend_off -->
+<!-- END BLOCK_attend -->
+
+
 <!-- BEGIN BLOCK_noforum disabled -->
 <div class="Info">
 	Pagaidām šai tēmai nav neviena komentāra!
@@ -30,3 +48,4 @@
 	Tēma slēgta
 </div>
 <!-- END BLOCK_forum_closed -->
+

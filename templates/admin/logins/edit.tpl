@@ -73,7 +73,7 @@
 	<td>{l_userip}</td>
 </tr>
 <tr>
-	<td class="right nowrap">Manīts no:</td>
+	<td class="right">Pēdējā gada laikā manīts no:</td>
 	<td>
 		<a href="{http_root}/admin/reports/?report=ip&amp;ips={all_ips}">{all_ips_view}</a>
 	</td>
