@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
-
 require_once('lib/ResComment.php');
 
 $template->set_file('FILE_forum', 'forum/det.tpl');
@@ -20,22 +18,12 @@ $template->copy_block('BLOCK_forum_comments', 'FILE_forum_comments');
 # 2) uztaisīt balsošanu par articles un forum
 # 3) pārkopēt foruma pirmā komenta votes uz foruma votēm
 # 4) izvākt pirmo foruma komentu
-/*
-if($forum_data)
-{
-	$template->enable('BLOCK_forum');
-	$template->set_array($forum_data, 'BLOCK_forum');
-}
-*/
-#
 
 if(user_loged())
 	$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_comment_count'];
 
 if(($forum_data['forum_closed'] == FORUM_OPEN) && ($action == 'add_comment') && user_loged())
 {
-	//$table = 'forum';
-	//$table_id = $forum_id;
 	$res_id = $forum_data['res_id'];
 	$data = post('data');
 	$resDb = $db;
@@ -113,7 +101,6 @@ if(($forum_data['forum_display'] == Forum::DISPLAY_DATA) && !empty($comments[0])
 		)
 	{
 		array_unshift($comments, array_pop($comments));
-		//$comments = array_merge(array(array_pop($comments)), $comments);
 	}
 	$comments[0]['c_datacompiled'] = $forum_data['forum_data'];
 }

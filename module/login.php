@@ -34,9 +34,7 @@ if(isset($_POST['data']))
 	$data = post('data');
 	if($login_data = $my_login->login($data['login'], $data['password']))
 	{
-		//$template->set_var('error_msg', 'Pēc lapas lietošanas vēlams nospiest "LOG OFF"');
-		if($login_data['l_sessiondata'])
-		{
+		if($login_data['l_sessiondata']){
 			session_decode($login_data['l_sessiondata']);
 		}
 

@@ -5,11 +5,8 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
+require_once('lib/SQLLayer.php');
 
-require_once('lib//SQLLayer.php');
-
-/* sleedzamies pie datubaazes */
 if(empty($GLOBALS['sys_database_type']))
 {
 	$db = null;
@@ -23,7 +20,8 @@ if(empty($GLOBALS['sys_database_type']))
 		$GLOBALS['sys_db_name'], $GLOBALS['sys_db_port']
 		);
 
-	if(!$db->conn)
+	if(!$db->conn){
 		die('True DB error!');
+	}
 }
 

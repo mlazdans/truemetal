@@ -5,11 +5,9 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
-
-require_once('lib//sphinxapi.php');
-require_once('lib//Article.php');
-require_once('lib//Forum.php');
+require_once('lib/sphinxapi.php');
+require_once('lib/Article.php');
+require_once('lib/Forum.php');
 
 # Init classes
 $Article = new Article();
@@ -75,8 +73,6 @@ if(($res = $cl->Query($search_q, $index)) === false)
 } elseif($res["total_found"] == 0) {
 	$search_msg[] = "Nekas netika atrasts";
 } else {
-	//if ( $cl->GetLastWarning() )
-	//	print "WARNING: " . $cl->GetLastWarning() . "\n\n";
 	$ids = array();
 	foreach($res["matches"] as $id=>$doc)
 	{
@@ -100,8 +96,6 @@ if(($res = $cl->Query($search_q, $index)) === false)
 
 			foreach($arts as $item)
 			{
-				//$doc_id = $item['art_id'] + $ds['id_offset'.($only_titles ? "_titles" : "")];
-				//$doc_id = $res_ids[$item['art_id']];
 				$doc_id = $item['res_id'];
 				$items[$doc_id] = array(
 					'doc_res_id'=>$item['art_id'],
@@ -123,8 +117,6 @@ if(($res = $cl->Query($search_q, $index)) === false)
 				));
 			foreach($forums as $item)
 			{
-				//$doc_id = $item['forum_id'] + $ds['id_offset'.($only_titles ? "_titles" : "")];
-				//$doc_id = $doc_ids[$item['forum_id']];
 				$doc_id = $item['res_id'];
 				$items[$doc_id] = array(
 					'doc_res_id'=>$item['forum_id'],

@@ -5,7 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib//ResComment.php');
+require_once('lib/ResComment.php');
 
 class Res
 {
@@ -87,20 +87,20 @@ class Res
 		switch($res_data['table_id'])
 		{
 			case Table::ARTICLE:
-				require_once("lib/Article.php");
+				require_once('lib/Article.php');
 				$D = new Article();
 				return array_merge($res_data, $D->load(array(
 					'res_id'=>$res_data['res_id'],
 					)));
 			case Table::FORUM:
-				require_once("lib/Forum.php");
+				require_once('lib/Forum.php');
 				$D = new Forum();
 				return array_merge($res_data, $D->load(array(
 					'res_id'=>$res_data['res_id'],
 					)));
 				break;
 			case Table::COMMENT:
-				require_once("lib/Comment.php");
+				require_once('lib/Comment.php');
 				$D = new Comment();
 				return array_merge($res_data, $D->Get(array(
 					'res_id'=>$res_data['res_id'],
@@ -149,20 +149,5 @@ class Res
 
 		return $location;
 	} // Route
-/*
-	public static function genId()
-	{
-		if(empty(Res::$db)) {
-			require('include/dbconnect.php');
-			Res::$db = $db;
-		}
-
-		Res::$db->Execute("UPDATE `resid` SET `id` = LAST_INSERT_ID(`id` + 1)");
-		$resId = Res::$db->LastID();
-
-		return $resId;
-	} // genId
-*/
-
 } // class::Res
 

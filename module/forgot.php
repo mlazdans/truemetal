@@ -24,9 +24,9 @@ $error_msg = array();
 
 if($action == 'request')
 {
-	include("module//forgot//request.inc.php");
+	include('module/forgot/request.inc.php');
 } elseif($action == 'accept') {
-	include("module//forgot//accept.inc.php");
+	include('module/forgot/accept.inc.php');
 } else {
 	$template->enable('BLOCK_forgot_form');
 }

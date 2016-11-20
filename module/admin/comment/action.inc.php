@@ -1,6 +1,11 @@
 <?php
+// dqdp.net Web Engine v3.0
+//
+// contacts:
+// http://dqdp.net/
+// marrtins@dqdp.net
 
-require_once('lib//Comment.php');
+require_once('lib/Comment.php');
 
 $c_ids = post('c_id');
 if(!is_array($c_ids))

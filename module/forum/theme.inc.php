@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
-
 if(user_loged())
 	$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_themecount'];
 
@@ -64,7 +62,6 @@ if($action == 'add_theme')
 	# Tirgus
 	if($forum_id == 107488){
 		$entered_days = (time() - strtotime($ldata['l_entered'])) / (3600 * 24);
-		//if(true || ($ldata['comment_count'] < 100) || ($ldata['votes_plus'] - $ldata['votes_minus'] < 100)){
 		if(($entered_days < 10) || ($ldata['votes_plus'] - $ldata['votes_minus'] < 10)){
 			$error = true;
 			$template->enable('BLOCK_forumdata_error_rating');
@@ -83,12 +80,10 @@ if($action == 'add_theme')
 				"forum_id"=>$id,
 				));
 
-			//$table = 'forum';
-			//$table_id = $id;
 			$res_id = $new_data['res_id'];
 			$data['c_data'] = $data['forum_data'];
 			$resDb = $db;
-			if($c_id = include('module//comment//add.inc.php'))
+			if($c_id = include('module/comment/add.inc.php'))
 			{
 				$_SESSION['user']['username'] = $data['forum_username'];
 				$_SESSION['user']['useremail'] = $data['forum_useremail'];
@@ -96,20 +91,13 @@ if($action == 'add_theme')
 				header("Location: $module_root/$id-".rawurlencode(urlize($data['forum_name'])));
 				return;
 			}
-			/*
-			if(isset($forum_data['forum_allowchilds']) && ($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS))
-			{
-				//$data['forum_allowchilds'] = FORUM_PROHIBITCHILDS;
-				$this->add($id, $data);
-			}
-			*/
 			$resDb->Commit();
 		}
 		$db->AutoCommit(true);
 	}
 	parse_form_data_array($data);
 	$template->set_array($data, 'BLOCK_loggedin');
-} // add_theme
+}
 
 
 if(user_loged())
@@ -164,7 +152,7 @@ foreach($items as $item)
 }
 
 $forum_count = $forum_items->getThemeCount($forum_id);
-include('module//forum//pages.inc.php');
+include('module/forum/pages.inc.php');
 
 set_forum($template, $forum_id);
 

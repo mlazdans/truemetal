@@ -5,10 +5,10 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib//Article.php');
-require_once('lib//Module.php');
-require_once('lib//Comment.php');
-require_once('lib//ResComment.php');
+require_once('lib/Article.php');
+require_once('lib/Module.php');
+require_once('lib/Comment.php');
+require_once('lib/ResComment.php');
 
 $action = post('action');
 $art_id = array_shift($sys_parameters);
@@ -22,7 +22,7 @@ $template->set_title('Admin :: raksti');
 # Comment actions
 if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
 {
-	if(include("module//admin//comment//action.inc.php"))
+	if(include('module/admin/comment/action.inc.php'))
 	{
 		header("Location: ".($art_id ? "$module_root/$art_id/" : "$module_root"));
 	}
@@ -69,8 +69,6 @@ if(!$art_id)
 {
 	$template->enable('BLOCK_articles_list');
 
-	//$article->set_order('m.mod_id, a.art_entered DESC');
-	//$articles = $article->load(0, 0, ARTICLE_ALL, ARTICLE_ALL);
 	$articles = $article->load(array(
 		'art_active'=>ARTICLE_ALL,
 		'order'=>'m.mod_id, a.art_entered DESC',
@@ -95,18 +93,16 @@ if(!$art_id)
 			$template->set_var('art_color_class', 'box-inactive', 'BLOCK_article_item');
 
 		$template->parse_block('BLOCK_article_item', TMPL_APPEND);
-	} // foreach articles
+	}
 	$template->set_var('article_count', $article_count);
-# Edit
 } elseif($art = $article->load(array(
 	'art_id'=>$art_id,
 	'art_active'=>ARTICLE_ALL,
 	)))
 {
+	# Edit
 	$template->enable('BLOCK_article_edit');
 	$template->set_var('art_name_edit', $art['art_name'], 'BLOCK_article_edit');
-
-	//$template->set_var('art_comments', $art['art_comments'] == 'Y' ? ' checked' : '');
 
 	if($art['art_type'] == ARTICLE_TYPE_OPEN)
 		$template->set_var('art_type_o', ' selected="selected"');
@@ -123,14 +119,13 @@ if(!$art_id)
 	else
 		$template->set_var('art_active_n', ' selected="selected"');
 
-	//parse_form_data_array($art);
 	$art['art_intro'] = parse_form_data($art['art_intro']);
 	$art['art_data'] = parse_form_data($art['art_data']);
 	$template->set_array($art);
 
 	$module->set_modules_all($template, $art['art_modid'], 'BLOCK_modules_under_list');
 
-	// komentaari
+	# komentaari
 	$template->set_file('FILE_comment_list', 'comment/list.tpl');
 	$template->copy_block('BLOCK_article_comments', 'FILE_comment_list');
 
@@ -140,7 +135,7 @@ if(!$art_id)
 		'c_visible'=>Comment::ALL,
 		));
 
-	include("module//admin//comment//list.inc.php");
+	include('module/admin/comment/list.inc.php');
 }
 
 $template->out();

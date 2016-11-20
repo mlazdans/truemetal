@@ -1,13 +1,9 @@
 <?php
-// Hackers.lv Web Engine v2.0
+// dqdp.net Web Engine v3.0
 //
 // contacts:
-// http://www.hackers.lv/
-// mailto:marrtins@hackers.lv
-
-//
-
-//require_once('lib/class.Admin.php');
+// http://dqdp.net/
+// marrtins@dqdp.net
 
 define('GALLERY_ACTIVE', 'Y');
 define('GALLERY_INACTIVE', 'N');
@@ -303,3 +299,4 @@ class Gallery
 	} // validate
 
 } // Gallery
+

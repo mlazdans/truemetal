@@ -47,7 +47,6 @@ class TemplateBlock
 		$this->slash = chr(92).chr(92);
 		$this->set_undefined($str_undefined);
 		$this->content = $str_content;
-		//$this->blocks = $this->__find_blocks();
 		$this->__find_blocks();
 
 		return true;
@@ -115,7 +114,7 @@ class TemplateBlock
 	/* ----------------------------------------------------------- */
 	function parse($bln_append = false)
 	{
-		/* ja bloks sleegts */
+		# ja bloks sleegts
 		if($this->attributes['disabled'])
 			return;
 
@@ -128,24 +127,20 @@ class TemplateBlock
 		}
 		*/
 
-		/* ja jau noparseets */
+		# ja jau noparseets
 		if($this->parsed_count && !$bln_append) {
 			return $this->__get_parsed_content();
 		}
 
-		/* ja jauna parseeshana */
+		# ja jauna parseeshana
 		$parsed_content = $this->__parse_vars();
 
-		/* ja blokaa veel ir bloki */
+		# ja blokaa veel ir bloki
 		foreach($this->blocks as $block_id => $object)
 		{
 			$block_content = $object->parse();
 			$patt = '/\s*<!--\s+BEGIN\s+' . $block_id . '\s+[^<]*-->.*<!--\s+END\s+' . $block_id . '\s+-->\s*/smi';
 			preg_match_all($patt, $parsed_content, $m);
-			/*
-			if($block_id == 'BLOCK_gallery_data'){
-				printr($m);
-			}*/
 			foreach($m[0] as $mm) {
 				$parsed_content = str_replace($mm, $block_content, $parsed_content);
 			}
@@ -162,7 +157,7 @@ class TemplateBlock
 
 		$cont = $this->__get_parsed_content();
 
-		/* reset childs */
+		# reset childs
 		if($bln_append) {
 			foreach($this->blocks as $block_id => $object) {
 				$object->reset();
@@ -181,7 +176,6 @@ class TemplateBlock
 	function __get_parsed_content()
 	{
 		return $this->parsed_content;
-		//return join('', $this->parsed_content);
 	} // __get_parsed_content
 
 	function find_var($k, $d = 0)
@@ -347,22 +341,6 @@ class TemplateBlock
 		$block = false;
 		return $block;
 	} // get_block
-	/*
-	function &get_block($ID)
-	{
-		//reset($this->blocks);
-
-		if(isset($this->blocks[$ID]))
-			return $this->blocks[$ID];
-
-		foreach($this->blocks as $block_id => $object)
-			if($block =& $this->blocks[$block_id]->get_block($ID))
-				return $block;
-
-		$block = false;
-		return $block;
-	} // get_block
-	*/
 
 	/* ----------------------------------------------------------- */
 	/* TemplateBlock
@@ -373,12 +351,10 @@ class TemplateBlock
 	function reset($bln_parent_only = false)
 	{
 		if(empty($this->blocks)) {
-			//$this->parsed_content = array();
 			$this->parsed_content = '';
 			$this->last_parsed_content = '';
 			$this->parsed_count = 0;
 		} else {
-			//$this->parsed_content = array();
 			$this->parsed_content = '';
 			$this->last_parsed_content = '';
 			$this->parsed_count = 0;
@@ -428,27 +404,12 @@ class TemplateBlock
 
 	/* ----------------------------------------------------------- */
 	/* TemplateBlock
-	/*	invalid (string var_id)
-	/* -----------------------------------------------------------
-	/* paarbaudam, vai $string der par mainiigaa nosaukumu
-	/* tipa, saakas ar (a-z vai A-Z vai _ vai ascii 127-255)
-	/* un turpinas (a-z vai A-Z vai 0-9 _ vai ascii 127-255)
-	/* ----------------------------------------------------------- */
-	function invalid($str_var_id)
-	{
-		return false;
-		//return !preg_match('/^[a-zA-Z_\x7F-\xFF][a-zA-Z0-9_\x7F-\xFF]*/', $str_var_id) or !$str_var_id;
-	} // invalid
-
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
 	/*	set_attribute (string attribute, mixed value)
 	/* -----------------------------------------------------------
 	/* uzstaadam atribuutu, iespeejamie atribuuti un to veertiibas
 	/* nosaukums - veertiibas [defaultaa] - apraksts
 	/* disabled - false/true [false] iespeeja izsleegt
 	/* ----------------------------------------------------------- */
-	//function set_attribute($str_attribute, $value)
 	function set_attribute()
 	{
 		list($str_attribute, $value) = func_get_args();
@@ -469,7 +430,6 @@ class TemplateBlock
 	/* liidziigi, kaa set_file, tachu datus uzstaada nevis no faila,
 	/* bet no stringa
 	/* ----------------------------------------------------------- */
-	//function set_block_string($content = '') {
 	function set_block_string()
 	{
 		list($content) = func_get_args();

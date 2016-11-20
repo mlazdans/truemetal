@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
-
 define('POLL_ACTIVE', 'Y');
 define('POLL_INACTIVE', 'N');
 define('POLL_ALL', false);
@@ -17,25 +15,12 @@ class Poll
 {
 	var $date_format;
 	var $error_msg;
-	var $insert_period; // sec
-	var $insert_rate; // rate = $insert_rate / $insert_period
 
-	function __construct()
-	{
-		global $_USER;
-
+	function __construct(){
 		$this->date_format = '%d.%m.%Y %H:%i';
-		$this->set_insert_rate(5, 4); // max 5msg in 4sec
 	} // __construct
 
-	function set_insert_rate($rate, $period)
-	{
-		$this->insert_period = $period;
-		$this->insert_rate = $rate;
-	} // set_insert_rate
-
-	function load($poll_id = 0, $poll_pollid = 0, $poll_active = POLL_ACTIVE,
-		$poll_date = '', $limit = 0)
+	function load($poll_id = 0, $poll_pollid = 0, $poll_active = POLL_ACTIVE, $poll_date = '', $limit = 0)
 	{
 		global $db;
 
@@ -211,7 +196,7 @@ class Poll
 
 		if(isset($data['item_count']) && $func)
 			for($r = 1; $r <= $data['item_count']; ++$r)
-				// ja iechekots, proceseejam
+				# ja iechekots, proceseejam
 				if(isset($data['poll_checked'.$r]) && isset($data['poll_id'.$r]))
 					$ret = $ret && $this->{$func}($data['poll_id'.$r]);
 
@@ -305,31 +290,25 @@ class Poll
 		}
 
 		$template->set_var('poll_question', $poll['poll_name'], 'BLOCK_middle');
-		//$template->set_array($poll['poll_name'], 'BLOCK_middle');
 
 		$total_votes = $this->count_votes($poll['poll_id']);
 		$template->set_var('total_votes', $total_votes, 'BLOCK_middle');
 		$template->set_title(ent("Balsošana: $poll[poll_name] rezultāti"));
 
-		// atbildes
+		# atbildes
 		$data = $this->load(0, $poll['poll_id']);
-		if(count($data))
-		{
+		if(count($data)){
 			$template->enable('BLOCK_poll_r_items');
 			$this->__set_poll($template, $poll, $data, 'BLOCK_poll_r_items');
 		}
 
 
-		if(count($polls) < 2)
-		{
+		if(count($polls) < 2){
 			return;
 		}
 
 		$template->enable('BLOCK_poll_archive');
-		foreach($polls as $poll)
-		{
-			//if($id == $poll['poll_id'])
-				//continue;
+		foreach($polls as $poll){
 			$poll['poll_name'] = strip_tags($poll['poll_name']);
 			$template->set_array_prefix($poll, '_a', 'BLOCK_middle');
 			$template->parse_block('BLOCK_poll_archive_item', TMPL_APPEND);
@@ -341,17 +320,12 @@ class Poll
 	{
 		$now = date('Y-m-d H:i:s');
 
-		//$template->_copy_vars_byname('FILE_poll', 'FILE_index');
 		$template->set_file('FILE_poll', 'poll/results.tpl');
 		$template->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_poll');
-		//$template->copy_block('BLOCK_poll', 'FILE_poll');
-		//$template->copy_block('BLOCK_right_item', 'FILE_poll', TMPL_APPEND);
 
 		$data = $this->load(0, 0, POLL_ACTIVE, $now, 1);
 
-		if(!count($data))
-		{
-			//$template->disable('FILE_poll');
+		if(!count($data)){
 			return false;
 		}
 
@@ -362,7 +336,7 @@ class Poll
 		$total_votes = $this->count_votes($poll['poll_id']);
 		$template->set_var('total_votes', $total_votes, 'FILE_poll');
 
-		// atbildes
+		# atbildes
 		$data = $this->load(0, $poll['poll_id']);
 		if(count($data))
 		{
@@ -379,7 +353,6 @@ class Poll
 	{
 		global $db;
 
-		//if( !(user_loged() && empty($GLOBALS['poll_results'])) )
 		if(!user_loged())
 			return $this->show_results($template);
 
@@ -390,33 +363,16 @@ class Poll
 
 		$poll_data = $data[0];
 
-		// ja jau nobalsots
+		# ja jau nobalsots
 		$sql = sprintf(
 			"SELECT COUNT(*) vote_count FROM poll_votes WHERE pv_userid = %d AND pv_pollid = %d",
 			$_SESSION['login']['l_id'],
 			$poll_data['poll_id']
 		);
 		$check_votes = $db->ExecuteSingle($sql);
-		if($check_votes['vote_count'] > 0)
-		{
+		if($check_votes['vote_count'] > 0){
 			return $this->show_results($template);
 		}
-		/*
-		else {
-			if(isset($_SESSION['poll']['votes']))
-			{
-				foreach($_SESSION['poll']['votes'] as $item)
-				{
-					if(
-						isset($item['poll_id']) &&
-						isset($item['poll_vote_date']) &&
-						//($item['poll_vote_date'] == date('Ymd')) &&
-						($item['poll_id'] == $data[0]['poll_id'])
-					)
-						return $this->show_results($template);
-				}
-			}
-		}*/
 
 		$template->set_file('FILE_poll', 'poll.tpl');
 		$template->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_poll');
@@ -425,7 +381,7 @@ class Poll
 		$template->set_var('poll_question', $poll_data['poll_name'], 'FILE_poll');
 		$template->set_var('poll_question_id', $poll_data['poll_id'], 'FILE_poll');
 
-		// atbildes
+		# atbildes
 		$data = $this->load(0, $poll_data['poll_id']);
 		if(count($data))
 			$template->enable('BLOCK_poll_items');
@@ -453,33 +409,6 @@ class Poll
 		if(!$poll_id || !$poll_pollid || !user_loged())
 			return false;
 
-		/*
-		NOTE: Vairs nav aktuāls, jo balso tikai reģistrētie
-		// paarbaudam vai nefloodo
-		if($this->insert_rate && $this->insert_period)
-		{
-			$sql = "
-			SELECT
-				count(*) rate
-			FROM
-				poll_votes
-			WHERE
-				pv_entered >= DATE_SUB(NOW(), INTERVAL ".$this->insert_period." SECOND) AND
-				pv_userip='$ip'";
-
-			$rate = $db->ExecuteSingle($sql);
-
-			if($rate['rate'] >= $this->insert_rate) {
-				$new_ban['ub_net'] = $ip;
-				$new_ban['ub_moduleid'] = 'poll';
-				$new_ban['ub_reason'] = 'Flood!';
-				$ban->insert($new_ban);
-				$this->error_msg = "Flood detected! Banned['$ip']";
-				return false;
-			}
-		} // rate && period
-		*/
-
 		if( !($current_poll = $this->load(0, 0, POLL_ACTIVE, $now, 1)) )
 			return false;
 
@@ -497,18 +426,7 @@ class Poll
 
 		$ret = $db->Execute($sql);
 
-		/*
-		NOTE: Vairs nav aktuāls, jo balso tikai reģistrētie
-		if($ret)
-		{
-			$new_vote['poll_id'] = $poll_id;
-			$new_vote['poll_vote_date'] = date('Ymd');
-			$_SESSION['poll']['votes'][] = $new_vote;
-		}
-		*/
-
 		return $ret;
 	} // vote
-
 } // Poll
 

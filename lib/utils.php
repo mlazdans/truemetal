@@ -5,10 +5,8 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-// dazaadas paliigfunkcijas
-
 require_once('Mail.php');
-require_once('Mail//mime.php');
+require_once('Mail/mime.php');
 
 define('REMOVE_TABLE', 1);
 define('REMOVE_FONT', 2);
@@ -23,7 +21,6 @@ define('D', array('pirmdiena', 'otrdiena', 'trešdiena', 'ceturtdiena', 'piektdi
 function invalid($value)
 {
 	return preg_match("/[^a-z^A-Z^0-9_]/", $value) or !$value;
-	//return ereg("[^a-z^A-Z^0-9_]", $value) or !$value;
 } // invalid
 
 function valid($value)
@@ -46,7 +43,6 @@ function parse_params($data)
 
 function my_strip_tags(&$text)
 {
-	//$text = htmlspecialchars(stripslashes($text), ENT_QUOTES);
 	$text = htmlspecialchars($text, ENT_QUOTES);
 } // my_strip_tags
 
@@ -1230,8 +1226,13 @@ function tm_shutdown()
 
 function create_dir($dir, $mode = false)
 {
+	global $sys_root;
+
+	# novāc daļu ārpus roota
+	$patt = "/^".preg_quote($sys_root, '/')."\//";
+	$dir = preg_replace($patt, '', $dir);
 	$da = explode('/', $dir);
-	$path = '';
+	$path = $sys_root;
 	foreach($da as $item)
 	{
 		$path .= "/$item";

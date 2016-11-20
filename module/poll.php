@@ -5,8 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-// ----------------------------------------------------------------------------
-require_once('lib//Poll.php');
+require_once('lib/Poll.php');
 
 $action = array_shift($sys_parameters);
 
@@ -27,7 +26,6 @@ if($action == 'vote')
 			$template->set_title('Balsošanas kļūda!');
 			$template->set_file('FILE_poll', 'poll.tpl');
 			$template->copy_block('BLOCK_middle', 'FILE_poll');
-			//die($poll->error_msg);
 			$template->disable('BLOCK_poll');
 			$template->enable('BLOCK_poll_error');
 			$template->set_var('error_msg', $poll->error_msg);
@@ -45,8 +43,6 @@ if($action == 'results')
 	$id = (int)array_shift($sys_parameters);
 
 	$template = new MainModule($sys_template_root, $sys_module_id);
-	//$template->set_file('FILE_poll_results', 'poll_results2.tpl');
-	//$template->copy_block('BLOCK_middle', 'FILE_poll_results');
 	$poll->show_archive($template, $id);
 
 	$template->set_right();

@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-// sql functions
-
 define('DB_MYSQL', 1);
 define('DB_PGSQL', 2);
 define('DB_MYSQLI', 3);
@@ -18,7 +16,6 @@ class SQLLayer
 	var $str_db_info_string;
 	var $charset;
 
-	/* Inicializeejam datubaazes objektu */
 	function __construct($int_db_type = DB_MYSQLI, $charset = 'utf8')
 	{
 		$this->str_db_info_string = 'none';
@@ -26,7 +23,6 @@ class SQLLayer
 		$this->charset = $charset;
 	} // __construct
 
-	/* Sleedzamies klaat datubaazei */
 	function Connect($str_db_host = '', $str_db_user = '', $str_db_password = '', $str_db_name = '', $int_port = 0)
 	{
 		switch( $this->int_db_type ) {
@@ -49,11 +45,8 @@ class SQLLayer
 		return false;
 	} // Connect
 
-	/* izpildam SQL pieprasiijumu */
 	function Execute($str_sql)
 	{
-		//$p_str_sql = "-----------------------------\n$str_sql\n-----------------------------\n";
-		//printr($p_str_sql);
 		switch( $this->int_db_type ) {
 			case DB_MYSQL:
 				return $this->__execute_mysql($str_sql);
@@ -70,7 +63,6 @@ class SQLLayer
 		}
 	} // Execute
 
-	/* izpildam SQL pieprasiijumu un atgriezham tikai vienu ierakstu */
 	function ExecuteSingle($str_sql)
 	{
 		switch( $this->int_db_type ) {
@@ -296,11 +288,11 @@ class SQLLayer
 		if(!extension_loaded('mysql'))
 			user_error('Šī PHP versija neatbalsta MySQL funkcijas!', E_USER_ERROR);
 
-		if( !($this->conn = @mysql_connect($str_db_host, $str_db_user, $str_db_password)) )
+		if( !($this->conn = mysql_connect($str_db_host, $str_db_user, $str_db_password)) )
 			user_error(mysql_error(), E_USER_WARNING);
 
 		if($str_db_name && $this->conn)
-			if(@mysql_select_db($str_db_name))
+			if(mysql_select_db($str_db_name))
 				$this->str_db_info_string = 'MySQL::'.$str_db_name;
 			else
 				user_error(mysql_error(), E_USER_WARNING);
@@ -308,7 +300,6 @@ class SQLLayer
 		return $this->conn;
 	} // __connect_mysql
 
-	/* Sleedzamies klaat postgresql */
 	protected function __connect_pgsql($str_db_host = '', $str_db_user = '', $str_db_password = '', $str_db_name = '')
 	{
 		if(!extension_loaded('pgsql'))
@@ -328,7 +319,7 @@ class SQLLayer
 		if($str_db_name)
 			$str_connect .= ' dbname='.$str_db_name;
 
-		if( !($this->conn = @pg_connect($str_connect)) )
+		if( !($this->conn = pg_connect($str_connect)) )
 			user_error(pg_last_error(), E_USER_WARNING);
 
 		if($this->conn)
@@ -337,7 +328,6 @@ class SQLLayer
 		return $this->conn;
 	} // __connect_pgsql
 
-	/* Sleedzamies klaat mysqli */
 	protected function __connect_mysqli($str_db_host = '', $str_db_user = '', $str_db_password = '', $str_db_name = '', $int_port = 3306)
 	{
 		if(!extension_loaded('mysqli'))
@@ -348,7 +338,7 @@ class SQLLayer
 
 		if($str_db_name && $this->conn)
 		{
-			if(@mysqli_select_db($this->conn, $str_db_name))
+			if(mysqli_select_db($this->conn, $str_db_name))
 				$this->str_db_info_string = 'MySQLi::'.$str_db_name;
 			else
 				user_error(mysqli_error($this->conn), E_USER_WARNING);
@@ -366,57 +356,57 @@ class SQLLayer
 
 	protected function __execute_mysql($str_sql)
 	{
-		if( !($res_q = @mysql_query($str_sql)) )
+		if( !($res_q = mysql_query($str_sql)) )
 			user_error(mysql_error().($GLOBALS['sys_debug'] ? $str_sql : ''), E_USER_WARNING);
 
 		$arr_data = array();
 
 		if(is_resource($res_q)) {
-			while($arr_row = @mysql_fetch_array($res_q, MYSQL_ASSOC))
+			while($arr_row = mysql_fetch_array($res_q, MYSQL_ASSOC))
 				$arr_data[] = $arr_row;
 		}
 
-		/* ja selekteejam datus, tad atgriezam tos, savaadaak querija rezultaatu */
+		# ja selekteejam datus, tad atgriezam tos, savaadaak querija rezultaatu
 		return is_resource($res_q) ? $arr_data : $res_q;
 	} // __execute_mysql
 
 	protected function __execute_pgsql($str_sql)
 	{
-		if( !($res_q = @pg_query($str_sql)) )
+		if( !($res_q = pg_query($str_sql)) )
 			user_error(pg_last_error(), E_USER_WARNING);
 
 		$arr_data = array();
 
 		if($res_q) {
-			while($arr_row = @pg_fetch_array($res_q))
+			while($arr_row = pg_fetch_array($res_q))
 				$arr_data[] = $arr_row;
 		}
 
-		/* ja selekteejam datus, tad atgriezam tos, savaadaak querija rezultaatu */
+		# ja selekteejam datus, tad atgriezam tos, savaadaak querija rezultaatu
 		return is_resource($res_q) ? $arr_data : $res_q;
 	} // __execute_pgsql
 
 	protected function __execute_mysqli($str_sql)
 	{
-		if( !($res_q = @mysqli_query($this->conn, $str_sql)) )
+		if( !($res_q = mysqli_query($this->conn, $str_sql)) )
 			user_error(mysqli_error($this->conn).($GLOBALS['sys_debug'] ? nl2br("\n$str_sql\n\n") : ''), E_USER_WARNING);
 
 		$arr_data = array();
 		if(is_object($res_q))
 		{
-			while($arr_row = @mysqli_fetch_assoc($res_q))
+			while($arr_row = mysqli_fetch_assoc($res_q))
 			{
 				$arr_data[] = $arr_row;
 			}
 		}
 
-		/* ja selekteejam datus, tad atgriezam tos, savaadaak querija rezultaatu */
+		# ja selekteejam datus, tad atgriezam tos, savaadaak querija rezultaatu
 		return is_object($res_q) ? $arr_data : $res_q;
 	} // __execute_mysqli
 
 	protected function __query_mysqli($str_sql)
 	{
-		if( !($res_q = @mysqli_query($this->conn, $str_sql)) )
+		if( !($res_q = mysqli_query($this->conn, $str_sql)) )
 			user_error(mysqli_error($this->conn).(true || $GLOBALS['sys_debug'] ? $str_sql : ''), E_USER_WARNING);
 
 		return $res_q;

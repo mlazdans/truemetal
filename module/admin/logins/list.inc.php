@@ -1,4 +1,9 @@
 <?php
+// dqdp.net Web Engine v3.0
+//
+// contacts:
+// http://dqdp.net/
+// marrtins@dqdp.net
 
 $q = postget('q');
 $sort = postget('sort');
@@ -11,7 +16,6 @@ if(substr($sort, -4) == '_asc')
 
 $sortables = array(
 	"votes",
-	//"votes_perc",
 	"comment_count",
 	"l_entered"
 	);
@@ -77,7 +81,6 @@ foreach($sortables as $sa)
 	} else {
 		$sort_new = $sa;
 	}
-	//$qs = __query($q, "-sort=&sort=$sort_new", '&amp;');
 	$qs = queryl("-sort=&sort=$sort_new");
 	$template->set_var("q_sort_{$sa}", parse_form_data($qs), "BLOCK_logins_list");
 }
@@ -100,7 +103,6 @@ foreach($logins as $item)
 	} else {
 		$item['votes_perc'] = 0;
 	}
-	//$item['votes_perc'] = number_format($item['votes_perc'], 2, '.', '');
 
 	$template->set_array($item, 'BLOCK_logins');
 	$template->set_var('logins_nr', ++$logins_count, 'BLOCK_logins');

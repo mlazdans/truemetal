@@ -5,11 +5,9 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
-
-require_once('lib//Module.php');
-require_once('lib//Res.php');
-require_once('lib//Table.php');
+require_once('lib/Module.php');
+require_once('lib/Res.php');
+require_once('lib/Table.php');
 
 define('ARTICLE_ACTIVE', 'Y');
 define('ARTICLE_INACTIVE', 'N');

@@ -5,7 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib//User.php');
+require_once('lib/User.php');
 
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 $user_login = array_shift($sys_parameters);
@@ -19,8 +19,6 @@ if($user->error_msg) {
 	$template->out();
 	exit;
 }
-
-/* ------------------------------------------------------------------------- */
 
 function user_err($msg, &$template) {
 	$template->enable('BLOCK_user_error');
@@ -38,11 +36,11 @@ if(in_array($action, $actions)) {
 	exit;
 }
 
-/* cancel */
+# cancel
 if($action == 'cancel') {
 	header("Location: $module_root/");
 	exit;
-/* save */
+# saglabāt
 } elseif($action == 'user_save') {
 	if($id = $user->save($user_login, $_POST['data'])) {
 		header("Location: $module_root/".$id.'/');
@@ -50,18 +48,20 @@ if($action == 'cancel') {
 	} else
 		user_err($user->error_msg, $template);
 } elseif($action == 'user_new') {
-// jauns
+# jauns
 	$template->enable('BLOCK_user_edit');
 } else {
-// saraksts
-	if(!$user_login) {
+# saraksts
+	if(!$user_login)
+	{
 		$users = $user->load('', '', USER_ALL);
 
 		if(count($users))
 			$template->enable('BLOCK_user_list');
 
 		$user_count = 0;
-		foreach($users as $item) {
+		foreach($users as $item)
+		{
 			++$user_count;
 			$template->set_var('user_nr', $user_count);
 			$template->set_array($item);
@@ -77,10 +77,10 @@ if($action == 'cancel') {
 			}
 
 			$template->parse_block('BLOCK_users', TMPL_APPEND);
-		} // foreach users
+		}
 		$template->set_var('user_count', $user_count);
 	} else {
-// redigeet
+		# rediģēt
 		$usr = $user->load($user_login, '', USER_ALL);
 		$template->enable('BLOCK_user_edit');
 
@@ -91,8 +91,6 @@ if($action == 'cancel') {
 		else
 			$template->set_var('user_active_n', ' selected');
 	}
-} // action
-
-/* ------------------------------------------------------------------------- */
+}
 
 $template->out();

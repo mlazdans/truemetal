@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
-
 $template->set_file('FILE_forum', 'forum.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_forum');
 

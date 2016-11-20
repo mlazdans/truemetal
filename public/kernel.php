@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-// galvenais fails - kernelis :)
-
 # DEFAULTS - var overraidot configā
 $sys_start_time        = microtime(true);
 $sys_root              = realpath(dirname(__FILE__).'/../');
@@ -43,7 +41,7 @@ $now                   = date("d.m.Y, H:i", time());
 $today                 = date("d.m.Y");
 
 # Config
-require_once("$sys_root//include//config.php");
+require_once($sys_root.'/include/config.php');
 
 if(!isset($i_am_admin))
 	$i_am_admin = in_array($ip, $sys_admins);
@@ -56,14 +54,13 @@ if(!$i_am_admin){
 }
 */
 
-//ini_set('display_errors', ($sys_debug ? 1 : 0));
 ini_set('display_errors', ($sys_debug ? 1 : 0));
 ini_set('expose_php', false);
 error_reporting($sys_error_reporting);
 
 # Include paths
 $include_path = explode(PATH_SEPARATOR, ini_get('include_path'));
-foreach($include_path as $k=>$v) // Unset current dir
+foreach($include_path as $k=>$v) # Unset current dir
 {
 	if($v == '.' || $v == './')
 		unset($include_path[$k]);
@@ -84,48 +81,24 @@ if(isset($sys_banned[$ip]))
 	return;
 }
 
-//apd_set_pprof_trace();
-/* some includes */
-require_once('include//dbconnect.php');
-require_once('lib//utils.php');
-require_once('lib//MainModule.php');
-require_once('lib//Module.php');
-require_once('lib//Logins.php');
+require_once('include/dbconnect.php');
+require_once('lib/utils.php');
+require_once('lib/MainModule.php');
+require_once('lib/Module.php');
+require_once('lib/Logins.php');
 
-//$a = search_to_sql('black sabbath', 'song_name');
-//printr($a);
-
-# Blacklisted
-/*
-if($_SERVER['REQUEST_METHOD'] == 'POST')
-{
-	if(ip_blacklisted($ip))
-	{
-		print "Blacklisted: $ip";
-		return;
-	}
-}
-*/
-
-/* MySQL tune */
-$db->Execute(sprintf("SET SESSION join_buffer_size=%d", 512*1024));
-
-/*
-if($i_am_admin)
-{
-	print "Backtrace:";
-	debug_print_backtrace();
-}
-*/
+# MySQL tune
+//$db->Execute(sprintf("SET SESSION join_buffer_size=%d", 512*1024));
 
 mb_regex_encoding($sys_encoding);
 mb_internal_encoding($sys_encoding);
 
-/* dabuujam parametrus no mod_rewrite */
+# dabuujam parametrus no mod_rewrite
 if(!isset($_SERVER["SERVER_PROTOCOL"]))
 	$_SERVER["SERVER_PROTOCOL"] = "HTTP/1.0";
 if(!isset($_SERVER["REQUEST_URI"]))
-	$_SERVER["REQUEST_URI"] = "http://truemetal.lv/forum/122131-d%C4%ABvaini-cilv%C4%93ku-v%C4%81rdi-uzv%C4%81rdi";
+	$_SERVER["REQUEST_URI"] = "";
+
 $parts = explode('?', $_SERVER["REQUEST_URI"]);
 $_SERVER["REQUEST_URI"] = array_shift($parts);
 $_SERVER["QUERY_STRING"] = join("?", $parts);
@@ -135,12 +108,12 @@ $sys_parameters = explode('/', $_SERVER["REQUEST_URI"]);
 $sys_parameters = parse_params($sys_parameters);
 
 $sys_module_id = array_shift($sys_parameters);
-// ja nav ne1 modulis selekteets
+# ja nav ne1 modulis selekteets
 if(!$sys_module_id && $sys_default_module)
 	$sys_module_id = $sys_default_module;
 
 if(!in_array($sys_module_id, $sys_nosess_modules)){
-	require_once('include//session_handler.php');
+	require_once('include/session_handler.php');
 }
 
 if(user_loged())
@@ -157,7 +130,7 @@ if(user_loged())
 
 $module_root = "$sys_http_root/$sys_module_id";
 
-// nochekojam, vai modulis existee, ja nee tad vai mappings iraid
+# nochekojam, vai modulis existee, ja nee tad vai mappings iraid
 if(isset($sys_module_map[$sys_module_id]) && !file_exists("$sys_root/module/$sys_module_id.php"))
 	$sys_module_id = $sys_module_map[$sys_module_id];
 
@@ -193,17 +166,16 @@ header('Content-Type: text/html; charset='.$sys_encoding);
 header('X-Powered-By: TRUEMETAL');
 
 # LOCALE
-if(isset($sys_locale))
-{
+if(isset($sys_locale)){
 	setlocale(LC_TIME, $sys_locale);
 }
 
 //ob_start();
-/* iesleedzam vaidziigo moduli */
+# iesleedzam vaidziigo moduli
 if(file_exists("$sys_root/module/$sys_module.php")) {
-	include("$sys_root//module//$sys_module.php");
+	include("$sys_root/module/$sys_module.php");
 } else {
-	include("$sys_root//module//$sys_default_module.php");
+	include("$sys_root/module/$sys_default_module.php");
 }
 //$data = ob_get_clean();
 
@@ -221,14 +193,4 @@ $tidy = tidy_parse_string($data, $tidy_config, 'UTF8');
 $tidy->cleanRepair();
 print $tidy;
 */
-
-//$my_login = new Logins;
-//$my_login->save_session_data();
-//Logins::save_session_data();
-
-if($i_am_admin)
-{
-	$sys_end_time = microtime(true);
-	print '<!-- Finished: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec -->';
-}
 

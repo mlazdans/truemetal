@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
-
 class Stats
 {
 } // class Stats

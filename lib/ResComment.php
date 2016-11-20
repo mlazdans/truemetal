@@ -5,8 +5,8 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib//Comment.php');
-require_once('lib//Res.php');
+require_once('lib/Comment.php');
+require_once('lib/Res.php');
 
 class ResComment extends Res
 {

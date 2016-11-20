@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
-
 require_once('lib/Res.php');
 require_once('lib/Table.php');
 

@@ -5,13 +5,9 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-// ----------------------------------------------------------------------------
-
 # TODO: pārlikt visu šo zem lib
-
 $value = array_shift($sys_parameters);
 $res_id = (int)array_shift($sys_parameters);
-//$json = array_shift($sys_parameters) == 'json';
 $json = isset($_GET['json']);
 $retJson = new StdClass;
 

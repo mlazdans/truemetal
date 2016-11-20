@@ -17,7 +17,7 @@ function set_poll(&$template, &$item) {
 
 	$template->set_array($item);
 
-	// ja aktiivs vai nee - kaukaa iekraaso to
+	# ja aktiivs vai nee - kaukaa iekraaso to
 	$template->disable('BLOCK_poll_active');
 	$template->disable('BLOCK_poll_inactive');
 	if($item['poll_active'] == POLL_ACTIVE) {
@@ -29,8 +29,8 @@ function set_poll(&$template, &$item) {
 	}
 }
 
-require_once('lib//AdminModule.php');
-require_once('lib//Poll.php');
+require_once('lib/AdminModule.php');
+require_once('lib/Poll.php');
 
 $poll_id = (integer)array_shift($sys_parameters);
 $action = isset($_POST['action']) ? $_POST['action'] : '';
@@ -60,9 +60,12 @@ if(in_array($action, array('delete_multiple', 'activate_multiple', 'deactivate_m
 	exit;
 }
 
-if($action == 'add_poll') {
-	if(isset($_POST['data'])) {
-		if(!$poll_id)	// ja jautaajums
+if($action == 'add_poll')
+{
+	if(isset($_POST['data']))
+	{
+		# ja jautaajums
+		if(!$poll_id)
 			$_POST['data']['poll_active'] = 'N';
 		if($newpoll_id = $poll->insert($poll_id, $_POST['data'])) {
 			if($poll_id)
@@ -96,18 +99,18 @@ if($action == 'save_poll') {
 	exit;
 }
 
-// ja redigeejam
+# ja redigeejam
 if($poll_id) {
 
 	$template->set_file('FILE_poll', 'poll_edit.tpl');
 	$template->copy_block('BLOCK_middle', 'FILE_poll');
 
-	// jautaajums
+	# jautaajums
 	$poll_data = $poll->load($poll_id, 0, POLL_ALL);
 	$poll1_name_stripped = strip_tags($poll_data['poll_name']);
 	parse_form_data_array($poll_data);
 
-	// jauna atbilde, ja redigee jautaajumu
+	# jauna atbilde, ja redigee jautaajumu
 	if(!$poll_data['poll_pollid']) {
 		$template->set_file('FILE_pollnew', 'poll_new.tpl');
 		$template->copy_block('BLOCK_pollnew', 'FILE_pollnew');
@@ -124,7 +127,7 @@ if($poll_id) {
 	else
 		$template->set_var('poll1_inactive', ' selected="selected"');
 
-	// atbildes
+	# atbildes
 	$poll_data = $poll->load(0, $poll_id, POLL_ALL);
 
 	if(count($poll_data)) {
@@ -142,8 +145,8 @@ if($poll_id) {
 	}
 
 	$template->set_var('item_count', $c);
- // ja pollu sarakstu
 } else {
+	# ja pollu sarakstu
 	$poll_data = $poll->load(0, 0, POLL_ALL);
 
 	$template->set_file('FILE_poll', 'poll.tpl');
@@ -161,12 +164,11 @@ if($poll_id) {
 	}
 	$template->set_var('item_count', $c);
 
-	// jauns jautaajums
+	# jauns jautaajums
 	$template->set_file('FILE_pollnew', 'poll_new.tpl');
 	$template->copy_block('BLOCK_pollnew', 'FILE_pollnew');
 	$template->set_var('poll_new_name', 'Jauns jautājums');
-} // poll_id
-
-
+}
 
 $template->out();
+

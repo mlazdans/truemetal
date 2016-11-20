@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-// Admin moduļu kernelis
-
 header('Cache-Control: no-cache');
 header('Pragma: no-cache');
 
@@ -17,8 +15,8 @@ function identify() {
 	die("Nepareizs logins vai parole!");
 }
 
-require_once('lib//AdminModule.php');
-require_once('lib//User.php');
+require_once('lib/AdminModule.php');
+require_once('lib/User.php');
 
 $user_login = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : '';
 $user_pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
@@ -61,5 +59,5 @@ $module_root = "$admin_root/$admin_module";
 if(!$admin_module || !file_exists("$sys_root/module/admin/$admin_module.php"))
 	$admin_module = 'start';
 
-include("$sys_root//module//admin/$admin_module.php");
+include("$sys_root/module/admin/$admin_module.php");
 

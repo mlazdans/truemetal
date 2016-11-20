@@ -5,7 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
 define('MOD_ALL', -1);
 define('MOD_NONE', -2);
 define('MOD_ACTIVE', 'Y');

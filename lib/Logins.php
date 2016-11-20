@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
-
 define('LOGIN_ACTIVE', 'Y');
 define('LOGIN_INACTIVE', 'N');
 define('LOGIN_ACCEPTED', 'Y');
@@ -17,7 +15,7 @@ define('LOGIN_DONTVALIDATE', false);
 define('LOGIN_EMAIL_VISIBLE', 'Y');
 define('LOGIN_EMAIL_INVISIBLE', 'N');
 
-require_once('lib//Forum.php');
+require_once('lib/Forum.php');
 
 class Logins
 {
@@ -26,7 +24,6 @@ class Logins
 	function __construct() {
 	} // Logins
 
-	//function load($l_login = '', $l_pass = '', $l_active = LOGIN_ACTIVE, $l_accepted = LOGIN_ACCEPTED)
 	function load(Array $params = array())
 	{
 		global $db;
@@ -95,47 +92,10 @@ class Logins
 
 		$sql = " SELECT * ";
 
-		/*
-		if(!empty($params['get_votes']))
-		{
-			/*
-			$sql .= ", (SELECT SUM(c_votes) FROM comment WHERE login_id = l_id AND c_votes > 0) votes_plus ";
-			$sql .= ", (SELECT SUM(c_votes) FROM comment WHERE login_id = l_id AND c_votes < 0) votes_minus ";
-			* /
-			$sql .= ",
-			(SELECT
-				COUNT(*)
-			FROM
-				comment c
-			JOIN res_vote rv ON rv.res_id = c.res_id
-			WHERE
-				c.login_id = l_id AND
-				rv.rv_value = 1
-			) AS votes_plus,
-			(SELECT
-				COUNT(*)
-			FROM
-				comment c
-			JOIN res_vote rv ON rv.res_id = c.res_id
-			WHERE
-				c.login_id = l_id AND
-				rv.rv_value = -1
-			) AS votes_minus
-			";
-		}
-		*/
-
 		if(!empty($params['jubilars'])){
 			$sql .= ", DATE_FORMAT(l_entered, '%m%d') AS entered_stamp ";
 			$sql .= ", DATEDIFF(CURRENT_TIMESTAMP, l_entered) AS age ";
 		}
-
-		/*
-		if(!empty($params['get_comment_count']))
-		{
-			$sql .= ", (SELECT COUNT(*) FROM comment WHERE login_id = l_id) comment_count ";
-		}
-		*/
 
 		if(!empty($params['get_all_ips']))
 		{
@@ -164,24 +124,6 @@ class Logins
 		if($sql_add)
 			$sql .= " WHERE ".join(" AND ", $sql_add);
 
-		/*
-		if(!empty($params['get_comment_count']))
-		{
-			if(isset($params['comment_count_more_than']))
-			{
-				$sql_having[] = sprintf("comment_count > %d", $params['comment_count_more_than']);
-			}
-			if(isset($params['comment_count_equal']))
-			{
-				$sql_having[] = sprintf("comment_count = %d", $params['comment_count_equal']);
-			}
-			if(isset($params['comment_count_less_than']))
-			{
-				$sql_having[] = sprintf("comment_count < %d", $params['comment_count_less_than']);
-			}
-		}
-		*/
-
 		if($sql_having)
 			$sql .= " HAVING ".join(" AND ", $sql_having);
 
@@ -198,8 +140,6 @@ class Logins
 
 		if(isset($params['limit']))
 			$sql .= " LIMIT $params[limit]";
-
-		//printr($sql);
 
 		if(
 			isset($params['l_id']) ||
@@ -290,7 +230,6 @@ class Logins
 				$data = session_encode();
 			}
 			$sql = "UPDATE logins SET l_sessiondata ='$data', l_lastaccess = NOW(), l_logedin = 'Y' WHERE l_id = $l_id";
-			//$sess_handler->log($sql);
 			$db->Execute($sql);
 			$db->Commit();
 		}
@@ -446,15 +385,9 @@ class Logins
 
 		if(!$error_msg)
 		{
-			/*
-			$sql = "INSERT INTO logins_change SELECT * FROM logins WHERE l_id = $l_id";
-			$db->Execute($sql);
-			*/
-
 			$osql = $sql = '';
 			$sql .= $data['l_email'] ? "l_email = '$data[l_email]', " : '';
 			$sql .= $data['l_password'] ? "l_password = PASSWORD('$data[l_password]'), " : '';
-			//$sql .= "l_emailvisible = '" .(isset($data['l_emailvisible']) ? LOGIN_EMAIL_VISIBLE : LOGIN_EMAIL_INVISIBLE)."', ";
 			$sql .= "l_emailvisible = '$data[l_emailvisible]', ";
 			$sql .= $data['l_forumsort_themes'] ? "l_forumsort_themes = '$data[l_forumsort_themes]', " : '';
 			$sql .= $data['l_forumsort_msg'] ? "l_forumsort_msg = '$data[l_forumsort_msg]', " : '';
@@ -463,7 +396,7 @@ class Logins
 			$osql .= $data['l_email'] ? "l_email = '$l_data[l_email]', " : '';
 			$osql .= $data['l_password'] ? "l_password = '$l_data[l_password], " : '';
 
-			// ja mainiits epasts, disable acc
+			# ja mainiits epasts, disable acc
 			if($data['l_email'] && $data['l_email'] != $l_data['l_email'])
 			{
 				$sql .= "l_accepted = '".LOGIN_NOTACCEPTED."', ";
@@ -476,7 +409,7 @@ class Logins
 			{
 				if($db->Execute("UPDATE logins SET $sql WHERE l_id = $l_id"))
 				{
-					// check new email changed
+					# check new email changed
 					if($data['l_email'] && ($data['l_email'] != $l_data['l_email']))
 					{
 						if($accept_code = $this->insert_accept_code($l_data['l_login']))
@@ -491,17 +424,17 @@ class Logins
 								return false;
 							}
 						}
-					} // check email
+					}
 
+					# image
 					if($_FILES['l_picfile']['tmp_name'])
 					{
 						Logins::delete_image();
-						// handle image
 						$save_path = $sys_user_root.'/pic/'.$l_id.'.jpg';
 						$tsave_path = $sys_user_root.'/pic/thumb/'.$l_id.'.jpg';
+						# ja bilde
 						if($ct = save_file('l_picfile', $save_path))
 						{
-						// ja bilde
 							if(!($type = image_load($in_img, $save_path)))
 							{
 								$this->error_msg = 'Nevar nolasīt failu ['.$_FILES['l_picfile']['name'].']';
@@ -535,14 +468,13 @@ class Logins
 						} else {
 							$this->error_msg = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
 							return false;
-						} // save file
-					} // $_FILES
+						}
+					}
 
 					return Logins::load_by_id($l_id);
-				} // execute
-			} // sql
-
-		} else { // $error_msg
+				}
+			}
+		} else {
 			$this->error_msg = $error_msg;
 			return false;
 		}
@@ -552,7 +484,6 @@ class Logins
 	{
 		global $db;
 
-		//if($this->valid_login($l_login) && $l_pass && ($data = $this->load($l_login, $l_pass)))
 		if(
 			$this->valid_login($l_login) &&
 			$l_pass &&
@@ -743,8 +674,6 @@ class Logins
 		$sql .= "l_accepted = '$data[l_accepted]', ";
 		$sql .= "l_emailvisible = '$data[l_emailvisible]', ";
 		$sql .= "l_logedin = '$data[l_logedin]', ";
-		//$sql .= $data['l_entered'] ? "l_entered = '$data[l_entered]', " : '';
-		//$sql .= "l_password = PASSWORD('$data[l_password]'), ";
 		$sql = substr($sql, 0, -2);
 		$sql .= " WHERE l_login = '$data[l_login]'";
 
@@ -752,31 +681,6 @@ class Logins
 
 		return $data['l_login'];
 	} // update
-/*
-	function save($l_login, &$data)
-	{
-		$this->validate($data);
-
-		$error_msg = '';
-
-		if(!$data['l_login'])
-			$error_msg .= 'Nav norādīts lietotāja logins<br />';
-
-		if(!$data['l_firstname'] || !$data['l_lastname'])
-			$error_msg .= 'Nav norādīts lietotāja vārds/uzvārds<br />';
-
-		if(!$error_msg)
-		{
-			if($l_login)
-				return $this->update($l_login, $data, LOGIN_DONTVALIDATE);
-			else
-				return $this->insert($data, LOGIN_DONTVALIDATE);
-		} else { // $error_msg
-			$this->error_msg = $error_msg;
-			return false;
-		}
-	} // save
-*/
 
 	function del($l_id)
 	{
@@ -987,28 +891,10 @@ WHERE
 GROUP BY
 	l.l_id
 ";
-//printr($sql);
-//die;
+
 		if($alsoUsers = $db->Execute($sql))
 		{
 			return $alsoUsers;
-			//printr($alsoUsers);
-			//print "-----------------------------<br/>";
-			//die;
-			/*
-			$ret = $alsoUsers;
-			foreach($alsoUsers as $item)
-			{
-				$new_ips = explode(',', $item['ips']);
-				$exclude_ips = array_merge($exclude_ips, $ips);
-				$exclude_l_ids[] = $item['l_id'];
-				if($a = Logins::collectUsersByIP($new_ips, $exclude_l_ids, $exclude_ips, $d+1))
-				{
-					$ret = array_merge($ret, $a);
-				}
-			}
-			return $ret;
-			*/
 		} else {
 			return false;
 		}

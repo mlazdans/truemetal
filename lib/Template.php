@@ -5,9 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-// niknaa templashu engine
-
-require_once("lib//TemplateBlock.php");
+require_once('lib/TemplateBlock.php');
 
 define('TMPL_APPEND', true);
 
@@ -22,7 +20,6 @@ class Template extends TemplateBlock
 	var $modtime;
 	var $APC;
 	var $root_dir = '.';
-	//var $files = array();
 
 	/* ----------------------------------------------------------- */
 	/* Template
@@ -165,7 +162,6 @@ class Template extends TemplateBlock
 				return $block->set_var($str_var_id, $value, $bln_parent_only);
 		} else {
 			parent::set_var($str_var_id, $value, $bln_parent_only);
-			//return $this->set_global($str_var_id, $value);
 		}
 
 		return false;
@@ -179,8 +175,7 @@ class Template extends TemplateBlock
 	/* ja nav noraadiits bloka id, uzstaada globaali
 	/* parent_only, ja veertiibas nevaig uzstaadiit apaksblokiem
 	/* ----------------------------------------------------------- */
-	function set_array($arr_array, $ID = '', $bln_parent_only = false,
-		$prefix = '')
+	function set_array($arr_array, $ID = '', $bln_parent_only = false, $prefix = '')
 	{
 		if($ID)
 		{
@@ -188,8 +183,6 @@ class Template extends TemplateBlock
 				return $block->set_array($arr_array, $bln_parent_only, $prefix);
 		} else {
 			return parent::set_array($arr_array, $bln_parent_only, $prefix);
-			//foreach($this->blocks as $file_id => $object)
-				//$this->blocks[$file_id]->set_array($arr_array, $bln_parent_only, $prefix);
 		}
 	} // set_array
 
@@ -227,14 +220,6 @@ class Template extends TemplateBlock
 	/* -----------------------------------------------------------
 	/* neljaujam parseet failu kaa bloku
 	/* ----------------------------------------------------------- */
-	/*
-	function parse()
-	{
-		$this->halt('parse: try parse_file() or parse_block()');
-		return false;
-	} // parse
-	*/
-
 	function parse_block($ID, $bln_append = false)
 	{
 		if($block =& $this->get_block($ID))
@@ -249,53 +234,27 @@ class Template extends TemplateBlock
 	/* -----------------------------------------------------------
 	/* paarkopeejam bloku ID2 uz ID1
 	/* ----------------------------------------------------------- */
-	# XXX: nekad nav strādājis
-	/*
-	function _copy_vars_byobj(&$block1, &$block1) # XXX: <- LOL :D
-	{
-		$block1->vars = array_merge($block1->vars, $block2->vars);
-	} // _copy_vars_byobj
-	*/
-
 	function copy_block($ID_from, $ID_to)
 	{
-		if( !($block1 =& $this->get_block($ID_from)) )
-		{
+		if(!($block1 =& $this->get_block($ID_from))){
 			$this->halt('copy_block: block ['.$ID_from.'] not found!');
 			return false;
 		}
 
-		if( ! ($block2 =& $this->get_block($ID_to)) )
-		{
+		if(!($block2 =& $this->get_block($ID_to))){
 			$this->halt('copy_block: block ['.$ID_to.'] not found!');
 			return false;
 		}
 
-		/* tagat noskaidrosim, vai block1 nav zem block2 */
-		if( ($block3 =& $block2->get_block($ID_from)) )
-		{
+		# tagat noskaidrosim, vai block1 nav zem block2
+		if(($block3 =& $block2->get_block($ID_from))){
 			$this->halt('copy_block: cannot copy ['.$ID_to.'] to ['.$ID_from.']. ['.$ID_from.'] is a child of ['.$ID_to.']');
 			return false;
 		}
 
-		//$block1 = $block2;
-		//return;
-
-		/* uzstaadam visiem $block2 apaksblokiem mainiigos
-			ljoti svariiga vieta - bugs bija ;)
-		*/
-		//foreach($block2->blocks as $key => $val)
-			//$block2->blocks[$key]->set_array($block1->vars);
-
-		/* paarkopeejam paareejos parametrus */
+		# paarkopeejam paareejos parametrus
 		$block1->vars = &$block2->vars;
-		//$block1->vars = array_merge($block1->vars, $block2->vars);
-		# XXX: nekad nav strādājis :D
-		//$this->_copy_vars_byobj($block1, $block2);
-
-		//$block1->blocks = array_merge($block1->blocks, $block2->blocks);
 		$block1->blocks = $block2->blocks;
-		//$block1->parsed_content = array_merge($block1->parsed_content, $block2->parsed_content);
 		$block1->parsed_content = $block2->parsed_content;
 		$block1->content = $block2->content;
 
@@ -328,7 +287,6 @@ class Template extends TemplateBlock
 	/* uzstaadam blokam ID atribuutu
 	/* vairaak skatiit TemplateBlock::set_attribute
 	/* ----------------------------------------------------------- */
-	//function set_attribute($ID, $str_attribute, $value)
 	function set_attribute()
 	{
 		list($ID, $str_attribute, $value) = func_get_args();
@@ -362,7 +320,6 @@ class Template extends TemplateBlock
 	/* liidziigi, kaa set_file, tachu datus uzstaada nevis no faila,
 	/* bet no stringa
 	/* ----------------------------------------------------------- */
-	//function set_block_string($ID, $content = '')
 	function set_block_string()
 	{
 		list($ID, $content) = func_get_args();

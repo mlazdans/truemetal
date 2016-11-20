@@ -6,24 +6,14 @@
 // marrtins@dqdp.net
 
 $section = array_shift($sys_parameters);
+$sections = array(
+	'image',
+	'thumb',
+	'profile',
+	'viewimage',
+	);
 
-if($section == 'image')
-{
-	include("module//user//image.inc.php");
-}
-
-if($section == 'thumb')
-{
-	include("module//user//thumb.inc.php");
-}
-
-if($section == 'profile')
-{
-	include("module//user//profile.inc.php");
-}
-
-if($section == 'viewimage')
-{
-	include("module//user//viewimage.inc.php");
+if(($k = array_search($section, $sections)) !== FALSE){
+	include('module/user/'.$sections[$k].'.inc.php');
 }
 

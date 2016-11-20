@@ -9,6 +9,12 @@
 
 <form action="" method="post" id="forum_edit">
 <table class="Main">
+<!-- BEGIN BLOCK_forum_resid disabled -->
+<tr>
+	<td class="right nowrap">Res ID:</td>
+	<td>{res_id}</td>
+</tr>
+<!-- END BLOCK_forum_resid -->
 <tr>
 	<td class="right nowrap">Nosaukums:</td>
 	<td>

@@ -1,13 +1,11 @@
 <?php
-// Hackers.lv Web Engine v2.0
+// dqdp.net Web Engine v3.0
 //
 // contacts:
-// http://www.hackers.lv/
-// mailto:marrtins@hackers.lv
+// http://dqdp.net/
+// marrtins@dqdp.net
 
-// session handling
-
-require_once('lib//SQLLayer.php');
+require_once('lib/SQLLayer.php');
 
 class SessHandler
 {
@@ -21,9 +19,9 @@ class SessHandler
 	function __construct()
 	{
 		$this->ip = $GLOBALS["ip"];
-		$this->timeout = 0; // none
+		$this->timeout = 0;
 		$this->sess_name = '';
-		$this->max_time_online = 300; // 5min
+		$this->max_time_online = 300;
 		$this->db = new SQLLayer($GLOBALS['sys_database_type']);
 		$this->db->connect($GLOBALS['sys_db_host'], $GLOBALS['sys_db_user'], $GLOBALS['sys_db_password'], $GLOBALS['sys_db_name'], $GLOBALS['sys_db_port']);
 	} // __construct
@@ -38,15 +36,10 @@ class SessHandler
 		$sql = "SELECT s.*, (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(s.sess_lastaccess)) sess_period FROM sessions s WHERE sess_id = '$sess_id'";
 		$sess = $this->db->ExecuteSingle($sql);
 
-		if(isset($sess['sess_id']) && ($sess['sess_id'] == $sess_id)) { // if session exists
-		/*
-			if($this->ip != $sess['sess_ip']) { // if ip was changed
-				$this->sess_destroy($sess_id);
-				return false ;
-			} else {*/
-				$sql = "UPDATE sessions SET sess_lastaccess = NOW() WHERE sess_id='$sess_id'";
-				$this->db->Execute($sql);
-			//}
+		# if session exists
+		if(isset($sess['sess_id']) && ($sess['sess_id'] == $sess_id)) {
+			$sql = "UPDATE sessions SET sess_lastaccess = NOW() WHERE sess_id='$sess_id'";
+			$this->db->Execute($sql);
 		}
 
 		if(isset($sess['sess_period']))
@@ -96,7 +89,8 @@ class SessHandler
 			return "";
 		}
 
-		if($sess['sess_id'] == $sess_id) // if session exists
+		# if session exists
+		if($sess['sess_id'] == $sess_id)
 			return($sess['sess_data']);
 		else
 			return "";
@@ -123,7 +117,6 @@ class SessHandler
 			"DELETE FROM `sessions` WHERE sess_data = '' OR sess_data = 'login|a:0:{}'",
 			"DELETE FROM `sessions` WHERE `sess_lastaccess` < '$period'",
 			"OPTIMIZE TABLE sessions",
-			//"DELETE FROM `sessions` WHERE `sess_ip` IN (SELECT * FROM (SELECT `sess_ip` FROM sessions GROUP BY `sess_ip` HAVING COUNT(`sess_ip`) > 50) AS t)",
 			);
 
 		foreach($sql as $q){
@@ -148,6 +141,5 @@ class SessHandler
 
 		return $this->db->Execute($sql);
 	} // get_active
-
 } // SessHandler
 

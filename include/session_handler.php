@@ -7,8 +7,8 @@
 
 // Custom session handleris
 
-require_once('lib//SessHandler.php');
-$cookie_time = 31536000; // 1 year
+require_once('lib/SessHandler.php');
+$cookie_time = 31536000; # 1 year
 
 ini_set('session.save_handler', 'user');
 ini_set('session.use_cookies', true);

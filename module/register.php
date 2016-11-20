@@ -35,7 +35,6 @@ if(isset($_POST['data']))
 	$data = post('data', array());
 
 	$error_field = array();
-	//$template->set_var('error_'.$c, ' class="error-form"');
 	foreach($check as $c)
 	{
 		if(empty($data[$c]))
@@ -47,7 +46,6 @@ if(isset($_POST['data']))
 
 	if($data['l_password'] != $data['l_password2'])
 	{
-		//$error = true;
 		$error_msg[] = 'Paroles nesakrīt!';
 		$error_field[] = 'l_password';
 		$error_field[] = 'l_password2';
@@ -65,41 +63,38 @@ if(isset($_POST['data']))
 	$data['l_login'] = strtolower($data['l_login']);
 	$data['l_email'] = trim($data['l_email']);
 
+	# test login
 	if($test_login = $logins->load(array(
 		'l_login'=>$data['l_login'],
 		'l_active'=>LOGIN_ALL,
 		'l_accepted'=>LOGIN_ALL,
 		)))
 	{
-		//$error = true;
-		//$template->set_var('error_l_login', ' class="error-form"');
 		$error_field[] = 'l_login';
 		$error_msg[] = 'Šāds login jau eksistē!';
-	} // test login
+	}
 
+	# test email
 	if($test_email = $logins->load(array(
 		'l_email'=>$data['l_email'],
 		'l_active'=>LOGIN_ALL,
 		'l_accepted'=>LOGIN_ALL,
 		)))
 	{
-		//$error = true;
-		//$template->set_var('error_l_email', ' class="error-form"');
 		$error_field[] = 'l_email';
 		$error_msg[] = 'Šāda e-pasta adrese jau eksistē!';
-	} // test email
+	}
 
+	# test nick
 	if($test_nick = $logins->load(array(
 		'l_nick'=>$data['l_nick'],
 		'l_active'=>LOGIN_ALL,
 		'l_accepted'=>LOGIN_ALL,
 		)))
 	{
-		//$error = true;
-		//$template->set_var('error_l_nick', ' class="error-form"');
 		$error_field[] = 'l_nick';
 		$error_msg[] = 'Šāds niks jau eksistē!';
-	} // test email
+	}
 
 	if($error_field)
 	{
@@ -110,7 +105,6 @@ if(isset($_POST['data']))
 		$template->set_array($data, 'BLOCK_register_form');
 	} elseif(($id = $logins->insert($data))) {
 		email($new_login_mail, '[truemetal] jauns lietotajs', "$data[l_login] ($data[l_nick])\n\nIP:$_SERVER[REMOTE_ADDR]");
-		//email($data['l_email'], 'truemetal.lv registacija', "Veiksmigi registrejaties\nGaidiet apstiprinajumu!\n\nwww.lpa.lv");
 		header("Location: $module_root/ok/");
 		return;
 	}

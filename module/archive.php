@@ -5,7 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib//Article.php');
+require_once('lib/Article.php');
 
 $template = new MainModule($sys_template_root, $sys_module_id);
 $template->set_title("Arhīvs: visi notikumi līdz šim");
@@ -15,8 +15,8 @@ $template->set_descr("Metāliskais arhīvs: visi notikumi līdz šim");
 
 $arts = $db->Execute("SELECT * FROM view_mainpage");
 
-// ja ir kaadi ieraksti shajaa datumaa, paraadam
-// ja nee, tad paraadam attieciigu pazinjojumu
+# ja ir kaadi ieraksti shajaa datumaa, paraadam
+# ja nee, tad paraadam attieciigu pazinjojumu
 if(count($arts))
 	$template->enable('BLOCK_archive_items');
 else

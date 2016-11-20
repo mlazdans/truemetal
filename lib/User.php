@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
-
 define('USER_ACTIVE', 'Y');
 define('USER_INACTIVE', 'N');
 define('USER_ALL', false);
@@ -109,7 +107,6 @@ class User
 
 		$sql = 'UPDATE user SET ';
 		$sql .= $data['user_entered'] ? "user_entered = '$data[user_entered]', " : '';
-		//$sql .= "user_login = '$data[user_login]', ";
 		$sql .= "user_pass = '$data[user_pass]', ";
 		$sql .= "user_name = '$data[user_name]', ";
 		$sql .= "user_email = '$data[user_email]', ";
@@ -140,7 +137,7 @@ class User
 				return $this->update($user_login, $data, USER_DONTVALIDATE);
 			else
 				return $this->insert($data, USER_DONTVALIDATE);
-		} else { // $error_msg
+		} else {
 			$this->error_msg = $error_msg;
 			return false;
 		}
@@ -194,7 +191,7 @@ class User
 
 		if(isset($data['user_count']) && $func)
 			for($r = 1; $r <= $data['user_count']; ++$r)
-				// ja iechekots, proceseejam
+				# ja iechekots, proceseejam
 				if(isset($data['user_checked'.$r]) && isset($data['user_login'.$r]))
 					$ret = $ret && $this->{$func}($data['user_login'.$r]);
 
@@ -231,6 +228,5 @@ class User
 	{
 		return valid($user_login) && (strlen($user_login) > 0);
 	} // valid_login
-
 } // class User
 

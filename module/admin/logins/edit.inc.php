@@ -5,17 +5,16 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
+require_once('lib/ResComment.php');
+
 # Comment actions
 if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
 {
-	if(include("module//admin//comment//action.inc.php"))
-	{
+	if(include('module/admin/comment/action.inc.php')){
 		header("Location: ".($l_id ? "$module_root/$l_id/" : "$module_root"));
 	}
 	return;
 }
-
-require_once('lib//ResComment.php');
 
 $template = new AdminModule($sys_template_root.'/admin', "logins/edit");
 $template->set_title('Admin :: logini :: rediģēt');
@@ -28,7 +27,6 @@ $login = $Logins->load(array(
 	'get_all_ips'=>true,
 	));
 
-//$template->enable('BLOCK_login_edit');
 $template->set_array($login, 'BLOCK_login_edit');
 
 $YN = array(
@@ -60,7 +58,6 @@ $comments = $RC->get(array(
 
 # Šmurguļi, kas nāk no vairākā IP un reklamē :E (piemēram, HeavenGrey)
 $alsoUsers = Logins::collectUsersByIP(explode(",", $login['all_ips']), $l_id);
-//$ips = join("','", explode(",", $login['all_ips']));
 
 if($alsoUsers)
 {
@@ -77,12 +74,13 @@ if($alsoUsers)
 
 # Bildes
 $pic_suffixes = array();
-// Main pic
+
+# Main pic
 if(file_exists("$sys_user_root/pic/thumb/$l_id.jpg")){
 	$pic_suffixes = array('');
 }
 
-// Pic history
+# Pic history
 $files = scandir("$sys_user_root/pic/thumb", 1);
 foreach($files as $k=>$v){
 	if(preg_match("/^$l_id(-\d+).jpg\$/", $v, $m)){
@@ -100,7 +98,7 @@ if($pic_suffixes)
 }
 
 
-include("module//admin//comment//list.inc.php");
+include('module/admin/comment/list.inc.php');
 
 $template->out();
 

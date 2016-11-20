@@ -6,4 +6,5 @@
 // marrtins@dqdp.net
 
 $thumb = "/thumb";
-include("image.inc.php");
+include('image.inc.php');
+

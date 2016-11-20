@@ -21,7 +21,8 @@ if($action == 'upload')
 		$template->set_var('msg', 'Fails nav izvēlēts!');
 	} elseif(move_uploaded_file($some_file['tmp_name'], $sys_upload_root.'/'.$some_file['name'])) {
 		$path = $sys_upload_root.'/'.$some_file['name'];
-		// resize
+
+		# resize
 		$image_size = isset($_POST['image_size']) ? (integer)$_POST['image_size'] : 0;
 		$data = getimagesize($path);
 		if($data[0] > $image_size && $image_size) {
@@ -29,7 +30,7 @@ if($action == 'upload')
 			$out_img = image_resample($in_img, $image_size);
 			image_save($out_img, $path, $type);
 		}
-		// end resize
+
 		$template->set_var('msg', 'Fails <b>'.$some_file['name'].'</b> uzkopēts!');
 	} else {
 		$template->set_var('msg', 'Neizdevās uzkopēt failu <b>'.$some_file['name'].'</b>!');
@@ -58,11 +59,11 @@ if($action == 'delete_multiple') {
 			} else
 				$template->set_var('msg', 'Fails <b>'.$file.'</b> neekistē');
 			$template->parse_block('BLOCK_msg', TMPL_APPEND);
-		} // file
-	} // loop
+		}
+	}
 }
 
-// ielaadeejam failu sarakstu un uztaisa sarakstu sakaartotaa seciibaa
+# ielaadeejam failu sarakstu un uztaisa sarakstu sakaartotaa seciibaa
 $files = array();
 if($dir = @opendir($sys_upload_root)) {
 	while(false !== ($file = readdir($dir)))

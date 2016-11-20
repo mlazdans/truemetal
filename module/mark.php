@@ -5,7 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib//Article.php');
+require_once('lib/Article.php');
 
 $now = time();
 

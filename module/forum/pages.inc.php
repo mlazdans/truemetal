@@ -5,11 +5,9 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
-
 $total_pages = ceil($forum_count / $fpp);
 
-// uzstaadam pages
+# uzstaadam pages
 if($total_pages > 1)
 {
 	$_pvs = $pages_visible_to_sides;
@@ -57,29 +55,7 @@ if($total_pages > 1)
 
 # prev
 $template->set_var('prev_page_id', ($page_id > 1) ? $page_id - 1 : $page_id, 'BLOCK_is_pages');
-/*
-if($page_id > 1)
-{
-	//$template->enable('BLOCK_page_prev');
-} else {
-	$template->set_var('prev_page_id', $page_id - 1, 'BLOCK_is_pages');
-	//$template->enable('BLOCK_page_prev_disabled');
-}
-*/
 
 # next
 $template->set_var('next_page_id', ($page_id < $total_pages) ? $page_id + 1 : $page_id, 'BLOCK_is_pages');
-/*
-if($page_id < $total_pages)
-{
-	$template->set_var('next_page_id', $page_id + 1, 'BLOCK_is_pages');
-	$template->enable('BLOCK_page_next');
-} else {
-	$template->enable('BLOCK_page_next_disabled');
-}
-*/
-// --
-
-//$template->parse_block('BLOCK_is_pages');
-//$template->set_var('pages_bottom', $template->get_parsed_content('BLOCK_is_pages'), 'BLOCK_middle');
 

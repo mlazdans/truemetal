@@ -5,7 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib//CommentDisabled.php');
+require_once('lib/CommentDisabled.php');
 
 $action = post('action');
 $json = isset($_GET['json']);
@@ -20,7 +20,6 @@ $template->set_var('error_l_email', '', 'FILE_profile');
 
 if(!user_loged())
 {
-	//header($_SERVER["SERVER_PROTOCOL"]." 403 Forbidden");
 	$template->enable('BLOCK_not_loged');
 	ob_start();
 	$template->out();
@@ -109,7 +108,6 @@ if($json)
 	$html = ob_get_clean();
 
 	$jsonData = new StdClass;
-	//$jsonData->l_nick = $login_data['l_nick'];
 	$jsonData->title = "[ TRUEMETAL ".$template->get_title()." ]";
 	$jsonData->html = $html;
 	header('Content-Type: text/javascript; charset='.$sys_encoding);

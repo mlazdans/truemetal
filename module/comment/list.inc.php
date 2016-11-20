@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
-
 require_once('lib/CommentDisabled.php');
 
 if(user_loged())
@@ -76,6 +74,5 @@ foreach($comments as $item)
 	$template->set_var('comment_nr', $comment_nr, 'BLOCK_comment');
 
 	$template->parse_block('BLOCK_comment_list', TMPL_APPEND);
-} // foreach
-
+}
 

@@ -5,10 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-// ----------------------------------------------------------------------------
-
 # TODO: pārlikt visu šo zem lib
-
 require_once('lib/Res.php');
 
 $res_id = (int)array_shift($sys_parameters);

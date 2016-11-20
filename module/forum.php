@@ -5,7 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-// ----------------------------------------------------------------------------
 require_once('lib/Forum.php');
 
 $hl = rawurldecode(get("hl"));
@@ -41,8 +40,7 @@ if($forum_id == 0)
 
 $template = new MainModule($sys_template_root, $sys_module_id);
 
-// ---------------------------------------------
-// ja izveeleets forums, paraadam teemu sarakstu
+# ja izveeleets forums, paraadam teemu sarakstu
 $forum_title = 'Diskusijas';
 $forum_descr = "Metāliskās diskusijas";
 
@@ -80,12 +78,12 @@ if($forum_id)
 	# Subtēma TODO: jānotestē
 	if($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS)
 	{
-		include("forum/theme.inc.php");
+		include('forum/theme.inc.php');
 	} else {
-		include("forum/det.inc.php");
+		include('forum/det.inc.php');
 	}
 } else {
-	include("forum/root.inc.php");
+	include('forum/root.inc.php');
 }
 
 $template->set_title($forum_title);

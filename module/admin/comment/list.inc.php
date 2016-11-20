@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
-
 if($comments)
 {
 	$template->enable('BLOCK_comments');
@@ -18,8 +16,6 @@ foreach($comments as $item)
 {
 	$item['c_origin_href'] = "/resroute/$item[parent_res_id]/?c_id=$item[c_id]";
 	$item['c_origin_name'] = "#comment$item[c_id]";
-
-	//$item['res_votes'] = (int)$item['res_votes'];
 
 	$template->set_array($item, 'BLOCK_comment_item');
 

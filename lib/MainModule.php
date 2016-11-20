@@ -137,7 +137,7 @@ $descr.
 
 	function out()
 	{
-		global $sys_http_root, $sys_use_cdn, $sys_cdn_func, $sys_domain;
+		global $sys_http_root, $sys_use_cdn, $sys_cdn_func, $sys_domain, $i_am_admin, $sys_start_time;
 
 		//print $this->parse_file('FILE_index');
 		if($sys_use_cdn && function_exists($sys_cdn_func))
@@ -181,6 +181,12 @@ $descr.
 			}
 			print $dom->saveHTML();
 		} else {
+			if($i_am_admin)
+			{
+				$sys_end_time = microtime(true);
+				$finished = '<!-- Finished: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec -->';
+				$this->set_var('tmpl_finished', $finished);
+			}
 			print $this->parse_file('FILE_index');
 		}
 		//$content = $this->parse_file('FILE_index');

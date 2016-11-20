@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-//
-
 require_once('lib/ResComment.php');
 
 if(empty($data['c_data']))
@@ -45,7 +43,6 @@ if(user_blacklisted())
 
 	return;
 }
-#
 
 $cData = array(
 	'login_id'=>$_SESSION['login']['l_id'],
