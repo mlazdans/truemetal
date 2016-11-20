@@ -15,12 +15,10 @@ function gallery_error($msg, &$template) {
 	$template->set_var('error_msg', $msg);
 }
 
-// predefines
+# thumbs per row
 $tpr = 4;
-
-// params
 $gal_id = array_shift($sys_parameters);
-$gd_id = (integer)array_shift($sys_parameters);
+$gd_id = (int)array_shift($sys_parameters);
 
 $gallery = new Gallery;
 
@@ -53,7 +51,7 @@ if(!user_loged())
 } else {
 if($gal_id)
 {
-	// ja skataas bildi, nocheko vai attieciigaa galerija ir pieejama
+	# ja skataas bildi, nocheko vai attieciigaa galerija ir pieejama
 	if($gal_id == 'view' && $gd_id) {
 		$data = $gallery->load_data($gd_id);
 		if(!isset($data['gd_galid'])) {
@@ -69,7 +67,6 @@ if($gal_id)
 		header("Location: $module_root/");
 		exit;
 	}
-	// --
 
 	$gal_name = "";
 	if($gal['gal_ggid'])
@@ -82,16 +79,18 @@ if($gal_id)
 
 	if($gal_id == 'view') {
 		$data = $gallery->load_data($gd_id);
-		// ja skataas pa vienai
+		# ja skataas pa vienai
 		$template->enable('BLOCK_image');
-		// nechekojam, vai ir veel bildes
+
+		# nechekojam, vai ir veel bildes
 		$next_id = $gallery->get_next_data($gal['gal_id'], $gd_id);
 		if($next_id) {
 			$template->set_var('gd_nextid', $next_id);
 			$template->enable('BLOCK_image_viewnext');
-		} else
+		} else {
 			$template->enable('BLOCK_image_viewsingle');
-		// end check
+		}
+
 		$template->set_var('gd_descr', $data['gd_descr']);
 		$template->set_var('gd_id', $gd_id);
 	} else {
@@ -101,7 +100,7 @@ if($gal_id)
 			$data = join('', file($gal_cache));
 			$template->set_block_string('BLOCK_thumb', $data);
 		} else {
-			// ielasam thumbus
+			# ielasam thumbus
 			$data = $gallery->load_data(0, $gal_id);
 			$thumb_count = count($data);
 			$c = 0;
@@ -132,10 +131,10 @@ if($gal_id)
 			if(false){
 				save_data($gal_cache, $template->get_block('BLOCK_thumb')->parse());
 			}
-		} // cache exists
-	} // gal_id == view
+		}
+	}
 } else {
-	// ielasam galerijas
+	# ielasam galerijas
 	$template->set_title('Galerijas');
 	$gal_cache = "$sys_template_root/gallery/gallery.html";
 	if(false && file_exists($gal_cache)) {

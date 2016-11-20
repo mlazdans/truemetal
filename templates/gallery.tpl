@@ -11,7 +11,7 @@
 <!-- END BLOCK_nogalleries -->
 
 <!-- BEGIN BLOCK_gallery_list disabled -->
-<div id="gal{gal_id}" style="margin-bottom: 20px;">
+<div style="margin-bottom: 20px;">
 	<!-- BEGIN BLOCK_gallery_group -->
 	<div class="TD-cat">
 		{gg_name}
@@ -20,7 +20,7 @@
 	<!-- END BLOCK_gallery_group -->
 
 	<!-- BEGIN BLOCK_gallery_data -->
-	<div style="padding-left: 20px;">
+	<div id="gal{gal_id}" style="padding-left: 20px;">
 		<a href="{module_root}/{gal_id}/">{gal_name}</a>
 	</div>
 	<!-- END BLOCK_gallery_data -->

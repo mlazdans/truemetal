@@ -36,6 +36,7 @@ INSERT INTO `search_log` (
 $cl = new SphinxClient();
 $cl->SetConnectTimeout(1);
 $cl->SetLimits(0, 100);
+$cl->SetServer('localhost', 3312);
 $cl->SetMatchMode(SPH_MATCH_BOOLEAN);
 
 $sources = array();
