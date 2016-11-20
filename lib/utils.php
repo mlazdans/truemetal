@@ -13,6 +13,13 @@ require_once('Mail//mime.php');
 define('REMOVE_TABLE', 1);
 define('REMOVE_FONT', 2);
 
+define('M', array(
+	'janvārī', 'februārī', 'martā', 'aprīlī', 'maijā', 'jūnijā', 'jūlijā', 'augustā', 'septembrī',
+	'oktobrī', 'novembrī', 'decembrī'
+	));
+
+define('D', array('pirmdiena', 'otrdiena', 'trešdiena', 'ceturtdiena', 'piektdiena', 'sestdiena', 'svētidiena'));
+
 function invalid($value)
 {
 	return preg_match("/[^a-z^A-Z^0-9_]/", $value) or !$value;
@@ -118,24 +125,16 @@ function remove_shit(&$data, $filter = 0)
 	$data = preg_replace($patt, $repl, $data);
 } // remove_shit
 
+function get_month($i){
+	return M[$i];
+} // get_month
+
+function get_day($i){
+	return D[$i];
+} // get_day
+
 function proc_date($date)
 {
-	# $date - strtotime acceptable date
-	# XXX: NOT TRUE $date format Y:M:D:H:M - 2002:07:27:23:12
-	$M = array(
-		'janvārī',
-		'februārī',
-		'martā',
-		'aprīlī',
-		'maijā',
-		'jūnijā',
-		'jūlijā',
-		'augustā',
-		'septembrī',
-		'oktobrī',
-		'novembrī',
-		'decembrī'
-	);
 	$D = array(
 		'šodien',
 		'vakar',
@@ -143,13 +142,12 @@ function proc_date($date)
 	);
 
 	$date_now = date("Y:m:j:H:i");
-	@list($y0, $m0, $d0, $h0, $min0) = explode(":", date("Y:m:j:H:i", strtotime($date)));
-	@list($y1, $m1, $d1, $h1, $min1) = explode(":", $date_now);
+	list($y0, $m0, $d0, $h0, $min0) = explode(":", date("Y:m:j:H:i", strtotime($date)));
+	list($y1, $m1, $d1, $h1, $min1) = explode(":", $date_now);
 	// mktime ( [int hour [, int minute [, int second [, int month [, int day [, int year [, int is_dst]]]]]]])
 	$dlong0 = mktime($h0, $min0, 0, $m0, $d0, $y0);
 	$dlong1 = mktime($h1, $min1, 0, $m1, $d1, $y1);
 	$diff = date('z', $dlong1) - date('z', $dlong0);
-
 	$retdate = '';
 
 	if( ($diff < 3) && ($y1 == $y0) )
@@ -159,7 +157,7 @@ function proc_date($date)
 	} else {
 		if($y1 != $y0)
 			$retdate .= "$y0. gada ";
-		$retdate.= "$d0. ".$M[$m0 - 1];
+		$retdate.= "$d0. ".get_month($m0 - 1);
 	}
 
 	if((integer)$h0 || (integer)$min0)
@@ -861,6 +859,16 @@ function printr(&$data)
 	}
 } // printr
 
+function printa($data)
+{
+	if($GLOBALS['i_am_admin'])
+	{
+		print "<pre>";
+		print $data;
+		print "</pre>";
+	}
+} // printa
+
 function _GET()
 {
 	$ret = array();
@@ -1219,4 +1227,54 @@ function tm_shutdown()
 	Logins::save_session_data();
 	session_commit();
 } // tm_shutdown
+
+function create_dir($dir, $mode = false)
+{
+	$da = explode('/', $dir);
+	$path = '';
+	foreach($da as $item)
+	{
+		$path .= "/$item";
+		if(!file_exists($path)){
+			if(mkdir($path)){
+				if($mode){
+					chmod($path, $mode);
+				}
+			}
+		}
+	}
+} // create_dir
+
+function save_data($file, $data)
+{
+	$pi = pathinfo($file);
+	create_dir($pi['dirname'], 0777);
+
+	return file_put_contents($file, $data);
+} // save_data
+
+function cache_hash($item, $pref = '', $levels = 3)
+{
+	$hash = crc32($item);
+	$l = strlen($hash);
+
+	$path = '';
+	for($i = 1; $i <= $levels; $i++){
+		$path .= substr($hash, $l - $i, 1).'/';
+	}
+	$path .= $pref.$hash;
+
+	return $path;
+} // cache_hash
+
+function get_inner_html($node)
+{
+	$innerHTML= '';
+	$children = $node->childNodes;
+	foreach ($children as $child) {
+		$innerHTML .= $child->ownerDocument->saveXML( $child );
+	}
+
+	return $innerHTML;
+} // get_inner_html
 

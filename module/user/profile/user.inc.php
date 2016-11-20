@@ -8,7 +8,7 @@
 require_once('lib//CommentDisabled.php');
 
 $action = post('action');
-$json = get('json');
+$json = isset($_GET['json']);
 
 if($json)
 {

@@ -185,12 +185,18 @@ if($forum_id)
 		$template->set_var('forum_prohibitchilds_sel', ' selected="selected"', 'BLOCK_forum_edit');
 	}
 
+	foreach($forum->types as $type_id=>$type_name){
+		$template->set_var('type_id', $type_id, 'BLOCK_forum_type_list');
+		$template->set_var('type_name', $type_name, 'BLOCK_forum_type_list');
+		$template->set_var('type_id_selected', '', 'BLOCK_forum_type_list');
+		if($type_id == $forum_data['type_id']){
+			$template->set_var('type_id_selected', ' selected="selected"', 'BLOCK_forum_type_list');
+		}
+		$template->parse_block('BLOCK_forum_type_list', TMPL_APPEND);
+	}
+
 	$module->set_modules_all($template, $forum_data['forum_modid'], 'BLOCK_modules_under_list');
 	$template->set_var("forum_display_$forum_data[forum_display]_selected", ' selected="selected"', 'BLOCK_forum_edit');
-	/*
-	if($forum_data['forum_showmainpage'])
-		$template->set_var("forum_showmainpage_checked", ' checked="checked"', 'BLOCK_forum_edit');
-	*/
 } else {
 	# Root
 	set_themes($template, $items);

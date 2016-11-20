@@ -18,6 +18,22 @@
 	</td>
 </tr>
 <tr>
+	<td class="right nowrap">Tips</td>
+	<td>
+		<select name="data[type_id]">
+		<!-- BEGIN BLOCK_forum_type_list -->
+		<option value="{type_id}"{type_id_selected}>{type_name}</option>
+		<!-- END BLOCK_forum_type_list -->
+		</select>
+	</td>
+</tr>
+<tr>
+	<td class="right nowrap">Pasākuma sākums:</td>
+	<td>
+		<input type="text" name="data[event_startdate]" value="{event_startdate}" />
+	</td>
+</tr>
+<tr>
 	<td class="right nowrap">Aktīvs?:</td>
 	<td>
 		<select name="data[forum_active]">

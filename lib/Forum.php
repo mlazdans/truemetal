@@ -56,8 +56,16 @@ class Forum extends Res
 		if(isset($params['forum_id']))
 			$sql_add[] = "f.forum_id = $params[forum_id]";
 
+		if(isset($params['type_id']))
+			$sql_add[] = "f.type_id = $params[type_id]";
+
 		if(isset($params['res_id']))
 			$sql_add[] = "f.res_id = $params[res_id]";
+
+		if(isset($params['actual_events'])){
+			$sql_add[] = "f.type_id = ".Res::TYPE_EVENT;
+			$sql_add[] = sprintf("f.event_startdate >= '%s'", date('Y-m-d H:i:s'));
+		}
 
 		if(isset($params['forum_ids']) && is_array($params['forum_ids']))
 			$sql_add[] = sprintf("f.forum_id IN (%s)", join(",", $params['forum_ids']));
@@ -299,6 +307,8 @@ INSERT INTO forum (
 		$sql .= $data2['forum_name'] ? "forum_name = '$data2[forum_name]', " : '';
 		$sql .= $data2['forum_entered'] ? "forum_entered = '$data2[forum_entered]', " : '';
 		$sql .= $data2['forum_datacompiled'] ? "forum_datacompiled = '$data2[forum_datacompiled]', " : '';
+		$sql .= $data2['type_id'] ? "type_id = $data2[type_id], " : '';
+		$sql .= $data2['event_startdate'] ? "event_startdate = '$data2[event_startdate]', " : '';
 		$sql .= "forum_data = '$data2[forum_data]', ";
 		$sql .= "forum_allowchilds = '$data2[forum_allowchilds]', ";
 		$sql .= "forum_modid = $data2[forum_modid], ";

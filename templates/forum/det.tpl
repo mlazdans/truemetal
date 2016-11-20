@@ -12,13 +12,13 @@
 </div>
 	<!-- BEGIN BLOCK_attend_on disabled -->
 	<div class="List-item">
-		<input type="button" onclick="Truemetal.Attend('{res_id}'); return false;" value="Es ar' nāks!"/>
+		<a href="/attend/{res_id}/" type="button" onclick="Truemetal.Attend('{res_id}'); return false;">Es ar' nāks!</a>
 	</div>
 	<!-- END BLOCK_attend_on -->
 
 	<!-- BEGIN BLOCK_attend_off disabled -->
 	<div class="List-item">
-		<input type="button" onclick="if(confirm('Tu ko?! Nezini, kas ir Amorphis???'))Truemetal.AttendNo('{res_id}'); return false;" value="Es tomēr nenāks!"/>
+		<a href="/attend/{res_id}/off/" onclick="if(confirm('Tu ko?! Nezini, kas ir Amorphis???'))Truemetal.AttendNo('{res_id}'); return false;">Es tomēr nenāks!</a>
 	</div>
 	<!-- END BLOCK_attend_off -->
 <!-- END BLOCK_attend -->

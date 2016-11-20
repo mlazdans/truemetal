@@ -1,11 +1,6 @@
 <a name="comments"></a>
-
 <!-- BEGIN BLOCK_comment disabled -->
 <!-- BEGIN BLOCK_comment_list -->
-
-<!-- BEGIN BLOCK_comment_old_id -->
-<a name="comment{cm_old_id}"></a>
-<!-- END BLOCK_comment_old_id -->
 <div class="Comment" id="comment{c_id}">
 	<div class="header">
 		<div class="nick">{c_username}</div>
@@ -61,7 +56,6 @@
 <!-- END BLOCK_notloggedin -->
 
 <!-- BEGIN BLOCK_addcomment disabled -->
-
 <form action="#add_comment" method="post" id="add_comment">
 <table width="100%" cellpadding="2" cellspacing="0">
 <!-- BEGIN BLOCK_comment_error disabled -->

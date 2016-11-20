@@ -9,23 +9,51 @@
 
 # TODO: pārlikt visu šo zem lib
 
+require_once('lib/Res.php');
+
 $res_id = (int)array_shift($sys_parameters);
 $off = array_shift($sys_parameters);
+$json = isset($_GET['json']);
+
 $retJson = new StdClass;
+$redirect = "$sys_http_root/resroute/$res_id/";
 
 if(!user_loged())
 {
+	$retJson->msg = "Access denied";
 	if($json)
 	{
-		$retJson->msg = "Access denied";
 		print json_encode($retJson);
-		return;
+	} else {
+		print $retJson->msg;
 	}
-	header("Location: $sys_http_root/");
 	return;
 }
 
 $login_id = $_SESSION['login']['l_id'];
+
+$Res = new Res();
+$item = $Res->GetAllData($res_id);
+
+if(!isset($item['type_id']) || ($item['type_id'] != Res::TYPE_EVENT)){
+	$retJson->msg = "Access denied";
+	if($json){
+		print json_encode($retJson);
+	} else {
+		print $retJson->msg;
+	}
+	return;
+}
+
+if(time() > strtotime($item['event_startdate'])){
+	$retJson->msg = "Par vēlu";
+	if($json){
+		print json_encode($retJson);
+	} else {
+		print $retJson->msg;
+	}
+	return;
+}
 
 if($off == 'off'){
 	$sql = sprintf(
@@ -60,6 +88,10 @@ if($db->Execute($sql))
 
 	$retJson->attendees = $db->Execute($sql);
 	*/
-	print json_encode($retJson);
+	if($json){
+		print json_encode($retJson);
+	} else {
+		header('Location: '.$redirect);
+	}
 }
 

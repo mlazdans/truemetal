@@ -120,11 +120,13 @@ class TemplateBlock
 			return;
 
 		/* reset childs */
+		/*
 		if($bln_append) {
 			foreach($this->blocks as $block_id => $object) {
 				$object->reset();
 			}
 		}
+		*/
 
 		/* ja jau noparseets */
 		if($this->parsed_count && !$bln_append) {
@@ -135,10 +137,15 @@ class TemplateBlock
 		$parsed_content = $this->__parse_vars();
 
 		/* ja blokaa veel ir bloki */
-		foreach($this->blocks as $block_id => $object) {
+		foreach($this->blocks as $block_id => $object)
+		{
 			$block_content = $object->parse();
-			$patt = '/<!--\s+BEGIN\s+' . $block_id . '\s+[^<]*-->.*<!--\s+END\s+' . $block_id . '\s+-->/smi';
+			$patt = '/\s*<!--\s+BEGIN\s+' . $block_id . '\s+[^<]*-->.*<!--\s+END\s+' . $block_id . '\s+-->\s*/smi';
 			preg_match_all($patt, $parsed_content, $m);
+			/*
+			if($block_id == 'BLOCK_gallery_data'){
+				printr($m);
+			}*/
 			foreach($m[0] as $mm) {
 				$parsed_content = str_replace($mm, $block_content, $parsed_content);
 			}
@@ -153,51 +160,17 @@ class TemplateBlock
 		$this->parsed_count++;
 		$this->last_parsed_content = $parsed_content;
 
-		return $this->__get_parsed_content();
-	} // parse
+		$cont = $this->__get_parsed_content();
 
-	function parse_old($bln_append = false)
-	{
-		/* noskaidrojam, cik reizu bloks noparseets */
-		$current_parsed_content = count($this->parsed_content);
-
-		/* ja jau pirmit ir kautkas noparseets */
-		if($current_parsed_content) {
-
-			/* ja nevaig papildinaat, parseejam to pashu */
-			if(!$bln_append)
-				$current_parsed_content--;
+		/* reset childs */
+		if($bln_append) {
+			foreach($this->blocks as $block_id => $object) {
+				$object->reset();
+			}
 		}
 
-		/* ja jau noparseets */
-		if($bln_append && isset($this->parsed_content[$current_parsed_content]))
-			return;
-
-		/* ja bloks sleegts */
-		if($this->attributes['disabled'])
-			return;
-
-		/* ja jauna parseeshana */
-		if(!isset($this->parsed_content[$current_parsed_content]) || !$bln_append)
-			$this->parsed_content[$current_parsed_content] = $this->__parse_vars();
-
-		/* ja blokaa veel ir bloki */
-		//if(count($this->blocks) > 0) {
-			foreach($this->blocks as $block_id => $object) {
-				$block_content = $object->parse(false);
-				//$patt = '/<!--\s+BEGIN\s+' . $block_id . '\s+([^<]*)-->(.*)<!--\s+END\s+' . $block_id . '\s+-->/smi';
-				//$this->parsed_content[$current_parsed_content] = preg_replace($patt, $block_content, $this->parsed_content[$current_parsed_content]);
-				$patt = '/<!--\s+BEGIN\s+' . $block_id . '\s+[^<]*-->.*<!--\s+END\s+' . $block_id . '\s+-->/smi';
-				preg_match_all($patt, $this->parsed_content[$current_parsed_content], $m);
-				foreach($m[0] as $mm)
-				{
-					$this->parsed_content[$current_parsed_content] = str_replace($mm, $block_content, $this->parsed_content[$current_parsed_content]);
-				}
-			}
-		//}
-
-		return $this->__get_parsed_content();
-	} // parse_old
+		return $cont;
+	} // parse
 
 	/* ----------------------------------------------------------- */
 	/* TemplateBlock
@@ -263,43 +236,8 @@ class TemplateBlock
 			$repl[] = preg_replace($p, $r, $vars_cache[$k]);
 		}
 
-		/*
-		if(count($this->block_vars) < count($this->vars))
-		{
-			foreach($this->block_vars as $k)
-			{
-				$patt[] = '/{'.$k.'}/';
-				$repl[] = isset($this->vars[$k]) ? $this->vars[$k] : false;
-			}
-		} else {
-			foreach($this->vars as $k=>$v)
-			{
-				$patt[] = '/{'.$k.'}/';
-				$repl[] = isset($this->vars[$k]) ? $this->vars[$k] : false;
-			}
-		}
-		*/
-		//
-		//printr($m);
-		/*
-		foreach($this->vars as $str_var_id=>$value)
-		{
-			//$content = str_replace('{'.$str_var_id.'}', $value, $content);
-			//$content = preg_replace('/{'.$str_var_id.'}/', $value, $content);
-			//$patt[] = '/{'.$str_var_id.'}/';
-			//$repl[] = $value;
-		}
-		*/
-		//printr($this->vars);
-		//$content = preg_replace(array_keys($this->vars), array_values($this->vars), $content);
-
 		$content = preg_replace($patt, $repl, $content);
 
-		//$content = preg_replace('/(\n{1}|\r\n{1})?{'.$str_var_id.'}/', $value, $content);
-
-		//$variable_pattern = '[a-zA-z0-9_x\F7-\xFF^}]{1,}';
-		//$variable_pattern = '[a-zA-z0-9_^}]{1,}';
-		//$content = preg_replace('/\\\{('.$variable_pattern.')}/', '{\1}', $content);
 		/*
 		switch ($this->undefined)
 		{
@@ -336,19 +274,6 @@ class TemplateBlock
 	function set_var($str_var_id, $value, $bln_parent_only = false)
 	{
 		$this->vars[$str_var_id] = $value;
-		//print("$this->ID:$str_var_id<br>");
-		//$this->vars['/{'.$str_var_id.'}/'] = $value;
-
-		/* ja parseejam arii apaksblokus */
-		/*
-		if(!$bln_parent_only) {
-			//if(count($this->blocks) > 3)
-				//printf("%d:$this->ID:$str_var_id<br>", count($this->blocks));
-			foreach($this->blocks as $block_id => $object)
-				$this->blocks[$block_id]->set_var($str_var_id, $value, $bln_parent_only);
-		}
-		*/
-
 		return true;
 	} // set_var
 
@@ -421,7 +346,7 @@ class TemplateBlock
 
 		$block = false;
 		return $block;
-	} // parse_block
+	} // get_block
 	/*
 	function &get_block($ID)
 	{
@@ -545,7 +470,8 @@ class TemplateBlock
 	/* bet no stringa
 	/* ----------------------------------------------------------- */
 	//function set_block_string($content = '') {
-	function set_block_string() {
+	function set_block_string()
+	{
 		list($content) = func_get_args();
 		return $this->content = $content;
 	} // set_block_string
@@ -559,15 +485,6 @@ class TemplateBlock
 	function delete_block($ID)
 	{
 		unset($this->blocks[$ID]);
-		/*
-		if($this->block_isset($ID))
-		{
-			return true;
-		} else {
-			$this->halt('delete_block: block ['.$ID.'] not found');
-			return false;
-		}
-		*/
 	} // delete_block
 }
 

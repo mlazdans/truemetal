@@ -11,7 +11,8 @@
 
 $value = array_shift($sys_parameters);
 $res_id = (int)array_shift($sys_parameters);
-$json = array_shift($sys_parameters) == 'json';
+//$json = array_shift($sys_parameters) == 'json';
+$json = isset($_GET['json']);
 $retJson = new StdClass;
 
 if(!user_loged())

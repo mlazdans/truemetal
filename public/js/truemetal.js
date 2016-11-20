@@ -3,14 +3,14 @@
 */
 var Truemetal = {
 	Attend: function(res_id){
-		$.getJSON("/attend/" + res_id + "/",
+		$.getJSON("/attend/" + res_id + "/?json",
 			function(ret)
 			{
 				location.reload();
 			});
 	},
 	AttendNo: function(res_id){
-		$.getJSON("/attend/" + res_id + "/off",
+		$.getJSON("/attend/" + res_id + "/off/?json",
 			function(ret)
 			{
 				location.reload();
@@ -38,7 +38,7 @@ var Truemetal = {
 		window.open(theURL, name, 'fullscreen=0,toolbar=0,status=0,scrollbars=0,menubar=0,location=0,resizable=0,channelmode=0,directories=0,width=' + w + ',height=' + h + ',top=' + t +',left=' + l);
 	},
 	Vote: function(cId, value, voteXpath) {
-		$.getJSON("/vote/" + value + "/" + cId + "/json/",
+		$.getJSON("/vote/" + value + "/" + cId + "/?json",
 			function(data)
 			{
 				if(!data || !data.Votes)
@@ -179,7 +179,7 @@ var Truemetal = {
 
 		var dialog = $('<div/>').dialog(dOptions);
 		$.ajax({
-				url: "/user/profile/" + login + "/?json=1",
+				url: "/user/profile/" + login + "/?json",
 				dataType: 'json',
 				success: function(data){
 					$(dialog).dialog("option", "title", data.title);

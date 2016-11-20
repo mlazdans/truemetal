@@ -226,11 +226,9 @@ print $tidy;
 //$my_login->save_session_data();
 //Logins::save_session_data();
 
-/*
 if($i_am_admin)
 {
 	$sys_end_time = microtime(true);
 	print '<!-- Finished: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec -->';
 }
-*/
 

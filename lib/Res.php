@@ -9,6 +9,14 @@ require_once('lib//ResComment.php');
 
 class Res
 {
+	const TYPE_STD = 0;
+	const TYPE_EVENT = 1;
+
+	var $types = array(
+		Res::TYPE_STD=>'Forums',
+		Res::TYPE_EVENT=>'Pasākums',
+		);
+
 	protected $table_id;
 	protected $login_id;
 	protected $db = null;

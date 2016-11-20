@@ -7,7 +7,7 @@
 
 //
 
-require_once('lib//ResComment.php');
+require_once('lib/ResComment.php');
 
 if(empty($data['c_data']))
 {

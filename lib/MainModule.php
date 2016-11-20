@@ -7,11 +7,11 @@
 
 // pats pats...
 
-require_once('lib//Module.php');
-require_once('lib//Article.php');
-require_once('lib//Poll.php');
-require_once('lib//Logins.php');
-require_once('lib//Template.php');
+require_once('lib/Module.php');
+require_once('lib/Article.php');
+require_once('lib/Poll.php');
+require_once('lib/Logins.php');
+require_once('lib/Template.php');
 
 class MainModule extends Template
 {
@@ -487,5 +487,39 @@ $descr.
 		$this->parse_block('BLOCK_right_item', TMPL_APPEND);
 	} // set_jubilars
 
+	function set_events()
+	{
+		$forum = new Forum;
+		$data = $forum->load(array(
+			"fields"=>array('forum_id', 'forum_name', 'event_startdate', 'f.res_id'),
+			"actual_events"=>true,
+			"order"=>'event_startdate',
+			));
+
+		if($data){
+			$this->enable('BLOCK_events');
+		}
+
+		$timeout = 7*24*60*60;
+		foreach($data as $item){
+			$ts = strtotime($item['event_startdate']);
+			$D = date('j', $ts);
+			$Dw = date('w', $ts);
+			$M = date('m', $ts);
+
+			$diff = $ts -time();
+
+			$this->set_var('event_class', "", 'BLOCK_events_list');
+			$this->set_var('event_url', "/resroute/$item[res_id]/", 'BLOCK_events_list');
+			$this->set_var('event_title', ent($D.". ".get_month($M - 1).", ".get_day($Dw - 1)), 'BLOCK_events_list');
+			$this->set_var('event_name', ent($item['forum_name']), 'BLOCK_events_list');
+
+			if(($diff>0) && ($diff<$timeout)){
+				$this->set_var('event_class', " actual", 'BLOCK_events_list');
+			}
+
+			$this->parse_block('BLOCK_events_list', TMPL_APPEND);
+		}
+	} // set_events
 } // MainModule
 

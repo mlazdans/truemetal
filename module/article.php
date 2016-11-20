@@ -301,6 +301,7 @@ $art_title .= ($hl ? sprintf(" - meklēšana: %s", $hl) : "");
 $template->set_title($art_title);
 
 $template->set_right();
+$template->set_events();
 $template->set_login();
 $template->set_online();
 $template->set_jubilars();

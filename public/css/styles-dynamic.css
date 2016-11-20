@@ -356,7 +356,7 @@ table.Comments {
 }
 #header .logo {
 	position: relative;
-	background: url("../img/logo-background.gif") no-repeat top left;
+	background: url("../img/logo-background.png") no-repeat top left;
 	float: left;
 }
 #header .logo .logo-inside {

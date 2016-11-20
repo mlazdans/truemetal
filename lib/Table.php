@@ -7,7 +7,6 @@
 
 class Table
 {
-
 	const ARTICLE = 1;
 	const FORUM = 2;
 	const COMMENT = 3;
