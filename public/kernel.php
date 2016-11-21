@@ -54,6 +54,7 @@ if(!$i_am_admin){
 }
 */
 
+//ini_set('sysvshm.init_mem', 100000);
 ini_set('display_errors', ($sys_debug ? 1 : 0));
 ini_set('expose_php', false);
 error_reporting($sys_error_reporting);

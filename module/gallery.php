@@ -23,16 +23,16 @@ $gd_id = (int)array_shift($sys_parameters);
 $gallery = new Gallery;
 
 if(($gal_id == 'thumb' || $gal_id == 'image') && $gd_id) {
-	$gal_cache = "$sys_public_root/cache/".cache_hash($gd_id, $gal_id."_").".jpg";
-	if($CACHE_ENABLE && file_exists($gal_cache)) {
-		$jpeg = file_get_contents($gal_cache);
+	$hash = cache_hash($gd_id.$gal_id.".jpg");
+	if($CACHE_ENABLE && cache_exists($hash)) {
+		$jpeg = cache_read($hash);
 	} else {
 		$data = $gallery->load_data($gd_id);
 		if($gal_id == 'image')
 			$jpeg = $data['gd_data'];
 		else
 			$jpeg = $data['gd_thumb'];
-		save_data($gal_cache, $jpeg);
+		cache_save($hash, $jpeg);
 	}
 
 	header('Content-type: image/jpeg');
@@ -82,6 +82,13 @@ if($gal_id)
 		# ja skataas pa vienai
 		$template->enable('BLOCK_image');
 
+		$hash = cache_hash($gd_id."image.jpg");
+		if(cache_exists($hash)){
+			$template->set_var('image_path', cache_http_path($hash), 'BLOCK_image');
+		} else {
+			$template->set_var('image_path', "$module_root/image/$gd_id/", 'BLOCK_image');
+		}
+
 		# nechekojam, vai ir veel bildes
 		$next_id = $gallery->get_next_data($gal['gal_id'], $gd_id);
 		if($next_id) {
@@ -95,7 +102,7 @@ if($gal_id)
 		$template->set_var('gd_id', $gd_id);
 	} else {
 		$template->enable('BLOCK_thumb_list');
-		$gal_cache = "$sys_template_root/gallery/$gal_id.html";
+		$gal_cache = "templates/gallery/$gal_id.html";
 		if(false && file_exists($gal_cache)) {
 			$data = join('', file($gal_cache));
 			$template->set_block_string('BLOCK_thumb', $data);
@@ -117,10 +124,9 @@ if($gal_id)
 					$template->disable('BLOCK_tr2');
 				$template->set_var('gd_id', $thumb['gd_id'], 'BLOCK_thumb');
 
-				$hash = cache_hash($thumb['gd_id'], "thumb_");
-				$gal_cache = "$sys_public_root/cache/$hash.jpg";
-				if(file_exists($gal_cache)){
-					$template->set_var('thumb_path', "$sys_http_root/cache/$hash.jpg", 'BLOCK_thumb');
+				$hash = cache_hash($thumb['gd_id']."thumb.jpg");
+				if(cache_exists($hash)){
+					$template->set_var('thumb_path', cache_http_path($hash), 'BLOCK_thumb');
 				} else {
 					$template->set_var('thumb_path', "$module_root/thumb/$thumb[gd_id]/", 'BLOCK_thumb');
 				}
@@ -128,15 +134,17 @@ if($gal_id)
 				$template->parse_block('BLOCK_thumb', TMPL_APPEND);
 			}
 
+			/*
 			if(false){
 				save_data($gal_cache, $template->get_block('BLOCK_thumb')->parse());
 			}
+			*/
 		}
 	}
 } else {
 	# ielasam galerijas
 	$template->set_title('Galerijas');
-	$gal_cache = "$sys_template_root/gallery/gallery.html";
+	$gal_cache = "templates/gallery/gallery.html";
 	if(false && file_exists($gal_cache)) {
 		$template->enable('BLOCK_gallery_list');
 		$data = join('', file($gal_cache));
@@ -167,9 +175,11 @@ if($gal_id)
 			}
 			$template->parse_block('BLOCK_gallery_list', TMPL_APPEND);
 		}
+		/*
 		if(false){
 			save_data($gal_cache, $template->get_block('BLOCK_gallery')->parse());
 		}
+		*/
 	} else {
 		gallery_error($gallery->error_msg, $template);
 	}

@@ -1224,46 +1224,61 @@ function tm_shutdown()
 	session_commit();
 } // tm_shutdown
 
-function create_dir($dir, $mode = false)
+function cache_save($h, $data)
 {
 	global $sys_root;
 
-	# novāc daļu ārpus roota
-	$patt = "/^".preg_quote($sys_root, '/')."\//";
-	$dir = preg_replace($patt, '', $dir);
-	$da = explode('/', $dir);
-	$path = $sys_root;
-	foreach($da as $item)
-	{
-		$path .= "/$item";
-		if(!file_exists($path)){
-			if(mkdir($path)){
-				if($mode){
-					chmod($path, $mode);
-				}
-			}
-		}
-	}
-} // create_dir
+	$abs_path = "$sys_root/public/cache/$h";
+	$dir = dirname($abs_path);
 
-function save_data($file, $data)
+	$key = ftok("$sys_root/public/cache", "T");
+	//$key = crc32($h) % 101 + 0xBADBEEF;
+	$se = sem_get($key);
+	sem_acquire($se);
+
+	if(!file_exists($dir))
+		mkdir($dir, 0777, true);
+
+	$status = true;
+	if(!file_exists($abs_path))
+		$status = file_put_contents($abs_path, $data, LOCK_EX);
+
+	sem_release($se);
+
+	return $status;
+} // cache_save
+
+function cache_exists($h, $levels = 2)
 {
-	$pi = pathinfo($file);
-	create_dir($pi['dirname'], 0777);
+	global $sys_root;
 
-	return file_put_contents($file, $data);
-} // save_data
+	return file_exists("$sys_root/public/cache/$h");
+} // cache_exists
 
-function cache_hash($item, $pref = '', $levels = 3)
+function cache_read($h)
 {
-	$hash = crc32($item);
+	global $sys_root;
+
+	return file_get_contents("$sys_root/public/cache/$h");
+} // cache_read
+
+function cache_http_path($h)
+{
+	global $sys_http_root;
+
+	return "$sys_http_root/cache/$h";
+} // cache_http_path
+
+function cache_hash($id, $levels = 2)
+{
+	$hash = crc32($id);
 	$l = strlen($hash);
 
 	$path = '';
 	for($i = 1; $i <= $levels; $i++){
 		$path .= substr($hash, $l - $i, 1).'/';
 	}
-	$path .= $pref.$hash;
+	$path .= "$hash-$id";
 
 	return $path;
 } // cache_hash

@@ -44,12 +44,12 @@
 	<a class="A-cat" href="{module_root}/{gal_id}/">{gal_name}</a>
 </div>
 	<!-- BEGIN BLOCK_image_viewsingle disabled -->
-	<div style="text-align: center;"><img src="{module_root}/image/{gd_id}/" alt="" /></div>
+	<div style="text-align: center;"><img src="{image_path}" alt="" /></div>
 	<div style="text-align: center;">{gd_descr}</div>
 	<!-- END BLOCK_image_viewsingle -->
 
 	<!-- BEGIN BLOCK_image_viewnext disabled -->
-	<div style="text-align: center;"><a name="pic" href="{module_root}/view/{gd_nextid}/#pic"><img src="{module_root}/image/{gd_id}/" alt="Nākamā" /></a></div>
+	<div style="text-align: center;"><a name="pic" href="{module_root}/view/{gd_nextid}/#pic"><img src="{image_path}" alt="Nākamā" /></a></div>
 	<div style="text-align: center;">{gd_descr}</div>
 	<!-- END BLOCK_image_viewnext -->
 <!-- END BLOCK_image -->
