@@ -20,6 +20,7 @@ define('GALLERY_DATA_ALL', false);
 class Gallery
 {
 	var $error_msg;
+	var $load_images = false;
 
 	function load_data($gd_id, $gd_galid = 0, $gd_visible = GALLERY_DATA_VISIBLE,
 		$gal_active = GALLERY_ACTIVE)
@@ -30,7 +31,11 @@ class Gallery
 		$gd_galid = (integer)$gd_galid;
 
 		$sql_add = 'gd.gd_galid = g.gal_id AND ';
-		$sql = 'SELECT gd.* FROM gallery_data_old gd, gallery_old g';
+		$sql = 'SELECT gd.gd_id, gd.gd_galid, gd.gd_descr, gd.gd_entered';
+		if($this->load_images)
+			$sql .= ', gd.gd_data, gd.gd_thumb';
+		$sql .= ' FROM gallery_data_old gd, gallery_old g';
+
 
 		if($gd_id)
 			$sql_add .= "gd.gd_id = $gd_id AND ";

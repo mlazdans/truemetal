@@ -16,7 +16,7 @@ function gallery_error($msg, &$template) {
 }
 
 # thumbs per row
-$tpr = 4;
+$tpr = 5;
 $gal_id = array_shift($sys_parameters);
 $gd_id = (int)array_shift($sys_parameters);
 
@@ -27,6 +27,7 @@ if(($gal_id == 'thumb' || $gal_id == 'image') && $gd_id) {
 	if($CACHE_ENABLE && cache_exists($hash)) {
 		$jpeg = cache_read($hash);
 	} else {
+		$gallery->load_images = true;
 		$data = $gallery->load_data($gd_id);
 		if($gal_id == 'image')
 			$jpeg = $data['gd_data'];
@@ -78,7 +79,7 @@ if($gal_id)
 	$template->set_title('Galerija '.$gal_name);
 
 	if($gal_id == 'view') {
-		$data = $gallery->load_data($gd_id);
+		//$data = $gallery->load_data($gd_id);
 		# ja skataas pa vienai
 		$template->enable('BLOCK_image');
 
