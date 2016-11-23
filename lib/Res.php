@@ -106,6 +106,20 @@ class Res
 					'res_id'=>$res_data['res_id'],
 					)));
 				break;
+			case Table::GALLERY:
+				require_once('lib/Gallery.php');
+				$D = new Gallery();
+				return array_merge($res_data, $D->load(array(
+					'res_id'=>$res_data['res_id'],
+					)));
+				break;
+			case Table::GALLERY_DATA:
+				require_once('lib/GalleryData.php');
+				$D = new GalleryData();
+				return array_merge($res_data, $D->load(array(
+					'res_id'=>$res_data['res_id'],
+					)));
+				break;
 		}
 
 		return false;
@@ -144,6 +158,12 @@ class Res
 					'c_id'=>$resource['c_id'],
 					));
 				$location = Res::Route($C['parent_res_id'], $c_id);
+				break;
+			case Table::GALLERY:
+				$location = "/gallery/$resource[gal_id]/";
+				break;
+			case Table::GALLERY_DATA:
+				$location = "/gallery/view/$resource[gd_id]/";
 				break;
 		}
 

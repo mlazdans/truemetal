@@ -70,6 +70,7 @@ $data.
 
 $db->AutoCommit(false);
 
+/*
 $sql = "SELECT * FROM `gallery_group_old`";
 $items = $db->Execute($sql);
 
@@ -82,5 +83,17 @@ foreach($items as $item)
 	$db->Execute($sql);
 }
 $db->Commit();
+*/
+$sql = "SELECT * FROM `gallery_old`";
+$items = $db->Execute($sql);
 
+foreach($items as $item)
+{
+	$data = $item['gal_data'];
+	if($data)
+		$data = gal_clean($data);
+	$sql = "UPDATE `gallery_old` SET `gal_data` = '".$db->Quote($data)."' WHERE gal_id = $item[gal_id]";
+	$db->Execute($sql);
+}
+$db->Commit();
 

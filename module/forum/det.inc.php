@@ -30,20 +30,13 @@ if(($forum_data['forum_closed'] == FORUM_OPEN) && ($action == 'add_comment') && 
 	if($c_id = include('module/comment/add.inc.php'))
 	{
 		$resDb->Commit();
+		# TODO: /resroute/
 		header("Location: $sys_http_root/forum/$forum_id-".rawurlencode(urlize($forum_data["forum_name"]))."#comment$c_id");
 		return;
 	}
 }
 
-$params = array(
-	'res_id'=>$forum_data['res_id'],
-	);
-$params['order'] =
-	isset($_SESSION['login']['l_forumsort_msg']) &&
-	($_SESSION['login']['l_forumsort_msg'] == FORUM_SORT_DESC)
-	? "c_entered DESC"
-	: "c_entered";
-
+# Attendees
 if(user_loged() && ($forum_data['type_id'] == Res::TYPE_EVENT))
 {
 	$template->enable('BLOCK_attend');
@@ -87,6 +80,16 @@ if(user_loged() && ($forum_data['type_id'] == Res::TYPE_EVENT))
 		$template->enable('BLOCK_attend_'.($attended ? 'off' : 'on'));
 	}
 }
+
+# Comments
+$params = array(
+	'res_id'=>$forum_data['res_id'],
+	);
+$params['order'] =
+	isset($_SESSION['login']['l_forumsort_msg']) &&
+	($_SESSION['login']['l_forumsort_msg'] == FORUM_SORT_DESC)
+	? "c_entered DESC"
+	: "c_entered";
 
 $RC = new ResComment();
 $comments = $RC->Get($params);

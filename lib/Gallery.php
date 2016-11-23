@@ -5,6 +5,9 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
+require_once('lib/Res.php');
+require_once('lib/Table.php');
+
 define('GALLERY_ACTIVE', 'Y');
 define('GALLERY_INACTIVE', 'N');
 define('GALLERY_VISIBLE', 'Y');
@@ -13,113 +16,72 @@ define('GALLERY_ALL', false);
 define('GALLERY_VALIDATE', true);
 define('GALLERY_DONTVALIDATE', false);
 
-define('GALLERY_DATA_VISIBLE', 'Y');
-define('GALLERY_DATA_INVISIBLE', 'N');
-define('GALLERY_DATA_ALL', false);
-
-class Gallery
+class Gallery extends Res
 {
+	protected $table_id = Table::GALLERY;
+
 	var $error_msg;
-	var $load_images = false;
 
-	function load_data($gd_id, $gd_galid = 0, $gd_visible = GALLERY_DATA_VISIBLE,
-		$gal_active = GALLERY_ACTIVE)
-	{
-		global $db, $ip;
-
-		$gd_id = (integer)$gd_id;
-		$gd_galid = (integer)$gd_galid;
-
-		$sql_add = 'gd.gd_galid = g.gal_id AND ';
-		$sql = 'SELECT gd.gd_id, gd.gd_galid, gd.gd_descr, gd.gd_entered';
-		if($this->load_images)
-			$sql .= ', gd.gd_data, gd.gd_thumb';
-		$sql .= ' FROM gallery_data_old gd, gallery_old g';
-
-
-		if($gd_id)
-			$sql_add .= "gd.gd_id = $gd_id AND ";
-
-		if($gd_galid)
-			$sql_add .= "gd.gd_galid = $gd_galid AND ";
-
-		if($gal_active)
-			$sql_add .= "g.gal_active = '$gal_active' AND ";
-
-		if($gd_visible)
-			$sql_add .= "gd.gd_visible = '$gd_visible' AND ";
-
-		$sql_add = substr($sql_add, 0, -4);
-
-		if($sql_add)
-			$sql .= ' WHERE '.$sql_add;
-
-		$sql .= ' ORDER BY gd_filename';
-
-		if($gd_id) {
-			return $db->ExecuteSingle($sql);
-		} else
-			return $db->Execute($sql);
-	} // load_data
-
-	function get_next_data($gal_id, $gd_id)
+	function __construct()
 	{
 		global $db;
 
-		$gal_id = (integer)$gal_id;
-		$gd_id = (integer)$gd_id;
+		parent::__construct();
 
-		$sql = "SELECT gd_id FROM gallery_data_old WHERE gd_visible = 'Y' AND gd_galid = $gal_id AND gd_id > $gd_id LIMIT 0,1";
-		$data = $db->ExecuteSingle($sql);
+		$this->SetDb($db);
+	} // __construct
 
-		return isset($data['gd_id']) ? $data['gd_id'] : 0;
-	} // get_next_data
-
+	/*
 	function load($gal_id = 0, $gal_active = GALLERY_ACTIVE,
 		$gal_visible = GALLERY_ALL)
+	{*/
+	function load($params = array())
 	{
-		global $db, $ip;
+		if(!is_array($params))
+			$params = array('gal_id'=>$params);
 
-		$gal_id = (integer)$gal_id;
+		$sql_add = array();
 
-		$sql_add = '';
-		$sql = 'SELECT * FROM gallery_old';
-		if($gal_id)
-			$sql_add .= "gal_id = $gal_id AND ";
+		if(isset($params['gal_id']))
+			$sql_add[] = sprintf("gal_id = %d", $params['gal_id']);
 
-		if($gal_active)
-			$sql_add .= "gal_active = '$gal_active' AND ";
+		if(isset($params['res_id']))
+			$sql_add[] = sprintf("res_id = %d", $params['res_id']);
 
-		if($gal_visible)
-			$sql_add .= "gal_visible = '$gal_visible' AND ";
+		if(isset($params['gal_active']))
+		{
+			if($params['gal_active'])
+				$sql_add[] = sprintf("gal_active = '%s'", $params['gal_active']);
+		} else {
+			$sql_add[] = sprintf("gal_active = '%s'", GALLERY_ACTIVE);
+		}
 
-		$sql_add = substr($sql_add, 0, -4);
-
+		$sql = 'SELECT * FROM gallery g';
+		$sql .= ' JOIN res r ON r.res_id = g.res_id';
 		$sql .= ' LEFT JOIN gallery_group_old ON gg_id = gal_ggid';
+
 		if($sql_add)
-			$sql .= ' WHERE '.$sql_add;
+			$sql .= " WHERE ".join(" AND ", $sql_add);
 
-		$sql .= ' ORDER BY gal_entered DESC, gg_date DESC';
+		$sql .= (empty($params['order']) ? " ORDER BY gal_entered DESC, gg_date DESC " : " ORDER BY $params[order] ");
 
-		if($gal_id) {
-			return $db->ExecuteSingle($sql);
-		} else
-			return $db->Execute($sql);
+		if(isset($params['limit']))
+			$sql .= " LIMIT $params[limit]";
+
+		return (isset($params['gal_id']) || isset($params['res_id']) ? $this->db->ExecuteSingle($sql) : $this->db->Execute($sql));
 	} // load
 
 	function insert(&$data, $validate = GALLERY_VALIDATE)
 	{
-		global $db;
-
 		if($validate)
 			$this->validate($data);
 
-		$date = $db->now();
+		$date = $this->db->now();
 		if($data['gal_entered'])
 			$date = "'$data[gal_entered]'";
 
 		$sql = "
-		INSERT INTO gallery_old (
+		INSERT INTO gallery (
 			gal_name, gal_active, gal_visible,
 			gal_data, gal_entered, gal_ggid
 		) VALUES (
@@ -127,7 +89,7 @@ class Gallery
 			'$data[gal_data]',  $date, $data[gal_ggid]
 		)";
 
-		if($db->Execute($sql))
+		if($this->db->Execute($sql))
 			return last_insert_id();
 		else
 			return false;
@@ -135,8 +97,6 @@ class Gallery
 
 	function update($gal_id, &$data, $validate = GALLERY_VALIDATE)
 	{
-		global $db;
-
 		$gal_id = (integer)$gal_id;
 
 		if(!$gal_id) {
@@ -157,11 +117,11 @@ class Gallery
 		$sql .= "gal_ggid = $data[gal_ggid], ";
 		$sql = substr($sql, 0, -2);
 		$sql .= ' WHERE gal_id = '.$gal_id;
-		$db->Execute($sql);
+		$this->db->Execute($sql);
 		if(isset($data['gd_descr']) && is_array($data['gd_descr'])) {
 			foreach($data['gd_descr'] as $key=>$descr) {
-				$sql = "UPDATE gallery_data_old SET gd_descr='$descr' WHERE gd_id = $key";
-				$db->Execute($sql);
+				$sql = "UPDATE gallery_data SET gd_descr='$descr' WHERE gd_id = $key";
+				$this->db->Execute($sql);
 			}
 		}
 
@@ -192,8 +152,6 @@ class Gallery
 
 	function del($gal_id)
 	{
-		global $db;
-
 		$gal_id = (integer)$gal_id;
 
 		if(!$gal_id)
@@ -201,51 +159,43 @@ class Gallery
 
 		$sql = 'DELETE FROM gallery WHERE gal_id = '.$gal_id;
 
-		return $db->Execute($sql);
+		return $this->db->Execute($sql);
 	} // del
 
 	function activate($gal_id)
 	{
-		global $db;
-
 		$gal_id = (integer)$gal_id;
 
 		$sql = 'UPDATE gallery SET gal_active = "'.GALLERY_ACTIVE.'" WHERE gal_id = '.$gal_id;
 
-		return $db->Execute($sql);
+		return $this->db->Execute($sql);
 	} // activate
 
 	function deactivate($gal_id)
 	{
-		global $db;
-
 		$gal_id = (integer)$gal_id;
 
 		$sql = 'UPDATE gallery SET gal_active = "'.GALLERY_INACTIVE.'" WHERE gal_id = '.$gal_id;
 
-		return $db->Execute($sql);
+		return $this->db->Execute($sql);
 	} // deactivate
 
 	function show($gal_id)
 	{
-		global $db;
-
 		$gal_id = (integer)$gal_id;
 
 		$sql = 'UPDATE gallery SET gal_visible = "'.GALLERY_VISIBLE.'" WHERE gal_id = '.$gal_id;
 
-		return $db->Execute($sql);
+		return $this->db->Execute($sql);
 	} // show
 
 	function hide($gal_id)
 	{
-		global $db;
-
 		$gal_id = (integer)$gal_id;
 
 		$sql = 'UPDATE gallery SET gal_visible = "'.GALLERY_INVSIBLE.'" WHERE gal_id = '.$gal_id;
 
-		return $db->Execute($sql);
+		return $this->db->Execute($sql);
 	} // hide
 
 	function process_action(&$data, $action)

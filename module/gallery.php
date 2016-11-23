@@ -5,34 +5,40 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
+require_once('lib/ResComment.php');
 require_once('lib/Gallery.php');
+require_once('lib/GalleryData.php');
 require_once('lib/MainModule.php');
 
 $CACHE_ENABLE = true;
+$gal_id = array_shift($sys_parameters);
+$gd_id = (int)array_shift($sys_parameters);
+$hl = rawurldecode(get("hl"));
+$action = post('action');
 
 function gallery_error($msg, &$template) {
 	$template->enable('BLOCK_gallery_error');
 	$template->set_var('error_msg', $msg);
 }
 
-# thumbs per row
-$tpr = 5;
-$gal_id = array_shift($sys_parameters);
-$gd_id = (int)array_shift($sys_parameters);
-
+$GD = new GalleryData;
 $gallery = new Gallery;
 
-if(($gal_id == 'thumb' || $gal_id == 'image') && $gd_id) {
+# thumbs per row
+$tpr = 5;
+
+if(($gal_id == 'thumb' || $gal_id == 'image') && $gd_id)
+{
 	$hash = cache_hash($gd_id.$gal_id.".jpg");
-	if($CACHE_ENABLE && cache_exists($hash)) {
+	if($CACHE_ENABLE && cache_exists($hash)){
 		$jpeg = cache_read($hash);
 	} else {
-		$gallery->load_images = true;
-		$data = $gallery->load_data($gd_id);
-		if($gal_id == 'image')
-			$jpeg = $data['gd_data'];
-		else
-			$jpeg = $data['gd_thumb'];
+		$data = $GD->load(array(
+			'gd_id'=>$gd_id,
+			'load_images'=>true,
+			));
+
+		$jpeg = $gal_id == 'image' ? $data['gd_data'] : $data['gd_thumb'];
 		cache_save($hash, $jpeg);
 	}
 
@@ -49,17 +55,16 @@ if(!user_loged())
 {
 	header($_SERVER["SERVER_PROTOCOL"]." 403 Forbidden");
 	gallery_error("TrueMetal!", $template);
-} else {
-if($gal_id)
-{
-	# ja skataas bildi, nocheko vai attieciigaa galerija ir pieejama
-	if($gal_id == 'view' && $gd_id) {
-		$data = $gallery->load_data($gd_id);
-		if(!isset($data['gd_galid'])) {
+} elseif($gal_id) {
+# ja skataas bildi, nocheko vai attieciigaa galerija ir pieejama
+	if($gal_id == 'view' && $gd_id)
+	{
+		$galdata = $GD->load($gd_id);
+		if(!isset($galdata['gal_id'])) {
 			header("Location: $module_root/");
 			exit;
 		}
-		$gal = $gallery->load($data['gd_galid']);
+		$gal = $gallery->load($galdata['gal_id']);
 	} else {
 		$gal = $gallery->load($gal_id);
 	}
@@ -78,29 +83,71 @@ if($gal_id)
 	$template->set_var('gal_id', $gal['gal_id']);
 	$template->set_title('Galerija '.$gal_name);
 
-	if($gal_id == 'view') {
-		//$data = $gallery->load_data($gd_id);
+	if($gal['gal_ggid']){
+		$template->set_var('gal_jump_id', "gg_".$gal['gal_ggid']);
+	} else {
+		$template->set_var('gal_jump_id', "gal_".$gal['gal_id']);
+	}
+
+	if($gal_id == 'view')
+	{
+		$gal_id = $gal['gal_id'];
+		# Komenti
+		//$_SESSION['gallery']['viewed'][$gal_id] = $forum_data['forum_comment_count'];
+
+		if(user_loged() && ($action == 'add_comment'))
+		{
+			$res_id = $galdata['res_id'];
+			$data = post('data');
+			$resDb = $db;
+			if($c_id = include('module/comment/add.inc.php'))
+			{
+				$resDb->Commit();
+				header("Location: $sys_http_root/resroute/$res_id/#comment$c_id");
+				return;
+			}
+		}
+
+		$template->set_file('FILE_gallery_comments', 'comments.tpl');
+		$template->copy_block('BLOCK_gallery_comments', 'FILE_gallery_comments');
+
+		$RC = new ResComment();
+		$params = array(
+			'res_id'=>$galdata['res_id'],
+			);
+		$params['order'] =
+			isset($_SESSION['login']['l_forumsort_msg']) &&
+			($_SESSION['login']['l_forumsort_msg'] == FORUM_SORT_DESC)
+			? "c_entered DESC"
+			: "c_entered";
+		$comments = $RC->Get($params);
+		include('module/comment/list.inc.php');
+
 		# ja skataas pa vienai
 		$template->enable('BLOCK_image');
 
 		$hash = cache_hash($gd_id."image.jpg");
-		if(cache_exists($hash)){
+		if($CACHE_ENABLE && cache_exists($hash)){
 			$template->set_var('image_path', cache_http_path($hash), 'BLOCK_image');
 		} else {
 			$template->set_var('image_path', "$module_root/image/$gd_id/", 'BLOCK_image');
 		}
 
-		# nechekojam, vai ir veel bildes
-		$next_id = $gallery->get_next_data($gal['gal_id'], $gd_id);
-		if($next_id) {
-			$template->set_var('gd_nextid', $next_id);
-			$template->enable('BLOCK_image_viewnext');
+		$galdata['res_votes'] = (int)$galdata['res_votes'];
+		if($galdata['res_votes'] > 0)
+		{
+			$template->set_var('comment_vote_class', 'plus', 'BLOCK_image');
+			$galdata['res_votes'] = '+'.$galdata['res_votes'];
+		} elseif($galdata['res_votes'] < 0) {
+			$template->set_var('comment_vote_class', 'minus', 'BLOCK_image');
 		} else {
-			$template->enable('BLOCK_image_viewsingle');
+			$template->set_var('comment_vote_class', '', 'BLOCK_image');
 		}
 
-		$template->set_var('gd_descr', $data['gd_descr']);
-		$template->set_var('gd_id', $gd_id);
+		# nechekojam, vai ir veel bildes
+		$next_id = $GD->get_next_data($gal['gal_id'], $gd_id);
+		$template->set_var('gd_nextid', $next_id ? $next_id : $gd_id, 'BLOCK_image');
+		$template->set_array($galdata, 'BLOCK_image');
 	} else {
 		$template->enable('BLOCK_thumb_list');
 		$gal_cache = "templates/gallery/$gal_id.html";
@@ -109,7 +156,7 @@ if($gal_id)
 			$template->set_block_string('BLOCK_thumb', $data);
 		} else {
 			# ielasam thumbus
-			$data = $gallery->load_data(0, $gal_id);
+			$data = $GD->load(array('gal_id'=>$gal_id));
 			$thumb_count = count($data);
 			$c = 0;
 			foreach($data as $thumb)
@@ -126,7 +173,7 @@ if($gal_id)
 				$template->set_var('gd_id', $thumb['gd_id'], 'BLOCK_thumb');
 
 				$hash = cache_hash($thumb['gd_id']."thumb.jpg");
-				if(cache_exists($hash)){
+				if($CACHE_ENABLE && cache_exists($hash)){
 					$template->set_var('thumb_path', cache_http_path($hash), 'BLOCK_thumb');
 				} else {
 					$template->set_var('thumb_path', "$module_root/thumb/$thumb[gd_id]/", 'BLOCK_thumb');
@@ -150,9 +197,8 @@ if($gal_id)
 		$template->enable('BLOCK_gallery_list');
 		$data = join('', file($gal_cache));
 		$template->set_block_string('BLOCK_gallery_list', $data);
-	} elseif($data = $gallery->load(0, GALLERY_ACTIVE, GALLERY_VISIBLE)) {
+	} elseif($data = $gallery->load()) {
 		$template->enable('BLOCK_gallery_list');
-		$old_ggid = -1;
 
 		$data2 = array();
 		foreach($data as $gal) {
@@ -160,14 +206,15 @@ if($gal_id)
 			$data2[$k][] = $gal;
 		}
 
-		$old_ggid = -1;
 		foreach($data2 as $gal_ggid=>$data)
 		{
 			$template->set_array($data[0], 'BLOCK_gallery_list');
 			if($data[0]['gal_ggid']){
 				$template->set_var('gg_name', $data[0]['gg_name'], 'BLOCK_gallery_group');
+				$template->set_var('gal_jump_id', "gg_".$data[0]['gg_id'], 'BLOCK_gallery_group');
 			} else {
 				$template->set_var('gg_name', $data[0]['gal_name'], 'BLOCK_gallery_group');
+				$template->set_var('gal_jump_id', "gal_".$data[0]['gal_id'], 'BLOCK_gallery_group');
 			}
 
 			foreach($data as $gal){
@@ -184,7 +231,6 @@ if($gal_id)
 	} else {
 		gallery_error($gallery->error_msg, $template);
 	}
-}
 }
 
 $template->set_right();

@@ -855,6 +855,13 @@ function printr(&$data)
 	}
 } // printr
 
+function dier($data = '')
+{
+	if($GLOBALS['i_am_admin']){
+		die($data);
+	}
+} // dier
+
 function printa($data)
 {
 	if($GLOBALS['i_am_admin'])
