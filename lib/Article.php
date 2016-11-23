@@ -84,7 +84,7 @@ SELECT
 FROM
 	`article` a
 JOIN `modules` m ON (a.art_modid = m.mod_id)
-LEFT JOIN `res` r ON r.`res_id` = a.`res_id`
+JOIN `res` r ON r.`res_id` = a.`res_id`
 ";
 
 		if($sql_add)

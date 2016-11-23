@@ -59,7 +59,7 @@ SELECT
 	comment.*,
 	r.res_votes
 FROM comment
-LEFT JOIN res r ON r.res_id = comment.res_id
+JOIN res r ON r.res_id = comment.res_id
 ";
 
 		$sql_add = array();

@@ -38,13 +38,13 @@ class GalleryData extends Res
 
 		$sql_add = array();
 
-		$sql = 'SELECT gd_id, gd.res_id, gd.gal_id, gd_descr, gd_entered, r.res_votes';
+		$sql = 'SELECT gd_id, gd.res_id, gd.gal_id, gd_descr, gd_entered, r.res_votes, r.res_comment_count';
 		if(!empty($params['load_images']))
 			$sql .= ', gd_data, gd_thumb';
 
 		$sql .= ' FROM gallery_data gd';
-		$sql .= ' LEFT JOIN gallery g ON g.gal_id = gd.gal_id';
-		$sql .= ' LEFT JOIN res r ON r.res_id = gd.res_id';
+		$sql .= ' JOIN gallery g ON g.gal_id = gd.gal_id';
+		$sql .= ' JOIN res r ON r.res_id = gd.res_id';
 
 		if(isset($params['gd_id']))
 			$sql_add[] = sprintf("gd_id = %d", $params['gd_id']);

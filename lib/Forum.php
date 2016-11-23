@@ -103,7 +103,7 @@ class Forum extends Res
 	(SELECT MAX(forum_entered) FROM forum f3 WHERE f3.forum_forumid = f.forum_id) forum_lastthemedate
 FROM
 	forum f
-LEFT JOIN `res` r ON r.`res_id` = f.`res_id`
+	JOIN `res` r ON r.`res_id` = f.`res_id`
 ";
 
 		if($sql_add)

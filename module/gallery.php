@@ -91,9 +91,8 @@ if(!user_loged())
 
 	if($gal_id == 'view')
 	{
-		$gal_id = $gal['gal_id'];
 		# Komenti
-		//$_SESSION['gallery']['viewed'][$gal_id] = $forum_data['forum_comment_count'];
+		$_SESSION['gallery']['viewed'][$gd_id] = $galdata['res_comment_count'];
 
 		if(user_loged() && ($action == 'add_comment'))
 		{
@@ -112,9 +111,8 @@ if(!user_loged())
 		$template->copy_block('BLOCK_gallery_comments', 'FILE_gallery_comments');
 
 		$RC = new ResComment();
-		$params = array(
-			'res_id'=>$galdata['res_id'],
-			);
+		$params = array('res_id'=>$galdata['res_id']);
+		# TODO: izvākt un ielikt kaut kur zem list.inc.php
 		$params['order'] =
 			isset($_SESSION['login']['l_forumsort_msg']) &&
 			($_SESSION['login']['l_forumsort_msg'] == FORUM_SORT_DESC)
