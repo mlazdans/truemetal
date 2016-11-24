@@ -1,8 +1,8 @@
-<!-- BEGIN BLOCK_gallery_error disabled -->
+<!-- BEGIN BLOCK_not_loged disabled -->
 <div class="Info">
-	{error_msg}
+	TrueMetal!
 </div>
-<!-- END BLOCK_gallery_error -->
+<!-- END BLOCK_not_loged -->
 
 <!-- BEGIN BLOCK_nogalleries disabled -->
 <div class="Info">

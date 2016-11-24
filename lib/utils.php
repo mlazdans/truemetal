@@ -8,9 +8,6 @@
 require_once('Mail.php');
 require_once('Mail/mime.php');
 
-define('REMOVE_TABLE', 1);
-define('REMOVE_FONT', 2);
-
 define('M', array(
 	'janvārī', 'februārī', 'martā', 'aprīlī', 'maijā', 'jūnijā', 'jūlijā', 'augustā', 'septembrī',
 	'oktobrī', 'novembrī', 'decembrī'
@@ -45,81 +42,6 @@ function my_strip_tags(&$text)
 {
 	$text = htmlspecialchars($text, ENT_QUOTES);
 } // my_strip_tags
-
-function remove_shit(&$data, $filter = 0)
-{
-	$filter = (integer)$filter;
-	$patt = array();
-	$repl = array();
-
-	if($filter & REMOVE_TABLE) {
-		$patt = array_merge($patt,
-			array(
-				'/<table([^<]*)>/imsU',
-				'/<\/table>/imsU',
-				'/<tbody([^<])*>/imsU',
-				'/<\/tbody>/imsU',
-				'/<tr([^<])*>/imsU',
-				'/<\/tr>/imsU',
-				'/<td([^<])*>/imsU',
-				'/<\/td>/imsU'
-			)
-		);
-		$repl = array_merge($repl, array_fill(0, 8, ''));
-	}
-
-	$patt[] = '/<p([^<]*)>/imsU';
-	$repl[] = '<p>';
-
-	if($filter & REMOVE_FONT) {
-		$patt = array_merge($patt,
-			array(
-				'/<font([^<]*)>/imsU',
-				'/<\/font>/imsU'
-			)
-		);
-		$repl = array_merge($repl, array_fill(0, 2, ''));
-	}
-
-	$patt = array_merge($patt,
-		array(
-			'/<span([^<]*)>/imsU',
-			'/<\/span>/imsU',
-			'/<strong([^<]*)>/imsU',
-			'/<\/strong>/imsU',
-			'/<o:p>/imsU',
-			'/<\/o:p>/imsU',
-			'/<p>(&nbsp;)*<\/P>/imsU',
-			'/<\?xml([^<]*)\/>/imsU',
-			'/<.:([^<]*)>/imsU',
-			'/<\/.:([^<]*)>/imsU',
-			'/(\t)+/',
-			'/(\t\n)/',
-			'/(\n)+/',
-			'/(\r\n)+/'
-		)
-	);
-	$repl = array_merge($repl,
-		array(
-			'',
-			'',
-			'',
-			'',
-			'',
-			'',
-			'',
-			'',
-			'',
-			'',
-			'',
-			'',
-			"\r\n",
-			"\r\n"
-		)
-	);
-
-	$data = preg_replace($patt, $repl, $data);
-} // remove_shit
 
 function get_month($i){
 	return M[$i];
