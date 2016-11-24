@@ -11,6 +11,8 @@ require_once('include/console.php');
 require_once('include/dbconnect.php');
 require_once('lib/utils.php');
 
+die("UZMANĪBU: forumā ir koncerti ar custom formatējumu. Palaižot šo - sačakarēs!");
+
 $db->AutoCommit(false);
 
 # COMMENTS

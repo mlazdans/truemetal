@@ -5,9 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-$GD = new GalleryData;
-$gallery = new Gallery;
-
 if(!user_loged())
 {
 	header($_SERVER["SERVER_PROTOCOL"]." 403 Forbidden");

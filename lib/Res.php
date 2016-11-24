@@ -156,23 +156,23 @@ class Res
 		switch($resource['table_id'])
 		{
 			case Table::ARTICLE:
-				$location = "/$resource[module_id]/$resource[art_id]-".urlize($resource['art_name']).($c_id ? "#comment$c_id" : "");
+				$location = Article::Route($resource, $c_id);;
 				break;
 			case Table::FORUM:
-				$location = "/forum/$resource[forum_id]-".urlize($resource['forum_name']).($c_id ? "#comment$c_id" : "");
+				$location = Forum::Route($resource, $c_id);
 				break;
 			case Table::COMMENT:
 				$RC = new ResComment;
 				$C = $RC->get(array(
 					'c_id'=>$resource['c_id'],
 					));
-				$location = Res::Route($C['parent_res_id'], $c_id);
+				$location = Res::Route($C['parent_res_id'], $resource['c_id']);
 				break;
 			case Table::GALLERY:
-				$location = "/gallery/$resource[gal_id]/";
+				$location = Gallery::Route($resource, $c_id);
 				break;
 			case Table::GALLERY_DATA:
-				$location = "/gallery/view/$resource[gd_id]/";
+				$location = GalleryData::Route($resource, $c_id);
 				break;
 		}
 

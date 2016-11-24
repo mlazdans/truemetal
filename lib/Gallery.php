@@ -242,5 +242,9 @@ class Gallery extends Res
 			$data['gal_ggid'] = 0;
 	} // validate
 
+	public static function Route($resource, $c_id = 0)
+	{
+		return "/gallery/$resource[gal_id]/".($c_id ? "#comment$c_id" : "");
+	} // Route
 } // Gallery
 

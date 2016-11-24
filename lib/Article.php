@@ -301,5 +301,9 @@ INSERT INTO article (
 		return $data['art_count'];
 	} // get_total
 
+	public static function Route($resource, $c_id = 0)
+	{
+		return "/$resource[module_id]/$resource[art_id]-".urlize($resource['art_name']).($c_id ? "#comment$c_id" : "");
+	} // Route
 } // class::Article
 

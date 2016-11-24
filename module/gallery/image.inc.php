@@ -18,7 +18,7 @@ if($CACHE_ENABLE && cache_exists($hash)){
 
 	$jpeg = $gal_id == 'image' ? $data['gd_data'] : $data['gd_thumb'];
 
-	if($CACHE_ENABLE)
+	if($CACHE_ENABLE && $jpeg)
 		cache_save($hash, $jpeg);
 }
 

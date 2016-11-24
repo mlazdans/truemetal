@@ -504,5 +504,9 @@ INSERT INTO forum (
 		$_SESSION['forums']['viewed'][$item['forum_id']] = $item['forum_themecount'];
 	} // markThemeCount
 
+	public static function Route($resource, $c_id = 0)
+	{
+		return "/forum/$resource[forum_id]-".urlize($resource['forum_name']).($c_id ? "#comment$c_id" : "");
+	} // Route
 } // Class::Forum
 

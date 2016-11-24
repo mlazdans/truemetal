@@ -29,8 +29,7 @@ if(($forum_data['forum_closed'] == Forum::OPEN) && ($action == 'add_comment') &&
 	if($c_id = include('module/comment/add.inc.php'))
 	{
 		$resDb->Commit();
-		# TODO: /resroute/
-		header("Location: $sys_http_root/forum/$forum_id-".rawurlencode(urlize($forum_data["forum_name"]))."#comment$c_id");
+		header("Location: ".Forum::Route($forum_data, $c_id));
 		return;
 	}
 }

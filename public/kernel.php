@@ -5,6 +5,8 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
+# TODO: mainot galerijām/foruma/commention utt login_id, trigerī nomainās arī res tabulā
+
 # DEFAULTS - var overraidot configā
 $sys_start_time        = microtime(true);
 $sys_root              = realpath(dirname(__FILE__).'/../');
@@ -182,10 +184,9 @@ foreach($clear_session as $section){
 		unset($_SESSION[$section]);
 	}
 }
-//printr($_SESSION);
 
-//ob_start();
 # iesleedzam vaidziigo moduli
+//ob_start();
 if(file_exists("$sys_root/module/$sys_module.php")) {
 	include("$sys_root/module/$sys_module.php");
 } else {

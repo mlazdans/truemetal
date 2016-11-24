@@ -19,6 +19,9 @@ $action = post('action');
 # thumbs per row
 $tpr = 5;
 
+$GD = new GalleryData;
+$gallery = new Gallery;
+
 if(($gal_id == 'thumb' || $gal_id == 'image') && $gd_id && user_loged())
 {
 	include('gallery/image.inc.php');
@@ -30,6 +33,7 @@ if(($gal_id == 'thumb' || $gal_id == 'image') && $gd_id && user_loged())
 	include('gallery/root.inc.php');
 
 	$template->set_right();
+	$template->set_events();
 	$template->set_recent_forum();
 	$template->set_login();
 	$template->set_online();

@@ -99,5 +99,10 @@ class GalleryData extends Res
 		return $this->db->Execute($sql);
 	} // del
 
+	public static function Route($resource, $c_id = 0)
+	{
+		return "/gallery/view/$resource[gd_id]/".($c_id ? "#comment$c_id" : "");
+	} // Route
+
 } // GalleryData
 

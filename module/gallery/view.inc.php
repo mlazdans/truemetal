@@ -16,7 +16,7 @@ if(user_loged() && ($action == 'add_comment'))
 	if($c_id = include('module/comment/add.inc.php'))
 	{
 		$resDb->Commit();
-		header("Location: $sys_http_root/resroute/$res_id/#comment$c_id");
+		header("Location: ".GalleryData::Route($galdata, $c_id));
 		return;
 	}
 }
