@@ -20,15 +20,11 @@ class MainModule extends Template
 	var $title;
 
 	function __construct($template_root, $module_name = '',
-		$str_main_file = 'index.tpl', $str_undefined = 'remove')
+		$str_main_file = 'index.tpl')
 	{
-		//parent::Template($template_root, $str_undefined);
-		parent::__construct($template_root, $str_undefined);
+		parent::__construct($template_root);
 
 		$this->set_module_name($module_name ? $module_name : get_class($this));
-
-		//$this->set_root($template_root);
-		//$this->set_undefined($str_undefined);
 
 		/* ielaadeejam failus */
 		/* galveno failu un vidus failus, kuram jaasaucas <module_name>.tpl */
@@ -43,12 +39,12 @@ class MainModule extends Template
 	{
 		global $sys_modules, $sys_encoding;
 
-		$this->set_global('encoding', $GLOBALS['sys_encoding'], 'FILE_index', true);
-		$this->set_global('http_root', $GLOBALS['sys_http_root']);
-		$this->set_global('module_root', $GLOBALS['sys_http_root'].'/'.$this->module_name);
-		$this->set_global('script_version', $GLOBALS['sys_script_version']);
-		$this->set_global('disable_youtube', (empty($_SESSION['login']['l_disable_youtube']) ? 0 : 1));
-		$this->set_global('i_am_admin', $GLOBALS['i_am_admin']);
+		$this->set_var('encoding', $GLOBALS['sys_encoding']);
+		$this->set_var('http_root', $GLOBALS['sys_http_root']);
+		$this->set_var('module_root', $GLOBALS['sys_http_root'].'/'.$this->module_name);
+		$this->set_var('script_version', $GLOBALS['sys_script_version']);
+		$this->set_var('disable_youtube', (empty($_SESSION['login']['l_disable_youtube']) ? 0 : 1));
+		$this->set_var('i_am_admin', $GLOBALS['i_am_admin']);
 		$this->set_descr("Metāls Latvijā");
 
 		$this->set_banner_top();
@@ -59,7 +55,7 @@ class MainModule extends Template
 	function set_title($str_title)
 	{
 		$this->title = $str_title;
-		$this->set_global('title', addslashes($this->title), 'FILE_index', true);
+		$this->set_var('title', addslashes($this->title), 'FILE_index', true);
 	} // set_title
 
 	function get_title()
@@ -127,7 +123,7 @@ $descr.
 		}
 
 		if($meta_descr = parse_form_data(trim($meta_descr)))
-			$this->set_global("meta_descr", $meta_descr);
+			$this->set_var("meta_descr", $meta_descr);
 	} // set_descr
 
 	function set_module_name($module_name)
@@ -139,11 +135,10 @@ $descr.
 	{
 		global $sys_http_root, $sys_use_cdn, $sys_cdn_func, $sys_domain, $i_am_admin, $sys_start_time;
 
-		//print $this->parse_file('FILE_index');
 		if($sys_use_cdn && function_exists($sys_cdn_func))
 		{
 			$dom = new DOMDocument('1.0', 'utf-8');
-			@$dom->loadHTML($this->parse_file('FILE_index'));
+			@$dom->loadHTML($this->parse_block('FILE_index'));
 			$xdom = simplexml_import_dom($dom);
 
 			# Images
@@ -187,11 +182,8 @@ $descr.
 				$finished = '<!-- Finished: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec -->';
 				$this->set_var('tmpl_finished', $finished);
 			}
-			print $this->parse_file('FILE_index');
+			print $this->parse_block('FILE_index');
 		}
-		//$content = $this->parse_file('FILE_index');
-		//$variable_pattern = '[a-zA-z0-9_^}]{1,}';
-		//print preg_replace('/{'.$variable_pattern.'}/U', '', $content);
 	} // out
 
 	function set_modules(&$modules)

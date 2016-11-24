@@ -16,13 +16,11 @@ class AdminModule extends Template
 	var $title;
 
 	function __construct($template_root, $module_name = '',
-		$str_main_file = 'index.tpl', $str_undefined = 'remove')
+		$str_main_file = 'index.tpl')
 	{
-
 		$this->set_module_name($module_name ? $module_name : get_class($this));
 
 		$this->set_root($template_root);
-		$this->set_undefined($str_undefined);
 
 		/* ielaadeejam failus */
 		$this->set_file("FILE_index", $str_main_file);
@@ -38,15 +36,15 @@ class AdminModule extends Template
 	{
 		global $admin_modules, $_USER, $sys_encoding;
 
-		$this->set_global('encoding', $GLOBALS['sys_encoding']);
-		$this->set_global('upload_root', $GLOBALS['sys_upload_http_root']);
-		$this->set_global('http_root', $GLOBALS['sys_http_root']);
-		$this->set_global('admin_root', $GLOBALS['admin_root']);
-		$this->set_global('module_root', $GLOBALS['module_root']);
-		$this->set_global('year', date('Y'));
-		$this->set_global('script_version', $GLOBALS['sys_script_version']);
+		$this->set_var('encoding', $GLOBALS['sys_encoding']);
+		$this->set_var('upload_root', $GLOBALS['sys_upload_http_root']);
+		$this->set_var('http_root', $GLOBALS['sys_http_root']);
+		$this->set_var('admin_root', $GLOBALS['admin_root']);
+		$this->set_var('module_root', $GLOBALS['module_root']);
+		$this->set_var('year', date('Y'));
+		$this->set_var('script_version', $GLOBALS['sys_script_version']);
 
-		$this->set_global('USER_name', $_USER['user_name']);
+		$this->set_var('USER_name', $_USER['user_name']);
 
 		foreach($admin_modules as $mod=>$val)
 		{
@@ -68,7 +66,7 @@ class AdminModule extends Template
 	function set_title($str_title)
 	{
 		$this->title = $str_title;
-		$this->set_global('title', $this->title);
+		$this->set_var('title', $this->title);
 	} // set_title
 
 	function set_module_name($module_name)
@@ -78,7 +76,7 @@ class AdminModule extends Template
 
 	function out()
 	{
-		print $this->parse_file("FILE_index");
+		print $this->parse_block("FILE_index");
 	} // out
 
 } // AdminModule

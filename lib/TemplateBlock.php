@@ -5,12 +5,8 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-/* =========================================================== */
-/* TemplateBlock
-/* =========================================================== */
-/* aprakstam templates block modeli
-/*
-/* =========================================================== */
+define('TMPL_APPEND', true);
+
 class TemplateBlock
 {
 	var $ID;
@@ -32,38 +28,17 @@ class TemplateBlock
 		'disabled' => false
 	);
 
-	var $debug = true;
-	var $die_on_error = false;
-
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	TemplateBlock (string block_id, string content [, string undefined])
-	/* -----------------------------------------------------------
-	/* konstruktors - uzstaada visko vajadziigu
-	/* ----------------------------------------------------------- */
-	function __construct($ID, $str_content, $str_undefined = 'remove')
+	function __construct($ID, $str_content)
 	{
 		$this->ID = $ID;
 		$this->slash = chr(92).chr(92);
-		$this->set_undefined($str_undefined);
 		$this->content = $str_content;
 		$this->__find_blocks();
 
 		return true;
 	} // __construct
 
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	__find_blocks()
-	/* -----------------------------------------------------------
-	/* samekleejam visus blokus esosajaa blokaa
-	/*
-	/* mega krutaaa regulaaraa izteiksme (regexp)
-	/* $m[1] massiivs - vaidzeetu glabaaties bloku nosaukmiem
-	/* $m[2] massiivs - dazaadi parametri <- veel jaatestee
-	/* $m[3] massiivs - tipa kontents, tas kas pa vidu
-	/* ----------------------------------------------------------- */
-	function __find_blocks()
+	private function __find_blocks()
 	{
 		$patt = '/<!--\s+BEGIN\s+(.*)\s+(.*)-->(.*)<!--\s+END\s+\1\s+-->/smU';
 		preg_match_all($patt, $this->content, $m);
@@ -75,7 +50,7 @@ class TemplateBlock
 			for($c = 0; $c < $int_count; $c++)
 			{
 				$id = $m[1][$c];
-				$this->blocks[$id] = new TemplateBlock($id, $m[3][$c], $this->undefined);
+				$this->blocks[$id] = new TemplateBlock($id, $m[3][$c]);
 				$this->blocks[$id]->block_parent = $this;
 
 				$arr_attributes = explode(' ', strtolower($m[2][$c]));
@@ -87,115 +62,7 @@ class TemplateBlock
 			return false;
 	} // __find_blocks
 
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	halt (string err_msg)
-	/* -----------------------------------------------------------
-	/* apstopee, ja vaig
-	/* ----------------------------------------------------------- */
-	function halt($str_msg)
-	{
-		if($this->debug) {
-			if($this->die_on_error)
-				die($str_msg);
-			else
-				print $str_msg;
-		}
-		return false;
-	} // halt
-
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	parse ([boolean append])
-	/* -----------------------------------------------------------
-	/* apstraadaa bloku un taa apaksblokus, t.i., aizvieto blokus
-	/* ar apaksbloku datiem. saliek mainiigo veertiibas ar
-	/* __parse_vars()
-	/* ----------------------------------------------------------- */
-	function parse($bln_append = false)
-	{
-		# ja bloks sleegts
-		if($this->attributes['disabled'])
-			return;
-
-		/* reset childs */
-		/*
-		if($bln_append) {
-			foreach($this->blocks as $block_id => $object) {
-				$object->reset();
-			}
-		}
-		*/
-
-		# ja jau noparseets
-		if($this->parsed_count && !$bln_append) {
-			return $this->__get_parsed_content();
-		}
-
-		# ja jauna parseeshana
-		$parsed_content = $this->__parse_vars();
-
-		# ja blokaa veel ir bloki
-		foreach($this->blocks as $block_id => $object)
-		{
-			$block_content = $object->parse();
-			$patt = '/\s*<!--\s+BEGIN\s+' . $block_id . '\s+[^<]*-->.*<!--\s+END\s+' . $block_id . '\s+-->\s*/smi';
-			preg_match_all($patt, $parsed_content, $m);
-			foreach($m[0] as $mm) {
-				$parsed_content = str_replace($mm, $block_content, $parsed_content);
-			}
-		}
-
-		if($bln_append) {
-			$this->parsed_content .= $parsed_content;
-		} else {
-			$this->parsed_content = $parsed_content;
-		}
-
-		$this->parsed_count++;
-		$this->last_parsed_content = $parsed_content;
-
-		$cont = $this->__get_parsed_content();
-
-		# reset childs
-		if($bln_append) {
-			foreach($this->blocks as $block_id => $object) {
-				$object->reset();
-			}
-		}
-
-		return $cont;
-	} // parse
-
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	__get_parsed_content()
-	/* -----------------------------------------------------------
-	/* dabuujam visus parseejumus kaa stringu
-	/* ----------------------------------------------------------- */
-	function __get_parsed_content()
-	{
-		return $this->parsed_content;
-	} // __get_parsed_content
-
-	function find_var($k, $d = 0)
-	{
-		if(isset($this->vars[$k])) {
-			return $this->vars[$k];
-		} else if($this->block_parent) {
-			return $this->block_parent->find_var($k, $d + 1);
-		}
-
-		return '';
-	} // find_var
-
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	__parse_vars()
-	/* -----------------------------------------------------------
-	/*  saliek mainiigo veertiibas
-	/* ----------------------------------------------------------- */
-	function __parse_vars()
+	private function __parse_vars()
 	{
 		$content = $this->content;
 		$patt = array();
@@ -207,17 +74,6 @@ class TemplateBlock
 			preg_match_all("/{(.*)}/U", $content, $m);
 			$this->block_vars = $m[1];
 		}
-
-		/*
-		foreach($this->block_vars as $k)
-		{
-			if(!isset($vars_cache[$k]))
-				$vars_cache[$k] = $this->find_var($k);
-
-			$patt[] = '/{'.$k.'}/';
-			$repl[] = $vars_cache[$k];
-		}
-		*/
 
 		foreach($this->block_vars as $k)
 		{
@@ -256,131 +112,230 @@ class TemplateBlock
 		return $content;
 	} // __parse_vars
 
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	set_var (string variable_id, mixed value [, boolean parent_only])
-	/* -----------------------------------------------------------
-	/* piesaista blokam mainiigo ar veertiibu
-	/* defaultaa veertiiba nepieskiras apaksblokiem
-	/* ja apaksblokiem vajag pieskirt, tad pieliekam
-	/* $bln_parent_only = true
-	/* ----------------------------------------------------------- */
-	function set_var($str_var_id, $value, $bln_parent_only = false)
+	protected function halt($msg, $e = E_USER_WARNING)
 	{
-		$this->vars[$str_var_id] = $value;
-		return true;
-	} // set_var
+		trigger_error($msg, $e);
+	} // halt
 
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	set_array(array values [, boolean parent_only])
-	/* -----------------------------------------------------------
-	/* uzstaadam masiivu ar datiem kaa veertiibas
-	/* masiivam jaabuut $values['key1'], $values['some_other_key']
-	/* formaa, t.i., indexi stringi.
-	/* parent_only, ja veertiibas nevaig uzstaadiit apaksblokiem
-	/* ----------------------------------------------------------- */
-	function set_array($arr_array, $bln_parent_only = false, $prefix = '')
+	function parse($append = false)
 	{
-		foreach($arr_array as $key => $value) {
-			$this->set_var($key.$prefix, $value, $bln_parent_only);
-		}
-	} // set_array
+		# ja bloks sleegts
+		if($this->attributes['disabled'])
+			return;
 
-	function set_array_prefix($arr_array, $prefix, $ID = '')
-	{
-		return $this->set_array($arr_array, false, $prefix);
-	} // set_array_prefix
-
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	set_global (string variable_id, mixed value)
-	/* -----------------------------------------------------------
-	/* uzstaadam mainiigaa veertiibu globaali, t.i.,
-	/* arii katram apaksblokam
-	/* ----------------------------------------------------------- */
-	function set_global($str_var_id, $value)
-	{
-		if($this->set_var($str_var_id, $value)) {
-			foreach($this->blocks as $ID => $object)
-				$this->blocks[$ID]->set_global($str_var_id, $value);
-
-			return true;
+		# ja jau noparseets
+		if($this->parsed_count && !$append) {
+			return $this->get_parsed_content();
 		}
 
-		return false;
-	} // set_global
+		# ja jauna parseeshana
+		$parsed_content = $this->__parse_vars();
 
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	get_block (string block_id)
-	/* -----------------------------------------------------------
-	/* samekleejam bloku ar nosaukumu ID
-	/* ----------------------------------------------------------- */
-	function &get_block($ID)
-	{
-		# fetch from cache
-		if(isset($this->blocks_cache[$ID]))
-			return $this->blocks_cache[$ID];
-
-		if(isset($this->blocks[$ID]))
+		# ja blokaa veel ir bloki
+		foreach($this->blocks as $block_id => $object)
 		{
-			$this->blocks_cache[$ID] = &$this->blocks[$ID];
-			return $this->blocks[$ID];
-		}
-
-		foreach($this->blocks as $file_id => $object)
-		{
-			if($block =& $this->blocks[$file_id]->get_block($ID))
-			{
-				$this->blocks_cache[$ID] = &$block;
-				return $block;
+			$block_content = $object->parse();
+			$patt = '/\s*<!--\s+BEGIN\s+' . $block_id . '\s+[^<]*-->.*<!--\s+END\s+' . $block_id . '\s+-->\s*/smi';
+			preg_match_all($patt, $parsed_content, $m);
+			foreach($m[0] as $mm) {
+				$parsed_content = str_replace($mm, $block_content, $parsed_content);
 			}
 		}
 
-		$block = false;
-		return $block;
-	} // get_block
-
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	reset (boolean parent_only)
-	/* -----------------------------------------------------------
-	/* uzstaadam visus mainiigos uz neko :)
-	/* ----------------------------------------------------------- */
-	function reset($bln_parent_only = false)
-	{
-		if(empty($this->blocks)) {
-			$this->parsed_content = '';
-			$this->last_parsed_content = '';
-			$this->parsed_count = 0;
+		if($append) {
+			$this->parsed_content .= $parsed_content;
 		} else {
-			$this->parsed_content = '';
-			$this->last_parsed_content = '';
-			$this->parsed_count = 0;
-			foreach($this->blocks as $block_id => $object)
-			{
-				$object->reset($bln_parent_only);
+			$this->parsed_content = $parsed_content;
+		}
+
+		$this->parsed_count++;
+		$this->last_parsed_content = $parsed_content;
+
+		$cont = $this->get_parsed_content();
+
+		# reset childs
+		if($append) {
+			foreach($this->blocks as $block_id => $object) {
+				$object->reset();
+			}
+		}
+
+		return $cont;
+	} // parse
+
+	function get_parsed_content($ID = '')
+	{
+		$block = $this;
+		if($ID && !($block = $this->get_block($ID))){
+			$this->halt('get_parsed_content: block ['.$ID.'] not found!');
+			return false;
+		}
+
+		return $block->parsed_content;
+	} // get_parsed_content
+
+	function find_var($k, $d = 0)
+	{
+		if(isset($this->vars[$k])) {
+			return $this->vars[$k];
+		} else if($this->block_parent) {
+			return $this->block_parent->find_var($k, $d + 1);
+		}
+
+		return '';
+	} // find_var
+
+	function set_var($var_id, $value, $ID = '')
+	{
+		$block = $this;
+		if($ID && !($block = $this->get_block($ID))){
+			$this->halt('set_var: block ['.$ID.'] not found!');
+			return false;
+		}
+
+		$block->vars[$var_id] = $value;
+
+		return false;
+	} // set_var
+
+	function set_array(Array $array, $ID = '')
+	{
+		$block = $this;
+		if($ID && !($block = $this->get_block($ID))){
+			$this->halt('set_array: block ['.$ID.'] not found!');
+			return false;
+		}
+
+		foreach($array as $key => $value) {
+			$block->set_var($key, $value);
+		}
+	} // set_array
+
+	function reset($ID = '')
+	{
+		$block = $this;
+		if($ID && !($block = $this->get_block($ID))){
+			$this->halt('reset: block ['.$ID.'] not found!');
+			return false;
+		}
+
+		$block->parsed_content = '';
+		$block->last_parsed_content = '';
+		$block->parsed_count = 0;
+		if(!empty($block->blocks)){
+			$block->parsed_content = '';
+			$block->last_parsed_content = '';
+			$block->parsed_count = 0;
+			foreach($block->blocks as $block_id=>$object){
+				$object->reset();
 			}
 		}
 
 		return true;
 	} // reset
 
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	block_isset (string block_id)
-	/* -----------------------------------------------------------
-	/* vai bloks ID existee?
-	/* ----------------------------------------------------------- */
+	function enable($ID = '')
+	{
+		return $this->set_attribute('disabled', false, $ID);
+	} // enable
+
+	function disable($ID = '')
+	{
+		return $this->set_attribute('disabled', true, $ID);
+	} // disable
+
+	function set_attribute($attribute, $value, $ID = '')
+	{
+		$block = $this;
+		if($ID && !($block = $this->get_block($ID))){
+			$this->halt('set_attribute: block ['.$ID.'] not found!');
+			return false;
+		}
+
+		if(isset($block->attributes[$attribute]))
+			return $block->attributes[$attribute] = $value;
+
+		return false;
+	} // set_attribute
+
+
+
+
+	function get_block($ID)
+	{
+		# fetch from cache
+		if(isset($this->blocks_cache[$ID]))
+			return $this->blocks_cache[$ID];
+
+		if(isset($this->blocks[$ID])){
+			$this->blocks_cache[$ID] = $this->blocks[$ID];
+			return $this->blocks[$ID];
+		}
+
+		foreach($this->blocks as $block_id => $object){
+			if($block = $this->blocks[$block_id]->get_block($ID)){
+				$this->blocks_cache[$ID] = $block;
+				return $block;
+			}
+		}
+
+		return false;
+	} // get_block
+
+	function copy_block($ID_from, $ID_to)
+	{
+		if(!($block1 = $this->get_block($ID_from))){
+			$this->halt('copy_block: block ['.$ID_from.'] not found!');
+			return false;
+		}
+
+		if(!($block2 = $this->get_block($ID_to))){
+			$this->halt('copy_block: block ['.$ID_to.'] not found!');
+			return false;
+		}
+
+		# tagat noskaidrosim, vai block1 nav zem block2
+		if(($block3 = $block2->get_block($ID_from))){
+			$this->halt('copy_block: cannot copy ['.$ID_to.'] to ['.$ID_from.']. ['.$ID_from.'] is a child of ['.$ID_to.']');
+			return false;
+		}
+
+		# paarkopeejam paareejos parametrus
+		$block1->vars = &$block2->vars;
+		$block1->blocks = $block2->blocks;
+		$block1->parsed_content = $block2->parsed_content;
+		$block1->content = $block2->content;
+
+		# Uzstādam parentu
+		$block2->block_parent = $block1;
+
+		return true;
+	} // copy_block
+
+	function parse_block($ID, $append = false)
+	{
+		if($block = $this->get_block($ID)){
+			return $block->parse($append);
+		} else {
+			$this->halt('parse_block: block ['.$ID.'] not found!');
+			return false;
+		}
+	} // parse_block
+
+	function set_block_string($ID, $content)
+	{
+		if($block = $this->get_block($ID)){
+			$this->halt('set_block_string: block ['.$ID.'] not found!');
+			return false;
+		}
+
+		return $block->content = $content;
+	} // set_block_string
+
 	function block_isset($ID)
 	{
-		if(isset($this->blocks[$ID]))
+		if($block = $this->get_block($ID))
 			return true;
-
-		foreach($this->blocks as $block)
-			if($block->block_isset($ID))
-				return true;
 
 		return false;
 	} // block_isset
@@ -390,61 +345,5 @@ class TemplateBlock
 		return $this->block_isset($ID);
 	} // block_exists
 
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	set_undefined (string undefined)
-	/* -----------------------------------------------------------
-	/* uzstaadam, ko dariit ar nedefineetiem mainiigiem
-	/* ----------------------------------------------------------- */
-	function set_undefined($str_undefined)
-	{
-		$this->undefined = $str_undefined;
-		return true;
-	} // set_undefined
-
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	set_attribute (string attribute, mixed value)
-	/* -----------------------------------------------------------
-	/* uzstaadam atribuutu, iespeejamie atribuuti un to veertiibas
-	/* nosaukums - veertiibas [defaultaa] - apraksts
-	/* disabled - false/true [false] iespeeja izsleegt
-	/* ----------------------------------------------------------- */
-	function set_attribute()
-	{
-		list($str_attribute, $value) = func_get_args();
-
-		if(isset($this->attributes[$str_attribute]))
-			return $this->attributes[$str_attribute] = $value;
-		else
-			$this->halt('set_attribute: no such attribute ['.$str_attribute.']');
-
-		return false;
-	} // set_attribute
-
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	set_block_string (string contents)
-	/* -----------------------------------------------------------
-	/* uzstaadam blokam parseejamos datus
-	/* liidziigi, kaa set_file, tachu datus uzstaada nevis no faila,
-	/* bet no stringa
-	/* ----------------------------------------------------------- */
-	function set_block_string()
-	{
-		list($content) = func_get_args();
-		return $this->content = $content;
-	} // set_block_string
-
-	/* ----------------------------------------------------------- */
-	/* TemplateBlock
-	/*	delete_block (string block_id)
-	/* -----------------------------------------------------------
-	/* izdzēš bloku
-	/* ----------------------------------------------------------- */
-	function delete_block($ID)
-	{
-		unset($this->blocks[$ID]);
-	} // delete_block
-}
+} // class::TemplateBlock
 
