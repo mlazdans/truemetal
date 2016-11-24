@@ -115,7 +115,7 @@ if(!user_loged())
 		# TODO: izvākt un ielikt kaut kur zem list.inc.php
 		$params['order'] =
 			isset($_SESSION['login']['l_forumsort_msg']) &&
-			($_SESSION['login']['l_forumsort_msg'] == FORUM_SORT_DESC)
+			($_SESSION['login']['l_forumsort_msg'] == Forum::SORT_DESC)
 			? "c_entered DESC"
 			: "c_entered";
 		$comments = $RC->Get($params);

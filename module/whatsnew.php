@@ -20,9 +20,9 @@ if(!user_loged())
 	# Forum
 	$Forum = new Forum;
 	$data = $Forum->load(array(
-		"order"=>'forum_lastcommentdate DESC',
+		"order"=>'res_comment_lastdate DESC',
 		"limit"=>50,
-		"forum_allowchilds"=>FORUM_PROHIBITCHILDS,
+		"forum_allowchilds"=>Forum::PROHIBIT_CHILDS,
 		));
 
 	if($data)
@@ -62,10 +62,13 @@ if(!user_loged())
 	}
 }
 
+# TODO: galvenās izvēles ielikt MainModule
 $template->set_right();
+$template->set_events();
 $template->set_login();
 $template->set_online();
 $template->set_search();
+$template->set_jubilars();
 
 $template->out();
 

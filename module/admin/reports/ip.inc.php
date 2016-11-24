@@ -24,7 +24,7 @@ $RC = new ResComment();
 $RC->setDb($db);
 $comments = $RC->get(array(
 	'ips'=>$ips,
-	'c_visible'=>Comment::ALL,
+	'c_visible'=>Res::STATE_ALL,
 	'sort'=>'c_entered DESC',
 	'limit'=>1000,
 	));

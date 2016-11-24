@@ -22,8 +22,8 @@ $template->set_title('Admin :: logini :: rediģēt');
 $Logins = new Logins();
 $login = $Logins->load(array(
 	'l_id'=>$l_id,
-	'l_active'=>LOGIN_ALL,
-	'l_accepted'=>LOGIN_ALL,
+	'l_active'=>Res::STATE_ALL,
+	'l_accepted'=>Res::STATE_ALL,
 	'get_all_ips'=>true,
 	));
 
@@ -51,7 +51,7 @@ $RC = new ResComment();
 $RC->setDb($db);
 $comments = $RC->get(array(
 	'login_id'=>$l_id,
-	'c_visible'=>Comment::ALL,
+	'c_visible'=>Res::STATE_ALL,
 	'order'=>'c_entered DESC',
 	'limit'=>500,
 	));
@@ -66,7 +66,7 @@ if($alsoUsers)
 	{
 		$template->set_array($item, 'BLOCK_logins_also_list');
 		$template->set_var('l_color_class', 'box-normal', 'BLOCK_logins_also_list');
-		if($item['l_active'] != LOGIN_ACTIVE)
+		if($item['l_active'] != Res::STATE_ACTIVE)
 			$template->set_var('l_color_class', 'box-inactive', 'BLOCK_logins_also_list');
 		$template->parse_block('BLOCK_logins_also_list', TMPL_APPEND);
 	}

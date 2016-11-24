@@ -40,8 +40,8 @@ foreach($data as $item){
 
 $gallery = new GalleryData;
 $data = $gallery->load(array(
-	'gal_active'=>GALLERY_ALL,
-	'gd_visible'=>GALLERY_DATA_ALL,
+	'gal_active'=>Res::STATE_ALL,
+	'gd_visible'=>Res::STATE_ALL,
 	));
 foreach($data as $item){
 	if($item['res_id']){

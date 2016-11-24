@@ -8,25 +8,21 @@
 require_once('lib/Res.php');
 require_once('lib/Table.php');
 
-define('FORUM_ACTIVE', 'Y');
-define('FORUM_DEACTIVE', 'N');
-define('FORUM_ALLOWCHILDS', 'Y');
-define('FORUM_PROHIBITCHILDS', 'N');
-define('FORUM_ALL', false);
-define('FORUM_COMMENTS', true);
-define('FORUM_VALIDATE', true);
-define('FORUM_DONTVALIDATE', false);
-define('FORUM_SORT_THEME', 'T');
-define('FORUM_SORT_LAST_COMMENT', 'C');
-define('FORUM_SORT_DESC', 'D');
-define('FORUM_SORT_ASC', 'A');
-define('FORUM_CLOSED', 'Y');
-define('FORUM_OPEN', 'N');
-
 class Forum extends Res
 {
 	const DISPLAY_DATACOMPILED = 0;
 	const DISPLAY_DATA = 1;
+
+	const SORT_THEME = 'T';
+	const SORT_LASTCOMMENT = 'C';
+	const SORT_DESC = 'D';
+	const SORT_ASC = 'A';
+
+	const CLOSED = 'Y';
+	const OPEN = 'N';
+
+	const ALLOW_CHILDS = 'Y';
+	const PROHIBIT_CHILDS = 'N';
 
 	var $page;
 	var $fpp = 20;
@@ -81,10 +77,10 @@ class Forum extends Res
 
 		if(isset($params['forum_active']))
 		{
-			if($params['forum_active'] != FORUM_ALL)
+			if($params['forum_active'] != Res::STATE_ALL)
 				$sql_add[] = sprintf("f.forum_active = '%s'", $params['forum_active']);
 		} else {
-			$sql_add[] = sprintf("f.forum_active = '%s'", FORUM_ACTIVE);
+			$sql_add[] = sprintf("f.forum_active = '%s'", Res::STATE_ACTIVE);
 		}
 
 		if(isset($params['forum_allowchilds']))
@@ -100,8 +96,8 @@ class Forum extends Res
 		$sql .= ",
 	COALESCE(res_comment_count, 0) AS res_comment_count,
 	res_comment_lastdate,
-	(SELECT COUNT(*) FROM forum f2 WHERE f2.forum_forumid = f.forum_id AND f2.forum_active = '".FORUM_ACTIVE."') forum_themecount,
-	(SELECT MAX(forum_entered) FROM forum f3 WHERE f3.forum_forumid = f.forum_id AND f3.forum_active = '".FORUM_ACTIVE."') forum_lastthemedate
+	(SELECT COUNT(*) FROM forum f2 WHERE f2.forum_forumid = f.forum_id AND f2.forum_active = '".Res::STATE_ACTIVE."') forum_themecount,
+	(SELECT MAX(forum_entered) FROM forum f3 WHERE f3.forum_forumid = f.forum_id AND f3.forum_active = '".Res::STATE_ACTIVE."') forum_lastthemedate
 FROM
 	forum f
 	JOIN `res` r ON r.`res_id` = f.`res_id`
@@ -212,7 +208,6 @@ FROM
 		}
 	} // set_all_tree
 
-	//function Add($forum_id, &$data, $validate = FORUM_DONTVALIDATE, $forum_active = FORUM_ACTIVE)
 	function Add()
 	{
 		global $ip;
@@ -262,7 +257,7 @@ INSERT INTO forum (
 		return ($this->db->Execute($sql) ? $this->db->LastID() : false);
 	} // add
 
-	function save(&$data, $validate = FORUM_DONTVALIDATE)
+	function save(&$data, $validate = Res::ACT_DONTVALIDATE)
 	{
 		if($validate)
 			$this->validate($data);
@@ -327,7 +322,7 @@ INSERT INTO forum (
 	function open($forum_id)
 	{
 		$forum_id = (int)$forum_id;
-		$sql = 'UPDATE forum SET forum_closed = "'.FORUM_OPEN.'" WHERE forum_id = '.$forum_id;
+		$sql = 'UPDATE forum SET forum_closed = "'.Forum::OPEN.'" WHERE forum_id = '.$forum_id;
 
 		return $this->db->Execute($sql);
 	} // open
@@ -335,7 +330,7 @@ INSERT INTO forum (
 	function close($forum_id)
 	{
 		$forum_id = (int)$forum_id;
-		$sql = 'UPDATE forum SET forum_closed = "'.FORUM_CLOSED.'" WHERE forum_id = '.$forum_id;
+		$sql = 'UPDATE forum SET forum_closed = "'.Forum::CLOSED.'" WHERE forum_id = '.$forum_id;
 
 		return $this->db->Execute($sql);
 	} // close
@@ -412,19 +407,19 @@ INSERT INTO forum (
 		$data['forum_display'] = isset($data['forum_display']) ? (int)$data['forum_display'] : 0;
 
 		if(isset($data['forum_active']))
-			$data['forum_active'] = preg_match('/[YN]/', $data['forum_active']) ? $data['forum_active'] : FORUM_ACTIVE;
+			$data['forum_active'] = preg_match('/[YN]/', $data['forum_active']) ? $data['forum_active'] : Res::STATE_ACTIVE;
 		else
-			$data['forum_active'] = FORUM_ACTIVE;
+			$data['forum_active'] = Res::STATE_ACTIVE;
 
 		if(isset($data['forum_closed']))
-			$data['forum_closed'] = preg_match('/[YN]/', $data['forum_closed']) ? $data['forum_closed'] : FORUM_OPEN;
+			$data['forum_closed'] = preg_match('/[YN]/', $data['forum_closed']) ? $data['forum_closed'] : Forum::OPEN;
 		else
-			$data['forum_closed'] = FORUM_OPEN;
+			$data['forum_closed'] = Forum::OPEN;
 
 		if(isset($data['forum_allowchilds']))
-			$data['forum_allowchilds'] = preg_match('/[YN]/', $data['forum_allowchilds']) ? $data['forum_allowchilds'] : FORUM_PROHIBITCHILDS;
+			$data['forum_allowchilds'] = preg_match('/[YN]/', $data['forum_allowchilds']) ? $data['forum_allowchilds'] : Forum::PROHIBIT_CHILDS;
 		else
-			$data['forum_allowchilds'] = FORUM_PROHIBITCHILDS;
+			$data['forum_allowchilds'] = Forum::PROHIBIT_CHILDS;
 
 		if(isset($data['forum_name']))
 			$data['forum_name'] = mb_strcut($data['forum_name'], 0, 64);
@@ -463,7 +458,7 @@ INSERT INTO forum (
 			"fields"=>array('forum_id', 'forum_name', 'f.res_id'),
 			"order"=>'res_comment_lastdate DESC',
 			"limit"=>'10',
-			"forum_allowchilds"=>FORUM_PROHIBITCHILDS,
+			"forum_allowchilds"=>Forum::PROHIBIT_CHILDS,
 			));
 
 		if(count($data))

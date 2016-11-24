@@ -10,10 +10,6 @@ require_once('lib/Table.php');
 
 class Comment extends Res
 {
-	const VISIBLE = 'Y';
-	const INVISIBLE = 'N';
-	const ALL = false;
-
 	protected $table_id = Table::COMMENT;
 
 	function __construct() {
@@ -75,7 +71,7 @@ JOIN res r ON r.res_id = comment.res_id
 			if($params['c_visible'])
 				$sql_add[] = sprintf("c_visible = '%s'", $params['c_visible']);
 		} else {
-			$sql_add[] = sprintf("c_visible = '%s'", Comment::VISIBLE);
+			$sql_add[] = sprintf("c_visible = '%s'", Res::STATE_VISIBLE);
 		}
 
 		if($sql_add)
@@ -103,7 +99,7 @@ JOIN res r ON r.res_id = comment.res_id
 	{
 		$sql = sprintf(
 			"UPDATE `comment` SET c_visible = '%s' WHERE c_id = %d",
-			Comment::VISIBLE,
+			Res::STATE_VISIBLE,
 			$id
 			);
 
@@ -114,7 +110,7 @@ JOIN res r ON r.res_id = comment.res_id
 	{
 		$sql = sprintf(
 			"UPDATE `comment` SET c_visible = '%s' WHERE c_id = %d",
-			Comment::INVISIBLE,
+			Res::STATE_INVISIBLE,
 			$id
 			);
 
@@ -138,7 +134,7 @@ JOIN res r ON r.res_id = comment.res_id
 		if(isset($data['c_visible']))
 			$data['c_visible'] = ereg('[^YN]', $data['c_visible']) ? '' : $data['c_visible'];
 		else
-			$data['c_visible'] = Comment::VISIBLE;
+			$data['c_visible'] = Res::STATE_VISIBLE;
 
 	} // Validate
 

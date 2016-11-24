@@ -27,7 +27,7 @@ function set_themes(&$template, &$data, $d = 0, $c = 0) {
 		$template->disable('BLOCK_forum_inactive');
 		$template->disable('BLOCK_forum_closed');
 		$template->disable('BLOCK_forum_open');
-		if($item['forum_active'] == FORUM_ACTIVE) {
+		if($item['forum_active'] == Res::STATE_ACTIVE) {
 			$template->enable('BLOCK_forum_active');
 			$template->set_var('forum_color_class', 'box-normal', 'BLOCK_forum_theme_item');
 		} else {
@@ -35,7 +35,7 @@ function set_themes(&$template, &$data, $d = 0, $c = 0) {
 			$template->set_var('forum_color_class', 'box-inactive', 'BLOCK_forum_theme_item');
 		}
 
-		if($item['forum_closed'] == FORUM_CLOSED) {
+		if($item['forum_closed'] == Forum::CLOSED) {
 			$template->enable('BLOCK_forum_closed');
 		} else {
 			$template->enable('BLOCK_forum_open');
@@ -72,7 +72,7 @@ if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
 
 if(in_array($action, array('delete_multiple', 'activate_multiple', 'deactivate_multiple', 'move_multiple', 'close_multiple', 'open_multiple')))
 {
-	if($forum->process_action($_POST, $action, FORUM_VALIDATE))
+	if($forum->process_action($_POST, $action, Res::ACT_VALIDATE))
 	{
 		if($forum_id)
 			header("Location: $module_root/$forum_id/");
@@ -84,7 +84,7 @@ if(in_array($action, array('delete_multiple', 'activate_multiple', 'deactivate_m
 
 if($action == 'save_forum') {
 	if(isset($_POST['data'])) {
-		if($forum->save($_POST['data'], FORUM_VALIDATE))
+		if($forum->save($_POST['data'], Res::ACT_VALIDATE))
 			if($forum_id)
 				header("Location: $module_root/$forum_id/");
 			else
@@ -97,7 +97,7 @@ if($action == 'add_forum') {
 	if(isset($_POST['data'])) {
 		$_POST['data']['forum_allowchilds'] = 'Y';
 		$_POST['data']['forum_active'] = 'N';
-		if($forum->add($forum_id, $_POST['data'], FORUM_VALIDATE, FORUM_ALL))
+		if($forum->add($forum_id, $_POST['data'], Res::ACT_VALIDATE, Res::STATE_ALL))
 		{
 			if($forum_id)
 				header("Location: $module_root/$forum_id/");
@@ -117,7 +117,7 @@ set_forum($template, $forum_id);
 
 $items = $forum->load(array(
 	'forum_forumid'=>$forum_id,
-	'forum_active'=>FORUM_ALL,
+	'forum_active'=>Res::STATE_ALL,
 	));
 
 # Forums atvērts
@@ -125,10 +125,10 @@ if($forum_id)
 {
 	$forum_data = $forum->load(array(
 		'forum_id'=>$forum_id,
-		'forum_active'=>FORUM_ALL,
+		'forum_active'=>Res::STATE_ALL,
 		));
 
-	if($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS)
+	if($forum_data['forum_allowchilds'] == Forum::ALLOW_CHILDS)
 	{
 		set_themes($template, $items);
 		# jauna teema
@@ -141,7 +141,7 @@ if($forum_id)
 		$RC = new ResComment();
 		$comments = $RC->Get(array(
 			'res_id'=>$forum_data['res_id'],
-			'c_visible'=>Comment::ALL,
+			'c_visible'=>Res::STATE_ALL,
 			));
 
 		include('module/admin/comment/list.inc.php');
@@ -152,21 +152,21 @@ if($forum_id)
 	$template->set_array($forum_data, 'BLOCK_forum_edit');
 	$template->set_var('forum_data', parse_form_data($forum_data['forum_data']), 'BLOCK_forum_edit');
 
-	if($forum_data['forum_active'] == FORUM_ACTIVE)
+	if($forum_data['forum_active'] == Res::STATE_ACTIVE)
 	{
 		$template->set_var('forum_active_sel', ' selected="selected"', 'BLOCK_forum_edit');
 	} else {
 		$template->set_var('forum_inactive_sel', ' selected="selected"', 'BLOCK_forum_edit');
 	}
 
-	if($forum_data['forum_closed'] == FORUM_CLOSED)
+	if($forum_data['forum_closed'] == Forum::CLOSED)
 	{
 		$template->set_var('forum_closed_sel', ' selected="selected"', 'BLOCK_forum_edit');
 	} else {
 		$template->set_var('forum_open_sel', ' selected="selected"', 'BLOCK_forum_edit');
 	}
 
-	if($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS)
+	if($forum_data['forum_allowchilds'] == Forum::ALLOW_CHILDS)
 	{
 		$template->set_var('forum_allowchilds_sel', ' selected="selected"', 'BLOCK_forum_edit');
 	} else {

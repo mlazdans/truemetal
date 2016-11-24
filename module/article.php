@@ -97,7 +97,7 @@ if($art_id && isset($articles[0]))
 	$template->enable('BLOCK_article_comments_head');
 
 	# Add
-	if(($action == 'add_comment') && ($art['art_comments'] == ARTICLE_COMMENTS) && user_loged())
+	if(($action == 'add_comment') && user_loged())
 	{
 		$res_id = $art['res_id'];
 		$data = post('data');

@@ -85,7 +85,7 @@ JOIN res r2 ON r2.res_id = rc.res_id
 			if($params['c_visible'])
 				$sql_add[] = sprintf("c.c_visible = '%s'", $params['c_visible']);
 		} else {
-			$sql_add[] = sprintf("c.c_visible = '%s'", Comment::VISIBLE);
+			$sql_add[] = sprintf("c.c_visible = '%s'", Res::STATE_VISIBLE);
 		}
 
 		# IPS

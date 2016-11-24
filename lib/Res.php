@@ -12,6 +12,15 @@ class Res
 	const TYPE_STD = 0;
 	const TYPE_EVENT = 1;
 
+	const STATE_ACTIVE = 'Y';
+	const STATE_INACTIVE = 'N';
+	const STATE_VISIBLE = 'Y';
+	const STATE_INVISIBLE = 'N';
+	const STATE_ALL = false;
+
+	const ACT_VALIDATE = true;
+	const ACT_DONTVALIDATE = false;
+
 	var $types = array(
 		Res::TYPE_STD=>'Forums',
 		Res::TYPE_EVENT=>'Pasākums',

@@ -47,7 +47,7 @@ printf("TRUNCATE TABLE `res`;\n");
 $Comment = new Comment;
 $Comment->setDb($db);
 $items = $Comment->get(array(
-	'c_visible'=>Comment::ALL,
+	'c_visible'=>Res::STATE_ALL,
 	'sort'=>'c_id ASC',
 	));
 
@@ -68,7 +68,7 @@ foreach($items as $item)
 ### Article ###################################################################
 $Article = new Article;
 $items = $Article->load(array(
-	'art_active'=>ARTICLE_ALL,
+	'art_active'=>Res::STATE_ALL,
 	'order'=>'a.art_id ASC',
 	));
 
@@ -89,7 +89,7 @@ foreach($items as $item)
 ### Forum #####################################################################
 $Forum = new Forum;
 $items = $Forum->load(array(
-	'forum_active'=>FORUM_ALL,
+	'forum_active'=>Res::STATE_ALL,
 	'order'=>'f.forum_id ASC',
 	));
 

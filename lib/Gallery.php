@@ -8,14 +8,6 @@
 require_once('lib/Res.php');
 require_once('lib/Table.php');
 
-define('GALLERY_ACTIVE', 'Y');
-define('GALLERY_INACTIVE', 'N');
-define('GALLERY_VISIBLE', 'Y');
-define('GALLERY_INVISIBLE', 'N');
-define('GALLERY_ALL', false);
-define('GALLERY_VALIDATE', true);
-define('GALLERY_DONTVALIDATE', false);
-
 class Gallery extends Res
 {
 	protected $table_id = Table::GALLERY;
@@ -31,10 +23,6 @@ class Gallery extends Res
 		$this->SetDb($db);
 	} // __construct
 
-	/*
-	function load($gal_id = 0, $gal_active = GALLERY_ACTIVE,
-		$gal_visible = GALLERY_ALL)
-	{*/
 	function load($params = array())
 	{
 		if(!is_array($params))
@@ -53,7 +41,7 @@ class Gallery extends Res
 			if($params['gal_active'])
 				$sql_add[] = sprintf("gal_active = '%s'", $params['gal_active']);
 		} else {
-			$sql_add[] = sprintf("gal_active = '%s'", GALLERY_ACTIVE);
+			$sql_add[] = sprintf("gal_active = '%s'", Res::STATE_ACTIVE);
 		}
 
 		$sql = 'SELECT * FROM gallery g';
@@ -71,7 +59,7 @@ class Gallery extends Res
 		return (isset($params['gal_id']) || isset($params['res_id']) ? $this->db->ExecuteSingle($sql) : $this->db->Execute($sql));
 	} // load
 
-	function insert(&$data, $validate = GALLERY_VALIDATE)
+	function insert(&$data, $validate = Res::ACT_VALIDATE)
 	{
 		if($validate)
 			$this->validate($data);
@@ -95,7 +83,7 @@ class Gallery extends Res
 			return false;
 	} // insert
 
-	function update($gal_id, &$data, $validate = GALLERY_VALIDATE)
+	function update($gal_id, &$data, $validate = Res::ACT_VALIDATE)
 	{
 		$gal_id = (integer)$gal_id;
 
@@ -141,9 +129,9 @@ class Gallery extends Res
 
 		if(!$error_msg) {
 			if($gal_id)
-				return $this->update($gal_id, $data, GALLERY_DONTVALIDATE);
+				return $this->update($gal_id, $data, Res::ACT_DONTVALIDATE);
 			else
-				return $this->insert($data, GALLERY_DONTVALIDATE);
+				return $this->insert($data, Res::ACT_DONTVALIDATE);
 		} else { // $error_msg
 			$this->error_msg = $error_msg;
 			return false;
@@ -166,7 +154,7 @@ class Gallery extends Res
 	{
 		$gal_id = (integer)$gal_id;
 
-		$sql = 'UPDATE gallery SET gal_active = "'.GALLERY_ACTIVE.'" WHERE gal_id = '.$gal_id;
+		$sql = 'UPDATE gallery SET gal_active = "'.Res::STATE_ACTIVE.'" WHERE gal_id = '.$gal_id;
 
 		return $this->db->Execute($sql);
 	} // activate
@@ -175,7 +163,7 @@ class Gallery extends Res
 	{
 		$gal_id = (integer)$gal_id;
 
-		$sql = 'UPDATE gallery SET gal_active = "'.GALLERY_INACTIVE.'" WHERE gal_id = '.$gal_id;
+		$sql = 'UPDATE gallery SET gal_active = "'.Res::STATE_INACTIVE.'" WHERE gal_id = '.$gal_id;
 
 		return $this->db->Execute($sql);
 	} // deactivate
@@ -184,7 +172,7 @@ class Gallery extends Res
 	{
 		$gal_id = (integer)$gal_id;
 
-		$sql = 'UPDATE gallery SET gal_visible = "'.GALLERY_VISIBLE.'" WHERE gal_id = '.$gal_id;
+		$sql = 'UPDATE gallery SET gal_visible = "'.Res::STATE_VISIBLE.'" WHERE gal_id = '.$gal_id;
 
 		return $this->db->Execute($sql);
 	} // show
@@ -193,7 +181,7 @@ class Gallery extends Res
 	{
 		$gal_id = (integer)$gal_id;
 
-		$sql = 'UPDATE gallery SET gal_visible = "'.GALLERY_INVSIBLE.'" WHERE gal_id = '.$gal_id;
+		$sql = 'UPDATE gallery SET gal_visible = "'.Res::STATE_INVISIBLE.'" WHERE gal_id = '.$gal_id;
 
 		return $this->db->Execute($sql);
 	} // hide
@@ -227,17 +215,18 @@ class Gallery extends Res
 		return $ret;
 	} // process_action
 
+	# TODO: validāciju atstāt izsaucēja ziņā
 	function validate(&$data)
 	{
 		if(isset($data['gal_active']))
 			$data['gal_active'] = ereg('[^YN]', $data['gal_active']) ? '' : $data['gal_active'];
 		else
-			$data['gal_active'] = GALLERY_ACTIVE;
+			$data['gal_active'] = Res::STATE_ACTIVE;
 
 		if(isset($data['gal_visible']))
 			$data['gal_visible'] = ereg('[^YN]', $data['gal_visible']) ? '' : $data['gal_visible'];
 		else
-			$data['gal_visible'] = GALLERY_VISIBLE;
+			$data['gal_visible'] = Res::STATE_VISIBLE;
 
 		if(!isset($data['gal_name']))
 			$data['gal_name'] = '';

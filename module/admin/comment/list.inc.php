@@ -19,7 +19,7 @@ foreach($comments as $item)
 
 	$template->set_array($item, 'BLOCK_comment_item');
 
-	if($item['c_visible'] == Comment::VISIBLE)
+	if($item['c_visible'] == Res::STATE_VISIBLE)
 	{
 		$template->enable('BLOCK_c_visible');
 		$template->disable('BLOCK_c_invisible');

@@ -9,9 +9,6 @@
 define('FORUM_MAXWORDSIZE', 26);
 define('FORUM_MAXWORDS', 800);
 define('FORUM_MAXLINES', 50);
-define('TMP_DIR', ini_get('upload_tmp_dir'));
-define('ACCESS_DENIED', 'Nav pieejas!');
-define('ARTICLE_TO_SHOW', 15);
 
 $sys_admins = array(
 	'127.0.0.1',

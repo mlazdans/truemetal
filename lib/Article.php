@@ -9,16 +9,6 @@ require_once('lib/Module.php');
 require_once('lib/Res.php');
 require_once('lib/Table.php');
 
-define('ARTICLE_ACTIVE', 'Y');
-define('ARTICLE_INACTIVE', 'N');
-define('ARTICLE_ALL', false);
-define('ARTICLE_VALIDATE', true);
-define('ARTICLE_DONTVALIDATE', false);
-define('ARTICLE_COMMENTS', 'Y');
-define('ARTICLE_NOCOMMENTS', 'N');
-define('ARTICLE_TYPE_OPEN', 'O');
-define('ARTICLE_TYPE_REGISTRATED', 'R');
-
 class Article extends Res
 {
 	var $date_format;
@@ -65,7 +55,7 @@ class Article extends Res
 			if($params['art_active'])
 				$sql_add[] = sprintf("art_active = '%s'", $params['art_active']);
 		} else {
-			$sql_add[] = sprintf("art_active = '%s'", ARTICLE_ACTIVE);
+			$sql_add[] = sprintf("art_active = '%s'", Res::STATE_ACTIVE);
 		}
 
 		if(isset($params['art_modid']))
@@ -98,7 +88,7 @@ JOIN `res` r ON r.`res_id` = a.`res_id`
 		return (isset($params['art_id']) || isset($params['res_id']) ? $this->db->ExecuteSingle($sql) : $this->db->Execute($sql));
 	} // load
 
-	function insert(&$data, $validate = ARTICLE_VALIDATE)
+	function insert(&$data, $validate = Res::ACT_VALIDATE)
 	{
 		global $ip;
 
@@ -121,17 +111,17 @@ JOIN `res` r ON r.`res_id` = a.`res_id`
 INSERT INTO article (
 	res_id, art_name, art_username, art_useremail, art_userip, art_entered,
 	art_modid, art_data, art_intro, art_active,
-	art_comments, art_type, login_id
+	art_type, login_id
 ) VALUES (
 	$res_id, '$data2[art_name]', '$data2[art_username]', '$data2[art_useremail]', '$ip', ".$date.",
 	$data2[art_modid], '$data2[art_data]', '$data2[art_intro]', '$data2[art_active]',
-	'$data2[art_comments]', '$data2[art_type]', $login_id
+	'$data2[art_type]', $login_id
 )";
 
 		return ($this->db->Execute($sql) ? $this->db->LastID() : false);
 	}
 
-	function update($art_id, &$data, $validate = ARTICLE_VALIDATE)
+	function update($art_id, &$data, $validate = Res::ACT_VALIDATE)
 	{
 		//global $db;
 
@@ -151,7 +141,6 @@ INSERT INTO article (
 		$sql .= $data2['art_name'] ? "art_name = '$data2[art_name]', " : '';
 		$sql .= $data2['art_entered'] ? "art_entered = '$data2[art_entered]', " : '';
 		$sql .= "art_active = '$data2[art_active]', ";
-		$sql .= "art_comments = '$data2[art_comments]', ";
 		$sql .= "art_type = '$data2[art_type]', ";
 		$sql .= "art_data = '$data2[art_data]', ";
 		$sql .= "art_intro = '$data2[art_intro]', ";
@@ -179,9 +168,9 @@ INSERT INTO article (
 		if(!$error_msg)
 		{
 			if($art_id)
-				return $this->update($art_id, $data, ARTICLE_DONTVALIDATE);
+				return $this->update($art_id, $data, Res::ACT_DONTVALIDATE);
 			else
-				return $this->insert($data, ARTICLE_DONTVALIDATE);
+				return $this->insert($data, Res::ACT_DONTVALIDATE);
 		} else { // $error_msg
 			$this->error_msg = $error_msg;
 			return false;
@@ -207,7 +196,7 @@ INSERT INTO article (
 		//global $db;
 
 		$art_id = (integer)$art_id;
-		$sql = 'UPDATE `article` SET art_active = "'.ARTICLE_ACTIVE.'" WHERE art_id = '.$art_id;
+		$sql = 'UPDATE `article` SET art_active = "'.Res::STATE_ACTIVE.'" WHERE art_id = '.$art_id;
 
 		return $this->db->Execute($sql);
 	}
@@ -217,7 +206,7 @@ INSERT INTO article (
 		//global $db;
 
 		$art_id = (integer)$art_id;
-		$sql = 'UPDATE `article` SET art_active = "'.ARTICLE_INACTIVE.'" WHERE art_id = '.$art_id;
+		$sql = 'UPDATE `article` SET art_active = "'.Res::STATE_INACTIVE.'" WHERE art_id = '.$art_id;
 
 		return $this->db->Execute($sql);
 	}
@@ -266,19 +255,9 @@ INSERT INTO article (
 			$data['art_modid'] = 0;
 
 		if(isset($data['art_active']))
-			$data['art_active'] = preg_match('/[YN]/', $data['art_active']) ? $data['art_active'] : ARTICLE_ACTIVE;
+			$data['art_active'] = preg_match('/[YN]/', $data['art_active']) ? $data['art_active'] : Res::STATE_ACTIVE;
 		else
-			$data['art_active'] = ARTICLE_ACTIVE;
-
-		if(isset($data['art_comments']))
-			$data['art_comments'] = preg_match('/[YN]/', $data['art_comments']) ? $data['art_comments'] : ARTICLE_COMMENTS;
-		else
-			$data['art_comments'] = ARTICLE_COMMENTS;
-
-		if(isset($data['art_type']))
-			$data['art_type'] = preg_match('/[OR]/', $data['art_type']) ? $data['art_type'] : ARTICLE_TYPE_OPEN;
-		else
-			$data['art_type'] = ARTICLE_TYPE_OPEN;
+			$data['art_active'] = Res::STATE_ACTIVE;
 
 		if(!isset($data['art_name']))
 			$data['art_name'] = '';

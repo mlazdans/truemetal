@@ -7,7 +7,6 @@
 
 if(user_loged())
 	Forum::markThemeCount($forum_data);
-	//$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_themecount'];
 
 $template->set_file('FILE_forum', 'forum/theme.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_forum');
@@ -41,7 +40,7 @@ if($action == 'add_theme')
 	$data['forum_userlogin'] = $_SESSION['login']['l_login'];
 	$data['forum_useremail'] = $_SESSION['login']['l_email'];
 	$data['forum_username'] = $_SESSION['login']['l_nick'];
-	$data['forum_allowchilds'] = FORUM_PROHIBITCHILDS;
+	$data['forum_allowchilds'] = Forum::PROHIBIT_CHILDS;
 
 	if(!user_loged())
 	{
@@ -115,7 +114,7 @@ $forum_items->setPage($page_id);
 
 if(
 	isset($_SESSION['login']['l_forumsort_themes']) &&
-	($_SESSION['login']['l_forumsort_themes'] == FORUM_SORT_LAST_COMMENT)
+	($_SESSION['login']['l_forumsort_themes'] == Forum::SORT_LASTCOMMENT)
 )
 {
 	$items = $forum_items->load(array(

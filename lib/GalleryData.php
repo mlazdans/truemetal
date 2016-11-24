@@ -9,10 +9,6 @@ require_once('lib/Res.php');
 require_once('lib/Table.php');
 require_once('lib/Gallery.php');
 
-define('GALLERY_DATA_VISIBLE', 'Y');
-define('GALLERY_DATA_INVISIBLE', 'N');
-define('GALLERY_DATA_ALL', false);
-
 class GalleryData extends Res
 {
 	protected $table_id = Table::GALLERY_DATA;
@@ -28,9 +24,6 @@ class GalleryData extends Res
 		$this->SetDb($db);
 	} // __construct
 
-	//function load_data($gd_id = 0, $gd_galid = 0, $gd_visible = GALLERY_DATA_VISIBLE,
-	//	$gal_active = GALLERY_ACTIVE)
-	//{
 	function load($params = array())
 	{
 		if(!is_array($params))
@@ -66,7 +59,7 @@ class GalleryData extends Res
 			if($params['gal_active'])
 				$sql_add[] = sprintf("gal_active = '%s'", $params['gal_active']);
 		} else {
-			$sql_add[] = sprintf("gal_active = '%s'", GALLERY_ACTIVE);
+			$sql_add[] = sprintf("gal_active = '%s'", Res::STATE_ACTIVE);
 		}
 
 		if(isset($params['gd_visible']))
@@ -74,7 +67,7 @@ class GalleryData extends Res
 			if($params['gd_visible'])
 				$sql_add[] = sprintf("gd_visible = '%s'", $params['gd_visible']);
 		} else {
-			$sql_add[] = sprintf("gd_visible = '%s'", GALLERY_DATA_VISIBLE);
+			$sql_add[] = sprintf("gd_visible = '%s'", Res::STATE_VISIBLE);
 		}
 
 		if($sql_add)
@@ -93,7 +86,7 @@ class GalleryData extends Res
 		$gal_id = (integer)$gal_id;
 		$gd_id = (integer)$gd_id;
 
-		$sql = "SELECT gd_id FROM gallery_data WHERE gd_visible = 'Y' AND gal_id = $gal_id AND gd_id > $gd_id LIMIT 0,1";
+		$sql = "SELECT gd_id FROM gallery_data WHERE gd_visible = '".Res::STATE_VISIBLE."' AND gal_id = $gal_id AND gd_id > $gd_id LIMIT 0,1";
 		$data = $this->db->ExecuteSingle($sql);
 
 		return isset($data['gd_id']) ? $data['gd_id'] : 0;

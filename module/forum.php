@@ -76,7 +76,7 @@ if($forum_id)
 	$template->set_var('current_forum_name_urlized', rawurlencode(urlize($forum_data['forum_name'])));
 
 	# Subtēma TODO: jānotestē
-	if($forum_data['forum_allowchilds'] == FORUM_ALLOWCHILDS)
+	if($forum_data['forum_allowchilds'] == Forum::ALLOW_CHILDS)
 	{
 		include('forum/theme.inc.php');
 	} else {

@@ -9,7 +9,6 @@ CREATE OR REPLACE VIEW view_mainpage AS
 	a.art_intro,
 	a.art_data,
 	a.art_entered,
-	a.art_comments,
 	r.table_id
 FROM
 	`article` a
@@ -30,7 +29,6 @@ UNION
 	forum_data as art_intro,
 	forum_data as art_data,
 	forum_entered,
-	'Y' AS art_comments,
 	r.table_id
 FROM
 	forum

@@ -239,8 +239,8 @@ class Logins
 	{
 		global $sys_user_root, $sys_http_root;
 
-		$login['l_forumsort_themes'] = isset($login['l_forumsort_themes']) ? $login['l_forumsort_themes'] : FORUM_SORT_LAST_COMMENT;
-		$login['l_forumsort_msg'] = isset($login['l_forumsort_msg']) ? $login['l_forumsort_msg'] : FORUM_SORT_ASC;
+		$login['l_forumsort_themes'] = isset($login['l_forumsort_themes']) ? $login['l_forumsort_themes'] : Forum::SORT_LASTCOMMENT;
+		$login['l_forumsort_msg'] = isset($login['l_forumsort_msg']) ? $login['l_forumsort_msg'] : Forum::SORT_ASC;
 		$pic_localpath = $sys_user_root.'/pic/'.$login['l_id'].'.jpg';
 		$tpic_localpath = $sys_user_root.'/pic/thumb/'.$login['l_id'].'.jpg';
 		$pic_path = "$sys_http_root/user/image/$login[l_login]/";
@@ -807,12 +807,12 @@ class Logins
 		if(isset($data['l_forumsort_themes']))
 			$data['l_forumsort_themes'] = (preg_match('/[TC]/', $data['l_forumsort_themes']) ? $data['l_forumsort_themes'] : '');
 		else
-			$data['l_forumsort_themes'] = FORUM_SORT_THEME;
+			$data['l_forumsort_themes'] = Forum::SORT_THEME;
 
 		if(isset($data['l_forumsort_msg']))
 			$data['l_forumsort_msg'] = (preg_match('/[AD]/', $data['l_forumsort_msg']) ? $data['l_forumsort_msg'] : '');
 		else
-			$data['l_forumsort_msg'] = FORUM_SORT_THEME;
+			$data['l_forumsort_msg'] = Forum::SORT_THEME;
 
 		if(isset($data['l_disable_avatars']))
 			$data['l_disable_avatars'] = 1;

@@ -21,7 +21,7 @@ $template->copy_block('BLOCK_forum_comments', 'FILE_forum_comments');
 
 Res::markCommentCount($forum_data);
 
-if(($forum_data['forum_closed'] == FORUM_OPEN) && ($action == 'add_comment') && user_loged())
+if(($forum_data['forum_closed'] == Forum::OPEN) && ($action == 'add_comment') && user_loged())
 {
 	$res_id = $forum_data['res_id'];
 	$data = post('data');
@@ -86,7 +86,7 @@ $params = array(
 	);
 $params['order'] =
 	isset($_SESSION['login']['l_forumsort_msg']) &&
-	($_SESSION['login']['l_forumsort_msg'] == FORUM_SORT_DESC)
+	($_SESSION['login']['l_forumsort_msg'] == Forum::SORT_DESC)
 	? "c_entered DESC"
 	: "c_entered";
 
@@ -99,7 +99,7 @@ if(($forum_data['forum_display'] == Forum::DISPLAY_DATA) && !empty($comments[0])
 	# Ja sakārtots dilstoši, tad jāaiztiek ir pēdējais komments
 	if(
 		isset($_SESSION['login']['l_forumsort_msg']) &&
-		($_SESSION['login']['l_forumsort_msg'] == FORUM_SORT_DESC)
+		($_SESSION['login']['l_forumsort_msg'] == Forum::SORT_DESC)
 		)
 	{
 		array_unshift($comments, array_pop($comments));
@@ -109,7 +109,7 @@ if(($forum_data['forum_display'] == Forum::DISPLAY_DATA) && !empty($comments[0])
 
 include('module/comment/list.inc.php');
 
-if($forum_data['forum_closed'] == FORUM_CLOSED)
+if($forum_data['forum_closed'] == Forum::CLOSED)
 {
 	$template->disable('BLOCK_addcomment');
 	$template->enable('BLOCK_forum_closed');
