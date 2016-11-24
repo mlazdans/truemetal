@@ -66,8 +66,8 @@ if(isset($_POST['data']))
 	# test login
 	if($test_login = $logins->load(array(
 		'l_login'=>$data['l_login'],
-		'l_active'=>LOGIN_ALL,
-		'l_accepted'=>LOGIN_ALL,
+		'l_active'=>Res::STATE_ALL,
+		'l_accepted'=>Res::STATE_ALL,
 		)))
 	{
 		$error_field[] = 'l_login';
@@ -77,8 +77,8 @@ if(isset($_POST['data']))
 	# test email
 	if($test_email = $logins->load(array(
 		'l_email'=>$data['l_email'],
-		'l_active'=>LOGIN_ALL,
-		'l_accepted'=>LOGIN_ALL,
+		'l_active'=>Res::STATE_ALL,
+		'l_accepted'=>Res::STATE_ALL,
 		)))
 	{
 		$error_field[] = 'l_email';
@@ -88,8 +88,8 @@ if(isset($_POST['data']))
 	# test nick
 	if($test_nick = $logins->load(array(
 		'l_nick'=>$data['l_nick'],
-		'l_active'=>LOGIN_ALL,
-		'l_accepted'=>LOGIN_ALL,
+		'l_active'=>Res::STATE_ALL,
+		'l_accepted'=>Res::STATE_ALL,
 		)))
 	{
 		$error_field[] = 'l_nick';

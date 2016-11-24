@@ -19,11 +19,11 @@ $test_data = false;
 
 # Meklēt pēc logina
 if($data['l_login'])
-	$test_data = Logins::load_by_login($data['l_login'], array('l_accepted'=>LOGIN_ALL));
+	$test_data = Logins::load_by_login($data['l_login'], array('l_accepted'=>Res::STATE_ALL));
 
 # Meklē pēc e-pasta
 if(!$test_data && $data['l_email'])
-	$test_data = Logins::load_by_email($data['l_email'], array('l_accepted'=>LOGIN_ALL));
+	$test_data = Logins::load_by_email($data['l_email'], array('l_accepted'=>Res::STATE_ALL));
 
 if($test_data)
 {

@@ -86,7 +86,7 @@ if(
 if($login_data)
 {
 	$template->set_title(" - $login_data[l_nick]");
-	if($login_data['l_emailvisible'] == LOGIN_EMAIL_VISIBLE)
+	if($login_data['l_emailvisible'] == Logins::EMAIL_VISIBLE)
 	{
 		$template->enable('BLOCK_public_email');
 	}

@@ -33,8 +33,8 @@ $params = array(
 	'limit'=>200,
 	'get_votes'=>true,
 	'get_comment_count'=>true,
-	'l_active'=>LOGIN_ALL,
-	'l_accepted'=>LOGIN_ALL,
+	'l_active'=>Res::STATE_ALL,
+	'l_accepted'=>Res::STATE_ALL,
 	'order'=>($sortr ? $sortr.($desc ? " DESC" : " ASC") : ""),
 	);
 
@@ -45,19 +45,19 @@ if($action == 'search')
 
 	if(postget('l_active_y'))
 	{
-		$params['l_active'] = LOGIN_ACTIVE;
+		$params['l_active'] = Res::STATE_ACTIVE;
 		$template->set_var('ls_l_active_y_checked', 'checked="checked"');
 	} elseif(postget('l_active_n')) {
-		$params['l_active'] = LOGIN_INACTIVE;
+		$params['l_active'] = Res::STATE_INACTIVE;
 		$template->set_var('ls_l_active_n_checked', 'checked="checked"');
 	}
 
 	if(postget('l_accepted_y'))
 	{
-		$params['l_accepted'] = LOGIN_ACCEPTED;
+		$params['l_accepted'] = Logins::ACCEPTED;
 		$template->set_var('ls_l_accepted_y_checked', 'checked="checked"');
 	} elseif(postget('l_accepted_n')) {
-		$params['l_accepted'] = LOGIN_NOTACCEPTED;
+		$params['l_accepted'] = Logins::NOT_ACCEPTED;
 		$template->set_var('ls_l_accepted_n_checked', 'checked="checked"');
 	}
 
@@ -108,7 +108,7 @@ foreach($logins as $item)
 	$template->set_var('logins_nr', ++$logins_count, 'BLOCK_logins');
 
 	$template->set_var('l_color_class', 'box-normal', 'BLOCK_logins');
-	if($item['l_active'] != LOGIN_ACTIVE)
+	if($item['l_active'] != Res::STATE_ACTIVE)
 		$template->set_var('l_color_class', 'box-inactive', 'BLOCK_logins');
 
 	$template->parse_block('BLOCK_logins', TMPL_APPEND);

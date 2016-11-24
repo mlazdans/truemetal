@@ -5,21 +5,17 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-define('LOGIN_ACTIVE', 'Y');
-define('LOGIN_INACTIVE', 'N');
-define('LOGIN_ACCEPTED', 'Y');
-define('LOGIN_NOTACCEPTED', 'N');
-define('LOGIN_ALL', false);
-define('LOGIN_VALIDATE', true);
-define('LOGIN_DONTVALIDATE', false);
-define('LOGIN_EMAIL_VISIBLE', 'Y');
-define('LOGIN_EMAIL_INVISIBLE', 'N');
-
+require_once('lib/Res.php');
 require_once('lib/Forum.php');
 
 class Logins
 {
 	var $error_msg;
+
+	const ACCEPTED = 'Y';
+	const NOT_ACCEPTED = 'N';
+	const EMAIL_VISIBLE = 'Y';
+	const EMAIL_INVISIBLE = 'N';
 
 	function __construct() {
 	} // Logins
@@ -69,18 +65,18 @@ class Logins
 
 		if(isset($params['l_active']))
 		{
-			if($params['l_active'] != LOGIN_ALL)
+			if($params['l_active'] != Res::STATE_ALL)
 				$sql_add[] = sprintf("l_active = '%s'", $params['l_active']);
 		} else {
-			$sql_add[] = sprintf("l_active = '%s'", LOGIN_ACTIVE);
+			$sql_add[] = sprintf("l_active = '%s'", Res::STATE_ACTIVE);
 		}
 
 		if(isset($params['l_accepted']))
 		{
-			if($params['l_accepted'] != LOGIN_ALL)
+			if($params['l_accepted'] != Res::STATE_ALL)
 				$sql_add[] = sprintf("l_accepted = '%s'", $params['l_accepted']);
 		} else {
-			$sql_add[] = sprintf("l_accepted = '%s'", LOGIN_ACCEPTED);
+			$sql_add[] = sprintf("l_accepted = '%s'", Logins::ACCEPTED);
 		}
 
 		if(isset($params['q']))
@@ -178,8 +174,8 @@ class Logins
 		{
 			return $Logins->load(array(
 				'l_login'=>$l_login,
-				'l_active'=>LOGIN_ALL,
-				'l_accepted'=>LOGIN_ALL,
+				'l_active'=>Res::STATE_ALL,
+				'l_accepted'=>Res::STATE_ALL,
 				));
 		} else {
 			return $Logins->load(array(
@@ -266,7 +262,7 @@ class Logins
 			$template->set_var('l_disable_youtube_checked', '');
 		}
 
-		if($login['l_emailvisible'] != LOGIN_EMAIL_VISIBLE)
+		if($login['l_emailvisible'] != Logins::EMAIL_VISIBLE)
 		{
 			$template->set_var('l_emailvisible', '');
 		} else {
@@ -357,7 +353,7 @@ class Logins
 			$this->validate($data);
 
 			// check login status
-			if($l_data['l_active'] != LOGIN_ACTIVE || $l_data['l_accepted'] != LOGIN_ACCEPTED)
+			if($l_data['l_active'] != Res::STATE_ACTIVE || $l_data['l_accepted'] != Logins::ACCEPTED)
 			{
 				$error_msg .= 'Nevar saglabāt neaktīvu profilu!<br />';
 			}
@@ -399,7 +395,7 @@ class Logins
 			# ja mainiits epasts, disable acc
 			if($data['l_email'] && $data['l_email'] != $l_data['l_email'])
 			{
-				$sql .= "l_accepted = '".LOGIN_NOTACCEPTED."', ";
+				$sql .= "l_accepted = '".Logins::NOT_ACCEPTED."', ";
 			}
 
 			$sql = substr($sql, 0, -2);
@@ -603,7 +599,7 @@ class Logins
 		{
 			$sql = "UPDATE login_accept SET la_accepted = NOW() WHERE la_login = '$data[la_login]'";
 			$db->Execute($sql);
-			$sql = "UPDATE logins SET l_accepted = '".LOGIN_ACCEPTED."' WHERE l_login = '$data[la_login]'";
+			$sql = "UPDATE logins SET l_accepted = '".Logins::ACCEPTED."' WHERE l_login = '$data[la_login]'";
 			if($db->Execute($sql))
 				return true;
 		}
@@ -620,7 +616,7 @@ class Logins
 		return $db->ExecuteSingle($sql);
 	} // get_forgot
 
-	function insert(&$data, $validate = LOGIN_VALIDATE)
+	function insert(&$data, $validate = Res::ACT_VALIDATE)
 	{
 		global $db;
 
@@ -654,7 +650,7 @@ class Logins
 			return false;
 	} // insert
 
-	function update($data, $validate = LOGIN_VALIDATE)
+	function update($data, $validate = Res::ACT_VALIDATE)
 	{
 		global $db;
 
@@ -698,7 +694,7 @@ class Logins
 	{
 		global $db;
 
-		$sql = 'UPDATE logins SET l_accepted = "'.LOGIN_ACCEPTED.'" WHERE l_id = "'.$l_id.'"';
+		$sql = 'UPDATE logins SET l_accepted = "'.Logins::ACCEPTED.'" WHERE l_id = "'.$l_id.'"';
 
 		return $db->Execute($sql);
 	} // accept
@@ -707,7 +703,7 @@ class Logins
 	{
 		global $db;
 
-		$sql = 'UPDATE logins SET l_active = "'.LOGIN_ACTIVE.'" WHERE l_id = "'.$l_id.'"';
+		$sql = 'UPDATE logins SET l_active = "'.Res::STATE_ACTIVE.'" WHERE l_id = "'.$l_id.'"';
 
 		return $db->Execute($sql);
 	} // activate
@@ -716,7 +712,7 @@ class Logins
 	{
 		global $db;
 
-		$sql = 'UPDATE logins SET l_active = "'.LOGIN_INACTIVE.'" WHERE l_id = "'.$l_id.'"';
+		$sql = 'UPDATE logins SET l_active = "'.Res::STATE_INACTIVE.'" WHERE l_id = "'.$l_id.'"';
 
 		return $db->Execute($sql);
 	} // deactivate
@@ -752,12 +748,12 @@ class Logins
 		if(isset($data['l_active']))
 			$data['l_active'] = (preg_match('/[YN]/', $data['l_active']) ? $data['l_active'] : '');
 		else
-			$data['l_active'] = LOGIN_ACTIVE;
+			$data['l_active'] = Res::STATE_ACTIVE;
 
 		if(isset($data['l_emailvisible']))
-			$data['l_emailvisible'] = LOGIN_EMAIL_VISIBLE;
+			$data['l_emailvisible'] = Logins::EMAIL_VISIBLE;
 		else
-			$data['l_emailvisible'] = LOGIN_EMAIL_INVISIBLE;
+			$data['l_emailvisible'] = Logins::EMAIL_INVISIBLE;
 
 		if(!isset($data['l_login']))
 			$data['l_login'] = '';
@@ -802,7 +798,7 @@ class Logins
 		if(isset($data['l_accepted']))
 			$data['l_accepted'] = (preg_match('/[YN]/', $data['l_accepted']) ? $data['l_accepted'] : '');
 		else
-			$data['l_accepted'] = LOGIN_NOTACCEPTED;
+			$data['l_accepted'] = Logins::NOT_ACCEPTED;
 
 		if(isset($data['l_forumsort_themes']))
 			$data['l_forumsort_themes'] = (preg_match('/[TC]/', $data['l_forumsort_themes']) ? $data['l_forumsort_themes'] : '');
