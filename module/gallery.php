@@ -178,6 +178,16 @@ if(!user_loged())
 				}
 				$template->{(GalleryData::hasNewComments($thumb) ? "enable" : "disable")}('BLOCK_comments_new');
 
+				//$thumb['res_votes'] = (int)$thumb['res_votes'];
+				if($thumb['res_votes'] > 0)
+				{
+					$template->set_var('comment_vote_class', 'plus', 'BLOCK_thumb');
+					$thumb['res_votes'] = '+'.$thumb['res_votes'];
+				} elseif($thumb['res_votes'] < 0) {
+					$template->set_var('comment_vote_class', 'minus', 'BLOCK_thumb');
+				} else {
+					$template->set_var('comment_vote_class', '', 'BLOCK_thumb');
+				}
 				$template->set_array($thumb, 'BLOCK_thumb');
 				$template->parse_block('BLOCK_thumb', TMPL_APPEND);
 			}

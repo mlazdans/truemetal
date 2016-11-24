@@ -33,8 +33,11 @@
 </div>
 	<!-- BEGIN BLOCK_thumb -->
 		<!-- BEGIN BLOCK_tr1 --><div style="text-align: center; margin-bottom: 1em;"><!-- END BLOCK_tr1 -->
-		<div style="display: inline-block;position: relative;left:0;padding:0; margin: 0 2px;">
-			<div class="List-item">Komentāri (<span class="<!-- BEGIN BLOCK_comments_new disabled -->Comment-new<!-- END BLOCK_comments_new -->">{res_comment_count}</span>)</div>
+		<div class="unselectable" style="display: inline-block;position: relative;left:0;padding:0; margin: 0 2px;">
+			<div class="List-item" style="text-align: left;">
+				<div class="vote {comment_vote_class} vote-value" style="display: inline-block;text-align: center; padding:0; border:none;">{res_votes}</div>
+				Kom. (<div class="<!-- BEGIN BLOCK_comments_new disabled -->Comment-new<!-- END BLOCK_comments_new -->" style="display: inline-block;">{res_comment_count}</div>)
+			</div>
 			<a href="{module_root}/view/{gd_id}/#pic-holder"><img src="{thumb_path}" alt="" class="img-thumb" /></a>
 		</div>
 		<!-- BEGIN BLOCK_tr2 --></div><!-- END BLOCK_tr2 -->
