@@ -19,8 +19,7 @@ $template->copy_block('BLOCK_forum_comments', 'FILE_forum_comments');
 # 3) pārkopēt foruma pirmā komenta votes uz foruma votēm
 # 4) izvākt pirmo foruma komentu
 
-if(user_loged())
-	$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_comment_count'];
+Res::markCommentCount($forum_data);
 
 if(($forum_data['forum_closed'] == FORUM_OPEN) && ($action == 'add_comment') && user_loged())
 {

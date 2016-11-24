@@ -171,6 +171,19 @@ if(isset($sys_locale)){
 	setlocale(LC_TIME, $sys_locale);
 }
 
+$clear_session = array(
+	'comments',
+	'gallery',
+	);
+
+# TODO: novākt pēc kāda laika
+foreach($clear_session as $section){
+	if(isset($_SESSION[$section])){
+		unset($_SESSION[$section]);
+	}
+}
+//printr($_SESSION);
+
 //ob_start();
 # iesleedzam vaidziigo moduli
 if(file_exists("$sys_root/module/$sys_module.php")) {

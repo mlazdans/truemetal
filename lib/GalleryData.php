@@ -38,7 +38,13 @@ class GalleryData extends Res
 
 		$sql_add = array();
 
-		$sql = 'SELECT gd_id, gd.res_id, gd.gal_id, gd_descr, gd_entered, r.res_votes, r.res_comment_count';
+		$sql = "
+		SELECT
+			gd_id, gd.res_id, gd.gal_id, gd_descr, gd_entered, r.res_votes,
+			COALESCE(r.res_comment_count, 0) AS res_comment_count,
+			res_comment_lastdate
+			";
+
 		if(!empty($params['load_images']))
 			$sql .= ', gd_data, gd_thumb';
 

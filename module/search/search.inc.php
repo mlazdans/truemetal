@@ -104,7 +104,7 @@ if(($res = $cl->Query($search_q, $index)) === false)
 					'doc_url'=>"/".($doc_source_id == 1 ? "article" : "reviews")."/$item[art_id]-".rawurlencode(urlize($item["art_name"]))."?hl=$special_search_q",
 					'doc_module_name'=>$ds['name'],
 					'doc_date'=>date('d.m.Y', strtotime($item['art_entered'])),
-					'doc_comment_count'=>$item['art_comment_count'],
+					'doc_comment_count'=>$item['res_comment_count'],
 					);
 			}
 			unset($arts);
@@ -125,7 +125,7 @@ if(($res = $cl->Query($search_q, $index)) === false)
 					'doc_url'=>"/forum/$item[forum_id]-".rawurlencode(urlize($item["forum_name"]))."?hl=$special_search_q",
 					'doc_module_name'=>$ds['name'],
 					'doc_date'=>date('d.m.Y', strtotime($item['forum_entered'])),
-					'doc_comment_count'=>$item['forum_comment_count'],
+					'doc_comment_count'=>$item['res_comment_count'],
 					);
 			}
 			unset($forums);

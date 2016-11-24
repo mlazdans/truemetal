@@ -33,7 +33,7 @@ if(!user_loged())
 		{
 			$template->{(Forum::hasNewComments($item) ? "enable" : "disable")}('BLOCK_forum_r_comments_new');
 			$template->set_var('forum_r_name', addslashes($item['forum_name']), 'BLOCK_forum_r_items');
-			$template->set_var('forum_r_comment_count', $item['forum_comment_count'], 'BLOCK_forum_r_items');
+			$template->set_var('forum_r_comment_count', $item['res_comment_count'], 'BLOCK_forum_r_items');
 			$template->set_var('forum_r_path', "forum/{$item['forum_id']}-".rawurlencode(urlize($item["forum_name"])), 'BLOCK_forum_r_items');
 			$template->parse_block('BLOCK_forum_r_items', TMPL_APPEND);
 		}
@@ -42,7 +42,7 @@ if(!user_loged())
 	# Articles
 	$Article = new Article;
 	$data = $Article->load(array(
-		'order'=>'art_comment_lastdate DESC',
+		'order'=>'res_comment_lastdate DESC',
 		'limit'=>50,
 		));
 
@@ -55,7 +55,7 @@ if(!user_loged())
 			$template->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_comment_r_comments_new');
 
 			$template->set_var('comment_r_name', $item['art_name'], 'BLOCK_comment_r_items');
-			$template->set_var('comment_r_comment_count', $item['art_comment_count'], 'BLOCK_comment_r_items');
+			$template->set_var('comment_r_comment_count', $item['res_comment_count'], 'BLOCK_comment_r_items');
 			$template->set_var('comment_r_path', "{$item['module_id']}/{$item['art_id']}-".urlize($item['art_name']), 'BLOCK_comment_r_items');
 			$template->parse_block('BLOCK_comment_r_items', TMPL_APPEND);
 		}

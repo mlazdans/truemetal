@@ -369,7 +369,7 @@ $descr.
 			$this->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_review_r_comments_new');
 
 			$this->set_var('review_r_name', $item['art_name'], 'BLOCK_review_r_items');
-			$this->set_var('review_r_comment_count', $item['art_comment_count'], 'BLOCK_review_r_items');
+			$this->set_var('review_r_comment_count', $item['res_comment_count'], 'BLOCK_review_r_items');
 			$this->set_var('review_r_path', "reviews/{$item['art_id']}-".urlize($item['art_name']), 'BLOCK_review_r_items');
 			$this->parse_block('BLOCK_review_r_items', TMPL_APPEND);
 		}
@@ -384,7 +384,7 @@ $descr.
 		$Article = new Article;
 
 		$data = $Article->load(array(
-			'order'=>'art_comment_lastdate DESC',
+			'order'=>'res_comment_lastdate DESC',
 			'limit'=>$limit,
 			));
 
@@ -395,7 +395,7 @@ $descr.
 			$this->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_comment_r_comments_new');
 
 			$this->set_var('comment_r_name', $item['art_name'], 'BLOCK_comment_r_items');
-			$this->set_var('comment_r_comment_count', $item['art_comment_count'], 'BLOCK_comment_r_items');
+			$this->set_var('comment_r_comment_count', $item['res_comment_count'], 'BLOCK_comment_r_items');
 			$this->set_var('comment_r_path', "{$item['module_id']}/{$item['art_id']}-".urlize($item['art_name']), 'BLOCK_comment_r_items');
 			$this->parse_block('BLOCK_comment_r_items', TMPL_APPEND);
 		}

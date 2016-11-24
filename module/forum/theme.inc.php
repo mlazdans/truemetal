@@ -6,7 +6,8 @@
 // marrtins@dqdp.net
 
 if(user_loged())
-	$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_themecount'];
+	Forum::markThemeCount($forum_data);
+	//$_SESSION['forums']['viewed'][$forum_id] = $forum_data['forum_themecount'];
 
 $template->set_file('FILE_forum', 'forum/theme.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_forum');
@@ -119,7 +120,7 @@ if(
 {
 	$items = $forum_items->load(array(
 		"forum_forumid"=>$forum_id,
-		"order"=>"forum_lastcommentdate DESC",
+		"order"=>"res_comment_lastdate DESC",
 		));
 
 	if($items)
@@ -151,7 +152,7 @@ foreach($items as $item)
 	$template->parse_block('BLOCK_forum', TMPL_APPEND);
 }
 
-$forum_count = $forum_items->getThemeCount($forum_id);
+$forum_count = $forum_data['forum_themecount'];
 include('module/forum/pages.inc.php');
 
 set_forum($template, $forum_id);

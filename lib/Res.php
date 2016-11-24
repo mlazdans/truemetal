@@ -169,5 +169,33 @@ class Res
 
 		return $location;
 	} // Route
+
+	public static function hasNewComments($item)
+	{
+		if(!user_loged()){
+			return false;
+		}
+
+		if(empty($item['res_id'])){
+			$t = debug_backtrace();
+			$e = sprintf("Empty res_id: %s\nTrace: %s\n", mlog($item), mlog($t));
+			trigger_error($e);
+			return false;
+		}
+
+		if(isset($_SESSION['res']['viewed'][$item['res_id']]))
+			return ($item['res_comment_count'] > $_SESSION['res']['viewed'][$item['res_id']]);
+
+		if(isset($_SESSION['res']['viewed_before']))
+			return ($_SESSION['res']['viewed_before'] < strtotime($item['res_comment_lastdate']));
+
+		return ($item['res_comment_count'] > 0);
+	} // hasNewComments
+
+	public static function markCommentCount($item)
+	{
+		$_SESSION['res']['viewed'][$item['res_id']] = $item['res_comment_count'];
+	} // markCommentCount
+
 } // class::Res
 

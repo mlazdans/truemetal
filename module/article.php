@@ -112,8 +112,7 @@ if($art_id && isset($articles[0]))
 	}
 	#
 
-	if(user_loged())
-		$_SESSION['comments']['viewed'][$art_id] = $articles[0]['art_comment_count'];
+	Res::markCommentCount($articles[0]);
 
 	$RC = new ResComment();
 	$comments = $RC->Get(array(
@@ -201,17 +200,7 @@ if($articles)
 			$template->enable('BLOCK_art_data');
 			$template->disable('BLOCK_art_intro');
 		}
-
-		if($item['table_id'] == Table::FORUM)
-		{
-			$itemF = $item;
-			$itemF['forum_id'] = $item['art_id'];
-			$itemF['forum_comment_count'] = $item['art_comment_count'];
-			$itemF['forum_lastcommentdate'] = $item['art_comment_lastdate'];
-			$template->{(Forum::hasNewComments($itemF) ? "enable" : "disable")}('BLOCK_comments_new');
-		} else {
-			$template->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_comments_new');
-		}
+		$template->{(Res::hasNewComments($item) ? "enable" : "disable")}('BLOCK_comments_new');
 
 		$item['art_name_urlized'] = rawurlencode(urlize($item['art_name']));
 		$template->set_array($item, 'BLOCK_article');

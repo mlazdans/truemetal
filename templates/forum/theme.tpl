@@ -42,7 +42,7 @@
 		<a href="{module_root}/{forum_id}-{forum_name_urlized}" title="Datums: {forum_date}"><b>{forum_name}</b></a>
 	</td>
 	<td class="Forum-Theme-childcount<!-- BEGIN BLOCK_comments_new disabled --> Comment-new<!-- END BLOCK_comments_new -->">
-		{forum_comment_count}
+		{res_comment_count}
 	</td>
 	<td class="Forum-Theme-username">
 		{forum_username}

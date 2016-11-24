@@ -92,7 +92,7 @@ if(!user_loged())
 	if($gal_id == 'view')
 	{
 		# Komenti
-		$_SESSION['gallery']['viewed'][$gd_id] = $galdata['res_comment_count'];
+		Res::markCommentCount($galdata);
 
 		if(user_loged() && ($action == 'add_comment'))
 		{
@@ -168,7 +168,7 @@ if(!user_loged())
 					$template->enable('BLOCK_tr2');
 				else
 					$template->disable('BLOCK_tr2');
-				$template->set_var('gd_id', $thumb['gd_id'], 'BLOCK_thumb');
+				//$template->set_var('gd_id', $thumb['gd_id'], 'BLOCK_thumb');
 
 				$hash = cache_hash($thumb['gd_id']."thumb.jpg");
 				if($CACHE_ENABLE && cache_exists($hash)){
@@ -176,7 +176,9 @@ if(!user_loged())
 				} else {
 					$template->set_var('thumb_path', "$module_root/thumb/$thumb[gd_id]/", 'BLOCK_thumb');
 				}
+				$template->{(GalleryData::hasNewComments($thumb) ? "enable" : "disable")}('BLOCK_comments_new');
 
+				$template->set_array($thumb, 'BLOCK_thumb');
 				$template->parse_block('BLOCK_thumb', TMPL_APPEND);
 			}
 

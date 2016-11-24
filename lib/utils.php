@@ -845,6 +845,13 @@ function to_range($val, $range, $default = '')
 	return $val;
 } // to_range
 
+function mlog(&$data)
+{
+	ob_start();
+	print_r($data);
+	return ob_get_clean();
+} // mlog
+
 function printr(&$data)
 {
 	if($GLOBALS['i_am_admin'])

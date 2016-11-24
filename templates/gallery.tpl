@@ -32,8 +32,11 @@
 	<a href="{module_root}/#{gal_jump_id}">Galerijas</a> / {gal_name}
 </div>
 	<!-- BEGIN BLOCK_thumb -->
-		<!-- BEGIN BLOCK_tr1 --><div style="text-align: center;"><!-- END BLOCK_tr1 -->
-		<a href="{module_root}/view/{gd_id}/#pic-holder"><img src="{thumb_path}" alt="" class="img-thumb" /></a>
+		<!-- BEGIN BLOCK_tr1 --><div style="text-align: center; margin-bottom: 1em;"><!-- END BLOCK_tr1 -->
+		<div style="display: inline-block;position: relative;left:0;padding:0; margin: 0 2px;">
+			<div class="List-item">Komentāri (<span class="<!-- BEGIN BLOCK_comments_new disabled -->Comment-new<!-- END BLOCK_comments_new -->">{res_comment_count}</span>)</div>
+			<a href="{module_root}/view/{gd_id}/#pic-holder"><img src="{thumb_path}" alt="" class="img-thumb" /></a>
+		</div>
 		<!-- BEGIN BLOCK_tr2 --></div><!-- END BLOCK_tr2 -->
 	<!-- END BLOCK_thumb -->
 <!-- END BLOCK_thumb_list -->
@@ -47,10 +50,10 @@
 <div class="Comment" id="gal_id{gal_id}" style="margin: 0;">
 	<div class="header">
 		<div class="vote unselectable">
-			<a href="{http_root}/vote/down/{res_id}/" title="Dauns..." onclick="Truemetal.Vote('{res_id}', 'down', '#gal_id{gal_id} .vote-value'); return false;">[&ndash;]</a>
+			<a href="{http_root}/vote/down/{res_id}/" title="-" onclick="Truemetal.Vote('{res_id}', 'down', '#gal_id{gal_id} .vote-value'); return false;">[&ndash;]</a>
 		</div>
 		<div class="vote unselectable">
-			<a href="{http_root}/vote/up/{res_id}/" title="Ōjā!" onclick="Truemetal.Vote('{res_id}', 'up', '#gal_id{gal_id} .vote-value'); return false;">[+]</a>
+			<a href="{http_root}/vote/up/{res_id}/" title="+" onclick="Truemetal.Vote('{res_id}', 'up', '#gal_id{gal_id} .vote-value'); return false;">[+]</a>
 		</div>
 		<div class="vote {comment_vote_class} vote-value unselectable">
 			{res_votes}

@@ -79,8 +79,8 @@ SELECT
 	a.*,
 	m.*,
 	r.*,
-	COALESCE(res_comment_count, 0) AS art_comment_count,
-	res_comment_lastdate AS art_comment_lastdate
+	COALESCE(res_comment_count, 0) AS res_comment_count,
+	res_comment_lastdate
 FROM
 	`article` a
 JOIN `modules` m ON (a.art_modid = m.mod_id)
@@ -321,17 +321,6 @@ INSERT INTO article (
 
 		return $data['art_count'];
 	} // get_total
-
-	static function hasNewComments($item)
-	{
-		if(isset($_SESSION['comments']['viewed'][$item['art_id']]))
-			return ($item['art_comment_count'] > $_SESSION['comments']['viewed'][$item['art_id']]);
-
-		if(isset($_SESSION['comments']['viewed_before']))
-			return ($_SESSION['comments']['viewed_before'] < strtotime($item['art_comment_lastdate']));
-
-		return true;
-	} // hasNewComments
 
 } // class::Article
 

@@ -20,10 +20,10 @@
 		<!-- END BLOCK_profile_link -->
 		<!-- BEGIN BLOCK_comment_vote disabled -->
 			<div class="vote unselectable">
-				<a href="{http_root}/vote/down/{res_id}/" title="Dauns..." onclick="Truemetal.Vote('{res_id}', 'down', '#comment{c_id} .vote-value'); return false;">[&ndash;]</a>
+				<a href="{http_root}/vote/down/{res_id}/" title="-" onclick="Truemetal.Vote('{res_id}', 'down', '#comment{c_id} .vote-value'); return false;">[&ndash;]</a>
 			</div>
 			<div class="vote unselectable">
-				<a href="{http_root}/vote/up/{res_id}/" title="Ōjā!" onclick="Truemetal.Vote('{res_id}', 'up', '#comment{c_id} .vote-value'); return false;">[+]</a>
+				<a href="{http_root}/vote/up/{res_id}/" title="+" onclick="Truemetal.Vote('{res_id}', 'up', '#comment{c_id} .vote-value'); return false;">[+]</a>
 			</div>
 			<div class="vote {comment_vote_class} vote-value unselectable">
 				{res_votes}

@@ -9,7 +9,7 @@
 		<div class="date">{art_date}</div>
 		<div class="comments">
 			<a href="{http_root}/{module_id}/{art_id}-{art_name_urlized}#comments">Komentāri</a>
-			<span<!-- BEGIN BLOCK_comments_new disabled --> class="Comment-new"<!-- END BLOCK_comments_new -->>({art_comment_count})</span>
+			<span<!-- BEGIN BLOCK_comments_new disabled --> class="Comment-new"<!-- END BLOCK_comments_new -->>({res_comment_count})</span>
 		</div>
 		<div class="caption"><a class="caption" href="{http_root}/{module_id}/{art_id}-{art_name_urlized}">{art_name}</a></div>
 	</div>

@@ -96,11 +96,12 @@ class Forum extends Res
 			$sql = "SELECT f.*, r.*";
 		}
 
+		# TODO: forum_themecount, forum_lastthemedate trigeros
 		$sql .= ",
-	COALESCE(res_comment_count, 0) AS forum_comment_count,
-	res_comment_lastdate AS forum_lastcommentdate,
-	(SELECT COUNT(*) FROM forum f2 WHERE f2.forum_forumid = f.forum_id) forum_themecount,
-	(SELECT MAX(forum_entered) FROM forum f3 WHERE f3.forum_forumid = f.forum_id) forum_lastthemedate
+	COALESCE(res_comment_count, 0) AS res_comment_count,
+	res_comment_lastdate,
+	(SELECT COUNT(*) FROM forum f2 WHERE f2.forum_forumid = f.forum_id AND f2.forum_active = '".FORUM_ACTIVE."') forum_themecount,
+	(SELECT MAX(forum_entered) FROM forum f3 WHERE f3.forum_forumid = f.forum_id AND f3.forum_active = '".FORUM_ACTIVE."') forum_lastthemedate
 FROM
 	forum f
 	JOIN `res` r ON r.`res_id` = f.`res_id`
@@ -119,39 +120,9 @@ FROM
 				$sql .= sprintf(" LIMIT %s,%s", ($this->page - 1) * $this->fpp, $this->fpp);
 		}
 
+
 		return (isset($params['forum_id']) || isset($params['res_id']) ? $this->db->ExecuteSingle($sql) : $this->db->Execute($sql));
 	} // load
-
-	function getThemeCount($forum_id = 0, $forum_active = FORUM_ACTIVE)
-	{
-		$sql_add = array();
-
-		if($forum_id === 0){
-			$sql_add[] = "forum_forumid IS NULL";
-		} else {
-			$sql_add[] = "forum_forumid = $forum_id";
-		}
-
-		if($forum_active != FORUM_ALL)
-			$sql_add[] = sprintf("forum_active = '%s'", $forum_active);
-
-		$sql = "
-SELECT
-	COUNT(forum_id) AS forum_comment_count
-FROM
-	forum
-";
-
-		if($sql_add)
-			$sql .= " WHERE ".join(" AND ", $sql_add);
-
-		if($data = $this->db->ExecuteSingle($sql))
-		{
-			return $data['forum_comment_count'];
-		} else {
-			return 0;
-		}
-	} // getThemeCount
 
 	function setItemsPerPage($fpp)
 	{
@@ -489,8 +460,8 @@ INSERT INTO forum (
 	function set_recent_forum(&$template)
 	{
 		$data = $this->load(array(
-			"fields"=>array('forum_id', 'forum_name'),
-			"order"=>'forum_lastcommentdate DESC',
+			"fields"=>array('forum_id', 'forum_name', 'f.res_id'),
+			"order"=>'res_comment_lastdate DESC',
 			"limit"=>'10',
 			"forum_allowchilds"=>FORUM_PROHIBITCHILDS,
 			));
@@ -503,7 +474,7 @@ INSERT INTO forum (
 			{
 				$template->{(Forum::hasNewComments($item) ? "enable" : "disable")}('BLOCK_forum_r_comments_new');
 				$template->set_var('forum_r_name', addslashes($item['forum_name']), 'FILE_r_forum');
-				$template->set_var('forum_r_comment_count', $item['forum_comment_count'], 'FILE_r_forum');
+				$template->set_var('forum_r_comment_count', $item['res_comment_count'], 'FILE_r_forum');
 				$template->set_var('forum_r_path', "forum/{$item['forum_id']}-".rawurlencode(urlize($item["forum_name"])), 'FILE_r_forum');
 				$template->parse_block('BLOCK_forum_r_items', TMPL_APPEND);
 			}
@@ -515,27 +486,28 @@ INSERT INTO forum (
 		}
 	} // set_recent_forum
 
-	static function hasNewComments($item)
-	{
-		if(isset($_SESSION['forums']['viewed'][$item['forum_id']]))
-			return ($item['forum_comment_count'] > $_SESSION['forums']['viewed'][$item['forum_id']]);
-
-		if(isset($_SESSION['forums']['viewed_before']))
-			return ($_SESSION['forums']['viewed_before'] < strtotime($item['forum_lastcommentdate']));
-
-		return true;
-	} // hasNewComments
-
 	static function hasNewThemes($item)
 	{
+		if(!user_loged()){
+			return false;
+		}
+
 		if(isset($_SESSION['forums']['viewed'][$item['forum_id']]))
 			return ($item['forum_themecount'] > $_SESSION['forums']['viewed'][$item['forum_id']]);
 
 		if(isset($_SESSION['forums']['viewed_before']))
 			return ($_SESSION['forums']['viewed_before'] < strtotime($item['forum_lastthemedate']));
 
-		return true;
+		return ($item['forum_themecount'] > 0);
 	} // hasNewThemes
+
+	public static function markThemeCount($item)
+	{
+		if(!user_loged()){
+			return false;
+		}
+		$_SESSION['forums']['viewed'][$item['forum_id']] = $item['forum_themecount'];
+	} // markThemeCount
 
 } // Class::Forum
 
