@@ -31,7 +31,7 @@ foreach($comments as $item)
 	$comment_nr++;
 	$item['res_votes'] = (int)$item['res_votes'];
 	# balsošana
-	if(user_loged() && $template->block_isset('BLOCK_comment_vote')){
+	if(user_loged() && $template->block_exists('BLOCK_comment_vote')){
 		$template->enable('BLOCK_comment_vote');
 	}
 

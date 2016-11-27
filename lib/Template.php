@@ -27,15 +27,15 @@ class Template extends TemplateBlock
 	{
 		$file_name = "$this->root_dir/$file_name";
 		if(!file_exists($file_name))
-			$this->halt('filename: file ['.$file_name.'] does not exists', E_USER_ERROR);
+			$this->error('filename: file ['.$file_name.'] does not exists', E_USER_ERROR);
 
 		return $file_name;
 	} // __filename
 
 	function set_file($ID, $file_name)
 	{
-		if($this->block_isset($ID)) {
-			$this->halt('set_file: block ['.$ID.'] already exists', E_USER_ERROR);
+		if($this->block_exists($ID)) {
+			$this->error('set_file: block ['.$ID.'] already exists', E_USER_ERROR);
 			return false;
 		}
 
@@ -48,8 +48,8 @@ class Template extends TemplateBlock
 			$content = file_get_contents($file_path);
 		}
 
-		$this->blocks[$ID] = new TemplateBlock($ID, $content);
-		$this->blocks[$ID]->block_parent = $this;
+		$this->blocks[$ID] = new TemplateBlock($this, $ID, $content);
+		//$this->blocks[$ID]->block_parent = $this;
 		$this->blocks[$ID]->modtime = $modtime;
 
 		return true;

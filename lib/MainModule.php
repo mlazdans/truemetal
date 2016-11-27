@@ -177,8 +177,6 @@ class MainModule extends Template
 		$this->set_jubilars();
 		$this->set_recent_comments();
 		$this->set_recent_reviews();
-
-		$this->enable('BLOCK_right');
 	} // set_right
 
 	function set_poll()

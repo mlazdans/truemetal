@@ -62,6 +62,11 @@ if(!user_loged())
 	}
 }
 
-$template->set_right_defaults();
+$template->set_right();
+$template->set_events();
+$template->set_login();
+$template->set_online();
+$template->set_search();
+$template->set_jubilars();
 $template->out();
 

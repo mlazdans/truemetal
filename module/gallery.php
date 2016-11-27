@@ -12,7 +12,7 @@ require_once('lib/MainModule.php');
 
 $CACHE_ENABLE = true;
 if($i_am_admin){
-	$CACHE_ENABLE = false;
+	//$CACHE_ENABLE = false;
 }
 $gal_id = array_shift($sys_parameters);
 $gd_id = (int)array_shift($sys_parameters);
