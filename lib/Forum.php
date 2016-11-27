@@ -386,14 +386,15 @@ INSERT INTO forum (
 		if($action == 'open_multiple')
 			$func = 'open';
 
-		if(isset($data['item_count']) && $func)
-			for($r = 1; $r <= $data['item_count']; ++$r)
-				// ja iechekots, proceseejam
-				if(isset($data['forum_checked'.$r]) && isset($data['forum_id'.$r]))
-					if($func == 'move')
-						$ret = $ret && $this->{$func}($data['forum_id'.$r], $data['new_forum_forumid']);
-					else
-						$ret = $ret && $this->{$func}($data['forum_id'.$r]);
+		if(!empty($data['forum_checked']) && $func)
+		{
+			foreach($data['forum_checked'] as $forum_id=>$on){
+				if($func == 'move')
+					$ret = $ret && $this->{$func}($forum_id, $data['new_forum_forumid']);
+				else
+					$ret = $ret && $this->{$func}($forum_id);
+			}
+		}
 
 		return $ret;
 	} // process_action

@@ -40,7 +40,7 @@ foreach($data as $item){
 
 $gallery = new GalleryData;
 $data = $gallery->load(array(
-	'gal_active'=>Res::STATE_ALL,
+	'gal_visible'=>Res::STATE_ALL,
 	'gd_visible'=>Res::STATE_ALL,
 	));
 foreach($data as $item){

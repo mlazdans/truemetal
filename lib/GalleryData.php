@@ -54,12 +54,12 @@ class GalleryData extends Res
 		if(isset($params['res_id']))
 			$sql_add[] = sprintf("gd.res_id = %d", $params['res_id']);
 
-		if(isset($params['gal_active']))
+		if(isset($params['gal_visible']))
 		{
-			if($params['gal_active'])
-				$sql_add[] = sprintf("gal_active = '%s'", $params['gal_active']);
+			if($params['gal_visible'])
+				$sql_add[] = sprintf("g.gal_visible = '%s'", $params['gal_visible']);
 		} else {
-			$sql_add[] = sprintf("gal_active = '%s'", Res::STATE_ACTIVE);
+			$sql_add[] = sprintf("g.gal_visible = '%s'", Res::STATE_VISIBLE);
 		}
 
 		if(isset($params['gd_visible']))

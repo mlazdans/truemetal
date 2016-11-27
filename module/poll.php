@@ -5,6 +5,9 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
+header("Location: /");
+return;
+
 require_once('lib/Poll.php');
 
 $action = array_shift($sys_parameters);

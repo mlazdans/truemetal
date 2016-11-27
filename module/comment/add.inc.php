@@ -15,7 +15,7 @@ if(empty($data['c_data']))
 }
 
 # Safe
-$template->set_var('c_data', parse_form_data($data['c_data']), 'BLOCK_addcomment');
+$template->set_var('c_data', parse_form_data($data['c_data']));
 
 # Nočeko vai iepostēts tikai links
 $c_data = $data['c_data'];

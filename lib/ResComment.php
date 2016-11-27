@@ -69,6 +69,8 @@ SELECT
 	c.*,
 	0 as cm_old_id,
 	r.res_votes,
+	r.res_votes_plus_count,
+	r.res_votes_minus_count,
 	r2.res_id AS parent_res_id,
 	r2.table_id AS parent_table_id
 FROM

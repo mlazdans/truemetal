@@ -36,12 +36,12 @@ class Gallery extends Res
 		if(isset($params['res_id']))
 			$sql_add[] = sprintf("res_id = %d", $params['res_id']);
 
-		if(isset($params['gal_active']))
+		if(isset($params['gal_visible']))
 		{
-			if($params['gal_active'])
-				$sql_add[] = sprintf("gal_active = '%s'", $params['gal_active']);
+			if($params['gal_visible'])
+				$sql_add[] = sprintf("gal_visible = '%s'", $params['gal_visible']);
 		} else {
-			$sql_add[] = sprintf("gal_active = '%s'", Res::STATE_ACTIVE);
+			$sql_add[] = sprintf("gal_visible = '%s'", Res::STATE_VISIBLE);
 		}
 
 		$sql = 'SELECT * FROM gallery g';
@@ -70,10 +70,10 @@ class Gallery extends Res
 
 		$sql = "
 		INSERT INTO gallery (
-			gal_name, gal_active, gal_visible,
+			gal_name, gal_visible,
 			gal_data, gal_entered, gal_ggid
 		) VALUES (
-			'$data[gal_name]', '$data[gal_active]', '$data[gal_visible]',
+			'$data[gal_name]', '$data[gal_visible]',
 			'$data[gal_data]',  $date, $data[gal_ggid]
 		)";
 
@@ -99,7 +99,6 @@ class Gallery extends Res
 		$sql .= $data['gal_name'] ? "gal_name = '$data[gal_name]', " : '';
 		$sql .= $data['gal_entered'] ? "gal_entered = '$data[gal_entered]', " : '';
 		$sql .= $data['gal_data'] ? "gal_data = '$data[gal_data]', " : '';
-		$sql .= "gal_active = '$data[gal_active]', ";
 		$sql .= "gal_visible = '$data[gal_visible]', ";
 		$sql .= "gal_data = '$data[gal_data]', ";
 		$sql .= "gal_ggid = $data[gal_ggid], ";
@@ -149,24 +148,6 @@ class Gallery extends Res
 
 		return $this->db->Execute($sql);
 	} // del
-
-	function activate($gal_id)
-	{
-		$gal_id = (integer)$gal_id;
-
-		$sql = 'UPDATE gallery SET gal_active = "'.Res::STATE_ACTIVE.'" WHERE gal_id = '.$gal_id;
-
-		return $this->db->Execute($sql);
-	} // activate
-
-	function deactivate($gal_id)
-	{
-		$gal_id = (integer)$gal_id;
-
-		$sql = 'UPDATE gallery SET gal_active = "'.Res::STATE_INACTIVE.'" WHERE gal_id = '.$gal_id;
-
-		return $this->db->Execute($sql);
-	} // deactivate
 
 	function show($gal_id)
 	{
@@ -218,11 +199,6 @@ class Gallery extends Res
 	# TODO: validāciju atstāt izsaucēja ziņā
 	function validate(&$data)
 	{
-		if(isset($data['gal_active']))
-			$data['gal_active'] = ereg('[^YN]', $data['gal_active']) ? '' : $data['gal_active'];
-		else
-			$data['gal_active'] = Res::STATE_ACTIVE;
-
 		if(isset($data['gal_visible']))
 			$data['gal_visible'] = ereg('[^YN]', $data['gal_visible']) ? '' : $data['gal_visible'];
 		else

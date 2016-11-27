@@ -16,7 +16,6 @@ if($json)
 } else {
 	$template = new MainModule($sys_template_root, 'profile', 'user/profile/user.tpl');
 }
-$template->set_var('error_l_email', '', 'FILE_profile');
 
 if(!user_loged())
 {

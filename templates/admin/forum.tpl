@@ -174,25 +174,20 @@ Nav nevienas tēmas
 <!-- BEGIN BLOCK_forum_theme_item -->
 <tr>
 	<td class="{forum_color_class}">
-		<input type="hidden" name="forum_id{forum_nr}" value="{forum_id}" />
-		<input type="checkbox" name="forum_checked{forum_nr}" />
+		<input type="checkbox" name="forum_checked[{forum_id}]" />
 	</td>
 	<td class="{forum_color_class}" style="white-space: nowrap;">
 		{forum_padding}<a href="{module_root}/{forum_id}/">{forum_name}</a>
 	</td>
+	<td class="{forum_color_class}">{res_comment_count}</td>
 	<td class="{forum_color_class}">
-		<!-- BEGIN BLOCK_forum_active disabled --><!-- END BLOCK_forum_active -->
 		<!-- BEGIN BLOCK_forum_inactive disabled -->neaktīvs<!-- END BLOCK_forum_inactive -->
-	</td>
-	<td class="{forum_color_class}">
 		<!-- BEGIN BLOCK_forum_closed disabled -->slēgts<!-- END BLOCK_forum_closed -->
-		<!-- BEGIN BLOCK_forum_open disabled --><!-- END BLOCK_forum_open -->
 	</td>
 </tr>
 <!-- END BLOCK_forum_theme_item -->
 <tr>
 	<td colspan="4">
-		<input type="hidden" name="item_count" value="{item_count}" />
 		Iezīmētos:
 		<select name="action">
 			<option value="">---</option>

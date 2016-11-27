@@ -92,7 +92,7 @@ JOIN `res` r ON r.`res_id` = a.`res_id`
 	{
 		global $ip;
 
-		$this->login_id = $login_id = 3;
+		$this->login_id = 3;
 		if(!($res_id = parent::Add())) {
 			return false;
 		}
@@ -105,17 +105,16 @@ JOIN `res` r ON r.`res_id` = a.`res_id`
 			$date = "'$data[art_entered]'";
 
 		$data2 = $this->db->QuoteArray($data);
-		//$login_id = (int)(isset($_SESSION['login']['l_id']) ? $_SESSION['login']['l_id'] : 0);
 
 		$sql = "
 INSERT INTO article (
-	res_id, art_name, art_username, art_useremail, art_userip, art_entered,
+	res_id, art_name, art_userip, art_entered,
 	art_modid, art_data, art_intro, art_active,
 	art_type, login_id
 ) VALUES (
-	$res_id, '$data2[art_name]', '$data2[art_username]', '$data2[art_useremail]', '$ip', ".$date.",
+	$res_id, '$data2[art_name]', '$ip', ".$date.",
 	$data2[art_modid], '$data2[art_data]', '$data2[art_intro]', '$data2[art_active]',
-	'$data2[art_type]', $login_id
+	'$data2[art_type]', $this->login_id
 )";
 
 		return ($this->db->Execute($sql) ? $this->db->LastID() : false);
@@ -262,12 +261,6 @@ INSERT INTO article (
 		if(!isset($data['art_name']))
 			$data['art_name'] = '';
 
-		if(!isset($data['art_username']))
-			$data['art_username'] = '';
-
-		if(!isset($data['art_useremail']))
-			$data['art_useremail'] = '';
-
 		if(!isset($data['art_data']))
 			$data['art_data'] = '';
 
@@ -278,8 +271,6 @@ INSERT INTO article (
 			$data['art_entered'] = '';
 
 		my_strip_tags($data['art_name']);
-		my_strip_tags($data['art_username']);
-		my_strip_tags($data['art_useremail']);
 	} // validate
 
 	function get_total($art_modid = 0)

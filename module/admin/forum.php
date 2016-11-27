@@ -5,7 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-function set_themes(&$template, &$data, $d = 0, $c = 0) {
+function set_themes(&$template, &$data, $d = 0) {
 	global $forum;
 
 	if($d == 2)
@@ -17,18 +17,14 @@ function set_themes(&$template, &$data, $d = 0, $c = 0) {
 		$template->enable('BLOCK_forum_nothemes');
 
 	foreach($data as $item) {
-		++$c;
-		$template->set_var('forum_nr', $c, 'BLOCK_forum_theme_item');
 		$template->set_var('forum_id', $item['forum_id'], 'BLOCK_forum_theme_item');
+		$template->set_var('res_comment_count', $item['res_comment_count'], 'BLOCK_forum_theme_item');
 		$template->set_var('forum_name', $item['forum_name'], 'BLOCK_forum_theme_item');
 
 		# ja aktiivs vai nee - kaukaa iekraaso to
-		$template->disable('BLOCK_forum_active');
 		$template->disable('BLOCK_forum_inactive');
 		$template->disable('BLOCK_forum_closed');
-		$template->disable('BLOCK_forum_open');
 		if($item['forum_active'] == Res::STATE_ACTIVE) {
-			$template->enable('BLOCK_forum_active');
 			$template->set_var('forum_color_class', 'box-normal', 'BLOCK_forum_theme_item');
 		} else {
 			$template->enable('BLOCK_forum_inactive');
@@ -37,16 +33,12 @@ function set_themes(&$template, &$data, $d = 0, $c = 0) {
 
 		if($item['forum_closed'] == Forum::CLOSED) {
 			$template->enable('BLOCK_forum_closed');
-		} else {
-			$template->enable('BLOCK_forum_open');
+			$template->set_var('forum_color_class', 'box-inactive', 'BLOCK_forum_theme_item');
 		}
 
 		$template->set_var('forum_padding', str_repeat('&nbsp;', 3 * $d));
 		$template->parse_block('BLOCK_forum_theme_item', TMPL_APPEND);
 	}
-	$template->set_var('item_count', $c);
-
-	return $c;
 }
 
 require_once('lib/AdminModule.php');
