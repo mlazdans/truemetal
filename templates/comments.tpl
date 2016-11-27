@@ -25,10 +25,10 @@
 			<div class="vote unselectable">
 				<a href="/vote/up/{res_id}/" title="+" onclick="Truemetal.Vote('{res_id}', 'up', '#comment{c_id} .vote-value'); return false;">[+]</a>
 			</div>
+		<!-- END BLOCK_comment_vote -->
 			<div class="vote {comment_vote_class} vote-value unselectable" title="+{res_votes_plus_count} -{res_votes_minus_count}">
 				{res_votes}
 			</div>
-		<!-- END BLOCK_comment_vote -->
 		<div class="center unselectable">&nbsp;</div>
 	</div>
 	<div class="data{c_disabled_user_class}">
