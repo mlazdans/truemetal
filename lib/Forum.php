@@ -187,27 +187,6 @@ FROM
 		return $data2;
 	} // get_all_tree
 
-	function set_all_tree(&$template, $tree, $forum_forumid = 0, $d = 0, $block = 'BLOCK_forum_forumid')
-	{
-		if($forum_forumid)
-		{
-			$data = &$tree[$forum_forumid]['_data_'];
-		} else
-			$data = &$tree['_data_'];
-
-		if(isset($data))
-		{
-			foreach($data as $item)
-			{
-				//print str_repeat('&nbsp;', $d * 3).$item['forum_name']."\n";
-				$template->set_var('new_forum_forumid', $item['forum_id'], $block);
-				$template->set_var('new_forum_name', str_repeat('&nbsp;', $d * 3).$item['forum_name'], $block);
-				$template->parse_block('BLOCK_forum_forumid', TMPL_APPEND);
-				$this->set_all_tree($template, $tree, $item['forum_id'], $d + 1, $block);
-			}
-		}
-	} // set_all_tree
-
 	function Add()
 	{
 		global $ip;
@@ -453,7 +432,7 @@ INSERT INTO forum (
 
 	} // validate
 
-	function set_recent_forum(&$template)
+	function set_recent_forum(Template $template)
 	{
 		$data = $this->load(array(
 			"fields"=>array('forum_id', 'forum_name', 'f.res_id'),
@@ -481,7 +460,48 @@ INSERT INTO forum (
 		}
 	} // set_recent_forum
 
-	static function hasNewThemes($item)
+	public function set_all_tree(Template $template, $tree, $forum_forumid = 0, $d = 0, $block = 'BLOCK_forum_forumid')
+	{
+		if($forum_forumid)
+		{
+			$data = &$tree[$forum_forumid]['_data_'];
+		} else
+			$data = &$tree['_data_'];
+
+		if(isset($data))
+		{
+			foreach($data as $item)
+			{
+				//print str_repeat('&nbsp;', $d * 3).$item['forum_name']."\n";
+				$template->set_var('new_forum_forumid', $item['forum_id'], $block);
+				$template->set_var('new_forum_name', str_repeat('&nbsp;', $d * 3).$item['forum_name'], $block);
+				$template->parse_block('BLOCK_forum_forumid', TMPL_APPEND);
+				$this->set_all_tree($template, $tree, $item['forum_id'], $d + 1, $block);
+			}
+		}
+	} // set_all_tree
+
+	public function set_forum_path(Template $template, $forum_id)
+	{
+		if(!($tree = $this->get_tree($forum_id)))
+			return false;
+
+		$template->enable('BLOCK_forum_path');
+		foreach($tree as $key=>$item)
+		{
+			if(isset($tree[$key + 0]))
+			{
+				$forum_path = Forum::Route($item);
+				$template->set_var('forum_name', addslashes($item['forum_name']), 'BLOCK_forum_path');
+				$template->set_var('forum_path', $forum_path, 'BLOCK_forum_path');
+				$template->parse_block('BLOCK_forum_path', TMPL_APPEND);
+			}
+		}
+
+		return true;
+	} // set_forum_path
+
+	public static function hasNewThemes($item)
 	{
 		if(!user_loged()){
 			return false;

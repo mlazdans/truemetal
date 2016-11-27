@@ -3,7 +3,7 @@
 </div>
 
 <div class="Forum-cat">
-	<a href="{module_root}/"><b>Forums</b></a><!-- BEGIN BLOCK_forum_path disabled --> / <a href="{module_root}{forum1_path}">{forum1_name}</a><!-- END BLOCK_forum_path -->
+	<a href="{module_root}/"><b>Forums</b></a><!-- BEGIN BLOCK_forum_path disabled --> / <a href="{forum_path}">{forum_name}</a><!-- END BLOCK_forum_path -->
 </div>
 
 <!-- BEGIN BLOCK_attend disabled -->

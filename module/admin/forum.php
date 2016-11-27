@@ -105,7 +105,7 @@ $template->set_var('forum_class', 'TD-menu-active');
 $template->set_title('Admin :: forumi');
 
 $template->set_var('forum_id', $forum_id, 'FILE_middle');
-set_forum($template, $forum_id);
+set_forum_path($template, $forum_id);
 
 $items = $forum->load(array(
 	'forum_forumid'=>$forum_id,

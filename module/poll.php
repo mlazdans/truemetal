@@ -48,12 +48,7 @@ if($action == 'results')
 	$template = new MainModule($sys_module_id);
 	$poll->show_archive($template, $id);
 
-	$template->set_right();
-	$template->set_poll();
-	$template->set_login();
-	$template->set_online();
-	$template->set_search();
-
+	$template->set_right_defaults();
 	$template->out();
 }
 

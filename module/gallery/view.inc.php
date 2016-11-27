@@ -59,5 +59,6 @@ if($galdata['res_votes'] > 0)
 # nechekojam, vai ir veel bildes
 $next_id = $GD->get_next_data($gal['gal_id'], $gd_id);
 $template->set_var('gd_nextid', $next_id ? $next_id : $gd_id, 'BLOCK_image');
+
 $template->set_array($galdata, 'BLOCK_image');
 

@@ -26,10 +26,6 @@ while($r = $db->FetchAssoc($q))
 	$template->parse_block('BLOCK_search_log', TMPL_APPEND);
 }
 
-$template->set_right();
-$template->set_login();
-$template->set_online();
-$template->set_search();
-
+$template->set_right_defaults();
 $template->out();
 

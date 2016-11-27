@@ -154,5 +154,5 @@ foreach($items as $item)
 $forum_count = $forum_data['forum_themecount'];
 include('module/forum/pages.inc.php');
 
-set_forum($template, $forum_id);
+$forum->set_forum_path($template, $forum_id);
 

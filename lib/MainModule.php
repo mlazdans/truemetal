@@ -158,34 +158,28 @@ class MainModule extends Template
 		} // while
 	} // set_submodules
 
-	function set_right($file = 'right.tpl', $img = '')
+	function set_right()
 	{
-		$this->set_file('FILE_right', $file);
+		$this->set_file('FILE_right', 'right.tpl');
 		$this->copy_block('BLOCK_right', 'FILE_right');
 
 		$this->enable('BLOCK_right');
 	} // set_right
 
-	function set_label($path)
+	function set_right_defaults()
 	{
-		if($c = count($path))
-		{
-			$this->enable('BLOCK_label');
-			if($c > 3)
-				$path = array_slice($path, -3);
-		}
+		$this->set_right();
+		$this->set_events();
+		$this->set_recent_forum();
+		$this->set_login();
+		$this->set_online();
+		$this->set_search();
+		$this->set_jubilars();
+		$this->set_recent_comments();
+		$this->set_recent_reviews();
 
-		$p = '/';
-		foreach($path as $k=>$label) {
-			if($label['module_id'])
-				$p .= $label['module_id'].'/';
-			if(mb_strlen($label['module_name']) > 20)
-				$label['module_name'] = mb_substr($label['module_name'], 0, 18).'..';
-			$this->set_var('label_name', $label['module_name']);
-			$this->set_var('label_path', $p);
-			$this->parse_block('BLOCK_label', TMPL_APPEND);
-		}
-	}
+		$this->enable('BLOCK_right');
+	} // set_right
 
 	function set_poll()
 	{
@@ -232,35 +226,23 @@ class MainModule extends Template
 
 	function set_online()
 	{
-		global $db;
-
 		$login = new Logins;
 		$this->set_file('FILE_online', 'right/online.tpl');
 
 		$block = user_loged() ? 'BLOCK_online_item' : 'BLOCK_online_item_notloged';
 		$user_count = 0;
-		$parsed_users = array();
 
-		$active_sessions = $login->get_active();
-
-		if($active_sessions)
-		{
+		if($active_sessions = $login->get_active())
 			$this->enable($block);
-		}
 
 		foreach($active_sessions as $data)
 		{
-			if(!in_array($data['l_nick'], $parsed_users))
-			{
-				++$user_count;
-				$this->set_var('online_name', $data['l_nick'], 'FILE_online');
-				$this->set_var('online_login_id', $data['l_login'], 'FILE_online');
-				$this->parse_block($block, TMPL_APPEND);
-				$parsed_users[] = $data['l_nick'];
-			}
+			$this->set_var('online_name', $data['l_nick'], 'FILE_online');
+			$this->set_var('online_login_id', $data['l_login'], 'FILE_online');
+			$this->parse_block($block, TMPL_APPEND);
 		}
 
-		$this->set_var('online_total', $user_count);
+		$this->set_var('online_total', count($active_sessions));
 
 		$this->parse_block('FILE_online');
 		$this->set_var('right_item_data', $this->get_parsed_content('FILE_online'), 'BLOCK_right_item');
@@ -269,10 +251,9 @@ class MainModule extends Template
 
 	function set_recent_reviews($limit = 4)
 	{
-		global $module_tree, $i_am_admin;
+		global $module_tree;
 
 		$article = new Article;
-		//$comment = new Comment('article_comments', 'art_id');
 
 		$data = $article->load(array(
 			'art_modid'=>$module_tree['reviews']['_data_']['mod_id'],

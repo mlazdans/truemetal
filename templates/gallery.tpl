@@ -64,7 +64,7 @@
 		<div class="center unselectable">&nbsp;</div>
 	</div>
 </div>
-<div style="text-align: center;"><a href="{module_root}/view/{gd_nextid}/#pic-holder"><img src="{image_path}" alt="Nākamā" /></a></div>
+<div style="text-align: center;"><a href="{module_root}/view/{gd_nextid}/#pic-holder"><img src="{image_path}" alt="Nākamā" width="500" /></a></div>
 <div style="text-align: center;">{gd_descr}</div>
 
 <div class="TD-cat">

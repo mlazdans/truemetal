@@ -40,10 +40,6 @@ if($error_msg)
 parse_form_data_array($data);
 $template->set_array($data, 'BLOCK_forgot_form');
 
-$template->set_right();
-$template->set_login();
-$template->set_online();
-$template->set_search();
-
+$template->set_right_defaults();
 $template->out();
 

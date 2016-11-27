@@ -21,10 +21,6 @@ $template->copy_block('BLOCK_middle', 'FILE_module');
 # View and edit private profile
 include('module/user/profile/private.inc.php');
 
-$template->set_right();
-$template->set_login();
-$template->set_online();
-$template->set_search();
-
+$template->set_right_defaults();
 $template->out();
 

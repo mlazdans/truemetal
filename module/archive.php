@@ -53,9 +53,6 @@ foreach($arts as $item)
 	$template->parse_block('BLOCK_archive_items', TMPL_APPEND);
 }
 
-$template->set_right();
-$template->set_login();
-$template->set_online();
-
+$template->set_right_defaults();
 $template->out();
 

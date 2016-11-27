@@ -82,10 +82,7 @@ if($search_msg)
 	}
 }
 
-$template->set_right();
-$template->set_search($ent_search_q);
-$template->set_login();
-$template->set_online();
-
+$template->set_right_defaults();
+//$template->set_search($ent_search_q);
 $template->out();
 

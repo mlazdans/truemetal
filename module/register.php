@@ -131,10 +131,6 @@ if($error_msg)
 	$template->set_var('error_msg', join('<br/>', $error_msg), 'BLOCK_register_error');
 }
 
-$template->set_right();
-$template->set_login();
-$template->set_online();
-$template->set_search();
-
+$template->set_right_defaults();
 $template->out();
 

@@ -87,16 +87,9 @@ if($forum_id)
 }
 
 $template->set_title($forum_title);
+$template->set_var("menu_active_forum", "_over");
 $template->set_descr($forum_descr);
 
-$template->set_right();
-$template->set_events();
-$template->set_recent_forum();
-$template->set_login();
-$template->set_online();
-$template->set_search();
-$template->set_jubilars();
-
-$template->set_var("menu_active_forum", "_over");
+$template->set_right_defaults();
 $template->out();
 

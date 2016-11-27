@@ -62,13 +62,6 @@ if(!user_loged())
 	}
 }
 
-# TODO: galvenās izvēles ielikt MainModule
-$template->set_right();
-$template->set_events();
-$template->set_login();
-$template->set_online();
-$template->set_search();
-$template->set_jubilars();
-
+$template->set_right_defaults();
 $template->out();
 

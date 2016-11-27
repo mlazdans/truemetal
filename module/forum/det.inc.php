@@ -114,5 +114,5 @@ if($forum_data['forum_closed'] == Forum::CLOSED)
 	$template->enable('BLOCK_forum_closed');
 }
 
-set_forum($template, $forum_id);
+$forum->set_forum_path($template, $forum_id);
 

@@ -223,16 +223,8 @@ if($articles)
 $art_title .= ($hl ? sprintf(" - meklēšana: %s", $hl) : "");
 
 $template->set_title($art_title);
-
-$template->set_right();
-$template->set_events();
-$template->set_login();
-$template->set_online();
-$template->set_jubilars();
-$template->set_recent_comments();
-$template->set_search();
-$template->set_recent_reviews();
-
 $template->set_var("menu_active_".$_pointer['_data_']['module_id'], "_over");
+
+$template->set_right_defaults();
 $template->out();
 
