@@ -15,15 +15,15 @@
 		</div>
 		<!-- BEGIN BLOCK_profile_link disabled -->
 		<div class="profile unselectable">
-			<a href="{http_root}/user/profile/{user_login_id}/" onclick="Truemetal.viewProfile('{user_login_id}'); return false;">[Profils]</a>
+			<a href="/user/profile/{user_login_id}/" onclick="Truemetal.viewProfile('{user_login_id}'); return false;">[Profils]</a>
 		</div>
 		<!-- END BLOCK_profile_link -->
 		<!-- BEGIN BLOCK_comment_vote disabled -->
 			<div class="vote unselectable">
-				<a href="{http_root}/vote/down/{res_id}/" title="-" onclick="Truemetal.Vote('{res_id}', 'down', '#comment{c_id} .vote-value'); return false;">[&ndash;]</a>
+				<a href="/vote/down/{res_id}/" title="-" onclick="Truemetal.Vote('{res_id}', 'down', '#comment{c_id} .vote-value'); return false;">[&ndash;]</a>
 			</div>
 			<div class="vote unselectable">
-				<a href="{http_root}/vote/up/{res_id}/" title="+" onclick="Truemetal.Vote('{res_id}', 'up', '#comment{c_id} .vote-value'); return false;">[+]</a>
+				<a href="/vote/up/{res_id}/" title="+" onclick="Truemetal.Vote('{res_id}', 'up', '#comment{c_id} .vote-value'); return false;">[+]</a>
 			</div>
 			<div class="vote {comment_vote_class} vote-value unselectable" title="+{res_votes_plus_count} -{res_votes_minus_count}">
 				{res_votes}
@@ -51,7 +51,7 @@
 <!-- BEGIN BLOCK_notloggedin disabled -->
 <div class="Info">
 	Komentārus rakstīt var tikai reģistrēti lietotāji, tapēc ielogojies vai
-	<a href="{http_root}/register/">reģistrējies</a>!
+	<a href="/register/">reģistrējies</a>!
 </div>
 <!-- END BLOCK_notloggedin -->
 

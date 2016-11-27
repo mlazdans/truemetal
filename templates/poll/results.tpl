@@ -20,6 +20,6 @@
 </div>
 
 <div class="List-item">
-	<a href="{http_root}/poll/results/">Jautājumu arhīvs</a>
+	<a href="/poll/results/">Jautājumu arhīvs</a>
 </div>
 

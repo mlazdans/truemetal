@@ -53,7 +53,7 @@ $admin_modules = array(
 
 $admin_module = array_shift($sys_parameters);
 $admin_module = (isset($admin_modules[$admin_module]) ? $admin_module : '');
-$admin_root = "$sys_http_root/admin";
+$admin_root = "/admin";
 $module_root = "$admin_root/$admin_module";
 
 if(!$admin_module || !file_exists("$sys_root/module/admin/$admin_module.php"))

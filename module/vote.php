@@ -19,7 +19,7 @@ if(!user_loged())
 		print json_encode($retJson);
 		return;
 	}
-	header("Location: $sys_http_root/");
+	header("Location: /");
 	return;
 }
 
@@ -45,7 +45,7 @@ if(!$res_data || ($cv_login_id == $login_id))
 	} else {
 		if(empty($_SERVER['HTTP_REFERER']))
 		{
-			header("Location: $sys_http_root/");
+			header("Location: /");
 		} else {
 			header("Location: $_SERVER[HTTP_REFERER]");
 		}
@@ -70,7 +70,7 @@ if($countCheck['cv_count'] >= 24)
 	} else {
 		if(empty($_SERVER['HTTP_REFERER']))
 		{
-			header("Location: $sys_http_root/");
+			header("Location: /");
 		} else {
 			header("Location: $_SERVER[HTTP_REFERER]");
 		}
@@ -106,7 +106,7 @@ if($json)
 } else {
 	if(empty($_SERVER['HTTP_REFERER']))
 	{
-		header("Location: $sys_http_root/");
+		header("Location: /");
 	} else {
 		header("Location: $_SERVER[HTTP_REFERER]");
 	}

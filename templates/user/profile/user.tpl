@@ -1,21 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>[ TRUEMETAL {title} ]</title>
-<meta http-equiv="Content-Language" content="lv" />
-<meta name="verify-v1" content="1T6p5COcolqsK65q0I6uXdMjPuPskp2jyWjFMTOW/LY=" />
-<meta name="author" content="Mārtiņš Lazdāns (dqdp.net)" />
-<meta name="description" content="Metāls Latvijā" />
-<link rel="stylesheet" type="text/css" href="{http_root}/css/styles-dynamic.css?{script_version}" />
-<link rel="stylesheet" type="text/css" href="{http_root}/css/article.css?{script_version}" />
-<script type="text/javascript" src="{http_root}/js/swfobject.js?{script_version}"></script>
-<script type="text/javascript" src="{http_root}/js/jquery.js?{script_version}"></script>
-<script type="text/javascript" src="{http_root}/js/truemetal.js?{script_version}"></script>
-</head>
-
-<body>
-
 <!-- BEGIN BLOCK_not_loged disabled -->
 <div class="Info">
 	TrueMetal!
@@ -29,10 +11,11 @@
 <!-- END BLOCK_no_such_login -->
 
 <!-- BEGIN BLOCK_profile disabled -->
-<div style="background: #444444;">
+	<!-- BEGIN BLOCK_profile_title disabled -->
 	<div class="TD-cat">
 		Profils: {l_nick}
 	</div>
+	<!-- END BLOCK_profile_title -->
 
 	<!-- BEGIN BLOCK_nopicture disabled -->
 	<div class="List-item">
@@ -44,7 +27,7 @@
 	<div style="margin: 0 2px; float: left;">
 		<a
 			href="{module_root}/view/{l_login}/"
-			onclick="Truemetal.viewProfileImage('{l_login}/', {pic_w}, {pic_h}, '{l_login}'); return false;"
+			onclick="Truemetal.viewProfileImage('{l_login}', {pic_w}, {pic_h}, '{l_nick}'); return false;"
 		><img
 			src="{pic_path}"
 			alt=""
@@ -60,6 +43,10 @@
 		<b>Pievienojies:</b> {l_entered_f}
 	</div>
 
+	<div class="List-item">
+		<b>Komentāri:</b> {comment_count}
+	</div>
+
 	<!-- BEGIN BLOCK_public_email disabled -->
 	<div class="List-item">
 		<b>E-pasts:</b> <a href="mailto:{l_email}">{l_email}</a>
@@ -67,7 +54,7 @@
 	<!-- END BLOCK_public_email -->
 
 	<!-- BEGIN BLOCK_disable_comments disabled -->
-	<form method="post" action="">
+	<form method="post" action="/user/profile/{l_login}/">
 	<input type="hidden" name="action" value="disable_comments" />
 	<div class="List-item">
 		<label for="disable_comments">
@@ -78,13 +65,5 @@
 	</div>
 	</form>
 	<!-- END BLOCK_disable_comments -->
-
-	<div class="List-item clear" style="text-align: center;">
-		<a href="#" onclick="window.close(); return false;">Aizvērt</a>
-	</div>
-
-</div>
 <!-- END BLOCK_profile -->
 
-</body>
-</html>

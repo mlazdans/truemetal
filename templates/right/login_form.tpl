@@ -4,7 +4,7 @@
 </div>
 
 <div class="List-item">
-<form action="{http_root}/login/" method="post">
+<form action="/login/" method="post">
 <table cellpadding="1" cellspacing="1" width="100%">
 <tr>
 	<td colspan="2">
@@ -21,10 +21,10 @@
 </div>
 
 <div class="List-item">
-	<a href="{http_root}/register/">Reģistrācija</a>
+	<a href="/register/">Reģistrācija</a>
 </div>
 <div class="List-item">
-	<a href="{http_root}/forgot/">Aizmirsu paroli</a>
+	<a href="/forgot/">Aizmirsu paroli</a>
 </div>
 <!-- END BLOCK_login_form -->
 
@@ -39,10 +39,10 @@
 	<a href="/login/logoff/" onclick="return confirm('Tu ko?! Nezini, kas ir Amorphis???');">Log Off</a>
 </div>
 <div class="List-item">
-	<a href="{http_root}/user/profile/" title="Lietotāja profils">Tavs profils</a>
+	<a href="/user/profile/" title="Lietotāja profils">Tavs profils</a>
 </div>
 <div class="List-item">
-	<a href="{http_root}/mark/" title="Iezīmēt visus komentārus kā izlasītus">Mark all as read</a>
+	<a href="/mark/" title="Iezīmēt visus komentārus kā izlasītus">Mark all as read</a>
 </div>
 <!-- END BLOCK_login_data -->
 

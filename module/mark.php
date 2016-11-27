@@ -10,5 +10,5 @@ $now = time();
 $_SESSION['res']['viewed'] = array();
 $_SESSION['res']['viewed_before'] = $now;
 
-header("Location: $sys_http_root/");
+header("Location: /");
 

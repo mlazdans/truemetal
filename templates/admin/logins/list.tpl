@@ -64,7 +64,7 @@ Nav neviena logina
 	<td class="{l_color_class}">{l_active}</td>
 	<td class="{l_color_class}">{l_accepted}</td>
 	<td class="{l_color_class}" title="Atrast pēc IP">
-		<a href="{http_root}/admin/reports/?report=ip&amp;ips={l_userip}">{l_userip}</a>
+		<a href="/admin/reports/?report=ip&amp;ips={l_userip}">{l_userip}</a>
 	</td>
 	<td class="{l_color_class} nowrap">{l_lastaccess}</td>
 	<td class="{l_color_class} nowrap">{l_entered}</td>

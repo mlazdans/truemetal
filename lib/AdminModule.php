@@ -38,7 +38,6 @@ class AdminModule extends Template
 
 		$this->set_var('encoding', $GLOBALS['sys_encoding']);
 		$this->set_var('upload_root', $GLOBALS['sys_upload_http_root']);
-		$this->set_var('http_root', $GLOBALS['sys_http_root']);
 		$this->set_var('admin_root', $GLOBALS['admin_root']);
 		$this->set_var('module_root', $GLOBALS['module_root']);
 		$this->set_var('year', date('Y'));

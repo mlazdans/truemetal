@@ -5,15 +5,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset={encoding}" />
 <title>{title} ({USER_name})</title>
 <meta http-equiv="Pragma" content="no-cache" />
-<link rel="stylesheet" type="text/css" href="{http_root}/css/admin_styles.css?{script_version}" />
-<link rel="stylesheet" type="text/css" href="{http_root}/css/admin/jquery-ui.css?{script_version}" />
-<script type="text/javascript" src="{http_root}/js/tiny.config.js?{script_version}"></script>
-<script type="text/javascript" src="{http_root}/js/jquery.js?{script_version}"></script>
-<script type="text/javascript" src="{http_root}/js/jquery-ui.js?{script_version}"></script>
-<script type="text/javascript" src="{http_root}/js/truemetal.js?{script_version}"></script>
-<script type="text/javascript" src="{http_root}/js/admin.js?{script_version}"></script>
-<script type="text/javascript" src="{http_root}/tiny_mce/tiny_mce.js?{script_version}"></script>
-<script type="text/javascript" src="{http_root}/tiny_mce/plugins/tinybrowser/tb_tinymce.js.php?{script_version}"></script>
+<link rel="stylesheet" type="text/css" href="/css/admin_styles.css?{script_version}" />
+<link rel="stylesheet" type="text/css" href="/css/admin/jquery-ui.css?{script_version}" />
+<script type="text/javascript" src="/js/tiny.config.js?{script_version}"></script>
+<script type="text/javascript" src="/js/jquery.js?{script_version}"></script>
+<script type="text/javascript" src="/js/jquery-ui.js?{script_version}"></script>
+<script type="text/javascript" src="/js/truemetal.js?{script_version}"></script>
+<script type="text/javascript" src="/js/admin.js?{script_version}"></script>
+<script type="text/javascript" src="/tiny_mce/tiny_mce.js?{script_version}"></script>
+<script type="text/javascript" src="/tiny_mce/plugins/tinybrowser/tb_tinymce.js.php?{script_version}"></script>
 
 <script type="text/javascript">
 function initEditor(){

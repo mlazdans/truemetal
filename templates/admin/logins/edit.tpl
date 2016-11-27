@@ -75,7 +75,7 @@
 <tr>
 	<td class="right">Pēdējā gada laikā manīts no:</td>
 	<td>
-		<a href="{http_root}/admin/reports/?report=ip&amp;ips={all_ips}">{all_ips_view}</a>
+		<a href="/admin/reports/?report=ip&amp;ips={all_ips}">{all_ips_view}</a>
 	</td>
 </tr>
 <tr>
@@ -94,7 +94,7 @@
 <tr>
 	<td>
 		<!-- BEGIN BLOCK_logins_pics_item -->
-		<img src="{http_root}/user/thumb/{l_login}/{l_pic_suffix}/" alt="" />
+		<img src="/user/thumb/{l_login}/{l_pic_suffix}/" alt="" />
 		<!-- END BLOCK_logins_pics_item -->
 	</td>
 </tr>
@@ -115,7 +115,7 @@
 <!-- BEGIN BLOCK_logins_also_list -->
 <tr>
 	<td class="{l_color_class}">
-		<a href="{http_root}/admin/logins/{l_id}/" style="font-weight: bold;">{l_login}</a>
+		<a href="/admin/logins/{l_id}/" style="font-weight: bold;">{l_login}</a>
 	</td>
 	<td class="{l_color_class}">{l_nick}</td>
 	<td class="{l_color_class}">{comment_count}</td>

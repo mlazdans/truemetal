@@ -10,13 +10,13 @@
 <div class="Forum-cat" style="margin-bottom: 0;">
 	<!-- BEGIN BLOCK_page_prev -->
 	<div class="Forum-Page-prev">
-		<a href="{module_root}/{current_forum_id}-{current_forum_name_urlized}/page/{prev_page_id}/"><img src="{http_root}/img/left.png" alt="Pa kreisi" /></a>
+		<a href="{module_root}/{current_forum_id}-{current_forum_name_urlized}/page/{prev_page_id}/"><img src="/img/left.png" alt="Pa kreisi" /></a>
 	</div>
 	<!-- END BLOCK_page_prev -->
 
 	<!-- BEGIN BLOCK_page_next -->
 	<div class="Forum-Page-next">
-		<a href="{module_root}/{current_forum_id}-{current_forum_name_urlized}/page/{next_page_id}/"><img src="{http_root}/img/right.png" alt="Pa labi" /></a>
+		<a href="{module_root}/{current_forum_id}-{current_forum_name_urlized}/page/{next_page_id}/"><img src="/img/right.png" alt="Pa labi" /></a>
 	</div>
 	<!-- END BLOCK_page_next -->
 	<div class="Forum-Pager">
@@ -77,7 +77,7 @@
 
 <!-- BEGIN BLOCK_notloggedin disabled -->
 <div class="Info">
-	Pievienot jaunu tēmu var tikai reģistrēti lietotāji, tapēc, ielogojies vai <a href="{http_root}/register/">reģistrējies</a>!
+	Pievienot jaunu tēmu var tikai reģistrēti lietotāji, tapēc, ielogojies vai <a href="/register/">reģistrējies</a>!
 </div>
 <!-- END BLOCK_notloggedin -->
 

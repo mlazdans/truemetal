@@ -18,7 +18,7 @@ if($action == 'logoff')
 	$my_login = new Logins;
 	if($my_login->logoff())
 	{
-		header("Location: $sys_http_root/");
+		header("Location: /");
 		return;
 	}
 }
@@ -48,7 +48,7 @@ if(isset($_POST['data']))
 			(strpos($referer, "/forgot/") !== false)
 			)
 		{
-			header("Location: $sys_http_root/user/profile/");
+			header("Location: /user/profile/");
 		} else {
 			header("Location: $referer");
 		}

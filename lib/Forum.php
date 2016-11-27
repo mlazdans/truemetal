@@ -465,7 +465,6 @@ INSERT INTO forum (
 		if(count($data))
 		{
 			$template->set_file('FILE_r_forum', 'forum/recent.tpl');
-			$template->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_r_forum');
 			foreach($data as $item)
 			{
 				$template->{(Forum::hasNewComments($item) ? "enable" : "disable")}('BLOCK_forum_r_comments_new');

@@ -53,10 +53,10 @@
 <div class="Comment" id="gal_id{gal_id}" style="margin: 0;">
 	<div class="header">
 		<div class="vote unselectable">
-			<a href="{http_root}/vote/down/{res_id}/" title="-" onclick="Truemetal.Vote('{res_id}', 'down', '#gal_id{gal_id} .vote-value'); return false;">[&ndash;]</a>
+			<a href="/vote/down/{res_id}/" title="-" onclick="Truemetal.Vote('{res_id}', 'down', '#gal_id{gal_id} .vote-value'); return false;">[&ndash;]</a>
 		</div>
 		<div class="vote unselectable">
-			<a href="{http_root}/vote/up/{res_id}/" title="+" onclick="Truemetal.Vote('{res_id}', 'up', '#gal_id{gal_id} .vote-value'); return false;">[+]</a>
+			<a href="/vote/up/{res_id}/" title="+" onclick="Truemetal.Vote('{res_id}', 'up', '#gal_id{gal_id} .vote-value'); return false;">[+]</a>
 		</div>
 		<div class="vote {comment_vote_class} vote-value unselectable">
 			{res_votes}

@@ -11,7 +11,7 @@
 	Jautājums
 </div>
 <div class="List-item">
-	<form action="{http_root}/poll/vote/" method="post" id="poll_vote_form">
+	<form action="/poll/vote/" method="post" id="poll_vote_form">
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 		<td colspan="2">
@@ -32,13 +32,13 @@
 	<tr>
 		<td colspan="2" style="padding-top: 1em;">
 			<input type="submit" value="Balsot" />
-			<input type="button" value="Rezultāti" onclick="location.href='{http_root}/poll/results/';" />
+			<input type="button" value="Rezultāti" onclick="location.href='/poll/results/';" />
 		</td>
 	</tr>
 	</table>
 	</form>
 </div>
 <div class="List-item">
-	<a href="{http_root}/poll/results/">Jautājumu arhīvs</a>
+	<a href="/poll/results/">Jautājumu arhīvs</a>
 </div>
 <!-- END BLOCK_poll -->

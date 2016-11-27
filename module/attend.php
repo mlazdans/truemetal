@@ -13,7 +13,7 @@ $off = array_shift($sys_parameters);
 $json = isset($_GET['json']);
 
 $retJson = new StdClass;
-$redirect = "$sys_http_root/resroute/$res_id/";
+$redirect = "/resroute/$res_id/";
 
 if(!user_loged())
 {

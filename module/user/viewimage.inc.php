@@ -8,7 +8,10 @@
 $login = array_shift($sys_parameters);
 $login_data = Logins::load_by_login($login);
 
-$template = new MainModule($sys_template_root, 'atteli', 'user/viewimage.tpl');
+//$template = new MainModule($sys_template_root, 'atteli', 'user/viewimage.tpl');
+$template = new MainModule($sys_template_root, 'atteli');
+$template->set_file('FILE_viewimage', 'user/viewimage.tpl');
+$template->copy_block('BLOCK_body', 'FILE_viewimage');
 
 if(!user_loged())
 {
@@ -22,14 +25,14 @@ $template->enable("BLOCK_userpic");
 
 if(
 	$login_data &&
-	($pic_path = "$sys_http_root/user/image/$login_data[l_login]/")
+	($pic_path = "/user/image/$login_data[l_login]/")
 	)
 {
 	$template->set_title(" - $login_data[l_nick] bilde");
 	$template->set_var('pic_path', $pic_path);
 } else {
 	$template->set_title(" - not found");
-	$template->set_var('pic_path', $sys_http_root.'/img/1x1.gif');
+	$template->set_var('pic_path', '/img/1x1.gif');
 }
 
 $template->out();

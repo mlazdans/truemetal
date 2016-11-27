@@ -8,10 +8,10 @@
 	<div class="TD-cat">
 		<div class="date">{art_date}</div>
 		<div class="comments">
-			<a href="{http_root}/{module_id}/{art_id}-{art_name_urlized}#comments">Komentāri</a>
+			<a href="/{module_id}/{art_id}-{art_name_urlized}#comments">Komentāri</a>
 			<span<!-- BEGIN BLOCK_comments_new disabled --> class="Comment-new"<!-- END BLOCK_comments_new -->>({res_comment_count})</span>
 		</div>
-		<div class="caption"><a class="caption" href="{http_root}/{module_id}/{art_id}-{art_name_urlized}">{art_name}</a></div>
+		<div class="caption"><a class="caption" href="/{module_id}/{art_id}-{art_name_urlized}">{art_name}</a></div>
 	</div>
 
 	<!-- BEGIN BLOCK_art_intro -->
@@ -19,7 +19,7 @@
 		{art_intro}
 		<!-- BEGIN BLOCK_art_cont disabled -->
 		<div>
-			<a href="{http_root}/{module_id}/{art_id}-{art_name_urlized}">..tālāk..</a>
+			<a href="/{module_id}/{art_id}-{art_name_urlized}">..tālāk..</a>
 		</div>
 		<!-- END BLOCK_art_cont -->
 		<div class="clear"></div>
@@ -64,7 +64,7 @@
 <div class="TD-cat">
 	<!-- BEGIN BLOCK_article_page_prev disabled -->
 	<div style="float: left;">
-		<img src="{http_root}/img/left.png" alt="Vecāki ieraksti" style="vertical-align: middle;" />
+		<img src="/img/left.png" alt="Vecāki ieraksti" style="vertical-align: middle;" />
 		<a class="caption" href="{page}">vecāki ieraksti</a>
 	</div>
 	<!-- END BLOCK_article_page_prev  -->
@@ -72,7 +72,7 @@
 	<!-- BEGIN BLOCK_article_page_next disabled -->
 	<div style="float: right;">
 		<a class="caption" href="{page}">jaunāki ieraksti</a>
-		<img src="{http_root}/img/right.png" alt="Jaunāki ieraksti" style="vertical-align: middle;" />
+		<img src="/img/right.png" alt="Jaunāki ieraksti" style="vertical-align: middle;" />
 	</div>
 	<!-- END BLOCK_article_page_next -->
 	<div>&nbsp;</div>

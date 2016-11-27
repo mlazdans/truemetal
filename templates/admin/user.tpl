@@ -3,7 +3,7 @@
 <table width="100%" cellpadding="2" cellspacing="2" border="0">
 	<tr>
 		<td valign="top"><input type="submit" name="do" value="Jauns"></td>
-		<td valign="top"><input type="button" value="Atcelt" onClick="location.replace('{http_root}/admin/user/')"></td>
+		<td valign="top"><input type="button" value="Atcelt" onClick="location.replace('/admin/user/')"></td>
 		<td valign="top" width="100%">&nbsp;</td>
 	</tr>
 </table>

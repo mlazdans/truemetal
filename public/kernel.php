@@ -11,7 +11,6 @@
 $sys_start_time        = microtime(true);
 $sys_root              = realpath(dirname(__FILE__).'/../');
 $sys_public_root       = $sys_root.'/public';
-$sys_http_root         = '';
 $sys_template_root     = $sys_root.'/templates';
 $sys_upload_root       = $sys_public_root.'/data';
 $sys_upload_http_root  = '/data';
@@ -106,7 +105,6 @@ $parts = explode('?', $_SERVER["REQUEST_URI"]);
 $_SERVER["REQUEST_URI"] = array_shift($parts);
 $_SERVER["QUERY_STRING"] = join("?", $parts);
 
-# NOTE: $sys_http_root netiek ņemts vērā, bet vajadzētu
 $sys_parameters = explode('/', $_SERVER["REQUEST_URI"]);
 $sys_parameters = parse_params($sys_parameters);
 
@@ -131,7 +129,7 @@ if(user_loged())
 	}
 }
 
-$module_root = "$sys_http_root/$sys_module_id";
+$module_root = "/$sys_module_id";
 
 # nochekojam, vai modulis existee, ja nee tad vai mappings iraid
 if(isset($sys_module_map[$sys_module_id]) && !file_exists("$sys_root/module/$sys_module_id.php"))

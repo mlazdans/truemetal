@@ -11,7 +11,7 @@
 		<input type="submit" name="do" value="Jauns" />
 	</td>
 	<td valign="top">
-		<input type="button" value="Atcelt" onclick="location.replace('{http_root}/admin/modules/')" />
+		<input type="button" value="Atcelt" onclick="location.replace('/admin/modules/')" />
 	</td>
 	<td valign="top">&nbsp;</td>
 </tr>

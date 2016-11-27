@@ -57,7 +57,7 @@
 <!-- BEGIN BLOCK_picture disabled -->
 <tr>
 	<td>
-		<a href="{http_root}/user/viewimage/{l_login}/" onclick="Truemetal.viewProfileImage('{l_login}', {pic_w}, {pic_h}, '{l_login}'); return false;"><img src="{pic_path}" alt="" /></a>
+		<a href="/user/viewimage/{l_login}/" onclick="Truemetal.viewProfileImage('{l_login}', {pic_w}, {pic_h}, '{l_login}'); return false;"><img src="{pic_path}" alt="" /></a>
 	</td>
 </tr>
 <!-- BEGIN BLOCK_picture_delete disabled -->

@@ -40,8 +40,7 @@ class MainModule extends Template
 		global $sys_modules, $sys_encoding;
 
 		$this->set_var('encoding', $GLOBALS['sys_encoding']);
-		$this->set_var('http_root', $GLOBALS['sys_http_root']);
-		$this->set_var('module_root', $GLOBALS['sys_http_root'].'/'.$this->module_name);
+		$this->set_var('module_root', '/'.$this->module_name);
 		$this->set_var('script_version', $GLOBALS['sys_script_version']);
 		$this->set_var('disable_youtube', (empty($_SESSION['login']['l_disable_youtube']) ? 0 : 1));
 		$this->set_var('i_am_admin', $GLOBALS['i_am_admin']);
@@ -133,7 +132,7 @@ $descr.
 
 	function out()
 	{
-		global $sys_http_root, $sys_use_cdn, $sys_cdn_func, $sys_domain, $i_am_admin, $sys_start_time;
+		global $sys_use_cdn, $sys_cdn_func, $sys_domain, $i_am_admin, $sys_start_time;
 
 		if($sys_use_cdn && function_exists($sys_cdn_func))
 		{
@@ -241,7 +240,7 @@ $descr.
 				$path = array_slice($path, -3);
 		}
 
-		$p = $GLOBALS['sys_http_root'].'/';
+		$p = '/';
 		foreach($path as $k=>$label) {
 			if($label['module_id'])
 				$p .= $label['module_id'].'/';
@@ -262,7 +261,6 @@ $descr.
 	function set_login()
 	{
 		$this->set_file('FILE_login_form', 'right/login_form.tpl');
-		$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_login_form');
 
 		if(user_loged())
 		{
@@ -286,7 +284,6 @@ $descr.
 	function set_search($search_q = '')
 	{
 		$this->set_file('FILE_search_form', 'right/search_form.tpl');
-		$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_search_form');
 		$this->set_var('search_q', $search_q, 'FILE_search_form');
 
 		$this->parse_block('FILE_search_form');
@@ -302,11 +299,10 @@ $descr.
 
 	function set_online()
 	{
-		global $db, $sys_http_root;
+		global $db;
 
 		$login = new Logins;
 		$this->set_file('FILE_online', 'right/online.tpl');
-		$this->set_var('http_root', $sys_http_root, 'FILE_online');
 
 		$block = user_loged() ? 'BLOCK_online_item' : 'BLOCK_online_item_notloged';
 		$user_count = 0;
@@ -355,7 +351,6 @@ $descr.
 			return;
 
 		$this->set_file('FILE_r_review', 'right/review_recent.tpl');
-		$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_r_review');
 		foreach($data as $item)
 		{
 			$this->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_review_r_comments_new');
@@ -381,7 +376,6 @@ $descr.
 			));
 
 		$this->set_file('FILE_r_comment', 'right/comment_recent.tpl');
-		$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_r_comment');
 		foreach($data as $item)
 		{
 			$this->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_comment_r_comments_new');
@@ -398,10 +392,76 @@ $descr.
 		$this->parse_block('BLOCK_right_item', TMPL_APPEND);
 	} // set_recent_comments
 
-	function set_profile($login_data)
+	function set_profile($login)
 	{
-		$logins = new Logins;
-		$logins->set_profile($this, $login_data);
+		global $sys_user_root;
+
+		$login['l_forumsort_themes'] = isset($login['l_forumsort_themes']) ? $login['l_forumsort_themes'] : Forum::SORT_LASTCOMMENT;
+		$login['l_forumsort_msg'] = isset($login['l_forumsort_msg']) ? $login['l_forumsort_msg'] : Forum::SORT_ASC;
+		$pic_localpath = $sys_user_root.'/pic/'.$login['l_id'].'.jpg';
+		$tpic_localpath = $sys_user_root.'/pic/thumb/'.$login['l_id'].'.jpg';
+		$pic_path = "/user/image/$login[l_login]/";
+		$tpic_path = "/user/thumb/$login[l_login]/";
+
+		$this->enable('BLOCK_profile');
+		$this->set_array($login, 'BLOCK_profile');
+
+		$this->set_var('l_forumsort_themes_'.$login['l_forumsort_themes'], ' checked="checked"', 'BLOCK_profile');
+		$this->set_var('l_forumsort_msg_'.$login['l_forumsort_msg'], ' checked="checked"', 'BLOCK_profile');
+
+		if(!empty($login['l_disable_avatars']))
+		{
+			$this->set_var('l_disable_avatars_checked', ' checked="checked"', 'BLOCK_profile');
+		} else {
+			$this->set_var('l_disable_avatars_checked', '', 'BLOCK_profile');
+		}
+
+		if(!empty($login['l_disable_youtube']))
+		{
+			$this->set_var('l_disable_youtube_checked', ' checked="checked"', 'BLOCK_profile');
+		} else {
+			$this->set_var('l_disable_youtube_checked', '', 'BLOCK_profile');
+		}
+
+		if($login['l_emailvisible'] != Logins::EMAIL_VISIBLE)
+		{
+			$this->set_var('l_emailvisible', '', 'BLOCK_profile');
+		} else {
+			$this->set_var('l_emailvisible', ' checked="checked"', 'BLOCK_profile');
+		}
+
+		if(file_exists($pic_localpath) && file_exists($tpic_localpath))
+		{
+			$this->set_var('pic_path', $tpic_path, 'BLOCK_profile');
+			if($info = getimagesize($pic_localpath))
+			{
+				$this->set_var('pic_w', $info[0], 'BLOCK_profile');
+				$this->set_var('pic_h', $info[1], 'BLOCK_profile');
+			} else {
+				$this->set_var('pic_w', 400, 'BLOCK_profile');
+				$this->set_var('pic_h', 400, 'BLOCK_profile');
+			}
+
+			$this->enable('BLOCK_picture');
+		} else {
+			$this->enable('BLOCK_nopicture');
+		}
+
+		$this->set_var('l_entered_f', strftime('%e. %b %Y', strtotime($login['l_entered'])), 'BLOCK_profile');
+		$this->set_var('l_lastaccess_f', strftime('%e. %b %Y', strtotime($login['l_lastaccess'])), 'BLOCK_profile');
+		$days = floor((time() - strtotime($login['l_lastaccess'])) / (3600 * 24));
+		if($days)
+		{
+			if($days < 365)
+			{
+				$days_lv = "dienām";
+				if($days % 10 == 1)
+					$days_lv = "dienas";
+				$this->set_var('l_lastaccess_days', " (pirms $days $days_lv)", 'BLOCK_profile');
+			}
+		} else {
+			$this->set_var('l_lastaccess_days', " (šodien)", 'BLOCK_profile');
+		}
 	} // set_profile
 
 	function set_banner_top()
@@ -443,7 +503,6 @@ $descr.
 		$block = user_loged() ? 'BLOCK_jub_item' : 'BLOCK_jub_item_notloged';
 
 		$this->set_file('FILE_jub', 'right/jub.tpl');
-		$this->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_jub');
 
 		if($jubs) {
 			$this->enable($block);

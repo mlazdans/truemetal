@@ -231,78 +231,6 @@ class Logins
 		}
 	} // save_session_data
 
-	function set_profile(&$template, $login)
-	{
-		global $sys_user_root, $sys_http_root;
-
-		$login['l_forumsort_themes'] = isset($login['l_forumsort_themes']) ? $login['l_forumsort_themes'] : Forum::SORT_LASTCOMMENT;
-		$login['l_forumsort_msg'] = isset($login['l_forumsort_msg']) ? $login['l_forumsort_msg'] : Forum::SORT_ASC;
-		$pic_localpath = $sys_user_root.'/pic/'.$login['l_id'].'.jpg';
-		$tpic_localpath = $sys_user_root.'/pic/thumb/'.$login['l_id'].'.jpg';
-		$pic_path = "$sys_http_root/user/image/$login[l_login]/";
-		$tpic_path = "$sys_http_root/user/thumb/$login[l_login]/";
-
-		$template->enable('BLOCK_profile');
-		$template->set_array($login);
-
-		$template->set_var('l_forumsort_themes_'.$login['l_forumsort_themes'], ' checked="checked"');
-		$template->set_var('l_forumsort_msg_'.$login['l_forumsort_msg'], ' checked="checked"');
-
-		if(!empty($login['l_disable_avatars']))
-		{
-			$template->set_var('l_disable_avatars_checked', ' checked="checked"');
-		} else {
-			$template->set_var('l_disable_avatars_checked', '');
-		}
-
-		if(!empty($login['l_disable_youtube']))
-		{
-			$template->set_var('l_disable_youtube_checked', ' checked="checked"');
-		} else {
-			$template->set_var('l_disable_youtube_checked', '');
-		}
-
-		if($login['l_emailvisible'] != Logins::EMAIL_VISIBLE)
-		{
-			$template->set_var('l_emailvisible', '');
-		} else {
-			$template->set_var('l_emailvisible', ' checked="checked"');
-		}
-
-		if(file_exists($pic_localpath) && file_exists($tpic_localpath))
-		{
-			$template->set_var('pic_path', $tpic_path);
-			if($info = getimagesize($pic_localpath))
-			{
-				$template->set_var('pic_w', $info[0]);
-				$template->set_var('pic_h', $info[1]);
-			} else {
-				$template->set_var('pic_w', 400);
-				$template->set_var('pic_h', 400);
-			}
-
-			$template->enable('BLOCK_picture');
-		} else {
-			$template->enable('BLOCK_nopicture');
-		}
-
-		$template->set_var('l_entered_f', strftime('%e. %b %Y', strtotime($login['l_entered'])));
-		$template->set_var('l_lastaccess_f', strftime('%e. %b %Y', strtotime($login['l_lastaccess'])));
-		$days = floor((time() - strtotime($login['l_lastaccess'])) / (3600 * 24));
-		if($days)
-		{
-			if($days < 365)
-			{
-				$days_lv = "dienām";
-				if($days % 10 == 1)
-					$days_lv = "dienas";
-				$template->set_var('l_lastaccess_days', " (pirms $days $days_lv)");
-			}
-		} else {
-			$template->set_var('l_lastaccess_days', " (šodien)");
-		}
-	} // set_profile
-
 	static function delete_image()
 	{
 		global $sys_user_root;
@@ -545,7 +473,7 @@ class Logins
 
 	function send_forgot_code($login, $code, $email, $subj = '', $msg = '')
 	{
-		global $sys_domain, $http_root, $db;
+		global $sys_domain, $db;
 
 		if(!$msg)
 		{
@@ -568,7 +496,7 @@ class Logins
 
 	function send_accept_code($login, $code, $email, $subj = '', $msg = '')
 	{
-		global $sys_domain, $http_root, $db;
+		global $sys_domain, $db;
 
 		if(!$msg)
 		{

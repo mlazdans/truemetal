@@ -22,7 +22,7 @@ if($action == 'vote')
 	{
 		if($poll->vote($poll_id, $poll_pollid))
 		{
-			header("Location: $sys_http_root/");
+			header("Location: /");
 			return;
 		} else {
 			$template = new MainModule($sys_template_root, $sys_module_id);
@@ -36,7 +36,7 @@ if($action == 'vote')
 			return;
 		}
 	} else {
-		header("Location: $sys_http_root/");
+		header("Location: /");
 		return;
 	}
 }

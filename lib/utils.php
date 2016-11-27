@@ -1200,9 +1200,7 @@ function cache_read($h)
 
 function cache_http_path($h)
 {
-	global $sys_http_root;
-
-	return "$sys_http_root/cache/$h";
+	return "/cache/$h";
 } // cache_http_path
 
 function cache_hash($id, $levels = 2)

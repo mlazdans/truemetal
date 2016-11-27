@@ -106,7 +106,7 @@ if($art_id && isset($articles[0]))
 		{
 			$resDb->Commit();
 			$np = join('/', array_keys($path));
-			header("Location: $sys_http_root/$np/$art_id-$art_name_urlized#comment$ac_id");
+			header("Location: /$np/$art_id-$art_name_urlized#comment$ac_id");
 			return;
 		}
 	}

@@ -6,8 +6,8 @@
 <form
 	id="search_form"
 	method="post"
-	action="{http_root}/search/"
-	onsubmit="$('#search_form').attr('action', '{http_root}/search/?search_q=' + $('#search_form_search_q').val()); $('#search_sPPAAMMcheck').val(0);"
+	action="/search/"
+	onsubmit="$('#search_form').attr('action', '/search/?search_q=' + $('#search_form_search_q').val()); $('#search_sPPAAMMcheck').val(0);"
 >
 <table cellpadding="1" cellspacing="1" width="100%">
 <tr>
@@ -24,10 +24,10 @@
 </div>
 
 <div class="List-item">
-	<a href="{http_root}/search/">Advanced</a>
+	<a href="/search/">Advanced</a>
 </div>
 
 <div class="List-item">
-	<a href="{http_root}/search_log/">Ko mēs meklējam?</a>
+	<a href="/search_log/">Ko mēs meklējam?</a>
 </div>
 

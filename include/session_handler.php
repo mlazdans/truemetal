@@ -29,5 +29,5 @@ session_set_save_handler(
 	array(&$sess_handler, "sess_gc")
 );
 
-session_set_cookie_params($cookie_time, $sys_http_root.'/');
+session_set_cookie_params($cookie_time, '/');
 session_start();

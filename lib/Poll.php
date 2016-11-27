@@ -321,7 +321,6 @@ class Poll
 		$now = date('Y-m-d H:i:s');
 
 		$template->set_file('FILE_poll', 'poll/results.tpl');
-		$template->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_poll');
 
 		$data = $this->load(0, 0, POLL_ACTIVE, $now, 1);
 
@@ -375,7 +374,6 @@ class Poll
 		}
 
 		$template->set_file('FILE_poll', 'poll.tpl');
-		$template->set_var('http_root', $GLOBALS['sys_http_root'], 'FILE_poll');
 		$template->enable('BLOCK_poll');
 
 		$template->set_var('poll_question', $poll_data['poll_name'], 'FILE_poll');
