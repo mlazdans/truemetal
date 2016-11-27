@@ -12,9 +12,9 @@ $json = isset($_GET['json']);
 
 if($json)
 {
-	$template = new MainModule($sys_template_root, 'profile', 'user/profile/user.tpl');
+	$template = new MainModule('profile', 'user/profile/user.tpl');
 } else {
-	$template = new MainModule($sys_template_root, 'profile');
+	$template = new MainModule('profile');
 	$template->set_file('FILE_profile', 'user/profile/user.tpl');
 	$template->copy_block('BLOCK_middle', 'FILE_profile');
 }

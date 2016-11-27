@@ -46,7 +46,7 @@ $mod_id = array_shift($sys_parameters);
 require_once('lib/Module.php');
 
 $module = new Module();
-$template = new AdminModule($sys_template_root.'/admin', $admin_module);
+$template = new AdminModule($admin_module);
 $template->set_title('Admin :: moduļi');
 
 $actions = array('delete_multiple', 'activate_multiple', 'deactivate_multiple', 'show_multiple', 'hide_multiple');

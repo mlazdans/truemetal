@@ -23,7 +23,7 @@ if($action == 'logoff')
 	}
 }
 
-$template = new MainModule($sys_template_root, $sys_module_id, 'index.tpl');
+$template = new MainModule($sys_module_id);
 $template->set_title($_pointer['_data_']['module_name']);
 $template->set_file('FILE_module', 'login.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_module');

@@ -38,7 +38,7 @@ if($forum_id == 0)
 		));
 }
 
-$template = new MainModule($sys_template_root, $sys_module_id);
+$template = new MainModule($sys_module_id);
 
 # ja izveeleets forums, paraadam teemu sarakstu
 $forum_title = 'Diskusijas';

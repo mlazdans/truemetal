@@ -7,11 +7,11 @@
 
 require_once('lib/Article.php');
 
-$template = new MainModule($sys_template_root, $sys_module_id);
+$template = new MainModule($sys_module_id);
 $template->set_title("Arhīvs: visi notikumi līdz šim");
 $template->set_file('FILE_archive', 'archive.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_archive');
-$template->set_descr("Metāliskais arhīvs: visi notikumi līdz šim");
+$template->set_descr("Metāliskais arhīvs");
 
 $arts = $db->Execute("SELECT * FROM view_mainpage");
 

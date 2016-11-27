@@ -19,15 +19,11 @@ class MainModule extends Template
 	var $module_name;
 	var $title;
 
-	function __construct($template_root, $module_name = '',
-		$str_main_file = 'index.tpl')
+	function __construct($module_name = '', $str_main_file = 'index.tpl')
 	{
-		parent::__construct($template_root);
+		parent::__construct($GLOBALS['sys_template_root']);
 
 		$this->set_module_name($module_name ? $module_name : get_class($this));
-
-		/* ielaadeejam failus */
-		/* galveno failu un vidus failus, kuram jaasaucas <module_name>.tpl */
 		$this->set_file('FILE_index', $str_main_file);
 
 		$this->init();
@@ -37,15 +33,12 @@ class MainModule extends Template
 
 	function init()
 	{
-		global $sys_modules, $sys_encoding;
-
 		$this->set_var('encoding', $GLOBALS['sys_encoding']);
 		$this->set_var('module_root', '/'.$this->module_name);
 		$this->set_var('script_version', $GLOBALS['sys_script_version']);
 		$this->set_var('disable_youtube', (empty($_SESSION['login']['l_disable_youtube']) ? 0 : 1));
 		$this->set_var('i_am_admin', $GLOBALS['i_am_admin']);
 		$this->set_descr("Metāls Latvijā");
-
 		$this->set_banner_top();
 
 		return true;
@@ -54,7 +47,7 @@ class MainModule extends Template
 	function set_title($str_title)
 	{
 		$this->title = $str_title;
-		$this->set_var('title', addslashes($this->title), 'FILE_index', true);
+		$this->set_var('title', addslashes($this->title), 'FILE_index');
 	} // set_title
 
 	function get_title()
@@ -64,65 +57,7 @@ class MainModule extends Template
 
 	function set_descr($descr)
 	{
-		$descr = preg_replace("/(\r\n)/", "\n", $descr);
-
-		{
-			$dd = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title></title>
-</head>
-<body>'.
-$descr.
-'</body>'.
-'</html>';
-			$doc = new DOMDocument();
-			@$doc->loadHTML($dd);
-			$xml = simplexml_import_dom($doc);
-
-			$els = $xml->xpath("//a");
-			foreach($els as $el)
-			{
-				if(isset($el[0]))
-					$el = $el[0];
-				//unset($el[0]);
-			}
-
-			$els = $xml->xpath("//br");
-			foreach($els as $el)
-				$el[0] = "\n";
-
-			$descr = $xml->asXML();
-		}
-
-		$descr = strip_tags($descr);
-		$descr = preg_replace("/[\s\s+]/", " ", $descr);
-		$descr = preg_replace("/\s+/", " ", $descr);
-
-		$parts = preg_split("/([\.\?\!])/U", $descr, -1, PREG_SPLIT_DELIM_CAPTURE);
-		$meta_descr = '';
-		foreach($parts as $p)
-		{
-			$meta_descr .= $p;
-			if(mb_strlen($meta_descr) >= 250)
-				break;
-		}
-
-		if(mb_strlen($meta_descr) >= 250)
-		{
-			$parts = preg_split("/(\s)/U", $meta_descr, -1, PREG_SPLIT_DELIM_CAPTURE);
-			$meta_descr = '';
-			foreach($parts as $p)
-			{
-				$meta_descr .= $p;
-				if(mb_strlen($meta_descr) >= 250)
-					break;
-			}
-		}
-
-		if($meta_descr = parse_form_data(trim($meta_descr)))
-			$this->set_var("meta_descr", $meta_descr);
+		$this->set_var("meta_descr", parse_form_data(trim($descr)));
 	} // set_descr
 
 	function set_module_name($module_name)
@@ -266,8 +201,6 @@ $descr.
 		{
 			$this->enable('BLOCK_login_data');
 			$this->set_var('login_nick', $_SESSION['login']['l_nick'], 'BLOCK_login_data');
-			//$this->set_var('login_firstname', $_SESSION['login']['l_firstname']);
-			//$this->set_var('login_lastname', $_SESSION['login']['l_lastname']);
 		} else {
 			$this->enable('BLOCK_login_form');
 			$referer = $_SERVER["REQUEST_URI"];
@@ -533,9 +466,6 @@ $descr.
 			} else {
 				$this->set_var('jub_info', " ($jub_year)", 'FILE_jub');
 			}
-			//$this->set_var('jub_age', $age, 'FILE_jub');
-			//$this->set_var('jub_year', $jub_year, 'FILE_jub');
-
 			$this->parse_block($block, TMPL_APPEND);
 		}
 

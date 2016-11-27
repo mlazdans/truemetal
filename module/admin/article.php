@@ -16,7 +16,7 @@ $art_id = array_shift($sys_parameters);
 $article = new Article();
 $module = new Module();
 
-$template = new AdminModule($sys_template_root.'/admin', $admin_module);
+$template = new AdminModule($admin_module);
 $template->set_title('Admin :: raksti');
 
 # Comment actions

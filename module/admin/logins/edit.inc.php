@@ -16,7 +16,7 @@ if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
 	return;
 }
 
-$template = new AdminModule($sys_template_root.'/admin', "logins/edit");
+$template = new AdminModule("logins/edit");
 $template->set_title('Admin :: logini :: rediģēt');
 
 $Logins = new Logins();

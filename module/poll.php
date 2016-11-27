@@ -25,7 +25,7 @@ if($action == 'vote')
 			header("Location: /");
 			return;
 		} else {
-			$template = new MainModule($sys_template_root, $sys_module_id);
+			$template = new MainModule($sys_module_id);
 			$template->set_title('Balsošanas kļūda!');
 			$template->set_file('FILE_poll', 'poll.tpl');
 			$template->copy_block('BLOCK_middle', 'FILE_poll');
@@ -45,7 +45,7 @@ if($action == 'results')
 {
 	$id = (int)array_shift($sys_parameters);
 
-	$template = new MainModule($sys_template_root, $sys_module_id);
+	$template = new MainModule($sys_module_id);
 	$poll->show_archive($template, $id);
 
 	$template->set_right();

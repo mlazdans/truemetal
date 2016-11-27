@@ -10,7 +10,7 @@ $action = array_shift($sys_parameters);
 
 if($module == 'votes' && $action == 'view')
 {
-	$template = new MainModule($sys_template_root, 'profile', 'admin/comment/votes/view.json.tpl');
+	$template = new MainModule('profile', 'admin/comment/votes/view.json.tpl');
 	$res_id = (int)array_shift($sys_parameters);
 	$sql = "
 SELECT
@@ -47,11 +47,11 @@ if($module == 'original' && $action == 'view')
 {
 	$Comment = new Comment;
 	$Comment->setDb($db);
-	$template = new MainModule($sys_template_root, 'profile', 'admin/comment/original/view.json.tpl');
+	$template = new MainModule('profile', 'admin/comment/original/view.json.tpl');
 
-	$c_id = (int)array_shift($sys_parameters);
+	$res_id = (int)array_shift($sys_parameters);
 	$data = $Comment->get(array(
-		'c_id'=>$c_id
+		'res_id'=>$res_id
 		));
 
 	$template->set_array($data);

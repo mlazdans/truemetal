@@ -8,8 +8,7 @@
 $login = array_shift($sys_parameters);
 $login_data = Logins::load_by_login($login);
 
-//$template = new MainModule($sys_template_root, 'atteli', 'user/viewimage.tpl');
-$template = new MainModule($sys_template_root, 'atteli');
+$template = new MainModule('atteli');
 $template->set_file('FILE_viewimage', 'user/viewimage.tpl');
 $template->copy_block('BLOCK_body', 'FILE_viewimage');
 
@@ -36,5 +35,4 @@ if(
 }
 
 $template->out();
-
 

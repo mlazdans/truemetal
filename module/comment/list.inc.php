@@ -21,7 +21,6 @@ if(user_loged())
 if($comments)
 {
 	$template->enable('BLOCK_comment');
-	$template->set_descr((empty($hl) ? "" : sprintf("(Meklēšana: %s) ", trim($hl))).$comments[0]['c_datacompiled']);
 } else {
 	$template->enable('BLOCK_nocomment');
 }

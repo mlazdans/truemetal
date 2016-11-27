@@ -14,7 +14,7 @@ if(user_blacklisted() || Logins::banned24h($GLOBALS['ip']))
 
 $action = array_shift($sys_parameters);
 
-$template = new MainModule($sys_template_root, $sys_module_id, 'index.tpl');
+$template = new MainModule($sys_module_id, 'index.tpl');
 $template->set_title("Reģistrācija");
 $template->set_file('FILE_register', 'register.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_register');

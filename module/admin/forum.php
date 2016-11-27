@@ -100,7 +100,7 @@ if($action == 'add_forum') {
 	return;
 }
 
-$template = new AdminModule($sys_template_root.'/admin', 'forum');
+$template = new AdminModule('forum');
 $template->set_var('forum_class', 'TD-menu-active');
 $template->set_title('Admin :: forumi');
 

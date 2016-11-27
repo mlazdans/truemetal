@@ -13,7 +13,7 @@ if($login)
 	return;
 }
 
-$template = new MainModule($sys_template_root, $sys_module_id);
+$template = new MainModule($sys_module_id);
 $template->set_title('Profils');
 $template->set_file('FILE_module', 'user/profile/private.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_module');

@@ -10,7 +10,7 @@ require_once('lib/User.php');
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 $user_login = array_shift($sys_parameters);
 
-$template = new AdminModule($sys_template_root.'/admin', $admin_module);
+$template = new AdminModule($admin_module);
 $template->set_title('Admin :: lietotāji');
 
 $user = new User();

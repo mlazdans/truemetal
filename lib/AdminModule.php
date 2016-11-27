@@ -15,12 +15,11 @@ class AdminModule extends Template
 	var $module_name;
 	var $title;
 
-	function __construct($template_root, $module_name = '',
-		$str_main_file = 'index.tpl')
+	function __construct($module_name = '', $str_main_file = 'index.tpl')
 	{
-		$this->set_module_name($module_name ? $module_name : get_class($this));
+		parent::__construct($GLOBALS['sys_template_root'].'/admin');
 
-		$this->set_root($template_root);
+		$this->set_module_name($module_name ? $module_name : get_class($this));
 
 		/* ielaadeejam failus */
 		$this->set_file("FILE_index", $str_main_file);

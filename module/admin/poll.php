@@ -35,7 +35,7 @@ require_once('lib/Poll.php');
 $poll_id = (integer)array_shift($sys_parameters);
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
-$template = new AdminModule($sys_template_root.'/admin', 'poll');
+$template = new AdminModule('poll');
 $template->set_var('poll_class', 'TD-menu-active');
 $template->set_title('Admin :: jautājumi');
 

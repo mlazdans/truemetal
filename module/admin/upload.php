@@ -5,7 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-$template = new AdminModule($sys_template_root.'/admin', $admin_module);
+$template = new AdminModule($admin_module);
 $template->set_title('Admin :: faili');
 
 $action = isset($_POST['action']) ? $_POST['action'] : (isset($_GET['action']) ? $_GET['action'] : '');

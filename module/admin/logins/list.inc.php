@@ -20,7 +20,7 @@ $sortables = array(
 	"l_entered"
 	);
 
-$template = new AdminModule($sys_template_root.'/admin', "logins/list");
+$template = new AdminModule("logins/list");
 $template->set_title('Admin :: logini :: saraksts');
 
 $sortr = $sort;

@@ -7,10 +7,10 @@
 
 //$sql_cache = 'SQL_NO_CACHE';
 
-$template = new MainModule($sys_template_root, $sys_module_id, 'index.tpl');
+$template = new MainModule($sys_module_id, 'index.tpl');
 $template->set_file('FILE_search', 'search/log.tpl');
 $template->set_title("Ko mēs meklējam");
-$template->set_descr("Metāliskais meklētājs: ko tad mēs šeit meklējam?");
+$template->set_descr("Metāliskais meklētājs");
 $template->copy_block('BLOCK_middle', 'FILE_search');
 
 $template->enable('BLOCK_search_log');

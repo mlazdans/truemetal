@@ -29,7 +29,7 @@ $art_id_urlized = rawurldecode($art_id);
 $art_id = (int)$art_id;
 
 # Template
-$template = new MainModule($sys_template_root, $sys_module_id);
+$template = new MainModule($sys_module_id);
 $template->set_file('FILE_article', 'article.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_article');
 
@@ -232,13 +232,6 @@ $template->set_jubilars();
 $template->set_recent_comments();
 $template->set_search();
 $template->set_recent_reviews();
-
-if($art_id && $art)
-{
-	$template->set_descr((empty($hl) ? "" : sprintf("(Meklēšana: %s) ", trim($hl))).$art["art_name"]." - ".$art["art_intro"].' '.$art["art_data"]);
-} else {
-	$template->set_descr(htmlspecialchars($_pointer['_data_']['module_descr']));
-}
 
 $template->set_var("menu_active_".$_pointer['_data_']['module_id'], "_over");
 $template->out();

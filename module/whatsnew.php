@@ -5,7 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-$template = new MainModule($sys_template_root, 'whatsnew');
+$template = new MainModule('whatsnew');
 $template->set_title('Kas jauns');
 $template->set_file('FILE_module', 'whatsnew.tpl');
 $template->copy_block('BLOCK_middle', 'FILE_module');
