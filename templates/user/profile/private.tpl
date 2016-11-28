@@ -140,7 +140,7 @@
 	<li>Lai nomainītu paroli, tā jāievada abos lauciņos (ja negrib nomainīt - jāatstāj tukšs)</li>
 	<li>Parole datubāzē tiek glabāta šifrēta ar vienvirziena algoritmu - tātad nevienam neizlasāma.</li>
 	<li>Ja tiks mainīts e-pasts, konts kļūs neaktīvs, kamēr tas netiks apstiprināts tāpat kā reģistrējoties (kods tiks saņemts uz jauno e-pastu)</li>
-	<li>Bildes izmēri nedrīksts pārsniegt {user_pic_w} x {user_pic_h}. Ja ja kāda no dimensijām pārsniegs dotos izmērus, tā tiks automātiski samazināta. Mazā bilde tiek ģenerēta automātiski (ne lielāka par {user_pic_tw} x {user_pic_th}). Pieņemti tiek faili 'image/gif', 'image/jpeg', 'image/pjpeg'</li>
+	<li>Bildes izmēri nedrīkst pārsniegt {user_pic_w} x {user_pic_h}. Ja ja kāda no dimensijām pārsniegs dotos izmērus, tā tiks automātiski samazināta. Mazā bilde tiek ģenerēta automātiski (ne lielāka par {user_pic_tw} x {user_pic_th}). Pieņemti tiek faili 'image/gif', 'image/jpeg', 'image/pjpeg'</li>
 	<li>Aizliegts pievienot XXX, LV likumdošanai neatbildstošas, citu cilvēku bildes u.c. drazu!</li>
 </ul>
 

@@ -31,6 +31,10 @@ class TemplateBlock
 
 	function __construct(TemplateBlock $parent, $ID, $content)
 	{
+		if($block = $this->get_block($ID)){
+			$this->error('__construct: block ['.$ID.'] already exists', E_USER_ERROR);
+		}
+
 		$this->ID = $ID;
 		$this->slash = chr(92).chr(92);
 		$this->parent_block = $parent;
@@ -56,7 +60,6 @@ class TemplateBlock
 		$patt = '/<!--\s+BEGIN\s+(.*)\s+(.*)-->(.*)<!--\s+END\s+\1\s+-->/smU';
 		preg_match_all($patt, $this->content, $m);
 
-		/* ja atrasts kaads bloks */
 		if(isset($m[1]))
 		{
 			$int_count = count($m[1]);

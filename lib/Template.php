@@ -34,11 +34,6 @@ class Template extends TemplateBlock
 
 	function set_file($ID, $file_name)
 	{
-		if($this->block_exists($ID)) {
-			$this->error('set_file: block ['.$ID.'] already exists', E_USER_ERROR);
-			return false;
-		}
-
 		$modtime = 0;
 		$content = '';
 
@@ -49,7 +44,6 @@ class Template extends TemplateBlock
 		}
 
 		$this->blocks[$ID] = new TemplateBlock($this, $ID, $content);
-		//$this->blocks[$ID]->block_parent = $this;
 		$this->blocks[$ID]->modtime = $modtime;
 
 		return true;
