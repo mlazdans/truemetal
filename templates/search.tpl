@@ -77,7 +77,7 @@
 <tr>
 	<td>{doc_module_name}</td>
 	<td style="text-align: left; width: 100%;"><a href="{doc_url}">{doc_name}&nbsp;</a> ({doc_comment_count})</td>
-	<td style="text-align: right;">{doc_date}</td>
+	<td style="text-align: right;">{doc_comment_lastdate}</td>
 </tr>
 <!-- END BLOCK_search_item -->
 </table>

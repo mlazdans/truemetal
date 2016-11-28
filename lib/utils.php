@@ -976,10 +976,7 @@ function ip_blacklisted($ip)
 	{
 		# return 1 - not found; 0 - listed
 		$c = "host -W 1 -t any $iprev.$bl";
-		//$t=time();
 		$ret = exec($c, $o, $rv);
-		//$b="$c:".(time()-$t)."\n";
-		//printr($b);
 		if(!$rv)
 			return true;
 	}

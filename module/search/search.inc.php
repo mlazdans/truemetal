@@ -9,12 +9,16 @@ require_once('lib/sphinxapi.php');
 require_once('lib/Article.php');
 require_once('lib/Forum.php');
 
+# TODO: kārtošana pēc datuma gan article, gan forum. Tagad kārtojas atsevišķi
+
 # Init classes
 $Article = new Article();
 $Forum = new Forum();
 
 $sections = post('sections', array());
 $only_titles = post('only_titles', false);
+
+$spx_limit = 250;
 
 # Log
 if($search_log)
@@ -35,9 +39,11 @@ INSERT INTO `search_log` (
 # Sphinx
 $cl = new SphinxClient();
 $cl->SetConnectTimeout(1);
-$cl->SetLimits(0, 100);
+$cl->SetLimits(0, $spx_limit);
 $cl->SetServer('localhost', 3312);
 $cl->SetMatchMode(SPH_MATCH_BOOLEAN);
+//$cl->SetSortMode(SPH_SORT_ATTR_DESC, "doc_entered");
+$cl->SetSortMode(SPH_SORT_ATTR_DESC, "doc_comment_lastdate");
 
 $sources = array();
 if(in_array('article', $sections))
@@ -61,7 +67,7 @@ if($only_titles)
 	$template->set_var('only_titles_checked', ' checked="checked"', 'BLOCK_middle');
 }
 
-$cl->SetSortMode(SPH_SORT_ATTR_DESC, "doc_entered");
+
 if($sources)
 	$cl->SetFilter('doc_source_id', $sources);
 
@@ -93,6 +99,7 @@ if(($res = $cl->Query($search_q, $index)) === false)
 		{
 			$arts = $Article->load(array(
 				'res_ids'=>$res_ids,
+				'order'=>'r.res_comment_lastdate DESC',
 				));
 
 			foreach($arts as $item)
@@ -101,9 +108,11 @@ if(($res = $cl->Query($search_q, $index)) === false)
 				$items[$doc_id] = array(
 					'doc_res_id'=>$item['art_id'],
 					'doc_name'=>$item['art_name'],
-					'doc_url'=>"/".($doc_source_id == 1 ? "article" : "reviews")."/$item[art_id]-".rawurlencode(urlize($item["art_name"]))."?hl=$special_search_q",
+					'doc_url'=>Article::Route($item)."?hl=$special_search_q",
+					//'doc_url'=>"/".($doc_source_id == 1 ? "article" : "reviews")."/$item[art_id]-".rawurlencode(urlize($item["art_name"]))."?hl=$special_search_q",
 					'doc_module_name'=>$ds['name'],
 					'doc_date'=>date('d.m.Y', strtotime($item['art_entered'])),
+					'doc_comment_lastdate'=>date('d.m.Y', strtotime($item['res_comment_lastdate'])),
 					'doc_comment_count'=>$item['res_comment_count'],
 					);
 			}
@@ -115,6 +124,7 @@ if(($res = $cl->Query($search_q, $index)) === false)
 		{
 			$forums = $Forum->load(array(
 				'res_ids'=>$res_ids,
+				'order'=>'r.res_comment_lastdate DESC',
 				));
 			foreach($forums as $item)
 			{
@@ -122,9 +132,11 @@ if(($res = $cl->Query($search_q, $index)) === false)
 				$items[$doc_id] = array(
 					'doc_res_id'=>$item['forum_id'],
 					'doc_name'=>$item['forum_name'],
-					'doc_url'=>"/forum/$item[forum_id]-".rawurlencode(urlize($item["forum_name"]))."?hl=$special_search_q",
+					'doc_url'=>Forum::Route($item)."?hl=$special_search_q",
+					//'doc_url'=>"/forum/$item[forum_id]-".rawurlencode(urlize($item["forum_name"]))."?hl=$special_search_q",
 					'doc_module_name'=>$ds['name'],
 					'doc_date'=>date('d.m.Y', strtotime($item['forum_entered'])),
+					'doc_comment_lastdate'=>date('d.m.Y', strtotime($item['res_comment_lastdate'])),
 					'doc_comment_count'=>$item['res_comment_count'],
 					);
 			}
@@ -136,7 +148,12 @@ if(($res = $cl->Query($search_q, $index)) === false)
 }
 
 # Docs
-if(isset($items) && $items)
+//print count($items);
+if($res['total_found'] > $spx_limit){
+	$search_msg[] = "Uzmanību: atrasti $res[total_found] rezultāti, rādam $spx_limit";
+}
+
+if(!empty($items))
 {
 	$template->enable('BLOCK_search');
 	$template->enable('BLOCK_search_item');

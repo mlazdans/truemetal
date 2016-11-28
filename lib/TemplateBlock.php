@@ -42,14 +42,14 @@ class TemplateBlock
 		return true;
 	} // __construct
 
-	private function __get_root()
+	function get_root()
 	{
 		if($this->parent_block == null){
 			return $this;
 		} else {
-			return $this->parent_block->__get_root();
+			return $this->parent_block->get_root();
 		}
-	} // __get_root
+	} // get_root
 
 	private function __find_blocks()
 	{
@@ -318,6 +318,8 @@ class TemplateBlock
 		$block_to->parsed_content = $block_from->parsed_content;
 		$block_to->content = $block_from->content;
 
+		unset($block_from->parent_block->blocks[$ID_from]);
+
 		# Uzstādam parentu
 		$block_from->parent_block = $block_to;
 
@@ -351,6 +353,25 @@ class TemplateBlock
 
 		return false;
 	} // block_exists
+
+	function dump_blocks($d = 0)
+	{
+		$pre = '+'.str_repeat("-", $d);
+		foreach($this->blocks as $block_id => $object){
+			print $pre.$block_id."<br>\n";
+			$object->dump_blocks($d + 1);
+		}
+	} // dump_blocks
+
+	/*
+	function dump_tree($node = null, $d = 0)
+	{
+		if(!$node)
+			$node = $this->__get_root();
+
+		$node->dump_blocks;
+	} // dump_cache
+	*/
 
 } // class::TemplateBlock
 
