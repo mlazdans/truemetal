@@ -20,7 +20,6 @@ class TemplateBlock
 
 	var $content = '';
 	var $parsed_content = '';
-	var $last_parsed_content = '';
 	var $parsed_count = 0;
 
 	var $slash;
@@ -188,13 +187,12 @@ class TemplateBlock
 		}
 
 		$this->parsed_count++;
-		$this->last_parsed_content = $parsed_content;
 
 		$cont = $this->get_parsed_content();
 
 		# reset childs
 		if($append) {
-			foreach($this->blocks as $block_id => $object) {
+			foreach($this->blocks as $block_id=>$object) {
 				$object->reset();
 			}
 		}
@@ -259,11 +257,9 @@ class TemplateBlock
 		}
 
 		$block->parsed_content = '';
-		$block->last_parsed_content = '';
 		$block->parsed_count = 0;
 		if(!empty($block->blocks)){
 			$block->parsed_content = '';
-			$block->last_parsed_content = '';
 			$block->parsed_count = 0;
 			foreach($block->blocks as $block_id=>$object){
 				$object->reset();
@@ -357,24 +353,15 @@ class TemplateBlock
 		return false;
 	} // block_exists
 
-	function dump_blocks($d = 0)
+	function dump_blocks($pre = '')
 	{
-		$pre = '+'.str_repeat("-", $d);
-		foreach($this->blocks as $block_id => $object){
-			print $pre.$block_id."<br>\n";
-			$object->dump_blocks($d + 1);
+		foreach($this->blocks as $block_id=>$object)
+		{
+			$a = ($object->blocks ? '+' : '-');
+			print "$pre$a$block_id($object->parsed_count)\n";
+			$object->dump_blocks("| $pre");
 		}
 	} // dump_blocks
-
-	/*
-	function dump_tree($node = null, $d = 0)
-	{
-		if(!$node)
-			$node = $this->__get_root();
-
-		$node->dump_blocks;
-	} // dump_cache
-	*/
 
 } // class::TemplateBlock
 

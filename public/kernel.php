@@ -190,6 +190,13 @@ if(file_exists("$sys_root/module/$sys_module.php")) {
 } else {
 	include("$sys_root/module/$sys_default_module.php");
 }
+/*
+if($i_am_admin && isset($template)){
+	print '<pre style="font-family: courier new;">';
+	$template->dump_blocks();
+	print "</pre>";
+}
+*/
 //$data = ob_get_clean();
 
 /*
