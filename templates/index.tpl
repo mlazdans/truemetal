@@ -7,7 +7,7 @@
 <meta name="verify-v1" content="1T6p5COcolqsK65q0I6uXdMjPuPskp2jyWjFMTOW/LY=" />
 <meta name="author" content="Mārtiņš Lazdāns (dqdp.net)" />
 <meta name="description" content="{meta_descr}" />
-<link href="/css/?s[]=styles-dynamic&amp;s[]=article&amp;s[]=jquery-ui&amp;v={script_version}" rel="stylesheet" type="text/css" />
+<link href="/css/?v={script_version}" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <!-- BEGIN BLOCK_body -->
@@ -16,10 +16,10 @@
 	<div class="menu">
 		<table cellpadding="5" cellspacing="0">
 		<tr>
-			<td><a href="/"><img src="/img/buttons/article{menu_active_article}.png?{script_version}" alt="JAUNUMI" width="94" height="20" /></a></td>
-			<td><a href="/forum/"><img src="/img/buttons/forum{menu_active_forum}.png?{script_version}" alt="FORUMS" width="85" height="20" /></a></td>
-			<td><a href="/reviews/"><img src="/img/buttons/reviews{menu_active_reviews}.png?{script_version}" alt="RECENZIJAS" width="124" height="20" /></a></td>
-			<td><a href="/interviews/"><img src="/img/buttons/interviews{menu_active_interviews}.png?{script_version}" alt="INTERVIJAS" width="121" height="20" /></a></td>
+			<td><a href="/"><img src="/img/buttons/article{menu_active_article}.png" alt="JAUNUMI" width="94" height="20" /></a></td>
+			<td><a href="/forum/"><img src="/img/buttons/forum{menu_active_forum}.png" alt="FORUMS" width="85" height="20" /></a></td>
+			<td><a href="/reviews/"><img src="/img/buttons/reviews{menu_active_reviews}.png" alt="RECENZIJAS" width="124" height="20" /></a></td>
+			<td><a href="/interviews/"><img src="/img/buttons/interviews{menu_active_interviews}.png" alt="INTERVIJAS" width="121" height="20" /></a></td>
 		</tr>
 		</table>
 	</div>
@@ -37,7 +37,7 @@
 	</div>
 </div>
 <!-- END BLOCK_body -->
-<script type="text/javascript" src="/jsload/?s[]=jquery&amp;s[]=jquery-ui&amp;s[]=truemetal&amp;v={script_version}"></script>
+<script type="text/javascript" src="/jsload/?v={script_version}"></script>
 <script type="text/javascript">
 var User = {
 	disableYoutube: parseInt('{disable_youtube}')
