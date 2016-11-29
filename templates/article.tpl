@@ -64,7 +64,7 @@
 <div class="TD-cat">
 	<!-- BEGIN BLOCK_article_page_prev disabled -->
 	<div style="float: left;">
-		<img src="/img/left.png" alt="Vecāki ieraksti" style="vertical-align: middle;" />
+		<img src="/img/left.png" alt="Vecāki ieraksti" style="vertical-align: middle;" width="16" height="16" />
 		<a class="caption" href="{page}">vecāki ieraksti</a>
 	</div>
 	<!-- END BLOCK_article_page_prev  -->
@@ -72,7 +72,7 @@
 	<!-- BEGIN BLOCK_article_page_next disabled -->
 	<div style="float: right;">
 		<a class="caption" href="{page}">jaunāki ieraksti</a>
-		<img src="/img/right.png" alt="Jaunāki ieraksti" style="vertical-align: middle;" />
+		<img src="/img/right.png" alt="Jaunāki ieraksti" style="vertical-align: middle;" width="16" height="16" />
 	</div>
 	<!-- END BLOCK_article_page_next -->
 	<div>&nbsp;</div>

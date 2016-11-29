@@ -326,6 +326,7 @@ input[type=button]:active {
 	position: relative;
 	background: url("../img/logo-background.png") no-repeat top left;
 	float: left;
+	border-bottom: 0.1em dotted #220000;
 }
 #header .logo .logo-inside {
 	display: block;
@@ -340,10 +341,10 @@ input[type=button]:active {
 	vertical-align: middle;
 	background-color: #330000;
 }
+
 #header .menu {
 	width: 58.0em;
 	height: 3em;
-	margin-top: 0.1em;
 	position: relative;
 	float: left;
 }

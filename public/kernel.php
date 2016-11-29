@@ -5,6 +5,7 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
+# TODO: autoload
 # TODO: mainot galerijām/foruma/commention utt login_id, trigerī nomainās arī res tabulā
 
 # DEFAULTS - var overraidot configā

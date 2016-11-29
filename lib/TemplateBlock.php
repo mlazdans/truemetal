@@ -128,6 +128,21 @@ class TemplateBlock
 
 	protected function error($msg, $e = E_USER_WARNING)
 	{
+		$tmsg = '';
+		$t = debug_backtrace();
+		for($i=1;$i<count($t);$i++)
+		{
+			$bn = basename($t[$i]['file']);
+			if($bn == 'TemplateBlock.php' || $bn == 'Template.php'){
+				continue;
+			}
+			$tmsg = sprintf("(called %s line %d)", $t[$i]['file'], $t[$i]['line']);
+			break;
+		}
+
+		if($tmsg)
+			$msg .= " $tmsg";
+
 		trigger_error($msg, $e);
 	} // error
 

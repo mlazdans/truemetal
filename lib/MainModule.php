@@ -113,7 +113,7 @@ class MainModule extends Template
 			if($i_am_admin)
 			{
 				$sys_end_time = microtime(true);
-				$finished = '<!-- Finished: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec -->';
+				$finished = '<div>Rendered in: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec</div>';
 				$this->set_var('tmpl_finished', $finished);
 			}
 			print $this->parse_block('FILE_index');
@@ -462,10 +462,10 @@ class MainModule extends Template
 			"order"=>'event_startdate',
 			));
 
-		if($data){
-			$this->enable('BLOCK_events');
-		}
+		if(!$data)
+			return;
 
+		$this->set_file('FILE_events', 'right/events.tpl');
 		$timeout = 7*24*60*60;
 		foreach($data as $item){
 			$ts = strtotime($item['event_startdate']);
@@ -476,7 +476,7 @@ class MainModule extends Template
 			$diff = $ts -time();
 
 			$this->set_var('event_class', "", 'BLOCK_events_list');
-			$this->set_var('event_url', "/resroute/$item[res_id]/", 'BLOCK_events_list');
+			$this->set_var('event_url', Forum::Route($item), 'BLOCK_events_list');
 			$this->set_var('event_title', ent($D.". ".get_month($M - 1).", ".get_day($Dw - 1)), 'BLOCK_events_list');
 			$this->set_var('event_name', ent($item['forum_name']), 'BLOCK_events_list');
 
@@ -486,6 +486,10 @@ class MainModule extends Template
 
 			$this->parse_block('BLOCK_events_list', TMPL_APPEND);
 		}
+
+		$this->parse_block('FILE_events');
+		$this->set_var('right_item_data', $this->get_parsed_content('FILE_events'), 'BLOCK_right_item');
+		$this->parse_block('BLOCK_right_item', TMPL_APPEND);
 	} // set_events
 } // MainModule
 

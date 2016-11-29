@@ -1,6 +1,4 @@
-<div class="TD-cat" title="Jaunākie ieraksti forumā">
-	Forums
-</div>
+<div class="TD-cat" title="Jaunākie ieraksti forumā">Forums</div>
 <!-- BEGIN BLOCK_forum_r_items -->
 <div class="List-item">
 	<a href="/{forum_r_path}">{forum_r_name}</a>

@@ -16,10 +16,10 @@
 	<div class="menu">
 		<table cellpadding="5" cellspacing="0">
 		<tr>
-			<td><a href="/"><img src="/img/buttons/article{menu_active_article}.png?{script_version}" alt="JAUNUMI" /></a></td>
-			<td><a href="/forum/"><img src="/img/buttons/forum{menu_active_forum}.png?{script_version}" alt="FORUMS" /></a></td>
-			<td><a href="/reviews/"><img src="/img/buttons/reviews{menu_active_reviews}.png?{script_version}" alt="ALBUMU RECENZIJAS" /></a></td>
-			<td><a href="/interviews/"><img src="/img/buttons/interviews{menu_active_interviews}.png?{script_version}" alt="INTERVIJAS" /></a></td>
+			<td><a href="/"><img src="/img/buttons/article{menu_active_article}.png?{script_version}" alt="JAUNUMI" width="94" height="20" /></a></td>
+			<td><a href="/forum/"><img src="/img/buttons/forum{menu_active_forum}.png?{script_version}" alt="FORUMS" width="85" height="20" /></a></td>
+			<td><a href="/reviews/"><img src="/img/buttons/reviews{menu_active_reviews}.png?{script_version}" alt="RECENZIJAS" width="124" height="20" /></a></td>
+			<td><a href="/interviews/"><img src="/img/buttons/interviews{menu_active_interviews}.png?{script_version}" alt="INTERVIJAS" width="121" height="20" /></a></td>
 		</tr>
 		</table>
 	</div>
@@ -50,6 +50,7 @@ $(document).ready(function(){
 		}
 });
 </script>
+{tmpl_finished}
 </body>
 </html>
-{tmpl_finished}
+
