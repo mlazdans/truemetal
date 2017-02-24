@@ -477,7 +477,7 @@ class MainModule extends Template
 
 			$this->set_var('event_class', "", 'BLOCK_events_list');
 			$this->set_var('event_url', Forum::Route($item), 'BLOCK_events_list');
-			$this->set_var('event_title', ent($D.". ".get_month($M - 1).", ".get_day($Dw - 1)), 'BLOCK_events_list');
+			$this->set_var('event_title', ent($D.". ".get_month($M - 1).", ".get_day($Dw - 0)), 'BLOCK_events_list');
 			$this->set_var('event_name', ent($item['forum_name']), 'BLOCK_events_list');
 
 			if(($diff>0) && ($diff<$timeout)){

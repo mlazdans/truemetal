@@ -12,9 +12,9 @@ if(!user_loged())
 	return;
 }
 
-# ja skataas bildi, nocheko vai attieciigaa galerija ir pieejama
 if($gal_id)
 {
+	# ja skataas bildi, nocheko vai attieciigaa galerija ir pieejama
 	if($gal_id == 'view' && $gd_id)
 	{
 		$galdata = $GD->load($gd_id);

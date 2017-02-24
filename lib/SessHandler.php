@@ -61,7 +61,7 @@ class SessHandler
 
 	function sess_write($sess_id, $sess_data)
 	{
-		if(empty($sess_data))
+		if(empty($sess_data) || !user_loged())
 			return true;
 
 		$sess = $this->get_sess($sess_id);
@@ -112,7 +112,10 @@ class SessHandler
 
 	function sess_gc($maxlifetime)
 	{
-		$period = date('Y-m-d', mktime(0,0,0, date('m'), date('d') - 180, date('Y')));
+		//$period = date('Y-m-d', mktime(0,0,0, date('m'), date('d') - 180, date('Y')));
+		# 180 days: 24*3600*180
+		$period = date('Y-m-d', time() - 15552000);
+
 		$sql = array(
 			"DELETE FROM `sessions` WHERE sess_data = '' OR sess_data = 'login|a:0:{}'",
 			"DELETE FROM `sessions` WHERE `sess_lastaccess` < '$period'",

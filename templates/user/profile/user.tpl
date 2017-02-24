@@ -42,7 +42,11 @@
 	<div class="List-item">
 		<b>Pievienojies:</b> {l_entered_f}
 	</div>
-
+<!--
+	<div class="List-item">
+		<b>Komentāri:</b> <a href="/user/comments/{l_nick}/">{comment_count}</a>
+	</div>
+-->
 	<div class="List-item">
 		<b>Komentāri:</b> {comment_count}
 	</div>

@@ -13,7 +13,7 @@ define('M', array(
 	'oktobrī', 'novembrī', 'decembrī'
 	));
 
-define('D', array('pirmdiena', 'otrdiena', 'trešdiena', 'ceturtdiena', 'piektdiena', 'sestdiena', 'svētidiena'));
+define('D', array('svētdiena', 'pirmdiena', 'otrdiena', 'trešdiena', 'ceturtdiena', 'piektdiena', 'sestdiena'));
 
 function invalid($value)
 {
@@ -582,11 +582,12 @@ function search_to_spider($q, $fields)
 
 function email($to, $subj, $msg, $attachments = array())
 {
-	global $sys_mail_from, $mail_params;
+	global $sys_mail_from, $sys_mail_params;
 
 	$headers = array(
 		'From'=>$sys_mail_from,
 		'Subject'=>$subj,
+		'Return-Path'=>'returns-truemetal@mail.dqdp.net',
 	);
 
 	$mime = new Mail_Mime("\n");
@@ -606,16 +607,17 @@ function email($to, $subj, $msg, $attachments = array())
 	$body = $mime->get($param);
 	$hdrs = $mime->headers($headers);
 
-	if(empty($mail_params))
+	if(empty($sys_mail_params))
 	{
 		$mail = Mail::factory('mail');
 	} else {
-		$mail = Mail::factory('mail', $mail_params);
+		$mail = Mail::factory($sys_mail_params['driver'], $sys_mail_params);
 	}
 	$e = $mail->send($to, $hdrs, $body);
 
 	if($e !== TRUE)
 	{
+		print_r($e);
 		$ret = false;
 	} else {
 		$ret = true;
@@ -975,10 +977,13 @@ function ip_blacklisted($ip)
 	foreach($dnsbl as $bl)
 	{
 		# return 1 - not found; 0 - listed
-		$c = "host -W 1 -t any $iprev.$bl";
+		//$c = "host -W 1 -t any $iprev.$bl";
+		$c = "host -W 1 $iprev.$bl";
 		$ret = exec($c, $o, $rv);
-		if(!$rv)
+		if(!$rv){
+			trigger_error("blacklisted $ip: $ret");
 			return true;
+		}
 	}
 
 	return false;
@@ -1005,9 +1010,17 @@ function user_blacklisted()
 
 function tm_shutdown()
 {
-	$_SESSION['login']['l_lastaccess'] = date('Y-m-d H:i:s');
-	Logins::save_session_data();
-	session_commit();
+	if(user_loged())
+	{
+		$_SESSION['login']['l_lastaccess'] = date('Y-m-d H:i:s');
+		Logins::save_session_data();
+		session_commit();
+	} else {
+		if(session_id()){
+			session_destroy();
+			session_commit();
+		}
+	}
 } // tm_shutdown
 
 function cache_save($h, $data)

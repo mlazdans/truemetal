@@ -83,16 +83,18 @@ for($r=0; $r<2; $r++)
 	$ids[] = $db->Execute($sql);
 }
 
-if($ids)
+
+$i=array();
+foreach($ids as $id){
+	foreach($id as $k=>$v){
+		$i[] = $v['res_id'];
+	}
+}
+
+# TODO: zem lib; active='Y'
+if($i)
 {
 	$template->enable('BLOCK_truecomments');
-
-	$i=array();
-	foreach($ids as $id){
-		foreach($id as $k=>$v){
-			$i[] = $v['res_id'];
-		}
-	}
 
 	$sql = "
 	SELECT

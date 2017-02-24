@@ -7,7 +7,7 @@
 </div>
 
 <!-- BEGIN BLOCK_attend disabled -->
-<div class="Forum-cat">Solās ierasties:
+<div class="Forum-cat">Solās ierasties:&nbsp;
 	<!-- BEGIN BLOCK_attend_list disabled -->{l_nick_}<!-- END BLOCK_attend_list -->
 </div>
 	<!-- BEGIN BLOCK_attend_on disabled -->

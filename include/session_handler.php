@@ -16,7 +16,7 @@ ini_set('session.name', 'sid');
 ini_set('session.cookie_lifetime', $cookie_time);
 ini_set('session.serialize_handler', 'php');
 ini_set('session.gc_probability', 1);
-ini_set('session.gc_divisor', 100);
+ini_set('session.gc_divisor', 1000);
 
 $sess_handler = new SessHandler();
 

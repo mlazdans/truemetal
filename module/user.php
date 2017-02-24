@@ -11,6 +11,7 @@ $sections = array(
 	'thumb',
 	'profile',
 	'viewimage',
+	'comments',
 	);
 
 if(($k = array_search($section, $sections)) !== FALSE){

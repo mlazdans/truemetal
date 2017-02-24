@@ -5,6 +5,8 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
+//trigger_error('test');
+
 if(!$i_am_admin)
 	return;
 

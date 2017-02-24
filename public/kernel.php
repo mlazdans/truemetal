@@ -118,9 +118,9 @@ if(!in_array($sys_module_id, $sys_nosess_modules)){
 	require_once('include/session_handler.php');
 }
 
+register_shutdown_function("tm_shutdown");
 if(user_loged())
 {
-	register_shutdown_function("tm_shutdown");
 	if($l = Logins::load_by_id($_SESSION['login']['l_id'])) {
 		session_decode($l['l_sessiondata']);
 	} else {

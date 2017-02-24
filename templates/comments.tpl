@@ -11,7 +11,7 @@
 		<div class="date">, {c_date}</div>
 
 		<div class="link unselectable">
-			<a href="#comment{c_id}">[#{comment_nr}]</a>
+			<a href="/resroute/{res_id}/?c_id={c_id}">[#{comment_nr}]</a>
 		</div>
 		<!-- BEGIN BLOCK_profile_link disabled -->
 		<div class="profile unselectable">
