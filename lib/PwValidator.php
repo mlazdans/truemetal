@@ -10,7 +10,7 @@ class PwValidatorResult
 	var bool $HAS_LEN        = false;
 	var bool $HAS_NON_ALPHA  = false;
 	var bool $HAS_ALPHA      = false;
-	var bool $HAS_NO_REPEATS    = false;
+	var bool $HAS_NO_REPEATS = false;
 }
 
 class PwValidator
@@ -19,7 +19,7 @@ class PwValidator
 	const HAS_NON_ALPHA  = 1;
 
 	static function has_len(string $s): bool {
-		return mb_strlen($s) > 8;
+		return mb_strlen($s) > 9;
 	}
 
 	static function has_non_alpha(string $s): bool {
