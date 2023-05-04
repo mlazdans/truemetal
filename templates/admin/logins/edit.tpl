@@ -17,7 +17,7 @@
 	<td><input type="text" name="data[l_login]" value="{l_login}" size="16" /></td>
 </tr>
 <tr>
-	<td class="right nowrap">Niks:</td>
+	<td class="right nowrap">Segvārds:</td>
 	<td><input type="text" name="data[l_nick]" value="{l_nick}" size="16" /></td>
 </tr>
 <tr>
