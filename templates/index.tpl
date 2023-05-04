@@ -37,16 +37,19 @@
 <!-- END BLOCK_body -->
 <script src="/jsload/?v={script_version}"></script>
 <script>
-var User = {
-	disableYoutube: parseInt('{disable_youtube}')
-};
-$(document).ready(function(){
-		Truemetal.initMenu();
-		Truemetal.initUnselectable();
-		if(!User.disableYoutube){
-			Truemetal.initYouTube();
-		}
-});
+	const truemetal = document;
+
+	var User = {
+		disableYoutube: parseInt('{disable_youtube}')
+	};
+
+	$(truemetal).ready(function(){
+			Truemetal.initMenu();
+			Truemetal.initUnselectable();
+			if(!User.disableYoutube){
+				Truemetal.initYouTube();
+			}
+	});
 </script>
 {tmpl_finished}
 </body>
