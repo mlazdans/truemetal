@@ -104,62 +104,63 @@ class MainModule extends Template
 				{
 					$src = parse_url($item->attributes()->href, PHP_URL_PATH);
 					$host = parse_url($item->attributes()->src, PHP_URL_HOST);
-					if(empty($host) || ($host == $sys_domain))
-						$item->attributes()->href = 'http://'.$sys_cdn_func($src).$src;
+					if(empty($host) || ($host == $sys_domain)){
+						$item->attributes()->{"href"} = 'http://'.$sys_cdn_func($src).$src;
+					}
 				}
 			}
 			print $dom->saveHTML();
 		} else {
-			// $sys_end_time = microtime(true);
-			// $rendered = 'Rendered in: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec';
-			// if($i_am_admin)
-			// {
-			// 	$finished = "<div>$rendered</div>";
-			// } else {
-			// 	$finished = "<!-- $rendered -->";
-			// }
-			// $this->set_var('tmpl_finished', $finished);
+			$sys_end_time = microtime(true);
+			$rendered = 'Rendered in: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec';
+			if($i_am_admin)
+			{
+				$finished = "<div>$rendered</div>";
+			} else {
+				$finished = "<!-- $rendered -->";
+			}
+			$this->set_var('tmpl_finished', $finished);
 			print $this->parse_block('FILE_index');
 		}
 	} // out
 
-	function set_modules(&$modules)
-	{
-		foreach($modules as $module)
-		{
-			$item = &$module['_data_'];
-			if($item['module_visible'] == MOD_VISIBLE && $item['module_active'] == MOD_ACTIVE)
-			{
-				$this->set_var('mod_id', $item['mod_id']);
-				$this->set_var('module_id', $item['module_id']);
-				$this->set_var('module_name', toupper($item['module_name']));
-				$this->parse_block('BLOCK_cat', TMPL_APPEND);
-			}
-		} // while
-	} // set_modules
+	// function set_modules(&$modules)
+	// {
+	// 	foreach($modules as $module)
+	// 	{
+	// 		$item = &$module['_data_'];
+	// 		if($item['module_visible'] == MOD_VISIBLE && $item['module_active'] == MOD_ACTIVE)
+	// 		{
+	// 			$this->set_var('mod_id', $item['mod_id']);
+	// 			$this->set_var('module_id', $item['module_id']);
+	// 			$this->set_var('module_name', toupper($item['module_name']));
+	// 			$this->parse_block('BLOCK_cat', TMPL_APPEND);
+	// 		}
+	// 	} // while
+	// } // set_modules
 
-	function set_submodules(&$modules, $p = '', $d = 0)
-	{
-		if(!$modules)
-			return;
+	// function set_submodules(&$modules, $p = '', $d = 0)
+	// {
+	// 	if(!$modules)
+	// 		return;
 
-		$this->enable('BLOCK_subcat');
-		foreach($modules as $module) {
-			$item = &$module['_data_'];
-			if($item['module_visible'] == MOD_VISIBLE && $item['module_active'] == MOD_ACTIVE) {
-				$this->set_var('submodule_path', $p.$item['module_id']);
-				$this->set_var('submodule_name', ($d ? $item['module_name'] : toupper($item['module_name'])));
-				$this->set_var('submodule_modid', $item['mod_id']);
-				if(!$d)
-					$this->set_var('subcat_class', 'subcat');
-				else
-					$this->set_var('subcat_class', 'subcat2');
-				$this->parse_block('BLOCK_subcat', TMPL_APPEND);
-				if(!$d) // ja pirmais apaksliimenis
-					$this->set_submodules($module, $item['module_id'].'/', $d + 1);
-			}
-		} // while
-	} // set_submodules
+	// 	$this->enable('BLOCK_subcat');
+	// 	foreach($modules as $module) {
+	// 		$item = &$module['_data_'];
+	// 		if($item['module_visible'] == MOD_VISIBLE && $item['module_active'] == MOD_ACTIVE) {
+	// 			$this->set_var('submodule_path', $p.$item['module_id']);
+	// 			$this->set_var('submodule_name', ($d ? $item['module_name'] : toupper($item['module_name'])));
+	// 			$this->set_var('submodule_modid', $item['mod_id']);
+	// 			if(!$d)
+	// 				$this->set_var('subcat_class', 'subcat');
+	// 			else
+	// 				$this->set_var('subcat_class', 'subcat2');
+	// 			$this->parse_block('BLOCK_subcat', TMPL_APPEND);
+	// 			if(!$d) // ja pirmais apaksliimenis
+	// 				$this->set_submodules($module, $item['module_id'].'/', $d + 1);
+	// 		}
+	// 	} // while
+	// } // set_submodules
 
 	function set_right()
 	{

@@ -191,32 +191,8 @@ if(file_exists("$sys_root/module/$sys_module.php")) {
 	include("$sys_root/module/$sys_default_module.php");
 }
 
-if($i_am_admin && !in_array($sys_module_id, $sys_nosess_modules)){
-	$sys_end_time = microtime(true);
-	$rendered = 'Rendered in: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec';
-	echo $rendered;
-}
-
-/*
-if($i_am_admin && isset($template)){
-	print '<pre style="font-family: courier new;">';
-	$template->dump_blocks();
-	print "</pre>";
-}
-*/
-//$data = ob_get_clean();
-
-/*
-$tidy_config = array(
-	'wrap'=>false,
-	'hide-comments'=>true,
-	'indent-spaces'=>false,
-	'output-xhtml'=>true,
-	'doctype'=>'strict',
-	'preserve-entities'=>true,
-	'newline'=>' ',
-	);
-$tidy = tidy_parse_string($data, $tidy_config, 'UTF8');
-$tidy->cleanRepair();
-print $tidy;
-*/
+// if($i_am_admin && !in_array($sys_module_id, $sys_nosess_modules)){
+// 	$sys_end_time = microtime(true);
+// 	$rendered = 'Rendered in: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec';
+// 	echo $rendered;
+// }
