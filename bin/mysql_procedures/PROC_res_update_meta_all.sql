@@ -1,0 +1,21 @@
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `res_update_meta_all` $$
+CREATE PROCEDURE `res_update_meta_all` ()
+BEGIN
+	DECLARE done INT DEFAULT 0;
+	DECLARE v_res_id INT DEFAULT 0;
+	DECLARE cur1 CURSOR FOR SELECT DISTINCT res_id FROM `res`;
+	DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET done = 1;
+
+	OPEN cur1;
+	REPEAT
+		FETCH cur1 INTO v_res_id;
+		IF NOT done THEN
+			CALL res_update_meta(v_res_id);
+		END IF;
+	UNTIL done END REPEAT;
+END $$
+
+DELIMITER ;
+

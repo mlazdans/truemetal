@@ -1,0 +1,3 @@
+# /usr/src/letsencrypt
+
+./letsencrypt-auto certonly -a webroot --webroot-path=/www/truemetal.lv/public -d truemetal.lv -d www.truemetal.lv

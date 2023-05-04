@@ -1,0 +1,158 @@
+body {
+	font-family: "Verdana", arial, serif;
+	color: black;
+	background-color: #EEEEEE;
+	margin:0;
+	padding:0;
+	font-size: 10pt;
+}
+
+td {
+	text-align: left;
+}
+
+p {
+	text-align: justify;
+}
+
+input, select {
+	font-size: 9pt;
+}
+
+.A-cat:link, .A-cat:visited, .A-cat:active {
+	color: white;
+	text-decoration: none;
+	font-size: 10pt;
+	font-weight: bold;
+}
+
+.A-cat:hover {
+	color: white;
+	text-decoration: underline;
+	font-size: 10pt;
+	font-weight: bold;
+}
+
+.menu-button {
+	border: 1px solid ButtonFace;
+	padding-right: 1px;
+}
+
+.error-msg {
+	font-family: "arial", serif;
+	color: red;
+	font-size: 10pt;
+}
+
+.raised {
+	border-right: 1px solid ButtonHighlight;
+	background-color: ButtonShadow;
+}
+
+/* ------------------------------------------------------------------------- */
+#header {
+	background: #dddddd;
+	padding: 1em;
+}
+#header h1 {
+	font-size: 1em;
+	margin: 0;
+	padding: 0;
+}
+
+#menu {
+	background: #dddddd;
+}
+
+#footer {
+	text-align: center;
+	font-size: 75%;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+img, form {
+	border: none;
+	margin:0;
+	padding:0;
+}
+
+hr {
+	color: black;
+	background-color: black;
+	height: 1px;
+	border: 0;
+}
+
+.TD-menu, .TD-menu-active, .TD-cat, .TD-cat-active,
+.TD-menu a, .TD-menu-active a, .TD-cat a, .TD-cat-active a
+{
+	font-weight: bold;
+	color: white;
+	white-space: nowrap;
+}
+.TD-menu, .TD-menu-active, .TD-cat, .TD-cat-active{
+	padding: 3px 8px;
+}
+.TD-menu {
+	background-color: #000066;
+}
+.TD-menu-active {
+	background-color: #990000;
+}
+
+.TD-cat {
+	background-color: #000066;
+}
+.TD-cat-active {
+	background-color: #990000;
+}
+
+table.Main {
+	width: 100%;
+	min-width: 50%;
+	border-collapse: separate;
+	border-spacing: 1px;
+}
+table.Main td {
+	padding: 3px;
+}
+table.Main td.right {
+	text-align: right;
+}
+table.Main td.nowrap {
+	white-space: nowrap;
+}
+
+table.Main td:last-child, table.Main th:last-child {
+	width: 100%;
+}
+table.Main th {
+	white-space: nowrap;
+	text-align: left;
+	background: #bbbbbb;
+	font-size: normal;
+	font-weight: normal;
+}
+
+.box-normal {
+	background-color: #dddddd;
+}
+
+.box-inactive, .box-invisible, .box-inactive-invisible {
+	background-color: #666666;
+	opacity: 0.30;
+	-moz-opacity: 0.30;
+	filter:alpha(opacity=30);
+}
+
+.nowrap {
+	white-space: nowrap;
+}
+
+textarea.edit {
+	width: 650px;
+}
+

@@ -1,0 +1,30 @@
+body.mceContentBody {
+	background: #444444;
+	padding: 10px;
+	margin: 10px auto;
+	width: 560px;
+	border: 1px dotted red;
+	color: white;
+	font-family: "Verdana", arial, serif;
+	font-size: 8pt;
+}
+
+A {
+	color: red;
+	text-decoration: underline;
+	font-size: 8pt;
+	font-weight: normal;
+}
+A:hover {
+	text-decoration: none;
+}
+
+img.left {
+	float: left;
+	margin: 0 .5em .5em 0;
+}
+img.right {
+	float: right;
+	margin: 0 0 .5em .5em;
+}
+
