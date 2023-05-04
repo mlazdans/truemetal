@@ -35,7 +35,7 @@ Nav neviena logina
 		<input type="checkbox" name="logins_check_all" onclick="Truemetal.checkAll(this);" />
 	</td>
 	<td class="TD-cat">Logins</td>
-	<td class="TD-cat">Niks</td>
+	<td class="TD-cat">Segvārds</td>
 	<td class="TD-cat"><a href="?{q_sort_votes}">Reitings</a></td>
 	<td class="TD-cat">Lietderība</td>
 	<td class="TD-cat"><a href="?{q_sort_comment_count}">Komentāri</a></td>
