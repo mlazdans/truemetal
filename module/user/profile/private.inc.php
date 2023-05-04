@@ -83,12 +83,14 @@ for($r=0; $r<2; $r++)
 	// $ids[$r] = $db->Execute($sql);
 }
 
-if($ids){
+if($ids[0] || $ids[1]){
 	$template->enable('BLOCK_truecomments');
 }
 
 foreach($ids as $k=>$i){
-	// $template->enable('BLOCK_truecomment_header');
+	if (!$i){
+		continue;
+	}
 	if($k == 0){
 		$order = "res_votes_plus_count DESC, res_votes_minus_count DESC";
 		$template->set_var('truecomment_msg', 'Visvairāk plusotie komenti:', 'BLOCK_truecomments');
