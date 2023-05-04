@@ -7,11 +7,8 @@
 
 require_once('lib/SQLLayer.php');
 
-if(empty($GLOBALS['sys_database_type']))
+if(!empty($GLOBALS['sys_database_type']))
 {
-	$db = null;
-	$db->AutoCommit(true);
-} else {
 	$db = new SQLLayer($GLOBALS['sys_database_type'], 'utf8mb4');
 	$db->connect(
 		$GLOBALS['sys_db_host'],
@@ -23,5 +20,6 @@ if(empty($GLOBALS['sys_database_type']))
 	if(!$db->conn){
 		die('True DB error!');
 	}
+} else {
+	$db = null;
 }
-
