@@ -127,18 +127,18 @@
 <ul>
 	<li>
 		<div>Lai nomainītu paroli, tā jāievada abos lauciņos</div>
-		<div>Parole datubāzē tiek glabāta šifrēta ar vienvirziena algoritmu</div>
-		<div>Parolei jāatbilst visiem zemāk minētajiem kritējiem:</div>
+		<div>Parolei jāatbilst <u>visiem</u> zemāk minētajiem kritējiem:</div>
 		<ul style="margin-top: 0;">
 			<li>vismaz 10 simbolu gara</li>
 			<li>jāsatur burts (bez garumzīmes)</li>
 			<li>jāsatur ne-burts (cipars, burts ar garumzīmi, pietruzīme, utml.)</li>
-			<li>Nav secīgu simbolu, piemēram, &quot;aaa&quot;</li>
+			<li>nav secīgu simbolu, piemēram, &quot;aaa&quot;</li>
 		</ul>
+		<div>Paroles tiek glabātas šifrētas ar <a href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">vienvirziena algoritmu</a></div>
 	</li>
 
-	<li>Ja tiks mainīts e-pasts, konts kļūs neaktīvs, kamēr tas netiks apstiprināts tāpat kā reģistrējoties (kods tiks saņemts uz jauno e-pastu)</li>
-	<li>Bildes izmēri nedrīkst pārsniegt {user_pic_w} x {user_pic_h}. Ja ja kāda no dimensijām pārsniegs dotos izmērus, tā tiks automātiski samazināta. Mazā bilde tiek ģenerēta automātiski (ne lielāka par {user_pic_tw} x {user_pic_th}). Pieņemti tiek faili 'image/gif', 'image/jpeg', 'image/pjpeg'</li>
+	<li>Ja tiek mainīts e-pasts, konts kļūs neaktīvs, kamēr tas netiks apstiprināts tāpat kā reģistrējoties (kods tiks saņemts uz jauno e-pastu)</li>
+	<li>Bildes izmēri nedrīkst pārsniegt {user_pic_w} x {user_pic_h}. Ja kāda no dimensijām pārsniegs dotos izmērus, tā tiks automātiski samazināta. Mazā bilde tiek ģenerēta automātiski (ne lielāka par {user_pic_tw} x {user_pic_th}). Pieņemti tiek faili 'image/gif', 'image/jpeg', 'image/pjpeg'</li>
 	<li>Aizliegts XXX, citu cilvēku bildes u.c. drazu!</li>
 </ul>
 <!-- END BLOCK_profile -->

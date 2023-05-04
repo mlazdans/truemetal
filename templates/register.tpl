@@ -51,12 +51,12 @@
 <tr>
 	<td></td>
 	<td colspan="2">
-		<div>Parolei jāatbilst visiem zemāk minētajiem kritējiem:</div>
+		<div>Parolei jāatbilst <u>visiem</u> zemāk minētajiem kritējiem:</div>
 		<ul style="margin-top: 0;">
 			<li>vismaz 10 simbolu gara</li>
 			<li>jāsatur burts (bez garumzīmes)</li>
 			<li>jāsatur ne-burts (cipars, burts ar garumzīmi, pietruzīme, utml.)</li>
-			<li>Nav secīgu simbolu, piemēram, &quot;aaa&quot;</li>
+			<li>nav secīgu simbolu, piemēram, &quot;aaa&quot;</li>
 		</ul>
 	</td>
 </tr>
