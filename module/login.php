@@ -47,6 +47,7 @@ if(isset($_POST['data']))
 		if(
 			empty($data['referer']) ||
 			(strpos($referer, "/register/") !== false) ||
+			(strpos($referer, "/login/") !== false) ||
 			(strpos($referer, "/forgot/") !== false)
 			)
 		{
