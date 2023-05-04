@@ -313,7 +313,6 @@ class Logins
 			$sql .= "l_emailvisible = '$data[l_emailvisible]', ";
 			$sql .= $data['l_forumsort_themes'] ? "l_forumsort_themes = '$data[l_forumsort_themes]', " : '';
 			$sql .= $data['l_forumsort_msg'] ? "l_forumsort_msg = '$data[l_forumsort_msg]', " : '';
-			$sql .= "l_disable_avatars = $data[l_disable_avatars], ";
 			$sql .= "l_disable_youtube = $data[l_disable_youtube], ";
 			$osql .= $data['l_email'] ? "l_email = '$l_data[l_email]', " : '';
 			$osql .= $data['l_password'] ? "l_password = '$l_data[l_password], " : '';
@@ -735,11 +734,6 @@ class Logins
 			$data['l_forumsort_msg'] = (preg_match('/[AD]/', $data['l_forumsort_msg']) ? $data['l_forumsort_msg'] : '');
 		else
 			$data['l_forumsort_msg'] = Forum::SORT_THEME;
-
-		if(isset($data['l_disable_avatars']))
-			$data['l_disable_avatars'] = 1;
-		else
-			$data['l_disable_avatars'] = 0;
 
 		if(isset($data['l_disable_youtube']))
 			$data['l_disable_youtube'] = 1;

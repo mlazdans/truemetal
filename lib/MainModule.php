@@ -327,13 +327,6 @@ class MainModule extends Template
 		$this->set_var('l_forumsort_themes_'.$login['l_forumsort_themes'], ' checked="checked"', 'BLOCK_profile');
 		$this->set_var('l_forumsort_msg_'.$login['l_forumsort_msg'], ' checked="checked"', 'BLOCK_profile');
 
-		if(!empty($login['l_disable_avatars']))
-		{
-			$this->set_var('l_disable_avatars_checked', ' checked="checked"', 'BLOCK_profile');
-		} else {
-			$this->set_var('l_disable_avatars_checked', '', 'BLOCK_profile');
-		}
-
 		if(!empty($login['l_disable_youtube']))
 		{
 			$this->set_var('l_disable_youtube_checked', ' checked="checked"', 'BLOCK_profile');
