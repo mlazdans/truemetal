@@ -70,7 +70,7 @@
 </tr>
 <tr>
 	<td class="right nowrap">IP:</td>
-	<td>{l_userip}</td>
+	<td><a href="/admin/reports/?report=ip&amp;ips={l_userip}">{l_userip}</a></td>
 </tr>
 <tr>
 	<td class="right">Pēdējā gada laikā manīts no:</td>
