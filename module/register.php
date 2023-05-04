@@ -26,77 +26,64 @@ $error_msg = array();
 if(isset($_POST['data']))
 {
 	$check = array(
-		'l_email',
 		'l_login',
 		'l_nick',
-		'l_password'
+		'l_password',
+		'l_email',
 	);
 
 	$data = post('data', array());
 
 	$error_field = array();
-	foreach($check as $c)
-	{
-		if(empty($data[$c]))
+	foreach($check as $c) {
+		$data[$c] = isset($data[$c]) ? trim($data[$c]) : '';
+		if(empty($data[$c])){
 			$error_field[] = $c;
+		}
 	}
 
-	if(empty($data['l_login'])) {
-		$data['l_login'] = '';
-	}
+	$data['l_login'] = strtolower($data['l_login']);
 
 	// žagarvilnis123
 	// aaa123123123
 	// 1aa123123123
-	if(!pw_validate($data['l_password']??"", $data['l_password2']??"", $error_msg)){
+	if(empty($data['l_password'])){
+		$error_msg[] = 'Nav ievadīta parole';
 		$error_field[] = 'l_password';
 		$error_field[] = 'l_password2';
+	} else {
+		if(!pw_validate($data['l_password'], $data['l_password2'], $error_msg)){
+			$error_field[] = 'l_password';
+			$error_field[] = 'l_password2';
+		}
 	}
 
 	if(invalid($data['l_login']) || strlen($data['l_login']) < 5) {
-		$error_msg[] = 'Nepareizs vai īss logins!';
+		$error_msg[] = 'Nepareizs vai īss logins';
 		$error_field[] = 'l_login';
 	}
 
 	if(!valid_email($data['l_email'])) {
-		$error_msg[] = 'Nekorekta e-pasta adrese!';
+		$error_msg[] = 'Nekorekta e-pasta adrese';
 		$error_field[] = 'l_email';
 	}
 
-	$data['l_login'] = strtolower($data['l_login']);
-	$data['l_email'] = trim($data['l_email']);
-
 	# test login
-	if($test_login = $logins->load(array(
-		'l_login'=>$data['l_login'],
-		'l_active'=>Res::STATE_ALL,
-		'l_accepted'=>Res::STATE_ALL,
-		)))
-	{
+	if($test_login = $logins->load(['l_login'=>$data['l_login'], 'l_active'=>Res::STATE_ALL, 'l_accepted'=>Res::STATE_ALL])) {
 		$error_field[] = 'l_login';
-		$error_msg[] = 'Šāds login jau eksistē!';
+		$error_msg[] = 'Šāds login jau eksistē';
 	}
 
 	# test email
-	if($test_email = $logins->load(array(
-		'l_email'=>$data['l_email'],
-		'l_active'=>Res::STATE_ALL,
-		'l_accepted'=>Res::STATE_ALL,
-		)))
-	{
+	if($test_email = $logins->load(['l_email'=>$data['l_email'], 'l_active'=>Res::STATE_ALL, 'l_accepted'=>Res::STATE_ALL])) {
 		$error_field[] = 'l_email';
-		$error_msg[] = 'Šāda e-pasta adrese jau eksistē!';
+		$error_msg[] = 'Šāda e-pasta adrese jau eksistē';
 	}
 
 	# test nick
-	if($test_nick = $logins->load(array(
-		'l_nick'=>$data['l_nick'],
-		'l_active'=>Res::STATE_ALL,
-		'l_accepted'=>Res::STATE_ALL,
-		)))
-	{
+	if($test_nick = $logins->load(['l_nick'=>$data['l_nick'], 'l_active'=>Res::STATE_ALL, 'l_accepted'=>Res::STATE_ALL])) {
 		$error_field[] = 'l_nick';
-		$error_msg[] = 'Šāds segvārds jau eksistē!';
+		$error_msg[] = 'Šāds segvārds jau eksistē';
 	}
 
 	if($error_field)
