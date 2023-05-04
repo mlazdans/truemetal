@@ -4,21 +4,20 @@
 </div>
 <!-- END BLOCK_not_loged -->
 
-<!-- BEGIN BLOCK_profile_error disabled -->
-<div class="error">
-	{error_msg}
-</div>
-<!-- END BLOCK_profile_error -->
-
 <!-- BEGIN BLOCK_profile disabled -->
 <div class="TD-cat">
 	Profils: {l_nick}
 </div>
+<!-- BEGIN BLOCK_profile_error disabled -->
+<div class="List-item error">
+	{error_msg}
+</div>
+<!-- END BLOCK_profile_error -->
 
 <form action="" method="post" enctype="multipart/form-data" id="profile_edit">
 <table class="Main">
 <tr>
-	<td align="right"{error_l_email}><b>Niks:</b></td>
+	<td align="right"{error_l_email}><b>Segvārds:</b></td>
 	<td>{l_nick}</td>
 </tr>
 <tr>
@@ -34,11 +33,14 @@
 </tr>
 <tr>
 	<td align="right"{error_l_password}><b>Parole:</b></td>
-	<td><input type="password" name="data[l_password]" /></td>
+	<td><input type="password" name="data[l_password]" value="{l_password}" /></td>
 </tr>
 <tr>
 	<td align="right"{error_l_password} style="white-space: nowrap;"><b>Parole 2x:</b></td>
-	<td><input type="password" name="data[l_password2]" /></td>
+	<td><input type="password" name="data[l_password2]" value="{l_password2}" /></td>
+</tr>
+<tr>
+	<td colspan="2"><input type="submit" value=" Saglabāt " /></td>
 </tr>
 </table>
 
@@ -105,8 +107,10 @@
 	</td>
 </tr>
 </table>
+</form>
 
 <div class="List-sep"></div>
+
 
 <!-- BEGIN BLOCK_truecomments disabled -->
 <div class="TD-cat">{truecomment_msg}</div>
@@ -128,16 +132,21 @@
 	Palīdzība
 </div>
 <ul>
-	<li>Lai nomainītu paroli, tā jāievada abos lauciņos (ja negrib nomainīt - jāatstāj tukšs)</li>
-	<li>Parole datubāzē tiek glabāta šifrēta ar vienvirziena algoritmu - tātad nevienam neizlasāma.</li>
+	<li>
+		<div>Lai nomainītu paroli, tā jāievada abos lauciņos</div>
+		<div>Parole datubāzē tiek glabāta šifrēta ar vienvirziena algoritmu</div>
+		<div>Parolei jāatbilst visiem zemāk minētajiem kritējiem:</div>
+		<ul style="margin-top: 0;">
+			<li>vismaz 9 simbolu gara</li>
+			<li>jāsatur burts (bez garumzīmes)</li>
+			<li>jāsatur ne-burts (cipars, burts ar garumzīmi, pietruzīme, utml.)</li>
+			<li>Nav secīgu simbolu, piemēram, &quot;aaa&quot;</li>
+		</ul>
+	</li>
+
 	<li>Ja tiks mainīts e-pasts, konts kļūs neaktīvs, kamēr tas netiks apstiprināts tāpat kā reģistrējoties (kods tiks saņemts uz jauno e-pastu)</li>
 	<li>Bildes izmēri nedrīkst pārsniegt {user_pic_w} x {user_pic_h}. Ja ja kāda no dimensijām pārsniegs dotos izmērus, tā tiks automātiski samazināta. Mazā bilde tiek ģenerēta automātiski (ne lielāka par {user_pic_tw} x {user_pic_th}). Pieņemti tiek faili 'image/gif', 'image/jpeg', 'image/pjpeg'</li>
 	<li>Aizliegts XXX, citu cilvēku bildes u.c. drazu!</li>
 </ul>
-
-<div>
-	<input type="submit" value=" Saglabāt " />
-</div>
-</form>
 <!-- END BLOCK_profile -->
 

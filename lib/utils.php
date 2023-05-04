@@ -7,6 +7,7 @@
 
 require_once('Mail.php');
 require_once('Mail/mime.php');
+require_once('lib/PwValidator.php');
 
 define('M', array(
 	'janvārī', 'februārī', 'martā', 'aprīlī', 'maijā', 'jūnijā', 'jūlijā', 'augustā', 'septembrī',
@@ -749,6 +750,16 @@ function printr($data)
 	}
 } // printr
 
+function dumpr($data)
+{
+	if($GLOBALS['i_am_admin'])
+	{
+		print "<pre>";
+		var_dump($data);
+		print "</pre>";
+	}
+} // dumpr
+
 function dier($data = '')
 {
 	if($GLOBALS['i_am_admin']){
@@ -1144,4 +1155,24 @@ ORDER BY
 
 function specialchars($data){
 	return htmlspecialchars($data);
+}
+
+function pw_validate(string $p1, string $p2, array &$error_msg): bool {
+	if($p1 != $p2){
+		$error_msg[] = 'Paroles nesakrīt!';
+		return false;
+	}
+
+	$resut = PwValidator::validate($p1);
+
+	if(PwValidator::valid_pass($resut)){
+		return true;
+	}
+
+	if(!$resut->HAS_LEN)        $error_msg[] = 'Parole par īsu';
+	if(!$resut->HAS_ALPHA)      $error_msg[] = 'Parolē nav standarta burtu';
+	if(!$resut->HAS_NON_ALPHA)  $error_msg[] = 'Parolē nav simbolu vai ciparu';
+	if(!$resut->HAS_NO_REPEATS) $error_msg[] = 'Parolē ir sacīgi simboli';
+
+	return false;
 }

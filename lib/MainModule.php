@@ -319,7 +319,10 @@ class MainModule extends Template
 		$tpic_path = "/user/thumb/$login[l_login]/";
 
 		$this->enable('BLOCK_profile');
-		$this->set_array($login, 'BLOCK_profile');
+		// $this->set_array($login, 'BLOCK_profile');
+		$this->set_var('l_login', $login['l_login'], 'BLOCK_profile');
+		$this->set_var('l_nick', $login['l_nick'], 'BLOCK_profile');
+		$this->set_var('l_email', $login['l_email'], 'BLOCK_profile');
 
 		$this->set_var('l_forumsort_themes_'.$login['l_forumsort_themes'], ' checked="checked"', 'BLOCK_profile');
 		$this->set_var('l_forumsort_msg_'.$login['l_forumsort_msg'], ' checked="checked"', 'BLOCK_profile');

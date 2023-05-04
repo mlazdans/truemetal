@@ -44,6 +44,8 @@ if(isset($_POST['data']))
 		$template->set_var('error_msg', $login->error_msg);
 	}
 	$login_data = array_merge($_SESSION['login'], $login_data);
+	$template->set_var('l_password', $login_data['l_password'], 'BLOCK_profile');
+	$template->set_var('l_password2', $login_data['l_password2'], 'BLOCK_profile');
 } else {
 	$login_data = $_SESSION['login'];
 } // post

@@ -288,13 +288,10 @@ class Logins
 			}
 
 			// check pass match
-			if($data['l_password'])
-			{
-				if($data['l_password'] != $data['l_password2'])
-				{
-					$error_msg .= 'Paroles nesakrīt!<br />';
-				} elseif(invalid($data['l_password']) || strlen($data['l_password']) < 5) {
-					$error_msg .= 'Nepareiza vai īsa parole!';
+			if(!empty($data['l_password'])){
+				$local_msg = [];
+				if(!pw_validate($data['l_password']??"", $data['l_password2']??"", $local_msg)){
+					$error_msg .= join("<br/>", $local_msg)."<br/>";
 				}
 			}
 

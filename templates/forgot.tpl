@@ -3,9 +3,7 @@
 </div>
 
 <!-- BEGIN BLOCK_forgot_error disabled -->
-<div class="error-form">
-	<p>{error_msg}</p>
-</div>
+<div class="List-item error-form">{error_msg}</div>
 <!-- END BLOCK_forgot_error -->
 
 <!-- BEGIN BLOCK_forgot_code_error disabled -->
@@ -26,7 +24,7 @@
 <form method="post" action="{module_root}/request/">
 <table class="Main">
 <tr>
-	<td colspan="2">Ievadi savu loginu vai e-pastu!</td>
+	<td colspan="2">Ievadi <b>vienu</b>: savu login <u>vai</u> e-pastu!</td>
 </tr>
 <tr>
 	<td align="right"{error_l_login}>Login:</td>
@@ -73,13 +71,13 @@
 	<td colspan="2">{l_email}</td>
 </tr>
 <tr>
-	<td align="right">Niks:</td>
+	<td align="right">Segvārds:</td>
 	<td colspan="2">{l_nick}</td>
 </tr>
 <tr>
 	<td align="right"{error_l_password}>Parole:</td>
 	<td><input type="password" name="data[l_password]" /></td>
-	<td>Vismaz 5 simboli (a-z0-9_)</td>
+	<td></td>
 </tr>
 <tr>
 	<td align="right"{error_l_password}>Parole 2x:</td>
@@ -88,6 +86,17 @@
 <tr>
 	<td></td>
 	<td colspan="2">
+		<div>Parolei jāatbilst visiem zemāk minētajiem kritējiem:</div>
+		<ul style="margin-top: 0;">
+			<li>vismaz 9 simbolu gara</li>
+			<li>jāsatur burts (bez garumzīmes)</li>
+			<li>jāsatur ne-burts (cipars, burts ar garumzīmi, pietruzīme, utml.)</li>
+			<li>Nav secīgu simbolu, piemēram, &quot;aaa&quot;</li>
+		</ul>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
 		<input type="submit" value=" Nomainīt paroli " />
 	</td>
 </tr>

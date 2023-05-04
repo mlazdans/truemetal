@@ -27,22 +27,16 @@ $change_passw = (int)post('change_passw');
 $login_data = Logins::load_by_login($forgot_data['f_login'], array('l_accepted'=>Res::STATE_ALL));
 
 $pass_changed = false;
-if($change_passw)
-{
-	if(empty($data['l_password']) || empty($data['l_password2']))
-		$error_msg[] = 'Parole jānorāda obligāti!';
-	if($data['l_password'] != $data['l_password2'])
-		$error_msg[] ='Paroles nesakrīt!';
-	if(invalid($data['l_password']) || strlen($data['l_password']) < 5)
-		$error_msg[] = 'Nepareiza vai īsa parole!';
+if($change_passw) {
+	$error_msg = [];
+	pw_validate($data['l_password']??"", $data['l_password2']??"", $error_msg);
 
 	if(
 		!$error_msg &&
 		$logins->update_password($login_data['l_login'], $data['l_password']) &&
 		$logins->accept($login_data['l_id']) &&
 		$logins->remove_forgot_code($code)
-		)
-	{
+	) {
 		header("Location: $module_root/accept/ok/");
 		return;
 	}
@@ -50,5 +44,3 @@ if($change_passw)
 
 $template->set_array($login_data, 'BLOCK_forgot_passw');
 $template->enable('BLOCK_forgot_passw');
-
-

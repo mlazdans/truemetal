@@ -38,24 +38,27 @@ if(isset($_POST['data']))
 	foreach($check as $c)
 	{
 		if(empty($data[$c]))
-			$error_field[] = 'error_'.$c;
+			$error_field[] = $c;
 	}
 
-	if(empty($data['l_login']))
+	if(empty($data['l_login'])) {
 		$data['l_login'] = '';
+	}
 
-	if($data['l_password'] != $data['l_password2'])
-	{
-		$error_msg[] = 'Paroles nesakrīt!';
+	// žagarvilnis123
+	// aaa123123123
+	// 1aa123123123
+	if(!pw_validate($data['l_password']??"", $data['l_password2']??"", $error_msg)){
 		$error_field[] = 'l_password';
 		$error_field[] = 'l_password2';
-	} elseif(invalid($data['l_password']) || strlen($data['l_password']) < 5) {
-		$error_msg[] = 'Nepareiza vai īsa parole!';
-		$error_field[] = 'l_password';
-	} elseif(invalid($data['l_login']) || strlen($data['l_login']) < 5) {
+	}
+
+	if(invalid($data['l_login']) || strlen($data['l_login']) < 5) {
 		$error_msg[] = 'Nepareizs vai īss logins!';
 		$error_field[] = 'l_login';
-	} elseif(!valid_email($data['l_email'])) {
+	}
+
+	if(!valid_email($data['l_email'])) {
 		$error_msg[] = 'Nekorekta e-pasta adrese!';
 		$error_field[] = 'l_email';
 	}
@@ -93,7 +96,7 @@ if(isset($_POST['data']))
 		)))
 	{
 		$error_field[] = 'l_nick';
-		$error_msg[] = 'Šāds niks jau eksistē!';
+		$error_msg[] = 'Šāds segvārds jau eksistē!';
 	}
 
 	if($error_field)
