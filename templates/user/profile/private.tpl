@@ -24,7 +24,7 @@
 	<td align="right"{error_l_email}><b>E-pasts:</b></td>
 	<td>
 		<input type="text" name="data[l_email]" value="{l_email}" />
-		<input type="checkbox" name="data[l_emailvisible]"{l_emailvisible} /> - redzams citiem
+		<label><input type="checkbox" name="data[l_emailvisible]"{l_emailvisible} />redzams citiem</label>
 	</td>
 </tr>
 <tr>
@@ -77,33 +77,26 @@
 </div>
 <table class="Main">
 <tr>
-	<td colspan="2"{error_l_forumsort_themes}><b>Tēmas kārtot pēc:</b></td>
-</tr>
-<tr>
-	<td colspan="2">
-		<input type="radio" name="data[l_forumsort_themes]" value="T"{l_forumsort_themes_T} /> tēmu datumiem
-		<input type="radio" name="data[l_forumsort_themes]" value="C"{l_forumsort_themes_C} /> jaunākā komentāra
+	<td style="text-align: right;" {error_l_forumsort_themes}><b>Tēmas kārtot pēc:</b></td>
+	<td>
+		<label><input type="radio" name="data[l_forumsort_themes]" value="T"{l_forumsort_themes_T} /> tēmu datumiem</label>
+	</td>
+	<td>
+		<label><input type="radio" name="data[l_forumsort_themes]" value="C"{l_forumsort_themes_C} /> jaunākā komentāra</label>
 	</td>
 </tr>
 <tr>
-	<td colspan="2"{error_l_forumsort_msg}><b>Ziņojumus kārtot:</b></td>
-</tr>
-<tr>
-	<td colspan="2">
-		<input type="radio" name="data[l_forumsort_msg]" value="A"{l_forumsort_msg_A} /> pēc datuma augoši
-		<input type="radio" name="data[l_forumsort_msg]" value="D"{l_forumsort_msg_D} /> pēc datuma dilstoši
+	<td style="text-align: right;" {error_l_forumsort_msg}><b>Ziņojumus kārtot:</b></td>
+	<td>
+		<label><input type="radio" name="data[l_forumsort_msg]" value="A"{l_forumsort_msg_A} /> pēc datuma augoši</label>
+	</td>
+	<td>
+		<label><input type="radio" name="data[l_forumsort_msg]" value="D"{l_forumsort_msg_D} /> pēc datuma dilstoši</label>
 	</td>
 </tr>
 <tr>
-	<td colspan="2">
-		<input id="l_disable_avatars" type="checkbox" name="data[l_disable_avatars]"{l_disable_avatars_checked} />
-		<label for="l_disable_avatars">Nerādīt avatārus</label>
-	</td>
-</tr>
-<tr>
-	<td colspan="2">
-		<input id="l_disable_youtube" type="checkbox" name="data[l_disable_youtube]"{l_disable_youtube_checked} />
-		<label for="l_disable_youtube">Nerādīt Youtube klipus</label>
+	<td colspan="3">
+		<label><input type="checkbox" name="data[l_disable_youtube]"{l_disable_youtube_checked} /> nerādīt Youtube klipus</label>
 	</td>
 </tr>
 </table>

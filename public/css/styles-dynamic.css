@@ -492,3 +492,15 @@ div.loading {
 	font-size: smaller;
 	white-space: nowrap;
 }
+
+label {
+	display: inline-block;
+	vertical-align: middle;
+}
+label > input {
+	margin: 0 2px;
+	padding: 0;
+	display: inline-block;
+	vertical-align: middle;
+	position: relative;
+}
