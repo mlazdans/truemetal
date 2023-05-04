@@ -190,6 +190,13 @@ if(file_exists("$sys_root/module/$sys_module.php")) {
 } else {
 	include("$sys_root/module/$sys_default_module.php");
 }
+
+if($i_am_admin && !in_array($sys_module_id, $sys_nosess_modules)){
+	$sys_end_time = microtime(true);
+	$rendered = 'Rendered in: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec';
+	echo $rendered;
+}
+
 /*
 if($i_am_admin && isset($template)){
 	print '<pre style="font-family: courier new;">';

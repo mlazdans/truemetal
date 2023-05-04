@@ -110,15 +110,15 @@ class MainModule extends Template
 			}
 			print $dom->saveHTML();
 		} else {
-			$sys_end_time = microtime(true);
-			$rendered = 'Rendered in: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec';
-			if($i_am_admin)
-			{
-				$finished = "<div>$rendered</div>";
-			} else {
-				$finished = "<!-- $rendered -->";
-			}
-			$this->set_var('tmpl_finished', $finished);
+			// $sys_end_time = microtime(true);
+			// $rendered = 'Rendered in: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec';
+			// if($i_am_admin)
+			// {
+			// 	$finished = "<div>$rendered</div>";
+			// } else {
+			// 	$finished = "<!-- $rendered -->";
+			// }
+			// $this->set_var('tmpl_finished', $finished);
 			print $this->parse_block('FILE_index');
 		}
 	} // out
