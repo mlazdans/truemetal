@@ -46,7 +46,7 @@
 <tr>
 	<td align="right"{error_l_email}>E-pasts:</td>
 	<td><input type="text" name="data[l_email]" value="{l_email}" /></td>
-	<td>Jānorāda pareiza e-pasta adrese, uz kuru tiks nosūtīts pārbaudes kods.</td>
+	<td>jānorāda pareiza e-pasta adrese, uz kuru tiks nosūtīts pārbaudes kods</td>
 </tr>
 <tr>
 	<td></td>
