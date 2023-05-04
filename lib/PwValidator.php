@@ -15,9 +15,6 @@ class PwValidatorResult
 
 class PwValidator
 {
-	const HAS_ALPHA      = 0;
-	const HAS_NON_ALPHA  = 1;
-
 	static function has_len(string $s): bool {
 		return mb_strlen($s) > 9;
 	}
