@@ -12,6 +12,7 @@ $sections = array(
 	'profile',
 	'viewimage',
 	'comments',
+	'pwch',
 	);
 
 if(($k = array_search($section, $sections)) !== FALSE){

@@ -17,7 +17,7 @@
 <form action="" method="post" enctype="multipart/form-data" id="profile_edit">
 <table class="Main">
 <tr>
-	<td align="right"{error_l_email}><b>Segvārds:</b></td>
+	<td align="right"><b>Segvārds:</b></td>
 	<td>{l_nick}</td>
 </tr>
 <tr>
@@ -32,55 +32,20 @@
 	<td><input type="file" name="l_picfile" /></td>
 </tr>
 <tr>
-	<td align="right"{error_l_password}><b>Parole:</b></td>
-	<td><input type="password" name="data[l_password]" value="{l_password}" /></td>
-</tr>
-<tr>
-	<td align="right"{error_l_password} style="white-space: nowrap;"><b>Parole 2x:</b></td>
-	<td><input type="password" name="data[l_password2]" value="{l_password2}" /></td>
-</tr>
-<!-- BEGIN BLOCK_bad_pass disabled -->
-<tr>
-	<td></td>
+	<td align="right"><b>Parole:</b></td>
 	<td class="{bad_pass_class}" style="{bad_pass_style}">{bad_pass_msg}</td>
 </tr>
-<!-- END BLOCK_bad_pass -->
+<!-- BEGIN BLOCK_change_pass disabled -->
 <tr>
-	<td colspan="2"><input type="submit" value=" Saglabāt " /></td>
+	<td></td>
+	<td><a href="{module_root}/pwch/">Mainīt paroli</a></td>
 </tr>
+<!-- END BLOCK_change_pass -->
 </table>
 
 <div class="List-sep"></div>
 
-<div class="TD-cat">
-	Bilde:
-</div>
-
-<table class="Main">
-<!-- BEGIN BLOCK_nopicture disabled -->
-<tr>
-	<td>Bildes nav!</td>
-</tr>
-<!-- END BLOCK_nopicture -->
-<!-- BEGIN BLOCK_picture disabled -->
-<tr>
-	<td>
-		<a href="/user/viewimage/{l_login}/" onclick="Truemetal.viewProfileImage('{l_login}', {pic_w}, {pic_h}, '{l_login}'); return false;"><img src="{pic_path}" alt="" /></a>
-	</td>
-</tr>
-<!-- BEGIN BLOCK_picture_delete disabled -->
-<tr>
-	<td style="text-align: center"><a href="{module_root}/deleteimage/" onclick="return confirm('Pārliecināts?');">Dzēst</a></td>
-</tr>
-<!-- END BLOCK_picture_delete -->
-<!-- END BLOCK_picture -->
-</table>
-
-<div class="List-sep"></div>
-
-<div class="TD-cat">
-	Forums
-</div>
+<div class="TD-cat">Forums</div>
 <table class="Main">
 <tr>
 	<td style="text-align: right;" {error_l_forumsort_themes}><b>Tēmas kārtot pēc:</b></td>
@@ -105,11 +70,37 @@
 		<label><input type="checkbox" name="data[l_disable_youtube]"{l_disable_youtube_checked} /> nerādīt Youtube klipus</label>
 	</td>
 </tr>
+<tr>
+	<td colspan="3"><input type="submit" value=" Saglabāt " /></td>
+</tr>
+
 </table>
 </form>
 
 <div class="List-sep"></div>
 
+<div class="TD-cat">Bilde</div>
+<table class="Main">
+<!-- BEGIN BLOCK_nopicture disabled -->
+<tr>
+	<td>Bildes nav!</td>
+</tr>
+<!-- END BLOCK_nopicture -->
+<!-- BEGIN BLOCK_picture disabled -->
+<tr>
+	<td>
+		<a href="/user/viewimage/{l_login}/" onclick="Truemetal.viewProfileImage('{l_login}', {pic_w}, {pic_h}, '{l_login}'); return false;"><img src="{pic_path}" alt="" /></a>
+	</td>
+</tr>
+<!-- BEGIN BLOCK_picture_delete disabled -->
+<tr>
+	<td style="text-align: center"><a href="{module_root}/deleteimage/" onclick="return confirm('Pārliecināts?');">Dzēst</a></td>
+</tr>
+<!-- END BLOCK_picture_delete -->
+<!-- END BLOCK_picture -->
+</table>
+
+<div class="List-sep"></div>
 
 <!-- BEGIN BLOCK_truecomments disabled -->
 <div class="TD-cat">{truecomment_msg}</div>
