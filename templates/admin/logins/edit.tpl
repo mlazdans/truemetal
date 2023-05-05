@@ -13,6 +13,10 @@
 	<td>{l_id}</td>
 </tr>
 <tr>
+	<td class="right nowrap">Hash:</td>
+	<td>{l_password}</td>
+</tr>
+<tr>
 	<td class="right nowrap">Login:</td>
 	<td><input type="text" name="data[l_login]" value="{l_login}" size="16" /></td>
 </tr>
