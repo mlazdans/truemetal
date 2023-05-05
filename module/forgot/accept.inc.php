@@ -33,9 +33,9 @@ if($change_passw) {
 
 	if(
 		!$error_msg &&
-		$logins->update_password($login_data['l_login'], $data['l_password']) &&
 		$logins->accept($login_data['l_id']) &&
-		$logins->remove_forgot_code($code)
+		$logins->remove_forgot_code($code) &&
+		$logins->update_password($login_data['l_login'], $data['l_password'])
 	) {
 		header("Location: $module_root/accept/ok/");
 		return;
