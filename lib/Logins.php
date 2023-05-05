@@ -56,12 +56,14 @@ class Logins
 			$sql_add[] = sprintf("l_lastaccess >= '%s'", $d0);
 		}
 
-		if(isset($params['l_password']))
+		# TODO: remove old pass!!!
+		if(isset($params['l_password'])){
 			$sql_add[] = sprintf(
-				"(l_password = PASSWORD('%s') OR l_password = OLD_PASSWORD('%s'))",
-				$params['l_password'],
-				$params['l_password']
-				);
+				"(l_password = '%s' OR l_password = '%s')",
+				$this->genPass($params['l_password']),
+				mysql_old_password($params['l_password'])
+			);
+		}
 
 		if(isset($params['l_active']))
 		{
@@ -313,7 +315,10 @@ class Logins
 
 		$osql = $sql = '';
 		$sql .= $data['l_email'] ? "l_email = '$data[l_email]', " : '';
-		$sql .= $data['l_password'] ? "l_password = PASSWORD('$data[l_password]'), " : '';
+		if(isset($data['l_password'])){
+			$hash = $this->genPass($data['l_password']);
+			$sql .= "l_password = '$hash', ";
+		}
 		$sql .= "l_emailvisible = '$data[l_emailvisible]', ";
 		$sql .= $data['l_forumsort_themes'] ? "l_forumsort_themes = '$data[l_forumsort_themes]', " : '';
 		$sql .= $data['l_forumsort_msg'] ? "l_forumsort_msg = '$data[l_forumsort_msg]', " : '';
@@ -561,16 +566,15 @@ class Logins
 		$data = $db->Quote($data);
 
 		$date = $db->now();
-		if($data['l_entered'])
-			$date = "'$data[l_entered]'";
 
-		$sql = "
-		INSERT INTO logins (
-			l_login, l_password, l_email,
+		if($data['l_entered'])$date = "'$data[l_entered]'";
+
+		$sql = "INSERT INTO logins (
+			l_login, l_email,
 			l_active, l_accepted, l_nick,
 			l_entered, l_userip
 		) VALUES (
-			'$data[l_login]', PASSWORD('$data[l_password]'), '$data[l_email]',
+			'$data[l_login]', '$data[l_email]',
 			'$data[l_active]', '$data[l_accepted]', '$data[l_nick]',
 			$date, '$_SERVER[REMOTE_ADDR]'
 		)";
@@ -578,11 +582,16 @@ class Logins
 		if($db->Execute($sql))
 		{
 			if($accept_code = $this->insert_accept_code($data['l_login']))
+			{
 				$this->send_accept_code($data['l_login'], $accept_code, $data['l_email']);
+			}
+
+			$this->update_password($data['l_login'], $data['l_password']);
 
 			return $data['l_login'];
-		} else
+		} else {
 			return false;
+		}
 	} // insert
 
 	function update($data, $validate = Res::ACT_VALIDATE)
@@ -761,9 +770,13 @@ class Logins
 	{
 		global $db;
 
-		$sql = "UPDATE logins SET l_password = PASSWORD('$password') WHERE l_login='$login'";
-
-		return $db->Execute($sql);
+		return $db->Execute(
+			sprintf(
+				"UPDATE logins SET l_password = '%s' WHERE l_login='%s'",
+				$this->genPass($password),
+				$login
+			)
+		);
 	} // update_password
 
 	function remove_forgot_code($code)
@@ -825,5 +838,9 @@ GROUP BY
 			return false;
 		}
 	} // collectUsersByIP
+
+	static function genPass(string $str): string {
+		return mysql_password($str);
+	}
 } // class Logins
 
