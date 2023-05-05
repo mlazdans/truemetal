@@ -44,9 +44,6 @@ if(isset($_POST['data']))
 
 	$data['l_login'] = strtolower($data['l_login']);
 
-	// žagarvilnis123
-	// aaa123123123
-	// 1aa123123123
 	if(empty($data['l_password'])){
 		$error_msg[] = 'Nav ievadīta parole';
 		$error_field[] = 'l_password';
