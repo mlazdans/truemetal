@@ -504,3 +504,13 @@ label > input {
 	vertical-align: middle;
 	position: relative;
 }
+
+.blink {
+	animation: blinker 1s step-start infinite;
+}
+
+@keyframes blinker {
+	50% {
+	  opacity: 0;
+	}
+}

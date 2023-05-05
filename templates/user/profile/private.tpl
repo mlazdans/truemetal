@@ -9,7 +9,7 @@
 	Profils: {l_nick}
 </div>
 <!-- BEGIN BLOCK_profile_error disabled -->
-<div class="List-item error">
+<div class="List-item Info error">
 	{error_msg}
 </div>
 <!-- END BLOCK_profile_error -->
@@ -39,6 +39,12 @@
 	<td align="right"{error_l_password} style="white-space: nowrap;"><b>Parole 2x:</b></td>
 	<td><input type="password" name="data[l_password2]" value="{l_password2}" /></td>
 </tr>
+<!-- BEGIN BLOCK_bad_pass disabled -->
+<tr>
+	<td></td>
+	<td class="{bad_pass_class}" style="{bad_pass_style}">{bad_pass_msg}</td>
+</tr>
+<!-- END BLOCK_bad_pass -->
 <tr>
 	<td colspan="2"><input type="submit" value=" Saglabāt " /></td>
 </tr>

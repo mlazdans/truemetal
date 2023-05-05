@@ -139,4 +139,25 @@ foreach($ids as $k=>$i){
 	$template->parse_block('BLOCK_truecomments', TMPL_APPEND);
 }
 
+$template->enable('BLOCK_bad_pass');
+$sql = sprintf("SELECT bp.*
+FROM logins l
+JOIN bad_pass bp ON bp.pass_hash = l.l_password
+WHERE l.l_id = %d", $_SESSION['login']['l_id']);
 
+if($data = $db->ExecuteSingle($sql)){
+	$template->set_var('bad_pass_class', 'blink', 'BLOCK_bad_pass');
+	$template->set_var('bad_pass_style', 'color: red', 'BLOCK_bad_pass');
+	if($data['is_dict'] && $data['is_brute']){
+		$msg = "Apsveicam! Tava parole ir gan paroļu vārdnīcā gan viegli atlaužama! Nomaini!";
+	} elseif($data['is_dict']) {
+		$msg = "Tava parole ir paroļu vārdnīcā! Nomaini!";
+	} elseif($data['is_brute']) {
+		$msg = "Tava parole ir viegli atlaužama! Nomaini!";
+	}
+} else {
+	$template->set_var('bad_pass_style', 'color: #00a400', 'BLOCK_bad_pass');
+	$msg = "Apsveicam! Tava parole nav paroļu vārdnīcā vai viegli atlaužama!";
+}
+
+$template->set_var('bad_pass_msg', $msg, 'BLOCK_bad_pass');
