@@ -355,7 +355,6 @@ class MainModule extends Template
 			}
 
 			$this->enable('BLOCK_picture');
-			$this->enable('BLOCK_picture_delete');
 		} else {
 			$this->enable('BLOCK_nopicture');
 		}
