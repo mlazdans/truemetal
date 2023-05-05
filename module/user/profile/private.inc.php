@@ -14,8 +14,10 @@ if(!user_loged())
 	return;
 }
 
+$action = get('action');
+
 # del image
-if($section == 'deleteimage')
+if($action == 'deleteimage')
 {
 	if(Logins::delete_image())
 	{

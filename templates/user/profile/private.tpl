@@ -94,7 +94,7 @@
 </tr>
 <!-- BEGIN BLOCK_picture_delete disabled -->
 <tr>
-	<td style="text-align: center"><a href="{module_root}/deleteimage/" onclick="return confirm('Pārliecināts?');">Dzēst</a></td>
+	<td style="text-align: center"><a href="/user/profile/?action=deleteimage" onclick="return confirm('Pārliecināts?');">Dzēst</a></td>
 </tr>
 <!-- END BLOCK_picture_delete -->
 <!-- END BLOCK_picture -->
