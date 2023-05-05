@@ -263,6 +263,21 @@ class TemplateBlock
 		}
 	} // set_array
 
+	function set_array_except(array $except, array $array, $ID = '')
+	{
+		$block = $this;
+		if($ID && !($block = $this->get_block($ID))){
+			$this->error('set_array: block ['.$ID.'] not found!');
+			return false;
+		}
+
+		foreach($array as $key => $value) {
+			if(!in_array($key, $except)) {
+				$block->set_var($key, $value);
+			}
+		}
+	} // set_array
+
 	function reset($ID = '')
 	{
 		$block = $this;
