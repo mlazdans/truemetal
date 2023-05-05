@@ -622,7 +622,7 @@ function email($to, $subj, $msg, $attachments = array())
 
 	if($e !== TRUE)
 	{
-		print_r($e);
+		$GLOBALS['php_errormsg'] = $e;
 		$ret = false;
 	} else {
 		$ret = true;

@@ -305,100 +305,110 @@ class Logins
 			$error_msg .= 'Nevar saglabāt neaktīvu kontu!<br />';
 		}
 
-		if(!$error_msg)
+		if($error_msg)
 		{
-			$osql = $sql = '';
-			$sql .= $data['l_email'] ? "l_email = '$data[l_email]', " : '';
-			$sql .= $data['l_password'] ? "l_password = PASSWORD('$data[l_password]'), " : '';
-			$sql .= "l_emailvisible = '$data[l_emailvisible]', ";
-			$sql .= $data['l_forumsort_themes'] ? "l_forumsort_themes = '$data[l_forumsort_themes]', " : '';
-			$sql .= $data['l_forumsort_msg'] ? "l_forumsort_msg = '$data[l_forumsort_msg]', " : '';
-			$sql .= "l_disable_youtube = $data[l_disable_youtube], ";
-			$osql .= $data['l_email'] ? "l_email = '$l_data[l_email]', " : '';
-			$osql .= $data['l_password'] ? "l_password = '$l_data[l_password], " : '';
-
-			# ja mainiits epasts, disable acc
-			if($data['l_email'] && $data['l_email'] != $l_data['l_email'])
-			{
-				$sql .= "l_accepted = '".Logins::NOT_ACCEPTED."', ";
-			}
-
-			$sql = substr($sql, 0, -2);
-			$osql = substr($osql, 0, -2);
-
-			if($sql)
-			{
-				if($db->Execute("UPDATE logins SET $sql WHERE l_id = $l_id"))
-				{
-					# check new email changed
-					if($data['l_email'] && ($data['l_email'] != $l_data['l_email']))
-					{
-						if($accept_code = $this->insert_accept_code($l_data['l_login']))
-						{
-							$msg = "Jūsu epasts tika mainīts!\n\nApstiprini jauno e-pasta adresi, atverot saiti http://$sys_domain/register/accept/$accept_code/";
-							if(!$this->send_accept_code($l_data['l_login'], $accept_code, $data['l_email'], 'truemetal.lv e-pasta apstiprināšana', $msg))
-							{
-								$this->accept_login($accept_code);
-								// rollback (god damn, mehehehheee)
-								$db->Execute("UPDATE logins SET $osql WHERE l_id = $l_id");
-								$this->error_msg = 'Nevar nosūtīt kodu uz "'.$data['l_email'].'"<br />('.$GLOBALS['php_errormsg'].')';
-								return false;
-							}
-						}
-					}
-
-					# image
-					if($_FILES['l_picfile']['tmp_name'])
-					{
-						Logins::delete_image();
-						$save_path = $sys_user_root.'/pic/'.$l_id.'.jpg';
-						$tsave_path = $sys_user_root.'/pic/thumb/'.$l_id.'.jpg';
-						# ja bilde
-						if($ct = save_file('l_picfile', $save_path))
-						{
-							if(!($type = image_load($in_img, $save_path)))
-							{
-								$this->error_msg = 'Nevar nolasīt failu ['.$_FILES['l_picfile']['name'].']';
-								if(isset($GLOBALS['image_load_error']) && $GLOBALS['image_load_error'])
-									$this->error_msg .= " ($GLOBALS[image_load_error])";
-								return false;
-							}
-
-							list($w, $h, $type, $html) = getimagesize($save_path);
-							if($w > $user_pic_w || $h > $user_pic_h)
-							{
-								$out_img = image_resample($in_img, $user_pic_w, $user_pic_h);
-								if(!image_save($out_img, $save_path, IMAGETYPE_JPEG))
-								{
-									$this->error_msg = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
-									return false;
-								}
-							}
-
-							if($w > $user_pic_tw || $h > $user_pic_th)
-							{
-								$out_img = image_resample($in_img, $user_pic_tw, $user_pic_th);
-								if(!image_save($out_img, $tsave_path, IMAGETYPE_JPEG))
-								{
-									$this->error_msg = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
-									return false;
-								}
-							}
-
-							return Logins::load_by_id($l_id);
-						} else {
-							$this->error_msg = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
-							return false;
-						}
-					}
-
-					return Logins::load_by_id($l_id);
-				}
-			}
-		} else {
 			$this->error_msg = $error_msg;
 			return false;
 		}
+
+		$osql = $sql = '';
+		$sql .= $data['l_email'] ? "l_email = '$data[l_email]', " : '';
+		$sql .= $data['l_password'] ? "l_password = PASSWORD('$data[l_password]'), " : '';
+		$sql .= "l_emailvisible = '$data[l_emailvisible]', ";
+		$sql .= $data['l_forumsort_themes'] ? "l_forumsort_themes = '$data[l_forumsort_themes]', " : '';
+		$sql .= $data['l_forumsort_msg'] ? "l_forumsort_msg = '$data[l_forumsort_msg]', " : '';
+		$sql .= "l_disable_youtube = $data[l_disable_youtube], ";
+		$osql .= $data['l_email'] ? "l_email = '$l_data[l_email]', " : '';
+		$osql .= $data['l_password'] ? "l_password = '$l_data[l_password], " : '';
+
+		# ja mainiits epasts, disable acc
+		if($data['l_email'] && $data['l_email'] != $l_data['l_email'])
+		{
+			$sql .= "l_accepted = '".Logins::NOT_ACCEPTED."', ";
+		}
+
+		$sql = substr($sql, 0, -2);
+		$osql = substr($osql, 0, -2);
+
+		if(!$sql)
+		{
+			$this->error_msg = "Kaut kas nogāja greizi...";
+			return false;
+		}
+
+		if(!$db->Execute("UPDATE logins SET $sql WHERE l_id = $l_id"))
+		{
+			$this->error_msg = "Datubāzes kļūda";
+			return false;
+		}
+
+		# check new email changed
+		if($data['l_email'] && ($data['l_email'] != $l_data['l_email']))
+		{
+			if($accept_code = $this->insert_accept_code($l_data['l_login']))
+			{
+				$msg = "Jūsu epasts tika mainīts!\n\nApstiprini jauno e-pasta adresi, atverot saiti http://$sys_domain/register/accept/$accept_code/";
+				if(!$this->send_accept_code($l_data['l_login'], $accept_code, $data['l_email'], 'truemetal.lv e-pasta apstiprināšana', $msg))
+				{
+					$this->accept_login($accept_code);
+					// rollback (god damn, mehehehheee)
+					$db->Execute("UPDATE logins SET $osql WHERE l_id = $l_id");
+					$this->error_msg = 'Nevar nosūtīt kodu uz "'.$data['l_email'].'"<br />';
+					if(isset($GLOBALS['php_errormsg']->message)){
+						$this->error_msg .= '('.$GLOBALS['php_errormsg']->message.')<br/>';
+					}
+					return false;
+				}
+				$this->error_msg = "Jūsu e-pasts tika mainīts un uz to nosūtīts apstiprināšanas kods.";
+			}
+		}
+
+		# image
+		if($_FILES['l_picfile']['tmp_name'])
+		{
+			Logins::delete_image();
+			$save_path = $sys_user_root.'/pic/'.$l_id.'.jpg';
+			$tsave_path = $sys_user_root.'/pic/thumb/'.$l_id.'.jpg';
+			# ja bilde
+			if($ct = save_file('l_picfile', $save_path))
+			{
+				if(!($type = image_load($in_img, $save_path)))
+				{
+					$this->error_msg = 'Nevar nolasīt failu ['.$_FILES['l_picfile']['name'].']';
+					if(isset($GLOBALS['image_load_error']) && $GLOBALS['image_load_error'])
+						$this->error_msg .= " ($GLOBALS[image_load_error])";
+					return false;
+				}
+
+				list($w, $h, $type, $html) = getimagesize($save_path);
+				if($w > $user_pic_w || $h > $user_pic_h)
+				{
+					$out_img = image_resample($in_img, $user_pic_w, $user_pic_h);
+					if(!image_save($out_img, $save_path, IMAGETYPE_JPEG))
+					{
+						$this->error_msg = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
+						return false;
+					}
+				}
+
+				if($w > $user_pic_tw || $h > $user_pic_th)
+				{
+					$out_img = image_resample($in_img, $user_pic_tw, $user_pic_th);
+					if(!image_save($out_img, $tsave_path, IMAGETYPE_JPEG))
+					{
+						$this->error_msg = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
+						return false;
+					}
+				}
+
+				return Logins::load_by_id($l_id);
+			} else {
+				$this->error_msg = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
+				return false;
+			}
+		}
+
+		return Logins::load_by_id($l_id);
 	} // update_profile
 
 	function login($l_login = '', $l_pass = '')
