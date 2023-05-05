@@ -165,3 +165,4 @@ if($data = $db->ExecuteSingle($sql)){
 $template->set_var('bad_pass_msg', $msg);
 
 $template->enable('BLOCK_change_pass');
+$template->enable('BLOCK_picture_delete');
