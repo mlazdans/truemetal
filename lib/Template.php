@@ -5,6 +5,9 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
+// TODO: templete varētu uzstādīt kādus filtrus priekš set_var() procesēšanas,
+// piemēram htmlspecialchars()
+
 require_once('lib/TemplateBlock.php');
 
 class Template extends TemplateBlock
