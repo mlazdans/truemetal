@@ -7,14 +7,14 @@
 <!-- END BLOCK_register_error -->
 
 <!-- BEGIN BLOCK_accept_error disabled -->
-<div class="error-form">
-	<p>Diemžēl loginu neizdevās apstiprināt!</p>
+<div class="Info error-form">
+	<p>Diemžēl e-pastu neizdevās apstiprināt!</p>
 </div>
 <div class="List-item">
 	Varianti:<ol>
 		<li>nokavēts 15 min. apstiprināšanas termiņš</li>
 		<li>nepareizs kods</li>
-		<li>logins jau ir apstiprināts</li>
+		<li>e-pasts jau ir apstiprināts</li>
 	</ol>
 	<p>Ja kas, raksti uz <a href="mailto:info@truemetal.lv">info@truemetal.lv</a></p>
 </div>

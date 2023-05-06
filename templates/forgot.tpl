@@ -76,12 +76,12 @@
 </tr>
 <tr>
 	<td align="right"{error_l_password}>Parole:</td>
-	<td><input type="password" name="data[l_password]"></td>
+	<td><input type="password" name="data[l_password]" value="{l_password}"></td>
 	<td></td>
 </tr>
 <tr>
 	<td align="right"{error_l_password}>Parole 2x:</td>
-	<td colspan="2"><input type="password" name="data[l_password2]"></td>
+	<td colspan="2"><input type="password" name="data[l_password2]" value="{l_password2}"></td>
 </tr>
 <tr>
 	<td></td>

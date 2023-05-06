@@ -85,14 +85,14 @@
 	<td colspan="2"><a href="/user/profile/?action=deleteimage" onclick="return confirm('Pārliecināts?');">Dzēst</a></td>
 </tr>
 <!-- END BLOCK_picture -->
+<tr>
+	<td colspan="2">
+		<input type="submit" value=" Saglabāt ">
+		<a href="{module_root}/pwch/">Mainīt paroli</a>
+		<a href="{module_root}/emailch/">Mainīt e-pastu</a>
+	</td>
+</tr>
 </table>
-
-<div class="List-sep"></div>
-
-<input type="submit" value=" Saglabāt ">
-<a href="{module_root}/pwch/">Mainīt paroli</a>
-<a href="{module_root}/emailch/">Mainīt e-pastu</a>
-
 </form>
 
 <div class="List-sep"></div>
@@ -112,3 +112,5 @@
 
 <div class="List-sep"></div>
 <!-- END BLOCK_truecomments -->
+
+<!-- END BLOCK_profile -->
