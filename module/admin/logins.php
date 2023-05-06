@@ -29,7 +29,7 @@ if($action == 'save')
 	if($logins->update($_POST['data'], Res::ACT_DONTVALIDATE))
 		header("Location: $module_root/".($l_id ? "$l_id/" : ""));
 	else
-		print $logins->error_msg;
+		print join("<br>", $logins->error_msg);
 
 	return;
 }

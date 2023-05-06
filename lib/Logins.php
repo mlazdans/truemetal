@@ -10,7 +10,7 @@ require_once('lib/Forum.php');
 
 class Logins
 {
-	var $error_msg;
+	var $error_msg = [];
 
 	const ACCEPTED = 'Y';
 	const NOT_ACCEPTED = 'N';
@@ -59,8 +59,9 @@ class Logins
 		# TODO: remove old pass!!!
 		if(isset($params['l_password'])){
 			$sql_add[] = sprintf(
-				"(l_password = '%s' OR l_password = '%s')",
+				"(l_password = '%s' OR l_password = '%s' OR l_password = '%s')",
 				$this->genPass($params['l_password']),
+				mysql_password($params['l_password']),
 				mysql_old_password($params['l_password'])
 			);
 		}
@@ -164,10 +165,7 @@ class Logins
 
 	static function load_by_id($l_id)
 	{
-		$Logins = new Logins();
-		return $Logins->load(array(
-			'l_id'=>$l_id,
-			));
+		return (new Logins())->load(['l_id'=>$l_id]);
 	} // load_by_id
 
 	static function load_by_login($l_login, $ADMIN = false)
@@ -240,7 +238,7 @@ class Logins
 
 		$l_id = user_loged() ? $_SESSION['login']['l_id'] : 0;
 
-		if(!$l_id)
+		if(empty($l_id))
 			return false;
 
 		$ts = date('YmdHis');
@@ -260,62 +258,45 @@ class Logins
 
 	function update_profile($data, $l_id = 0)
 	{
-		global $db, $sys_domain, $sys_user_root, $user_pic_w, $user_pic_h, $user_pic_tw, $user_pic_th;
+		global $db, $sys_domain, $sys_user_root, $user_pic_w, $user_pic_h, $user_pic_tw, $user_pic_th, $sys_template_root;
+
+		$l_id = (int)$l_id;
 
 		// check vai noraadiits id, vai ir ielogojies
-		if(!$l_id)
+		if(empty($l_id))
 		{
-			$l_id_set = false;
 			$l_id = user_loged() ? $_SESSION['login']['l_id'] : 0;
-			if(!$l_id)
-			{
-				$this->error_msg = 'Neizdevās saglabāt profilu. Hacking?';
-				return false;
-			}
-		} else {
-			$l_id_set = true;
 		}
 
-		$error_msg = '';
-
-		// load data
-		if($l_data = Logins::load_by_id($l_id))
+		if(empty($l_id))
 		{
-			$this->validate($data);
-
-			// check login status
-			if($l_data['l_active'] != Res::STATE_ACTIVE || $l_data['l_accepted'] != Logins::ACCEPTED)
-			{
-				$error_msg .= 'Nevar saglabāt neaktīvu profilu!<br />';
-			}
-
-			// check pass match
-			if(!empty($data['l_password'])){
-				$local_msg = [];
-				if(!pw_validate($data['l_password']??"", $data['l_password2']??"", $local_msg)){
-					$error_msg .= join("<br/>", $local_msg)."<br/>";
-				}
-			}
-
-			// check email
-			if(!valid_email($data['l_email']))
-			{
-				$error_msg .= 'Nekorekta e-pasta adrese!';
-			}
-
-		} else {
-			$error_msg .= 'Nevar saglabāt neaktīvu kontu!<br />';
-		}
-
-		if($error_msg)
-		{
-			$this->error_msg = $error_msg;
+			$this->error_msg[] = 'Neizdevās saglabāt profilu. Hacking?';
 			return false;
 		}
 
-		$osql = $sql = '';
-		$sql .= $data['l_email'] ? "l_email = '$data[l_email]', " : '';
-		if(isset($data['l_password'])){
+		// load data
+		$OLD = Logins::load_by_id($l_id);
+
+		if(empty($OLD))
+		{
+			$this->error_msg[] = 'Konts nav atrasts vai ir neaktīvs!';
+			return false;
+		}
+
+		$this->validate($data);
+
+		// check pass match
+		if(!empty($data['l_password'])){
+			pw_validate($data['l_password']??"", $data['l_password2']??"", $this->error_msg);
+		}
+
+		if($this->error_msg)
+		{
+			return false;
+		}
+
+		$sql = '';
+		if(!empty($data['l_password'])){
 			$hash = $this->genPass($data['l_password']);
 			$sql .= "l_password = '$hash', ";
 		}
@@ -323,49 +304,19 @@ class Logins
 		$sql .= $data['l_forumsort_themes'] ? "l_forumsort_themes = '$data[l_forumsort_themes]', " : '';
 		$sql .= $data['l_forumsort_msg'] ? "l_forumsort_msg = '$data[l_forumsort_msg]', " : '';
 		$sql .= "l_disable_youtube = $data[l_disable_youtube], ";
-		$osql .= $data['l_email'] ? "l_email = '$l_data[l_email]', " : '';
-		$osql .= $data['l_password'] ? "l_password = '$l_data[l_password], " : '';
-
-		# ja mainiits epasts, disable acc
-		if($data['l_email'] && $data['l_email'] != $l_data['l_email'])
-		{
-			$sql .= "l_accepted = '".Logins::NOT_ACCEPTED."', ";
-		}
 
 		$sql = substr($sql, 0, -2);
-		$osql = substr($osql, 0, -2);
 
 		if(!$sql)
 		{
-			$this->error_msg = "Kaut kas nogāja greizi...";
+			$this->error_msg[] = "Kaut kas nogāja greizi...";
 			return false;
 		}
 
 		if(!$db->Execute("UPDATE logins SET $sql WHERE l_id = $l_id"))
 		{
-			$this->error_msg = "Datubāzes kļūda";
+			$this->error_msg[] = "Datubāzes kļūda";
 			return false;
-		}
-
-		# check new email changed
-		if($data['l_email'] && ($data['l_email'] != $l_data['l_email']))
-		{
-			if($accept_code = $this->insert_accept_code($l_data['l_login']))
-			{
-				$msg = "Jūsu epasts tika mainīts!\n\nApstiprini jauno e-pasta adresi, atverot saiti http://$sys_domain/register/accept/$accept_code/";
-				if(!$this->send_accept_code($l_data['l_login'], $accept_code, $data['l_email'], 'truemetal.lv e-pasta apstiprināšana', $msg))
-				{
-					$this->accept_login($accept_code);
-					// rollback (god damn, mehehehheee)
-					$db->Execute("UPDATE logins SET $osql WHERE l_id = $l_id");
-					$this->error_msg = 'Nevar nosūtīt kodu uz "'.$data['l_email'].'"<br />';
-					if(isset($GLOBALS['php_errormsg']->message)){
-						$this->error_msg .= '('.$GLOBALS['php_errormsg']->message.')<br/>';
-					}
-					return false;
-				}
-				$this->error_msg = "Jūsu e-pasts tika mainīts un uz to nosūtīts apstiprināšanas kods.";
-			}
 		}
 
 		# image
@@ -379,9 +330,9 @@ class Logins
 			{
 				if(!($type = image_load($in_img, $save_path)))
 				{
-					$this->error_msg = 'Nevar nolasīt failu ['.$_FILES['l_picfile']['name'].']';
+					$this->error_msg[] = 'Nevar nolasīt failu ['.$_FILES['l_picfile']['name'].']';
 					if(isset($GLOBALS['image_load_error']) && $GLOBALS['image_load_error'])
-						$this->error_msg .= " ($GLOBALS[image_load_error])";
+						$this->error_msg[] = " ($GLOBALS[image_load_error])";
 					return false;
 				}
 
@@ -391,7 +342,7 @@ class Logins
 					$out_img = image_resample($in_img, $user_pic_w, $user_pic_h);
 					if(!image_save($out_img, $save_path, IMAGETYPE_JPEG))
 					{
-						$this->error_msg = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
+						$this->error_msg[] = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
 						return false;
 					}
 				}
@@ -401,14 +352,14 @@ class Logins
 					$out_img = image_resample($in_img, $user_pic_tw, $user_pic_th);
 					if(!image_save($out_img, $tsave_path, IMAGETYPE_JPEG))
 					{
-						$this->error_msg = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
+						$this->error_msg[] = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
 						return false;
 					}
 				}
 
 				return Logins::load_by_id($l_id);
 			} else {
-				$this->error_msg = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
+				$this->error_msg[] = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
 				return false;
 			}
 		}
@@ -433,7 +384,7 @@ class Logins
 			$db->Execute("UPDATE logins SET l_logedin ='Y' WHERE l_id = $data[l_id]");
 			return $data;
 		} else {
-			$this->error_msg = 'Nepareizs login vai parole!';
+			$this->error_msg[] = 'Nepareizs login vai parole!';
 			return array();
 		}
 
@@ -442,7 +393,6 @@ class Logins
 	static function logoff()
 	{
 		global $db;
-
 
 		if(user_loged())
 		{
@@ -455,26 +405,32 @@ class Logins
 		}
 
 		return false;
-	} // logoff
+	}
 
-	function insert_accept_code($login)
+	static function genCode(): string {
+		return strtoupper(md5(uniqid('')));
+	}
+
+	static function insert_accept_code($login, $new_email = null)
 	{
 		global $db;
 
-		$accept_code = md5(uniqid(''));
-		$sql = "INSERT INTO login_accept (la_login, la_code, la_entered) VALUES ('$login', '$accept_code', NOW());";
+		$la_new_email = $new_email ? sprintf("'%s'", $db->Quote($new_email)) : "NULL";
+
+		$accept_code = static::genCode();
+		$sql = "INSERT INTO login_accept (la_login, la_new_email, la_code, la_entered) VALUES ('$login', $la_new_email, '$accept_code', NOW());";
 		if($db->Execute($sql))
 		{
 			return $accept_code;
 		} else
 			return false;
-	} // insert_accept_code
+	}
 
-	function insert_forgot_code($login)
+	static function insert_forgot_code($login)
 	{
 		global $db;
 
-		$accept_code = md5(uniqid(''));
+		$accept_code = static::genCode();
 		$sql = "INSERT INTO login_forgot (f_login, f_code, f_entered) VALUES ('$login', '$accept_code', NOW());";
 		if($db->Execute($sql))
 		{
@@ -483,19 +439,19 @@ class Logins
 			return false;
 	} // insert_forgot_code
 
-	function send_forgot_code($login, $code, $email, $subj = '', $msg = '')
+	static function send_forgot_code($login, $code, $email)
 	{
-		global $sys_domain, $db;
+		global $sys_domain, $sys_template_root, $db;
 
-		if(!$msg)
-		{
-			$msg = "Aizmirsi paroli?\n\nLogin: $login\nParole: uzpied uz http://$sys_domain/forgot/accept/$code/ un ievadi jaunu!\n\nIP:$_SERVER[REMOTE_ADDR]";
-		}
+		$t = new Template($sys_template_root);
+		$t->set_file('msg', 'emails/forgot.tpl');
+		$t->set_var('ip', $_SERVER['REMOTE_ADDR']);
+		$t->set_var('login', $login);
+		$t->set_var('sys_domain', $sys_domain);
+		$t->set_var('code', $code);
+		$msg = $t->parse_block('msg');
 
-		if(!$subj)
-		{
-			$subj = 'truemetal.lv - aizmirsi paroli?';
-		}
+		$subj = "$sys_domain - aizmirsi paroli?";
 
 		if(email($email, $subj, $msg))
 		{
@@ -506,19 +462,9 @@ class Logins
 		}
 	} // send_forgot_code
 
-	function send_accept_code($login, $code, $email, $subj = '', $msg = '')
+	static function send_accept_code($login, $email, $subj, $msg)
 	{
-		global $sys_domain, $db;
-
-		if(!$msg)
-		{
-			$msg = "Veiksmīga reģistrācija!\n\nApstiprini savu reģistrāciju, atverot šo saiti http://$sys_domain/register/accept/$code/";
-		}
-
-		if(!$subj)
-		{
-			$subj = 'truemetal.lv reģistrācija';
-		}
+		global $db;
 
 		if(email($email, $subj, $msg))
 		{
@@ -527,38 +473,52 @@ class Logins
 		} else {
 			return false;
 		}
-	} // send_accept_code
+	}
 
-	function accept_login($code, $timeout = 259200) // 3*24h
+	function accept_login($code)
 	{
 		global $db;
+
+		$timeout = static::codes_timeout();
 
 		$sql = "SELECT * FROM login_accept WHERE la_code = '$code' AND UNIX_TIMESTAMP() - UNIX_TIMESTAMP(la_entered) < $timeout AND la_accepted = '0000-00-00 00:00:00'";
 
 		if($data = $db->ExecuteSingle($sql))
 		{
-			$sql = "UPDATE login_accept SET la_accepted = NOW() WHERE la_login = '$data[la_login]'";
-			$db->Execute($sql);
-			$sql = "UPDATE logins SET l_accepted = '".Logins::ACCEPTED."' WHERE l_login = '$data[la_login]'";
-			if($db->Execute($sql))
-				return true;
+			$la_login = $db->Quote($data['la_login']);
+
+			$sql_set = sprintf("l_accepted = '%s'", Logins::ACCEPTED);
+			if($data['la_new_email']){
+				$sql_set .= sprintf(", l_email = '%s'", $db->Quote($data['la_new_email']));
+			}
+
+			return
+				$db->Execute("UPDATE login_accept SET la_accepted = NOW() WHERE la_login = '$la_login'") &&
+				$db->Execute("UPDATE logins SET $sql_set WHERE l_login = '$la_login'");
 		}
 
 		return false;
-	} // accept_login
+	}
 
-	function get_forgot($code, $timeout = 259200) // 3*24h
+	# TODO: configā
+	static function codes_timeout(): int {
+		return 900; // 15 min
+	}
+
+	function get_forgot($code)
 	{
 		global $db;
+
+		$timeout = static::codes_timeout();
 
 		$sql = "SELECT * FROM login_forgot WHERE f_code = '$code' AND UNIX_TIMESTAMP() - UNIX_TIMESTAMP(f_entered) < $timeout";
 
 		return $db->ExecuteSingle($sql);
-	} // get_forgot
+	}
 
 	function insert(&$data, $validate = Res::ACT_VALIDATE)
 	{
-		global $db;
+		global $db, $sys_domain, $sys_template_root;
 
 		if($validate)
 			$this->validate($data);
@@ -583,7 +543,16 @@ class Logins
 		{
 			if($accept_code = $this->insert_accept_code($data['l_login']))
 			{
-				$this->send_accept_code($data['l_login'], $accept_code, $data['l_email']);
+				$t = new Template($sys_template_root);
+				$t->set_file('msg', 'emails/registered.tpl');
+				$t->set_var('ip', $_SERVER['REMOTE_ADDR']);
+				$t->set_var('sys_domain', $sys_domain);
+				$t->set_var('code', $accept_code);
+				$msg = $t->parse_block('msg');
+
+				$subj = "$sys_domain - reģistrācija";
+
+				$this->send_accept_code($data['l_login'], $data['l_email'], $subj, $msg);
 			}
 
 			$this->update_password($data['l_login'], $data['l_password']);
@@ -600,7 +569,7 @@ class Logins
 
 		if(!$this->valid_login($data['l_login']))
 		{
-			$this->error_msg = 'Nav norādīts vai nepareizs lietotāja logins<br />';
+			$this->error_msg[] = 'Nav norādīts vai nepareizs lietotāja logins';
 			return false;
 		}
 

@@ -41,6 +41,7 @@ if(isset($_POST['data']))
 		}
 
 		unset($login_data['l_sessiondata']);
+		unset($login_data['l_password']);
 		$_SESSION['login'] = $login_data;
 
 		$referer = empty($data['referer']) ? false : urldecode($data['referer']);
@@ -58,7 +59,7 @@ if(isset($_POST['data']))
 
 		return;
 	} else {
-		$template->set_var('error_msg', $my_login->error_msg);
+		$template->set_var('error_msg', join("<br>", $my_login->error_msg));
 		$_SESSION['login'] = array();
 	}
 }
