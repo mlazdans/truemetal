@@ -43,11 +43,9 @@ if(isset($_POST['data']))
 		return;
 	} else {
 		$template->enable('BLOCK_profile_error');
-		$template->set_var('error_msg', $login->error_msg);
+		$template->set_var('error_msg', join("<br>", $login->error_msg));
 	}
 	$login_data = array_merge($_SESSION['login'], $login_data);
-	$template->set_var('l_password', $login_data['l_password'], 'BLOCK_profile');
-	$template->set_var('l_password2', $login_data['l_password2'], 'BLOCK_profile');
 } else {
 	$login_data = $_SESSION['login'];
 } // post
@@ -163,6 +161,3 @@ if($data = $db->ExecuteSingle($sql)){
 }
 
 $template->set_var('bad_pass_msg', $msg);
-
-$template->enable('BLOCK_change_pass');
-$template->enable('BLOCK_picture_delete');
