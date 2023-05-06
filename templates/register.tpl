@@ -12,7 +12,7 @@
 </div>
 <div class="List-item">
 	Varianti:<ol>
-		<li>nokavēts 3 x 24h apstiprināšanas termiņš</li>
+		<li>nokavēts 15 min. apstiprināšanas termiņš</li>
 		<li>nepareizs kods</li>
 		<li>logins jau ir apstiprināts</li>
 	</ol>
@@ -77,7 +77,6 @@
 
 <!-- BEGIN BLOCK_accept_ok disabled -->
 <div class="List-item">
-	Logins apstiptināts! Tagad Tu vari ielogoties!
+	E-pasts apstiptināts veiksmīgi!
 </div>
 <!-- END BLOCK_accept_ok -->
-

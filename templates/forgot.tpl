@@ -12,7 +12,7 @@
 </div>
 <div class="List-item">
 	Varianti:<ol>
-		<li>nokavēts 3 x 24h apstiprināšanas termiņš</li>
+		<li>nokavēts 15 min. apstiprināšanas termiņš</li>
 		<li>nepareizs kods</li>
 	</ol>
 	<p>Ja kas, raksti uz <a href="mailto:info@truemetal.lv">info@truemetal.lv</a></p>
