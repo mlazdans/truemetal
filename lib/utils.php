@@ -895,7 +895,7 @@ function urlize($name)
 	$name = html_entity_decode($name, ENT_QUOTES, "UTF-8");
 	$name = mb_strtolower($name);
 	$name = strip_tags($name);
-	$name = preg_replace("/[\:\/\?\#\[\]\@\"'\(\)\.,&;\+=\\\]/", " ", $name);
+	$name = preg_replace("/[\|\:\/\?\#\[\]\@\"'\(\)\.,&;\+=\\\]/", " ", $name);
 	$name = trim($name);
 	$name = preg_replace("/\s+/", "-", $name);
 	$name = preg_replace("/-+/", "-", $name);
