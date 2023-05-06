@@ -34,7 +34,7 @@ if(isset($_POST['data']))
 {
 	$my_login = new Logins;
 	$data = post('data');
-	if($login_data = $my_login->login($data['login'], $data['password']))
+	if($login_data = $my_login->login($data['login']??"", $data['password']??""))
 	{
 		if($login_data['l_sessiondata']){
 			session_decode($login_data['l_sessiondata']);
@@ -59,11 +59,12 @@ if(isset($_POST['data']))
 
 		return;
 	} else {
-		$template->set_var('error_msg', 'Nepareizs login vai parole!');
+		$template->enable('BLOCK_login_err');
+		$template->set_var('error_msg', 'Nepareizs login vai parole!', 'BLOCK_login_err');
+		$template->set_array($data, 'FILE_module');
 		$_SESSION['login'] = array();
 	}
 }
 
 $template->set_right_defaults();
 $template->out();
-

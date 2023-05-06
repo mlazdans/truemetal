@@ -123,8 +123,10 @@ dd {
 	margin-bottom: 1em;
 }
 
+.button,
 button,
 input, textarea {
+	text-decoration: unset;
 	border: 0.1em solid white;
 	background-color: #660000;
 	color: white;
@@ -136,6 +138,7 @@ input.checkbox {
 	color: #660000;
 }
 
+.button,
 button,
 input[type=submit],
 input[type=button] {
@@ -145,6 +148,7 @@ input[type=button] {
 	border-right: 0.1em solid #220000;
 	border-bottom: 0.1em solid #220000;
 }
+.button:active,
 button:active,
 input[type=submit]:active,
 input[type=button]:active {

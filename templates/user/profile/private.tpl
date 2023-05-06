@@ -68,28 +68,26 @@
 <table class="Main">
 <!-- BEGIN BLOCK_nopicture disabled -->
 <tr>
-	<td colspan="2">Bildes nav!</td>
-</tr>
-<!-- END BLOCK_nopicture -->
-<tr>
-	<td align="right"><b>Mainīt:</b></td>
+	<td>Bildes nav!</td>
 	<td><input type="file" name="l_picfile"></td>
 </tr>
+<!-- END BLOCK_nopicture -->
 <!-- BEGIN BLOCK_picture disabled -->
 <tr>
-	<td colspan="2">
+	<td style="text-align: center;">
 		<a href="/user/viewimage/{l_login}/" onclick="Truemetal.viewProfileImage('{l_login}', {pic_w}, {pic_h}, '{l_login}'); return false;"><img src="{pic_path}" alt=""></a>
 	</td>
-</tr>
-<tr>
-	<td colspan="2"><a href="/user/profile/?action=deleteimage" onclick="return confirm('Pārliecināts?');">Dzēst</a></td>
+	<td><input type="file" name="l_picfile"></td>
 </tr>
 <!-- END BLOCK_picture -->
 <tr>
-	<td colspan="2">
-		<input type="submit" value=" Saglabāt ">
-		<a href="{module_root}/pwch/">Mainīt paroli</a>
-		<a href="{module_root}/emailch/">Mainīt e-pastu</a>
+	<td><input type="submit" value=" Saglabāt "></td>
+	<td>
+		<a class="button" href="{module_root}/pwch/">Mainīt paroli</a>
+		<a class="button" href="{module_root}/emailch/">Mainīt e-pastu</a>
+		<!-- BEGIN BLOCK_picture_del disabled -->
+		<a class="button" href="/user/profile/?action=deleteimage" onclick="return confirm('Pārliecināts?');">Dzēst bildi</a>
+		<!-- END BLOCK_picture_del -->
 	</td>
 </tr>
 </table>
