@@ -123,6 +123,22 @@ if(user_loged())
 {
 	if($l = Logins::load_by_id($_SESSION['login']['l_id'])) {
 		session_decode($l['l_sessiondata']);
+
+		if(is_array($_SESSION['login']??[]))
+		{
+			foreach($_SESSION['login'] as $k=>&$v)
+			{
+				if(isset($l[$k]))
+				{
+					if($v != $l[$k])
+					{
+						$v = $l[$k];
+					}
+				}
+			}
+		}
+
+		$db->Execute("UPDATE logins SET l_lastaccess = CURRENT_TIMESTAMP, l_logedin = 'Y' WHERE l_id = $l[l_id]");
 	} else {
 		Logins::logoff();
 		redirect();
