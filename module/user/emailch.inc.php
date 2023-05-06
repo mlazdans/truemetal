@@ -49,11 +49,15 @@ if(isset($_POST['data']))
 		} else {
 			if(!valid_email($new_email)) {
 				$error_msg[] = 'Nekorekta e-pasta adrese!';
+			} else {
+				if(Logins::email_exists($new_email)){
+					$error_msg[] = 'Šāda e-pasta adrese jau eksistē';
+				}
 			}
 		}
 	}
 
-	$result = (function($login, $new_email, &$error_msg){
+	$do_code = function($login, $new_email, &$error_msg){
 		global $sys_template_root, $sys_domain;
 
 		$accept_code = Logins::insert_accept_code($login, $new_email);
@@ -83,7 +87,9 @@ if(isset($_POST['data']))
 		}
 
 		return false;
-	})($_SESSION['login']['l_login'], $new_email, $error_msg);
+	};
+
+	$result = !$error_msg && $do_code($_SESSION['login']['l_login'], $new_email, $error_msg);
 
 	if($error_msg){
 		$template->enable('BLOCK_emailch_error');
