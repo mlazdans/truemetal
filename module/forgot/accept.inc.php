@@ -40,7 +40,8 @@ if($change_passw) {
 		header("Location: $module_root/accept/ok/");
 		return;
 	}
+	$template->set_array($data, 'BLOCK_forgot_passw');
 }
 
-$template->set_array($login_data, 'BLOCK_forgot_passw');
+$template->set_array_except(['l_password', 'l_sessiondata'], $login_data, 'BLOCK_forgot_passw');
 $template->enable('BLOCK_forgot_passw');

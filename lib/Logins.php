@@ -56,16 +56,6 @@ class Logins
 			$sql_add[] = sprintf("l_lastaccess >= '%s'", $d0);
 		}
 
-		# TODO: remove old pass!!!
-		if(isset($params['l_password'])){
-			$sql_add[] = sprintf(
-				"(l_password = '%s' OR l_password = '%s' OR l_password = '%s')",
-				$this->genPass($params['l_password']),
-				mysql_password($params['l_password']),
-				mysql_old_password($params['l_password'])
-			);
-		}
-
 		if(isset($params['l_active']))
 		{
 			if($params['l_active'] != Res::STATE_ALL)
@@ -152,21 +142,12 @@ class Logins
 		} else {
 			return $db->Execute($sql);
 		}
-	} // load
-
-	static function load_by_id_logged_in($l_id)
-	{
-		$Logins = new Logins();
-		return $Logins->load(array(
-			'l_id'=>$l_id,
-			'l_logedin'=>'Y',
-			));
-	} // load_by_id_logged_in
+	}
 
 	static function load_by_id($l_id)
 	{
 		return (new Logins())->load(['l_id'=>$l_id]);
-	} // load_by_id
+	}
 
 	static function load_by_login($l_login, $ADMIN = false)
 	{
@@ -184,6 +165,17 @@ class Logins
 				));
 		}
 	} // load_by_login
+
+	# TODO: vajadzētu MySQL collation, kas respektē garumzīmes?
+	static function email_exists(string $email): bool {
+		$data = (new Logins)->load([
+			'l_email'=>$email,
+			'l_active'=>Res::STATE_ALL,
+			'l_accepted'=>Res::STATE_ALL
+		]);
+
+		return $data && (count($data) > 0);
+	}
 
 	static function load_by_email($l_email)
 	{
@@ -258,7 +250,7 @@ class Logins
 
 	function update_profile($data, $l_id = 0)
 	{
-		global $db, $sys_domain, $sys_user_root, $user_pic_w, $user_pic_h, $user_pic_tw, $user_pic_th, $sys_template_root;
+		global $db, $sys_user_root, $user_pic_w, $user_pic_h, $user_pic_tw, $user_pic_th;
 
 		$l_id = (int)$l_id;
 
@@ -285,27 +277,20 @@ class Logins
 
 		$this->validate($data);
 
-		// check pass match
-		if(!empty($data['l_password'])){
-			pw_validate($data['l_password']??"", $data['l_password2']??"", $this->error_msg);
-		}
-
 		if($this->error_msg)
 		{
 			return false;
 		}
 
-		$sql = '';
-		if(!empty($data['l_password'])){
-			$hash = $this->genPass($data['l_password']);
-			$sql .= "l_password = '$hash', ";
-		}
-		$sql .= "l_emailvisible = '$data[l_emailvisible]', ";
-		$sql .= $data['l_forumsort_themes'] ? "l_forumsort_themes = '$data[l_forumsort_themes]', " : '';
-		$sql .= $data['l_forumsort_msg'] ? "l_forumsort_msg = '$data[l_forumsort_msg]', " : '';
-		$sql .= "l_disable_youtube = $data[l_disable_youtube], ";
+		$cond = [
+			"l_emailvisible = '$data[l_emailvisible]'",
+			"l_disable_youtube = $data[l_disable_youtube]"
+		];
 
-		$sql = substr($sql, 0, -2);
+		if($data['l_forumsort_themes'])$cond[] = "l_forumsort_themes = '$data[l_forumsort_themes]'";
+		if($data['l_forumsort_msg'])$cond[] = "l_forumsort_msg = '$data[l_forumsort_msg]'";
+
+		$sql = join(",", $cond);
 
 		if(!$sql)
 		{
@@ -365,30 +350,17 @@ class Logins
 		}
 
 		return Logins::load_by_id($l_id);
-	} // update_profile
+	}
 
-	function login($l_login = '', $l_pass = '')
+	function login(string $l_login, string $l_pass)
 	{
 		global $db;
 
-		if(
-			$this->valid_login($l_login) &&
-			$l_pass &&
-			($data = $this->load(array(
-				'l_login'=>$l_login,
-				'l_password'=>$l_pass,
-				))
-				)
-			)
-		{
+		if($data = static::auth($l_login, $l_pass)) {
 			$db->Execute("UPDATE logins SET l_logedin ='Y' WHERE l_id = $data[l_id]");
 			return $data;
-		} else {
-			$this->error_msg[] = 'Nepareizs login vai parole!';
-			return array();
 		}
-
-	} // login
+	}
 
 	static function logoff()
 	{
@@ -422,8 +394,9 @@ class Logins
 		if($db->Execute($sql))
 		{
 			return $accept_code;
-		} else
+		} else {
 			return false;
+		}
 	}
 
 	static function insert_forgot_code($login)
@@ -742,11 +715,11 @@ class Logins
 		return $db->Execute(
 			sprintf(
 				"UPDATE logins SET l_password = '%s' WHERE l_login='%s'",
-				$this->genPass($password),
+				$this->gen_hash($password),
 				$login
 			)
 		);
-	} // update_password
+	}
 
 	function remove_forgot_code($code)
 	{
@@ -806,10 +779,34 @@ GROUP BY
 		} else {
 			return false;
 		}
-	} // collectUsersByIP
-
-	static function genPass(string $str): string {
-		return mysql_password($str);
 	}
-} // class Logins
 
+	static function gen_hash(string $str): string {
+		return password_hash($str, PASSWORD_BCRYPT, ['cost'=>12]);
+	}
+
+	static function auth(string $login, string $pass, bool $all = false) {
+		global $db;
+
+		$cond[] = sprintf("l_login = '%s'", $db->Quote($login));
+
+		if(!$all){
+			$cond[] = sprintf("l_active = '%s'", Res::STATE_ACTIVE);
+			$cond[] = sprintf("l_accepted = '%s'", Logins::ACCEPTED);
+		}
+
+		$sql = sprintf("SELECT * FROM logins WHERE ".join(" AND ", $cond));
+
+		if($data = $db->ExecuteSingle($sql)){
+			$pass_ok =
+				password_verify($pass, $data['l_password']) ||
+				(mysql_password($pass) == $data['l_password']) ||
+				(mysql_old_password($pass) == $data['l_password'])
+			;
+
+			if($pass_ok){
+				return $data;
+			}
+		}
+	}
+}

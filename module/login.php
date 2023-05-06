@@ -59,7 +59,7 @@ if(isset($_POST['data']))
 
 		return;
 	} else {
-		$template->set_var('error_msg', join("<br>", $my_login->error_msg));
+		$template->set_var('error_msg', 'Nepareizs login vai parole!');
 		$_SESSION['login'] = array();
 	}
 }

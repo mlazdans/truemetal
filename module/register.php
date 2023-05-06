@@ -72,7 +72,7 @@ if(isset($_POST['data']))
 	}
 
 	# test email
-	if($test_email = $logins->load(['l_email'=>$data['l_email'], 'l_active'=>Res::STATE_ALL, 'l_accepted'=>Res::STATE_ALL])) {
+	if(Logins::email_exists($data['l_email'])){
 		$error_field[] = 'l_email';
 		$error_msg[] = 'Šāda e-pasta adrese jau eksistē';
 	}

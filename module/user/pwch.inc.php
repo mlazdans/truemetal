@@ -31,18 +31,13 @@ if(isset($_POST['data']))
 		$error_msgs[] = 'Nav ievadīta vecā parole';
 		$error_fields[] = 'old_password';
 	} else {
-		$check_old_pass = $logins->load([
-			'l_login'=>$_SESSION['login']['l_login'],
-			'l_password'=>$_POST['data']['old_password']
-		]);
-
-		if(!$check_old_pass){
-			$error_msgs[] = 'Vecā parole nav pareiza';
-			$error_fields[] = 'old_password';
-		} else {
+		if(Logins::auth($_SESSION['login']['l_login'], $_POST['data']['old_password'])){
 			if(!pw_validate($data['l_password'], $data['l_password2'], $error_msgs)){
 				$error_fields[] = 'l_password';
 			}
+		} else {
+			$error_msgs[] = 'Vecā parole nav pareiza';
+			$error_fields[] = 'old_password';
 		}
 	}
 
