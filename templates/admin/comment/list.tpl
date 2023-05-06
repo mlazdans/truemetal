@@ -8,7 +8,7 @@
 <table class="Main">
 <tr>
 	<td class="TD-cat">
-		<input type="checkbox" name="comment_check_all" onclick="Truemetal.checkAll(this)" />
+		<input type="checkbox" name="comment_check_all" onclick="Truemetal.checkAll(this)">
 	</td>
 	<td colspan="6" class="TD-cat">
 		Komentāri
@@ -17,7 +17,7 @@
 <!-- BEGIN BLOCK_comment_item -->
 <tr>
 	<th class="{c_color_class}">
-		<input type="checkbox" name="c_id[]" value="{c_id}" />
+		<input type="checkbox" name="c_id[]" value="{c_id}">
 	</th>
 	<th class="{c_color_class} nowrap"><a href="/admin/logins/{login_id}/">{c_username} ({c_userlogin})</a></th>
 	<th class="{c_color_class}"><a href="/admin/reports/?report=ip&amp;ips={c_userip}">{c_userip}</a></th>
@@ -46,9 +46,9 @@
 		<option value="comment_hide">Deaktivizēt</option>
 		<option value="comment_move">Pārvietot</option>
 		</select>
-		<label for="new_res_id" id="lnew_res_id" style="display: none;">Tēma<input type="text" name="new_res_id" id="new_res_id" value="" /></label>
+		<label for="new_res_id" id="lnew_res_id" style="display: none;">Tēma<input type="text" name="new_res_id" id="new_res_id" value=""></label>
 
-		<input type="submit" value="  OK  " />
+		<input type="submit" value="  OK  ">
 	</td>
 </tr>
 </table>

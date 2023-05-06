@@ -8,13 +8,13 @@
 <table cellpadding="1" cellspacing="1" width="100%">
 <tr>
 	<td colspan="2">
-		<input type="hidden" name="data[referer]" value="{referer}" />
-		<input style="width: 160px;" type="text" name="data[login]" value="Lietotāja vārds" onfocus="if(this.value=='Lietotāja vārds')this.value=''" />
+		<input type="hidden" name="data[referer]" value="{referer}">
+		<input style="width: 160px;" type="text" name="data[login]" value="Lietotāja vārds" onfocus="if(this.value=='Lietotāja vārds')this.value=''">
 	</td>
 </tr>
 <tr>
-	<td><input style="width: 113px;" type="password" name="data[password]" size="13" /></td>
-	<td><input type="submit" class="input" value=" OK " /></td>
+	<td><input style="width: 113px;" type="password" name="data[password]" size="13"></td>
+	<td><input type="submit" class="input" value=" OK "></td>
 </tr>
 </table>
 </form>

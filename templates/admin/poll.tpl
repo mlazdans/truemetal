@@ -6,7 +6,7 @@
 <table class="Main">
 <tr>
 	<td class="TD-cat">
-		<input type="checkbox" onclick="Truemetal.checkAll(this);" />
+		<input type="checkbox" onclick="Truemetal.checkAll(this);">
 	</td>
 	<td class="TD-cat" colspan="3">
 		Jautājums
@@ -15,8 +15,8 @@
 <!-- BEGIN BLOCK_poll disabled -->
 <tr>
 	<td class="{poll_color_class}">
-		<input type="hidden" name="poll_id{poll_nr}" value="{poll_id}" />
-		<input type="checkbox" name="poll_checked{poll_nr}" />
+		<input type="hidden" name="poll_id{poll_nr}" value="{poll_id}">
+		<input type="checkbox" name="poll_checked{poll_nr}">
 	</td>
 	<td class="nowrap {poll_color_class}">
 		<a href="{module_root}/{poll_id}/">{poll_name}</a>
@@ -38,8 +38,8 @@
 			<option value="activate_multiple">Aktivizēt</option>
 			<option value="deactivate_multiple">Deaktivizēt</option>
 		</select>
-		<input type="hidden" name="item_count" value="{item_count}" />
-		<input type="submit" value="  OK  " />
+		<input type="hidden" name="item_count" value="{item_count}">
+		<input type="submit" value="  OK  ">
 	</td>
 </tr>
 </table>

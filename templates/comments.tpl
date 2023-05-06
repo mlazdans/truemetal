@@ -65,8 +65,8 @@
 <!-- END BLOCK_comment_error -->
 <tr>
 	<td align="right">
-		<input type="hidden" name="action" value="add_comment" />
-		<input type="hidden" name="c_referrer" value="{c_referrer}" />
+		<input type="hidden" name="action" value="add_comment">
+		<input type="hidden" name="c_referrer" value="{c_referrer}">
 		Vārds:
 	</td>
 	<td style="width: 100%">{c_username}</td>
@@ -81,7 +81,7 @@
 </tr>
 <tr>
 	<td colspan="2" style="padding-left: 16px; padding-right: 16px;">
-		<input type="submit" value="Pievienot" />
+		<input type="submit" value="Pievienot">
 	</td>
 </tr>
 </table>

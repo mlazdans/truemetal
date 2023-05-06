@@ -7,11 +7,11 @@
 <table class="Main">
 <tr>
 	<td valign="top">
-		<input type="hidden" name="action" value="module_new" />
-		<input type="submit" name="do" value="Jauns" />
+		<input type="hidden" name="action" value="module_new">
+		<input type="submit" name="do" value="Jauns">
 	</td>
 	<td valign="top">
-		<input type="button" value="Atcelt" onclick="location.replace('/admin/modules/')" />
+		<input type="button" value="Atcelt" onclick="location.replace('/admin/modules/')">
 	</td>
 	<td valign="top">&nbsp;</td>
 </tr>
@@ -28,8 +28,8 @@
 <table class="Main">
 <tr>
 	<td class="TD-cat">
-		<input type="hidden" name="module_count" value="{module_count}" />
-		<input type="checkbox" name="module_check_all" onclick="Truemetal.checkAll(this);" />
+		<input type="hidden" name="module_count" value="{module_count}">
+		<input type="checkbox" name="module_check_all" onclick="Truemetal.checkAll(this);">
 	</td>
 	<td class="TD-cat">Nosaukums</td>
 	<td class="TD-cat">Pos</td>
@@ -37,8 +37,8 @@
 <!-- BEGIN BLOCK_modules -->
 <tr>
 	<td class="{module_color_class}">
-		<input type="hidden" name="mod_id{module_count}" value="{mod_id}" />
-		<input type="checkbox" name="mod_checked{module_count}" />
+		<input type="hidden" name="mod_id{module_count}" value="{mod_id}">
+		<input type="checkbox" name="mod_checked{module_count}">
 	</td>
 	<td class="{module_color_class}" valign="top" style="white-space: nowrap;">
 		{module_padding}<a href="{module_root}/{mod_id}/">{module_name}</a>
@@ -57,7 +57,7 @@
 			<option value="show_multiple">Parādīt</option>
 			<option value="hide_multiple">Slēpt</option>
 		</select>
-		<input type="submit" value="  OK  " />
+		<input type="submit" value="  OK  ">
 	</td>
 </tr>
 </table>
@@ -79,8 +79,8 @@
 <tr>
 	<th>Zem</th>
 	<td>
-		<input type="hidden" name="action" value="module_save" />
-		<input type="hidden" name="data[mod_id]" value="{mod_id}" />
+		<input type="hidden" name="action" value="module_save">
+		<input type="hidden" name="data[mod_id]" value="{mod_id}">
 		<select name="data[mod_modid]">
 		<option value="0">/</option>
 		<!-- BEGIN BLOCK_modules_under_list -->
@@ -92,19 +92,19 @@
 <tr>
 	<th>ID</th>
 	<td>
-		<input type="text" name="data[module_id]" value="{module_id}" size="48" /> (pieļaujamie simboli [a-z0-9_])
+		<input type="text" name="data[module_id]" value="{module_id}" size="48"> (pieļaujamie simboli [a-z0-9_])
 	</td>
 </tr>
 <tr>
 	<th>Nosaukums</th>
 	<td>
-		<input type="text" name="data[module_name]" value="{module_name}" size="48" />
+		<input type="text" name="data[module_name]" value="{module_name}" size="48">
 	</td>
 </tr>
 <tr>
 	<th>Apraksts</th>
 	<td>
-		<input type="text" name="data[module_descr]" value="{module_descr}" size="96" />
+		<input type="text" name="data[module_descr]" value="{module_descr}" size="96">
 	</td>
 </tr>
 <tr>
@@ -153,7 +153,7 @@
 </tr>
 <tr>
 	<td colspan="2">
-		<input type="submit" value=" Saglabāt " />
+		<input type="submit" value=" Saglabāt ">
 	</td>
 </tr>
 </table>

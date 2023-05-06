@@ -10,13 +10,13 @@
 <div class="Forum-cat" style="margin-bottom: 0;">
 	<!-- BEGIN BLOCK_page_prev -->
 	<div class="Forum-Page-prev">
-		<a href="{module_root}/{current_forum_id}-{current_forum_name_urlized}/page/{prev_page_id}/"><img src="/img/left.png" alt="Pa kreisi" /></a>
+		<a href="{module_root}/{current_forum_id}-{current_forum_name_urlized}/page/{prev_page_id}/"><img src="/img/left.png" alt="Pa kreisi"></a>
 	</div>
 	<!-- END BLOCK_page_prev -->
 
 	<!-- BEGIN BLOCK_page_next -->
 	<div class="Forum-Page-next">
-		<a href="{module_root}/{current_forum_id}-{current_forum_name_urlized}/page/{next_page_id}/"><img src="/img/right.png" alt="Pa labi" /></a>
+		<a href="{module_root}/{current_forum_id}-{current_forum_name_urlized}/page/{next_page_id}/"><img src="/img/right.png" alt="Pa labi"></a>
 	</div>
 	<!-- END BLOCK_page_next -->
 	<div class="Forum-Pager">
@@ -100,14 +100,14 @@
 <table class="Forum-Theme-form" cellpadding="2" cellspacing="1">
 <tr>
 	<td align="right">
-		<input type="hidden" name="action" value="add_theme" />
+		<input type="hidden" name="action" value="add_theme">
 		Vārds:
 	</td>
 	<td style="width: 100%;">{forum_username}</td>
 </tr>
 <tr>
 	<td style="white-space: nowrap;" align="right"<!-- BEGIN BLOCK_forumname_error disabled --> class="error-form"<!-- END BLOCK_forumname_error -->>Jauna tēma:</td>
-	<td><input style="width: 95%;" type="text" name="data[forum_name]" maxlength="64" size="64" value="{forum_name}" /></td>
+	<td><input style="width: 95%;" type="text" name="data[forum_name]" maxlength="64" size="64" value="{forum_name}"></td>
 </tr>
 <tr>
 	<td align="right" valign="top"<!-- BEGIN BLOCK_forumdata_error disabled --> class="error-form"<!-- END BLOCK_forumdata_error -->>Ziņa:</td>
@@ -115,7 +115,7 @@
 </tr>
 <tr>
 	<td align="right">&nbsp;</td>
-	<td><input type="submit" value="Pievienot" /></td>
+	<td><input type="submit" value="Pievienot"></td>
 </tr>
 </table>
 </form>

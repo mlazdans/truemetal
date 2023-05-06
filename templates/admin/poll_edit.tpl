@@ -7,9 +7,9 @@
 <tr>
 	<th align="right">Nosaukums:</th>
 	<td>
-		<input type="hidden" name="action" value="save_poll" />
-		<input type="hidden" name="data[poll_id]" value="{poll1_id}" />
-		<input type="text" name="data[poll_name]" value="{poll1_name}" size="48" />
+		<input type="hidden" name="action" value="save_poll">
+		<input type="hidden" name="data[poll_id]" value="{poll1_id}">
+		<input type="text" name="data[poll_name]" value="{poll1_name}" size="48">
 	</td>
 </tr>
 <tr>
@@ -24,12 +24,12 @@
 <tr>
 	<th class="nowrap">Starta datums:</th>
 	<td>
-		<input type="text" name="data[poll_entered]" value="{poll1_entered}" />
+		<input type="text" name="data[poll_entered]" value="{poll1_entered}">
 	</td>
 </tr>
 <tr>
 	<td colspan="2">
-		<input type="button" value="Saglabāt" onclick="onSubmitHandler(this.form);" />
+		<input type="button" value="Saglabāt" onclick="onSubmitHandler(this.form);">
 	</td>
 </tr>
 </table>

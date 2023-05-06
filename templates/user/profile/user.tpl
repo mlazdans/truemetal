@@ -59,13 +59,13 @@
 
 	<!-- BEGIN BLOCK_disable_comments disabled -->
 	<form method="post" action="/user/profile/{l_login}/">
-	<input type="hidden" name="action" value="disable_comments" />
+	<input type="hidden" name="action" value="disable_comments">
 	<div class="List-item">
 		<label for="disable_comments">
-			<input type="checkbox" name="disable_comments" id="disable_comments"{disable_comments_checked} />
+			<input type="checkbox" name="disable_comments" id="disable_comments"{disable_comments_checked}>
 			Nerādīt šī lietotāja komentārus
 		</label>
-		<input type="submit" value="OK" />
+		<input type="submit" value="OK">
 	</div>
 	</form>
 	<!-- END BLOCK_disable_comments -->

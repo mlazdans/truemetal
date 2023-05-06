@@ -1,7 +1,7 @@
 <!-- BEGIN BLOCK_login_edit -->
 <form action="" method="post">
 <div class="TD-cat-active">
-	<input type="hidden" name="action" value="save" />
+	<input type="hidden" name="action" value="save">
 	Logini: rediģēt <em>{l_login}</em>
 </div>
 <table>
@@ -18,15 +18,15 @@
 </tr>
 <tr>
 	<td class="right nowrap">Login:</td>
-	<td><input type="text" name="data[l_login]" value="{l_login}" size="16" /></td>
+	<td><input type="text" name="data[l_login]" value="{l_login}" size="16"></td>
 </tr>
 <tr>
 	<td class="right nowrap">Segvārds:</td>
-	<td><input type="text" name="data[l_nick]" value="{l_nick}" size="16" /></td>
+	<td><input type="text" name="data[l_nick]" value="{l_nick}" size="16"></td>
 </tr>
 <tr>
 	<td class="right nowrap">E-pasts:</td>
-	<td><input type="text" name="data[l_email]" value="{l_email}" size="64" /></td>
+	<td><input type="text" name="data[l_email]" value="{l_email}" size="64"></td>
 </tr>
 <tr>
 	<td class="right nowrap">Aktīvs?:</td>
@@ -66,11 +66,11 @@
 </tr>
 <tr>
 	<td class="right nowrap">Ievadīts:</td>
-	<td><input type="text" name="data[l_entered]" value="{l_entered}" size="20" /></td>
+	<td><input type="text" name="data[l_entered]" value="{l_entered}" size="20"></td>
 </tr>
 <tr>
 	<td class="right nowrap">Pēdējoreiz manīts:</td>
-	<td><input type="text" name="data[l_lastaccess]" value="{l_lastaccess}" size="20" /></td>
+	<td><input type="text" name="data[l_lastaccess]" value="{l_lastaccess}" size="20"></td>
 </tr>
 <tr>
 	<td class="right nowrap">IP:</td>
@@ -84,7 +84,7 @@
 </tr>
 <tr>
 	<td colspan="2">
-		<input type="submit" value=" Saglabāt " />
+		<input type="submit" value=" Saglabāt ">
 	</td>
 </tr>
 </table>
@@ -98,7 +98,7 @@
 <tr>
 	<td>
 		<!-- BEGIN BLOCK_logins_pics_item -->
-		<img src="/user/thumb/{l_login}/{l_pic_suffix}/" alt="" />
+		<img src="/user/thumb/{l_login}/{l_pic_suffix}/" alt="">
 		<!-- END BLOCK_logins_pics_item -->
 	</td>
 </tr>

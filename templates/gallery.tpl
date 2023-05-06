@@ -38,7 +38,7 @@
 				<div class="vote {comment_vote_class} vote-value" style="display: inline-block;text-align: center; padding:0; border:none;">{res_votes}</div>
 				Kom. (<div class="<!-- BEGIN BLOCK_comments_new disabled -->Comment-new<!-- END BLOCK_comments_new -->" style="display: inline-block;">{res_comment_count}</div>)
 			</div>
-			<a href="{module_root}/view/{gd_id}/#pic-holder"><img src="{thumb_path}" alt="" class="img-thumb" width="120" /></a>
+			<a href="{module_root}/view/{gd_id}/#pic-holder"><img src="{thumb_path}" alt="" class="img-thumb" width="120"></a>
 		</div>
 		<!-- BEGIN BLOCK_tr2 --></div><!-- END BLOCK_tr2 -->
 	<!-- END BLOCK_thumb -->
@@ -64,7 +64,7 @@
 		<div class="center unselectable">&nbsp;</div>
 	</div>
 </div>
-<div style="text-align: center;"><a href="{module_root}/view/{gd_nextid}/#pic-holder"><img src="{image_path}" alt="Nākamā" width="500" /></a></div>
+<div style="text-align: center;"><a href="{module_root}/view/{gd_nextid}/#pic-holder"><img src="{image_path}" alt="Nākamā" width="500"></a></div>
 <div style="text-align: center;">{gd_descr}</div>
 
 <div class="TD-cat">

@@ -15,17 +15,17 @@
 <table class="Main">
 <tr>
 	<td align="right"{error_old_password}>Vecā parole:</td>
-	<td><input type="password" name="data[old_password]" value="{old_password}" /></td>
+	<td><input type="password" name="data[old_password]" value="{old_password}"></td>
 	<td></td>
 </tr>
 <tr>
 	<td align="right"{error_l_password}>Jaunā parole:</td>
-	<td><input type="password" name="data[l_password]" value="{l_password}" /></td>
+	<td><input type="password" name="data[l_password]" value="{l_password}"></td>
 	<td></td>
 </tr>
 <tr>
 	<td align="right"{error_l_password}>Jaunā parole 2x:</td>
-	<td colspan="2"><input type="password" name="data[l_password2]" value="{l_password2}" /></td>
+	<td colspan="2"><input type="password" name="data[l_password2]" value="{l_password2}"></td>
 </tr>
 <tr>
 	<td></td>
@@ -41,7 +41,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-		<input type="submit" value=" Nomainīt paroli " />
+		<input type="submit" value=" Mainīt paroli ">
 	</td>
 </tr>
 </table>

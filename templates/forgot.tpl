@@ -28,15 +28,15 @@
 </tr>
 <tr>
 	<td align="right"{error_l_login}>Login:</td>
-	<td><input type="text" name="data[l_login]" value="{l_login}" /></td>
+	<td><input type="text" name="data[l_login]" value="{l_login}"></td>
 </tr>
 <tr>
 	<td align="right"{error_l_email}>E-pasts:</td>
-	<td><input type="text" name="data[l_email]" value="{l_email}" /></td>
+	<td><input type="text" name="data[l_email]" value="{l_email}"></td>
 </tr>
 <tr>
 	<td></td>
-	<td><input type="submit" value=" Pieprasīt jaunu paroli " /></td>
+	<td><input type="submit" value=" Pieprasīt jaunu paroli "></td>
 </tr>
 </table>
 </form>
@@ -58,7 +58,7 @@
 <table class="Main">
 <tr>
 	<td colspan="3">
-		<input type="hidden" name="change_passw" value="1" />
+		<input type="hidden" name="change_passw" value="1">
 		Ievadi jauno paroli
 	</td>
 </tr>
@@ -76,12 +76,12 @@
 </tr>
 <tr>
 	<td align="right"{error_l_password}>Parole:</td>
-	<td><input type="password" name="data[l_password]" /></td>
+	<td><input type="password" name="data[l_password]"></td>
 	<td></td>
 </tr>
 <tr>
 	<td align="right"{error_l_password}>Parole 2x:</td>
-	<td colspan="2"><input type="password" name="data[l_password2]" /></td>
+	<td colspan="2"><input type="password" name="data[l_password2]"></td>
 </tr>
 <tr>
 	<td></td>
@@ -97,7 +97,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-		<input type="submit" value=" Nomainīt paroli " />
+		<input type="submit" value=" Nomainīt paroli ">
 	</td>
 </tr>
 </table>

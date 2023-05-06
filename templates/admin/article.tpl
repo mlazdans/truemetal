@@ -7,11 +7,11 @@
 <table class="Main">
 <tr>
 	<td valign="top">
-		<input type="hidden" name="action" value="art_new" />
-		<input type="submit" name="do" value="Jauns" />
+		<input type="hidden" name="action" value="art_new">
+		<input type="submit" name="do" value="Jauns">
 	</td>
 	<td valign="top">
-		<input type="button" value="Atcelt" onclick="location.replace('/admin/article/')" />
+		<input type="button" value="Atcelt" onclick="location.replace('/admin/article/')">
 	</td>
 	<td valign="top">&nbsp;</td>
 </tr>
@@ -29,8 +29,8 @@
 <table class="Main">
 <tr>
 	<td class="TD-cat">
-		<input type="hidden" name="article_count" value="{article_count}" />
-		<input type="checkbox" name="article_check_all" onclick="Truemetal.checkAll(this);" />
+		<input type="hidden" name="article_count" value="{article_count}">
+		<input type="checkbox" name="article_check_all" onclick="Truemetal.checkAll(this);">
 	</td>
 	<td class="TD-cat">Modulis</td>
 	<td class="TD-cat">Nosaukums</td>
@@ -38,8 +38,8 @@
 <!-- BEGIN BLOCK_article_item -->
 <tr>
 	<td class="{art_color_class}">
-		<input type="hidden" name="art_id{article_nr}" value="{art_id}" />
-		<input type="checkbox" name="art_checked{article_nr}" />
+		<input type="hidden" name="art_id{article_nr}" value="{art_id}">
+		<input type="checkbox" name="art_checked{article_nr}">
 	</td>
 	<td class="{art_color_class}">{module_id}</td>
 	<td class="{art_color_class}">
@@ -58,7 +58,7 @@
 			<option value="show_multiple">Parādīt</option>
 			<option value="hide_multiple">Slēpt</option>
 		</select>
-		<input type="submit" value="  OK  " />
+		<input type="submit" value="  OK  ">
 	</td>
 </tr>
 </table>
@@ -87,7 +87,7 @@
 <tr>
 	<th>Zem</th>
 	<td>
-		<input type="hidden" name="action" value="art_save" />
+		<input type="hidden" name="action" value="art_save">
 		<select name="data[art_modid]">
 		<!-- BEGIN BLOCK_modules_under_list -->
 		<option value="{mod_id}"{module_selected}>{module_padding}{module_name}</option>
@@ -98,7 +98,7 @@
 <tr>
 	<th>Nosaukums</th>
 	<td>
-		<input type="text" name="data[art_name]" value="{art_name}" size="128" />
+		<input type="text" name="data[art_name]" value="{art_name}" size="128">
 	</td>
 </tr>
 <tr>
@@ -113,7 +113,7 @@
 <tr>
 	<th>Ievadīšanas datums</th>
 	<td>
-		<input type="text" name="data[art_entered]" value="{art_entered}" size="20" />
+		<input type="text" name="data[art_entered]" value="{art_entered}" size="20">
 	</td>
 </tr>
 <tr>
@@ -136,7 +136,7 @@
 </tr>
 <tr>
 	<td colspan="2">
-		<input type="submit" value=" Saglabāt " />
+		<input type="submit" value=" Saglabāt ">
 	</td>
 </tr>
 <tr>

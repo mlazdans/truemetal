@@ -6,23 +6,23 @@
 <table class="Main">
 <tr>
 	<td>Frāze:</td>
-	<td><input type="text" name="search_q" id="search_q" value="{search_q}" size="64" style="width: 99%;" /></td>
+	<td><input type="text" name="search_q" id="search_q" value="{search_q}" size="64" style="width: 99%;"></td>
 </tr>
 <tr>
 	<td>Sadaļas:</td>
 	<td>
 		<label for="section_article">
-		<input{section_article_checked} type="checkbox" class="checkbox" name="sections[]" id="section_article" value="article" />
+		<input{section_article_checked} type="checkbox" class="checkbox" name="sections[]" id="section_article" value="article">
 		Jaunumi
 		</label>
 
 		<label for="section_reviews">
-		<input{section_reviews_checked} type="checkbox" class="checkbox" name="sections[]" id="section_reviews" value="reviews" />
+		<input{section_reviews_checked} type="checkbox" class="checkbox" name="sections[]" id="section_reviews" value="reviews">
 		Recenzijas
 		</label>
 
 		<label for="section_forum">
-		<input{section_forum_checked} type="checkbox" class="checkbox" name="sections[]" id="section_forum" value="forum" />
+		<input{section_forum_checked} type="checkbox" class="checkbox" name="sections[]" id="section_forum" value="forum">
 		Forums
 		</label>
 	</td>
@@ -34,11 +34,11 @@
 		</label>
 	</td>
 	<td>
-		<input{only_titles_checked} type="checkbox" class="checkbox" name="only_titles" id="only_titles" />
+		<input{only_titles_checked} type="checkbox" class="checkbox" name="only_titles" id="only_titles">
 	</td>
 </tr>
 <tr>
-	<td colspan="2"><input type="submit" value="Meklēt" /></td>
+	<td colspan="2"><input type="submit" value="Meklēt"></td>
 </tr>
 </table>
 </form>

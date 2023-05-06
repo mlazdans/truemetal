@@ -18,9 +18,9 @@
 <tr>
 	<td class="right nowrap">Nosaukums:</td>
 	<td>
-		<input type="hidden" name="action" value="save_forum" />
-		<input type="hidden" name="data[forum_id]" value="{forum_id}" />
-		<input type="text" name="data[forum_name]" value="{forum_name}" size="64" />
+		<input type="hidden" name="action" value="save_forum">
+		<input type="hidden" name="data[forum_id]" value="{forum_id}">
+		<input type="text" name="data[forum_name]" value="{forum_name}" size="64">
 	</td>
 </tr>
 <tr>
@@ -36,7 +36,7 @@
 <tr>
 	<td class="right nowrap">Pasākuma sākums:</td>
 	<td>
-		<input type="text" name="data[event_startdate]" value="{event_startdate}" />
+		<input type="text" name="data[event_startdate]" value="{event_startdate}">
 	</td>
 </tr>
 <tr>
@@ -69,7 +69,7 @@
 <tr>
 	<td class="right nowrap">Ievadīts:</td>
 	<td>
-		<input type="text" name="data[forum_entered]" value="{forum_entered}" />
+		<input type="text" name="data[forum_entered]" value="{forum_entered}">
 	</td>
 </tr>
 <!--
@@ -123,19 +123,19 @@ if($('#forum_data').hasClass('edit'))
 </tr>
 <tr>
 	<td class="right nowrap">Lietotāja vārds:</td>
-	<td><input type="text" name="data[forum_username]" value="{forum_username}" /></td>
+	<td><input type="text" name="data[forum_username]" value="{forum_username}"></td>
 </tr>
 <tr>
 	<td class="right nowrap">Lietotāja e-pasts:</td>
-	<td><input type="text" name="data[forum_useremail]" value="{forum_useremail}" /></td>
+	<td><input type="text" name="data[forum_useremail]" value="{forum_useremail}"></td>
 </tr>
 <tr>
 	<td class="right nowrap">Lietotāja IP:</td>
-	<td><input type="text" name="data[forum_userip]" value="{forum_userip}" /></td>
+	<td><input type="text" name="data[forum_userip]" value="{forum_userip}"></td>
 </tr>
 <tr>
 	<td colspan="2">
-		<input type="submit" value="Saglabāt" />
+		<input type="submit" value="Saglabāt">
 	</td>
 </tr>
 </table>
@@ -147,14 +147,14 @@ if($('#forum_data').hasClass('edit'))
 <table class="Main">
 <tr>
 	<td colspan="3" class="TD-cat">
-		<input type="hidden" name="action" value="add_forum" />
+		<input type="hidden" name="action" value="add_forum">
 		Jauna tēma
 	</td>
 </tr>
 <tr>
 	<td>Nosaukums:</td>
-	<td><input type="text" name="data[forum_name]" maxlength="32" size="20" /></td>
-	<td><input type="submit" value="Pievienot" /></td>
+	<td><input type="text" name="data[forum_name]" maxlength="32" size="20"></td>
+	<td><input type="submit" value="Pievienot"></td>
 </tr>
 </table>
 </form>
@@ -168,13 +168,13 @@ Nav nevienas tēmas
 <form action="" method="post" id="forum_themes">
 <table class="Main">
 <tr>
-	<td class="TD-cat"><input type="checkbox" name="forum_check_all" onclick="Truemetal.checkAll(this);" /></td>
+	<td class="TD-cat"><input type="checkbox" name="forum_check_all" onclick="Truemetal.checkAll(this);"></td>
 	<td colspan="3" class="TD-cat">Tēmas</td>
 </tr>
 <!-- BEGIN BLOCK_forum_theme_item -->
 <tr>
 	<td class="{forum_color_class}">
-		<input type="checkbox" name="forum_checked[{forum_id}]" />
+		<input type="checkbox" name="forum_checked[{forum_id}]">
 	</td>
 	<td class="{forum_color_class}" style="white-space: nowrap;">
 		{forum_padding}<a href="{module_root}/{forum_id}/">{forum_name}</a>
@@ -197,7 +197,7 @@ Nav nevienas tēmas
 			<option value="close_multiple">Slēgt</option>
 			<option value="open_multiple">Atvērt</option>
 		</select>
-		<input type="submit" value="  OK  " />
+		<input type="submit" value="  OK  ">
 	</td>
 </tr>
 </table>

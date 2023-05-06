@@ -6,7 +6,7 @@
 
 <!-- BEGIN BLOCK_userpic disabled -->
 <div>
-	<img src="{pic_path}" alt="" onclick="window.close()" />
+	<img src="{pic_path}" alt="" onclick="window.close()">
 </div>
 <!-- END BLOCK_userpic -->
 

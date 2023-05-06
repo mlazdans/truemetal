@@ -12,8 +12,8 @@ Nav neviena logina
 <!-- BEGIN BLOCK_logins_search_from -->
 <form action="" method="get" id="logins_search">
 <div>
-<input type="hidden" name="action" value="search" />
-<label for="ls_q">IP;E-mail;Login;Nick: <input type="text" name="q" id="ls_q" value="{q}" /></label>
+<input type="hidden" name="action" value="search">
+<label for="ls_q">IP;E-mail;Login;Nick: <input type="text" name="q" id="ls_q" value="{q}"></label>
 <label for="ls_l_active_n"><input type="checkbox" name="l_active_n" id="ls_l_active_n" {ls_l_active_n_checked}/> neaktīvie</label>
 <label for="ls_l_accepted_n"><input type="checkbox" name="l_accepted_n" id="ls_l_accepted_n" {ls_l_accepted_n_checked}/> neakceptētie</label>
 &nbsp;
@@ -31,8 +31,8 @@ Nav neviena logina
 <tr>
 	<td class="TD-cat">Nr</td>
 	<td class="TD-cat">
-		<input type="hidden" name="logins_count" value="{logins_count}" />
-		<input type="checkbox" name="logins_check_all" onclick="Truemetal.checkAll(this);" />
+		<input type="hidden" name="logins_count" value="{logins_count}">
+		<input type="checkbox" name="logins_check_all" onclick="Truemetal.checkAll(this);">
 	</td>
 	<td class="TD-cat">Logins</td>
 	<td class="TD-cat">Segvārds</td>
@@ -50,8 +50,8 @@ Nav neviena logina
 <tr>
 	<td class="{l_color_class}">{logins_nr}</td>
 	<td class="{l_color_class}">
-		<input type="hidden" name="l_id{logins_nr}" value="{l_id}" />
-		<input type="checkbox" name="l_checked{logins_nr}" />
+		<input type="hidden" name="l_id{logins_nr}" value="{l_id}">
+		<input type="checkbox" name="l_checked{logins_nr}">
 	</td>
 	<td class="{l_color_class}">
 		<a href="{module_root}/{l_id}/" style="font-weight: bold;">{l_login}</a>
@@ -81,7 +81,7 @@ Nav neviena logina
 			<option value="deactivate_multiple">Deaktivizēt</option>
 			<option value="delete_multiple">Dzēst</option>
 		</select>
-		<input type="submit" value="  OK  " />
+		<input type="submit" value="  OK  ">
 	</td>
 </tr>
 </table>
