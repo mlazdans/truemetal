@@ -5,9 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib/Res.php');
-require_once('lib/Forum.php');
-
 class Logins
 {
 	var $error_msg = [];

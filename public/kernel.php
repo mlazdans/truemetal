@@ -5,8 +5,18 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-# TODO: autoload
+spl_autoload_extensions(".php");
+spl_autoload_register(function($class){
+	global $sys_root;
+
+	$class_path = $sys_root.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR."$class.php";
+	if(file_exists($class_path)){
+		require_once($class_path);
+	}
+});
+
 # TODO: mainot galerijām/foruma/commention utt login_id, trigerī nomainās arī res tabulā
+# TODO: mainot paroli chrome piedāvā ieseivot arī pie fail
 
 # DEFAULTS - var overraidot configā
 $sys_start_time        = microtime(true);
@@ -50,32 +60,24 @@ if(!isset($i_am_admin))
 if(!isset($sys_debug))
 	$sys_debug = ($i_am_admin ? true : false);
 
-/*
-if(!$i_am_admin){
-	die('Maintenancē, bļa');
-}
-*/
-
 //ini_set('sysvshm.init_mem', 100000);
 ini_set('display_errors', ($sys_debug ? 1 : 0));
 ini_set('expose_php', false);
 error_reporting($sys_error_reporting);
 
 # Include paths
-$include_path = explode(PATH_SEPARATOR, ini_get('include_path'));
-foreach($include_path as $k=>$v) # Unset current dir
-{
-	if($v == '.' || $v == './')
-		unset($include_path[$k]);
-}
-$paths = array(
+$LIBS = [
 	".",
 	$sys_root,
-	);
-$include_path = array_merge($paths, $include_path);
+	$sys_root.DIRECTORY_SEPARATOR.'lib',
+];
+
+$include_path = array_unique(array_merge($LIBS, explode(PATH_SEPARATOR, ini_get('include_path'))));
 ini_set('include_path', join(PATH_SEPARATOR, $include_path));
-if(!empty($KERNEL_LEAVE_AFTER_INIT))
+
+if(!empty($KERNEL_LEAVE_AFTER_INIT)){
 	return;
+}
 
 # Bans
 if(isset($sys_banned[$ip]))
@@ -86,12 +88,6 @@ if(isset($sys_banned[$ip]))
 
 require_once('include/dbconnect.php');
 require_once('lib/utils.php');
-require_once('lib/MainModule.php');
-require_once('lib/Module.php');
-require_once('lib/Logins.php');
-
-# MySQL tune
-//$db->Execute(sprintf("SET SESSION join_buffer_size=%d", 512*1024));
 
 mb_regex_encoding($sys_encoding);
 mb_internal_encoding($sys_encoding);
@@ -183,7 +179,6 @@ $_GET = _GET();
 header('Content-Type: text/html; charset='.$sys_encoding);
 header('X-Powered-By: TRUEMETAL');
 
-# LOCALE
 if(isset($sys_locale)){
 	setlocale(LC_TIME, $sys_locale);
 }
@@ -199,16 +194,8 @@ foreach($clear_session as $section){
 	}
 }
 
-# iesleedzam vaidziigo moduli
-//ob_start();
 if(file_exists("$sys_root/module/$sys_module.php")) {
 	include("$sys_root/module/$sys_module.php");
 } else {
 	include("$sys_root/module/$sys_default_module.php");
 }
-
-// if($i_am_admin && !in_array($sys_module_id, $sys_nosess_modules)){
-// 	$sys_end_time = microtime(true);
-// 	$rendered = 'Rendered in: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec';
-// 	echo $rendered;
-// }

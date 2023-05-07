@@ -5,10 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib/Article.php');
-require_once('lib/Module.php');
-require_once('lib/ResComment.php');
-
 $art_per_page = 10;
 
 # GET/POST
@@ -268,4 +264,3 @@ if(isset($_pointer['_data_']['module_id']))
 
 $template->set_right_defaults();
 $template->out();
-

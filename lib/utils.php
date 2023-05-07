@@ -7,7 +7,6 @@
 
 require_once('Mail.php');
 require_once('Mail/mime.php');
-require_once('lib/PwValidator.php');
 
 define('M', array(
 	'janvārī', 'februārī', 'martā', 'aprīlī', 'maijā', 'jūnijā', 'jūlijā', 'augustā', 'septembrī',

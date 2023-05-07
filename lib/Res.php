@@ -5,13 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib/ResComment.php');
-require_once('lib/Comment.php');
-require_once('lib/Article.php');
-require_once('lib/Forum.php');
-require_once('lib/Gallery.php');
-require_once('lib/GalleryData.php');
-
 class Res
 {
 	const TYPE_STD = 0;

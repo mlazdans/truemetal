@@ -5,8 +5,6 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-require_once('lib/Res.php');
-
 $location = "/";
 $res_id = (int)array_shift($sys_parameters);
 

@@ -57,7 +57,7 @@ $set_vars = array(
 	'user_pic_th'=>$user_pic_th
 );
 $template->set_array($set_vars);
-$template->set_profile($login_data);
+$template->set_profile($login_data, true);
 
 # Comment stats
 # TODO: zem lib; active='Y'

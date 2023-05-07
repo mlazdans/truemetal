@@ -5,17 +5,8 @@
 // http://dqdp.net/
 // marrtins@dqdp.net
 
-// pats pats...
-
-require_once('lib/Module.php');
-require_once('lib/Article.php');
-require_once('lib/Poll.php');
-require_once('lib/Logins.php');
-require_once('lib/Template.php');
-
 class MainModule extends Template
 {
-
 	var $module_name;
 	var $title;
 
@@ -27,8 +18,6 @@ class MainModule extends Template
 		$this->set_file('FILE_index', $str_main_file);
 
 		$this->init();
-
-		return true;
 	} // MainModule
 
 	function init()
@@ -308,7 +297,8 @@ class MainModule extends Template
 		$this->parse_block('BLOCK_right_item', TMPL_APPEND);
 	} // set_recent_comments
 
-	function set_profile($login)
+	// TODO: izvākt is_private
+	function set_profile($login, $is_private = false)
 	{
 		global $sys_user_root;
 
@@ -351,7 +341,9 @@ class MainModule extends Template
 			}
 
 			$this->enable('BLOCK_picture');
-			$this->enable('BLOCK_picture_del');
+			if($is_private){
+				$this->enable('BLOCK_picture_del');
+			}
 		} else {
 			$this->enable('BLOCK_nopicture');
 		}
