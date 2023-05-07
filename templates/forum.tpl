@@ -21,5 +21,5 @@
 <div class="List-item">
 	Pagaidām nav neviena foruma!
 </div>
-<!-- END BLOCK_noforum  -->
+<!-- END BLOCK_noforum -->
 

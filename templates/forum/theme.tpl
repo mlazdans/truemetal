@@ -67,7 +67,7 @@
 <div class="List-item">
 	Pagaidām forumam nav nevienas tēmas!
 </div>
-<!-- END BLOCK_noforum  -->
+<!-- END BLOCK_noforum -->
 
 <div class="Forum-sep"></div>
 

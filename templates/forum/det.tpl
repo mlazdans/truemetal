@@ -28,7 +28,7 @@
 <div class="Info">
 	Pagaidām šai tēmai nav neviena komentāra!
 </div>
-<!-- END BLOCK_noforum  -->
+<!-- END BLOCK_noforum -->
 
 <!-- BEGIN BLOCK_info_sort_A disabled -->
 <div class="List-item">
