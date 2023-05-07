@@ -1,16 +1,12 @@
-<div class="TD-cat" title="Kas patlaban šeit ņemās?">
-	Online [{online_total}]
-</div>
-
 <!-- BEGIN BLOCK_online_item disabled -->
 <div class="List-item">
-	<a href="/user/profile/{online_login_id}/" onclick="Truemetal.viewProfile('{online_login_id}'); return false;">{online_name}</a>
+	<a href="/user/profile/{online_hash}/" onclick="Truemetal.viewProfile('{online_hash}'); return false;">{online_nick}</a>
 </div>
 <!-- END BLOCK_online_item -->
 
 <!-- BEGIN BLOCK_online_item_notloged disabled -->
 <div class="List-item">
-	{online_name}
+	{online_nick}
 </div>
 <!-- END BLOCK_online_item_notloged -->
 
@@ -19,4 +15,3 @@
 	- Melnais Caurums -
 </div>
 <!-- END BLOCK_noonlines -->
-

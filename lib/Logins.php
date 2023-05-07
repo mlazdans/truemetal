@@ -193,7 +193,7 @@ class Logins
 		return $item['banned'] > 0;
 	} // banned24h
 
-	function get_active()
+	static function get_active()
 	{
 		global $db;
 
@@ -203,7 +203,7 @@ class Logins
 			);
 
 		return $db->Execute($sql);
-	} // get_active
+	}
 
 	static function save_session_data($data = '')
 	{

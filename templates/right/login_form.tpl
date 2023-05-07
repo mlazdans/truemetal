@@ -1,8 +1,4 @@
 <!-- BEGIN BLOCK_login_form disabled -->
-<div class="TD-cat" title="Pieslēgties sistēmai">
-	Pieslēgties
-</div>
-
 <div class="List-item">
 <form action="/login/" method="post">
 <table cellpadding="1" cellspacing="1" width="100%">
@@ -29,9 +25,6 @@
 <!-- END BLOCK_login_form -->
 
 <!-- BEGIN BLOCK_login_data disabled -->
-<div class="TD-cat" title="Pieslēgties sistēmai">
-	Login
-</div>
 <div class="List-item">
 	{login_nick}
 </div>
@@ -45,4 +38,3 @@
 	<a href="/mark/" title="Iezīmēt visus komentārus kā izlasītus">Mark all as read</a>
 </div>
 <!-- END BLOCK_login_data -->
-

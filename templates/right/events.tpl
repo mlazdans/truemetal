@@ -1,7 +1,12 @@
-<div class="TD-cat">Aktuāli</div>
 <!-- BEGIN BLOCK_events_list -->
 	<!-- BEGIN BLOCK_more_events_start disabled -->
-	<div class="List-item"><a style="font-style: italic;" href="#" onclick="$('#MoreEvents').slideToggle();this.text=(this.text == '-vairāk-' ? '-mazāk-' : '-vairāk-');return false;">-vairāk-</a></div>
+	<div class="List-item">
+		<a
+			style="font-style: italic;"
+			href="#"
+			onclick="$('#MoreEvents').slideToggle();this.text=(this.text == '-vairāk-' ? '-mazāk-' : '-vairāk-');return false;"
+		>-vairāk-</a>
+	</div>
 	<div style="display: none;" id="MoreEvents">
 	<!-- END BLOCK_more_events_start -->
 <div class="List-item{event_class}">

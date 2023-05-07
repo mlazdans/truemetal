@@ -1,10 +1,6 @@
-<div class="TD-cat" title="Jubilāri">
-	Jubilāri
-</div>
-
 <!-- BEGIN BLOCK_jub_item disabled -->
 <div class="List-item">
-	<a href="/user/profile/{jub_login_id}/" onclick="Truemetal.viewProfile('{jub_login_id}'); return false;">{jub_name}</a>{jub_info}
+	<a href="/user/profile/{jub_hash}/" onclick="Truemetal.viewProfile('{jub_hash}'); return false;">{jub_name}</a>{jub_info}
 </div>
 <!-- END BLOCK_jub_item -->
 

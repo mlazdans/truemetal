@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 // dqdp.net Web Engine v3.0
 //
 // contacts:
@@ -6,14 +6,7 @@
 // marrtins@dqdp.net
 
 spl_autoload_extensions(".php");
-spl_autoload_register(function($class){
-	global $sys_root;
-
-	$class_path = $sys_root.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR."$class.php";
-	if(file_exists($class_path)){
-		require_once($class_path);
-	}
-});
+spl_autoload_register();
 
 # TODO: mainot galerijām/foruma/commention utt login_id, trigerī nomainās arī res tabulā
 # TODO: mainot paroli chrome piedāvā ieseivot arī pie fail
@@ -21,13 +14,12 @@ spl_autoload_register(function($class){
 # DEFAULTS - var overraidot configā
 $sys_start_time        = microtime(true);
 $sys_root              = realpath(dirname(__FILE__).'/../');
-$sys_public_root       = $sys_root.'/public';
-$sys_template_root     = $sys_root.'/templates';
-$sys_upload_root       = $sys_public_root.'/data';
+$sys_public_root       = $sys_root.DIRECTORY_SEPARATOR.'public';
+$sys_template_root     = $sys_root.DIRECTORY_SEPARATOR.'templates';
+$sys_upload_root       = $sys_public_root.DIRECTORY_SEPARATOR.'data';
 $sys_upload_http_root  = '/data';
 $sys_user_root         = $sys_root.'/users';
 
-//$sys_error_reporting   = E_ALL & ~(E_NOTICE | E_STRICT | E_DEPRECATED);
 $sys_error_reporting   = E_ALL;
 $sys_default_lang      = 'lv';
 $sys_encoding          = 'utf-8';
@@ -60,7 +52,6 @@ if(!isset($i_am_admin))
 if(!isset($sys_debug))
 	$sys_debug = ($i_am_admin ? true : false);
 
-//ini_set('sysvshm.init_mem', 100000);
 ini_set('display_errors', ($sys_debug ? 1 : 0));
 ini_set('expose_php', false);
 error_reporting($sys_error_reporting);
@@ -87,6 +78,7 @@ if(isset($sys_banned[$ip]))
 }
 
 require_once('include/dbconnect.php');
+require_once('lib/truelib.php');
 require_once('lib/utils.php');
 
 mb_regex_encoding($sys_encoding);

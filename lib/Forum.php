@@ -435,34 +435,6 @@ INSERT INTO forum (
 
 	} // validate
 
-	function set_recent_forum(Template $template)
-	{
-		$data = $this->load(array(
-			"fields"=>array('forum_id', 'forum_name', 'f.res_id'),
-			"order"=>'res_comment_lastdate DESC',
-			"limit"=>'10',
-			"forum_allowchilds"=>Forum::PROHIBIT_CHILDS,
-			));
-
-		if(count($data))
-		{
-			$template->set_file('FILE_r_forum', 'forum/recent.tpl');
-			foreach($data as $item)
-			{
-				$template->{(Forum::hasNewComments($item) ? "enable" : "disable")}('BLOCK_forum_r_comments_new');
-				$template->set_var('forum_r_name', addslashes($item['forum_name']), 'FILE_r_forum');
-				$template->set_var('forum_r_comment_count', $item['res_comment_count'], 'FILE_r_forum');
-				$template->set_var('forum_r_path', "forum/{$item['forum_id']}-".rawurlencode(urlize($item["forum_name"])), 'FILE_r_forum');
-				$template->parse_block('BLOCK_forum_r_items', TMPL_APPEND);
-			}
-
-			$template->enable('BLOCK_forum_r_more');
-			$template->parse_block('FILE_r_forum');
-			$template->set_var('right_item_data', $template->get_parsed_content('FILE_r_forum'), 'BLOCK_right_item');
-			$template->parse_block('BLOCK_right_item', TMPL_APPEND);
-		}
-	} // set_recent_forum
-
 	public function set_all_tree(Template $template, $tree, $forum_forumid = 0, $d = 0, $block = 'BLOCK_forum_forumid')
 	{
 		if($forum_forumid)
@@ -534,5 +506,12 @@ INSERT INTO forum (
 	{
 		return "/forum/$resource[forum_id]-".urlize($resource['forum_name']).($c_id ? "#comment$c_id" : "");
 	} // Route
+
+	function get_themes(array $DATA){
+		$DATA['forum_allowchilds'] = Forum::PROHIBIT_CHILDS;
+
+		return $this->load($DATA);
+	}
+
 } // Class::Forum
 

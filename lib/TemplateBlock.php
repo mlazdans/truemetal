@@ -1,137 +1,304 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
 define('TMPL_APPEND', true);
 
 class TemplateBlock
 {
-	public static $blocks_cache = array();
+	private string $ID = '';
+	private int $parsed_count = 0;
+	private ?int $offset_start = null;    // where block starts
+	private ?int $offset_end = null;      // where block ends
+	private ?int $len = null;             // block length
+	private bool $attr_disabled = false;
+	/** @var TemplateBlock[] */
+	protected array $blocks = [];
+	private array $vars = [];
+	private array $block_vars = [];
+	private string $content = '';
+	private $parsed_content = '';         // XXX: ja uzliek type, tad baigi lēns!!!
+	private ?TemplateBlock $parent = null;
 
-	var $ID;
-	var $vars = array();
-	var $blocks = array();
-
-	var $parent_block = null;
-	var $block_vars = null;
-
-	var $content = '';
-	var $parsed_content = '';
-	var $parsed_count = 0;
-
-	var $slash;
-	var $undefined = 'remove';
-	var $attributes = array(
-		'disabled' => false
-	);
-
-	function __construct(TemplateBlock $parent, $ID, $content)
-	{
-		if($block = $this->get_block($ID)){
-			$this->error('__construct: block ['.$ID.'] already exists', E_USER_ERROR);
-		}
-
+	function __construct(TemplateBlock $parent = NULL, string $ID, string $content){
 		$this->ID = $ID;
-		$this->slash = chr(92).chr(92);
-		$this->parent_block = $parent;
+		$this->parent = $parent;
 		$this->content = $content;
 		$this->__find_blocks();
-		if(!isset(self::$blocks_cache[$ID]))
-			self::$blocks_cache[$ID] = $this;
+	}
 
-		return true;
-	} // __construct
+	function block_exists(string $ID): bool {
+		return (bool)$this->_get_block($ID);
+	}
 
-	function get_root()
-	{
-		if($this->parent_block == null){
-			return $this;
-		} else {
-			return $this->parent_block->get_root();
+	function get_block(string $ID): TemplateBlock {
+		if($block = $this->_get_block($ID)){
+			return $block;
 		}
-	} // get_root
 
-	private function __find_blocks()
-	{
-		$patt = '/<!--\s+BEGIN\s+(.*)\s+(.*)-->(.*)<!--\s+END\s+\1\s+-->/smU';
-		preg_match_all($patt, $this->content, $m);
+		throw new InvalidArgumentException("block not found ($ID)");
+	}
 
-		if(isset($m[1]))
-		{
-			$int_count = count($m[1]);
-			for($c = 0; $c < $int_count; $c++)
-			{
-				$id = $m[1][$c];
-				$this->blocks[$id] = new TemplateBlock($this, $id, $m[3][$c]);
+	function parse_block(string $ID, bool $append = false): string {
+		return $this->get_block($ID)->parse($append);
+	}
 
-				$arr_attributes = explode(' ', strtolower($m[2][$c]));
-				$this->blocks[$id]->attributes['disabled'] = in_array('disabled', $arr_attributes);
+	function parse(bool $append = false): string {
+		if($this->attr_disabled){
+			return '';
+		}
+
+		if($this->parsed_count && !$append) {
+			return $this->parsed_content;
+		}
+
+		$this->parsed_count++;
+		$parsed_content = $this->content;
+		foreach($this->blocks as $id=>$block){
+			// No white-space check
+			// $patt = "/<!-- BEGIN $id .*-->.*<!-- END $id -->/smU";
+			$patt = "/\R?<!-- BEGIN $id .*-->.*<!-- END $id -->\R?/s";
+			if(preg_match($patt, $parsed_content, $m, PREG_OFFSET_CAPTURE)){
+				$offset = (int)$m[0][1];
+				$len = strlen($m[0][0]);
+				$parsed_content = substr_replace($parsed_content, $block->parse($append), $offset, $len);
+			}
+		}
+
+		$parsed_content = $this->_apply_vars($parsed_content);
+
+		if($append){
+			$this->parsed_content .= $parsed_content;
+			// foreach($this->blocks as $object){
+			// 	$object->reset();
+			// }
+		} else {
+			$this->parsed_content = $parsed_content;
+		}
+
+		return $parsed_content;
+	}
+
+	function get_vars(string $ID = NULL): ?array {
+		return ($block = $this->_get_block_or_self($ID)) ? $block->vars : NULL;
+	}
+
+	function get_parsed_content(string $ID = NULL): ?string {
+		return ($block = $this->_get_block_or_self($ID)) ? $block->parsed_content : NULL;
+	}
+
+	function get_var(string $var_id, string $ID = NULL){
+		if($block = $this->_get_block_or_self($ID)){
+			if(isset($block->vars[$var_id])) {
+				return $block->vars[$var_id];
+			} elseif($block->parent) {
+				return $block->parent->get_var($var_id);
+			}
+		}
+
+		return NULL;
+	}
+
+	function set_var(string $var_id, $value, string $ID = NULL): TemplateBlock {
+		if($block = $this->_get_block_or_self($ID)){
+			$block->vars[$var_id] = $value;
+		}
+
+		return $this;
+	}
+
+	function set_array(iterable $array, string $ID = NULL): TemplateBlock {
+		if($block = $this->_get_block_or_self($ID)){
+			foreach($array as $k=>$v){
+				$block->vars[$k] = $v;
+			}
+		}
+
+		return $this;
+	}
+
+	function set_except(array $exclude, array $data, string $ID = NULL): TemplateBlock {
+		if($block = $this->_get_block_or_self($ID)){
+			$diff = array_diff(array_keys($data), $exclude);
+			foreach($diff as $k){
+				$block->vars[$k] = $data[$k];
+			}
+		}
+
+		return $this;
+	}
+
+	function reset(string $ID = NULL): TemplateBlock {
+		if($block = $this->_get_block_or_self($ID)){
+			$block->parsed_content = '';
+			$block->parsed_count = 0;
+			foreach($block->blocks as $o){
+				$o->reset();
+			}
+		}
+
+		return $this;
+	}
+
+	function enable_if(bool $cond, string $ID = NULL): TemplateBlock {
+		return $this->set_attribute('disabled', !$cond, $ID);
+	}
+
+	function enable(string $ID = NULL): TemplateBlock {
+		return $this->set_attribute('disabled', false, $ID);
+	}
+
+	function disable(string $ID = NULL): TemplateBlock {
+		return $this->set_attribute('disabled', true, $ID);
+	}
+
+	function set_attribute(string $attribute, $value, string $ID = NULL): TemplateBlock {
+		if($block = $this->_get_block_or_self($ID)){
+			if($attribute == 'disabled'){
+				$block->attr_disabled = $value;
+			}
+		}
+		return $this;
+	}
+
+	# TODO: test vai remove?
+	// function copy_block($ID_to, $ID_from){
+	// 	if(!($block_to = $this->get_block($ID_to))){
+	// 		return false;
+	// 	}
+
+	// 	if(!($block_from = $this->get_block($ID_from))){
+	// 		return false;
+	// 	}
+
+	// 	# tagat noskaidrosim, vai block_to nav zem block_from
+	// 	// if($block_from->get_block($ID_to)){
+	// 	// 	$this->error("block is a child of parent ($ID_from:$ID_to)");
+	// 	// 	return false;
+	// 	// }
+
+	// 	# paarkopeejam paareejos parametrus
+	// 	$block_to->vars = &$block_from->vars;
+	// 	$block_to->blocks = &$block_from->blocks;
+	// 	$block_to->block_vars = &$block_from->block_vars;
+	// 	$block_to->content = &$block_from->content;
+	// 	$block_to->parsed_content = &$block_from->parsed_content;
+	// 	$block_to->attr_disabled = &$block_from->attr_disabled;
+	// 	$block_from->parent = $block_to;
+
+	// 	//unset($block_from->parent->blocks[$ID_from]);
+
+	// 	return true;
+	// }
+
+	function set_block_string(string $ID, string $content){
+		if($block = $this->get_block($ID)){
+			$block->parsed_content = $content;
+			$block->parsed_count = 1;
+		}
+
+		return $this;
+	}
+
+	function dump_blocks($pre = ''){
+		foreach($this->blocks as $block_id=>$object){
+			$a = ($object->blocks ? '+' : '-');
+			print "$pre$a$block_id($object->parsed_count)<br>\n";
+			$object->dump_blocks("| $pre");
+		}
+	}
+
+	function dump(){
+		$vars = [
+			'ID', 'attr_disabled', 'parsed_count', 'offset_start', 'offset_end', 'len',
+			'blocks', 'vars', 'block_vars', 'content', 'parsed_content'
+		];
+
+		foreach($vars as $k){
+			if($k == 'blocks'){
+				$ret[$k] = array_keys($this->blocks);
+			} else {
+				$ret[$k] = $this->{$k};
+			}
+		}
+
+		return $ret;
+	}
+
+	private function _apply_vars($data): string {
+		if(empty($this->block_vars)){
+			return $data;
+		}
+
+		foreach($this->block_vars as $k){
+			$patt[] = '{'.$k.'}';
+			$repl[] = $this->get_var($k);
+		}
+
+		return str_replace($patt, $repl, $data);
+	}
+
+	private function __find_blocks(){
+		// $m_WHOLE = 0;
+		// $m_BEGIN = 1;
+		// $m_ID = 2;
+		// $m_ATTRS = 3;
+		// $m_CONTENTS = 4;
+		// $m_END = 5;
+		$m_WHOLE = 0;
+		$m_ID = 1;
+		$m_ATTRS = 2;
+		$m_CONTENTS = 3;
+
+		// $patt = '/(<!-- BEGIN ([\S]+) (.*)-->)(.*)(<!-- END \2 -->)/smUS';
+		$patt = '/<!-- BEGIN ([\S]+) (.*)-->(.*)<!-- END \1 -->/smU';
+
+		if(preg_match_all($patt, $this->content, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER) === false){
+			$err = array_flip(array_filter(get_defined_constants(true)['pcre'], function ($value) {
+				return substr($value, -6) === '_ERROR';
+			  }, ARRAY_FILTER_USE_KEY))[preg_last_error()];
+
+			throw new ParseError(sprintf("template compilation failure $this->ID (%s)", $err));
+		}
+
+		$striped_offset = 0;
+		$striped_content = '';
+		foreach($matches as $item){
+			$id = $item[$m_ID][0];
+
+			if(isset($this->blocks[$id])){
+				$content_offset = (int)$item[$m_CONTENTS][1];
+				throw new InvalidArgumentException(
+					sprintf("block already exists ($id), at %d near: '%s'",
+					$item[$m_WHOLE][1],
+					substr($this->content, $content_offset - 20, 40))
+				);
 			}
 
-			return $this->blocks;
-		} else
-			return false;
-	} // __find_blocks
+			$Block = new TemplateBlock($this, $id, $item[$m_CONTENTS][0]);
+			$Block->len = strlen($item[$m_WHOLE][0]);
+			$Block->offset_start = (int)$item[$m_WHOLE][1];
+			$Block->offset_end = $Block->offset_start + $Block->len;
 
-	private function __parse_vars()
-	{
-		$content = $this->content;
-		$patt = array();
-		$repl = array();
-		$vars_cache = array();
+			$Block->attr_disabled = (strpos($item[$m_ATTRS][0], 'disabled') !== false);
 
-		if($this->block_vars === null)
-		{
-			preg_match_all("/{(.*)}/U", $content, $m);
-			$this->block_vars = $m[1];
+			$this->blocks[$id] = $Block;
+
+			$part = substr($this->content, $striped_offset, $Block->offset_start - $striped_offset);
+			$striped_content .= $part;
+			$striped_offset = $Block->offset_end;
 		}
+		$part = substr($this->content, $striped_offset);
+		$striped_content .= $part;
 
-		foreach($this->block_vars as $k)
-		{
-			$patt[] = '/{'.$k.'}/';
-			$p = array("/([$this->slash])+/", "/([\$])+/");
-			$r = array("\\\\$1", "\\\\$1");
-			if(!isset($vars_cache[$k]))
-				$vars_cache[$k] = $this->find_var($k);
-
-			$repl[] = preg_replace($p, $r, $vars_cache[$k]);
+		# Vars
+		if(preg_match_all("/{([^\s}]+)}/", $striped_content, $m)){
+			$this->block_vars = array_unique($m[1]);
 		}
+	}
 
-		$content = preg_replace($patt, $repl, $content);
-
-		/*
-		switch ($this->undefined)
-		{
-			case 'remove':
-				$content = preg_replace('/([^\\\])?{'.$variable_pattern.'}/U', '\1', $content);
-				$content = preg_replace('/\\\{('.$variable_pattern.')}/', '{\1}', $content);
-				return $content;
-				//preg_replace('/\\\{'.$variable_pattern.'\}/', 'aaa{'.$variable_pattern.'}', $content);
-				//return preg_replace('/(\n+|\r\n+)?{'.$variable_pattern.'}(\n+|\r\n+)?/', '', $content);
-				break;
-			case 'comment':
-				return preg_replace('/{('.$variable_pattern.')}/', '<!-- UNDEFINED \1 -->', $content);
-				//return preg_replace('/(\n+|\r\n+)?{('.$variable_pattern.')}(\n+|\r\n+)?/', '<!-- UNDEFINED \1 -->', $content);
-				break;
-			case 'warn':
-				return preg_replace('/{('.$variable_pattern.')}/', 'UNDEFINED \1', $content);
-				//return preg_replace('/(\n+|\r\n+)?{('.$variable_pattern.')}(\n+|\r\n+)?/', 'UNDEFINED \1', $content);
-				break;
-		}
-		*/
-
-		return $content;
-	} // __parse_vars
-
-	protected function error($msg, $e = E_USER_WARNING)
-	{
+	protected function error($msg, $e = E_USER_WARNING){
 		$tmsg = '';
 		$t = debug_backtrace();
-		for($i=1;$i<count($t);$i++)
-		{
+		for($i=1;$i<count($t);$i++){
 			$bn = basename($t[$i]['file']);
 			if($bn == 'TemplateBlock.php' || $bn == 'Template.php'){
 				continue;
@@ -140,258 +307,36 @@ class TemplateBlock
 			break;
 		}
 
-		if($tmsg)
+		if($tmsg){
 			$msg .= " $tmsg";
+		}
 
 		trigger_error($msg, $e);
-	} // error
+	}
 
-	function get_block($ID, $parent = null)
-	{
-		# fetch from cache
-		if(isset(self::$blocks_cache[$ID]))
-			return self::$blocks_cache[$ID];
+	private function _get_block_or_self(string $ID = null): ?TemplateBlock {
+		if($ID){
+			return $this->_get_block($ID);
+		} else {
+			return $this;
+		}
+	}
 
-		return false;
-	} // get_block
+	private function _get_block(string $ID): ?TemplateBlock {
+		if($this->ID == $ID){
+			return $this;
+		}
 
-	function get_block_under($ID)
-	{
 		if(isset($this->blocks[$ID])){
 			return $this->blocks[$ID];
 		}
 
-		foreach($this->blocks as $block_id => $object){
-			if($block = $this->blocks[$block_id]->get_block_under($ID)){
+		foreach($this->blocks as $o){
+			if($block = $o->_get_block($ID)){
 				return $block;
 			}
 		}
 
-		return false;
-	} // get_block
-
-	function parse($append = false)
-	{
-		# ja bloks sleegts
-		if($this->attributes['disabled'])
-			return;
-
-		# ja jau noparseets
-		if($this->parsed_count && !$append) {
-			return $this->get_parsed_content();
-		}
-
-		# ja jauna parseeshana
-		$parsed_content = $this->__parse_vars();
-
-		# ja blokaa veel ir bloki
-		foreach($this->blocks as $block_id => $object)
-		{
-			$block_content = $object->parse();
-			$patt = '/\s*<!--\s+BEGIN\s+' . $block_id . '\s+[^<]*-->.*<!--\s+END\s+' . $block_id . '\s+-->\s*/smi';
-			preg_match_all($patt, $parsed_content, $m);
-			foreach($m[0] as $mm) {
-				$parsed_content = str_replace($mm, $block_content, $parsed_content);
-			}
-		}
-
-		if($append) {
-			$this->parsed_content .= $parsed_content;
-		} else {
-			$this->parsed_content = $parsed_content;
-		}
-
-		$this->parsed_count++;
-
-		$cont = $this->get_parsed_content();
-
-		# reset childs
-		if($append) {
-			foreach($this->blocks as $block_id=>$object) {
-				$object->reset();
-			}
-		}
-
-		return $cont;
-	} // parse
-
-	function get_parsed_content($ID = '')
-	{
-		$block = $this;
-		if($ID && !($block = $this->get_block($ID))){
-			$this->error('get_parsed_content: block ['.$ID.'] not found!');
-			return false;
-		}
-
-		return $block->parsed_content;
-	} // get_parsed_content
-
-	function find_var($k, $d = 0)
-	{
-		if(isset($this->vars[$k])) {
-			return $this->vars[$k];
-		} else if($this->parent_block) {
-			return $this->parent_block->find_var($k, $d + 1);
-		}
-
-		return '';
-	} // find_var
-
-	function set_var($var_id, $value, $ID = '')
-	{
-		$block = $this;
-		if($ID && !($block = $this->get_block($ID))){
-			$this->error('set_var: block ['.$ID.'] not found!');
-			return false;
-		}
-
-		$block->vars[$var_id] = $value;
-
-		return false;
-	} // set_var
-
-	function set_array(Array $array, $ID = '')
-	{
-		$block = $this;
-		if($ID && !($block = $this->get_block($ID))){
-			$this->error('set_array: block ['.$ID.'] not found!');
-			return false;
-		}
-
-		foreach($array as $key => $value) {
-			$block->set_var($key, $value);
-		}
-	} // set_array
-
-	function set_array_except(array $except, array $array, $ID = '')
-	{
-		$block = $this;
-		if($ID && !($block = $this->get_block($ID))){
-			$this->error('set_array: block ['.$ID.'] not found!');
-			return false;
-		}
-
-		foreach($array as $key => $value) {
-			if(!in_array($key, $except)) {
-				$block->set_var($key, $value);
-			}
-		}
-	} // set_array
-
-	function reset($ID = '')
-	{
-		$block = $this;
-		if($ID && !($block = $this->get_block($ID))){
-			$this->error('reset: block ['.$ID.'] not found!');
-			return false;
-		}
-
-		$block->parsed_content = '';
-		$block->parsed_count = 0;
-		if(!empty($block->blocks)){
-			$block->parsed_content = '';
-			$block->parsed_count = 0;
-			foreach($block->blocks as $block_id=>$object){
-				$object->reset();
-			}
-		}
-
-		return true;
-	} // reset
-
-	function enable($ID = '')
-	{
-		return $this->set_attribute('disabled', false, $ID);
-	} // enable
-
-	function disable($ID = '')
-	{
-		return $this->set_attribute('disabled', true, $ID);
-	} // disable
-
-	function set_attribute($attribute, $value, $ID = '')
-	{
-		$block = $this;
-		if($ID && !($block = $this->get_block($ID))){
-			$this->error('set_attribute: block ['.$ID.'] not found!');
-			return false;
-		}
-
-		if(isset($block->attributes[$attribute]))
-			return $block->attributes[$attribute] = $value;
-
-		return false;
-	} // set_attribute
-
-	function copy_block($ID_to, $ID_from)
-	{
-		if(!($block_to = $this->get_block($ID_to))){
-			$this->error('copy_block: block ['.$ID_to.'] not found!');
-			return false;
-		}
-
-		if(!($block_from = $this->get_block($ID_from))){
-			$this->error('copy_block: block ['.$ID_from.'] not found!');
-			return false;
-		}
-
-		# tagat noskaidrosim, vai block_to nav zem block_from
-		if(($block_under_test = $block_from->get_block_under($ID_to))){
-			$this->error('copy_block: ['.$ID_from.'] is a child of ['.$ID_to.']');
-			return false;
-		}
-
-		# paarkopeejam paareejos parametrus
-		$block_to->vars = &$block_from->vars;
-		$block_to->blocks = $block_from->blocks;
-		$block_to->parsed_content = $block_from->parsed_content;
-		$block_to->content = $block_from->content;
-
-		unset($block_from->parent_block->blocks[$ID_from]);
-
-		# Uzstādam parentu
-		$block_from->parent_block = $block_to;
-
-		return true;
-	} // copy_block
-
-	function parse_block($ID, $append = false)
-	{
-		if($block = $this->get_block($ID)){
-			return $block->parse($append);
-		} else {
-			$this->error('parse_block: block ['.$ID.'] not found!');
-			return false;
-		}
-	} // parse_block
-
-	function set_block_string($ID, $content)
-	{
-		if($block = $this->get_block($ID)){
-			$this->error('set_block_string: block ['.$ID.'] not found!');
-			return false;
-		}
-
-		return $block->content = $content;
-	} // set_block_string
-
-	function block_exists($ID)
-	{
-		if($block = $this->get_block($ID))
-			return true;
-
-		return false;
-	} // block_exists
-
-	function dump_blocks($pre = '')
-	{
-		foreach($this->blocks as $block_id=>$object)
-		{
-			$a = ($object->blocks ? '+' : '-');
-			print "$pre$a$block_id($object->parsed_count)\n";
-			$object->dump_blocks("| $pre");
-		}
-	} // dump_blocks
-
-} // class::TemplateBlock
-
+		return null;
+	}
+}

@@ -1218,3 +1218,10 @@ function mysql_old_password($input, $hex = true) {
 
 	return hex_hash2bin($output);
 }
+
+
+function new_template(string $file_name): ?Template {
+	global $sys_template_root;
+
+	return new Template($sys_template_root.DIRECTORY_SEPARATOR.$file_name);
+}
