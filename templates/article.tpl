@@ -41,7 +41,7 @@
 	</div>
 	<!-- END BLOCK_art_date_formatted -->
 </div>
-<!-- END BLOCK_article  -->
+<!-- END BLOCK_article -->
 
 <!-- BEGIN BLOCK_noarticle disabled -->
 <div class="TD-cat">
@@ -50,7 +50,7 @@
 <div class="Info">
 	Resurss nav atrasts
 </div>
-<!-- END BLOCK_noarticle  -->
+<!-- END BLOCK_noarticle -->
 
 <!-- BEGIN BLOCK_article_comments_head disabled -->
 <div class="TD-cat">
@@ -67,7 +67,7 @@
 		<img src="/img/left.png" alt="Vecāki ieraksti" style="vertical-align: middle;" width="16" height="16">
 		<a class="caption" href="{page}">vecāki ieraksti</a>
 	</div>
-	<!-- END BLOCK_article_page_prev  -->
+	<!-- END BLOCK_article_page_prev -->
 
 	<!-- BEGIN BLOCK_article_page_next disabled -->
 	<div style="float: right;">
