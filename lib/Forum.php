@@ -1,12 +1,6 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
-require_once('lib/Res.php');
-require_once('lib/Table.php');
+use dqdp\Template;
 
 class Forum extends Res
 {
@@ -190,7 +184,11 @@ FROM
 	{
 		global $ip;
 
-		list($forum_id, $data, $validate, $forum_active) = func_get_args();
+		$args = func_get_args();
+		$forum_id = (int)$args[0]??null;
+		$data = $args[1]??null;
+		$validate = $args[2]??null;
+		$forum_active = $args[3]??null;
 
 		if($validate)
 			$this->validate($data);
