@@ -1308,3 +1308,59 @@ function user_image(string $l_hash, bool $thumb = false)
 		readfile("$sys_public_root/img/1x1.gif");
 	}
 }
+
+function whatsnew(MainModule $template): Template
+{
+	$T = $template->add_file('whatsnew.tpl');
+
+	if(!user_loged())
+	{
+		$template->not_logged();
+		return false;
+	}
+
+	# Forum
+	$data = (new Forum)->load([
+		"order"=>'res_comment_lastdate DESC',
+		"limit"=>50,
+		"forum_allowchilds"=>Forum::PROHIBIT_CHILDS,
+	]);
+
+	if($data)
+	{
+		$R = new_template('forum/recent.tpl');
+		foreach($data as $item)
+		{
+			$R->enable_if(Forum::hasNewComments($item), 'BLOCK_forum_r_comments_new');
+			$R->set_var('forum_r_name', addslashes($item['forum_name']));
+			$R->set_var('forum_r_comment_count', $item['res_comment_count']);
+			$R->set_var('forum_r_path', "forum/{$item['forum_id']}-".rawurlencode(urlize($item["forum_name"])));
+			$R->parse_block('BLOCK_forum_r_items', TMPL_APPEND);
+		}
+		$T->set_block_string('BLOCK_whatsnew_forum', $R->parse());
+	}
+
+	# Articles
+	$Article = new Article;
+	$data = $Article->load([
+		'order'=>'res_comment_lastdate DESC',
+		'limit'=>50,
+	]);
+
+	if($data)
+	{
+		$R = new_template('right/comment_recent.tpl');
+		foreach($data as $item)
+		{
+			$R->enable_if(Article::hasNewComments($item), 'BLOCK_comment_r_comments_new');
+
+			$R->set_var('comment_r_name', $item['art_name']);
+			$R->set_var('comment_r_comment_count', $item['res_comment_count']);
+			$R->set_var('comment_r_path', "{$item['module_id']}/{$item['art_id']}-".urlize($item['art_name']));
+			$R->parse_block('BLOCK_comment_r_items', TMPL_APPEND);
+		}
+		$T->set_block_string('BLOCK_whatsnew_comments', $R->parse());
+	}
+
+	return $T;
+}
