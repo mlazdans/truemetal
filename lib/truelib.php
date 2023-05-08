@@ -494,7 +494,6 @@ function set_profile(Template $T, $login, $is_private = false)
 	$login['l_forumsort_msg'] = isset($login['l_forumsort_msg']) ? $login['l_forumsort_msg'] : Forum::SORT_ASC;
 	$pic_localpath = $sys_user_root.'/pic/'.$login['l_id'].'.jpg';
 	$tpic_localpath = $sys_user_root.'/pic/thumb/'.$login['l_id'].'.jpg';
-	$tpic_path = "/user/thumb/$login[l_login]/";
 
 	$T->set_except(['l_password', 'l_sessiondata'], $login);
 
@@ -517,7 +516,7 @@ function set_profile(Template $T, $login, $is_private = false)
 
 	if(file_exists($pic_localpath) && file_exists($tpic_localpath))
 	{
-		$T->set_var('pic_path', $tpic_path);
+		$T->set_var('pic_path', "/user/thumb/$login[l_hash]/");
 		if($info = getimagesize($pic_localpath))
 		{
 			$T->set_var('pic_w', $info[0]);
@@ -1259,4 +1258,53 @@ function forum_root(MainModule $template): Template
 	}
 
 	return $T;
+}
+
+function user_image(string $l_hash, bool $thumb = false)
+{
+	global $sys_user_root, $sys_public_root;
+
+	if(!user_loged()){
+		header403();
+		return;
+	}
+
+	$suffix = "";
+
+	$login_data = Logins::load_by_login_hash($l_hash);
+	if(empty($login_data)){
+		header404();
+		return;
+	}
+
+	$parts = [$sys_user_root, "pic"];
+	if($thumb)$parts[] = "thumb";
+	$parts[] = "$login_data[l_id]$suffix.jpg";
+
+	$pic_localpath = join(DIRECTORY_SEPARATOR, $parts);
+
+	if($info = getimagesize($pic_localpath))
+	{
+		$last_modified_time = filemtime($pic_localpath);
+		$etag = md5_file($pic_localpath);
+		$image_data = file_get_contents($pic_localpath);
+
+		header("Content-type: $info[mime]");
+		header("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT");
+		header("Etag: $etag");
+		header("Expires: ".gmdate("D, d M Y H:i:s", time() + (7 * 24 * 3600)) . " GMT"); // 7d NOTE: keep in sync with web server
+
+		$not_mod = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && (strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time);
+		$non_match = isset($_SERVER['HTTP_IF_NONE_MATCH']) && (trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag);
+
+		if($not_mod || $non_match)
+		{
+			header("HTTP/1.1 304 Not Modified");
+			return;
+		}
+		print $image_data;
+	} else {
+		header("Content-type: image/gif");
+		readfile("$sys_public_root/img/1x1.gif");
+	}
 }

@@ -346,6 +346,11 @@ function image_resample(&$in_im, $w = 0, $h = 0, $percent = 0)
 	elseif($koef < 1) // un otraadi
 		$w_tmp = $h_tmp / $koef; // dala, jo koef tiek reekinaats attieciibaa pret augstumu
 
+	$w = (int)$w;
+	$h = (int)$h;
+	$w_tmp = (int)$w_tmp;
+	$h_tmp = (int)$h_tmp;
+
 	// gatavaa bilde
 	$out_im = imagecreatetruecolor($w, $h);
 
@@ -356,8 +361,8 @@ function image_resample(&$in_im, $w = 0, $h = 0, $percent = 0)
 	imagecopyresampled($tmp_im, $in_im, 0,0, 0,0, $w_tmp,$h_tmp, $im_w,$im_h);
 
 	// izgriezham peec defineetajiem izmeeriem iecentreetu
-	$startx = ($w_tmp - $w) / 2;
-	$starty = ($h_tmp - $h) / 2;
+	$startx = (int)(($w_tmp - $w) / 2);
+	$starty = (int)(($h_tmp - $h) / 2);
 	imagecopyresized($out_im, $tmp_im, 0,0, $startx,$starty, $w,$h, $w,$h);
 
 	return $out_im;
@@ -606,20 +611,10 @@ function user_loged()
 	return !empty($_SESSION['login']['l_id']);
 } // user_loged
 
-function save_file($id, $save_path)
+function save_upload($id, $save_path): bool
 {
-	$some_file = isset($_FILES[$id]) ? $_FILES[$id] : array();
-	if(!$some_file)
-		return false;
-
-	$ct = $some_file['type'];
-	if(move_uploaded_file($some_file['tmp_name'], $save_path))
-	{
-		return $ct;
-	}
-
-	return false;
-} // save_file
+	return empty($_FILES[$id]) ? false : move_uploaded_file($_FILES[$id]['tmp_name'], $save_path);
+}
 
 function mlog(&$data)
 {

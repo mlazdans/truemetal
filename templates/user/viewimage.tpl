@@ -1,12 +1,6 @@
-<!-- BEGIN BLOCK_not_loged disabled -->
-<div class="Info">
-	TrueMetal!
-</div>
-<!-- END BLOCK_not_loged -->
-
 <!-- BEGIN BLOCK_userpic disabled -->
-<div>
-	<img src="{pic_path}" alt="" onclick="window.close()">
+<div class="TD-cat">Bilde: {l_nick}</div>
+<div class="Info" style="text-align: center;">
+	<img src="{pic_path}" alt="">
 </div>
 <!-- END BLOCK_userpic -->
-

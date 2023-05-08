@@ -285,7 +285,7 @@ class Logins
 		// check vai noraadiits id, vai ir ielogojies
 		if(empty($l_id))
 		{
-			$l_id = user_loged() ? $_SESSION['login']['l_id'] : 0;
+			$l_id = user_loged() ? (int)$_SESSION['login']['l_id'] : 0;
 		}
 
 		if(empty($l_id))
@@ -339,7 +339,7 @@ class Logins
 			$save_path = $sys_user_root.'/pic/'.$l_id.'.jpg';
 			$tsave_path = $sys_user_root.'/pic/thumb/'.$l_id.'.jpg';
 			# ja bilde
-			if($ct = save_file('l_picfile', $save_path))
+			if($ct = save_upload('l_picfile', $save_path))
 			{
 				if(!($type = image_load($in_img, $save_path)))
 				{

@@ -63,7 +63,10 @@
 <!-- BEGIN BLOCK_picture disabled -->
 <tr>
 	<td style="text-align: center;">
-		<a href="/user/viewimage/{l_hash}/" onclick="Truemetal.viewProfileImage('{l_hash}', {pic_w}, {pic_h}, '{l_login}'); return false;"><img src="{pic_path}" alt=""></a>
+		<a
+			href="/user/viewimage/{l_hash}/"
+			onclick="Truemetal.viewProfileImage('{l_hash}', {pic_w}, {pic_h}, '{l_login}'); return false;"
+		><img src="{pic_path}" alt=""></a>
 	</td>
 	<td><input type="file" name="l_picfile"></td>
 </tr>

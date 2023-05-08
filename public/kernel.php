@@ -17,9 +17,9 @@ $sys_start_time        = microtime(true);
 $sys_root              = realpath(dirname(__FILE__).'/../');
 $sys_public_root       = $sys_root.DIRECTORY_SEPARATOR.'public';
 $sys_template_root     = $sys_root.DIRECTORY_SEPARATOR.'templates';
+$sys_user_root         = $sys_root.DIRECTORY_SEPARATOR.'users';
 $sys_upload_root       = $sys_public_root.DIRECTORY_SEPARATOR.'data';
 $sys_upload_http_root  = '/data';
-$sys_user_root         = $sys_root.'/users';
 
 $sys_error_reporting   = E_ALL;
 $sys_default_lang      = 'lv';

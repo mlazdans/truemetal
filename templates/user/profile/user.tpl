@@ -13,12 +13,9 @@
 <!-- BEGIN BLOCK_picture disabled -->
 <div style="margin: 0 2px; float: left;">
 	<a
-		href="{module_root}/view/{l_hash}/"
+		href="/user/viewimage/{l_hash}/"
 		onclick="Truemetal.viewProfileImage('{l_hash}', {pic_w}, {pic_h}, '{l_nick}'); return false;"
-	><img
-		src="{pic_path}"
-		alt=""
-	/></a>
+	><img src="{pic_path}" alt=""></a>
 </div>
 <!-- END BLOCK_picture -->
 
