@@ -560,52 +560,52 @@ function search_to_spider($q, $fields)
 	}
 } // search_to_spider
 
-function email($to, $subj, $msg, $attachments = array())
-{
-	global $sys_mail_from, $sys_mail_params;
+// function email($to, $subj, $msg, $attachments = array())
+// {
+// 	global $sys_mail_from, $sys_mail_params;
 
-	$headers = array(
-		'To'=>$to,
-		'From'=>$sys_mail_from,
-		'Subject'=>$subj,
-		// 'Return-Path'=>'returns-truemetal@mail.dqdp.net',
-	);
+// 	$headers = array(
+// 		'To'=>$to,
+// 		'From'=>$sys_mail_from,
+// 		'Subject'=>$subj,
+// 		// 'Return-Path'=>'returns-truemetal@mail.dqdp.net',
+// 	);
 
-	$mime = new Mail_Mime("\n");
-	$mime->setTxtBody($msg);
-	foreach($attachments as $file)
-	{
-		$filename = $file['tmp_name'];
-		$filename_show = $file['name'];
-		$type = $file['type'];
-		$mime->addAttachment($filename, $type, $filename_show);
-	}
+// 	$mime = new Mail_Mime("\n");
+// 	$mime->setTxtBody($msg);
+// 	foreach($attachments as $file)
+// 	{
+// 		$filename = $file['tmp_name'];
+// 		$filename_show = $file['name'];
+// 		$type = $file['type'];
+// 		$mime->addAttachment($filename, $type, $filename_show);
+// 	}
 
-	$param['text_charset'] = 'utf-8';
-	$param['html_charset'] = 'utf-8';
-	$param['head_charset'] = 'utf-8';
+// 	$param['text_charset'] = 'utf-8';
+// 	$param['html_charset'] = 'utf-8';
+// 	$param['head_charset'] = 'utf-8';
 
-	$body = $mime->get($param);
-	$hdrs = $mime->headers($headers);
+// 	$body = $mime->get($param);
+// 	$hdrs = $mime->headers($headers);
 
-	if(empty($sys_mail_params))
-	{
-		$mail = Mail::factory('mail');
-	} else {
-		$mail = Mail::factory($sys_mail_params['driver'], $sys_mail_params);
-	}
-	$e = $mail->send($to, $hdrs, $body);
+// 	if(empty($sys_mail_params))
+// 	{
+// 		$mail = Mail::factory('mail');
+// 	} else {
+// 		$mail = Mail::factory($sys_mail_params['driver'], $sys_mail_params);
+// 	}
+// 	$e = $mail->send($to, $hdrs, $body);
 
-	if($e !== TRUE)
-	{
-		$GLOBALS['php_errormsg'] = $e;
-		$ret = false;
-	} else {
-		$ret = true;
-	}
+// 	if($e !== TRUE)
+// 	{
+// 		$GLOBALS['php_errormsg'] = $e;
+// 		$ret = false;
+// 	} else {
+// 		$ret = true;
+// 	}
 
-	return $ret;
-} // email
+// 	return $ret;
+// } // email
 
 function user_loged()
 {

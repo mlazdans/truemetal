@@ -1,23 +1,5 @@
 <div class="TD-cat">E-pasta maiņa</div>
 
-<!-- BEGIN BLOCK_not_loged disabled -->
-<div class="Info">TrueMetal!</div>
-<!-- END BLOCK_not_loged -->
-
-<!-- BEGIN BLOCK_maint disabled -->
-<div class="Info">Pag bik :)</div>
-<!-- END BLOCK_maint -->
-
-
-<!-- BEGIN BLOCK_emailch_error disabled -->
-<div class="List-item Info error-form">{error_msg}</div>
-<!-- END BLOCK_emailch_error -->
-
-<!-- BEGIN BLOCK_emailch_msg disabled -->
-<div class="List-item Info">{msg}</div>
-<!-- END BLOCK_emailch_msg -->
-
-<!-- BEGIN BLOCK_emailch_form disabled -->
 <form method="post">
 <table class="Main">
 <tr>
@@ -41,4 +23,3 @@
 </tr>
 </table>
 </form>
-<!-- END BLOCK_emailch_form -->

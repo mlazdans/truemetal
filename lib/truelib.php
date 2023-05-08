@@ -613,7 +613,7 @@ function private_profile(MainModule $template): ?Template
 			header("Location: $module_root/");
 			return null;
 		} else {
-			$template->error(join("<br>", $login->error_msg));
+			$template->error($login->error_msg);
 		}
 		$login_data = array_merge($_SESSION['login'], $login_data);
 	} else {
@@ -739,6 +739,284 @@ function private_profile(MainModule $template): ?Template
 	}
 
 	$T->set_var('bad_pass_msg', $msg);
+
+	return $T;
+}
+
+function email(string $to, string $subj, string $msg, array $attachments = array())
+{
+	global $sys_mail_from, $sys_public_root, $sys_mail_params;
+
+	$params = new StdClass;
+	$params->MAIL_PARAMS = $sys_mail_params;
+	$params->use_queue = 0;
+	// $params->delete_after_send = false;
+	// $params->id_user = $r->ClientId;
+	$params->to = $to;
+	$params->from = $sys_mail_from;
+
+	$params->isHTML = false;
+	$params->basedir = $sys_public_root;
+	$params->message = $msg;
+	// $params->messageTxt = strip_tags($params->message);
+	$params->subject = $subj;
+	$params->attachments = $attachments;
+
+	return emailex($params);
+}
+
+function change_email(MainModule $template): ?Template
+{
+	if(!user_loged())
+	{
+		$template->not_logged();
+		return null;
+	}
+
+	$old_email = trim($_SESSION['login']['l_email']);
+
+	$T = $template->add_file('user/emailch.tpl');
+	$T->set_var('old_email', specialchars($old_email));
+
+	if(!isset($_POST['data']))
+	{
+		return $T;
+	}
+
+	$data = $_POST['data'];
+
+	$new_email = trim($data['new_email'] ?? "");
+
+	$error_msg = [];
+	if(empty($new_email)){
+		$error_msg[] = "Nav norādīts jaunais e-pasts";
+	} else {
+		if(strtolower($new_email) == strtolower($old_email)){
+			$error_msg[] = "Jaunais e-pasts nav jauns";
+		} else {
+			if(!is_valid_email($new_email)) {
+				$error_msg[] = 'Nekorekta e-pasta adrese!';
+			} else {
+				if(Logins::email_exists($new_email)){
+					$error_msg[] = 'Šāda e-pasta adrese jau eksistē';
+				}
+			}
+		}
+	}
+
+	$do_code = function(string $login, string $new_email, array &$error_msg): bool {
+		global $sys_domain;
+
+		$accept_code = Logins::insert_accept_code($login, $new_email);
+
+		if(!$accept_code){
+			$error_msg[] = "Datubāzes kļūda";
+			return false;
+		}
+
+		$t = new_template('emails/email_changed.tpl');
+		$t->set_var('ip', $_SERVER['REMOTE_ADDR']);
+		$t->set_var('sys_domain', $sys_domain);
+		$t->set_var('code', $accept_code);
+		$msg = $t->parse();
+
+		$subj = "$sys_domain - e-pasta apstiprināšana";
+
+		try {
+			if(Logins::send_accept_code($login, $new_email, $subj, $msg))
+			{
+				return true;
+			} else {
+				$error_msg[] = "Nevar nosūtīt kodu uz $new_email";
+			}
+		} catch (Exception $e) {
+			$error_msg[] = "Nevar nosūtīt kodu uz $new_email<br>".$e->getMessage();
+		}
+
+		return false;
+	};
+
+	$result = !$error_msg && $do_code($_SESSION['login']['l_login'], $new_email, $error_msg);
+
+	if($result)
+	{
+		$template->msg("Uz $new_email tika nosūtīts apstiprināšanas kods.");
+		return null;
+	} else {
+		$T->set_var('error_new_email', ' class="error-form"');
+		$T->set_var('new_email', specialchars($new_email));
+
+		$template->error($error_msg);
+		return $T;
+	}
+}
+
+function change_pw(MainModule $template): ?Template
+{
+	if(!user_loged())
+	{
+		$template->not_logged();
+		return null;
+	}
+
+	$T = $template->add_file('user/pwch.tpl');
+
+	if(!isset($_POST['data']))
+	{
+		return $T;
+	}
+
+	$data = $_POST['data'];
+	$T->set_array($data);
+
+	$error_fields = $error_msgs = [];
+
+	if(empty($data['old_password'])){
+		$error_msgs[] = 'Nav ievadīta vecā parole';
+		$error_fields[] = 'old_password';
+	} else {
+		if(Logins::auth($_SESSION['login']['l_login'], $_POST['data']['old_password'])){
+			if(!pw_validate($data['l_password'], $data['l_password2'], $error_msgs)){
+				$error_fields[] = 'l_password';
+			}
+		} else {
+			$error_msgs[] = 'Vecā parole nav pareiza';
+			$error_fields[] = 'old_password';
+		}
+	}
+
+	if(!$error_msgs){
+		if((new Logins)->update_password($_SESSION['login']['l_login'], $data['l_password'])){
+			$template->msg("Parole nomainīta.");
+			return null;
+		} else {
+			$error_msgs[] = "Datubāzes kļūda";
+		}
+	}
+
+	if($error_msgs){
+		foreach($error_fields as $k){
+			$T->set_var('error_'.$k, ' class="error-form"');
+		}
+
+		$template->error($error_msgs);
+	}
+
+	return $T;
+}
+
+function forgot(MainModule $template): ?Template {
+	$T = $template->add_file('forgot.tpl');
+	$T->enable('BLOCK_forgot_form');
+
+	if(!isset($_POST['data']))
+	{
+		return $T;
+	}
+
+	$data = $_POST['data'];
+	$T->set_array($data);
+
+	if(empty($data['l_email']) && empty($data['l_login']))
+	{
+		$error_msg[] = 'Jānorāda logins vai e-pasts';
+	} else {
+		if($data['l_login'])
+		{
+			$login_data = Logins::load_by_login($data['l_login']);
+		} elseif($data['l_email']) {
+			$login_data = Logins::load_by_email($data['l_email']);
+		}
+
+		if(empty($login_data))
+		{
+			$error_msg[] = 'Lietotājs netika atrasts vai ir bloķēts';
+		}
+	}
+
+	if(empty($error_msg))
+	{
+		$l_login = $login_data['l_login'];
+		if($forgot_code = Logins::insert_forgot_code($l_login)){
+			try {
+				if(Logins::send_forgot_code($l_login, $forgot_code, $login_data['l_email']))
+				{
+					$T->set_var('l_email', $login_data['l_email']);
+					$T->enable('BLOCK_forgot_ok');
+					$T->disable('BLOCK_forgot_form');
+				} else {
+					$error_msg[] = "Nevar nosūtīt kodu uz $login_data[l_email]";
+				}
+			} catch (Exception $e) {
+				$error_msg[] = "Nevar nosūtīt kodu uz $login_data[l_email]<br>".$e->getMessage();
+			}
+		} else {
+			$error_msg[] = "Datubāzes kļūda";
+		}
+	}
+
+	if(!empty($error_msg))
+	{
+		$template->error($error_msg);
+	}
+
+	return $T;
+}
+
+function forgot_accept(MainModule $template, string $code): ?Template
+{
+	$T = $template->add_file('forgot.tpl');
+
+	if($code == 'ok')
+	{
+		$template->msg("Parole nomainīta! Tagad tu vari mēģināt ielogoties!");
+		return null;
+	}
+
+	$forgot_data = Logins::get_forgot($code);
+
+	if(!$forgot_data)
+	{
+		$T->enable('BLOCK_forgot_code_error');
+		return $T;
+	}
+
+	$login_data = Logins::load_by_login($forgot_data['f_login']);
+
+	if(empty($login_data))
+	{
+		$template->error('Lietotājs netika atrasts vai ir bloķēts');
+		return $T;
+	}
+
+	$T->enable('BLOCK_forgot_pwch_form');
+	$T->set_except(['l_password', 'l_sessiondata'], $login_data);
+
+	if(!isset($_POST['data']))
+	{
+		return $T;
+	}
+
+	$data = $_POST['data'];
+
+	$error_msg = [];
+	pw_validate($data['l_password']??"", $data['l_password2']??"", $error_msg);
+
+	if(
+		!$error_msg &&
+		Logins::accept((int)$login_data['l_id']) &&
+		Logins::remove_forgot_code($code) &&
+		Logins::update_password($login_data['l_login'], $data['l_password'])
+	) {
+		header("Location: /forgot/accept/ok/");
+		return null;
+	}
+
+	if($error_msg){
+		$template->error($error_msg);
+	}
+
+	$T->set_array($data);
 
 	return $T;
 }

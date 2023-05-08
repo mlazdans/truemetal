@@ -7,6 +7,7 @@
 
 spl_autoload_extensions(".php");
 spl_autoload_register();
+require '../vendor/autoload.php';
 
 # TODO: mainot galerijām/foruma/commention utt login_id, trigerī nomainās arī res tabulā
 # TODO: mainot paroli chrome piedāvā ieseivot arī pie fail
@@ -104,7 +105,7 @@ if(!in_array($sys_module_id, $sys_nosess_modules)){
 register_shutdown_function("tm_shutdown");
 if(user_loged())
 {
-	if($l = Logins::load_by_id($_SESSION['login']['l_id'])) {
+	if($l = Logins::load_by_id((int)$_SESSION['login']['l_id'])) {
 		session_decode($l['l_sessiondata']);
 
 		if(is_array($_SESSION['login']??[]))
@@ -165,17 +166,6 @@ $_GET = _GET();
 
 header('Content-Type: text/html; charset='.$sys_encoding);
 header('X-Powered-By: TRUEMETAL');
-
-# TODO: novākt pēc kāda laika
-$clear_session = array(
-	'comments',
-	'gallery',
-	);
-foreach($clear_session as $section){
-	if(isset($_SESSION[$section])){
-		unset($_SESSION[$section]);
-	}
-}
 
 if(file_exists("$sys_root/module/$sys_module.php")) {
 	include("$sys_root/module/$sys_module.php");

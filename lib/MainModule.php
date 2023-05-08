@@ -464,9 +464,25 @@ class MainModule
 		return $this;
 	}
 
-	function error(string $msg = "TrueMetal")
+	function error(string|array $msg = "TrueMetal")
 	{
-		$this->Index->enable('BLOCK_error')->set_var('error_msg', $msg);
+		if(is_array($msg)){
+			$this->Index->enable('BLOCK_error')->set_var('error_msg', join("<br>", $msg));
+		} else {
+			$this->Index->enable('BLOCK_error')->set_var('error_msg', $msg);
+		}
+
+		return $this;
+	}
+
+	function msg(string|array $msg = "TrueMetal")
+	{
+		if(is_array($msg)){
+			$this->Index->enable('BLOCK_msg')->set_var('msg', join("<br>", $msg));
+		} else {
+			$this->Index->enable('BLOCK_msg')->set_var('msg', $msg);
+		}
+
 		return $this;
 	}
 }

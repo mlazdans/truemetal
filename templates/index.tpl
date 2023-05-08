@@ -28,7 +28,11 @@
 		<div class="col1 {block_middle_class}">
 			<div class="clear"></div>
 			<!-- BEGIN BLOCK_container -->
-				<!-- BEGIN BLOCK_error disabled --><div class="Info">{error_msg}</div><!-- END BLOCK_error -->
+				<!-- BEGIN BLOCK_error disabled -->
+					<div class="TD-cat">Kļūda:</div>
+					<div class="Info error-form">{error_msg}</div>
+				<!-- END BLOCK_error -->
+				<!-- BEGIN BLOCK_msg disabled --><div class="Info">{msg}</div><!-- END BLOCK_msg -->
 				<!-- BEGIN BLOCK_not_loged disabled --><div class="Info">{msg}</div><!-- END BLOCK_not_loged -->
 				<!-- BEGIN BLOCK_not_found disabled --><div class="Info">{msg}</div><!-- END BLOCK_not_found -->
 				<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->

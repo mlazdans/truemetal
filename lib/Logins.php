@@ -1,9 +1,4 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
 class Logins
 {
@@ -13,9 +8,6 @@ class Logins
 	const NOT_ACCEPTED = 'N';
 	const EMAIL_VISIBLE = 'Y';
 	const EMAIL_INVISIBLE = 'N';
-
-	function __construct() {
-	} // Logins
 
 	function load(Array $params = array())
 	{
@@ -145,50 +137,56 @@ class Logins
 		}
 	}
 
-	static function load_by_id($l_id)
+	static function load_by_id(int $l_id, bool $all = false)
 	{
-		return (new Logins())->load(['l_id'=>$l_id]);
-	}
+		$params = [ 'l_id'=>$l_id ];
 
-	static function load_by_login($l_login, $ADMIN = false)
-	{
-		$Logins = new Logins();
-		if($ADMIN)
+		if($all)
 		{
-			return $Logins->load(array(
-				'l_login'=>$l_login,
-				'l_active'=>Res::STATE_ALL,
-				'l_accepted'=>Res::STATE_ALL,
-				));
-		} else {
-			return $Logins->load(array(
-				'l_login'=>$l_login,
-				));
+			$params['l_active'] = Res::STATE_ALL;
+			$params['l_accepted'] = Res::STATE_ALL;
 		}
+
+		return (new Logins)->load($params);
 	}
 
-	static function load_by_login_hash(string $l_hash){
+	static function load_by_login(string $login, bool $all = false)
+	{
+		$params = [ 'l_login'=>$login ];
+
+		if($all)
+		{
+			$params['l_active'] = Res::STATE_ALL;
+			$params['l_accepted'] = Res::STATE_ALL;
+		}
+
+		return (new Logins)->load($params);
+	}
+
+	static function load_by_login_hash(string $l_hash)
+	{
 		return (new Logins)->load(['l_hash'=>$l_hash]);
 	}
 
 	# TODO: vajadzētu MySQL collation, kas respektē garumzīmes?
 	static function email_exists(string $email): bool {
-		$data = (new Logins)->load([
-			'l_email'=>$email,
-			'l_active'=>Res::STATE_ALL,
-			'l_accepted'=>Res::STATE_ALL
-		]);
+		$data = static::load_by_email($email, true);
 
 		return $data && (count($data) > 0);
 	}
 
-	static function load_by_email($l_email)
+	static function load_by_email(string $email, bool $all = false)
 	{
-		$Logins = new Logins();
-		return $Logins->load(array(
-			'l_email'=>$l_email,
-			));
-	} // load_by_email
+		$params = [ 'l_email'=>$email ];
+
+		if($all)
+		{
+			$params['l_active'] = Res::STATE_ALL;
+			$params['l_accepted'] = Res::STATE_ALL;
+		}
+
+		return (new Logins)->load($params);
+	}
 
 	static function banned24h($ip)
 	{
@@ -253,7 +251,7 @@ class Logins
 		return true;
 	} // delete_image
 
-	function update_profile($data, $l_id = 0)
+	function update_profile($data, int $l_id = 0)
 	{
 		global $db, $sys_user_root, $user_pic_w, $user_pic_h, $user_pic_tw, $user_pic_th;
 
@@ -419,38 +417,35 @@ class Logins
 
 	static function send_forgot_code($login, $code, $email)
 	{
-		global $sys_domain, $sys_template_root, $db;
+		global $sys_domain, $db;
 
-		$t = new Template($sys_template_root);
-		$t->set_file('msg', 'emails/forgot.tpl');
+		$t = new_template('emails/forgot.tpl');
 		$t->set_var('ip', $_SERVER['REMOTE_ADDR']);
 		$t->set_var('login', $login);
 		$t->set_var('sys_domain', $sys_domain);
 		$t->set_var('code', $code);
-		$msg = $t->parse_block('msg');
+		$msg = $t->parse();
 
 		$subj = "$sys_domain - aizmirsi paroli?";
 
 		if(email($email, $subj, $msg))
 		{
-			$sql = "UPDATE login_forgot SET f_sent = 'Y' WHERE f_login = '$login'";
-			return $db->Execute($sql);
-		} else {
-			return false;
+			return $db->Execute("UPDATE login_forgot SET f_sent = 'Y' WHERE f_login = '$login'");
 		}
-	} // send_forgot_code
 
-	static function send_accept_code($login, $email, $subj, $msg)
+		return false;
+	}
+
+	static function send_accept_code($login, $email, $subj, $msg): bool
 	{
 		global $db;
 
 		if(email($email, $subj, $msg))
 		{
-			$sql = "UPDATE login_accept SET la_sent = 'Y' WHERE la_login = '$login'";
-			return $db->Execute($sql);
-		} else {
-			return false;
+			return $db->Execute("UPDATE login_accept SET la_sent = 'Y' WHERE la_login = '$login'");
 		}
+
+		return false;
 	}
 
 	function accept_login($code)
@@ -483,7 +478,7 @@ class Logins
 		return 900; // 15 min
 	}
 
-	function get_forgot($code)
+	static function get_forgot($code)
 	{
 		global $db;
 
@@ -496,7 +491,7 @@ class Logins
 
 	function insert(&$data, $validate = Res::ACT_VALIDATE)
 	{
-		global $db, $sys_domain, $sys_template_root;
+		global $db, $sys_domain;
 
 		if($validate)
 			$this->validate($data);
@@ -504,8 +499,6 @@ class Logins
 		$data = $db->Quote($data);
 
 		$date = $db->now();
-
-		if($data['l_entered'])$date = "'$data[l_entered]'";
 
 		$sql = "INSERT INTO logins (
 			l_login, l_email,
@@ -517,29 +510,28 @@ class Logins
 			$date, '$_SERVER[REMOTE_ADDR]'
 		)";
 
-		if($db->Execute($sql))
+		if($accept_code = $this->insert_accept_code($data['l_login']))
 		{
-			if($accept_code = $this->insert_accept_code($data['l_login']))
-			{
-				$t = new Template($sys_template_root);
-				$t->set_file('msg', 'emails/registered.tpl');
-				$t->set_var('ip', $_SERVER['REMOTE_ADDR']);
-				$t->set_var('sys_domain', $sys_domain);
-				$t->set_var('code', $accept_code);
-				$msg = $t->parse_block('msg');
+			$t = new_template('emails/registered.tpl');
+			$t->set_var('ip', $_SERVER['REMOTE_ADDR']);
+			$t->set_var('sys_domain', $sys_domain);
+			$t->set_var('code', $accept_code);
+			$msg = $t->parse();
 
-				$subj = "$sys_domain - reģistrācija";
+			$subj = "$sys_domain - reģistrācija";
 
-				$this->send_accept_code($data['l_login'], $data['l_email'], $subj, $msg);
+			if($this->send_accept_code($data['l_login'], $data['l_email'], $subj, $msg)){
+				if($db->Execute($sql))
+				{
+					if($this->update_password($data['l_login'], $data['l_password'])){
+						return $data['l_login'];
+					}
+				}
 			}
-
-			$this->update_password($data['l_login'], $data['l_password']);
-
-			return $data['l_login'];
-		} else {
-			return false;
 		}
-	} // insert
+
+		return false;
+	}
 
 	function update($data, $validate = Res::ACT_VALIDATE)
 	{
@@ -581,14 +573,14 @@ class Logins
 		return $db->Execute($sql);
 	} // del
 
-	function accept($l_id)
+	static function accept(int $l_id)
 	{
 		global $db;
 
 		$sql = 'UPDATE logins SET l_accepted = "'.Logins::ACCEPTED.'" WHERE l_id = "'.$l_id.'"';
 
 		return $db->Execute($sql);
-	} // accept
+	}
 
 	function activate($l_id)
 	{
@@ -713,27 +705,27 @@ class Logins
 		return valid($user_login) && (strlen($user_login) > 0);
 	} // valid_login
 
-	function update_password($login, $password)
+	static function update_password(string $login, string $password)
 	{
 		global $db;
 
 		return $db->Execute(
 			sprintf(
 				"UPDATE logins SET l_password = '%s' WHERE l_login='%s'",
-				$this->gen_hash($password),
+				static::gen_hash($password),
 				$login
 			)
 		);
 	}
 
-	function remove_forgot_code($code)
+	static function remove_forgot_code(string $code)
 	{
 		global $db;
 
 		$sql = "DELETE FROM login_forgot WHERE f_code='$code'";
 
 		return $db->Execute($sql);
-	} // remove_forgot_code
+	}
 
 	static function collectUsersByIP($ips, $exclude_l_ids = array(), $exclude_ips = array(), $d = 0)
 	{

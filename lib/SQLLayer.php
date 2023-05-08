@@ -46,8 +46,8 @@ class SQLLayer
 
 	function Now()
 	{
-		return 'NOW()';
-	} // Now
+		return 'CURRENT_TIMESTAMP';
+	}
 
 	function Query($str_sql)
 	{

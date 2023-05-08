@@ -63,7 +63,7 @@
 <!-- BEGIN BLOCK_picture disabled -->
 <tr>
 	<td style="text-align: center;">
-		<a href="/user/viewimage/{l_login}/" onclick="Truemetal.viewProfileImage('{l_login}', {pic_w}, {pic_h}, '{l_login}'); return false;"><img src="{pic_path}" alt=""></a>
+		<a href="/user/viewimage/{l_hash}/" onclick="Truemetal.viewProfileImage('{l_hash}', {pic_w}, {pic_h}, '{l_login}'); return false;"><img src="{pic_path}" alt=""></a>
 	</td>
 	<td><input type="file" name="l_picfile"></td>
 </tr>
@@ -71,8 +71,8 @@
 <tr>
 	<td><input type="submit" value=" Saglabāt "></td>
 	<td>
-		<a class="button" href="{module_root}/pwch/">Mainīt paroli</a>
-		<a class="button" href="{module_root}/emailch/">Mainīt e-pastu</a>
+		<a class="button" href="/user/pwch/">Mainīt paroli</a>
+		<a class="button" href="/user/emailch/">Mainīt e-pastu</a>
 		<!-- BEGIN BLOCK_picture_del disabled -->
 		<a class="button" href="/user/profile/?action=deleteimage" onclick="return confirm('Pārliecināts?');">Dzēst bildi</a>
 		<!-- END BLOCK_picture_del -->

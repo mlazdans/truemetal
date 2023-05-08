@@ -23,7 +23,7 @@ if($l_hash)
 		return;
 	}
 
-	$T?->enable('BLOCK_profile_title');
+	$T->enable('BLOCK_profile_title');
 } else {
 	$T = private_profile($template);
 }
