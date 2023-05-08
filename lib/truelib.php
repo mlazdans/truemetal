@@ -534,8 +534,7 @@ function set_profile(Template $T, $login, $is_private = false)
 		$T->enable('BLOCK_nopicture');
 	}
 
-	$locale = "lv";
-	$formatter = new IntlDateFormatter($locale, IntlDateFormatter::MEDIUM, IntlDateFormatter::NONE);
+	$formatter = new IntlDateFormatter("lv", IntlDateFormatter::MEDIUM, IntlDateFormatter::NONE);
 
 	$T->set_var('l_entered_f', $formatter->format(strtotime($login['l_entered'])));
 	$T->set_var('l_lastaccess_f', $formatter->format(strtotime($login['l_lastaccess'])));

@@ -1,4 +1,6 @@
-<!-- BEGIN BLOCK_archive_items -->
+<div class="TD-cat">Arhīvs</div>
+
+<!-- BEGIN BLOCK_archive_items disabled -->
 	<!-- BEGIN BLOCK_archive_sep disabled -->
 	<div class="List-sep"></div>
 	<!-- END BLOCK_archive_sep -->
@@ -13,8 +15,6 @@
 <!-- END BLOCK_archive_items -->
 
 <!-- BEGIN BLOCK_no_archive disabled -->
-<div class="Info">
-	Diemžēl šajā datumā nav ierakstu!
-</div>
+<div class="Info">Nav ierakstu</div>
 <!-- END BLOCK_no_archive -->
 
