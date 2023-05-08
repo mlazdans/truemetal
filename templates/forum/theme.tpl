@@ -19,6 +19,7 @@
 		<a href="/forum/{current_forum_id}-{current_forum_name_urlized}/page/{next_page_id}/"><img src="/img/right.png" alt="Pa labi"></a>
 	</div>
 	<!-- END BLOCK_page_next -->
+
 	<div class="Forum-Pager">
 	<!-- BEGIN BLOCK_page -->{page_seperator}
 		<!-- BEGIN BLOCK_page_switcher -->
@@ -106,11 +107,11 @@
 	<td style="width: 100%;">{forum_username}</td>
 </tr>
 <tr>
-	<td style="white-space: nowrap;" align="right"<!-- BEGIN BLOCK_forumname_error disabled --> class="error-form"<!-- END BLOCK_forumname_error -->>Jauna tēma:</td>
+	<td style="white-space: nowrap;" align="right"{error_forum_name}>Jauna tēma:</td>
 	<td><input style="width: 95%;" type="text" name="data[forum_name]" maxlength="64" size="64" value="{forum_name}"></td>
 </tr>
 <tr>
-	<td align="right" valign="top"<!-- BEGIN BLOCK_forumdata_error disabled --> class="error-form"<!-- END BLOCK_forumdata_error -->>Ziņa:</td>
+	<td align="right" valign="top"{error_forum_data}>Ziņa:</td>
 	<td><textarea style="width: 95%;" name="data[forum_data]" cols="50" rows="10">{forum_data}</textarea></td>
 </tr>
 <tr>

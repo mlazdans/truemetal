@@ -1,22 +1,14 @@
-<div class="TD-cat">
-	Reģistrācija
-</div>
-
-<!-- BEGIN BLOCK_register_error disabled -->
-<div class=" List-item error-form">{error_msg}</div>
-<!-- END BLOCK_register_error -->
+<div class="TD-cat">Reģistrācija</div>
 
 <!-- BEGIN BLOCK_accept_error disabled -->
-<div class="Info error-form">
-	<p>Diemžēl e-pastu neizdevās apstiprināt!</p>
-</div>
+<div class="List-item  error-form">Diemžēl e-pastu neizdevās apstiprināt!</div>
 <div class="List-item">
 	Varianti:<ol>
 		<li>nokavēts 15 min. apstiprināšanas termiņš</li>
-		<li>nepareizs kods</li>
+		<li>nepareizs vai izlietots kods</li>
 		<li>e-pasts jau ir apstiprināts</li>
 	</ol>
-	<p>Ja kas, raksti uz <a href="mailto:info@truemetal.lv">info@truemetal.lv</a></p>
+	<p>Ja kas, tad raksti uz <a href="mailto:info@truemetal.lv">info@truemetal.lv</a></p>
 </div>
 <!-- END BLOCK_accept_error -->
 
@@ -30,7 +22,7 @@
 </tr>
 <tr>
 	<td align="right"{error_l_password}>Parole:</td>
-	<td><input type="password" name="data[l_password]" value="{l_password}"></td>
+	<td><input type="password" name="data[l_password]" value="{l_password}" autocomplete="new-password"></td>
 	<td></td>
 </tr>
 <tr>
@@ -40,12 +32,12 @@
 </tr>
 <tr>
 	<td align="right"{error_l_nick}>Segvārds:</td>
-	<td><input type="text" name="data[l_nick]" value="{l_nick}"></td>
+	<td><input type="text" name="data[l_nick]" value="{l_nick}" autocomplete="nickname"></td>
 	<td>vismaz viens simbols</td>
 </tr>
 <tr>
 	<td align="right"{error_l_email}>E-pasts:</td>
-	<td><input type="text" name="data[l_email]" value="{l_email}"></td>
+	<td><input type="text" name="data[l_email]" value="{l_email}" autocomplete="email"></td>
 	<td>jānorāda pareiza e-pasta adrese, uz kuru tiks nosūtīts pārbaudes kods</td>
 </tr>
 <tr>

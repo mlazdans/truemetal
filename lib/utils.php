@@ -1,12 +1,6 @@
 <?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
 
-require_once('Mail.php');
-require_once('Mail/mime.php');
+use dqdp\Template;
 
 define('M', array(
 	'janvārī', 'februārī', 'martā', 'aprīlī', 'maijā', 'jūnijā', 'jūlijā', 'augustā', 'septembrī',
@@ -15,10 +9,10 @@ define('M', array(
 
 define('D', array('svētdiena', 'pirmdiena', 'otrdiena', 'trešdiena', 'ceturtdiena', 'piektdiena', 'sestdiena'));
 
-function invalid($value)
+function invalid(string $value): bool
 {
-	return preg_match("/[^a-z^A-Z^0-9_]/", $value) or !$value;
-} // invalid
+	return !$value || preg_match("/[^a-z^A-Z^0-9_]/", $value);
+}
 
 function valid($value)
 {
@@ -612,41 +606,6 @@ function user_loged()
 	return !empty($_SESSION['login']['l_id']);
 } // user_loged
 
-function parse_form_data_array(&$data)
-{
-	foreach($data as $k=>$v)
-	{
-		if(is_array($v))
-		{
-			parse_form_data_array($v);
-			$data[$k] = $v;
-		} else
-			$data[$k] = parse_form_data($v);
-	}
-} // parse_form_data_array
-
-function parse_form_data($data)
-{
-	global $config;
-
-	//if(get_magic_quotes_gpc())
-	//	$data = stripslashes($data);
-
-	return htmlspecialchars($data, ENT_COMPAT, $GLOBALS['sys_encoding']);
-} // parse_form_data
-
-// function ent($data)
-// {
-// 	if(is_array($data))
-// 	{
-// 		foreach($data as $k=>$v)
-// 			$data[$k] = ent($v);
-// 		return $data;
-// 	} else {
-// 		return htmlentities($data, ENT_COMPAT, 'UTF-8');
-// 	}
-// } // ent
-
 function save_file($id, $save_path)
 {
 	$some_file = isset($_FILES[$id]) ? $_FILES[$id] : array();
@@ -668,23 +627,6 @@ function mlog(&$data)
 	print_r($data);
 	return ob_get_clean();
 } // mlog
-
-function dier($data = '')
-{
-	if($GLOBALS['i_am_admin']){
-		die($data);
-	}
-} // dier
-
-function printa($data)
-{
-	if($GLOBALS['i_am_admin'])
-	{
-		print "<pre>";
-		print $data;
-		print "</pre>";
-	}
-} // printa
 
 function _GET()
 {
@@ -749,11 +691,6 @@ function _GET()
 // {
 // 	return isset($_FILES[$key]) ? $_FILES[$key] : $default;
 // } // upload
-
-function fix_path($path)
-{
-	return str_replace('\\', '/', $path);
-} // fix_path
 
 // function redirect($url = '')
 // {
@@ -922,7 +859,6 @@ function user_blacklisted()
 			return false;
 	}
 
-	$last_access = 0;
 	# 1 week
 	if(user_loged() && (time() - strtotime($_SESSION['login']['l_lastaccess'])) < 604800)
 	{

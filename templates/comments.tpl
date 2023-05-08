@@ -1,6 +1,5 @@
 <a name="comments"></a>
 <!-- BEGIN BLOCK_comment disabled -->
-<!-- BEGIN BLOCK_comment_list -->
 <div class="Comment" id="comment{c_id}">
 	<div class="header">
 		<div class="nick">{c_username}</div>
@@ -35,7 +34,6 @@
 		{c_datacompiled}
 	</div>
 </div>
-<!-- END BLOCK_comment_list -->
 <!-- END BLOCK_comment -->
 
 <!-- BEGIN BLOCK_nocomment disabled -->

@@ -1,5 +1,7 @@
 <?php declare(strict_types = 1);
 
+use dqdp\Template;
+
 class MainModule
 {
 	var $module_name;

@@ -55,8 +55,8 @@ if(isset($_POST['data']))
 		return;
 	} else {
 		$T->enable('BLOCK_login_err');
-		$T->set_var('error_msg', 'Nepareizs login vai parole!', 'BLOCK_login_err');
-		$T->set_array($data, 'FILE_module');
+		$T->set_var('error_msg', 'Nepareizs login vai parole!');
+		$T->set_array($data);
 		$_SESSION['login'] = array();
 	}
 }
