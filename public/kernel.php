@@ -29,7 +29,7 @@ $sys_banned            = array();
 $sys_admins            = array('127.0.0.1');
 $sys_module_map        = array();
 $sys_use_cdn           = false;
-$sys_cdn_func          = '';
+$sys_include_paths     = [];
 
 $sys_nosess_modules    = array('css', 'jsload', 'apc', 'info');
 
@@ -57,13 +57,7 @@ ini_set('expose_php', false);
 error_reporting($sys_error_reporting);
 
 # Include paths
-$LIBS = [
-	".",
-	$sys_root,
-	$sys_root.DIRECTORY_SEPARATOR.'lib',
-];
-
-$include_path = array_unique(array_merge($LIBS, explode(PATH_SEPARATOR, ini_get('include_path'))));
+$include_path = array_unique(array_merge($sys_include_paths, explode(PATH_SEPARATOR, ini_get('include_path'))));
 ini_set('include_path', join(PATH_SEPARATOR, $include_path));
 
 if(!empty($KERNEL_LEAVE_AFTER_INIT)){
@@ -78,6 +72,7 @@ if(isset($sys_banned[$ip]))
 }
 
 require_once('include/dbconnect.php');
+require_once('stdlib.php');
 require_once('lib/truelib.php');
 require_once('lib/utils.php');
 

@@ -51,44 +51,44 @@ function get_day($i){
 	return D[$i];
 } // get_day
 
-function proc_date($date)
-{
-	$D = array(
-		'šodien',
-		'vakar',
-		'aizvakar'
-	);
+// function proc_date($date)
+// {
+// 	$D = array(
+// 		'šodien',
+// 		'vakar',
+// 		'aizvakar'
+// 	);
 
-	$date_now = date("Y:m:j:H:i");
-	list($y0, $m0, $d0, $h0, $min0) = explode(":", date("Y:m:j:H:i", strtotime($date)));
-	list($y1, $m1, $d1, $h1, $min1) = explode(":", $date_now);
-	// mktime ( [int hour [, int minute [, int second [, int month [, int day [, int year [, int is_dst]]]]]]])
-	$dlong0 = mktime($h0, $min0, 0, $m0, $d0, $y0);
-	$dlong1 = mktime($h1, $min1, 0, $m1, $d1, $y1);
-	$diff = date('z', $dlong1) - date('z', $dlong0);
-	$retdate = '';
+// 	$date_now = date("Y:m:j:H:i");
+// 	list($y0, $m0, $d0, $h0, $min0) = explode(":", date("Y:m:j:H:i", strtotime($date)));
+// 	list($y1, $m1, $d1, $h1, $min1) = explode(":", $date_now);
+// 	// mktime ( [int hour [, int minute [, int second [, int month [, int day [, int year [, int is_dst]]]]]]])
+// 	$dlong0 = mktime($h0, $min0, 0, $m0, $d0, $y0);
+// 	$dlong1 = mktime($h1, $min1, 0, $m1, $d1, $y1);
+// 	$diff = date('z', $dlong1) - date('z', $dlong0);
+// 	$retdate = '';
 
-	if( ($diff < 3) && ($y1 == $y0) )
-	//if( ($diff < 3) /*&& ($y1 == $y0)*/ )
-	{
-		$retdate .= $D[$diff];
-	} else {
-		if($y1 != $y0)
-			$retdate .= "$y0. gada ";
-		$retdate.= "$d0. ".get_month($m0 - 1);
-	}
+// 	if( ($diff < 3) && ($y1 == $y0) )
+// 	//if( ($diff < 3) /*&& ($y1 == $y0)*/ )
+// 	{
+// 		$retdate .= $D[$diff];
+// 	} else {
+// 		if($y1 != $y0)
+// 			$retdate .= "$y0. gada ";
+// 		$retdate.= "$d0. ".get_month($m0 - 1);
+// 	}
 
-	//if((integer)$h0 || (integer)$min0)
-		$retdate .= ", plkst. $h0:$min0";
+// 	//if((integer)$h0 || (integer)$min0)
+// 		$retdate .= ", plkst. $h0:$min0";
 
-	return $retdate;
-} // proc_date
+// 	return $retdate;
+// } // proc_date
 
-function url_pattern()
-{
-	$url_patt = $path_patt = '';
-	return "/(http(s?):\/\/|ftp:\/\/|telnet:\/\/|dchub:\/\/|ed2k:\/\/|mailto:|callto:)([^\/\s\t\n\r\!\'\<>\(\)]".$url_patt."*)([^\s\t\n\r\'\<>]".$path_patt."*)/is";
-} // url_pattern
+// function url_pattern()
+// {
+// 	$url_patt = $path_patt = '';
+// 	return "/(http(s?):\/\/|ftp:\/\/|telnet:\/\/|dchub:\/\/|ed2k:\/\/|mailto:|callto:)([^\/\s\t\n\r\!\'\<>\(\)]".$url_patt."*)([^\s\t\n\r\'\<>]".$path_patt."*)/is";
+// } // url_pattern
 
 function parse_text_data(&$data)
 {
@@ -222,69 +222,69 @@ function valid_date($date)
 	return checkdate($m, $d, $y);
 } // valid_date
 
-function substitute_change($str)
-{
-	$patt = array(
-		"'Ā'", "'Č'", "'Ē'", "'Ģ'", "'Ī'", "'Ķ'", "'Ļ'", "'Ņ'", "'Ō'", "'Ŗ'", "'Š'", "'Ū'", "'Ž'",
-		"'ā'", "'č'", "'ē'", "'ģ'", "'ī'", "'ķ'", "'ļ'", "'ņ'", "'ō'", "'ŗ'", "'š'", "'ū'", "'ž'",
-	);
-	$repl = array(
-		"A", "C", "E", "G", "I", "K", "L", "N", "O", "R", "S", "U", "Z",
-		"a", "c", "e", "g", "i", "k", "l", "n", "o", "r", "s", "u", "z",
-	);
+// function substitute_change($str)
+// {
+// 	$patt = array(
+// 		"'Ā'", "'Č'", "'Ē'", "'Ģ'", "'Ī'", "'Ķ'", "'Ļ'", "'Ņ'", "'Ō'", "'Ŗ'", "'Š'", "'Ū'", "'Ž'",
+// 		"'ā'", "'č'", "'ē'", "'ģ'", "'ī'", "'ķ'", "'ļ'", "'ņ'", "'ō'", "'ŗ'", "'š'", "'ū'", "'ž'",
+// 	);
+// 	$repl = array(
+// 		"A", "C", "E", "G", "I", "K", "L", "N", "O", "R", "S", "U", "Z",
+// 		"a", "c", "e", "g", "i", "k", "l", "n", "o", "r", "s", "u", "z",
+// 	);
 
-	return preg_replace($patt, $repl, $str);
-} // substitute_change
+// 	return preg_replace($patt, $repl, $str);
+// } // substitute_change
 
-function substitute($str)
-{
-	/*
-	$patt = array(
-		"/([ĀČĒĢĪĶĻŅŌŖŠŪŽ])/iue"
-	);
-	$repl = array(
-		"'[$1|'.substitute_change('$1').']'"
-	);
-	return preg_replace($patt, $repl, $str);
-	*/
-	$patt = array(
-		"/([ĀČĒĢĪĶĻŅŌŖŠŪŽ])/iu"
-	);
-	return preg_replace_callback(
-		$patt,
-		function($m){
-			//if(false && $i_am_admin)
-				return "[".$m[1]."|".substitute_change($m[1])."]";
-			//else
-			//	return "'[".$m[1]."|'".substitute_change($m[1])."']'";
-		},
-		$str);
-} // substitute
+// function substitute($str)
+// {
+// 	/*
+// 	$patt = array(
+// 		"/([ĀČĒĢĪĶĻŅŌŖŠŪŽ])/iue"
+// 	);
+// 	$repl = array(
+// 		"'[$1|'.substitute_change('$1').']'"
+// 	);
+// 	return preg_replace($patt, $repl, $str);
+// 	*/
+// 	$patt = array(
+// 		"/([ĀČĒĢĪĶĻŅŌŖŠŪŽ])/iu"
+// 	);
+// 	return preg_replace_callback(
+// 		$patt,
+// 		function($m){
+// 			//if(false && $i_am_admin)
+// 				return "[".$m[1]."|".substitute_change($m[1])."]";
+// 			//else
+// 			//	return "'[".$m[1]."|'".substitute_change($m[1])."']'";
+// 		},
+// 		$str);
+// } // substitute
 
-function valid_host($host)
-{
-	$testip = gethostbyname($host);
-	$test1 = ip2long($testip);
-	$test2 = long2ip($test1);
+// function valid_host($host)
+// {
+// 	$testip = gethostbyname($host);
+// 	$test1 = ip2long($testip);
+// 	$test2 = long2ip($test1);
 
-	return ($testip == $test2);
-} // valid_host
+// 	return ($testip == $test2);
+// } // valid_host
 
-function valid_email($email)
-{
-	if(!$email)
-		return false;
+// function valid_email($email)
+// {
+// 	if(!$email)
+// 		return false;
 
-	$parts = explode('@', $email);
+// 	$parts = explode('@', $email);
 
-	if(count($parts) != 2)
-		return false;
+// 	if(count($parts) != 2)
+// 		return false;
 
-	list($username, $domain) = $parts;
+// 	list($username, $domain) = $parts;
 
-	return ($username and $domain and (valid_host($domain) || checkdnsrr($domain)));
-	//return $username and $domain and valid_host($domain);
-} // valid_email
+// 	return ($username and $domain and (valid_host($domain) || checkdnsrr($domain)));
+// 	//return $username and $domain and valid_host($domain);
+// } // valid_email
 
 function get_modules($admin = false)
 {
@@ -451,106 +451,83 @@ function unstrip_script(&$data, &$keys, &$scripts)
 		$data = str_replace($keys[$r], $scripts[$r], $data);
 } // unstrip_script
 
-function parse_search_q($q)
-{
-	$q = preg_quote($q);
-	//$q = preg_replace('/[\h\v]/ims', ' ', $q);
-	//$q = preg_replace('/[\pPSZ]/uims', ' ', $q);
-	$q = preg_replace('/[\pP\pZ\pS\pC}]/uims', ' ', $q);
-	//$q = preg_replace('/(\n\r|\n)+/ims', ' ', $q);
-	$q = preg_replace('/(\s)+/uims', ' ', $q);
+// function parse_search_q($q)
+// {
+// 	$q = preg_quote($q);
+// 	//$q = preg_replace('/[\h\v]/ims', ' ', $q);
+// 	//$q = preg_replace('/[\pPSZ]/uims', ' ', $q);
+// 	$q = preg_replace('/[\pP\pZ\pS\pC}]/uims', ' ', $q);
+// 	//$q = preg_replace('/(\n\r|\n)+/ims', ' ', $q);
+// 	$q = preg_replace('/(\s)+/uims', ' ', $q);
 
-	return trim($q);
-} // parse_search_q
+// 	return trim($q);
+// } // parse_search_q
 
 function parse_mysql_search_q($q)
 {
 	return preg_replace('/[%\'_]/', '\$1', parse_search_q($q));
 } // parse_mysql_search_q
 
-/*
-function hl(&$data, $kw)
-{
-	strip_script($data, $keys, $scripts);
-	$colors = array('white', 'white', 'black', 'white');
-	$bg = array('red', 'blue', 'yellow', 'magenta');
-	$cc = count($colors);
-	$bc = count($bg);
+// function hl(&$data, $kw)
+// {
+// 	strip_script($data, $keys, $scripts);
+// 	$colors = array('white', 'white', 'black', 'white');
+// 	$bg = array('red', 'blue', 'yellow', 'magenta');
+// 	$cc = count($colors);
+// 	$bc = count($bg);
 
-	$words = explode(' ', $kw);
-	// duplikaati nafig
-	$words = array_unique($words);
+// 	$kw = trim(preg_replace("/[\*\(\)\-\+\/\:]/", " ", $kw));
 
-	foreach($words as $index=>$word) {
-		$color = $colors[$index % $cc];
-		$bgcolor = $bg[$index % $bc];
-		$data = ">$data<";
-		$patt = "/(>[^<]*)(".$word.")([^>]*)<?/imsU";
-		$data = preg_replace($patt, "$1<font style=\"background-color: $bgcolor\" color=\"$color\"><b>$2</b></font>$3", substr($data, 1, strlen($data)-2));
-	}
-	unstrip_script($data, $keys, $scripts);
-} // hl
-*/
-function hl(&$data, $kw)
-{
-	strip_script($data, $keys, $scripts);
-	$colors = array('white', 'white', 'black', 'white');
-	$bg = array('red', 'blue', 'yellow', 'magenta');
-	$cc = count($colors);
-	$bc = count($bg);
+// 	$words = explode(' ', $kw);
+// 	// duplikaati nafig
+// 	$words = array_unique($words);
 
-	$kw = trim(preg_replace("/[\*\(\)\-\+\/\:]/", " ", $kw));
+// 	//$tokens = array();
+// 	foreach($words as $index=>$word)
+// 	{
+// 		$word = preg_replace('/[<>\/]/', '', $word);
+// 		//$word = substitute(preg_quote($word));
+// 		$word = substitute(preg_quote($word));
 
-	$words = explode(' ', $kw);
-	// duplikaati nafig
-	$words = array_unique($words);
+// 		if(empty($word))
+// 			continue;
 
-	//$tokens = array();
-	foreach($words as $index=>$word)
-	{
-		$word = preg_replace('/[<>\/]/', '', $word);
-		//$word = substitute(preg_quote($word));
-		$word = substitute(preg_quote($word));
+// 		$color = $colors[$index % $cc];
+// 		$bgcolor = $bg[$index % $bc];
+// 		$data = ">$data<";
+// 		//$patt = "/(>[^<]*)(".substitute(preg_quote($word)).")([^>]*)<?/imsUu";
+// 		//$patt = "/(>[^<]*)(".substitute($word).")([^>]*)<?/imsUu";
+// 		$patt = "/(>[^<]*)(".$word.")([^>]*)<?/imsUu";
 
-		if(empty($word))
-			continue;
+// 		$data = preg_replace($patt, "$1<span style=\"background-color: $bgcolor; color: $color; font-weight: bold;\">$2</span>$3", $data);
+// 		$data = mb_substr($data, 1, mb_strlen($data)-2);
+// 	}
 
-		$color = $colors[$index % $cc];
-		$bgcolor = $bg[$index % $bc];
-		$data = ">$data<";
-		//$patt = "/(>[^<]*)(".substitute(preg_quote($word)).")([^>]*)<?/imsUu";
-		//$patt = "/(>[^<]*)(".substitute($word).")([^>]*)<?/imsUu";
-		$patt = "/(>[^<]*)(".$word.")([^>]*)<?/imsUu";
+// 	unstrip_script($data, $keys, $scripts);
+// } // hl
 
-		$data = preg_replace($patt, "$1<span style=\"background-color: $bgcolor; color: $color; font-weight: bold;\">$2</span>$3", $data);
-		$data = mb_substr($data, 1, mb_strlen($data)-2);
-	}
+// function search_to_sql($q, $fields)
+// {
+// 	$words = explode(' ', $q);
+// 	if(!is_array($fields))
+// 		$fields = array($fields);
 
-	unstrip_script($data, $keys, $scripts);
-} // hl
-
-function search_to_sql($q, $fields)
-{
-	$words = explode(' ', $q);
-	if(!is_array($fields))
-		$fields = array($fields);
-
-	$match = '';
-	foreach($words as $word)
-	{
-		$tmp = '';
-		foreach($fields as $field)
-			if($field)
-				$tmp .= "$field REGEXP '".addslashes(preg_quote($word))."' OR ";
-		$tmp = substr($tmp, 0, -4);
-		if($tmp)
-			$match .= "($tmp) AND ";
-	}
-	$match = substr($match, 0, -5);
-	if($match)
-		return "($match)";
-	//$match = ",(module_name REGEXP '$q' OR module_data REGEXP '$q') score";
-} // search_to_sql
+// 	$match = '';
+// 	foreach($words as $word)
+// 	{
+// 		$tmp = '';
+// 		foreach($fields as $field)
+// 			if($field)
+// 				$tmp .= "$field REGEXP '".addslashes(preg_quote($word))."' OR ";
+// 		$tmp = substr($tmp, 0, -4);
+// 		if($tmp)
+// 			$match .= "($tmp) AND ";
+// 	}
+// 	$match = substr($match, 0, -5);
+// 	if($match)
+// 		return "($match)";
+// 	//$match = ",(module_name REGEXP '$q' OR module_data REGEXP '$q') score";
+// } // search_to_sql
 
 function search_to_spider($q, $fields)
 {
@@ -658,17 +635,17 @@ function parse_form_data($data)
 	return htmlspecialchars($data, ENT_COMPAT, $GLOBALS['sys_encoding']);
 } // parse_form_data
 
-function ent($data)
-{
-	if(is_array($data))
-	{
-		foreach($data as $k=>$v)
-			$data[$k] = ent($v);
-		return $data;
-	} else {
-		return htmlentities($data, ENT_COMPAT, 'UTF-8');
-	}
-} // ent
+// function ent($data)
+// {
+// 	if(is_array($data))
+// 	{
+// 		foreach($data as $k=>$v)
+// 			$data[$k] = ent($v);
+// 		return $data;
+// 	} else {
+// 		return htmlentities($data, ENT_COMPAT, 'UTF-8');
+// 	}
+// } // ent
 
 function save_file($id, $save_path)
 {
@@ -685,79 +662,12 @@ function save_file($id, $save_path)
 	return false;
 } // save_file
 
-function to_int($val)
-{
-	return (int)$val;
-	/*
-	if(ereg('[^0-9]', trim($val)))
-	{
-		$val = 0;
-	} else {
-		settype($val, 'integer');
-	}
-
-	return $val;
-	*/
-} // to_int
-
-function to_float($val)
-{
-	return (float)$val;
-	/*
-	if(ereg('[^0-9\.]', trim($val)))
-	{
-		$val = 0;
-	} else {
-		$parts = explode('\.', $val);
-		if(count($parts) > 2)
-		{
-			$val = 0;
-		} else {
-			settype($val, 'float');
-		}
-	}
-
-	return $val;
-	*/
-} // to_float
-
-function to_range($val, $range, $default = '')
-{
-	$range_a = preg_split('//', $range);
-	if(!$val || !in_array($val, $range_a))
-	{
-		$val = $default;
-	}
-
-	return $val;
-} // to_range
-
 function mlog(&$data)
 {
 	ob_start();
 	print_r($data);
 	return ob_get_clean();
 } // mlog
-
-function printr($data)
-{
-	if($GLOBALS['i_am_admin'])
-	{
-		print "<pre>";
-		print_r($data);
-		print "</pre>";
-	}
-} // printr
-
-function dumpr($data)
-{
-	if($GLOBALS['i_am_admin'])
-	{
-		print "<pre>";
-		var_dump($data);
-		print "</pre>";
-	}
-} // dumpr
 
 function dier($data = '')
 {
@@ -805,57 +715,57 @@ function _GET()
 	return $ret;
 }
 
-function get($key, $default = '')
-{
-	return isset($_GET[$key]) ? $_GET[$key] : $default;
-} // get
+// function get($key, $default = '')
+// {
+// 	return isset($_GET[$key]) ? $_GET[$key] : $default;
+// } // get
 
-function post($key, $default = '')
-{
-	return isset($_POST[$key]) ? $_POST[$key] : $default;
-} // post
+// function post($key, $default = '')
+// {
+// 	return isset($_POST[$key]) ? $_POST[$key] : $default;
+// } // post
 
-function postget($key, $default = '')
-{
-	return isset($_POST[$key]) ? $_POST[$key] : get($key, $default);
-} // postget
+// function postget($key, $default = '')
+// {
+// 	return isset($_POST[$key]) ? $_POST[$key] : get($key, $default);
+// } // postget
 
-function sess($key, $default = '')
-{
-	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
-} // sess
+// function sess($key, $default = '')
+// {
+// 	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
+// } // sess
 
-function cookie($key, $default = '')
-{
-	return isset($_COOKIE[$key]) ? $_COOKIE[$key] : $default;
-} // cookie
+// function cookie($key, $default = '')
+// {
+// 	return isset($_COOKIE[$key]) ? $_COOKIE[$key] : $default;
+// } // cookie
 
-function server($key, $default = '')
-{
-	return isset($_SERVER[$key]) ? $_SERVER[$key] : $default;
-} // server
+// function server($key, $default = '')
+// {
+// 	return isset($_SERVER[$key]) ? $_SERVER[$key] : $default;
+// } // server
 
-function upload($key, $default = '')
-{
-	return isset($_FILES[$key]) ? $_FILES[$key] : $default;
-} // upload
+// function upload($key, $default = '')
+// {
+// 	return isset($_FILES[$key]) ? $_FILES[$key] : $default;
+// } // upload
 
 function fix_path($path)
 {
 	return str_replace('\\', '/', $path);
 } // fix_path
 
-function redirect($url = '')
-{
-	$url = $url ? $url : php_self();
+// function redirect($url = '')
+// {
+// 	$url = $url ? $url : php_self();
 
-	return header("Location: $url");
-} // redirect
+// 	return header("Location: $url");
+// } // redirect
 
-function php_self()
-{
-	return isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-} // php_self
+// function php_self()
+// {
+// 	return isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+// } // php_self
 
 function is_not_empty($v)
 {
@@ -888,120 +798,120 @@ function innerHTML(&$dom, &$node, $html = false)
 	}
 } // innerHTML
 
-function urlize($name)
-{
-	$name = preg_replace("/[%]/", " ", $name);
-	$name = html_entity_decode($name, ENT_QUOTES, "UTF-8");
-	$name = mb_strtolower($name);
-	$name = strip_tags($name);
-	$name = preg_replace("/[\|\:\/\?\#\[\]\@\"'\(\)\.,&;\+=\\\]/", " ", $name);
-	$name = trim($name);
-	$name = preg_replace("/\s+/", "-", $name);
-	$name = preg_replace("/-+/", "-", $name);
+// function urlize($name)
+// {
+// 	$name = preg_replace("/[%]/", " ", $name);
+// 	$name = html_entity_decode($name, ENT_QUOTES, "UTF-8");
+// 	$name = mb_strtolower($name);
+// 	$name = strip_tags($name);
+// 	$name = preg_replace("/[\|\:\/\?\#\[\]\@\"'\(\)\.,&;\+=\\\]/", " ", $name);
+// 	$name = trim($name);
+// 	$name = preg_replace("/\s+/", "-", $name);
+// 	$name = preg_replace("/-+/", "-", $name);
 
-	return $name;
-} // urlize
+// 	return $name;
+// } // urlize
 
-function queryl($format = '', $allowed = array())
-{
-	return __query($_SERVER['QUERY_STRING'], $format, '&', $allowed);
-} // queryl
+// function queryl($format = '', $allowed = array())
+// {
+// 	return __query($_SERVER['QUERY_STRING'], $format, '&', $allowed);
+// } // queryl
 
-function query($format = '', $allowed = array())
-{
-	return __query($_SERVER['QUERY_STRING'], $format, '&amp;', $allowed);
-} // query
+// function query($format = '', $allowed = array())
+// {
+// 	return __query($_SERVER['QUERY_STRING'], $format, '&amp;', $allowed);
+// } // query
 
-function __query($query_string = '', $format = '', $delim = '&amp;', $allowed = array())
-{
-	$QS = query_split($query_string);
-	$FORMAT = query_split($format);
+// function __query($query_string = '', $format = '', $delim = '&amp;', $allowed = array())
+// {
+// 	$QS = query_split($query_string);
+// 	$FORMAT = query_split($format);
 
-	# Unset disallowd
-	if($allowed)
-	{
-		foreach($QS as $k=>$v)
-			if(!in_array($k, $allowed))
-				unset($QS[$k]);
-	}
+// 	# Unset disallowd
+// 	if($allowed)
+// 	{
+// 		foreach($QS as $k=>$v)
+// 			if(!in_array($k, $allowed))
+// 				unset($QS[$k]);
+// 	}
 
-	foreach($FORMAT as $k=>$v)
-	{
-		if($k[0] == '-')
-		{
-			if( ($k2 = substr($k, 1)) && (!$v || ($QS[$k2] == $v)))
-				unset($QS[$k2]);
-		} else
-			$QS[$k] = $v;
-	}
+// 	foreach($FORMAT as $k=>$v)
+// 	{
+// 		if($k[0] == '-')
+// 		{
+// 			if( ($k2 = substr($k, 1)) && (!$v || ($QS[$k2] == $v)))
+// 				unset($QS[$k2]);
+// 		} else
+// 			$QS[$k] = $v;
+// 	}
 
-	return query_join($QS, $delim);
-} // __query
+// 	return query_join($QS, $delim);
+// } // __query
 
-function query_split($q)
-{
-	if(!$q)
-		return array();
+// function query_split($q)
+// {
+// 	if(!$q)
+// 		return array();
 
-	# XXX: dirty hack :)
-	$q = str_replace("&amp;", "|||", $q);
+// 	# XXX: dirty hack :)
+// 	$q = str_replace("&amp;", "|||", $q);
 
-	$ret = array();
-	$parts = explode('&', html_entity_decode($q));
+// 	$ret = array();
+// 	$parts = explode('&', html_entity_decode($q));
 
-	foreach($parts as $val)
-	{
-		$x = explode('=', $val);
-		//admin_print_r($x);
-		$x[0] = str_replace("|||", "&amp;", $x[0]);
-		$x[1] = str_replace("|||", "&amp;", $x[1]);
-		$ret[$x[0]] = $x[1];
-		if(!isset($x[1]))
-			trigger_error("\$x[1] not set $q");
-	}
+// 	foreach($parts as $val)
+// 	{
+// 		$x = explode('=', $val);
+// 		//admin_print_r($x);
+// 		$x[0] = str_replace("|||", "&amp;", $x[0]);
+// 		$x[1] = str_replace("|||", "&amp;", $x[1]);
+// 		$ret[$x[0]] = $x[1];
+// 		if(!isset($x[1]))
+// 			trigger_error("\$x[1] not set $q");
+// 	}
 
-	return $ret;
-} // query_split
+// 	return $ret;
+// } // query_split
 
-function query_join(Array $QS, $delim)
-{
-	$ret = array();
-	foreach($QS as $k=>$v)
-		$ret[] = "$k=$v";
+// function query_join(Array $QS, $delim)
+// {
+// 	$ret = array();
+// 	foreach($QS as $k=>$v)
+// 		$ret[] = "$k=$v";
 
-	return join($delim, $ret);
-} // query_join
+// 	return join($delim, $ret);
+// } // query_join
 
-function ip_rev($ip)
-{
-	return implode('.', array_reverse(explode('.', $ip)));
-} // ip_rev
+// function ip_rev($ip)
+// {
+// 	return implode('.', array_reverse(explode('.', $ip)));
+// } // ip_rev
 
-function ip_blacklisted($ip)
-{
-	$dnsbl = array(
-		'bl.blocklist.de',
-		'xbl.spamhaus.org',
-		'cbl.abuseat.org',
-		//'l2.apews.org',
-		'all.s5h.net',
-		);
+// function ip_blacklisted($ip)
+// {
+// 	$dnsbl = array(
+// 		'bl.blocklist.de',
+// 		'xbl.spamhaus.org',
+// 		'cbl.abuseat.org',
+// 		//'l2.apews.org',
+// 		'all.s5h.net',
+// 		);
 
-	$iprev = ip_rev($ip);
-	foreach($dnsbl as $bl)
-	{
-		# return 1 - not found; 0 - listed
-		//$c = "host -W 1 -t any $iprev.$bl";
-		$c = "host -W 1 $iprev.$bl";
-		$ret = exec($c, $o, $rv);
-		if(!$rv){
-			trigger_error("blacklisted $ip: $ret");
-			return true;
-		}
-	}
+// 	$iprev = ip_rev($ip);
+// 	foreach($dnsbl as $bl)
+// 	{
+// 		# return 1 - not found; 0 - listed
+// 		//$c = "host -W 1 -t any $iprev.$bl";
+// 		$c = "host -W 1 $iprev.$bl";
+// 		$ret = exec($c, $o, $rv);
+// 		if(!$rv){
+// 			trigger_error("blacklisted $ip: $ret");
+// 			return true;
+// 		}
+// 	}
 
-	return false;
-} // ip_blacklisted
+// 	return false;
+// } // ip_blacklisted
 
 function user_blacklisted()
 {
@@ -1094,67 +1004,9 @@ function cache_hash($id, $levels = 2)
 	return $path;
 } // cache_hash
 
-function get_inner_html($node)
-{
-	$innerHTML= '';
-	$children = $node->childNodes;
-	foreach ($children as $child) {
-		$innerHTML .= $child->ownerDocument->saveXML( $child );
-	}
-
-	return $innerHTML;
-} // get_inner_html
-
-/*
-function view_mainpage()
-{
-	$sql = "CREATE TEMPORARY TABLE IF NOT EXISTS view_mainpage2
-(SELECT
-	m.module_id,
-	a.art_id,
-	a.res_id,
-	COALESCE(res_comment_count, 0) AS res_comment_count,
-	res_comment_lastdate,
-	a.art_name,
-	a.art_intro,
-	a.art_data,
-	a.art_entered,
-	r.table_id
-FROM
-	`article` a
-JOIN `modules` m ON (a.art_modid = m.mod_id)
-JOIN `res` r ON r.`res_id` = a.`res_id`
-WHERE
-	art_active = 'Y'
-	)
-UNION
-(SELECT
-	(SELECT m.`module_id` FROM `modules` m WHERE m.`mod_id` = forum_modid) AS module_id,
-	forum_id AS art_id,
-	forum.res_id,
-	COALESCE(res_comment_count, 0) AS res_comment_count,
-	res_comment_lastdate,
-	forum_name,
-	forum_data as art_intro,
-	forum_data as art_data,
-	forum_entered,
-	r.table_id
-FROM
-	forum
-JOIN `res` r ON r.`res_id` = forum.`res_id`
-WHERE
-	forum_active = 'Y' AND
-	forum_modid > 0
-	)
-ORDER BY
-	art_entered DESC
-";
-} //
-*/
-
-function specialchars($data){
-	return htmlspecialchars($data);
-}
+// function specialchars($data){
+// 	return htmlspecialchars($data);
+// }
 
 function pw_validate(string $p1, string $p2, array &$error_msg): bool {
 	if($p1 != $p2){
@@ -1224,33 +1076,4 @@ function new_template(string $file_name): ?Template {
 	global $sys_template_root;
 
 	return new Template($sys_template_root.DIRECTORY_SEPARATOR.$file_name);
-}
-
-function get_server_protocol(){
-	return $_ENV['SERVER_PROTOCOL']??($_SERVER['SERVER_PROTOCOL']??'');
-}
-
-function __header(int $code, string $msg_header, string $msg_display = null): void {
-	$SERVER_PROTOCOL = get_server_protocol();
-
-	header("$SERVER_PROTOCOL $code $msg_header", true, $code);
-	if($msg_display){
-		print "<h1>$msg_display</h1>";
-	}
-}
-
-function header403($msg = "Forbidden"){
-	__header(403, $msg);
-}
-
-function header404($msg = "Not Found"){
-	__header(404, $msg);
-}
-
-function header410($msg = "Gone"){
-	__header(410, $msg);
-}
-
-function header503($msg = "Server error"){
-	__header(503, $msg);
 }
