@@ -31,16 +31,8 @@ $sys_admins            = array('127.0.0.1');
 $sys_module_map        = array();
 $sys_use_cdn           = false;
 $sys_include_paths     = [];
-
 $sys_nosess_modules    = array('css', 'jsload', 'apc', 'info');
-
-$sys_mail_from         = (isset($_SERVER['SERVER_ADMIN']) ?
-	$_SERVER['SERVER_ADMIN'] :
-	ini_get('sendmail_from')
-	);
-if(!$sys_mail_from)
-	$sys_mail_from = 'nobody@localhost';
-
+$sys_mail              = $_SERVER['SERVER_ADMIN']??ini_get('sendmail_from') or ($sys_mail = 'nobody@localhost');
 $ip                    = (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1');
 $now                   = date("d.m.Y, H:i", time());
 $today                 = date("d.m.Y");
