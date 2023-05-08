@@ -27,7 +27,12 @@
 	<div class="colleft">
 		<div class="col1 {block_middle_class}">
 			<div class="clear"></div>
-			<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->
+			<!-- BEGIN BLOCK_container -->
+				<!-- BEGIN BLOCK_error disabled --><div class="Info">{error_msg}</div><!-- END BLOCK_error -->
+				<!-- BEGIN BLOCK_not_loged disabled --><div class="Info">{msg}</div><!-- END BLOCK_not_loged -->
+				<!-- BEGIN BLOCK_not_found disabled --><div class="Info">{msg}</div><!-- END BLOCK_not_found -->
+				<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->
+			<!-- END BLOCK_container -->
 		</div>
 		<div class="col2">
 			<!-- BEGIN BLOCK_right disabled --><!-- END BLOCK_right -->

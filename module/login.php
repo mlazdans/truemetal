@@ -1,9 +1,4 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
 /*
 # Blacklisted
@@ -27,8 +22,8 @@ if($action == 'logoff')
 
 $template = new MainModule($sys_module_id);
 $template->set_title($_pointer['_data_']['module_name']??'');
-$template->set_file('FILE_module', 'login.tpl');
-$template->copy_block('BLOCK_middle', 'FILE_module');
+
+$T = $template->add_file('login.tpl');
 
 if(isset($_POST['data']))
 {
@@ -59,12 +54,12 @@ if(isset($_POST['data']))
 
 		return;
 	} else {
-		$template->enable('BLOCK_login_err');
-		$template->set_var('error_msg', 'Nepareizs login vai parole!', 'BLOCK_login_err');
-		$template->set_array($data, 'FILE_module');
+		$T->enable('BLOCK_login_err');
+		$T->set_var('error_msg', 'Nepareizs login vai parole!', 'BLOCK_login_err');
+		$T->set_array($data, 'FILE_module');
 		$_SESSION['login'] = array();
 	}
 }
 
 $template->set_right_defaults();
-$template->out();
+$template->out($T);

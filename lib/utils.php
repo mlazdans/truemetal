@@ -1225,3 +1225,32 @@ function new_template(string $file_name): ?Template {
 
 	return new Template($sys_template_root.DIRECTORY_SEPARATOR.$file_name);
 }
+
+function get_server_protocol(){
+	return $_ENV['SERVER_PROTOCOL']??($_SERVER['SERVER_PROTOCOL']??'');
+}
+
+function __header(int $code, string $msg_header, string $msg_display = null): void {
+	$SERVER_PROTOCOL = get_server_protocol();
+
+	header("$SERVER_PROTOCOL $code $msg_header", true, $code);
+	if($msg_display){
+		print "<h1>$msg_display</h1>";
+	}
+}
+
+function header403($msg = "Forbidden"){
+	__header(403, $msg);
+}
+
+function header404($msg = "Not Found"){
+	__header(404, $msg);
+}
+
+function header410($msg = "Gone"){
+	__header(410, $msg);
+}
+
+function header503($msg = "Server error"){
+	__header(503, $msg);
+}

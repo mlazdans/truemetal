@@ -70,8 +70,19 @@ class MainModule
 		$this->module_name = $module_name;
 	} // set_module_name
 
-	function out(Template $T)
+	function set_middle(?Template $T)
 	{
+		if($T instanceof Template){
+			$this->Index->set_block_string('BLOCK_middle', $T->parse());
+		}
+
+		return $this;
+	}
+
+	function out(?Template $T)
+	{
+		global $i_am_admin, $sys_start_time;
+
 		if(isset($this->TRight)){
 			$this->Index->set_block_string('BLOCK_right', $this->TRight->parse());
 		}
@@ -80,21 +91,20 @@ class MainModule
 			$this->Index->set_block_string('BLOCK_middle', $T->parse());
 		}
 
+		$sys_end_time = microtime(true);
+		$rendered = 'Rendered in: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec';
+		if($i_am_admin)
+		{
+			$finished = "<div>$rendered</div>";
+		} else {
+			$finished = "<!-- $rendered -->";
+		}
+		$this->Index->set_var('tmpl_finished', $finished);
+
 		print $this->Index->parse();
 
-		// $sys_end_time = microtime(true);
-		// $rendered = 'Rendered in: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec';
-		// if($i_am_admin)
-		// {
-		// 	$finished = "<div>$rendered</div>";
-		// } else {
-		// 	$finished = "<!-- $rendered -->";
-		// }
-		// $this->set_var('tmpl_finished', $finished);
-		// print $this->parse_block('FILE_index');
-
 		return $this;
-	} // out
+	}
 
 	function add_right_item(string $name, string $content) {
 		if(!isset($this->TRight)){
@@ -307,76 +317,7 @@ class MainModule
 		$T->enable('BLOCK_comment_r_more');
 
 		return $this->add_right_item("Komentāri", $T->parse());
-
 	}
-
-	// TODO: izvākt is_private
-	function set_profile($login, $is_private = false)
-	{
-		global $sys_user_root;
-
-		$login['l_forumsort_themes'] = isset($login['l_forumsort_themes']) ? $login['l_forumsort_themes'] : Forum::SORT_LASTCOMMENT;
-		$login['l_forumsort_msg'] = isset($login['l_forumsort_msg']) ? $login['l_forumsort_msg'] : Forum::SORT_ASC;
-		$pic_localpath = $sys_user_root.'/pic/'.$login['l_id'].'.jpg';
-		$tpic_localpath = $sys_user_root.'/pic/thumb/'.$login['l_id'].'.jpg';
-		$tpic_path = "/user/thumb/$login[l_login]/";
-
-		$this->enable('BLOCK_profile');
-		$this->set_array_except(['l_password', 'l_sessiondata'], $login, 'BLOCK_profile');
-
-		$this->set_var('l_forumsort_themes_'.$login['l_forumsort_themes'], ' checked="checked"', 'BLOCK_profile');
-		$this->set_var('l_forumsort_msg_'.$login['l_forumsort_msg'], ' checked="checked"', 'BLOCK_profile');
-
-		if(!empty($login['l_disable_youtube']))
-		{
-			$this->set_var('l_disable_youtube_checked', ' checked="checked"', 'BLOCK_profile');
-		} else {
-			$this->set_var('l_disable_youtube_checked', '', 'BLOCK_profile');
-		}
-
-		if($login['l_emailvisible'] != Logins::EMAIL_VISIBLE)
-		{
-			$this->set_var('l_emailvisible', '', 'BLOCK_profile');
-		} else {
-			$this->set_var('l_emailvisible', ' checked="checked"', 'BLOCK_profile');
-		}
-
-		if(file_exists($pic_localpath) && file_exists($tpic_localpath))
-		{
-			$this->set_var('pic_path', $tpic_path, 'BLOCK_profile');
-			if($info = getimagesize($pic_localpath))
-			{
-				$this->set_var('pic_w', $info[0], 'BLOCK_profile');
-				$this->set_var('pic_h', $info[1], 'BLOCK_profile');
-			} else {
-				$this->set_var('pic_w', 400, 'BLOCK_profile');
-				$this->set_var('pic_h', 400, 'BLOCK_profile');
-			}
-
-			$this->enable('BLOCK_picture');
-			if($is_private){
-				$this->enable('BLOCK_picture_del');
-			}
-		} else {
-			$this->enable('BLOCK_nopicture');
-		}
-
-		$this->set_var('l_entered_f', strftime('%e. %b %Y', strtotime($login['l_entered'])), 'BLOCK_profile');
-		$this->set_var('l_lastaccess_f', strftime('%e. %b %Y', strtotime($login['l_lastaccess'])), 'BLOCK_profile');
-		$days = floor((time() - strtotime($login['l_lastaccess'])) / (3600 * 24));
-		if($days)
-		{
-			if($days < 365)
-			{
-				$days_lv = "dienām";
-				if($days % 10 == 1)
-					$days_lv = "dienas";
-				$this->set_var('l_lastaccess_days', " (pirms $days $days_lv)", 'BLOCK_profile');
-			}
-		} else {
-			$this->set_var('l_lastaccess_days', " (šodien)", 'BLOCK_profile');
-		}
-	} // set_profile
 
 	function set_banner_top()
 	{
@@ -503,5 +444,29 @@ class MainModule
 		return $this->add_right_item('Aktuāli', $TEvents->parse());
 	}
 
-} // MainModule
+	function not_found(string $msg = NULL)
+	{
+		$msg = $msg??"Resurss nav atrasts!";
+		$this->Index->enable('BLOCK_not_found')->set_var('msg', $msg);
 
+		header404($msg);
+
+		return $this;
+	}
+
+	function not_logged(string $msg = NULL)
+	{
+		$msg = $msg??"Pieeja tikai reģistrētiem lietotājiem!";
+		$this->Index->enable('BLOCK_not_loged')->set_var('msg', $msg);
+
+		header403($msg);
+
+		return $this;
+	}
+
+	function error(string $msg = "TrueMetal")
+	{
+		$this->Index->enable('BLOCK_error')->set_var('error_msg', $msg);
+		return $this;
+	}
+}

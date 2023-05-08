@@ -328,7 +328,6 @@ function forum_det(
 	}
 
 	$C = comment_list($template, $comments, $hl);
-
 	$T->set_block_string('BLOCK_forum_comments', $C->parse());
 
 	if($forum_data['forum_closed'] == Forum::CLOSED)
@@ -352,8 +351,7 @@ function comment_list(
 	if(user_loged())
 	{
 		$C->enable('BLOCK_addcomment');
-		$C->set_var('acd_username', $_SESSION['login']['l_nick']);
-		$C->set_var('c_username', $_SESSION['login']['l_nick'], 'BLOCK_addcomment');
+		$C->set_var('c_username', $_SESSION['login']['l_nick']);
 		$disabled_users = CommentDisabled::get($_SESSION['login']['l_id']);
 	} else {
 		$C->enable('BLOCK_notloggedin');
@@ -401,25 +399,27 @@ function comment_list(
 		}
 
 		$C->set_array($item, 'BLOCK_comment');
-	/*	if($item['c_entered'] == '2018-03-03 00:00:38'){
-			$a = proc_date($item['c_entered']);
-			printr($a);
-		}
-		*/
 		$C->set_var('c_date', proc_date($item['c_entered']));
 
 		// Joined from logins
-		if($item['l_login'])
-		$C->set_var('user_login_id', $item['l_login']);
-		elseif($item['c_userlogin']) // legacy
-		$C->set_var('user_login_id', $item['c_userlogin']);
-		elseif($item['login_id']) // legacy
-		$C->set_var('user_login_id', $item['login_id']);
-
-		if(user_loged() && ($item['c_userlogin'] || $item['login_id']))
+		if(user_loged() && ($item['l_login'] || $item['c_userlogin'] || $item['login_id'])){
+			$C->set_var('l_hash', $item['l_hash']);
 			$C->enable('BLOCK_profile_link');
-		else
+		} else {
 			$C->disable('BLOCK_profile_link');
+		}
+
+		// if($item['l_login'])
+		// 	$C->set_var('user_login_id', $item['l_login']);
+		// elseif($item['c_userlogin']) // legacy
+		// 	$C->set_var('user_login_id', $item['c_userlogin']);
+		// elseif($item['login_id']) // legacy
+		// 	$C->set_var('user_login_id', $item['login_id']);
+
+		// if(user_loged() && ($item['c_userlogin'] || $item['login_id']))
+		// 	$C->enable('BLOCK_profile_link');
+		// else
+		// 	$C->disable('BLOCK_profile_link');
 
 		$C->set_var('comment_nr', $comment_nr, 'BLOCK_comment');
 
@@ -439,4 +439,306 @@ function get_attendees(int $res_id){
 	ORDER BY a_entered";
 
 	return $db->Execute($sql);
+}
+
+// TODO: izvākt is_private
+function set_profile(Template $T, $login, $is_private = false)
+{
+	global $sys_user_root;
+
+	$login['l_forumsort_themes'] = isset($login['l_forumsort_themes']) ? $login['l_forumsort_themes'] : Forum::SORT_LASTCOMMENT;
+	$login['l_forumsort_msg'] = isset($login['l_forumsort_msg']) ? $login['l_forumsort_msg'] : Forum::SORT_ASC;
+	$pic_localpath = $sys_user_root.'/pic/'.$login['l_id'].'.jpg';
+	$tpic_localpath = $sys_user_root.'/pic/thumb/'.$login['l_id'].'.jpg';
+	$tpic_path = "/user/thumb/$login[l_login]/";
+
+	$T->set_except(['l_password', 'l_sessiondata'], $login);
+
+	$T->set_var('l_forumsort_themes_'.$login['l_forumsort_themes'], ' checked="checked"');
+	$T->set_var('l_forumsort_msg_'.$login['l_forumsort_msg'], ' checked="checked"');
+
+	if(!empty($login['l_disable_youtube']))
+	{
+		$T->set_var('l_disable_youtube_checked', ' checked="checked"');
+	} else {
+		$T->set_var('l_disable_youtube_checked', '');
+	}
+
+	if($login['l_emailvisible'] != Logins::EMAIL_VISIBLE)
+	{
+		$T->set_var('l_emailvisible', '');
+	} else {
+		$T->set_var('l_emailvisible', ' checked="checked"');
+	}
+
+	if(file_exists($pic_localpath) && file_exists($tpic_localpath))
+	{
+		$T->set_var('pic_path', $tpic_path);
+		if($info = getimagesize($pic_localpath))
+		{
+			$T->set_var('pic_w', $info[0]);
+			$T->set_var('pic_h', $info[1]);
+		} else {
+			$T->set_var('pic_w', 400);
+			$T->set_var('pic_h', 400);
+		}
+
+		$T->enable('BLOCK_picture');
+		if($is_private){
+			$T->enable('BLOCK_picture_del');
+		}
+	} else {
+		$T->enable('BLOCK_nopicture');
+	}
+
+	$locale = "lv";
+	$formatter = new IntlDateFormatter($locale, IntlDateFormatter::MEDIUM, IntlDateFormatter::NONE);
+
+	$T->set_var('l_entered_f', $formatter->format(strtotime($login['l_entered'])));
+	$T->set_var('l_lastaccess_f', $formatter->format(strtotime($login['l_lastaccess'])));
+	$days = floor((time() - strtotime($login['l_lastaccess'])) / (3600 * 24));
+	if($days)
+	{
+		if($days < 365)
+		{
+			$days_lv = "dienām";
+			if($days % 10 == 1)
+				$days_lv = "dienas";
+			$T->set_var('l_lastaccess_days', " (pirms $days $days_lv)");
+		}
+	} else {
+		$T->set_var('l_lastaccess_days', " (šodien)");
+	}
+}
+
+function public_profile(MainModule $template, string $l_hash): ?Template
+{
+	$action = post('action');
+
+	if(!user_loged())
+	{
+		$template->not_logged();
+		return null;
+	}
+
+	if(!($login_data = Logins::load_by_login_hash($l_hash))){
+		$template->not_found();
+		return null;
+	}
+
+	$T = $template->add_file('user/profile/user.tpl');
+
+	# Disable comments
+	if(
+		($action == 'disable_comments') &&
+		($_SESSION['login']['l_id'] != $login_data['l_id'])
+		)
+	{
+		if(isset($_POST['disable_comments']))
+		{
+			$ret = CommentDisabled::disable($_SESSION['login']['l_id'], $login_data['l_id']);
+		} else {
+			$ret = CommentDisabled::enable($_SESSION['login']['l_id'], $login_data['l_id']);
+		}
+
+		if($ret)
+		{
+			if(isset($_SERVER['HTTP_REFERER']))
+				redirect($_SERVER['HTTP_REFERER']);
+			else
+				redirect();
+			return null;
+		}
+	}
+
+	if(CommentDisabled::get($_SESSION['login']['l_id'], $login_data['l_id']))
+	{
+		$T->set_var('disable_comments_checked', ' checked="checked"');
+	} else {
+		$T->set_var('disable_comments_checked', '');
+	}
+
+	if($_SESSION['login']['l_id'] != $login_data['l_id'])
+	{
+		$T->enable('BLOCK_disable_comments');
+	}
+
+	$template->set_title(" - $login_data[l_nick]");
+	if($login_data['l_emailvisible'] == Logins::EMAIL_VISIBLE)
+	{
+		$T->enable('BLOCK_public_email');
+	}
+
+	set_profile($T, $login_data);
+
+	return $T;
+}
+
+function private_profile(MainModule $template): ?Template
+{
+	global $db, $user_pic_w, $user_pic_h, $user_pic_tw, $user_pic_th;
+
+	$module_root = "/user/profile";
+
+	if(!user_loged())
+	{
+		$template->not_logged();
+		return null;
+	}
+
+	$action = get('action');
+
+	# del image
+	if($action == 'deleteimage')
+	{
+		if(Logins::delete_image())
+		{
+			header("Location: $module_root/");
+			return null;
+		} else {
+			$template->error('Bildi neizdevās izdzēst!');
+		}
+	}
+
+	// save
+	if(isset($_POST['data']))
+	{
+		$login = new Logins;
+		$login_data = $_POST['data'];
+
+		if($data = $login->update_profile($login_data))
+		{
+			unset($data['l_sessiondata']);
+			$_SESSION['login'] = $data;
+			header("Location: $module_root/");
+			return null;
+		} else {
+			$template->error(join("<br>", $login->error_msg));
+		}
+		$login_data = array_merge($_SESSION['login'], $login_data);
+	} else {
+		$login_data = $_SESSION['login'];
+	} // post
+
+	$T = $template->add_file('user/profile/private.tpl');
+
+	$set_vars = array(
+		'user_pic_w'=>$user_pic_w,
+		'user_pic_h'=>$user_pic_h,
+		'user_pic_tw'=>$user_pic_tw,
+		'user_pic_th'=>$user_pic_th
+	);
+
+	$T->set_array($set_vars);
+
+	set_profile($T, $login_data, true);
+
+	# Comment stats
+	# TODO: zem lib; active='Y'
+
+	$ids = array();
+	$data = array();
+	for($r=0; $r<2; $r++)
+	{
+		if($r == 0){
+			$v = 'r.res_votes_plus_count DESC';
+		} elseif($r == 1){
+			$v = 'r.res_votes_minus_count DESC';
+		}
+
+		$sql = "SELECT r.res_id FROM res r
+		WHERE r.login_id = {$_SESSION['login']['l_id']}
+		ORDER BY $v
+		LIMIT 10";
+
+		$ids[$r] = array_map(function($v) {
+			return $v['res_id'];
+		}, $db->Execute($sql));
+		// $ids[$r] = $db->Execute($sql);
+	}
+
+	if($ids[0] || $ids[1]){
+		$T->enable('BLOCK_truecomments');
+	}
+
+	foreach($ids as $k=>$i){
+		if (!$i){
+			continue;
+		}
+		if($k == 0){
+			$order = "res_votes_plus_count DESC, res_votes_minus_count DESC";
+			$T->set_var('truecomment_msg', 'Visvairāk plusotie komenti:');
+		} elseif($k == 1){
+			$order = "res_votes_minus_count DESC, res_votes_plus_count DESC";
+			$T->set_var('truecomment_msg', 'Visvairāk mīnusotie komenti:');
+		} else {
+			assert(false, "unreachable");
+		}
+
+		$sql = "SELECT
+			c.*,
+			rc.res_id AS parent_res_id,
+			r.res_votes_plus_count AS plus_count,
+			r.res_votes_minus_count AS minus_count
+		FROM
+			comment c
+		JOIN res r ON r.res_id = c.res_id
+		JOIN res_comment rc ON rc.c_id = c.c_id
+		WHERE
+			r.res_id IN (".join(',', $i).")
+		ORDER BY
+			$order
+		";
+
+		$BLOCK_truecomment_item = $T->get_block('BLOCK_truecomment_item');
+		$BLOCK_truecomment_item->reset();
+
+		$data = $db->Execute($sql);
+		foreach($data as $item)
+		{
+			$plus_count = $item['plus_count'];
+			$minus_count = $item['minus_count'];
+			$c_data = $item['c_data'];
+			if(mb_strlen($c_data) > 70){
+				$c_data = mb_substr($c_data, 0, 70).'...';
+			}
+
+			$c_href = "/resroute/{$item['parent_res_id']}/?c_id={$item['c_id']}";
+
+			$BLOCK_truecomment_item
+			->set_var('minus_count', $minus_count)
+			->set_var('plus_count', $plus_count)
+			->set_var('c_data', $c_data)
+			->set_var('c_href', $c_href)
+			->parse(TMPL_APPEND);
+
+			//$template->disable('BLOCK_truecomment_header');
+		}
+		$T->parse_block('BLOCK_truecomments', TMPL_APPEND);
+	}
+
+	// Passw status
+	$sql = sprintf("SELECT bp.*
+	FROM logins l
+	JOIN bad_pass bp ON bp.pass_hash = l.l_password
+	WHERE l.l_id = %d", $_SESSION['login']['l_id']);
+
+	if($data = $db->ExecuteSingle($sql)){
+		$T->set_var('bad_pass_class', 'blink');
+		$T->set_var('bad_pass_style', 'color: red');
+		if($data['is_dict'] && $data['is_brute']){
+			$msg = "Apsveicam! Tava parole ir gan paroļu vārdnīcā gan viegli atlaužama! Nomaini!";
+		} elseif($data['is_dict']) {
+			$msg = "Tava parole ir paroļu vārdnīcā! Nomaini!";
+		} elseif($data['is_brute']) {
+			$msg = "Tava parole ir viegli atlaužama! Nomaini!";
+		}
+	} else {
+		$T->set_var('bad_pass_style', 'color: #00a400');
+		$msg = "Apsveicam! Tava parole nav paroļu vārdnīcā vai viegli atlaužama!";
+	}
+
+	$T->set_var('bad_pass_msg', $msg);
+
+	return $T;
 }

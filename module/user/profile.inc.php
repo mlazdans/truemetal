@@ -1,26 +1,32 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
-$login = array_shift($sys_parameters);
-
-if($login)
-{
-	include('module/user/profile/user.inc.php');
-	return;
-}
+$json = isset($_GET['json']);
+$l_hash = array_shift($sys_parameters);
 
 $template = new MainModule($sys_module_id);
 $template->set_title('Profils');
-$template->set_file('FILE_module', 'user/profile/private.tpl');
-$template->copy_block('BLOCK_middle', 'FILE_module');
 
-# View and edit private profile
-include('module/user/profile/private.inc.php');
+if($l_hash)
+{
+	$T = public_profile($template, $l_hash);
+
+	if($json)
+	{
+		$template->set_middle($T);
+		$html = $template->Index->get_block('BLOCK_container')->parse();
+
+		$jsonData = new StdClass;
+		$jsonData->title = "[ TRUEMETAL ".$template->get_title()." ]";
+		$jsonData->html = $html;
+		header('Content-Type: text/javascript; charset='.$sys_encoding);
+		print json_encode($jsonData);
+		return;
+	}
+
+	$T?->enable('BLOCK_profile_title');
+} else {
+	$T = private_profile($template);
+}
 
 $template->set_right_defaults();
-$template->out();
-
+$template->out($T);
