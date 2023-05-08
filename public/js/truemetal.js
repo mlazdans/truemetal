@@ -189,21 +189,24 @@ var Truemetal = {
 			width: 400,
 			dialogClass: "loading",
 			buttons: {
-					"Aizvērt": function(){
-						$(this).dialog("destroy");
-					}
+				"Aizvērt": function(){
+					$(this).dialog("destroy");
+				}
 			}
 		};
 
 		var dialog = $('<div/>').dialog(dOptions);
 		$.ajax({
-				url: "/user/profile/" + login + "/?json",
-				dataType: 'json',
-				success: function(data){
+			url: "/user/profile/" + login + "/?json",
+			dataType: 'json',
+			complete: function(req, status){
+				if (req.responseJSON){
+					let data = req.responseJSON;
 					$(dialog).dialog("option", "title", data.title);
 					$(dialog).dialog("option", "dialogClass", "");
 					$(dialog).html(data.html);
 				}
+			}
 		});
 	},
 	viewProfileImage: function(login, w, h, nick){
