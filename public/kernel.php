@@ -171,10 +171,6 @@ $_GET = _GET();
 header('Content-Type: text/html; charset='.$sys_encoding);
 header('X-Powered-By: TRUEMETAL');
 
-if(isset($sys_locale)){
-	setlocale(LC_TIME, $sys_locale);
-}
-
 # TODO: novākt pēc kāda laika
 $clear_session = array(
 	'comments',

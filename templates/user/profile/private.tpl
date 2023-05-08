@@ -1,18 +1,6 @@
-<!-- BEGIN BLOCK_not_loged disabled -->
-<div class="Info">
-	TrueMetal!
-</div>
-<!-- END BLOCK_not_loged -->
-
-<!-- BEGIN BLOCK_profile disabled -->
 <div class="TD-cat">
 	Profils: {l_nick}
 </div>
-<!-- BEGIN BLOCK_profile_error disabled -->
-<div class="List-item Info error">
-	{error_msg}
-</div>
-<!-- END BLOCK_profile_error -->
 
 <form action="" method="post" enctype="multipart/form-data" id="profile_edit">
 <table class="Main">
@@ -110,5 +98,3 @@
 
 <div class="List-sep"></div>
 <!-- END BLOCK_truecomments -->
-
-<!-- END BLOCK_profile -->
