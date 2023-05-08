@@ -1,5 +1,94 @@
 <?php declare(strict_types = 1);
 
+use dqdp\Template;
+use dqdp\TemplateBlock;
+
+function forum_add_theme(MainModule $template, Template $T, int $forum_id, array $data): bool
+{
+	global $db, $ip;
+
+	if(!user_loged())
+	{
+		$template->not_logged();
+		return false;
+	}
+
+	if(user_blacklisted())
+	{
+		$error_msg[] = "Blacklisted IP: $ip";
+		return false;
+	}
+
+	$error_msg = $error_fields = [];
+	if(empty($data['forum_name']))
+	{
+		$error_msg[] = "Nav norādīts tēmas nosaukums";
+		$error_fields[] = 'forum_name';
+	}
+
+	if(empty($data['forum_data']))
+	{
+		$error_msg[] = "Nav norādīts ziņojums";
+		$error_fields[] = 'forum_data';
+	}
+
+	# Tirgus
+	if($forum_id == 107488){
+		$params = [
+			'get_votes'=>true,
+			'get_comment_count'=>true,
+			'l_id'=>$_SESSION['login']['l_id'],
+		];
+		$Logins = new Logins();
+		$ldata = $Logins->load($params);
+
+		$entered_days = (time() - strtotime($ldata['l_entered'])) / (3600 * 24);
+		if(($entered_days < 10) || ($ldata['votes_plus'] - $ldata['votes_minus'] < 10)){
+			$error_msg[] = 'Nepietiekams reitings. Jābūt vismaz 10 dienu vecam vai (plusi - mīnusi) vismaz 10';
+		}
+	}
+
+	if($error_msg){
+		$T->enable('BLOCK_forumdata_error_rating')->set_var('error_msg', join("<br>", $error_msg));
+	}
+
+	set_error_fields($T, $error_fields);
+
+	$T->set_array(specialchars($data));
+
+	if($error_msg){
+		return false;
+	}
+
+	$forum = new Forum;
+	$forum->validate($data);
+	$data['login_id'] = $_SESSION['login']['l_id'];
+	$data['forum_userlogin'] = $_SESSION['login']['l_login'];
+	$data['forum_useremail'] = $_SESSION['login']['l_email'];
+	$data['forum_username'] = $_SESSION['login']['l_nick'];
+	$data['forum_allowchilds'] = Forum::PROHIBIT_CHILDS;
+
+	$db->AutoCommit(false);
+	$forum->setDb($db);
+	if($id = $forum->add($forum_id, $data))
+	{
+		$newforum = new Forum;
+		$new_data = $newforum->load(["forum_id"=>$id]);
+
+		$res_id = (int)$new_data['res_id'];
+		if(add_comment($db, $res_id, $data['forum_data']))
+		{
+			$db->Commit();
+			header("Location: /forum/$id-".rawurlencode(urlize($data['forum_name'])));
+			return true;
+		}
+	}
+	$db->Rollback();
+	$db->AutoCommit(true);
+
+	return false;
+}
+
 function forum_themes(
 	int $forum_id,
 	array $forum_data,
@@ -10,8 +99,6 @@ function forum_themes(
 	int $pages_visible_to_sides,
 ): ?Template
 {
-	global $db, $ip;
-
 	if(user_loged())
 	{
 		Forum::markThemeCount($forum_data);
@@ -30,86 +117,10 @@ function forum_themes(
 
 	if($action == 'add_theme')
 	{
-		# Blacklisted
-		if(user_blacklisted())
+		if(forum_add_theme($template, $T, $forum_id, post('data')))
 		{
-			print "Blacklisted: $ip";
 			return null;
 		}
-
-		$error = false;
-		$data = post('data');
-		$forum->validate($data);
-
-		$params = array(
-			'get_votes'=>true,
-			'get_comment_count'=>true,
-			'l_id'=>$_SESSION['login']['l_id'],
-			);
-		$Logins = new Logins();
-		$ldata = $Logins->load($params);
-
-		$data['login_id'] = $_SESSION['login']['l_id'];
-		$data['forum_userlogin'] = $_SESSION['login']['l_login'];
-		$data['forum_useremail'] = $_SESSION['login']['l_email'];
-		$data['forum_username'] = $_SESSION['login']['l_nick'];
-		$data['forum_allowchilds'] = Forum::PROHIBIT_CHILDS;
-
-		if(!user_loged())
-		{
-			$error = true;
-		}
-
-		if(!$data['forum_name'])
-		{
-			$error = true;
-			$T->enable('BLOCK_forumname_error');
-		}
-
-		if(!$data['forum_data'])
-		{
-			$error = true;
-			$T->enable('BLOCK_forumdata_error');
-		}
-
-		# Tirgus
-		if($forum_id == 107488){
-			$entered_days = (time() - strtotime($ldata['l_entered'])) / (3600 * 24);
-			if(($entered_days < 10) || ($ldata['votes_plus'] - $ldata['votes_minus'] < 10)){
-				$error = true;
-				$T->enable('BLOCK_forumdata_error_rating');
-				$T->set_var('error_msg', 'Nepietiekams reitings. Jābūt vismaz 10 dienu vecam vai (plusi - mīnusi) vismaz 10', 'BLOCK_forumdata_error_rating');
-			}
-		}
-
-		if(!$error)
-		{
-			$db->AutoCommit(false);
-			$forum->setDb($db);
-			if($id = $forum->add($forum_id, $data))
-			{
-				$newforum = new Forum;
-				$new_data = $newforum->load(array(
-					"forum_id"=>$id,
-					));
-
-				$res_id = $new_data['res_id'];
-				$data['c_data'] = $data['forum_data'];
-				$resDb = $db;
-				if($c_id = include('module/comment/add.inc.php'))
-				{
-					$_SESSION['user']['username'] = $data['forum_username'];
-					$_SESSION['user']['useremail'] = $data['forum_useremail'];
-					$resDb->Commit();
-					header("Location: $module_root/$id-".rawurlencode(urlize($data['forum_name'])));
-					return null;
-				}
-				$resDb->Commit();
-			}
-			$db->AutoCommit(true);
-		}
-		parse_form_data_array($data);
-		$T->set_array($data, 'BLOCK_loggedin');
 	}
 
 	if(user_loged())
@@ -176,7 +187,7 @@ function forum_pages(
 	int $forum_count,
 	int $fpp,
 	int $pages_visible_to_sides,
-	Template $template,
+	Template $T,
 )
 {
 	$total_pages = ceil($forum_count / $fpp);
@@ -196,42 +207,50 @@ function forum_pages(
 			: 1
 		);
 
-		$template->enable('BLOCK_is_pages');
+		$T->enable('BLOCK_is_pages');
+		$BLOCK_page = $T->get_block('BLOCK_page');
 		for($p = 1; $p <= $total_pages; $p++)
 		{
 			$p_id = ($total_pages > 10) && ($p < 10) ? "0$p" : $p;
-			$template->set_var('p_id', $p_id);
-			$template->set_var('page_id', $p);
+			$BLOCK_page->set_var('p_id', $p_id);
+			$BLOCK_page->set_var('page_id', $p);
+
+			// if($p_id > 1){
+			// 	$ps = $BLOCK_page->get_block('BLOCK_page_switcher');
+			// 	printr($ps->dump());
+			// 	printr($ps->get_var('p_id'));
+			// 	// printr($BLOCK_page->get_block('BLOCK_page_switcher'));
+			// 	die;
+			// }
 
 			# atziimee, tekoshu page
 			if($p == $page_id)
 			{
-				$template->set_var('page_style', ' style="color: #00AC00;"');
+				$BLOCK_page->set_var('page_style', ' style="color: #00AC00;"');
 			} else {
-				$template->set_var('page_style', '');
+				$BLOCK_page->set_var('page_style', '');
 			}
 
 			# skippo pa nevajadziigaas pages
 			if(abs($p - $page_id) > $visible_pages)
 			{
 				$sep_count++;
-				$template->set_var('page_seperator', (abs($p - $page_id) > $visible_pages) && (abs($p - $page_id) - $visible_pages <= $side_sep) ? '[..]' : '');
-				$template->disable('BLOCK_page_switcher');
+				$BLOCK_page->set_var('page_seperator', (abs($p - $page_id) > $visible_pages) && (abs($p - $page_id) - $visible_pages <= $side_sep) ? '[..]' : '');
+				$BLOCK_page->disable('BLOCK_page_switcher');
 			} else {
-				$template->enable('BLOCK_page_switcher');
-				$template->set_var('page_seperator', '');
+				$BLOCK_page->enable('BLOCK_page_switcher');
+				$BLOCK_page->set_var('page_seperator', '');
 			}
 
-			$template->parse_block('BLOCK_page', TMPL_APPEND);
-
+			$BLOCK_page->parse(TMPL_APPEND);
 		}
 	}
 
 	# prev
-	$template->set_var('prev_page_id', ($page_id > 1) ? $page_id - 1 : $page_id);
+	$T->set_var('prev_page_id', ($page_id > 1) ? $page_id - 1 : $page_id);
 
 	# next
-	$template->set_var('next_page_id', ($page_id < $total_pages) ? $page_id + 1 : $page_id);
+	$T->set_var('next_page_id', ($page_id < $total_pages) ? $page_id + 1 : $page_id);
 }
 
 function forum_det(
@@ -360,7 +379,7 @@ function comment_list(
 
 	if($comments)
 	{
-		$C->enable('BLOCK_comment');
+		$BLOCK_comment = $C->enable('BLOCK_comment');
 	} else {
 		$C->enable('BLOCK_nocomment');
 	}
@@ -372,41 +391,41 @@ function comment_list(
 		$comment_nr++;
 		$item['res_votes'] = (int)$item['res_votes'];
 		# balsošana
-		if(user_loged() && $C->block_exists('BLOCK_comment_vote')){
-			$C->enable('BLOCK_comment_vote');
+		if(user_loged() && $BLOCK_comment->block_exists('BLOCK_comment_vote')){
+			$BLOCK_comment->enable('BLOCK_comment_vote');
 		}
 
 		if($item['res_votes'] > 0)
 		{
-			$C->set_var('comment_vote_class', 'plus', 'BLOCK_comment');
+			$BLOCK_comment->set_var('comment_vote_class', 'plus');
 			$item['res_votes'] = '+'.$item['res_votes'];
 		} elseif($item['res_votes'] < 0) {
-			$C->set_var('comment_vote_class', 'minus', 'BLOCK_comment');
+			$BLOCK_comment->set_var('comment_vote_class', 'minus');
 		} else {
-			$C->set_var('comment_vote_class', '', 'BLOCK_comment');
+			$BLOCK_comment->set_var('comment_vote_class', '');
 		}
 
 		if($hl){
 			hl($item['c_datacompiled'], $hl);
 		}
 
-		$item['c_username'] = parse_form_data($item['c_username']);
+		$item['c_username'] = specialchars($item['c_username']);
 		if(empty($disabled_users[$item['login_id']])){
-			$C->set_var('c_disabled_user_class', '');
+			$BLOCK_comment->set_var('c_disabled_user_class', '');
 		} else {
-			$C->set_var('c_disabled_user_class', ' disabled');
+			$BLOCK_comment->set_var('c_disabled_user_class', ' disabled');
 			$item['c_datacompiled'] = '-neredzams komentārs-';
 		}
 
-		$C->set_array($item, 'BLOCK_comment');
-		$C->set_var('c_date', proc_date($item['c_entered']));
+		$BLOCK_comment->set_array($item);
+		$BLOCK_comment->set_var('c_date', proc_date($item['c_entered']));
 
 		// Joined from logins
 		if(user_loged() && ($item['l_login'] || $item['c_userlogin'] || $item['login_id'])){
-			$C->set_var('l_hash', $item['l_hash']);
-			$C->enable('BLOCK_profile_link');
+			$BLOCK_comment->set_var('l_hash', $item['l_hash']);
+			$BLOCK_comment->enable('BLOCK_profile_link');
 		} else {
-			$C->disable('BLOCK_profile_link');
+			$BLOCK_comment->disable('BLOCK_profile_link');
 		}
 
 		// if($item['l_login'])
@@ -421,9 +440,9 @@ function comment_list(
 		// else
 		// 	$C->disable('BLOCK_profile_link');
 
-		$C->set_var('comment_nr', $comment_nr, 'BLOCK_comment');
+		$BLOCK_comment->set_var('comment_nr', $comment_nr);
 
-		$C->parse_block('BLOCK_comment_list', TMPL_APPEND);
+		$BLOCK_comment->parse(TMPL_APPEND);
 	}
 
 	return $C;
@@ -691,7 +710,6 @@ function private_profile(MainModule $template): ?Template
 		";
 
 		$BLOCK_truecomment_item = $T->get_block('BLOCK_truecomment_item');
-		$BLOCK_truecomment_item->reset();
 
 		$data = $db->Execute($sql);
 		foreach($data as $item)
@@ -745,7 +763,7 @@ function private_profile(MainModule $template): ?Template
 
 function email(string $to, string $subj, string $msg, array $attachments = array())
 {
-	global $sys_mail_from, $sys_public_root, $sys_mail_params;
+	global $sys_mail, $sys_public_root, $sys_mail_params;
 
 	$params = new StdClass;
 	$params->MAIL_PARAMS = $sys_mail_params;
@@ -753,7 +771,7 @@ function email(string $to, string $subj, string $msg, array $attachments = array
 	// $params->delete_after_send = false;
 	// $params->id_user = $r->ClientId;
 	$params->to = $to;
-	$params->from = $sys_mail_from;
+	$params->from = $sys_mail;
 
 	$params->isHTML = false;
 	$params->basedir = $sys_public_root;
@@ -1019,4 +1037,173 @@ function forgot_accept(MainModule $template, string $code): ?Template
 	$T->set_array($data);
 
 	return $T;
+}
+
+function register(MainModule $template, array $sys_parameters = []): ?Template
+{
+	global $sys_mail;
+
+	$T = $template->add_file('register.tpl');
+
+	$action = array_shift($sys_parameters)??"";
+
+	if($action == 'ok')
+	{
+		$T->enable('BLOCK_register_ok');
+		return $T;
+	}
+
+	if($action == 'accept') {
+		$code = array_shift($sys_parameters)??"";
+		if(Logins::accept_login($code))
+		{
+			$T->enable('BLOCK_accept_ok');
+		} else {
+			$T->enable('BLOCK_accept_error');
+		}
+		return $T;
+	}
+
+	$T->enable('BLOCK_register_form');
+
+	if(!isset($_POST['data']))
+	{
+		return $T;
+	}
+
+	$logins = new Logins;
+
+	$check = [ 'l_login', 'l_nick', 'l_password', 'l_email' ];
+	$data = $_POST['data'];
+
+	$error_msg = $error_field = [];
+	foreach($check as $c) {
+		$data[$c] = isset($data[$c]) ? trim($data[$c]) : '';
+		if(empty($data[$c])){
+			$error_field[] = $c;
+		}
+	}
+
+	$data['l_login'] = strtolower($data['l_login']);
+	$data['l_email'] = strtolower($data['l_email']);
+
+	if(empty($data['l_password'])){
+		$error_msg[] = 'Nav ievadīta parole';
+		$error_field[] = 'l_password';
+		$error_field[] = 'l_password2';
+	} else {
+		if(!pw_validate($data['l_password'], $data['l_password2'], $error_msg)){
+			$error_field[] = 'l_password';
+			$error_field[] = 'l_password2';
+		}
+	}
+
+	if(invalid($data['l_login']) || strlen($data['l_login']) < 5) {
+		$error_msg[] = 'Nepareizs vai īss logins';
+		$error_field[] = 'l_login';
+	}
+
+	if(!is_valid_email($data['l_email'])) {
+		$error_msg[] = 'Nekorekta e-pasta adrese';
+		$error_field[] = 'l_email';
+	}
+
+	if(Logins::login_exists($data['l_login'])) {
+		$error_field[] = 'l_login';
+		$error_msg[] = 'Šāds login jau eksistē';
+	}
+
+	if(Logins::email_exists($data['l_email'])){
+		$error_field[] = 'l_email';
+		$error_msg[] = 'Šāda e-pasta adrese jau eksistē';
+	}
+
+	if(Logins::nick_exists($data['l_nick'])) {
+		$error_field[] = 'l_nick';
+		$error_msg[] = 'Šāds segvārds jau eksistē';
+	}
+
+	if(!$error_msg && !$error_field) {
+		if($logins->insert($data)){
+			try {
+				email($sys_mail, '[truemetal] jauns lietotajs', "$data[l_login] ($data[l_nick])\n\nIP:$_SERVER[REMOTE_ADDR]");
+			} catch (Exception $e) {
+			}
+			header("Location: /register/ok/");
+			return null;
+		} else {
+			$error_msg[] = "Datubāzes kļūda";
+		}
+	}
+
+	$T->set_array(specialchars($data));
+
+	if($error_msg)
+	{
+		$template->error($error_msg);
+	}
+
+	set_error_fields($T, $error_field);
+
+	return $T;
+}
+
+function set_error_fields(TemplateBlock $T, array $fields){
+	foreach($fields as $k)
+	{
+		$T->set_var('error_'.$k, ' class="error-form"');
+	}
+}
+
+function add_comment(SQLLayer $db, int $res_id, string $c_data)
+{
+	global $ip;
+
+	// if(empty($c_data))
+	// {
+	// 	$error_msg[] = 'Nekorekti aizpildīta forma!';
+	// 	// $template->enable('BLOCK_comment_error');
+	// 	// $template->set_var('error_msg', 'Nekorekti aizpildīta forma!', 'BLOCK_comment_error');
+	// 	return false;
+	// }
+
+	# Nočeko vai iepostēts tikai links
+	// $url_pattern = url_pattern();
+	// if(preg_match_all($url_pattern, $c_data, $matches))
+	// {
+	// 	foreach($matches[0] as $k=>$v)
+	// 		$c_data = str_replace($matches[0][$k], '', $c_data);
+	// }
+
+	// $c_data = trim($c_data);
+
+	// if(empty($c_data))
+	// {
+	// 	$error_msg[] = 'Pārāk pliks tas komentārs - links bez teksta!';
+	// 	// $template->enable('BLOCK_comment_error');
+	// 	// $template->set_var('error_msg', 'Pārāk pliks tas komentārs - links bez teksta!', 'BLOCK_comment_error');
+	// 	return false;
+	// }
+
+	// if(user_blacklisted())
+	// {
+	// 	$error_msg["Blacklisted IP: $ip"];
+	// 	// $template->enable('BLOCK_comment_error');
+	// 	// $template->set_var('error_msg', "Blacklisted: $ip", 'BLOCK_comment_error');
+	// 	return false;
+	// }
+
+	$cData = array(
+		'login_id'=>$_SESSION['login']['l_id'],
+		'c_userlogin'=>$_SESSION['login']['l_login'],
+		'c_username'=>$_SESSION['login']['l_nick'],
+		'c_useremail'=>$_SESSION['login']['l_email'],
+		'c_data'=>$c_data,
+		'c_userip'=>$ip,
+		);
+
+	$ResComment = new ResComment();
+	$ResComment->setDb($db);
+
+	return $ResComment->add($res_id, $cData);
 }

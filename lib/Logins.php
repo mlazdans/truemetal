@@ -163,6 +163,19 @@ class Logins
 		return (new Logins)->load($params);
 	}
 
+	static function load_by_nick(string $nick, bool $all = false)
+	{
+		$params = [ 'l_nick'=>$nick ];
+
+		if($all)
+		{
+			$params['l_active'] = Res::STATE_ALL;
+			$params['l_accepted'] = Res::STATE_ALL;
+		}
+
+		return (new Logins)->load($params);
+	}
+
 	static function load_by_login_hash(string $l_hash)
 	{
 		return (new Logins)->load(['l_hash'=>$l_hash]);
@@ -171,6 +184,18 @@ class Logins
 	# TODO: vajadzētu MySQL collation, kas respektē garumzīmes?
 	static function email_exists(string $email): bool {
 		$data = static::load_by_email($email, true);
+
+		return $data && (count($data) > 0);
+	}
+
+	static function login_exists(string $login): bool {
+		$data = static::load_by_login($login, true);
+
+		return $data && (count($data) > 0);
+	}
+
+	static function nick_exists(string $nick): bool {
+		$data = static::load_by_nick($nick, true);
 
 		return $data && (count($data) > 0);
 	}
@@ -448,7 +473,7 @@ class Logins
 		return false;
 	}
 
-	function accept_login($code)
+	static function accept_login($code)
 	{
 		global $db;
 
@@ -537,6 +562,7 @@ class Logins
 	{
 		global $db;
 
+		# TODO: pārbaudīt citur!!!
 		if(!$this->valid_login($data['l_login']))
 		{
 			$this->error_msg[] = 'Nav norādīts vai nepareizs lietotāja logins';
