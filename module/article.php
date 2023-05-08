@@ -248,7 +248,7 @@ if($articles)
 			$T->enable('BLOCK_art_data');
 			$T->disable('BLOCK_art_intro');
 		}
-		$T->{(Res::hasNewComments($item) ? "enable" : "disable")}('BLOCK_comments_new');
+		$T->enable_if(Res::hasNewComments($item), 'BLOCK_comments_new');
 
 		$item['art_name_urlized'] = rawurlencode(urlize($item['art_name']));
 		$T->set_array($item, 'BLOCK_article');

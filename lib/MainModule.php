@@ -224,7 +224,7 @@ class MainModule
 			$TThemes = $this->add_file('forum/recent.tpl');
 			foreach($data as $item)
 			{
-				$TThemes->{(Forum::hasNewComments($item) ? "enable" : "disable")}('BLOCK_forum_r_comments_new');
+				$TThemes->enable_if(Forum::hasNewComments($item), 'BLOCK_forum_r_comments_new');
 				$TThemes->set_var('forum_r_name', addslashes($item['forum_name']));
 				$TThemes->set_var('forum_r_comment_count', $item['res_comment_count']);
 				$TThemes->set_var('forum_r_path', "forum/{$item['forum_id']}-".rawurlencode(urlize($item["forum_name"])));
@@ -308,7 +308,7 @@ class MainModule
 
 		foreach($data as $item)
 		{
-			$T->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_comment_r_comments_new');
+			$T->enable_if(Article::hasNewComments($item), 'BLOCK_comment_r_comments_new');
 
 			$T->set_var('comment_r_name', $item['art_name']);
 			$T->set_var('comment_r_comment_count', $item['res_comment_count']);
