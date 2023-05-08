@@ -49,7 +49,7 @@ function forum_add_theme(MainModule $template, Template $T, int $forum_id, array
 	}
 
 	if($error_msg){
-		$T->enable('BLOCK_forumdata_error_rating')->set_var('error_msg', join("<br>", $error_msg));
+		$T->enable('BLOCK_forum_error')->set_var('error_msg', join("<br>", $error_msg));
 	}
 
 	set_error_fields($T, $error_fields);
@@ -263,9 +263,39 @@ function forum_det(
 {
 	global $db;
 
+	$res_id = (int)$forum_data['res_id']??0;
+
 	$forum = new Forum;
 
 	$T = $template->add_file('forum/det.tpl');
+	$C = $template->add_file('comments.tpl');
+
+	# Comments
+	$params['order'] =
+		isset($_SESSION['login']['l_forumsort_msg']) &&
+		($_SESSION['login']['l_forumsort_msg'] == Forum::SORT_DESC)
+		? "c_entered DESC"
+		: "c_entered";
+
+	$comments = get_res_comments($res_id, $params);
+
+	# XXX : hack, vajag rādīt pa taisno foruma ierakstu
+	if(($forum_data['forum_display'] == Forum::DISPLAY_DATA) && !empty($comments[0]))
+	{
+		# Ja sakārtots dilstoši, tad jāaiztiek ir pēdējais komments
+		if(
+			isset($_SESSION['login']['l_forumsort_msg']) &&
+			($_SESSION['login']['l_forumsort_msg'] == Forum::SORT_DESC)
+			)
+		{
+			array_unshift($comments, array_pop($comments));
+		}
+		$comments[0]['c_datacompiled'] = $forum_data['forum_data'];
+	}
+
+	comment_list($C, $comments, $hl);
+
+	$forum->set_forum_path($T, $forum_id);
 
 	# TODO: Vajag uztaisīt:
 	# 1) lai rāda foruma datus
@@ -275,18 +305,47 @@ function forum_det(
 
 	Res::markCommentCount($forum_data);
 
-	if(($forum_data['forum_closed'] == Forum::OPEN) && ($action == 'add_comment') && user_loged())
+	if($forum_data['forum_closed'] == Forum::CLOSED)
 	{
-		$res_id = $forum_data['res_id'];
-		$data = post('data');
-		$resDb = $db;
-		if($c_id = include('module/comment/add.inc.php'))
-		{
-			$resDb->Commit();
-			header("Location: ".Forum::Route($forum_data, $c_id));
+		$T->disable('BLOCK_addcomment');
+		$T->enable('BLOCK_forum_closed');
+	}
+
+	$error_msg = [];
+	if($action == 'add_comment'){
+		if(!user_loged()){
+			$template->not_logged();
 			return null;
 		}
+
+		if($forum_data['forum_closed'] != Forum::OPEN)
+		{
+			$error_msg[] = "Tēma slēgta";
+		}
+
+		$data = post('data');
+		$C->set_array(specialchars($data));
+
+		if(empty($data['c_data'])){
+			$error_msg[] = "Kaut kas jau jāieraksta";
+		}
+
+		if(!$error_msg) {
+			if($c_id = add_comment($db, $res_id, $data['c_data']))
+			{
+				header("Location: ".Forum::Route($forum_data, $c_id));
+				return null;
+			} else {
+				$error_msg[] = "Neizdevās pievienot komentāru";
+			}
+		}
 	}
+
+	if($error_msg) {
+		$C->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
+	}
+
+	$T->set_block_string('BLOCK_forum_comments', $C->parse());
 
 	# Attendees
 	if(user_loged() && ($forum_data['type_id'] == Res::TYPE_EVENT))
@@ -319,54 +378,22 @@ function forum_det(
 		}
 	}
 
-	# Comments
-	$params = array(
-		'res_id'=>$forum_data['res_id'],
-		);
-	$params['order'] =
-		isset($_SESSION['login']['l_forumsort_msg']) &&
-		($_SESSION['login']['l_forumsort_msg'] == Forum::SORT_DESC)
-		? "c_entered DESC"
-		: "c_entered";
-
-	$RC = new ResComment();
-	$comments = $RC->Get($params);
-
-	# XXX : hack, vajag rādīt pa taisno foruma ierakstu
-	if(($forum_data['forum_display'] == Forum::DISPLAY_DATA) && !empty($comments[0]))
-	{
-		# Ja sakārtots dilstoši, tad jāaiztiek ir pēdējais komments
-		if(
-			isset($_SESSION['login']['l_forumsort_msg']) &&
-			($_SESSION['login']['l_forumsort_msg'] == Forum::SORT_DESC)
-			)
-		{
-			array_unshift($comments, array_pop($comments));
-		}
-		$comments[0]['c_datacompiled'] = $forum_data['forum_data'];
-	}
-
-	$C = comment_list($template, $comments, $hl);
-	$T->set_block_string('BLOCK_forum_comments', $C->parse());
-
-	if($forum_data['forum_closed'] == Forum::CLOSED)
-	{
-		$T->disable('BLOCK_addcomment');
-		$T->enable('BLOCK_forum_closed');
-	}
-
-	$forum->set_forum_path($T, $forum_id);
-
 	return $T;
 }
 
+function get_res_comments(int $res_id, array $params = [])
+{
+	$params = [ 'res_id'=>$res_id ];
+
+	$RC = new ResComment();
+	return $RC->Get($params);
+}
+
 function comment_list(
-	MainModule $template,
+	Template $C,
 	array $comments,
 	string $hl
 ){
-	$C = $template->add_file('comments.tpl');
-
 	if(user_loged())
 	{
 		$C->enable('BLOCK_addcomment');
@@ -444,8 +471,6 @@ function comment_list(
 
 		$BLOCK_comment->parse(TMPL_APPEND);
 	}
-
-	return $C;
 }
 
 function get_attendees(int $res_id){
@@ -1206,4 +1231,32 @@ function add_comment(SQLLayer $db, int $res_id, string $c_data)
 	$ResComment->setDb($db);
 
 	return $ResComment->add($res_id, $cData);
+}
+
+function forum_root(MainModule $template): Template
+{
+	$forum_data = (new Forum())->load([
+		"forum_forumid"=>0,
+		"order"=>"forum_id ASC",
+	]);
+
+	$T = $template->add_file('forum.tpl');
+
+	if(empty($forum_data))
+	{
+		$T->enable('BLOCK_noforum');
+		return $T;
+	}
+
+	$T->enable('BLOCK_forum');
+	foreach($forum_data as $item)
+	{
+		$T->enable_if(Forum::hasNewThemes($item), 'BLOCK_comments_new');
+		$T->set_array($item);
+		$T->set_var('forum_name_urlized', rawurlencode(urlize($item['forum_name'])));
+		$T->set_var('forum_date', proc_date($item['forum_entered']));
+		$T->parse_block('BLOCK_forum', TMPL_APPEND);
+	}
+
+	return $T;
 }

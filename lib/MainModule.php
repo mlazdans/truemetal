@@ -50,7 +50,7 @@ class MainModule
 	function set_title($str_title)
 	{
 		$this->title = $str_title;
-		$this->Index->set_var('title', addslashes($this->title), 'FILE_index');
+		$this->Index->set_var('title', specialchars($this->title));
 
 		return $this;
 	}

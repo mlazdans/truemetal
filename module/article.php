@@ -117,32 +117,46 @@ if($art_id)
 # Comments
 if($art_id && isset($articles[0]))
 {
-	// $T->set_file('FILE_article_comments', 'comments.tpl');
-	// $T->copy_block('BLOCK_article_comments', 'FILE_article_comments');
 	$T->enable('BLOCK_article_comments_head');
 
-	# Add
-	if(($action == 'add_comment') && user_loged())
+	$C = $template->add_file('comments.tpl');
+
+	$error_msg = [];
+	if($action == 'add_comment')
 	{
+		if(!user_loged()){
+			$template->not_logged();
+			return null;
+		}
+
 		$res_id = $art['res_id'];
 		$data = post('data');
-		$resDb = $db;
-		if($ac_id = include('module/comment/add.inc.php'))
-		{
-			$resDb->Commit();
-			$np = join('/', array_keys($path));
-			header("Location: /$np/$art_id-$art_name_urlized#comment$ac_id");
-			return;
+		$C->set_array(specialchars($data));
+
+		if(empty($data['c_data'])){
+			$error_msg[] = "Kaut kas jau jāieraksta";
+		}
+
+		if(!$error_msg){
+			if($ac_id = add_comment($db, $res_id, $data['c_data']))
+			{
+				$np = join('/', array_keys($path));
+				header("Location: /$np/$art_id-$art_name_urlized#comment$ac_id");
+				return;
+			} else {
+				$error_msg[] = "Neizdevās pievienot komentāru";
+			}
 		}
 	}
 	#
 
+	if($error_msg) {
+		$C->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
+	}
+
 	Res::markCommentCount($articles[0]);
-
-	$RC = new ResComment();
-	$comments = $RC->Get(['res_id'=>$art['res_id']]);
-
-	$C = comment_list($template, $comments, $hl);
+	$comments = get_res_comments((int)$art['res_id']);
+	comment_list($C, $comments, $hl);
 	$T->set_block_string('BLOCK_article_comments_head', $C->parse());
 }
 
