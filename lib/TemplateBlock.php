@@ -59,7 +59,7 @@ class TemplateBlock
 			if(preg_match($patt, $parsed_content, $m, PREG_OFFSET_CAPTURE)){
 				$offset = (int)$m[0][1];
 				$len = strlen($m[0][0]);
-				$parsed_content = substr_replace($parsed_content, $block->parse($append), $offset, $len);
+				$parsed_content = substr_replace($parsed_content, $block->parse(), $offset, $len);
 			}
 		}
 
@@ -155,8 +155,9 @@ class TemplateBlock
 			if($attribute == 'disabled'){
 				$block->attr_disabled = $value;
 			}
+
+			return $block;
 		}
-		return $this;
 	}
 
 	# TODO: test vai remove?
