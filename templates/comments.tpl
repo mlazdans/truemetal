@@ -15,7 +15,7 @@
 		</div>
 		<!-- BEGIN BLOCK_profile_link disabled -->
 		<div class="profile unselectable">
-			<a href="/user/profile/{user_login_id}/" onclick="Truemetal.viewProfile('{user_login_id}'); return false;">[Profils]</a>
+			<a href="/user/profile/{l_hash}/" onclick="Truemetal.viewProfile('{l_hash}'); return false;">[Profils]</a>
 		</div>
 		<!-- END BLOCK_profile_link -->
 		<!-- BEGIN BLOCK_comment_vote disabled -->
@@ -50,7 +50,7 @@
 
 <!-- BEGIN BLOCK_notloggedin disabled -->
 <div class="Info">
-	Komentārus rakstīt var tikai reģistrēti lietotāji, tapēc ielogojies vai
+	Komentārus rakstīt var tikai reģistrēti lietotāji, tapēc <a href="/login/">ielogojies</a> vai
 	<a href="/register/">reģistrējies</a>!
 </div>
 <!-- END BLOCK_notloggedin -->

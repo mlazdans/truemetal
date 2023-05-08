@@ -35,6 +35,9 @@ class Logins
 		if(isset($params['l_email']))
 			$sql_add[] = sprintf("l_email = '%s'", $params['l_email']);
 
+		if(isset($params['l_hash']))
+			$sql_add[] = sprintf("l_hash = '%s'", $params['l_hash']);
+
 		if(isset($params['l_nick']))
 			$sql_add[] = sprintf("l_nick = '%s'", $params['l_nick']);
 
@@ -132,6 +135,7 @@ class Logins
 			isset($params['l_id']) ||
 			isset($params['l_login']) ||
 			isset($params['l_email']) ||
+			isset($params['l_hash']) ||
 			isset($params['single'])
 			)
 		{
@@ -161,7 +165,11 @@ class Logins
 				'l_login'=>$l_login,
 				));
 		}
-	} // load_by_login
+	}
+
+	static function load_by_login_hash(string $l_hash){
+		return (new Logins)->load(['l_hash'=>$l_hash]);
+	}
 
 	# TODO: vajadzētu MySQL collation, kas respektē garumzīmes?
 	static function email_exists(string $email): bool {

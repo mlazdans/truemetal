@@ -84,7 +84,8 @@ SELECT
 	r.res_votes_minus_count,
 	r2.res_id AS parent_res_id,
 	r2.table_id AS parent_table_id,
-	l.l_login
+	l.l_login,
+	l.l_hash
 FROM
 	res_comment rc
 JOIN comment c ON c.c_id = rc.c_id
