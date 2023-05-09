@@ -187,13 +187,13 @@ class Res
 			return false;
 		}
 
-		if(isset($_SESSION['res']['viewed_date'][$item['res_id']]))
+		if(isset($_SESSION['res']['viewed_date'][$item['res_id']]) && $item['res_comment_lastdate'])
 			return (strtotime($item['res_comment_lastdate']) > strtotime($_SESSION['res']['viewed_date'][$item['res_id']]));
 
 		if(isset($_SESSION['res']['viewed'][$item['res_id']]))
 			return ($item['res_comment_count'] > $_SESSION['res']['viewed'][$item['res_id']]);
 
-		if(isset($_SESSION['res']['viewed_before']))
+		if(isset($_SESSION['res']['viewed_before']) && $item['res_comment_lastdate'])
 			return ($_SESSION['res']['viewed_before'] < strtotime($item['res_comment_lastdate']));
 
 		return ($item['res_comment_count'] > 0);
