@@ -1364,6 +1364,41 @@ function whatsnew(MainModule $template): Template
 	return $T;
 }
 
+function user_comments(MainModule $template, string $l_hash, string $hl): ?Template
+{
+	if(!user_loged())
+	{
+		$template->not_logged();
+		return null;
+	}
+
+	if(!($login_data = Logins::load_by_login_hash($l_hash)))
+	{
+		$template->not_found();
+		return null;
+	}
+
+	$T = $template->add_file('user/comments.tpl');
+	$C = new_template('comments.tpl');
+
+	$T->set_array($login_data);
+
+	# Comments
+	$params = [
+		'login_id'=>$login_data['l_id'],
+		'limit'=>100,
+		'order'=>"c_entered DESC",
+	];
+
+	$RC = new ResComment();
+	$comments = $RC->Get($params);
+	comment_list($C, $comments, $hl);
+
+	$T->set_block_string('BLOCK_user_comments_list', $C->parse());
+
+	return $T;
+}
+
 function gallery_thumbs_list(MainModule $template, int $gal_id): ?Template
 {
 	global $CACHE_ENABLE;
