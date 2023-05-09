@@ -1363,3 +1363,253 @@ function whatsnew(MainModule $template): Template
 
 	return $T;
 }
+
+function gallery_thumbs_list(MainModule $template, int $gal_id): ?Template
+{
+	global $CACHE_ENABLE;
+
+	$gallery = new Gallery;
+	if(!($gal = $gallery->load($gal_id))){
+		$template->not_found();
+		return null;
+	}
+
+	$GD = new GalleryData;
+	$T = $template->add_file('gallery.tpl');
+
+	// # ja skataas bildi, nocheko vai attieciigaa galerija ir pieejama
+	// if($gal_id == 'view' && $gd_id)
+	// {
+	// 	$galdata = $GD->load($gd_id);
+	// 	if(!isset($galdata['gal_id'])) {
+	// 		header("Location: /");
+	// 		exit;
+	// 	}
+	// 	$gal = $gallery->load($galdata['gal_id']);
+	// } else {
+	// 	$gal = $gallery->load($gal_id);
+	// }
+
+	$gal_name = "";
+	if($gal['gal_ggid'])
+		$gal_name .= "$gal[gg_name] / ";
+	$gal_name .= "$gal[gal_name]";
+
+	$T->set_var('gal_name', $gal_name);
+	$T->set_var('gal_id', $gal['gal_id']);
+	$template->set_title('Galerija '.$gal_name);
+
+	if($gal['gal_ggid']){
+		$T->set_var('gal_jump_id', "gg_".$gal['gal_ggid']);
+	} else {
+		$T->set_var('gal_jump_id', "gal_".$gal['gal_id']);
+	}
+
+	$T->enable('BLOCK_thumb_list');
+
+	// $gal_cache = "templates/gallery/$gal_id.html";
+	// if(false && file_exists($gal_cache)) {
+	// 	$data = join('', file($gal_cache));
+	// 	$template->set_block_string('BLOCK_thumb', $data);
+	// 	return;
+	// }
+
+	# ielasam thumbus
+	$tpr = 5;
+	$c = 0;
+	$data = $GD->load(['gal_id'=>$gal_id]);
+	$thumb_count = count($data);
+	foreach($data as $thumb)
+	{
+		++$c;
+		if($c % $tpr == 1)
+			$T->enable('BLOCK_tr1');
+		else
+			$T->disable('BLOCK_tr1');
+		if(($c % $tpr == 0) || ($c == $thumb_count))
+			$T->enable('BLOCK_tr2');
+		else
+			$T->disable('BLOCK_tr2');
+
+		if($CACHE_ENABLE && ($hash = cache_hash($thumb['gd_id']."thumb.jpg")) && cache_exists($hash)){
+			$T->set_var('thumb_path', cache_http_path($hash), 'BLOCK_thumb');
+		} else {
+			$T->set_var('thumb_path', "/gallery/thumb/$thumb[gd_id]/", 'BLOCK_thumb');
+		}
+
+		$T->enable_if(GalleryData::hasNewComments($thumb), 'BLOCK_comments_new');
+
+		if($thumb['res_votes'] > 0)
+		{
+			$T->set_var('comment_vote_class', 'plus', 'BLOCK_thumb');
+			$thumb['res_votes'] = '+'.$thumb['res_votes'];
+		} elseif($thumb['res_votes'] < 0) {
+			$T->set_var('comment_vote_class', 'minus', 'BLOCK_thumb');
+		} else {
+			$T->set_var('comment_vote_class', '', 'BLOCK_thumb');
+		}
+		$T->set_array($thumb, 'BLOCK_thumb');
+		$T->parse_block('BLOCK_thumb', TMPL_APPEND);
+	}
+
+	return $T;
+}
+
+
+function gallery_root(MainModule $template): ?Template
+{
+	$gallery = new Gallery;
+	if(!($data = $gallery->load()))
+	{
+		$template->not_found();
+		return null;
+	}
+
+	$T = $template->add_file('gallery.tpl');
+
+	$T->enable('BLOCK_gallery_list');
+
+	$data2 = array();
+	foreach($data as $gal) {
+		$k = empty($gal['gal_ggid']) ? "e-".$gal['gal_id'] : $gal['gal_ggid'];
+		$data2[$k][] = $gal;
+	}
+
+	foreach($data2 as $data)
+	{
+		$T->set_array($data[0], 'BLOCK_gallery_list');
+		if($data[0]['gal_ggid']){
+			$T->set_var('gg_name', $data[0]['gg_name'], 'BLOCK_gallery_group');
+			$T->set_var('gal_jump_id', "gg_".$data[0]['gg_id'], 'BLOCK_gallery_group');
+		} else {
+			$T->set_var('gg_name', $data[0]['gal_name'], 'BLOCK_gallery_group');
+			$T->set_var('gal_jump_id', "gal_".$data[0]['gal_id'], 'BLOCK_gallery_group');
+		}
+
+		foreach($data as $gal){
+			$T->set_array($gal, 'BLOCK_gallery_data');
+			$T->parse_block('BLOCK_gallery_data', TMPL_APPEND);
+		}
+		$T->parse_block('BLOCK_gallery_list', TMPL_APPEND);
+	}
+
+	return $T;
+}
+
+function gallery_image(int $gd_id, string $gal_type)
+{
+	global $CACHE_ENABLE;
+
+	$GD = new GalleryData;
+
+	if($CACHE_ENABLE){
+		$hash = cache_hash($gd_id.$gal_type.".jpg");
+	}
+
+	if($CACHE_ENABLE && cache_exists($hash)){
+		$jpeg = cache_read($hash);
+	} else {
+		$data = $GD->load(['gd_id'=>$gd_id, 'load_images'=>true]);
+		$jpeg = $gal_type == 'image' ? $data['gd_data'] : $data['gd_thumb'];
+
+		if($CACHE_ENABLE && $jpeg)
+			cache_save($hash, $jpeg);
+	}
+
+	header("Content-type: image/jpeg");
+	print $jpeg;
+}
+
+function gallery_view(MainModule $template, int $gd_id): ?Template
+{
+	global $db, $CACHE_ENABLE;
+
+	$action = post('action');
+
+	$GD = new GalleryData;
+
+	if(!($galdata = $GD->load($gd_id))){
+		$template->not_found();
+		return null;
+	}
+
+	$gallery = new Gallery;
+	$gal = $gallery->load($galdata['gal_id']);
+
+	# Komenti
+	Res::markCommentCount($galdata);
+
+	$T = $template->add_file('gallery.tpl');
+	$C = new_template('comments.tpl');
+
+	$error_msg = [];
+	if($action == 'add_comment')
+	{
+		$data = post('data');
+		$C->set_array(specialchars($data));
+
+		if(empty($data['c_data'])){
+			$error_msg[] = "Kaut kas jau jāieraksta";
+		}
+
+		if(empty($error_msg)){
+			$res_id = (int)$galdata['res_id'];
+			$data = post('data');
+			if($c_id = add_comment($db, $res_id, $data['c_data']))
+			{
+				$db->Commit();
+				header("Location: ".GalleryData::Route($galdata, $c_id));
+				return null;
+			} else {
+				$error_msg[] = "Never pievienot komentāru";
+			}
+		}
+	}
+
+	if($error_msg)
+	{
+		$C->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
+	}
+
+
+	$RC = new ResComment();
+	$params = array('res_id'=>$galdata['res_id']);
+
+	# TODO: izvākt un ielikt kaut kur zem list.inc.php
+	$params['order'] =
+		isset($_SESSION['login']['l_forumsort_msg']) &&
+		($_SESSION['login']['l_forumsort_msg'] == Forum::SORT_DESC)
+		? "c_entered DESC"
+		: "c_entered";
+	$comments = $RC->Get($params);
+	comment_list($C, $comments, "");
+	$T->set_block_string('BLOCK_gallery_comments', $C->parse());
+
+	# ja skataas pa vienai
+	$T->enable('BLOCK_image');
+
+	if($CACHE_ENABLE && ($hash = cache_hash($gd_id."image.jpg")) && cache_exists($hash)){
+		$T->set_var('image_path', cache_http_path($hash), 'BLOCK_image');
+	} else {
+		$T->set_var('image_path', "/gallery/image/$gd_id/", 'BLOCK_image');
+	}
+
+	$galdata['res_votes'] = (int)$galdata['res_votes'];
+	if($galdata['res_votes'] > 0)
+	{
+		$T->set_var('comment_vote_class', 'plus', 'BLOCK_image');
+		$galdata['res_votes'] = '+'.$galdata['res_votes'];
+	} elseif($galdata['res_votes'] < 0) {
+		$T->set_var('comment_vote_class', 'minus', 'BLOCK_image');
+	} else {
+		$T->set_var('comment_vote_class', '', 'BLOCK_image');
+	}
+
+	# nechekojam, vai ir veel bildes
+	$next_id = $GD->get_next_data($gal['gal_id'], $gd_id);
+	$T->set_var('gd_nextid', $next_id ? $next_id : $gd_id, 'BLOCK_image');
+
+	$T->set_array($galdata, 'BLOCK_image');
+
+	return $T;
+}

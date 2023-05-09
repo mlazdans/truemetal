@@ -1,9 +1,3 @@
-<!-- BEGIN BLOCK_not_loged disabled -->
-<div class="Info">
-	TrueMetal!
-</div>
-<!-- END BLOCK_not_loged -->
-
 <!-- BEGIN BLOCK_nogalleries disabled -->
 <div class="Info">
 	Diemžēl pagaidām šeit nav nevienas galerijas.
@@ -21,7 +15,7 @@
 
 	<!-- BEGIN BLOCK_gallery_data -->
 	<div id="gal{gal_id}" style="padding-left: 20px;">
-		<a href="{module_root}/{gal_id}/">{gal_name}</a> {gal_data}
+		<a href="/gallery/{gal_id}/">{gal_name}</a> {gal_data}
 	</div>
 	<!-- END BLOCK_gallery_data -->
 </div>
@@ -29,7 +23,7 @@
 
 <!-- BEGIN BLOCK_thumb_list disabled -->
 <div class="TD-cat">
-	<a href="{module_root}/#{gal_jump_id}">Galerijas</a> / {gal_name}
+	<a href="/gallery/#{gal_jump_id}">Galerijas</a> / {gal_name}
 </div>
 	<!-- BEGIN BLOCK_thumb -->
 		<!-- BEGIN BLOCK_tr1 --><div style="text-align: center; margin-bottom: 1em;"><!-- END BLOCK_tr1 -->
@@ -38,7 +32,7 @@
 				<div class="vote {comment_vote_class} vote-value" style="display: inline-block;text-align: center; padding:0; border:none;">{res_votes}</div>
 				Kom. (<div class="<!-- BEGIN BLOCK_comments_new disabled -->Comment-new<!-- END BLOCK_comments_new -->" style="display: inline-block;">{res_comment_count}</div>)
 			</div>
-			<a href="{module_root}/view/{gd_id}/#pic-holder"><img src="{thumb_path}" alt="" class="img-thumb" width="120"></a>
+			<a href="/gallery/view/{gd_id}/#pic-holder"><img src="{thumb_path}" alt="" class="img-thumb" width="120"></a>
 		</div>
 		<!-- BEGIN BLOCK_tr2 --></div><!-- END BLOCK_tr2 -->
 	<!-- END BLOCK_thumb -->
@@ -46,8 +40,8 @@
 
 <!-- BEGIN BLOCK_image disabled -->
 <div class="TD-cat" id="pic-holder">
-	<a class="A-cat" href="{module_root}/#{gal_jump_id}">Galerijas</a> /
-	<a class="A-cat" href="{module_root}/{gal_id}/">{gal_name}</a>
+	<a class="A-cat" href="/gallery/#{gal_jump_id}">Galerijas</a> /
+	<a class="A-cat" href="/gallery/{gal_id}/">{gal_name}</a>
 </div>
 
 <div class="Comment" id="gal_id{gal_id}" style="margin: 0;">
@@ -64,7 +58,7 @@
 		<div class="center unselectable">&nbsp;</div>
 	</div>
 </div>
-<div style="text-align: center;"><a href="{module_root}/view/{gd_nextid}/#pic-holder"><img src="{image_path}" alt="Nākamā" width="500"></a></div>
+<div style="text-align: center;"><a href="/gallery/view/{gd_nextid}/#pic-holder"><img src="{image_path}" alt="Nākamā" width="500"></a></div>
 <div style="text-align: center;">{gd_descr}</div>
 
 <div class="TD-cat">

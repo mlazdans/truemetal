@@ -882,22 +882,22 @@ function cache_save($h, $data)
 {
 	global $sys_root;
 
-	$abs_path = "$sys_root/public/cache/$h";
+	$abs_path = join_paths($sys_root, 'public', 'cache', $h);
 	$dir = dirname($abs_path);
 
-	$key = ftok("$sys_root/public/cache", "T");
-	//$key = crc32($h) % 101 + 0xBADBEEF;
-	$se = sem_get($key);
-	sem_acquire($se);
+	// $key = ftok("$sys_root/public/cache", "T");
+	// //$key = crc32($h) % 101 + 0xBADBEEF;
+	// $se = sem_get($key);
+	// sem_acquire($se);
 
 	if(!file_exists($dir))
-		mkdir($dir, 0777, true);
+		mkdir($dir, 0644, true);
 
 	$status = true;
 	if(!file_exists($abs_path))
 		$status = file_put_contents($abs_path, $data, LOCK_EX);
 
-	sem_release($se);
+	// sem_release($se);
 
 	return $status;
 } // cache_save
@@ -928,7 +928,7 @@ function cache_hash($id, $levels = 2)
 
 	$path = '';
 	for($i = 1; $i <= $levels; $i++){
-		$path .= substr($hash, $l - $i, 1).'/';
+		$path .= substr($hash, $l - $i, 1).DIRECTORY_SEPARATOR;
 	}
 	$path .= "$hash-$id";
 
