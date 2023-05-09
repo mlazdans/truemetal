@@ -1,11 +1,4 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
-
-
+<?php declare(strict_types = 1);
 /******************************************************************************
 |* doc_source_id
 |*	1 - articles
@@ -50,40 +43,38 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 $ent_search_q = ent($search_q);
 
 $template = new MainModule($sys_module_id, 'index.tpl');
-$template->set_file('FILE_search', 'search.tpl');
+$T = $template->add_file('search.tpl');
 $template->set_title("Meklēšana: $ent_search_q");
 $template->set_descr("Metāliskais meklētājs");
-$template->copy_block('BLOCK_middle', 'FILE_search');
 
 if($search_q && (mb_strlen($search_q) < 3))
 	$search_msg[] = "Jāievada vismaz 3 simbolus";
 
-$template->set_var("doc_count", 0, 'BLOCK_search');
-$template->set_var('search_q', $ent_search_q);
-$template->set_var('search_q_name', ": $ent_search_q");
+$T->set_var("doc_count", 0);
+$T->set_var('search_q', $ent_search_q);
+$T->set_var('search_q_name', ": $ent_search_q");
 
 if($search_q && !$search_msg)
 {
 	include('module/search/search.inc.php');
 } else {
-	$template->enable('BLOCK_search_help');
-	$template->set_var('section_article_checked', ' checked="checked"', 'BLOCK_middle');
-	$template->set_var('section_reviews_checked', ' checked="checked"', 'BLOCK_middle');
-	$template->set_var('section_forum_checked', ' checked="checked"', 'BLOCK_middle');
+	$T->enable('BLOCK_search_help');
+	$T->set_var('section_article_checked', ' checked="checked"');
+	$T->set_var('section_reviews_checked', ' checked="checked"');
+	$T->set_var('section_forum_checked', ' checked="checked"');
 }
 
 if($search_msg)
 {
-	$template->enable('BLOCK_search');
-	$template->enable('BLOCK_search_msg');
+	$T->enable('BLOCK_search');
+	$T->enable('BLOCK_search_msg');
 	foreach($search_msg as $msg)
 	{
-		$template->set_var('search_msg', $msg, 'BLOCK_search_msg');
-		$template->parse_block('BLOCK_search_msg_list', TMPL_APPEND);
+		$T->set_var('search_msg', $msg, 'BLOCK_search_msg');
+		$T->parse_block('BLOCK_search_msg_list', TMPL_APPEND);
 	}
 }
 
 $template->set_right_defaults();
-//$template->set_search($ent_search_q);
-$template->out();
+$template->out($T);
 
