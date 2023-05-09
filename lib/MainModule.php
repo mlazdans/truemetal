@@ -160,14 +160,6 @@ class MainModule
 	// 	} // while
 	// } // set_submodules
 
-	// function set_right()
-	// {
-	// 	$this->set_file('FILE_right', 'right.tpl');
-	// 	$this->copy_block('BLOCK_right', 'FILE_right');
-
-	// 	$this->enable('BLOCK_right');
-	// } // set_right
-
 	function set_right_defaults()
 	{
 		$this->set_events();
