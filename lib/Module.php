@@ -287,7 +287,7 @@ class Module
 
 		$match = '';
 		if($q)
-			$match = ', '.search_to_sql($q, array('module_name', 'module_data')).' score';
+			$match = ', '.search_to_sql_legacy($q, array('module_name', 'module_data')).' score';
 
 
 		$sql = "SELECT m.*$match FROM `modules` m";

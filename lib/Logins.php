@@ -66,7 +66,7 @@ class Logins
 
 		if(isset($params['q']))
 		{
-			$search_sql = search_to_sql($params['q'], array('l_nick', 'l_login', 'l_email', 'l_userip'));
+			$search_sql = search_to_sql_legacy($params['q'], array('l_nick', 'l_login', 'l_email', 'l_userip'));
 			if($search_sql)
 				$sql_add[] = $search_sql;
 		}
