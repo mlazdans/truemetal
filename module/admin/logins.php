@@ -1,28 +1,22 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
-
-require_once('lib/Logins.php');
-require_once('lib/Module.php');
-require_once('lib/Article.php');
-require_once('lib/Forum.php');
+<?php declare(strict_types = 1);
 
 $l_id = (int)array_shift($sys_parameters);
 $action = postget('action');
 $actions = array('delete_multiple', 'activate_multiple', 'deactivate_multiple');
-
 $logins = new Logins;
 
 if(in_array($action, $actions))
 {
-	if($logins->process_action($_POST, $action))
-		header("Location: $module_root/");
+	if($logins->process_action($_POST, $action)){
+		redirect_referer();
+		// header("Location: $module_root/");
+	}
 
 	return;
 }
+
+// XXX: ja post tukšs
+$action = get('action');
 
 if($action == 'save')
 {

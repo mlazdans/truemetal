@@ -34,6 +34,7 @@
 	</td>
 	<td class="TD-cat">Modulis</td>
 	<td class="TD-cat">Nosaukums</td>
+	<td class="TD-cat">Datums</td>
 </tr>
 <!-- BEGIN BLOCK_article_item -->
 <tr>
@@ -42,13 +43,12 @@
 		<input type="checkbox" name="art_checked{article_nr}">
 	</td>
 	<td class="{art_color_class}">{module_id}</td>
-	<td class="{art_color_class}">
-		<a href="{module_root}/{art_id}/">{art_name}</a>
-	</td>
+	<td class="{art_color_class}" nowrap><a href="{module_root}/{art_id}/">{art_name}</a></td>
+	<td class="{art_color_class}" nowrap>{art_entered}</td>
 </tr>
 <!-- END BLOCK_article_item -->
 <tr>
-	<td colspan="3">
+	<td colspan="5">
 		Iezīmētos:
 		<select name="action">
 			<option value="">---</option>

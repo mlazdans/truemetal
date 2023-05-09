@@ -1,5 +1,5 @@
 <div class="TD-cat-active">
-	/ <a class="A-cat" href="{module_root}/">Forums</a><!-- BEGIN BLOCK_forum_path disabled --> / <a class="A-cat" href="{forum_path}">{forum_name}</a><!-- END BLOCK_forum_path --> /
+	/ <a class="A-cat" href="{module_root}/">Forums</a><!-- BEGIN BLOCK_forum_path disabled --> / <a class="A-cat" href="/admin/{forum_path}">{forum_name}</a><!-- END BLOCK_forum_path --> /
 </div>
 
 <!-- BEGIN BLOCK_forum_edit disabled -->

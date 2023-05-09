@@ -1,42 +1,18 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
-header('Cache-Control: no-cache');
-header('Pragma: no-cache');
+$sys_admins = [3];
 
-function identify() {
-	header("WWW-Authenticate: Basic realm=\"Restricted zone!\"");
-	header("HTTP/1.0 401 Unauthorized");
-
-	die("Nepareizs logins vai parole!");
-}
-
-require_once('lib/AdminModule.php');
-require_once('lib/User.php');
-
-$user_login = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : '';
-$user_pass = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
-
-$user = new User();
-$user->login($user_login, $user_pass);
-if($user->logged_id) {
-	$_USER = $user->data;
-} else {
-	identify();
+if(!(user_loged() && in_array($_SESSION['login']['l_id'], $sys_admins))){
+	header403();
+	return;
 }
 
 $admin_modules = array(
 	'modules'=>'Moduļi',
 	'article'=>'Ziņas',
 	'upload'=>'Faili',
-	'poll'=>'Jautājums',
 	'forum'=>'Forums',
 	'editor'=>'',
-	'user'=>'Lietotāji',
 	'logins'=>'Logini',
 	'reports'=>'Reporti',
 	'res'=>'',
@@ -54,4 +30,3 @@ if(!$admin_module || !file_exists("$sys_root/module/admin/$admin_module.php"))
 	$admin_module = 'start';
 
 include("$sys_root/module/admin/$admin_module.php");
-

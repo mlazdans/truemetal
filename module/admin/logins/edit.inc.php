@@ -1,11 +1,4 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
-
-require_once('lib/ResComment.php');
+<?php declare(strict_types = 1);
 
 # Comment actions
 if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
@@ -16,8 +9,10 @@ if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
 	return;
 }
 
-$template = new AdminModule("logins/edit");
+$template = new AdminModule("logins");
 $template->set_title('Admin :: logini :: rediģēt');
+
+$T = $template->add_file("admin/logins/edit.tpl");
 
 $Logins = new Logins();
 $login = $Logins->load(array(
@@ -25,27 +20,26 @@ $login = $Logins->load(array(
 	'l_active'=>Res::STATE_ALL,
 	'l_accepted'=>Res::STATE_ALL,
 	'get_all_ips'=>true,
-	));
+));
 
-$template->set_array($login, 'BLOCK_login_edit');
+$T->set_array($login, 'BLOCK_login_edit');
 
 $YN = array(
 	'l_active',
 	'l_accepted',
 	'l_emailvisible',
 	'l_logedin',
-	);
+);
 
 foreach($YN as $k)
 {
 	$v = sprintf("%s_%s_sel", $k, $login[$k]);
-	$template->set_var($v, ' selected="selected"', 'BLOCK_login_edit');
+	$T->set_var($v, ' selected="selected"', 'BLOCK_login_edit');
 }
-$template->set_var('all_ips_view', str_replace(",", ", ", $login['all_ips']), 'BLOCK_login_edit');
+$T->set_var('all_ips_view', str_replace(",", ", ", $login['all_ips']), 'BLOCK_login_edit');
 
 # User comments
-$template->set_file('FILE_comment_list', 'comment/list.tpl');
-$template->copy_block('BLOCK_login_comments', 'FILE_comment_list');
+$C = new_template("admin/comment/list.tpl");
 
 $RC = new ResComment();
 $RC->setDb($db);
@@ -61,14 +55,14 @@ $alsoUsers = Logins::collectUsersByIP(explode(",", $login['all_ips']), $l_id);
 
 if($alsoUsers)
 {
-	$template->enable('BLOCK_logins_also');
+	$T->enable('BLOCK_logins_also');
 	foreach($alsoUsers as $item)
 	{
-		$template->set_array($item, 'BLOCK_logins_also_list');
-		$template->set_var('l_color_class', 'box-normal', 'BLOCK_logins_also_list');
+		$T->set_array($item, 'BLOCK_logins_also_list');
+		$T->set_var('l_color_class', 'box-normal', 'BLOCK_logins_also_list');
 		if($item['l_active'] != Res::STATE_ACTIVE)
-			$template->set_var('l_color_class', 'box-inactive', 'BLOCK_logins_also_list');
-		$template->parse_block('BLOCK_logins_also_list', TMPL_APPEND);
+			$T->set_var('l_color_class', 'box-inactive', 'BLOCK_logins_also_list');
+		$T->parse_block('BLOCK_logins_also_list', TMPL_APPEND);
 	}
 }
 
@@ -90,15 +84,15 @@ foreach($files as $k=>$v){
 
 if($pic_suffixes)
 {
-	$template->enable('BLOCK_logins_pics');
+	$T->enable('BLOCK_logins_pics');
 	foreach($pic_suffixes as $suffix){
-		$template->set_var('l_pic_suffix', $suffix, 'BLOCK_logins_pics_item');
-		$template->parse_block('BLOCK_logins_pics_item', TMPL_APPEND);
+		$T->set_var('l_pic_suffix', $suffix, 'BLOCK_logins_pics_item');
+		$T->parse_block('BLOCK_logins_pics_item', TMPL_APPEND);
 	}
 }
 
+admin_comment_list($C, $comments);
+$T->set_block_string('BLOCK_login_comments', $C->parse());
 
-include('module/admin/comment/list.inc.php');
-
-$template->out();
+$template->out($T);
 

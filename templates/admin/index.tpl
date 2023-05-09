@@ -61,7 +61,7 @@ initEditor();
 <tr>
 	<!-- BEGIN BLOCK_adminmodules -->
 	<td class="{adminmodule_class}">
-		<a class="A-cat" href="{admin_root}/{adminmodule_id}/">{adminmodule_name}</a>
+		<a class="A-cat" href="/admin/{adminmodule_id}/">{adminmodule_name}</a>
 	</td>
 	<!-- END BLOCK_adminmodules -->
 	<td class="TD-menu">
@@ -79,8 +79,11 @@ initEditor();
 
 <div id="footer">
 	Copyright &copy; Norge Datorsistēmas 2003-2008<br/>
-	Copyright &copy; dqdp.net 2008-{year}
+	Copyright &copy; dqdp.net 2008-{year}<br/>
 </div>
+
+<hr>
+{tmpl_finished}
 
 </body>
 </html>

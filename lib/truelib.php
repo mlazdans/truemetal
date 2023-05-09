@@ -1648,3 +1648,36 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 
 	return $T;
 }
+
+function admin_comment_list(
+	Template $C,
+	array $comments
+){
+
+	if($comments)
+	{
+		$C->enable('BLOCK_comments');
+	} else {
+		$C->enable('BLOCK_nocomments');
+	}
+
+	foreach($comments as $item)
+	{
+		$item['c_origin_href'] = "/resroute/$item[parent_res_id]/?c_id=$item[c_id]";
+		$item['c_origin_name'] = "#comment$item[c_id]";
+
+		$C->set_array($item, 'BLOCK_comment_item');
+
+		if($item['c_visible'] == Res::STATE_VISIBLE)
+		{
+			$C->enable('BLOCK_c_visible');
+			$C->disable('BLOCK_c_invisible');
+			$C->set_var('c_color_class', 'box-normal', 'BLOCK_comment_item');
+		} else {
+			$C->enable('BLOCK_c_invisible');
+			$C->disable('BLOCK_c_visible');
+			$C->set_var('c_color_class', 'box-invisible', 'BLOCK_comment_item');
+		}
+		$C->parse_block('BLOCK_comment_item', TMPL_APPEND);
+	}
+}

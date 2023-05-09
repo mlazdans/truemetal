@@ -7,4 +7,4 @@
 
 $template = new AdminModule($admin_module);
 $template->set_title('Admin :: hello');
-$template->out();
+$template->out(null);

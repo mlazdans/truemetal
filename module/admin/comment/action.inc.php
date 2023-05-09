@@ -1,12 +1,4 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
-
-require_once('lib/Comment.php');
-require_once('lib/ResComment.php');
+<?php declare(strict_types = 1);
 
 $c_ids = post('c_id');
 $new_res_id = post('new_res_id');
@@ -38,5 +30,3 @@ if($func == 'move'){
 }
 
 return $ok;
-
-
