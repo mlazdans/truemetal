@@ -16,19 +16,19 @@ $index = ($only_titles ? "doc_titles" : "doc");
 
 $sources = array();
 if(in_array('article', $sections)){
-	$template->set_var('section_article_checked', ' checked="checked"', 'BLOCK_middle');
+	$T->set_var('section_article_checked', ' checked="checked"', 'BLOCK_middle');
 	$sources[] = 1;
 }
 if(in_array('reviews', $sections)){
-	$template->set_var('section_reviews_checked', ' checked="checked"', 'BLOCK_middle');
+	$T->set_var('section_reviews_checked', ' checked="checked"', 'BLOCK_middle');
 	$sources[] = 2;
 }
 if(in_array('forum', $sections)){
-	$template->set_var('section_forum_checked', ' checked="checked"', 'BLOCK_middle');
+	$T->set_var('section_forum_checked', ' checked="checked"', 'BLOCK_middle');
 	$sources[] = 3;
 }
 if($only_titles){
-	$template->set_var('only_titles_checked', ' checked="checked"', 'BLOCK_middle');
+	$T->set_var('only_titles_checked', ' checked="checked"', 'BLOCK_middle');
 }
 
 $params = array(
@@ -62,7 +62,7 @@ if($res['result'] === false){
 	$search_msg[] = "Nekas netika atrasts";
 } else {
 	$items = $res['items'];
-	$template->set_var("doc_count", $res['res']['total_found'], 'BLOCK_search');
+	$T->set_var("doc_count", $res['res']['total_found'], 'BLOCK_search');
 }
 
 if($res['res']['total_found'] > $spx_limit){
@@ -71,12 +71,12 @@ if($res['res']['total_found'] > $spx_limit){
 
 if(!empty($items))
 {
-	$template->enable('BLOCK_search');
-	$template->enable('BLOCK_search_item');
+	$T->enable('BLOCK_search');
+	$T->enable('BLOCK_search_item');
 	foreach($items as $item)
 	{
-		$template->set_array($item, 'BLOCK_search_item');
-		$template->parse_block('BLOCK_search_item', TMPL_APPEND);
+		$T->set_array($item, 'BLOCK_search_item');
+		$T->parse_block('BLOCK_search_item', TMPL_APPEND);
 	}
 }
 
