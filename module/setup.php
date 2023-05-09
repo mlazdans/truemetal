@@ -33,3 +33,6 @@ if(!$i_am_admin)
 	}
 
 })();
+
+// apt install php8.2-intl
+printr("extension_loaded(intl):".(int)extension_loaded('intl'));
