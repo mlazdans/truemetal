@@ -67,11 +67,6 @@ class MainModule
 		return $this;
 	}
 
-	function set_module_name($module_name)
-	{
-		$this->module_name = $module_name;
-	} // set_module_name
-
 	function set_middle(?Template $T)
 	{
 		if($T instanceof Template){
@@ -393,12 +388,10 @@ class MainModule
 			"fields"=>array('forum_id', 'forum_name', 'event_startdate', 'f.res_id'),
 			"actual_events"=>true,
 			"order"=>'event_startdate',
-			));
+		));
 
 		if(!$data)
 			return;
-
-		// $this->set_file('FILE_events', 'right/events.tpl');
 
 		$TEvents = $this->add_file('right/events.tpl');
 
