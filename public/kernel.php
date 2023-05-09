@@ -1,5 +1,6 @@
 <?php declare(strict_types = 1);
 
+spl_autoload_register();
 # TODO: mainot galerijām/foruma/commention utt login_id, trigerī nomainās arī res tabulā
 # TODO: mainot paroli chrome piedāvā ieseivot arī pie fail
 
