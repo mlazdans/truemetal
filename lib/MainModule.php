@@ -70,7 +70,7 @@ class MainModule
 	function set_middle(?Template $T)
 	{
 		if($T instanceof Template){
-			$this->Index->set_block_string('BLOCK_middle', $T->parse());
+			$this->Index->set_block_string($T->parse(), 'BLOCK_middle');
 		}
 
 		return $this;
@@ -81,11 +81,11 @@ class MainModule
 		global $i_am_admin, $sys_start_time;
 
 		if(isset($this->TRight)){
-			$this->Index->set_block_string('BLOCK_right', $this->TRight->parse());
+			$this->Index->set_block_string($this->TRight->parse(), 'BLOCK_right');
 		}
 
 		if($T instanceof Template){
-			$this->Index->set_block_string('BLOCK_middle', $T->parse());
+			$this->Index->set_block_string($T->parse(), 'BLOCK_middle');
 		}
 
 		$sys_end_time = microtime(true);

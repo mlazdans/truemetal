@@ -345,7 +345,7 @@ function forum_det(
 		$C->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
 	}
 
-	$T->set_block_string('BLOCK_forum_comments', $C->parse());
+	$T->set_block_string($C->parse(), 'BLOCK_forum_comments');
 
 	# Attendees
 	if(user_loged() && ($forum_data['type_id'] == Res::TYPE_EVENT))
@@ -1336,7 +1336,7 @@ function whatsnew(MainModule $template): Template
 			$R->set_var('forum_r_path', "forum/{$item['forum_id']}-".rawurlencode(urlize($item["forum_name"])));
 			$R->parse_block('BLOCK_forum_r_items', TMPL_APPEND);
 		}
-		$T->set_block_string('BLOCK_whatsnew_forum', $R->parse());
+		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_forum');
 	}
 
 	# Articles
@@ -1358,7 +1358,7 @@ function whatsnew(MainModule $template): Template
 			$R->set_var('comment_r_path', "{$item['module_id']}/{$item['art_id']}-".urlize($item['art_name']));
 			$R->parse_block('BLOCK_comment_r_items', TMPL_APPEND);
 		}
-		$T->set_block_string('BLOCK_whatsnew_comments', $R->parse());
+		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_comments');
 	}
 
 	return $T;
@@ -1394,7 +1394,7 @@ function user_comments(MainModule $template, string $l_hash, string $hl): ?Templ
 	$comments = $RC->Get($params);
 	comment_list($C, $comments, $hl);
 
-	$T->set_block_string('BLOCK_user_comments_list', $C->parse());
+	$T->set_block_string($C->parse(), 'BLOCK_user_comments_list');
 
 	return $T;
 }
@@ -1441,13 +1441,6 @@ function gallery_thumbs_list(MainModule $template, int $gal_id): ?Template
 	}
 
 	$T->enable('BLOCK_thumb_list');
-
-	// $gal_cache = "templates/gallery/$gal_id.html";
-	// if(false && file_exists($gal_cache)) {
-	// 	$data = join('', file($gal_cache));
-	// 	$template->set_block_string('BLOCK_thumb', $data);
-	// 	return;
-	// }
 
 	# ielasam thumbus
 	$tpr = 5;
@@ -1618,7 +1611,7 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 		: "c_entered";
 	$comments = $RC->Get($params);
 	comment_list($C, $comments, "");
-	$T->set_block_string('BLOCK_gallery_comments', $C->parse());
+	$T->set_block_string($C->parse(), 'BLOCK_gallery_comments');
 
 	# ja skataas pa vienai
 	$T->enable('BLOCK_image');

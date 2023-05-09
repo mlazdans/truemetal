@@ -120,7 +120,7 @@ if(!$art_id)
 	$C = new_template("admin/comment/list.tpl");
 	admin_comment_list($C, $comments);
 
-	$T->set_block_string('BLOCK_article_comments', $C->parse());
+	$T->set_block_string($C->parse(), 'BLOCK_article_comments');
 
 }
 

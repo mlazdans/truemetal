@@ -157,7 +157,7 @@ if($art_id && isset($articles[0]))
 	Res::markCommentCount($articles[0]);
 	$comments = get_res_comments((int)$art['res_id']);
 	comment_list($C, $comments, $hl);
-	$T->set_block_string('BLOCK_article_comments_head', $C->parse());
+	$T->set_block_string($C->parse(), 'BLOCK_article_comments_head');
 }
 
 # Pages

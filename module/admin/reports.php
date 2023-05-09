@@ -34,7 +34,7 @@ if($report == 'ip')
 		));
 
 		admin_comment_list($C, $comments);
-		$T->set_block_string('BLOCK_report_comments', $C->parse());
+		$T->set_block_string($C->parse(), 'BLOCK_report_comments');
 	}
 }
 

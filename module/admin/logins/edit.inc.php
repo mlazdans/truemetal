@@ -92,7 +92,7 @@ if($pic_suffixes)
 }
 
 admin_comment_list($C, $comments);
-$T->set_block_string('BLOCK_login_comments', $C->parse());
+$T->set_block_string($C->parse(), 'BLOCK_login_comments');
 
 $template->out($T);
 
