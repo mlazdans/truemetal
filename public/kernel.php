@@ -1,13 +1,4 @@
 <?php declare(strict_types = 1);
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
-
-spl_autoload_extensions(".php");
-spl_autoload_register();
-require '../vendor/autoload.php';
 
 # TODO: mainot galerijām/foruma/commention utt login_id, trigerī nomainās arī res tabulā
 # TODO: mainot paroli chrome piedāvā ieseivot arī pie fail
