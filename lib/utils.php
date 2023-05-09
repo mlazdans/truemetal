@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 use dqdp\Template;
 
@@ -84,16 +84,15 @@ function get_day($i){
 // 	return "/(http(s?):\/\/|ftp:\/\/|telnet:\/\/|dchub:\/\/|ed2k:\/\/|mailto:|callto:)([^\/\s\t\n\r\!\'\<>\(\)]".$url_patt."*)([^\s\t\n\r\'\<>]".$path_patt."*)/is";
 // } // url_pattern
 
+# TODO: test https://www.metal-archives.com/bands/Jumpin%27_Jesus/6714
 function parse_text_data(&$data)
 {
-	global $i_am_admin;
-
 	// proc url's - 1pass
 	$patt = url_pattern();
 	if(preg_match_all($patt, $data, $matches)) {
 		$tokens = array();
 		foreach($matches[0] as $k=>$v) {
-			$tokens[$k] = ' '.substr(md5(uniqid(rand(),1)), 0, FORUM_MAXWORDSIZE - 1).' ';
+			$tokens[$k] = ' '.substr(md5(uniqid((string)rand(),true)), 0, FORUM_MAXWORDSIZE - 1).' ';
 			$data = str_replace($matches[0][$k], $tokens[$k], $data);
 		}
 	}
@@ -209,12 +208,6 @@ function parse_text_data(&$data)
 
 	$data = $data;
 } // parse_text_data
-
-function valid_date($date)
-{
-	list($d, $m, $y) = explode('\.', $date);
-	return checkdate($m, $d, $y);
-} // valid_date
 
 // function substitute_change($str)
 // {
@@ -433,7 +426,7 @@ function strip_script(&$data, &$keys, &$scripts)
 	foreach($patts as $patt) {
 		preg_match_all($patt, $data, $m);
 		for($r = 0; $r < count($m[0]); ++$r) {
-			$token = '<'.md5(uniqid(rand(),1)).'>';
+			$token = '<'.md5(uniqid((string)rand(), true)).'>';
 			$keys[] = $token;
 			$scripts[] = $m[0][$r];
 			$data = str_replace($m[0][$r], $token, $data);
@@ -505,28 +498,29 @@ function parse_mysql_search_q($q)
 // 	unstrip_script($data, $keys, $scripts);
 // } // hl
 
-// function search_to_sql($q, $fields)
-// {
-// 	$words = explode(' ', $q);
-// 	if(!is_array($fields))
-// 		$fields = array($fields);
+# TODO: vecais search - get rid off
+function search_to_sql_legacy($q, $fields)
+{
+	$words = explode(' ', $q);
+	if(!is_array($fields))
+		$fields = array($fields);
 
-// 	$match = '';
-// 	foreach($words as $word)
-// 	{
-// 		$tmp = '';
-// 		foreach($fields as $field)
-// 			if($field)
-// 				$tmp .= "$field REGEXP '".addslashes(preg_quote($word))."' OR ";
-// 		$tmp = substr($tmp, 0, -4);
-// 		if($tmp)
-// 			$match .= "($tmp) AND ";
-// 	}
-// 	$match = substr($match, 0, -5);
-// 	if($match)
-// 		return "($match)";
-// 	//$match = ",(module_name REGEXP '$q' OR module_data REGEXP '$q') score";
-// } // search_to_sql
+	$match = '';
+	foreach($words as $word)
+	{
+		$tmp = '';
+		foreach($fields as $field)
+			if($field)
+				$tmp .= "$field REGEXP '".addslashes(preg_quote($word))."' OR ";
+		$tmp = substr($tmp, 0, -4);
+		if($tmp)
+			$match .= "($tmp) AND ";
+	}
+	$match = substr($match, 0, -5);
+	if($match)
+		return "($match)";
+	//$match = ",(module_name REGEXP '$q' OR module_data REGEXP '$q') score";
+} // search_to_sql
 
 function search_to_spider($q, $fields)
 {
@@ -923,7 +917,7 @@ function cache_http_path($h)
 
 function cache_hash($id, $levels = 2)
 {
-	$hash = crc32($id);
+	$hash = (string)crc32($id);
 	$l = strlen($hash);
 
 	$path = '';
