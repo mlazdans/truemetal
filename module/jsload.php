@@ -22,11 +22,13 @@ if(!$sys_debug)
 	header("Expires: ".gmdate("D, d M Y H:i:s", time() + $expires) . " GMT");
 }
 
+$SCRIPTS = $i_am_admin ? $sys_admin_js : $sys_js;
+
 if($SCRIPTS = $sys_js){
 	foreach($SCRIPTS as $js){
-		if(is_file("js/$js.js")){
-			readfile("js/$js.js");
+		$path = join_paths($sys_root, "js", "$js.js");
+		if(is_file($path)){
+			readfile($path);
 		}
 	}
 }
-
