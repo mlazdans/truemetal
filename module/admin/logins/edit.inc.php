@@ -22,6 +22,8 @@ $login = $Logins->load(array(
 	'get_all_ips'=>true,
 ));
 
+$all_ips = $login['all_ips']??"";
+
 $T->set_array($login, 'BLOCK_login_edit');
 
 $YN = array(
@@ -36,7 +38,7 @@ foreach($YN as $k)
 	$v = sprintf("%s_%s_sel", $k, $login[$k]);
 	$T->set_var($v, ' selected="selected"', 'BLOCK_login_edit');
 }
-$T->set_var('all_ips_view', str_replace(",", ", ", $login['all_ips']), 'BLOCK_login_edit');
+$T->set_var('all_ips_view', str_replace(",", ", ", $all_ips), 'BLOCK_login_edit');
 
 # User comments
 $C = new_template("admin/comment/list.tpl");
@@ -51,7 +53,7 @@ $comments = $RC->get(array(
 	));
 
 # Šmurguļi, kas nāk no vairākā IP un reklamē :E (piemēram, HeavenGrey)
-$alsoUsers = Logins::collectUsersByIP(explode(",", $login['all_ips']), $l_id);
+$alsoUsers = Logins::collectUsersByIP(explode(",", $all_ips), $l_id);
 
 if($alsoUsers)
 {
