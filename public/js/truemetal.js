@@ -3,10 +3,10 @@
 */
 var Truemetal = {
 	SimpleDialog: function(msg, title = ""){
-		var dialog = $('<div/>',{
-				text: msg
+		 $('<div/>', {
+			html: msg
 		}).dialog({
-			title: "[ TRUEMETAL" + (title ? " " + title : "")+ " ]",
+			title: title,
 			buttons: {
 				"Aizvērt": function(){
 					$(this).dialog("destroy");
@@ -55,27 +55,36 @@ var Truemetal = {
 
 		window.open(theURL, name, 'fullscreen=0,toolbar=0,status=0,scrollbars=0,menubar=0,location=0,resizable=0,channelmode=0,directories=0,width=' + w + ',height=' + h + ',top=' + t +',left=' + l);
 	},
+	HandleJsonError: function(req, status){
+		let data = req?.responseJSON;
+		if(data === undefined){
+			Truemetal.SimpleDialog("Kaut kas nogāja greizi", "Kļūda");
+		} else if(data.html !== undefined) {
+			Truemetal.SimpleDialog(data?.html, data?.title);
+		} else {
+			console.error("Nez kas te domāts", data);
+		}
+	},
 	Vote: function(cId, value, voteXpath) {
-		$.getJSON("/vote/" + value + "/" + cId + "/?json",
-			function(data)
-			{
-				if(!data || !data.Votes)
-				{
-					if(data.msg)
-					{
-						alert(data.msg);
-					}
-					return false;
+		$.ajax({
+			url: "/vote/" + value + "/" + cId + "/?json",
+			dataType: 'json',
+			complete: function(req, status){
+				let data = req?.responseJSON;
+				if(data.Votes === undefined){
+					return Truemetal.HandleJsonError(req, status);
 				}
 
-				if(data.Votes > 0)
+				if(data.Votes > 0){
 					$(voteXpath).html('+' + data.Votes).removeClass("minus").addClass("plus");
-				else if(data.Votes < 0)
+				} else if(data.Votes < 0) {
 					$(voteXpath).html(data.Votes).addClass("minus").removeClass("plus");
-				else
+				} else {
 					$(voteXpath).html(data.Votes).removeClass("minus").removeClass("plus").addClass("Comment-Vote");
-			});
-	}, // Vote
+				}
+			}
+		});
+	},
 	wrapYouTube: function(el){
 		var videoId = Truemetal.getUrlVars($(el).attr("href")).v;
 		var q = '';

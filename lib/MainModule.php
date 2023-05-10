@@ -67,21 +67,13 @@ class MainModule
 		return $this;
 	}
 
-	function set_middle(?Template $T)
+	function out(null|Template|TrueResponseInterface $T)
 	{
-		if($T instanceof Template){
-			$this->Index->set_block_string($T->parse(), 'BLOCK_middle');
-		}
+		global $i_am_admin, $sys_start_time, $sys_encoding;
 
-		return $this;
-	}
-
-	function out(?Template $T)
-	{
-		global $i_am_admin, $sys_start_time;
-
-		if(isset($this->TRight)){
-			$this->Index->set_block_string($this->TRight->parse(), 'BLOCK_right');
+		if($T instanceof TrueResponseInterface){
+			$T->out();
+			return;
 		}
 
 		if($T instanceof Template){
@@ -98,7 +90,23 @@ class MainModule
 		}
 		$this->Index->set_var('tmpl_finished', $finished);
 
-		print $this->Index->parse();
+		# Default json handleris atgriež middle
+		if(isset($_GET['json']))
+		{
+			header('Content-Type: text/javascript; charset='.$sys_encoding);
+
+			$jsonData = new StdClass;
+			$jsonData->title = "[ TRUEMETAL ".$this->get_title()." ]";
+			$jsonData->html = $this->Index->get_block('BLOCK_container')->parse();
+			print json_encode($jsonData);
+		} else {
+			header('Content-Type: text/html; charset='.$sys_encoding);
+
+			if(isset($this->TRight)){
+				$this->Index->set_block_string($this->TRight->parse(), 'BLOCK_right');
+			}
+			print $this->Index->parse();
+		}
 
 		return $this;
 	}
