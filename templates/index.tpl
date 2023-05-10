@@ -5,6 +5,7 @@
 <title>[ TRUEMETAL {title} ]</title>
 <meta name="verify-v1" content="1T6p5COcolqsK65q0I6uXdMjPuPskp2jyWjFMTOW/LY=">
 <meta name="description" content="{meta_descr}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 <link href="/css/?v={script_version}" rel="stylesheet" type="text/css">
 </head>
 <body>
