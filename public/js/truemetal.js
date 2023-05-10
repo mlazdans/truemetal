@@ -12,26 +12,6 @@ var Truemetal = {
 			}
 		});
 	},
-	Attend: function(res_id){
-		$.getJSON("/attend/" + res_id + "/?json",
-			function(ret){
-				if(ret.msg){
-					Truemetal.SimpleDialog(ret.msg)
-				} else {
-					location.reload();
-				}
-			});
-	},
-	AttendNo: function(res_id){
-		$.getJSON("/attend/" + res_id + "/off/?json",
-			function(ret){
-				if(ret.msg){
-					Truemetal.SimpleDialog(ret.msg)
-				} else {
-					location.reload();
-				}
-			});
-	},
 	checkAll: function(form, ref){
 		if(form && ref)
 		{
@@ -47,11 +27,26 @@ var Truemetal = {
 			Truemetal.checkAll(form, ref);
 		}
 	},
-	Pop: function(theURL,w,h,name) {
-		var l = (screen.width - w) / 2;
-		var t = (screen.height - h) / 2;
-
-		window.open(theURL, name, 'fullscreen=0,toolbar=0,status=0,scrollbars=0,menubar=0,location=0,resizable=0,channelmode=0,directories=0,width=' + w + ',height=' + h + ',top=' + t +',left=' + l);
+	_attend_handler(req, status){
+		if(req?.responseJSON?.OK){
+			location.reload();
+		} else {
+			Truemetal.HandleJsonError(req, status);
+		}
+	},
+	Attend(res_id){
+		$.ajax({
+			url: "/attend/" + res_id + "/?json",
+			dataType: 'json',
+			complete: _attend_handler
+		});
+	},
+	AttendNo(res_id){
+		$.ajax({
+			url: "/attend/" + res_id + "/off/?json",
+			dataType: 'json',
+			complete: _attend_handler
+		});
 	},
 	HandleJsonError: function(req, status){
 		let data = req?.responseJSON;
@@ -125,26 +120,26 @@ var Truemetal = {
 		var WH = $(window).height();
 
 		yt.each(function(i, el){
-				if(yt[i].yt === true)
-				{
-					return;
-				}
+			if(yt[i].yt === true)
+			{
+				return;
+			}
 
-				var p = $(el).position();
-				var h = $(el).height();
-				if( (p.top >= scrollY) && ((p.top + h) <= (scrollY + WH)) )
-				{
-					Truemetal.wrapYouTube(el);
-					yt[i].yt = true;
-				}
+			var p = $(el).position();
+			var h = $(el).height();
+			if( (p.top >= scrollY) && ((p.top + h) <= (scrollY + WH)) )
+			{
+				Truemetal.wrapYouTube(el);
+				yt[i].yt = true;
+			}
 		});
 	},
 	initYouTubeUrls: function(){
 		$('.col1 a').each(function(i,a){
-				// youtube.com
-				if(a.hostname.match(/youtube.com$/i) || a.hostname.match(/youtu.be$/i)){
-					$(a).addClass("youtube");
-				}
+			// youtube.com
+			if(a.hostname.match(/youtube.com$/i) || a.hostname.match(/youtu.be$/i)){
+				$(a).addClass("youtube");
+			}
 		});
 	},
 	initYouTube: function() {
@@ -155,25 +150,25 @@ var Truemetal = {
 	},
 	initMenu: function(){
 		$('.menu img').each(function(){
-				var src = this.src;
-				var parts = this.src.split('.');
-				var ext = parts.pop();
-				try {
-					var srcOver = parts.join('.');
-					if(srcOver.substr(srcOver.length-5) != '_over')
-					{
-						srcOver = srcOver + "_over." + ext;
-					} else {
-						srcOver = srcOver + "." + ext;
-					}
-					$(this).mouseenter(function(){
-							this.src = srcOver;
-					});
-					$(this).mouseleave(function(){
-							this.src = src;
-					});
-				} catch(e1) {
+			var src = this.src;
+			var parts = this.src.split('.');
+			var ext = parts.pop();
+			try {
+				var srcOver = parts.join('.');
+				if(srcOver.substr(srcOver.length-5) != '_over')
+				{
+					srcOver = srcOver + "_over." + ext;
+				} else {
+					srcOver = srcOver + "." + ext;
 				}
+				$(this).mouseenter(function(){
+						this.src = srcOver;
+				});
+				$(this).mouseleave(function(){
+						this.src = src;
+				});
+			} catch(e1) {
+			}
 		});
 	},
 	initUnselectable: function(){

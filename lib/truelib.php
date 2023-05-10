@@ -350,31 +350,29 @@ function forum_det(
 	# Attendees
 	if(user_loged() && ($forum_data['type_id'] == Res::TYPE_EVENT))
 	{
-		$attended = false;
+		$me_attended = false;
 		$T->enable('BLOCK_attend');
 		$T->set_var('res_id', $forum_data['res_id']);
 		if($data = get_attendees((int)$forum_data['res_id']))
 		{
-			$T->enable('BLOCK_attend_list');
+			$BLOCK_attend_list = $T->enable('BLOCK_attend_list');
 			$c = count($data);
 			foreach($data as $k=>$item){
 				if($item['a_attended'] && ($_SESSION['login']['l_id'] == $item['l_id'])){
-					$attended = true;
+					$me_attended = true;
 				}
-				$l_nick = $item['l_nick'];
 				if(!$item['a_attended']){
-					$l_nick = "<strike>$l_nick</strike>";
+					$item['l_nick'] = "<strike>$item[l_nick]</strike>";
 				}
-				$l_nick .= ($k+1 < $c ? ', ' : '');
-				$T->set_array($item, 'BLOCK_attend_list');
-				$T->set_var('l_nick_', $l_nick, 'BLOCK_attend_list');
-				$T->parse_block('BLOCK_attend_list', TMPL_APPEND);
+				$BLOCK_attend_list->set_var('l_nick_sep', ($k+1 < $c ? ', ' : ''));
+				$BLOCK_attend_list->set_array($item);
+				$BLOCK_attend_list->parse(TMPL_APPEND);
 			}
 		}
 
 		$ts = strtotime(date('d.m.Y', strtotime($forum_data['event_startdate']))) + 24 * 3600;
 		if(time() < $ts){
-			$T->enable('BLOCK_attend_'.($attended ? 'off' : 'on'));
+			$T->enable('BLOCK_attend_'.($me_attended ? 'off' : 'on'));
 		}
 	}
 
@@ -476,7 +474,7 @@ function comment_list(
 function get_attendees(int $res_id){
 	global $db;
 
-	$sql = "SELECT a.*, l.l_nick
+	$sql = "SELECT a.*, l.l_nick, l.l_hash
 	FROM attend a
 	JOIN logins l ON l.l_id = a.l_id
 	WHERE res_id = $res_id
@@ -1751,11 +1749,55 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 	}
 }
 
+function attend(MainModule $template, int $res_id, ?string $off = null): ?TrueResponseInterface
+{
+	global $db;
+
+	$json = isset($_GET['json']);
+
+	if(!user_loged())
+	{
+		$template->not_logged();
+		return null;
+	}
+
+	$Res = new Res();
+	$Res->setDb($db);
+	if(!($item = $Res->GetAllData($res_id)))
+	{
+		$template->not_found();
+		return null;
+	}
+
+	$login_id = (int)$_SESSION['login']['l_id'];
+
+	if($item['type_id'] != Res::TYPE_EVENT)
+	{
+		$template->forbidden("Nav pasākums");
+		return null;
+	}
+
+	if(time() > (strtotime(date('d.m.Y', strtotime($item['event_startdate']))) + 24 * 3600)){
+		$template->msg("Par vēlu");
+		return null;
+	}
+
+	if($off == 'off'){
+		$sql = "UPDATE attend SET a_attended = 0 WHERE l_id = $login_id AND res_id = $res_id";
+	} else {
+		$sql = "INSERT INTO attend (l_id, res_id) VALUES ($login_id, $res_id) ON DUPLICATE KEY UPDATE a_attended = 1";
+	}
+
+	if(!$db->Execute($sql))
+	{
 		$template->error("Datubāzes kļūda");
 		return null;
 	}
 
-	redirect_referer();
-
-	return null;
+	if($json){
+		return new JsonResponse(["OK"=>true]);
+	} else {
+		header("Location: /resroute/$res_id/");
+		return null;
+	}
 }
