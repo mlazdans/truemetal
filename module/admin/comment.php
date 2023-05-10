@@ -1,59 +1,37 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
 $module = array_shift($sys_parameters);
 $action = array_shift($sys_parameters);
+$res_id = (int)array_shift($sys_parameters);
+
+$template = new AdminModule('comment');
 
 if($module == 'votes' && $action == 'view')
 {
-	$template = new MainModule('profile', 'admin/comment/votes/view.json.tpl');
-	$res_id = (int)array_shift($sys_parameters);
+	$T = $template->add_file('admin/comment/votes/view.json.tpl');
+
 	if($data = $db->Execute("SELECT rv.*, l.* FROM `res_vote` rv JOIN `logins` l ON l.l_id = rv.login_id WHERE rv.res_id = $res_id"))
-		$template->enable('BLOCK_votes');
-
-	foreach($data as $item)
 	{
-		$item['rv_color'] = ($item['rv_value'] > 0 ? "green" : "red");
-		$template->set_array($item, 'BLOCK_votes');
-		$template->parse_block('BLOCK_votes', TMPL_APPEND);
+		$BLOCK_votes = $T->enable('BLOCK_votes');
+		foreach($data as $item)
+		{
+			$item['rv_color'] = ($item['rv_value'] > 0 ? "green" : "red");
+			$BLOCK_votes->set_array($item);
+			$BLOCK_votes->parse(TMPL_APPEND);
+		}
 	}
-
-	ob_start();
-	$template->out();
-	$html = ob_get_clean();
-
-	$jsonData = new StdClass;
-	$jsonData->title = "[ TRUEMETAL ".$template->get_title()." ]";
-	$jsonData->html = $html;
-	header('Content-Type: text/javascript; charset='.$sys_encoding);
-	print json_encode($jsonData);
 }
 
 if($module == 'original' && $action == 'view')
 {
+	$T = $template->add_file('admin/comment/original/view.json.tpl');
+
 	$Comment = new Comment;
 	$Comment->setDb($db);
-	$template = new MainModule('profile', 'admin/comment/original/view.json.tpl');
 
-	$res_id = (int)array_shift($sys_parameters);
-	$data = $Comment->get(array(
-		'res_id'=>$res_id
-		));
+	$data = $Comment->get(['res_id'=>$res_id]);
 
-	$template->set_array($data);
-
-	ob_start();
-	$template->out();
-	$html = ob_get_clean();
-
-	$jsonData = new StdClass;
-	$jsonData->title = "[ TRUEMETAL ".$template->get_title()." ]";
-	$jsonData->html = $html;
-	header('Content-Type: text/javascript; charset='.$sys_encoding);
-	print json_encode($jsonData);
+	$T->set_array($data);
 }
 
+$template->out($T??null);

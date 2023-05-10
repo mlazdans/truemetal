@@ -4,15 +4,15 @@ var Admin = {
 			width: 400,
 			dialogClass: "loading",
 			buttons: {
-					"Aizvērt": function(){
-						$(this).dialog("destroy");
-					}
-			}
+				"Aizvērt": function(){
+					$(this).dialog("destroy");
+				}
+		}
 		};
 
 		var dialog = $('<div/>').dialog(dOptions);
 
-		$.getJSON("/admin/comment/votes/view/" + c_id + "/json/",
+		$.getJSON("/admin/comment/votes/view/" + c_id + "?json",
 			function(data)
 			{
 				$(dialog).dialog("option", "title", data.title);
@@ -25,15 +25,15 @@ var Admin = {
 			width: 800,
 			dialogClass: "loading",
 			buttons: {
-					"Aizvērt": function(){
-						$(this).dialog("destroy");
-					}
+				"Aizvērt": function(){
+					$(this).dialog("destroy");
+				}
 			}
 		};
 
 		var dialog = $('<div/>').dialog(dOptions);
 
-		$.getJSON("/admin/comment/original/view/" + c_id + "/json/",
+		$.getJSON("/admin/comment/original/view/" + c_id + "?json",
 			function(data)
 			{
 				$(dialog).dialog("option", "title", data.title);
@@ -42,4 +42,3 @@ var Admin = {
 			});
 	}
 };
-
