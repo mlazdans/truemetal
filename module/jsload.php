@@ -24,11 +24,9 @@ if(!$sys_debug)
 
 $SCRIPTS = $i_am_admin ? $sys_admin_js : $sys_js;
 
-if($SCRIPTS = $sys_js){
-	foreach($SCRIPTS as $js){
-		$path = join_paths($sys_root, "js", "$js.js");
-		if(is_file($path)){
-			readfile($path);
-		}
+foreach($SCRIPTS as $js){
+	$path = join_paths($sys_root, "js", "$js.js");
+	if(is_file($path)){
+		readfile($path);
 	}
 }
