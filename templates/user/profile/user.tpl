@@ -20,7 +20,7 @@
 <!-- END BLOCK_picture -->
 
 <div class="List-item">
-	<b>Manīts:</b> {l_lastaccess_f}{l_lastaccess_days}
+	<b>Manīts:</b> {l_lastaccess_f}
 </div>
 
 <div class="List-item">

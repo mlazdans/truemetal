@@ -533,22 +533,24 @@ function set_profile(Template $T, $login, $is_private = false)
 	}
 
 	$formatter = new IntlDateFormatter("lv", IntlDateFormatter::MEDIUM, IntlDateFormatter::NONE);
-
-	$T->set_var('l_entered_f', $formatter->format(strtotime($login['l_entered'])));
-	$T->set_var('l_lastaccess_f', $formatter->format(strtotime($login['l_lastaccess'])));
 	$days = floor((time() - strtotime($login['l_lastaccess'])) / (3600 * 24));
-	if($days)
-	{
-		if($days < 365)
-		{
-			$days_lv = "dienām";
-			if($days % 10 == 1)
-				$days_lv = "dienas";
-			$T->set_var('l_lastaccess_days', " (pirms $days $days_lv)");
-		}
+
+	if(!$days){
+		$l_lastaccess_f = "šodien";
+	} elseif($days == 1){
+		$l_lastaccess_f = "vakar";
+	} elseif($days == 2){
+		$l_lastaccess_f = "aizvakar";
+	} elseif($days == 3){
+		$l_lastaccess_f = "pirms trim dienām";
+	} elseif($days < 365){
+		$l_lastaccess_f = "pirms $days ".($days % 10 == 1 ? "dienas" : "dienām");
 	} else {
-		$T->set_var('l_lastaccess_days', " (šodien)");
+		$l_lastaccess_f = $formatter->format(strtotime($login['l_lastaccess']));
 	}
+
+	$T->set_var('l_lastaccess_f', $l_lastaccess_f);
+	$T->set_var('l_entered_f', $formatter->format(strtotime($login['l_entered'])));
 }
 
 function public_profile(MainModule $template, string $l_hash): ?Template
