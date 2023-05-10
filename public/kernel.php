@@ -31,13 +31,11 @@ $today                 = date("d.m.Y");
 # Config
 require_once($sys_root.'/include/config.php');
 
-if(!isset($i_am_admin))
-	$i_am_admin = in_array($ip, $sys_admins);
-if(!isset($sys_debug))
-	$sys_debug = ($i_am_admin ? true : false);
+$i_am_admin = (php_sapi_name() == 'cli') || in_array($ip, $sys_admins);
+$sys_debug = ($i_am_admin ? true : false);
 
 ini_set('display_errors', ($sys_debug ? 1 : 0));
-ini_set('expose_php', false);
+ini_set('expose_php', $sys_debug);
 error_reporting($sys_error_reporting);
 
 # Include paths

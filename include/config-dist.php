@@ -38,9 +38,6 @@ $sys_mail_params = [
 ];
 $sys_default_module = 'article';
 
-$i_am_admin = (php_sapi_name() == 'cli') || in_array($ip, $sys_admins);
-$sys_debug = ($i_am_admin ? true : false);
-
 $top_banners = [
 	/*
 	array(
