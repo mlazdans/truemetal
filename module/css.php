@@ -1,5 +1,7 @@
 <?php declare(strict_types = 1);
 
+header("Content-Type: text/css");
+
 $v = get('v');
 
 if($v != $sys_script_version)
@@ -16,7 +18,6 @@ if(isset($_SERVER['HTTP_ACCEPT_ENCODING']) && substr_count($_SERVER['HTTP_ACCEPT
 if(!$sys_debug)
 {
 	$expires = (7 * 24 * 3600);
-	header("Content-Type: text/css");
 	header("Cache-Control: max-age=$expires");
 	header("Expires: ".gmdate("D, d M Y H:i:s", time() + $expires) . " GMT");
 }
