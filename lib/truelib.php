@@ -1679,6 +1679,8 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 {
 	global $db, $ip;
 
+	$json = isset($_GET['json']);
+
 	if(!user_loged())
 	{
 		$template->not_logged();
@@ -1693,8 +1695,8 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 		return null;
 	}
 
-	$login_id = $_SESSION['login']['l_id'];
-	$res_login_id = $res_data['login_id'];
+	$login_id = (int)$_SESSION['login']['l_id'];
+	$res_login_id = (int)$res_data['login_id'];
 
 	if($res_login_id == $login_id)
 	{
@@ -1733,12 +1735,22 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 		return null;
 	}
 
-	if($new_data = $Res->Get(['res_id'=>$res_id]))
+	if(!($new_data = $Res->Get(['res_id'=>$res_id])))
 	{
+		$template->error("Datubāzes kļūda");
+		return null;
+	}
+
+	if($json){
 		$retJson = new StdClass;
 		$retJson->Votes = $new_data['res_votes'];
 		return new JsonResponse($retJson);
 	} else {
+		redirect_referer();
+		return null;
+	}
+}
+
 		$template->error("Datubāzes kļūda");
 		return null;
 	}
