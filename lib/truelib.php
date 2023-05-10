@@ -1674,3 +1674,76 @@ function admin_comment_list(
 		$C->parse_block('BLOCK_comment_item', TMPL_APPEND);
 	}
 }
+
+function vote(MainModule $template, string $value, int $res_id): ?TrueResponseInterface
+{
+	global $db, $ip;
+
+	if(!user_loged())
+	{
+		$template->not_logged();
+		return null;
+	}
+
+	$Res = new Res();
+	$Res->setDb($db);
+
+	if(!($res_data = $Res->Get(['res_id'=>$res_id]))){
+		$template->not_found();
+		return null;
+	}
+
+	$login_id = $_SESSION['login']['l_id'];
+	$res_login_id = $res_data['login_id'];
+
+	if($res_login_id == $login_id)
+	{
+		$msg = specialchars($value == 'up' ? ":)" : ">:)");
+		$template->msg($msg);
+		return null;
+	}
+
+	# Check count
+	$date = date('Y-m-d H:i:s', time() - 24 * 3600); // 24h
+	$check_sql = sprintf(
+		"SELECT COUNT(*) cv_count FROM `res_vote` WHERE login_id = %d AND rv_entered >= '%s'",
+		$login_id,
+		$date
+	);
+
+	$countCheck = $db->ExecuteSingle($check_sql);
+	if($countCheck['cv_count'] >= 24)
+	{
+		$template->msg("Pārsniegtiņš divdesmitčetriņu stundiņu limitiņš balsošaniņai.");
+		return null;
+	}
+
+	# Insert
+	$insert_sql = sprintf(
+		"INSERT IGNORE INTO res_vote (res_id, login_id, rv_value, rv_userip, rv_entered) VALUES (%d, %d, %d, '%s', NOW())",
+		$res_id,
+		$login_id,
+		$value == 'up' ? 1 : -1,
+		$ip
+	);
+
+	if(!$db->Execute($insert_sql))
+	{
+		$template->error("Datubāzes kļūda");
+		return null;
+	}
+
+	if($new_data = $Res->Get(['res_id'=>$res_id]))
+	{
+		$retJson = new StdClass;
+		$retJson->Votes = $new_data['res_votes'];
+		return new JsonResponse($retJson);
+	} else {
+		$template->error("Datubāzes kļūda");
+		return null;
+	}
+
+	redirect_referer();
+
+	return null;
+}
