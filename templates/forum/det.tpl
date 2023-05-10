@@ -7,9 +7,11 @@
 </div>
 
 <!-- BEGIN BLOCK_attend disabled -->
-<div class="Forum-cat">Solās ierasties:&nbsp;
-	<!-- BEGIN BLOCK_attend_list disabled -->{l_nick_}<!-- END BLOCK_attend_list -->
-</div>
+	<div class="Forum-cat">Solās ierasties:
+		<!-- BEGIN BLOCK_attend_list disabled -->
+			<a href="/user/profile/{l_hash}/" class="Profile" data-hash="{l_hash}">{l_nick}</a>{l_nick_sep}
+		<!-- END BLOCK_attend_list -->
+	</div>
 	<!-- BEGIN BLOCK_attend_on disabled -->
 	<div class="List-item">
 		<a href="/attend/{res_id}/" type="button" onclick="Truemetal.Attend('{res_id}'); return false;">Es ar' nāks!</a>

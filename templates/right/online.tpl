@@ -1,6 +1,6 @@
 <!-- BEGIN BLOCK_online_item disabled -->
 <div class="List-item">
-	<a href="/user/profile/{online_hash}/" onclick="Truemetal.viewProfile('{online_hash}'); return false;">{online_nick}</a>
+	<a href="/user/profile/{online_hash}/" class="Profile" data-hash="{online_hash}">{online_nick}</a>
 </div>
 <!-- END BLOCK_online_item -->
 

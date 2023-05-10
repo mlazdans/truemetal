@@ -1,6 +1,4 @@
-/**
-* @author Martins Lazdans <marrtins@dqdp.net>
-*/
+const truemetal = document;
 var Truemetal = {
 	SimpleDialog: function(msg, title = ""){
 		 $('<div/>', {
@@ -240,6 +238,17 @@ var Truemetal = {
 					$(dialog).dialog("option", "dialogClass", "");
 				}
 		}).appendTo(dialog);
+	},
+	initProfiles(){
+		$(truemetal).on("click", ".Profile", function() {
+			let hash = this?.dataset?.hash;
+
+			if(hash){
+				Truemetal.viewProfile(hash);
+			}
+
+			return false;
+		});
 	}
 };
 
