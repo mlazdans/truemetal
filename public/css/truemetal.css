@@ -50,7 +50,7 @@ TH {
 	background-color: #EFC964;
 }
 
-A {
+A, A:hover {
 	border: none;
 	color: red;
 	text-decoration: underline;

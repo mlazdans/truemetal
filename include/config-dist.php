@@ -50,6 +50,6 @@ $top_banners = [
 	*/
 ];
 
-$sys_css      = [ 'styles-dynamic', 'article', 'jquery-ui' ];
+$sys_css      = [ 'truemetal', 'article', 'jquery-ui' ];
 $sys_js       = [ 'jquery', 'jquery-ui', 'truemetal' ];
 $sys_admin_js = [ 'jquery', 'jquery-ui', 'truemetal', 'admin.js', 'tiny.config.js' ];
