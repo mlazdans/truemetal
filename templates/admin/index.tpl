@@ -72,7 +72,9 @@ initEditor();
 </div>
 
 <div id="middle">
-<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->
+<!-- BEGIN BLOCK_container -->
+	<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->
+<!-- END BLOCK_container -->
 </div>
 
 <hr>
