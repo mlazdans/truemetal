@@ -1,25 +1,17 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
-
-define('DB_MYSQLI', 3);
+<?php declare(strict_types = 1);
 
 class SQLLayer
 {
-	var $int_db_type;
 	var $conn;
 	var $str_db_info_string;
 	var $charset;
 
-	function __construct($int_db_type = DB_MYSQLI, $charset = 'utf8')
+	function __construct(string $charset = 'utf8')
 	{
 		$this->str_db_info_string = 'none';
-		$this->int_db_type = $int_db_type;
 		$this->charset = $charset;
-	} // __construct
+		mysqli_report(MYSQLI_REPORT_ERROR);
+	}
 
 	function Connect($str_db_host = '', $str_db_user = '', $str_db_password = '', $str_db_name = '', $int_port = 0)
 	{
@@ -173,8 +165,8 @@ class SQLLayer
 
 	protected function __mysqli_quote($str)
 	{
-		return mysqli_real_escape_string($this->conn, $str);
-	} // __mysqli_quote_array
+		return mysqli_real_escape_string($this->conn, (string)$str);
+	}
 
 	protected function __mysqli_quote_object($obj)
 	{
@@ -182,7 +174,7 @@ class SQLLayer
 			$obj->{$k} = $this->__mysqli_quote($v);
 
 		return $obj;
-	} // __mysqli_quote_array
+	}
 
 	protected function __mysqli_quote_array($arr)
 	{
@@ -190,5 +182,6 @@ class SQLLayer
 			$arr[$k] = $this->__mysqli_quote($v);
 
 		return $arr;
-	} // __mysqli_quote_array
-} // SQLLayer
+	}
+
+}

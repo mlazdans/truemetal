@@ -1,8 +1,8 @@
 <?php declare(strict_types = 1);
 
-$sys_admins = [3];
+$admins = [3];
 
-if(!(user_loged() && in_array($_SESSION['login']['l_id'], $sys_admins))){
+if(!(user_loged() && in_array($_SESSION['login']['l_id'], $admins))){
 	header403();
 	return;
 }

@@ -18,12 +18,11 @@ $sys_default_lang      = 'lv';
 $sys_encoding          = 'utf-8';
 $sys_domain            = (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost');
 $sys_script_version    = 1;
-$sys_banned            = array();
-$sys_admins            = array('127.0.0.1');
-$sys_module_map        = array();
-$sys_use_cdn           = false;
+$sys_banned            = [];
+$sys_admins            = [];
+$sys_module_map        = [];
 $sys_include_paths     = [];
-$sys_nosess_modules    = array('css', 'jsload', 'apc', 'info');
+$sys_nosess_modules    = ['css', 'jsload', 'apc', 'info'];
 $sys_mail              = $_SERVER['SERVER_ADMIN']??ini_get('sendmail_from') or ($sys_mail = 'nobody@localhost');
 $ip                    = (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1');
 $now                   = date("d.m.Y, H:i", time());
@@ -131,7 +130,7 @@ $sys_module = !invalid($sys_module_id) &&
 	$sys_module_id:
 	$sys_default_module;
 
-$path = array();
+$path = [];
 $_pointer = &$module_tree[$sys_module_id];
 
 if(isset($module_tree[$sys_module_id]) && $module_tree[$sys_module_id]['_data_'])
@@ -148,7 +147,6 @@ foreach($sys_parameters as $k=>$v)
 
 $_GET = _GET();
 
-header('Content-Type: text/html; charset='.$sys_encoding);
 header('X-Powered-By: TRUEMETAL');
 
 if(file_exists("$sys_root/module/$sys_module.php")) {
