@@ -459,6 +459,16 @@ class MainModule
 		return $this;
 	}
 
+	function forbidden(string $msg = NULL)
+	{
+		$msg = $msg??"Pieeja liegta!";
+		$this->error($msg);
+
+		header403($msg);
+
+		return $this;
+	}
+
 	function error(string|array $msg = "TrueMetal")
 	{
 		if(is_array($msg)){
