@@ -147,8 +147,25 @@ $_GET = _GET();
 
 header('X-Powered-By: TRUEMETAL');
 
-if(file_exists("$sys_root/module/$sys_module.php")) {
-	include("$sys_root/module/$sys_module.php");
+if($i_am_admin)
+{
+	if(file_exists("$sys_root/module/$sys_module.php")) {
+		include("$sys_root/module/$sys_module.php");
+	} else {
+		include("$sys_root/module/$sys_default_module.php");
+	}
 } else {
-	include("$sys_root/module/$sys_default_module.php");
+	try {
+		if(file_exists("$sys_root/module/$sys_module.php")) {
+			include("$sys_root/module/$sys_module.php");
+		} else {
+			include("$sys_root/module/$sys_default_module.php");
+		}
+	} catch(Throwable $e) {
+		$template = new MainModule("error");
+		$template->error("True Kļūda");
+		$template->set_right_defaults();
+		$template->out(null);
+		throw $e;
+	}
 }
