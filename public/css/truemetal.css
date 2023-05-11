@@ -215,8 +215,6 @@ input[type=button]:active {
 .Comment .date {
 	padding-left: 0;
 }
-.Comment .center {
-}
 .vote, .vote-plus, .vote-minus {
 	color: #676767;
 	font-weight: bold;
@@ -306,8 +304,6 @@ input[type=button]:active {
 	overflow: hidden;
 }
 /* 2 Column (right menu) settings */
-.rightmenu {
-}
 .rightmenu .colleft {
 	right: 17.0em;       /* right column width */
 }
