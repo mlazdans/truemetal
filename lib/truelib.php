@@ -1092,7 +1092,7 @@ function register(MainModule $template, array $sys_parameters = []): ?Template
 	}
 
 	if(invalid($data['l_login']) || strlen($data['l_login']) < 5) {
-		$error_msg[] = 'Nepareizs vai īss logins';
+		$error_msg[] = 'Neatļauti simboli vai īss logins';
 		$error_field[] = 'l_login';
 	}
 
