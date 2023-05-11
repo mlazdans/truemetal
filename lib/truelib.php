@@ -367,14 +367,11 @@ function get_res_comments(int $res_id, array $params = [])
 	return $RC->Get($params);
 }
 
-function comment_list(
-	Template $C,
-	array $comments,
-	string $hl
-){
+function comment_list(Template $C, array $comments, string $hl): void
+{
 	if(user_loged())
 	{
-		$C->enable('BLOCK_addcomment');
+		$C->enable('BLOCK_comment_form');
 		$C->set_var('c_username', $_SESSION['login']['l_nick']);
 		$disabled_users = CommentDisabled::get($_SESSION['login']['l_id']);
 	} else {
@@ -1366,6 +1363,8 @@ function user_comments(MainModule $template, string $l_hash, string $hl): ?Templ
 	$RC = new ResComment();
 	$comments = $RC->Get($params);
 	comment_list($C, $comments, $hl);
+
+	$C->disable('BLOCK_addcomment');
 
 	$T->set_block_string($C->parse(), 'BLOCK_user_comments_list');
 

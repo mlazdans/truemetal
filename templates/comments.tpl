@@ -37,14 +37,11 @@
 <!-- END BLOCK_comment -->
 
 <!-- BEGIN BLOCK_nocomment disabled -->
-<div class="Info">
-	Šim resursam nav neviena komentāra!
-</div>
+<div class="Info">Šim resursam nav neviena komentāra!</div>
 <!-- END BLOCK_nocomment -->
 
-<div class="TD-cat">
-	Pievienot komentāru
-</div>
+<!-- BEGIN BLOCK_addcomment -->
+<div class="TD-cat">Pievienot komentāru</div>
 
 <!-- BEGIN BLOCK_notloggedin disabled -->
 <div class="Info">
@@ -53,7 +50,7 @@
 </div>
 <!-- END BLOCK_notloggedin -->
 
-<!-- BEGIN BLOCK_addcomment disabled -->
+<!-- BEGIN BLOCK_comment_form disabled -->
 <form action="#add_comment" method="post" id="add_comment">
 <table width="100%" cellpadding="2" cellspacing="0">
 <!-- BEGIN BLOCK_comment_error disabled -->
@@ -100,5 +97,6 @@
 		<li>Tirgojoties obligāti jānorāda cena</li>
 	</ul>
 </div>
+<!-- END BLOCK_comment_form -->
 <!-- END BLOCK_addcomment -->
 
