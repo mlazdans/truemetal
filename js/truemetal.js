@@ -1,16 +1,61 @@
 const truemetal = document;
 var Truemetal = {
-	SimpleDialog: function(msg, title = ""){
-		 $('<div/>', {
-			html: msg
-		}).dialog({
-			title: title,
-			buttons: {
-				"Aizvērt": function(){
-					$(this).dialog("destroy");
-				}
+	ajaxDialog(id){
+		let el;
+		if($('#' + id).length){
+			el = $('#' + id);
+		} else {
+			el = $("<div>").attr("id", id);
+		}
+
+		return $(el).dialog({
+			width: $('#main').width() * 0.75,
+			classes: {
+				'ui-dialog': 'loading'
+			},
+			title: "Lādējās...",
+			height: "auto",
+			// buttons: [{
+			// 	text: "Aizvērt",
+			// 	click: function(){
+			// 		$(this).dialog("destroy");
+			// 	}
+			// }],
+			close: function(){
+				$(this).dialog("destroy");
 			}
 		});
+	},
+	SimpleDialog(msg, title, dialog){
+		if(dialog){
+			$(dialog).dialog("option", {
+				position: { 'my': 'center', 'at': 'center', of: window },
+				dialogClass: "",
+				width: $('#main').width() * 0.75,
+				height: "auto",
+				title: title === undefined ? "" : title
+			}).html(msg);
+		} else {
+			$('<div>').dialog({
+				width: $('#main').width() * 0.5,
+				title: title === undefined ? "" : title,
+				// buttons: {
+				// 	"Aizvērt": function(){
+				// 		$(this).dialog("destroy");
+				// 	}
+				// }
+			}).html(msg);
+		}
+	},
+	HandleStandardJson(req, status, dialog){
+		let data = req?.responseJSON;
+		if(data === undefined){
+			Truemetal.SimpleDialog("Kaut kas nogāja greizi", "Kļūda", dialog);
+		} else if(data?.html !== undefined) {
+			Truemetal.SimpleDialog(data?.html, data?.title, dialog);
+		} else {
+			Truemetal.SimpleDialog("Nezināma kļūda...", "Ooops...", dialog);
+		}
 	},
 	checkAll: function(form, ref){
 		if(form && ref)
@@ -29,43 +74,34 @@ var Truemetal = {
 	},
 	_attend_handler(req, status){
 		if(req?.responseJSON?.OK){
+			// TODO: ar ajax
 			location.reload();
 		} else {
-			Truemetal.HandleJsonError(req, status);
+			Truemetal.HandleStandardJson(req, status);
 		}
 	},
 	Attend(res_id){
 		$.ajax({
 			url: "/attend/" + res_id + "/?json",
 			dataType: 'json',
-			complete: _attend_handler
+			complete: Truemetal._attend_handler
 		});
 	},
 	AttendNo(res_id){
 		$.ajax({
 			url: "/attend/" + res_id + "/off/?json",
 			dataType: 'json',
-			complete: _attend_handler
+			complete: Truemetal._attend_handler
 		});
 	},
-	HandleJsonError: function(req, status){
-		let data = req?.responseJSON;
-		if(data === undefined){
-			Truemetal.SimpleDialog("Kaut kas nogāja greizi", "Kļūda");
-		} else if(data.html !== undefined) {
-			Truemetal.SimpleDialog(data?.html, data?.title);
-		} else {
-			console.error("Nez kas te domāts", data);
-		}
-	},
-	Vote: function(cId, value, voteXpath) {
+	Vote(cId, value, voteXpath){
 		$.ajax({
 			url: "/vote/" + value + "/" + cId + "/?json",
 			dataType: 'json',
 			complete: function(req, status){
 				let data = req?.responseJSON;
-				if(data.Votes === undefined){
-					return Truemetal.HandleJsonError(req, status);
+				if(data?.Votes === undefined){
+					return Truemetal.HandleStandardJson(req, status);
 				}
 
 				if(data.Votes > 0){
@@ -101,7 +137,7 @@ var Truemetal = {
 		if(videoId)
 		{
 			$(el).attr("id", "yt-" + videoId);
-			$(el).html('<img class="lazy" src="https://img.youtube.com/vi/' + videoId + '/0.jpg" width="480" height="395" />');
+			$(el).html('<img class="lazy" src="https://img.youtube.com/vi/' + videoId + '/0.jpg" width="480" height="395">');
 			$(el).wrap('<' + 'div style="text-align: center; height: 395px;"' +'><' + '/div>');
 
 			var params = { allowScriptAccess: "always", wmode: "transparent" };
@@ -185,65 +221,52 @@ var Truemetal = {
 		}
 
 		return vars;
-	}, // getUrlVars
-	viewProfile: function(login){
-		var dOptions = {
-			width: 400,
-			dialogClass: "loading",
-			buttons: {
-				"Aizvērt": function(){
-					$(this).dialog("destroy");
-				}
-			}
-		};
-
-		var dialog = $('<div/>').dialog(dOptions);
-		$.ajax({
-			url: "/user/profile/" + login + "/?json",
-			dataType: 'json',
-			complete: function(req, status){
-				if (req.responseJSON){
-					let data = req.responseJSON;
-					$(dialog).dialog("option", "title", data.title);
-					$(dialog).dialog("option", "dialogClass", "");
-					$(dialog).html(data.html);
-				}
-			}
-		});
-	},
-	viewProfileImage: function(login, w, h, nick){
-		var dOptions = {
-			width: w + 20,
-			//height: h + 35,
-			dialogClass: "loading"
-		};
-
-		var dialog = $('<div/>').dialog(dOptions);
-		$('<img/>', {
-				src: "/user/image/" + login + "/",
-				width: w,
-				height: h,
-				border: 0,
-				click: function(){
-					$(dialog).dialog("destroy");
-				},
-				load: function(){
-					if(nick)
-						$(dialog).dialog("option", "title", "[ TRUEMETAL " + nick + " bilde ]");
-					$(dialog).dialog("option", "dialogClass", "");
-				}
-		}).appendTo(dialog);
 	},
 	initProfiles(){
-		$(truemetal).on("click", ".Profile", function() {
+		$(truemetal).on("click", ".ProfilePopup", function() {
 			let hash = this?.dataset?.hash;
-
 			if(hash){
-				Truemetal.viewProfile(hash);
+				Truemetal.displayProfile(hash);
+				return false;
 			}
-
-			return false;
 		});
+		$(truemetal).on("click", ".ProfileImage", function() {
+			let hash = this?.dataset?.hash;
+			if(hash){
+				Truemetal.displayProfileImage(hash, this?.dataset?.nick);
+				return false;
+			}
+		});
+	},
+	displayProfile(hash){
+		var dialog = Truemetal.ajaxDialog("profile" + hash);
+		$.ajax({
+			url: "/user/profile/" + hash + "?json",
+			dataType: 'json',
+			complete: function(req, status){
+				Truemetal.HandleStandardJson(req, status, dialog);
+			}
+		});
+	},
+	displayProfileImage(hash, nick){
+		var dialog = Truemetal.ajaxDialog("image" + hash).html(
+			$('<img>', {
+				src: "/user/image/" + hash,
+				border: 0,
+				on: {
+					click: () => $(dialog).dialog("destroy"),
+					load: () => {
+						$(dialog).dialog("option", {
+							position: { 'my': 'center', 'at': 'center', of: window },
+							dialogClass: "",
+							width: "auto",
+							height: "auto",
+							title: "[ TRUEMETAL " + nick + " bilde ]",
+						});
+					}
+				}
+			})
+		);
 	}
 };
 
