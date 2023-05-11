@@ -379,7 +379,6 @@ class MainModule
 				}
 			}
 
-			# TODO: hash
 			$TJub->set_var('jub_name', $data['l_nick']);
 			$TJub->set_var('jub_hash', $data['l_hash']);
 
