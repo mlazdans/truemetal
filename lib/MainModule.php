@@ -11,7 +11,7 @@ class MainModule
 
 	function __construct(string $module_name, string $main_file = 'index.tpl')
 	{
-		global $sys_charset, $sys_script_version, $sys_upload_http_root;
+		global $sys_charset, $sys_script_version, $sys_upload_http_root, $user_pic_w, $user_pic_h, $user_pic_tw, $user_pic_th;
 
 		$this->Index = new_template($main_file);
 
@@ -24,7 +24,12 @@ class MainModule
 		$this->Index->set_var('module_root', "/$module_name/");
 		$this->Index->set_var('upload_root', $sys_upload_http_root);
 		$this->Index->set_var('script_version', $sys_script_version);
+		$this->Index->set_var('user_pic_w', $user_pic_w);
+		$this->Index->set_var('user_pic_h', $user_pic_h);
+		$this->Index->set_var('user_pic_tw', $user_pic_tw);
+		$this->Index->set_var('user_pic_th', $user_pic_th);
 		$this->Index->set_var('disable_youtube', (empty($_SESSION['login']['l_disable_youtube']) ? 0 : 1));
+
 		$this->set_descr("Metāls Latvijā");
 		$this->set_banner_top();
 	}
