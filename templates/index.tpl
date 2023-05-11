@@ -26,7 +26,7 @@
 </div>
 <div class="colmask rightmenu">
 	<div class="colleft">
-		<div class="col1 {block_middle_class}">
+		<div id="main" class="col1 {block_middle_class}">
 			<div class="clear"></div>
 			<!-- BEGIN BLOCK_container -->
 				<!-- BEGIN BLOCK_error disabled -->
