@@ -34,8 +34,8 @@ require_once($sys_root.'/include/config.php');
 $i_am_admin = (php_sapi_name() == 'cli') || in_array($ip, $sys_admins);
 $sys_debug = ($i_am_admin ? true : false);
 
-ini_set('display_errors', ($sys_debug ? 1 : 0));
-ini_set('expose_php', $sys_debug);
+ini_set('display_errors', (bool)$sys_debug);
+ini_set('expose_php', (bool)$sys_debug);
 error_reporting($sys_error_reporting);
 
 # Include paths
@@ -86,23 +86,12 @@ if(!in_array($sys_module_id, $sys_nosess_modules)){
 register_shutdown_function("tm_shutdown");
 if(user_loged())
 {
+	# Sync logins
 	if($l = Logins::load_by_id((int)$_SESSION['login']['l_id'])) {
 		session_decode($l['l_sessiondata']);
-
-		if(is_array($_SESSION['login']??[]))
-		{
-			foreach($_SESSION['login'] as $k=>&$v)
-			{
-				if(isset($l[$k]))
-				{
-					if($v != $l[$k])
-					{
-						$v = $l[$k];
-					}
-				}
-			}
-		}
-
+		unset($l['l_sessiondata']);
+		unset($l['l_password']);
+		$_SESSION['login'] = $l;
 		$db->Execute("UPDATE logins SET l_lastaccess = CURRENT_TIMESTAMP, l_logedin = 'Y' WHERE l_id = $l[l_id]");
 	} else {
 		Logins::logoff();
