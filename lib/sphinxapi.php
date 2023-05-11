@@ -413,6 +413,8 @@ function sphSetBit ( $flag, $bit, $on )
 /// sphinx searchd client class
 class SphinxClient
 {
+	var $_path;
+	var $_socket;
 	var $_host;			///< searchd host (default is "localhost")
 	var $_port;			///< searchd port (default is 9312)
 	var $_offset;		///< how many records to seek from result-set start (default is 0)
