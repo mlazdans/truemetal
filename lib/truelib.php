@@ -517,16 +517,7 @@ function set_profile(Template $T, $login, $is_private = false)
 
 	if(file_exists($pic_localpath) && file_exists($tpic_localpath))
 	{
-		$T->set_var('pic_path', "/user/thumb/$login[l_hash]/");
-		if($info = getimagesize($pic_localpath))
-		{
-			$T->set_var('pic_w', $info[0]);
-			$T->set_var('pic_h', $info[1]);
-		} else {
-			$T->set_var('pic_w', 400);
-			$T->set_var('pic_h', 400);
-		}
-
+		$T->set_var('thumb_path', "/user/thumb/$login[l_hash]/");
 		$T->enable('BLOCK_picture');
 		if($is_private){
 			$T->enable('BLOCK_picture_del');
@@ -612,6 +603,8 @@ function public_profile(MainModule $template, string $l_hash): ?Template
 	if($login_data['l_emailvisible'] == Logins::EMAIL_VISIBLE)
 	{
 		$T->enable('BLOCK_public_email');
+	} else {
+		$T->enable('BLOCK_public_email_invisible');
 	}
 
 	set_profile($T, $login_data);

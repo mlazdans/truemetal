@@ -1,41 +1,41 @@
-<!-- BEGIN BLOCK_profile_title disabled -->
-<div class="TD-cat">
-	Profils: {l_nick}
-</div>
-<!-- END BLOCK_profile_title -->
-
-<!-- BEGIN BLOCK_nopicture disabled -->
-<div class="List-item">
-	Bildes nav!
-</div>
-<!-- END BLOCK_nopicture -->
-
-<!-- BEGIN BLOCK_picture disabled -->
-<div style="margin: 0 2px; float: left;">
-	<a
-		href="/user/viewimage/{l_hash}/"
-		onclick="Truemetal.viewProfileImage('{l_hash}', {pic_w}, {pic_h}, '{l_nick}'); return false;"
-	><img src="{pic_path}" alt=""></a>
-</div>
-<!-- END BLOCK_picture -->
-
-<div class="List-item">
-	<b>Manīts:</b> {l_lastaccess_f}
-</div>
-
-<div class="List-item">
-	<b>Pievienojies:</b> {l_entered_f}
-</div>
-
-<div class="List-item">
-	<b>Komentāri:</b> <a href="/user/comments/{l_hash}/">{comment_count}</a>
-</div>
-
-<!-- BEGIN BLOCK_public_email disabled -->
-<div class="List-item">
-	<b>E-pasts:</b> <a href="mailto:{l_email}">{l_email}</a>
-</div>
-<!-- END BLOCK_public_email -->
+<div class="TD-cat">Profils: {l_nick}</div>
+<table>
+	<tr>
+		<td rowspan="4" class="List-item text-nowrap" style="vertical-align: middle;">
+			<!-- BEGIN BLOCK_nopicture disabled -->
+				<div style="text-align: center; width: {user_pic_tw}px;">Bildes nav!</div>
+			<!-- END BLOCK_nopicture -->
+			<!-- BEGIN BLOCK_picture disabled -->
+				<div
+					class="loading"
+					style="min-height: 50px; min-width: {user_pic_tw}px;"
+				><a
+					href="/user/viewimage/{l_hash}/"
+					class="ProfileImage"
+					data-hash="{l_hash}"
+					data-nick="{l_nick}"
+				><img src="/user/thumb/{l_hash}/" alt=""></a></div>
+			<!-- END BLOCK_picture -->
+		</td>
+		<th class="List-item">Manīts:</th>
+		<td class="List-item w-100">{l_lastaccess_f}{l_lastaccess_days}</td>
+	</tr>
+	<tr>
+		<th class="List-item">Pievienojies:</th>
+		<td class="List-item">{l_entered_f}</td>
+	</tr>
+	<tr>
+		<th class="List-item">Komentāri:</th>
+		<td class="List-item"><a href="/user/comments/{l_hash}/">{comment_count}</a></td>
+	</tr>
+	<tr>
+		<th class="List-item">E-pasts:</th>
+		<td class="List-item">
+			<!-- BEGIN BLOCK_public_email disabled --><a href="mailto:{l_email}">{l_email}</a><!-- END BLOCK_public_email -->
+			<!-- BEGIN BLOCK_public_email_invisible disabled --><div class="disabled">-nepublicēts e-pasts-</div><!-- END BLOCK_public_email_invisible -->
+		</td>
+	</tr>
+</table>
 
 <!-- BEGIN BLOCK_disable_comments disabled -->
 <form method="post" action="/user/profile/{l_hash}/">

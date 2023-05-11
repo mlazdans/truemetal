@@ -14,7 +14,7 @@
 		</div>
 		<!-- BEGIN BLOCK_profile_link disabled -->
 		<div class="profile unselectable">
-			<a href="/user/profile/{l_hash}/" class="Profile" data-hash="{l_hash}">[Profils]</a>
+			<a href="/user/profile/{l_hash}/" class="ProfilePopup" data-hash="{l_hash}">[Profils]</a>
 		</div>
 		<!-- END BLOCK_profile_link -->
 		<!-- BEGIN BLOCK_comment_vote disabled -->
