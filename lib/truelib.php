@@ -105,6 +105,7 @@ function forum_themes(
 	}
 
 	$T = $template->add_file('forum/theme.tpl');
+	$T->set_array($forum_data);
 
 	$T->set_var('current_forum_id', $forum_id);
 	$T->set_var('current_forum_name_urlized', rawurlencode(urlize($forum_data['forum_name'])));
@@ -113,7 +114,7 @@ function forum_themes(
 		$T->enable('BLOCK_forumdata_bazar');
 	}
 
-	$forum = new Forum;
+	// $forum = new Forum;
 
 	if($action == 'add_theme')
 	{
@@ -177,7 +178,7 @@ function forum_themes(
 	$forum_count = (int)$forum_data['forum_themecount'];
 	forum_pages($page_id, $forum_count, $fpp, $pages_visible_to_sides, $T);
 
-	$forum->set_forum_path($T, $forum_id);
+	// $forum->set_forum_path($T, $forum_id);
 
 	return $T;
 }
@@ -265,9 +266,11 @@ function forum_det(
 
 	$res_id = (int)$forum_data['res_id']??0;
 
-	$forum = new Forum;
+	// $forum = new Forum;
 
 	$T = $template->add_file('forum/det.tpl');
+	$T->set_only(['forum_name'], $forum_data);
+
 	$C = $template->add_file('comments.tpl');
 
 	# Comments
@@ -295,7 +298,7 @@ function forum_det(
 
 	comment_list($C, $comments, $hl);
 
-	$forum->set_forum_path($T, $forum_id);
+	// $forum->set_forum_path($T, $forum_id);
 
 	# TODO: Vajag uztaisīt:
 	# 1) lai rāda foruma datus

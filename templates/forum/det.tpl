@@ -1,10 +1,4 @@
-<div class="TD-cat">
-	Tēma: <b>{forum1_name}</b>
-</div>
-
-<div class="Forum-cat">
-	<a href="{module_root}/"><b>Forums</b></a><!-- BEGIN BLOCK_forum_path disabled --> / <a href="{forum_path}">{forum_name}</a><!-- END BLOCK_forum_path -->
-</div>
+<div class="TD-cat">{forum_name}</div>
 
 <!-- BEGIN BLOCK_attend disabled -->
 	<div class="Forum-cat">Solās ierasties:
