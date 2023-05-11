@@ -10,10 +10,11 @@ var Truemetal = {
 
 		return $(el).dialog({
 			width: $('#main').width() * 0.75,
-			classes: {
-				'ui-dialog': 'loading'
-			},
-			title: "Lādējās...",
+			// classes: {
+			// 	'ui-dialog': 'loading'
+			// },
+			dialogClass: "loading",
+			title: "Ielāde...",
 			height: "auto",
 			// buttons: [{
 			// 	text: "Aizvērt",
@@ -39,6 +40,7 @@ var Truemetal = {
 			$('<div>').dialog({
 				width: $('#main').width() * 0.5,
 				title: title === undefined ? "" : title,
+				dialogClass: "",
 				// buttons: {
 				// 	"Aizvērt": function(){
 				// 		$(this).dialog("destroy");
@@ -283,4 +285,3 @@ var Truemetal = {
 		);
 	}
 };
-
