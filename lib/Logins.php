@@ -518,23 +518,27 @@ class Logins
 	{
 		global $db, $sys_domain;
 
-		if($validate)
+		if($validate){
 			$this->validate($data);
+		}
+
+		$data['l_hash'] = Logins::gen_login_hash();
 
 		$data = $db->Quote($data);
 
 		$date = $db->now();
 
 		$sql = "INSERT INTO logins (
-			l_login, l_email,
+			l_login, l_hash, l_email,
 			l_active, l_accepted, l_nick,
 			l_entered, l_userip
 		) VALUES (
-			'$data[l_login]', '$data[l_email]',
+			'$data[l_login]', '$data[l_hash]', '$data[l_email]',
 			'$data[l_active]', '$data[l_accepted]', '$data[l_nick]',
 			$date, '$_SERVER[REMOTE_ADDR]'
 		)";
 
+		# TODO: move somewhere else
 		if($accept_code = $this->insert_accept_code($data['l_login']))
 		{
 			$t = new_template('emails/registered.tpl');
@@ -545,10 +549,12 @@ class Logins
 
 			$subj = "$sys_domain - reģistrācija";
 
-			if($this->send_accept_code($data['l_login'], $data['l_email'], $subj, $msg)){
+			if($this->send_accept_code($data['l_login'], $data['l_email'], $subj, $msg))
+			{
 				if($db->Execute($sql))
 				{
-					if($this->update_password($data['l_login'], $data['l_password'])){
+					if($this->update_password($data['l_login'], $data['l_password']))
+					{
 						return $data['l_login'];
 					}
 				}
@@ -738,7 +744,7 @@ class Logins
 		return $db->Execute(
 			sprintf(
 				"UPDATE logins SET l_password = '%s' WHERE l_login='%s'",
-				static::gen_hash($password),
+				static::gen_password_hash($password),
 				$login
 			)
 		);
@@ -804,7 +810,7 @@ GROUP BY
 		}
 	}
 
-	static function gen_hash(string $str): string {
+	static function gen_password_hash(string $str): string {
 		return password_hash($str, PASSWORD_BCRYPT, ['cost'=>12]);
 	}
 
@@ -832,4 +838,18 @@ GROUP BY
 			}
 		}
 	}
+
+	static function gen_login_hash(): string
+	{
+		global $db;
+
+		$hlen = 8;
+		do {
+			$l_hash = substr(md5uniqid(), 0, $hlen);
+			$found = $db->ExecuteSingle("SELECT l_hash FROM logins WHERE l_hash = '$l_hash'");
+		} while($found);
+
+		return $l_hash;
+	}
+
 }
