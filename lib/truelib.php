@@ -351,7 +351,8 @@ function forum_det(
 	$T->set_block_string($C->parse(), 'BLOCK_forum_comments');
 
 	# Attendees
-	if($A = attendees($template, $forum_data)){
+	if(user_loged() && ($forum_data['type_id'] == Res::TYPE_EVENT) && ($A = attendees($template, $forum_data)))
+	{
 		$T->set_block_string($A->parse(), 'BLOCK_attend');
 	}
 
