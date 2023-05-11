@@ -408,7 +408,7 @@ function comment_list(Template $C, array $comments, string $hl): void
 		}
 
 		if($hl){
-			hl($item['c_datacompiled'], $hl);
+			$item['c_datacompiled'] = hl($item['c_datacompiled'], $hl);
 		}
 
 		$item['c_username'] = specialchars($item['c_username']);
