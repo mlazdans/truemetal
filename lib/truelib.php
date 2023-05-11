@@ -351,32 +351,8 @@ function forum_det(
 	$T->set_block_string($C->parse(), 'BLOCK_forum_comments');
 
 	# Attendees
-	if(user_loged() && ($forum_data['type_id'] == Res::TYPE_EVENT))
-	{
-		$me_attended = false;
-		$T->enable('BLOCK_attend');
-		$T->set_var('res_id', $forum_data['res_id']);
-		if($data = get_attendees((int)$forum_data['res_id']))
-		{
-			$BLOCK_attend_list = $T->enable('BLOCK_attend_list');
-			$c = count($data);
-			foreach($data as $k=>$item){
-				if($item['a_attended'] && ($_SESSION['login']['l_id'] == $item['l_id'])){
-					$me_attended = true;
-				}
-				if(!$item['a_attended']){
-					$item['l_nick'] = "<strike>$item[l_nick]</strike>";
-				}
-				$BLOCK_attend_list->set_var('l_nick_sep', ($k+1 < $c ? ', ' : ''));
-				$BLOCK_attend_list->set_array($item);
-				$BLOCK_attend_list->parse(TMPL_APPEND);
-			}
-		}
-
-		$ts = strtotime(date('d.m.Y', strtotime($forum_data['event_startdate']))) + 24 * 3600;
-		if(time() < $ts){
-			$T->enable('BLOCK_attend_'.($me_attended ? 'off' : 'on'));
-		}
+	if($A = attendees($template, $forum_data)){
+		$T->set_block_string($A->parse(), 'BLOCK_attend');
 	}
 
 	return $T;
@@ -1798,4 +1774,58 @@ function attend(MainModule $template, int $res_id, ?string $off = null): ?TrueRe
 		header("Location: /resroute/$res_id/");
 		return null;
 	}
+}
+
+function attendees(MainModule $template, int|array $res): ?Template
+{
+	$T = $template->add_file('forum/attend.tpl');
+
+	if(!user_loged())
+	{
+		$template->not_logged();
+		return null;
+	}
+
+	if(is_int($res))
+	{
+		$Res = new Res();
+		// $Res->setDb($db);
+		if(!($res = $Res->GetAllData($res)))
+		{
+			$template->not_found();
+			return null;
+		}
+	}
+
+	if($res['type_id'] != Res::TYPE_EVENT)
+	{
+		$template->forbidden("Nav pasākums");
+		return null;
+	}
+
+	$me_attended = false;
+	$T->set_var('res_id', $res['res_id']);
+	if($data = get_attendees((int)$res['res_id']))
+	{
+		$BLOCK_attend_list = $T->enable('BLOCK_attend_list');
+		$c = count($data);
+		foreach($data as $k=>$item){
+			if($item['a_attended'] && ($_SESSION['login']['l_id'] == $item['l_id'])){
+				$me_attended = true;
+			}
+			if(!$item['a_attended']){
+				$item['l_nick'] = "<strike>$item[l_nick]</strike>";
+			}
+			$BLOCK_attend_list->set_var('l_nick_sep', ($k+1 < $c ? ', ' : ''));
+			$BLOCK_attend_list->set_array($item);
+			$BLOCK_attend_list->parse(TMPL_APPEND);
+		}
+	}
+
+	$ts = strtotime(date('d.m.Y', strtotime($res['event_startdate']))) + 24 * 3600;
+	if(time() < $ts){
+		$T->enable('BLOCK_attend_'.($me_attended ? 'off' : 'on'));
+	}
+
+	return $T;
 }

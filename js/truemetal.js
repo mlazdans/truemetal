@@ -72,10 +72,20 @@ var Truemetal = {
 			Truemetal.checkAll(form, ref);
 		}
 	},
-	_attend_handler(req, status){
+	_attend_handler(res_id, req, status){
 		if(req?.responseJSON?.OK){
-			// TODO: ar ajax
-			location.reload();
+			$.ajax({
+				url: "/attend/" + res_id + "/?json&get",
+				dataType: 'json',
+				complete: function(req, status){
+					let data = req?.responseJSON;
+					if(data?.html === undefined){
+						return Truemetal.HandleStandardJson(req, status);
+					} else {
+						$("#attendees" + res_id).replaceWith(data.html);
+					}
+				}
+			});
 		} else {
 			Truemetal.HandleStandardJson(req, status);
 		}
@@ -84,14 +94,18 @@ var Truemetal = {
 		$.ajax({
 			url: "/attend/" + res_id + "/?json",
 			dataType: 'json',
-			complete: Truemetal._attend_handler
+			complete: function(req, status){
+				Truemetal._attend_handler(res_id, req, status);
+			}
 		});
 	},
 	AttendNo(res_id){
 		$.ajax({
 			url: "/attend/" + res_id + "/off/?json",
 			dataType: 'json',
-			complete: Truemetal._attend_handler
+			complete: function(req, status){
+				Truemetal._attend_handler(res_id, req, status);
+			}
 		});
 	},
 	Vote(cId, value, voteXpath){
