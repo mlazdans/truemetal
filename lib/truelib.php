@@ -310,7 +310,7 @@ function forum_det(
 
 	if($forum_data['forum_closed'] == Forum::CLOSED)
 	{
-		$T->disable('BLOCK_addcomment');
+		$C->disable('BLOCK_addcomment');
 		$T->enable('BLOCK_forum_closed');
 	}
 
