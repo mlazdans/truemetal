@@ -542,10 +542,8 @@ class Logins
 		$sql = substr($sql, 0, -2);
 		$sql .= " WHERE l_login = '$data[l_login]'";
 
-		DB::Execute($sql);
-
-		return $data['l_login'];
-	} // update
+		return DB::Execute($sql);
+	}
 
 	static function delete(int $l_id): bool
 	{
