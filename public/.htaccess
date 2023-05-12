@@ -3,8 +3,15 @@ Options -Indexes
 # Maintenance mode
 # RewriteEngine on
 # RewriteCond %{REQUEST_FILENAME} !-f
-# RewriteCond expr "! -R '80.232.240.76'"
+# RewriteCond expr "! -R '80.232.240.71'"
 # RewriteRule ^(.*)$ /maint.html [L]
+# <Files maint.html>
+# 	FileETag None
+# 	Header unset ETag
+# 	Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+# 	Header set Pragma "no-cache"
+# 	Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+# </Files>
 
 RewriteEngine on
 RewriteCond  %{REQUEST_URI}   !^/tiny_mce/(.*) [NC]
