@@ -59,6 +59,16 @@ class DB
 		return static::$db->query($sql);
 	}
 
+	static function Prepare()
+	{
+		return static::$db->prepare(...func_get_args());
+	}
+
+	static function ExecutePrepared()
+	{
+		return static::$db->execute(...func_get_args());
+	}
+
 	static function Fetch($q)
 	{
 		return static::$db->fetch_assoc($q);
