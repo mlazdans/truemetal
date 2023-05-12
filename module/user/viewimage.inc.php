@@ -5,7 +5,7 @@ $l_hash = array_shift($sys_parameters)??"";
 $template = new MainModule('atteli');
 $T = $template->add_file('user/viewimage.tpl');
 
-if(!user_loged())
+if(!User::logged())
 {
 	$template->not_logged();
 	$template->set_right_defaults();

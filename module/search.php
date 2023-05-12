@@ -30,7 +30,7 @@ $DOC_SOURCES = array(
 
 if($_SERVER['REQUEST_METHOD'] == "POST")
 {
-	if(!user_loged()){
+	if(!User::logged()){
 		$search_msg[] = "Meklētājs tikai reģistrētiem lietotājiem";
 	}
 	$search_log = post('spam') ? false : true;

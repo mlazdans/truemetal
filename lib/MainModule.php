@@ -170,7 +170,7 @@ class MainModule
 		$TLogin_form = $this->add_file('right/login_form.tpl');
 
 		$name = "Pieslēgties";
-		if(user_loged()){
+		if(User::logged()){
 			$name = "Login";
 			$TLogin_form->enable('BLOCK_login_data');
 			$TLogin_form->set_var('login_nick', User::get_val('l_nick'));
@@ -224,7 +224,7 @@ class MainModule
 	{
 		$TLogin = $this->add_file('right/online.tpl');
 
-		$block = user_loged() ? 'BLOCK_online_item' : 'BLOCK_online_item_notloged';
+		$block = User::logged() ? 'BLOCK_online_item' : 'BLOCK_online_item_notloged';
 
 		if($active_sessions = Logins::get_active())
 		{
@@ -336,7 +336,7 @@ class MainModule
 			return $this;
 		}
 
-		$block = user_loged() ? 'BLOCK_jub_item' : 'BLOCK_jub_item_notloged';
+		$block = User::logged() ? 'BLOCK_jub_item' : 'BLOCK_jub_item_notloged';
 
 		$TJub = $this->add_file('right/jub.tpl');
 		$TJub->enable($block);

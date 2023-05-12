@@ -8,7 +8,7 @@ if($i_am_admin){
 $template = new MainModule($sys_module_id);
 $template->set_title('Galerijas');
 
-if(!user_loged()){
+if(!User::logged()){
 	$template->not_logged();
 	$template->set_right_defaults();
 	$template->out(null);

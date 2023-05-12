@@ -467,7 +467,7 @@ INSERT INTO forum (
 
 	public static function hasNewThemes($item)
 	{
-		if(!user_loged()){
+		if(!User::logged()){
 			return false;
 		}
 
@@ -485,7 +485,7 @@ INSERT INTO forum (
 
 	public static function markThemeCount($item)
 	{
-		if(!user_loged()){
+		if(!User::logged()){
 			return false;
 		}
 		$_SESSION['forums']['viewed_date'][$item['forum_id']] = $item['forum_lastthemedate'];

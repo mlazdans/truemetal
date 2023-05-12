@@ -139,7 +139,7 @@ class Res
 
 	public static function hasNewComments($item)
 	{
-		if(!user_loged()){
+		if(!User::logged()){
 			return false;
 		}
 

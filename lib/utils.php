@@ -844,7 +844,7 @@ function user_blacklisted()
 	}
 
 	# 1 week
-	if(user_loged() && ((time() - strtotime(User::get_val('l_lastaccess'))) < 604800))
+	if(User::logged() && ((time() - strtotime(User::get_val('l_lastaccess'))) < 604800))
 	{
 		return false;
 	} else {

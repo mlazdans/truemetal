@@ -365,7 +365,7 @@ class Logins
 
 	static function logoff(): bool
 	{
-		if(user_loged())
+		if(User::logged())
 		{
 			session_destroy();
 			return true;

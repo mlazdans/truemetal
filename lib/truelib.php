@@ -3,16 +3,11 @@
 use dqdp\Template;
 use dqdp\TemplateBlock;
 
-function user_loged(): bool
-{
-	return User::logged();
-}
-
 function forum_add_theme(MainModule $template, Template $T, int $forum_id, array $data): bool
 {
 	global $ip;
 
-	if(!user_loged())
+	if(!User::logged())
 	{
 		$template->not_logged();
 		return false;
@@ -103,7 +98,7 @@ function forum_themes(
 	int $pages_visible_to_sides,
 ): ?Template
 {
-	if(user_loged())
+	if(User::logged())
 	{
 		Forum::markThemeCount($forum_data);
 	}
@@ -128,7 +123,7 @@ function forum_themes(
 		}
 	}
 
-	if(user_loged())
+	if(User::logged())
 	{
 		$T->enable('BLOCK_loggedin');
 		$T->set_var('forum_username', User::nick(), 'BLOCK_loggedin');
@@ -311,7 +306,7 @@ function forum_det(
 
 	$error_msg = [];
 	if($action == 'add_comment'){
-		if(!user_loged()){
+		if(!User::logged()){
 			$template->not_logged();
 			return null;
 		}
@@ -346,7 +341,7 @@ function forum_det(
 	$T->set_block_string($C->parse(), 'BLOCK_forum_comments');
 
 	# Attendees
-	if(user_loged() && ($forum_data['type_id'] == Res::TYPE_EVENT) && ($A = attendees($template, $forum_data)))
+	if(User::logged() && ($forum_data['type_id'] == Res::TYPE_EVENT) && ($A = attendees($template, $forum_data)))
 	{
 		$T->set_block_string($A->parse(), 'BLOCK_attend');
 	}
@@ -363,7 +358,7 @@ function get_res_comments(int $res_id, array $params = [])
 
 function comment_list(Template $C, array $comments, string $hl): void
 {
-	if(user_loged())
+	if(User::logged())
 	{
 		$C->enable('BLOCK_comment_form');
 		$C->set_var('c_username', User::nick());
@@ -387,7 +382,7 @@ function comment_list(Template $C, array $comments, string $hl): void
 		$comment_nr++;
 		$item['res_votes'] = (int)$item['res_votes'];
 		# balsošana
-		if(user_loged() && $BLOCK_comment->block_exists('BLOCK_comment_vote')){
+		if(User::logged() && $BLOCK_comment->block_exists('BLOCK_comment_vote')){
 			$BLOCK_comment->enable('BLOCK_comment_vote');
 		}
 
@@ -417,7 +412,7 @@ function comment_list(Template $C, array $comments, string $hl): void
 		$BLOCK_comment->set_var('c_date', proc_date($item['c_entered']));
 
 		// Joined from logins
-		if(user_loged() && ($item['l_login'] || $item['c_userlogin'] || $item['login_id'])){
+		if(User::logged() && ($item['l_login'] || $item['c_userlogin'] || $item['login_id'])){
 			$BLOCK_comment->set_var('l_hash', $item['l_hash']);
 			$BLOCK_comment->enable('BLOCK_profile_link');
 		} else {
@@ -431,7 +426,7 @@ function comment_list(Template $C, array $comments, string $hl): void
 		// elseif($item['login_id']) // legacy
 		// 	$C->set_var('user_login_id', $item['login_id']);
 
-		// if(user_loged() && ($item['c_userlogin'] || $item['login_id']))
+		// if(User::logged() && ($item['c_userlogin'] || $item['login_id']))
 		// 	$C->enable('BLOCK_profile_link');
 		// else
 		// 	$C->disable('BLOCK_profile_link');
@@ -517,7 +512,7 @@ function public_profile(MainModule $template, string $l_hash): ?Template
 {
 	$action = post('action');
 
-	if(!user_loged())
+	if(!User::logged())
 	{
 		$template->not_logged();
 		return null;
@@ -584,7 +579,7 @@ function private_profile(MainModule $template): ?Template
 
 	$module_root = "/user/profile";
 
-	if(!user_loged())
+	if(!User::logged())
 	{
 		$template->not_logged();
 		return null;
@@ -766,7 +761,7 @@ function email(string $to, string $subj, string $msg, array $attachments = array
 
 function change_email(MainModule $template): ?Template
 {
-	if(!user_loged())
+	if(!User::logged())
 	{
 		$template->not_logged();
 		return null;
@@ -852,7 +847,7 @@ function change_email(MainModule $template): ?Template
 
 function change_pw(MainModule $template): ?Template
 {
-	if(!user_loged())
+	if(!User::logged())
 	{
 		$template->not_logged();
 		return null;
@@ -1218,7 +1213,7 @@ function user_image(string $l_hash, bool $thumb = false)
 {
 	global $sys_user_root, $sys_public_root;
 
-	if(!user_loged()){
+	if(!User::logged()){
 		header403();
 		return;
 	}
@@ -1267,7 +1262,7 @@ function whatsnew(MainModule $template): Template
 {
 	$T = $template->add_file('whatsnew.tpl');
 
-	if(!user_loged())
+	if(!User::logged())
 	{
 		$template->not_logged();
 		return false;
@@ -1321,7 +1316,7 @@ function whatsnew(MainModule $template): Template
 
 function user_comments(MainModule $template, string $l_hash, string $hl): ?Template
 {
-	if(!user_loged())
+	if(!User::logged())
 	{
 		$template->not_logged();
 		return null;
@@ -1634,7 +1629,7 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 
 	$json = isset($_GET['json']);
 
-	if(!user_loged())
+	if(!User::logged())
 	{
 		$template->not_logged();
 		return null;
@@ -1707,7 +1702,7 @@ function attend(MainModule $template, int $res_id, ?string $off = null): ?TrueRe
 {
 	$json = isset($_GET['json']);
 
-	if(!user_loged())
+	if(!User::logged())
 	{
 		$template->not_logged();
 		return null;
@@ -1756,7 +1751,7 @@ function attendees(MainModule $template, int|array $res): ?Template
 {
 	$T = $template->add_file('forum/attend.tpl');
 
-	if(!user_loged())
+	if(!User::logged())
 	{
 		$template->not_logged();
 		return null;

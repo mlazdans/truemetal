@@ -16,7 +16,7 @@ class SessHandler implements SessionHandlerInterface
 	{
 		global $ip;
 
-		if(empty($data) || !user_loged())
+		if(empty($data) || !User::logged())
 		{
 			return true;
 		}

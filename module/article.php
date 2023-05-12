@@ -119,7 +119,7 @@ if($art_id && isset($articles[0]))
 	$error_msg = [];
 	if($action == 'add_comment')
 	{
-		if(!user_loged()){
+		if(!User::logged()){
 			$template->not_logged();
 			return null;
 		}

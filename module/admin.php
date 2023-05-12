@@ -2,7 +2,7 @@
 
 $admins = [3];
 
-if(!(user_loged() && in_array(User::id(), $admins))){
+if(!(User::logged() && in_array(User::id(), $admins))){
 	$template = new MainModule("admin");
 	$template->not_found();
 	$template->set_right_defaults();
