@@ -14,7 +14,7 @@
 					class="ProfileImage"
 					data-hash="{l_hash}"
 					data-nick="{l_nick}"
-				><img src="/user/thumb/{l_hash}/" alt=""></a></div>
+				><img src="/user/thumb/{l_hash}/" onload="$(this).parent().parent().removeClass('loading');" alt=""></a></div>
 			<!-- END BLOCK_picture -->
 		</td>
 		<th class="List-item">Manīts:</th>
