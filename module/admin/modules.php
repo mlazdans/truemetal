@@ -1,13 +1,6 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
 function set_pos(&$template, $m_pos = 0, $mod_modid = '') {
-	global $db;
-
 	$mod_modid = (integer)$mod_modid;
 
 	if($mod_modid)
@@ -15,7 +8,7 @@ function set_pos(&$template, $m_pos = 0, $mod_modid = '') {
 	else
 		$sql = "SELECT MAX(module_pos) module_pos FROM modules WHERE mod_modid = 0";
 
-	$data = $db->ExecuteSingle($sql);
+	$data = DB::ExecuteSingle($sql);
 	$module_pos = $data['module_pos'];
 	$r = 1;
 	for($r = 1; $r <= $module_pos; ++$r) {

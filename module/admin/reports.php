@@ -24,9 +24,7 @@ if($report == 'ip')
 		$C = new_template("admin/comment/list.tpl");
 		$T->set_var('ips', $data);
 
-		$RC = new ResComment();
-		$RC->setDb($db);
-		$comments = $RC->get(array(
+		$comments = (new ResComment)->get(array(
 			'ips'=>$ips,
 			'c_visible'=>Res::STATE_ALL,
 			'order'=>'c_entered DESC',

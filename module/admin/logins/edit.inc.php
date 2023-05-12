@@ -43,14 +43,12 @@ $T->set_var('all_ips_view', str_replace(",", ", ", $all_ips), 'BLOCK_login_edit'
 # User comments
 $C = new_template("admin/comment/list.tpl");
 
-$RC = new ResComment();
-$RC->setDb($db);
-$comments = $RC->get(array(
+$comments = (new ResComment)->get([
 	'login_id'=>$l_id,
 	'c_visible'=>Res::STATE_ALL,
 	'order'=>'c_entered DESC',
 	'limit'=>500,
-	));
+]);
 
 # Šmurguļi, kas nāk no vairākā IP un reklamē :E (piemēram, HeavenGrey)
 $alsoUsers = Logins::collectUsersByIP(explode(",", $all_ips), $l_id);

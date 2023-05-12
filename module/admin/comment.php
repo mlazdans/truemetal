@@ -10,7 +10,7 @@ if($module == 'votes' && $action == 'view')
 {
 	$T = $template->add_file('admin/comment/votes/view.json.tpl');
 
-	if($data = $db->Execute("SELECT rv.*, l.* FROM `res_vote` rv JOIN `logins` l ON l.l_id = rv.login_id WHERE rv.res_id = $res_id"))
+	if($data = DB::Execute("SELECT rv.*, l.* FROM `res_vote` rv JOIN `logins` l ON l.l_id = rv.login_id WHERE rv.res_id = $res_id"))
 	{
 		$BLOCK_votes = $T->enable('BLOCK_votes');
 		foreach($data as $item)
@@ -26,10 +26,7 @@ if($module == 'original' && $action == 'view')
 {
 	$T = $template->add_file('admin/comment/original/view.json.tpl');
 
-	$Comment = new Comment;
-	$Comment->setDb($db);
-
-	$data = $Comment->get(['res_id'=>$res_id]);
+	$data = (new Comment)->get(['res_id'=>$res_id]);
 
 	$T->set_array($data);
 }
