@@ -358,10 +358,9 @@ function forum_det(
 
 function get_res_comments(int $res_id, array $params = [])
 {
-	$params = [ 'res_id'=>$res_id ];
+	$params['res_id'] = $res_id;
 
-	$RC = new ResComment();
-	return $RC->Get($params);
+	return (new ResComment)->Get($params);
 }
 
 function comment_list(Template $C, array $comments, string $hl): void
@@ -1350,8 +1349,7 @@ function user_comments(MainModule $template, string $l_hash, string $hl): ?Templ
 		'order'=>"c_entered DESC",
 	];
 
-	$RC = new ResComment();
-	$comments = $RC->Get($params);
+	$comments = (new ResComment)->Get($params);
 	comment_list($C, $comments, $hl);
 
 	$C->disable('BLOCK_addcomment');
@@ -1486,7 +1484,7 @@ function gallery_root(MainModule $template): ?Template
 	return $T;
 }
 
-function gallery_image(int $gd_id, string $gal_type)
+function gallery_image(int $gd_id, string $gal_type): void
 {
 	global $CACHE_ENABLE;
 
@@ -1561,7 +1559,6 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 	}
 
 
-	$RC = new ResComment();
 	$params = array('res_id'=>$galdata['res_id']);
 
 	# TODO: izvākt un ielikt kaut kur zem list.inc.php
@@ -1570,7 +1567,8 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 		($_SESSION['login']['l_forumsort_msg'] == Forum::SORT_DESC)
 		? "c_entered DESC"
 		: "c_entered";
-	$comments = $RC->Get($params);
+
+	$comments = (new ResComment)->Get($params);
 	comment_list($C, $comments, "");
 	$T->set_block_string($C->parse(), 'BLOCK_gallery_comments');
 
