@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 $f = (require '../vendor/autoload.php');
-$f->addPsr4("", "/www/dev.truemetal.lv/lib");
+$f->addPsr4("", $sys_root.DIRECTORY_SEPARATOR.'lib');
 $f->addPsr4("dqdp\\", "/www/dqdp8/dqdp");
 
 $sys_script_version = 1;
@@ -15,6 +15,7 @@ $sys_include_paths = [
 	".",
 	$sys_root,
 	$sys_root.DIRECTORY_SEPARATOR.'lib',
+	'/www/dqdp8',
 ];
 $sys_mail = 'info@truemetal.lv';
 $sys_domain = 'truemetal.lv';
