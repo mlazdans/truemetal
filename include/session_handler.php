@@ -10,6 +10,10 @@ ini_set('session.gc_probability', 1);
 ini_set('session.gc_divisor', 100);
 ini_set('session.gc_maxlifetime', $cookie_time);
 
+// TODO: kaut kad nākotnē uzstādīt zemāk uzskaitītos parametrus, jo tie mēdz atšķirties starp sistēmām
+// session.sid_bits_per_character
+// session.sid_length
+
 session_set_save_handler(new SessHandler);
 
 session_set_cookie_params($cookie_time, '/');
