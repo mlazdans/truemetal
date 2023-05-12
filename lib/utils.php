@@ -859,6 +859,29 @@ function user_blacklisted()
 
 function tm_shutdown()
 {
+	global $i_am_admin;
+
+	if($i_am_admin)
+	{
+		$is_html = 0;
+		$headers = headers_list();
+		foreach($headers as $h)
+		{
+			if(stripos(strtolower($h), "content-type: text/html") === 0)
+			{
+				$is_html = 1;
+				break;
+			}
+		}
+
+		if($is_html)
+		{
+			print '<link rel=stylesheet href="/css/highlight/vs.min.css">';
+			print '<script src="/js/highlight.min.js"></script>';
+			print '<script>hljs.highlightAll();</script>';
+		}
+	}
+
 	if(user_loged())
 	{
 		$_SESSION['login']['l_lastaccess'] = date('Y-m-d H:i:s');
