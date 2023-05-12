@@ -15,9 +15,6 @@ if(in_array($action, $actions))
 	return;
 }
 
-// XXX: ja post tukšs
-$action = get('action');
-
 if($action == 'save')
 {
 	if($logins->update($_POST['data'], Res::ACT_DONTVALIDATE))
@@ -27,6 +24,9 @@ if($action == 'save')
 
 	return;
 }
+
+// XXX: ja post tukšs
+$action = get('action');
 
 if($l_id)
 {
