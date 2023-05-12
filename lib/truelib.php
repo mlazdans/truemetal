@@ -604,7 +604,7 @@ function private_profile(MainModule $template): ?Template
 	{
 		$login = new Logins;
 
-		if($data = $login->update_profile($post_data))
+		if($login->update_profile($post_data))
 		{
 			header("Location: $module_root/");
 			return null;
