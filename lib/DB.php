@@ -18,7 +18,7 @@ class DB
 			$res[] = $r;
 		}
 
-		return $res ?? ($q->columnCount() ? [] :$q);
+		return $res ?? ($q->columnCount() ? [] : (bool)$q);
 	}
 
 	static function ExecuteSingle()
@@ -29,7 +29,7 @@ class DB
 			$res = $r;
 		}
 
-		return $res ?? ($q->columnCount() ? [] :$q);
+		return $res ?? ($q->columnCount() ? [] : (bool)$q);
 	}
 
 	static function Quote($p)
