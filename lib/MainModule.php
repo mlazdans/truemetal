@@ -358,8 +358,8 @@ class MainModule
 				}
 			}
 
-			$TJub->set_var('jub_name', $data['l_nick']);
-			$TJub->set_var('jub_hash', $data['l_hash']);
+			$TJub->set_var('l_nick', $data['l_nick']);
+			$TJub->set_var('l_hash', $data['l_hash']);
 
 			if($age){
 				$TJub->set_var('jub_info', " ($age $jub_year)");
