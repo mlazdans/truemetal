@@ -1,27 +1,10 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
-
-require_once('lib/Res.php');
-require_once('lib/Table.php');
+<?php declare(strict_types = 1);
 
 class Gallery extends Res
 {
 	protected $table_id = Table::GALLERY;
 
 	var $error_msg;
-
-	function __construct()
-	{
-		global $db;
-
-		parent::__construct();
-
-		$this->SetDb($db);
-	} // __construct
 
 	function load($params = array())
 	{
@@ -56,15 +39,15 @@ class Gallery extends Res
 		if(isset($params['limit']))
 			$sql .= " LIMIT $params[limit]";
 
-		return (isset($params['gal_id']) || isset($params['res_id']) ? $this->db->ExecuteSingle($sql) : $this->db->Execute($sql));
-	} // load
+		return (isset($params['gal_id']) || isset($params['res_id']) ? DB::ExecuteSingle($sql) : DB::Execute($sql));
+	}
 
 	function insert(&$data, $validate = Res::ACT_VALIDATE)
 	{
 		if($validate)
 			$this->validate($data);
 
-		$date = $this->db->now();
+		$date = DB::now();
 		if($data['gal_entered'])
 			$date = "'$data[gal_entered]'";
 
@@ -77,11 +60,8 @@ class Gallery extends Res
 			'$data[gal_data]',  $date, $data[gal_ggid]
 		)";
 
-		if($this->db->Execute($sql))
-			return last_insert_id();
-		else
-			return false;
-	} // insert
+		return DB::Execute($sql) ? DB::LastID() : false;
+	}
 
 	function update($gal_id, &$data, $validate = Res::ACT_VALIDATE)
 	{
@@ -104,16 +84,16 @@ class Gallery extends Res
 		$sql .= "gal_ggid = $data[gal_ggid], ";
 		$sql = substr($sql, 0, -2);
 		$sql .= ' WHERE gal_id = '.$gal_id;
-		$this->db->Execute($sql);
+		DB::Execute($sql);
 		if(isset($data['gd_descr']) && is_array($data['gd_descr'])) {
 			foreach($data['gd_descr'] as $key=>$descr) {
 				$sql = "UPDATE gallery_data SET gd_descr='$descr' WHERE gd_id = $key";
-				$this->db->Execute($sql);
+				DB::Execute($sql);
 			}
 		}
 
 		return $gal_id;
-	} // update
+	}
 
 	function save($gal_id, &$data)
 	{
@@ -135,7 +115,7 @@ class Gallery extends Res
 			$this->error_msg = $error_msg;
 			return false;
 		}
-	} // save
+	}
 
 	function del($gal_id)
 	{
@@ -146,8 +126,8 @@ class Gallery extends Res
 
 		$sql = 'DELETE FROM gallery WHERE gal_id = '.$gal_id;
 
-		return $this->db->Execute($sql);
-	} // del
+		return DB::Execute($sql);
+	}
 
 	function show($gal_id)
 	{
@@ -155,8 +135,8 @@ class Gallery extends Res
 
 		$sql = 'UPDATE gallery SET gal_visible = "'.Res::STATE_VISIBLE.'" WHERE gal_id = '.$gal_id;
 
-		return $this->db->Execute($sql);
-	} // show
+		return DB::Execute($sql);
+	}
 
 	function hide($gal_id)
 	{
@@ -164,8 +144,8 @@ class Gallery extends Res
 
 		$sql = 'UPDATE gallery SET gal_visible = "'.Res::STATE_INVISIBLE.'" WHERE gal_id = '.$gal_id;
 
-		return $this->db->Execute($sql);
-	} // hide
+		return DB::Execute($sql);
+	}
 
 	function process_action(&$data, $action)
 	{
@@ -194,7 +174,7 @@ class Gallery extends Res
 					$ret = $ret && $this->{$func}($data['gal_id'.$r]);
 
 		return $ret;
-	} // process_action
+	}
 
 	# TODO: validāciju atstāt izsaucēja ziņā
 	function validate(&$data)
@@ -216,11 +196,11 @@ class Gallery extends Res
 			$data['gal_ggid'] = ereg('[^0-9]', $data['gal_ggid']) ? 0 : $data['gal_ggid'];
 		else
 			$data['gal_ggid'] = 0;
-	} // validate
+	}
 
 	public static function Route($resource, $c_id = 0)
 	{
 		return "/gallery/$resource[gal_id]/".($c_id ? "#comment$c_id" : "");
-	} // Route
-} // Gallery
+	}
 
+}

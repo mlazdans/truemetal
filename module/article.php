@@ -133,7 +133,7 @@ if($art_id && isset($articles[0]))
 		}
 
 		if(!$error_msg){
-			if($ac_id = add_comment($db, $res_id, $data['c_data']))
+			if($ac_id = add_comment($res_id, $data['c_data']))
 			{
 				$np = join('/', array_keys($path));
 				header("Location: /$np/$art_id-$art_name_urlized#comment$ac_id");

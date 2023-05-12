@@ -1,28 +1,10 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
-
-require_once('lib/Res.php');
-require_once('lib/Table.php');
-require_once('lib/Gallery.php');
+<?php declare(strict_types = 1);
 
 class GalleryData extends Res
 {
 	protected $table_id = Table::GALLERY_DATA;
 
 	var $error_msg;
-
-	function __construct()
-	{
-		global $db;
-
-		parent::__construct();
-
-		$this->SetDb($db);
-	} // __construct
 
 	function load($params = array())
 	{
@@ -78,8 +60,8 @@ class GalleryData extends Res
 		if(isset($params['limit']))
 			$sql .= " LIMIT $params[limit]";
 
-		return (isset($params['gd_id']) || isset($params['res_id']) ? $this->db->ExecuteSingle($sql) : $this->db->Execute($sql));
-	} // load
+		return (isset($params['gd_id']) || isset($params['res_id']) ? DB::ExecuteSingle($sql) : DB::Execute($sql));
+	}
 
 	function get_next_data($gal_id, $gd_id)
 	{
@@ -87,22 +69,21 @@ class GalleryData extends Res
 		$gd_id = (integer)$gd_id;
 
 		$sql = "SELECT gd_id FROM gallery_data WHERE gd_visible = '".Res::STATE_VISIBLE."' AND gal_id = $gal_id AND gd_id > $gd_id LIMIT 0,1";
-		$data = $this->db->ExecuteSingle($sql);
+		$data = DB::ExecuteSingle($sql);
 
 		return isset($data['gd_id']) ? $data['gd_id'] : 0;
-	} // get_next_data
+	}
 
 	function del($gd_id)
 	{
 		$sql = sprintf('DELETE FROM gallery_data WHERE gd_id = %d', $gd_id);
 
-		return $this->db->Execute($sql);
-	} // del
+		return DB::Execute($sql);
+	}
 
 	public static function Route($resource, $c_id = 0)
 	{
 		return "/gallery/view/$resource[gd_id]/".($c_id ? "#comment$c_id" : "");
-	} // Route
+	}
 
-} // GalleryData
-
+}
