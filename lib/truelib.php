@@ -1825,10 +1825,12 @@ function archive(MainModule $template): ?Template
 
 	$old_date = '';
 	// $formatter = new IntlDateFormatter("lv", IntlDateFormatter::SHORT, IntlDateFormatter::NONE);
+	$menesi = menesi();
 
 	while($item = DB::Fetch($q))
 	{
 		$ts = strtotime($item['art_entered']);
+
 		$date = date('Ym', $ts);
 		if($old_date && ($old_date != $date))
 		{
@@ -1837,14 +1839,10 @@ function archive(MainModule $template): ?Template
 			$T->disable('BLOCK_archive_sep');
 		}
 
-		// $D = date_create()->setTimestamp($ts);
-		// $art_date = $D->format("Y F");
-		$art_date = date("Y F", $ts);
 
 		if($old_date != $date)
 		{
-			// $art_date = $formatter->format($ts);
-			// $art_date = mb_convert_case($art_date, MB_CASE_TITLE);
+			$art_date = date("Y", $ts).". gada ".mb_strtolower($menesi[date("m", $ts)]);
 			$T->enable('BLOCK_archive_date');
 			$T->set_var('art_date', $art_date);
 			$T->parse_block('BLOCK_archive_date');
