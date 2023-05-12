@@ -1860,3 +1860,26 @@ function archive(MainModule $template): ?Template
 
 	return $T;
 }
+
+function search_log(MainModule $template): ?Template
+{
+	$T = $template->add_file('search/log.tpl');
+
+	$sql = "SELECT DISTINCT sl_q FROM `search_log` ORDER BY `sl_id` DESC LIMIT 0,200";
+	if(!($q = DB::Query($sql)))
+	{
+		$template->error("Datubāzes kļūda");
+		return null;
+	}
+
+	$B = $T->enable('BLOCK_search_log');
+
+	while($r = DB::Fetch($q))
+	{
+		$B->set_array(specialchars($r));
+		$B->set_var('sl_q_encoded', urlencode($r['sl_q']));
+		$B->parse(TMPL_APPEND);
+	}
+
+	return $T;
+}
