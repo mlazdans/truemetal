@@ -21,10 +21,6 @@ if(isset($_POST['data']))
 	$data = post('data');
 	if($login_data = $my_login->login($data['login']??"", $data['password']??""))
 	{
-		if($login_data['l_sessiondata']){
-			session_decode($login_data['l_sessiondata']);
-		}
-
 		User::data(filter_login_data($login_data));
 
 		$referer = empty($data['referer']) ? false : urldecode($data['referer']);
