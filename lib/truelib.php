@@ -1494,7 +1494,7 @@ function gallery_root(MainModule $template): ?Template
 	return $T;
 }
 
-function gallery_image(int $gd_id, string $gal_type)
+function gallery_image(int $gd_id, string $gal_type): void
 {
 	global $CACHE_ENABLE;
 
