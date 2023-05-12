@@ -1,6 +1,5 @@
 <?php declare(strict_types = 1);
 
-// $json = isset($_GET['json']);
 $l_hash = array_shift($sys_parameters);
 
 $template = new MainModule($sys_module_id);
