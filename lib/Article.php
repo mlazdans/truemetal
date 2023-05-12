@@ -9,24 +9,13 @@ class Article extends Res
 
 	protected $table_id = Table::ARTICLE;
 
-	// function __construct()
-	// {
-	// 	global $db;
-
-	// 	parent::__construct();
-
-	// 	$this->SetDb($db);
-	// } // __construct
-
 	function set_date_format($new_date)
 	{
 		$this->date_format = $new_date;
-	} // set_date_format
+	}
 
 	function load(Array $params = array())
 	{
-		//global $db;
-
 		$sql_add = array();
 
 		if(isset($params['art_id']))
@@ -113,8 +102,6 @@ INSERT INTO article (
 
 	function update($art_id, &$data, $validate = Res::ACT_VALIDATE)
 	{
-		//global $db;
-
 		$art_id = (integer)$art_id;
 		if(!$art_id)
 		{
@@ -168,8 +155,6 @@ INSERT INTO article (
 
 	function del($art_id)
 	{
-		//global $db;
-
 		if(!$art_id)
 		{
 			return true;
@@ -182,8 +167,6 @@ INSERT INTO article (
 
 	function activate($art_id)
 	{
-		//global $db;
-
 		$art_id = (integer)$art_id;
 		$sql = 'UPDATE `article` SET art_active = "'.Res::STATE_ACTIVE.'" WHERE art_id = '.$art_id;
 
@@ -192,15 +175,12 @@ INSERT INTO article (
 
 	function deactivate($art_id)
 	{
-		//global $db;
-
 		$art_id = (integer)$art_id;
 		$sql = 'UPDATE `article` SET art_active = "'.Res::STATE_INACTIVE.'" WHERE art_id = '.$art_id;
 
 		return DB::Execute($sql);
 	}
 
-	// actionu preprocessors
 	function process_action(&$data, $action)
 	{
 
@@ -261,12 +241,10 @@ INSERT INTO article (
 			$data['art_entered'] = '';
 
 		my_strip_tags($data['art_name']);
-	} // validate
+	}
 
 	function get_total($art_modid = 0)
 	{
-		//global $db;
-
 		$sql_add = '';
 		$sql = "SELECT COUNT(*) art_count FROM `article` a";
 		if($art_modid)
@@ -280,11 +258,11 @@ INSERT INTO article (
 		$data = DB::ExecuteSingle($sql);
 
 		return $data['art_count'];
-	} // get_total
+	}
 
 	public static function Route($resource, $c_id = 0)
 	{
 		return "/$resource[module_id]/$resource[art_id]-".urlize($resource['art_name']).($c_id ? "#comment$c_id" : "");
-	} // Route
+	}
 }
 

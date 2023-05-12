@@ -23,17 +23,10 @@ class Forum extends Res
 
 	protected $table_id = Table::FORUM;
 
-	// function __construct()
-	// {
-	// 	parent::__construct();
-
-	// 	$this->SetDb($db);
-	// } // __construct
-
 	function setPage($page)
 	{
 		$this->page = $page;
-	} // setPage
+	}
 
 	function load(Array $params = array())
 	{
@@ -109,12 +102,12 @@ FROM
 		}
 
 		return (isset($params['forum_id']) || isset($params['res_id']) ? DB::ExecuteSingle($sql) : DB::Execute($sql));
-	} // load
+	}
 
 	function setItemsPerPage($fpp)
 	{
 		$this->fpp = $fpp;
-	} // setItemsPerPage
+	}
 
 	function get_tree($forum_id)
 	{
@@ -136,7 +129,7 @@ FROM
 		}
 
 		return $data2;
-	} // get_tree
+	}
 
 	function get_all_tree($forum_id = 0, $d = 0)
 	{
@@ -176,7 +169,7 @@ FROM
 		}
 
 		return $data2;
-	} // get_all_tree
+	}
 
 	function Add()
 	{
@@ -229,7 +222,7 @@ INSERT INTO forum (
 )";
 
 		return (DB::Execute($sql) ? DB::LastID() : false);
-	} // add
+	}
 
 	function save(&$data, $validate = Res::ACT_DONTVALIDATE)
 	{
@@ -258,7 +251,7 @@ INSERT INTO forum (
 		$sql .= 'WHERE forum_id = '.$data2['forum_id'];
 
 		return DB::Execute($sql);
-	} // save
+	}
 
 	function del_under($forum_id)
 	{
@@ -277,7 +270,7 @@ INSERT INTO forum (
 		$sql = "DELETE FROM forum WHERE forum_forumid = ".$forum_id;
 
 		return $ret && DB::Execute($sql);
-	} // del_under
+	}
 
 	function del($forum_id)
 	{
@@ -291,7 +284,7 @@ INSERT INTO forum (
 		$sql = 'DELETE FROM forum WHERE forum_id = '.$forum_id;
 
 		return $ret && DB::Execute($sql);
-	} // del
+	}
 
 	function open($forum_id)
 	{
@@ -299,7 +292,7 @@ INSERT INTO forum (
 		$sql = 'UPDATE forum SET forum_closed = "'.Forum::OPEN.'" WHERE forum_id = '.$forum_id;
 
 		return DB::Execute($sql);
-	} // open
+	}
 
 	function close($forum_id)
 	{
@@ -307,7 +300,7 @@ INSERT INTO forum (
 		$sql = 'UPDATE forum SET forum_closed = "'.Forum::CLOSED.'" WHERE forum_id = '.$forum_id;
 
 		return DB::Execute($sql);
-	} // close
+	}
 
 	function activate($forum_id)
 	{
@@ -315,7 +308,7 @@ INSERT INTO forum (
 		$sql = 'UPDATE forum SET forum_active = "Y" WHERE forum_id = '.$forum_id;
 
 		return DB::Execute($sql);
-	} // activate
+	}
 
 	function deactivate($forum_id)
 	{
@@ -323,7 +316,7 @@ INSERT INTO forum (
 		$sql = 'UPDATE forum SET forum_active = "N" WHERE forum_id = '.$forum_id;
 
 		return DB::Execute($sql);
-	} // deactivate
+	}
 
 	function move($forum_id, $new_forum_forumid)
 	{
@@ -335,7 +328,7 @@ INSERT INTO forum (
 		$sql = 'UPDATE forum SET forum_forumid = '.$new_forum_forumid.' WHERE forum_id = '.$forum_id;
 
 		return DB::Execute($sql);
-	} // deactivate
+	}
 
 	function process_action(&$data, $action)
 	{
@@ -371,7 +364,7 @@ INSERT INTO forum (
 		}
 
 		return $ret;
-	} // process_action
+	}
 
 	function validate(&$data)
 	{
@@ -429,7 +422,7 @@ INSERT INTO forum (
 		my_strip_tags($data['forum_username']);
 		my_strip_tags($data['forum_useremail']);
 
-	} // validate
+	}
 
 	public function set_all_tree(Template $template, $tree, $forum_forumid = 0, $d = 0, $block = 'BLOCK_forum_forumid')
 	{
@@ -450,7 +443,7 @@ INSERT INTO forum (
 				$this->set_all_tree($template, $tree, $item['forum_id'], $d + 1, $block);
 			}
 		}
-	} // set_all_tree
+	}
 
 	public function set_forum_path(Template $template, $forum_id)
 	{
@@ -470,7 +463,7 @@ INSERT INTO forum (
 		}
 
 		return true;
-	} // set_forum_path
+	}
 
 	public static function hasNewThemes($item)
 	{
@@ -488,7 +481,7 @@ INSERT INTO forum (
 			return ($_SESSION['res']['viewed_before'] < strtotime($item['forum_lastthemedate']));
 
 		return ($item['forum_themecount'] > 0);
-	} // hasNewThemes
+	}
 
 	public static function markThemeCount($item)
 	{
@@ -496,12 +489,12 @@ INSERT INTO forum (
 			return false;
 		}
 		$_SESSION['forums']['viewed_date'][$item['forum_id']] = $item['forum_lastthemedate'];
-	} // markThemeCount
+	}
 
 	public static function Route($resource, $c_id = 0)
 	{
 		return "/forum/$resource[forum_id]-".urlize($resource['forum_name']).($c_id ? "#comment$c_id" : "");
-	} // Route
+	}
 
 	function get_themes(array $DATA){
 		$DATA['forum_allowchilds'] = Forum::PROHIBIT_CHILDS;

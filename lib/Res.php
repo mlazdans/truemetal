@@ -21,15 +21,9 @@ class Res
 
 	protected $table_id;
 	protected $login_id;
-	// protected $db = null;
-
-	// function __construct() {
-	// } // __construct
 
 	function Get(Array $params = array())
 	{
-		// $this->InitDb();
-
 		$sql = "SELECT * FROM `res`";
 
 		$sql_add = array();
@@ -47,12 +41,10 @@ class Res
 			$sql .= " LIMIT ".$params['limit'];
 
 		return (empty($params['res_id']) ? DB::Execute($sql) : DB::ExecuteSingle($sql));
-	} // Get
+	}
 
 	function Add()
 	{
-		// $this->InitDb();
-
 		$sql = sprintf(
 			"INSERT INTO `res` (`table_id`, `login_id`, `res_entered`) VALUES (%s, %s, CURRENT_TIMESTAMP);",
 			($this->table_id ? $this->table_id : "NULL"),
@@ -60,20 +52,7 @@ class Res
 		);
 
 		return (DB::Execute($sql) ? DB::LastID() : false);
-	} // Add
-
-	// function Commit() {
-	// 	DB::Commit();
-	// } // Commit
-
-	// function Rollback() {
-	// 	DB::Rollback();
-	// } // Rollback
-
-	// function SetDb($db)
-	// {
-	// 	$this->db = $db;
-	// } // SetDb
+	}
 
 	# TODO: katrā klasē atsevišķi
 	function GetAllData($res_id)
@@ -120,17 +99,7 @@ class Res
 		}
 
 		return false;
-	} // GetAllData
-
-	// protected function InitDb()
-	// {
-	// 	if(!$this->db)
-	// 	{
-	// 		require('include/dbconnect.php');
-	// 		$this->db = $db;
-	// 		DB::AutoCommit(false);
-	// 	}
-	// } // InitDb
+	}
 
 	# TODO: katrā klasē atsevišķi
 	public static function Route($res_id, $c_id = 0)
@@ -166,7 +135,7 @@ class Res
 		}
 
 		return $location;
-	} // Route
+	}
 
 	public static function hasNewComments($item)
 	{
@@ -191,11 +160,11 @@ class Res
 			return ($_SESSION['res']['viewed_before'] < strtotime($item['res_comment_lastdate']));
 
 		return ($item['res_comment_count'] > 0);
-	} // hasNewComments
+	}
 
 	public static function markCommentCount($item)
 	{
 		$_SESSION['res']['viewed_date'][$item['res_id']] = $item['res_comment_lastdate'];
-	} // markCommentCount
+	}
 
 }
