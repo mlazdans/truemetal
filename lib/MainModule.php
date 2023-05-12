@@ -39,19 +39,6 @@ class MainModule
 		return new_template($file_name)->set_array($this->Index->get_vars());
 	}
 
-	// function init()
-	// {
-	// 	$this->set_var('encoding', $GLOBALS['sys_encoding']);
-	// 	$this->set_var('module_root', '/'.$this->module_name);
-	// 	$this->set_var('script_version', $GLOBALS['sys_script_version']);
-	// 	$this->set_var('disable_youtube', (empty($_SESSION['login']['l_disable_youtube']) ? 0 : 1));
-	// 	$this->set_var('i_am_admin', $GLOBALS['i_am_admin']);
-	// 	$this->set_descr("Metāls Latvijā");
-	// 	$this->set_banner_top();
-
-	// 	return true;
-	// } // init
-
 	function set_title($str_title)
 	{
 		$this->title = $str_title;
@@ -177,12 +164,6 @@ class MainModule
 		$this->set_recent_comments();
 		// $this->set_recent_reviews();
 	}
-
-	function set_poll()
-	{
-		$poll = new Poll;
-		$poll->set_poll($this);
-	} // set_poll
 
 	function set_login()
 	{
