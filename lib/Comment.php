@@ -1,26 +1,9 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
-
-require_once('lib/Res.php');
-require_once('lib/Table.php');
+<?php declare(strict_types = 1);
 
 class Comment extends Res
 {
 	protected $table_id = Table::COMMENT;
 
-	function __construct() {
-		global $db;
-
-		parent::__construct();
-
-		$this->SetDb($db);
-	} // __construct
-
-	//function Add($data)
 	function Add()
 	{
 		list($data) = func_get_args();
@@ -31,7 +14,7 @@ class Comment extends Res
 		}
 
 		$this->validate($data);
-		$data = $this->db->QuoteArray($data);
+		$data = DB::Quote($data);
 
 		$sql = "
 INSERT INTO comment (
@@ -41,12 +24,12 @@ INSERT INTO comment (
 ) VALUES (
 	$res_id, $data[login_id], '$data[c_userlogin]', '$data[c_username]',
 	'$data[c_useremail]', '$data[c_data]', '$data[c_datacompiled]',
-	'$data[c_visible]', '$data[c_userip]', ".$this->db->now()."
+	'$data[c_visible]', '$data[c_userip]', ".DB::now()."
 )
 ";
 
-		return $this->db->Execute($sql);
-	} // Add
+		return DB::Execute($sql);
+	}
 
 	function Get(Array $params = array())
 	{
@@ -85,15 +68,15 @@ JOIN res r ON r.res_id = comment.res_id
 		if(!empty($params['limit']))
 			$sql .= " LIMIT ".$params['limit'];
 
-		return (isset($params['c_id']) || isset($params['res_id']) ? $this->db->ExecuteSingle($sql) : $this->db->Execute($sql));
-	} // Get
+		return (isset($params['c_id']) || isset($params['res_id']) ? DB::ExecuteSingle($sql) : DB::Execute($sql));
+	}
 
 	function Delete($id)
 	{
 		$sql = sprintf("DELETE FROM `comment` WHERE c_id = %d", $id);
 
-		return $this->db->Execute($sql);
-	} // Delete
+		return DB::Execute($sql);
+	}
 
 	function Show($id)
 	{
@@ -103,8 +86,8 @@ JOIN res r ON r.res_id = comment.res_id
 			$id
 			);
 
-		return $this->db->Execute($sql);
-	} // Show
+		return DB::Execute($sql);
+	}
 
 	function Hide($id)
 	{
@@ -114,8 +97,8 @@ JOIN res r ON r.res_id = comment.res_id
 			$id
 			);
 
-		return $this->db->Execute($sql);
-	} // Hide
+		return DB::Execute($sql);
+	}
 
 	function Validate(&$data)
 	{
@@ -136,7 +119,6 @@ JOIN res r ON r.res_id = comment.res_id
 		else
 			$data['c_visible'] = Res::STATE_VISIBLE;
 
-	} // Validate
+	}
 
-} // class::Comment
-
+}

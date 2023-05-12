@@ -1,9 +1,4 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
 class Res
 {
@@ -26,14 +21,14 @@ class Res
 
 	protected $table_id;
 	protected $login_id;
-	protected $db = null;
+	// protected $db = null;
 
-	function __construct() {
-	} // __construct
+	// function __construct() {
+	// } // __construct
 
 	function Get(Array $params = array())
 	{
-		$this->InitDb();
+		// $this->InitDb();
 
 		$sql = "SELECT * FROM `res`";
 
@@ -51,35 +46,34 @@ class Res
 		if(!empty($params['limit']))
 			$sql .= " LIMIT ".$params['limit'];
 
-		return (empty($params['res_id']) ? $this->db->Execute($sql) : $this->db->ExecuteSingle($sql));
+		return (empty($params['res_id']) ? DB::Execute($sql) : DB::ExecuteSingle($sql));
 	} // Get
 
 	function Add()
 	{
-		$this->InitDb();
+		// $this->InitDb();
 
 		$sql = sprintf(
-			"INSERT INTO `res` (`table_id`, `login_id`, `res_entered`) VALUES (%s, %s, %s);",
+			"INSERT INTO `res` (`table_id`, `login_id`, `res_entered`) VALUES (%s, %s, CURRENT_TIMESTAMP);",
 			($this->table_id ? $this->table_id : "NULL"),
 			($this->login_id ? $this->login_id : "NULL"),
-			$this->db->now()
-			);
+		);
 
-		return ($this->db->Execute($sql) ? $this->db->LastID() : false);
+		return (DB::Execute($sql) ? DB::LastID() : false);
 	} // Add
 
-	function Commit() {
-		$this->db->Commit();
-	} // Commit
+	// function Commit() {
+	// 	DB::Commit();
+	// } // Commit
 
-	function Rollback() {
-		$this->db->Rollback();
-	} // Rollback
+	// function Rollback() {
+	// 	DB::Rollback();
+	// } // Rollback
 
-	function SetDb($db)
-	{
-		$this->db = $db;
-	} // SetDb
+	// function SetDb($db)
+	// {
+	// 	$this->db = $db;
+	// } // SetDb
 
 	# TODO: katrā klasē atsevišķi
 	function GetAllData($res_id)
@@ -128,15 +122,15 @@ class Res
 		return false;
 	} // GetAllData
 
-	protected function InitDb()
-	{
-		if(!$this->db)
-		{
-			require('include/dbconnect.php');
-			$this->db = $db;
-			$this->db->AutoCommit(false);
-		}
-	} // InitDb
+	// protected function InitDb()
+	// {
+	// 	if(!$this->db)
+	// 	{
+	// 		require('include/dbconnect.php');
+	// 		$this->db = $db;
+	// 		DB::AutoCommit(false);
+	// 	}
+	// } // InitDb
 
 	# TODO: katrā klasē atsevišķi
 	public static function Route($res_id, $c_id = 0)
@@ -204,4 +198,4 @@ class Res
 		$_SESSION['res']['viewed_date'][$item['res_id']] = $item['res_comment_lastdate'];
 	} // markCommentCount
 
-} // class::Res
+}

@@ -1,13 +1,5 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
-// Custom session handleris
-
-require_once('lib/SessHandler.php');
 $cookie_time = 31536000; # 1 year
 
 //ini_set('session.save_handler', 'user');
@@ -18,7 +10,7 @@ ini_set('session.serialize_handler', 'php');
 ini_set('session.gc_probability', 1);
 ini_set('session.gc_divisor', 1000);
 
-$sess_handler = new SessHandler($db);
+$sess_handler = new SessHandler();
 
 session_set_save_handler(
 	array(&$sess_handler, "sess_open"),
@@ -30,4 +22,5 @@ session_set_save_handler(
 );
 
 session_set_cookie_params($cookie_time, '/');
+
 session_start();

@@ -11,12 +11,10 @@ class Logins
 
 	function load(Array $params = array())
 	{
-		global $db;
-
 		$sql_add = array();
 		$sql_having = array();
 
-		$params = $db->Quote($params);
+		$params = DB::Quote($params);
 
 		if(isset($params['l_id']))
 			$sql_add[] = sprintf("l_id = %d", $params['l_id']);
@@ -131,9 +129,9 @@ class Logins
 			isset($params['single'])
 			)
 		{
-			return $db->ExecuteSingle($sql);
+			return DB::ExecuteSingle($sql);
 		} else {
-			return $db->Execute($sql);
+			return DB::Execute($sql);
 		}
 	}
 
@@ -215,31 +213,25 @@ class Logins
 
 	static function banned24h($ip)
 	{
-		global $db;
-
 		$d = date('Y-m-d H:i:s', strtotime('-24 hours'));
 		$sql = "SELECT COUNT(*) banned FROM `logins` WHERE l_active='N' AND l_userip='$ip' AND l_lastaccess > '$d'";
-		$item = $db->ExecuteSingle($sql);
+		$item = DB::ExecuteSingle($sql);
 
 		return $item['banned'] > 0;
 	} // banned24h
 
 	static function get_active()
 	{
-		global $db;
-
 		$sql = sprintf(
 			"SELECT * FROM logins WHERE l_logedin = 'Y' AND '%s' < l_lastaccess",
 			date('Y-m-d H:i:s', time() - 600)
 			);
 
-		return $db->Execute($sql);
+		return DB::Execute($sql);
 	}
 
 	static function save_session_data($data = '')
 	{
-		global $db, $sess_handler;
-
 		if(user_loged())
 		{
 			$l_id = $_SESSION['login']['l_id'];
@@ -247,8 +239,8 @@ class Logins
 				$data = session_encode();
 			}
 			$sql = "UPDATE logins SET l_sessiondata ='$data', l_lastaccess = NOW(), l_logedin = 'Y' WHERE l_id = $l_id";
-			$db->Execute($sql);
-			$db->Commit();
+			DB::Execute($sql);
+			// DB::Commit();
 		}
 	} // save_session_data
 
@@ -278,7 +270,7 @@ class Logins
 
 	function update_profile($data, int $l_id = 0)
 	{
-		global $db, $sys_user_root, $user_pic_w, $user_pic_h, $user_pic_tw, $user_pic_th;
+		global $sys_user_root, $user_pic_w, $user_pic_h, $user_pic_tw, $user_pic_th;
 
 		$l_id = (int)$l_id;
 
@@ -320,16 +312,13 @@ class Logins
 
 		$sql = join(",", $cond);
 
-		if(!$sql)
+		if($sql)
 		{
-			$this->error_msg[] = "Kaut kas nogāja greizi...";
-			return false;
-		}
-
-		if(!$db->Execute("UPDATE logins SET $sql WHERE l_id = $l_id"))
-		{
-			$this->error_msg[] = "Datubāzes kļūda";
-			return false;
+			if(!DB::Execute("UPDATE logins SET $sql WHERE l_id = $l_id"))
+			{
+				$this->error_msg[] = "Datubāzes kļūda";
+				return false;
+			}
 		}
 
 		# image
@@ -382,24 +371,20 @@ class Logins
 
 	function login(string $l_login, string $l_pass)
 	{
-		global $db;
-
 		if($data = static::auth($l_login, $l_pass)) {
-			$db->Execute("UPDATE logins SET l_logedin ='Y' WHERE l_id = $data[l_id]");
+			DB::Execute("UPDATE logins SET l_logedin ='Y' WHERE l_id = $data[l_id]");
 			return $data;
 		}
 	}
 
 	static function logoff()
 	{
-		global $db;
-
 		if(user_loged())
 		{
 			$l_id = $_SESSION['login']['l_id'];
 			Logins::save_session_data();
 			session_destroy();
-			$db->Execute("UPDATE logins SET l_logedin ='N' WHERE l_id = $l_id");
+			DB::Execute("UPDATE logins SET l_logedin ='N' WHERE l_id = $l_id");
 
 			return true;
 		}
@@ -413,13 +398,11 @@ class Logins
 
 	static function insert_accept_code($login, $new_email = null)
 	{
-		global $db;
-
-		$la_new_email = $new_email ? sprintf("'%s'", $db->Quote($new_email)) : "NULL";
+		$la_new_email = $new_email ? sprintf("'%s'", DB::Quote($new_email)) : "NULL";
 
 		$accept_code = static::genCode();
 		$sql = "INSERT INTO login_accept (la_login, la_new_email, la_code, la_entered) VALUES ('$login', $la_new_email, '$accept_code', NOW());";
-		if($db->Execute($sql))
+		if(DB::Execute($sql))
 		{
 			return $accept_code;
 		} else {
@@ -429,11 +412,9 @@ class Logins
 
 	static function insert_forgot_code($login)
 	{
-		global $db;
-
 		$accept_code = static::genCode();
 		$sql = "INSERT INTO login_forgot (f_login, f_code, f_entered) VALUES ('$login', '$accept_code', NOW());";
-		if($db->Execute($sql))
+		if(DB::Execute($sql))
 		{
 			return $accept_code;
 		} else
@@ -442,7 +423,7 @@ class Logins
 
 	static function send_forgot_code($login, $code, $email)
 	{
-		global $sys_domain, $db;
+		global $sys_domain;
 
 		$t = new_template('emails/forgot.tpl');
 		$t->set_var('ip', $_SERVER['REMOTE_ADDR']);
@@ -455,7 +436,7 @@ class Logins
 
 		if(email($email, $subj, $msg))
 		{
-			return $db->Execute("UPDATE login_forgot SET f_sent = 'Y' WHERE f_login = '$login'");
+			return DB::Execute("UPDATE login_forgot SET f_sent = 'Y' WHERE f_login = '$login'");
 		}
 
 		return false;
@@ -463,11 +444,9 @@ class Logins
 
 	static function send_accept_code($login, $email, $subj, $msg): bool
 	{
-		global $db;
-
 		if(email($email, $subj, $msg))
 		{
-			return $db->Execute("UPDATE login_accept SET la_sent = 'Y' WHERE la_login = '$login'");
+			return DB::Execute("UPDATE login_accept SET la_sent = 'Y' WHERE la_login = '$login'");
 		}
 
 		return false;
@@ -475,24 +454,22 @@ class Logins
 
 	static function accept_login($code)
 	{
-		global $db;
-
 		$timeout = static::codes_timeout();
 
 		$sql = "SELECT * FROM login_accept WHERE la_code = '$code' AND UNIX_TIMESTAMP() - UNIX_TIMESTAMP(la_entered) < $timeout AND la_accepted = '0000-00-00 00:00:00'";
 
-		if($data = $db->ExecuteSingle($sql))
+		if($data = DB::ExecuteSingle($sql))
 		{
-			$la_login = $db->Quote($data['la_login']);
+			$la_login = DB::Quote($data['la_login']);
 
 			$sql_set = sprintf("l_accepted = '%s'", Logins::ACCEPTED);
 			if($data['la_new_email']){
-				$sql_set .= sprintf(", l_email = '%s'", $db->Quote($data['la_new_email']));
+				$sql_set .= sprintf(", l_email = '%s'", DB::Quote($data['la_new_email']));
 			}
 
 			return
-				$db->Execute("UPDATE login_accept SET la_accepted = NOW() WHERE la_login = '$la_login'") &&
-				$db->Execute("UPDATE logins SET $sql_set WHERE l_login = '$la_login'");
+				DB::Execute("UPDATE login_accept SET la_accepted = NOW() WHERE la_login = '$la_login'") &&
+				DB::Execute("UPDATE logins SET $sql_set WHERE l_login = '$la_login'");
 		}
 
 		return false;
@@ -505,18 +482,16 @@ class Logins
 
 	static function get_forgot($code)
 	{
-		global $db;
-
 		$timeout = static::codes_timeout();
 
 		$sql = "SELECT * FROM login_forgot WHERE f_code = '$code' AND UNIX_TIMESTAMP() - UNIX_TIMESTAMP(f_entered) < $timeout";
 
-		return $db->ExecuteSingle($sql);
+		return DB::ExecuteSingle($sql);
 	}
 
 	function insert(&$data, $validate = Res::ACT_VALIDATE)
 	{
-		global $db, $sys_domain;
+		global $sys_domain;
 
 		if($validate){
 			$this->validate($data);
@@ -524,9 +499,9 @@ class Logins
 
 		$data['l_hash'] = Logins::gen_login_hash();
 
-		$data = $db->Quote($data);
+		$data = DB::Quote($data);
 
-		$date = $db->now();
+		$date = DB::Now();
 
 		$sql = "INSERT INTO logins (
 			l_login, l_hash, l_email,
@@ -551,7 +526,7 @@ class Logins
 
 			if($this->send_accept_code($data['l_login'], $data['l_email'], $subj, $msg))
 			{
-				if($db->Execute($sql))
+				if(DB::Execute($sql))
 				{
 					if($this->update_password($data['l_login'], $data['l_password']))
 					{
@@ -566,8 +541,6 @@ class Logins
 
 	function update($data, $validate = Res::ACT_VALIDATE)
 	{
-		global $db;
-
 		# TODO: pārbaudīt citur!!!
 		if(!$this->valid_login($data['l_login']))
 		{
@@ -588,48 +561,40 @@ class Logins
 		$sql = substr($sql, 0, -2);
 		$sql .= " WHERE l_login = '$data[l_login]'";
 
-		$db->Execute($sql);
+		DB::Execute($sql);
 
 		return $data['l_login'];
 	} // update
 
 	function del($l_id)
 	{
-		global $db;
-
 		if(!$l_id)
 			return true;
 
 		$sql = "DELETE FROM logins WHERE l_id = '$l_id'";
 
-		return $db->Execute($sql);
+		return DB::Execute($sql);
 	} // del
 
 	static function accept(int $l_id)
 	{
-		global $db;
-
 		$sql = 'UPDATE logins SET l_accepted = "'.Logins::ACCEPTED.'" WHERE l_id = "'.$l_id.'"';
 
-		return $db->Execute($sql);
+		return DB::Execute($sql);
 	}
 
 	function activate($l_id)
 	{
-		global $db;
-
 		$sql = 'UPDATE logins SET l_active = "'.Res::STATE_ACTIVE.'" WHERE l_id = "'.$l_id.'"';
 
-		return $db->Execute($sql);
+		return DB::Execute($sql);
 	} // activate
 
 	function deactivate($l_id)
 	{
-		global $db;
-
 		$sql = 'UPDATE logins SET l_active = "'.Res::STATE_INACTIVE.'" WHERE l_id = "'.$l_id.'"';
 
-		return $db->Execute($sql);
+		return DB::Execute($sql);
 	} // deactivate
 
 	function process_action(&$data, $action)
@@ -739,9 +704,7 @@ class Logins
 
 	static function update_password(string $login, string $password)
 	{
-		global $db;
-
-		return $db->Execute(
+		return DB::Execute(
 			sprintf(
 				"UPDATE logins SET l_password = '%s' WHERE l_login='%s'",
 				static::gen_password_hash($password),
@@ -752,17 +715,13 @@ class Logins
 
 	static function remove_forgot_code(string $code)
 	{
-		global $db;
-
 		$sql = "DELETE FROM login_forgot WHERE f_code='$code'";
 
-		return $db->Execute($sql);
+		return DB::Execute($sql);
 	}
 
 	static function collectUsersByIP($ips, $exclude_l_ids = array(), $exclude_ips = array(), $d = 0)
 	{
-		global $db;
-
 		if($d > 3)
 			return false;
 
@@ -802,7 +761,7 @@ GROUP BY
 	l.l_id
 ";
 
-		if($alsoUsers = $db->Execute($sql))
+		if($alsoUsers = DB::Execute($sql))
 		{
 			return $alsoUsers;
 		} else {
@@ -815,9 +774,7 @@ GROUP BY
 	}
 
 	static function auth(string $login, string $pass, bool $all = false) {
-		global $db;
-
-		$cond[] = sprintf("l_login = '%s'", $db->Quote($login));
+		$cond[] = sprintf("l_login = '%s'", DB::Quote($login));
 
 		if(!$all){
 			$cond[] = sprintf("l_active = '%s'", Res::STATE_ACTIVE);
@@ -826,7 +783,7 @@ GROUP BY
 
 		$sql = sprintf("SELECT * FROM logins WHERE ".join(" AND ", $cond));
 
-		if($data = $db->ExecuteSingle($sql)){
+		if($data = DB::ExecuteSingle($sql)){
 			$pass_ok =
 				password_verify($pass, $data['l_password']) ||
 				(mysql_password($pass) == $data['l_password']) ||
@@ -841,12 +798,10 @@ GROUP BY
 
 	static function gen_login_hash(): string
 	{
-		global $db;
-
 		$hlen = 8;
 		do {
 			$l_hash = substr(md5uniqid(), 0, $hlen);
-			$found = $db->ExecuteSingle("SELECT l_hash FROM logins WHERE l_hash = '$l_hash'");
+			$found = DB::ExecuteSingle("SELECT l_hash FROM logins WHERE l_hash = '$l_hash'");
 		} while($found);
 
 		return $l_hash;

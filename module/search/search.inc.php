@@ -41,17 +41,16 @@ $params = array(
 # Log
 if($search_log)
 {
-	$sql = sprintf("
-INSERT INTO `search_log` (
-`login_id`, `sl_q`, `sl_ip`, `sl_entered`
-) VALUES (
-%s, '%s', '%s', NOW()
-);",
-		user_loged() ? $_SESSION['login']['l_id'] : "NULL",
-		$db->Quote($search_q),
-		$_SERVER['REMOTE_ADDR']
-		);
-	$db->Execute($sql);
+	$sql = sprintf(
+		"INSERT INTO search_log (
+			login_id, sl_q, sl_ip, sl_entered
+		) VALUES (
+			%s, ?, ?, CURRENT_TIMESTAMP
+		)",
+		user_loged() ? (int)$_SESSION['login']['l_id'] : "NULL"
+	);
+
+	DB::Execute($sql, $search_q, $_SERVER['REMOTE_ADDR']);
 }
 
 $res = search($params);

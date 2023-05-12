@@ -1,9 +1,4 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
 $art_per_page = 10;
 
@@ -49,7 +44,7 @@ if($art_id)
 	$art_name_urlized = '';
 	$sql = "SELECT * FROM `$tableName` WHERE `art_id` = $art_id";
 	//$sql = "SELECT * FROM ".view_mainpage()." WHERE `art_id` = $art_id";
-	if($art = $db->ExecuteSingle($sql))
+	if($art = DB::ExecuteSingle($sql))
 	{
 		# NOTE: redirektējam uz jaunajām adresēm, pēc gada (2011-04-30) varēs noņemt
 		$art_name_urlized = urlize($art['art_name']);
@@ -81,7 +76,7 @@ if($art_id)
 		//printr($sql);
 	//$sql = "SELECT COUNT(*) AS cc FROM ".view_mainpage()." WHERE `module_id` = '$sys_module_id'";
 	//printr($sql);
-	$cc = $db->ExecuteSingle($sql);
+	$cc = DB::ExecuteSingle($sql);
 	$tc = (int)$cc['cc'];
 	//printr($tc);
 
@@ -109,7 +104,7 @@ if($art_id)
 
 
 	//$sql = "SELECT * FROM ".view_mainpage()." WHERE `module_id` = '$sys_module_id' LIMIT $limit";
-	$articles = $db->Execute($sql);
+	$articles = DB::Execute($sql);
 } else {
 	$articles = array();
 }

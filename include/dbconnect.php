@@ -1,13 +1,12 @@
 <?php declare(strict_types = 1);
 
-$db = new SQLLayer('utf8mb4');
-$db->connect(
-	$GLOBALS['sys_db_host'],
-	$GLOBALS['sys_db_user'],
-	$GLOBALS['sys_db_password'],
-	$GLOBALS['sys_db_name'], $GLOBALS['sys_db_port']
-);
+use dqdp\DBA\driver\MySQL_PDO;
+use dqdp\DBA\Types\MySQLConnectParams;
 
-if(!$db->conn){
+$params = new MySQLConnectParams(database: $sys_db_name, username: $sys_db_user, password: $sys_db_password, charset: 'utf8mb4');
+$D = (new MySQL_PDO($params))->connect();
+if(!$D->get_conn()){
 	die('True DB error!');
 }
+
+DB::set_db($D);

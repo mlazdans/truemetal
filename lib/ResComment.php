@@ -1,19 +1,7 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
-
-require_once('lib/Comment.php');
-require_once('lib/Res.php');
+<?php declare(strict_types = 1);
 
 class ResComment extends Res
 {
-	function __construct() {
-		parent::__construct();
-	} // __construct
-
 	function Connect($res_id, $c_id)
 	{
 		$sql = sprintf(
@@ -22,10 +10,9 @@ class ResComment extends Res
 			$c_id
 			);
 
-		return $this->db->Execute($sql);
-	} // Connect
+		return DB::Execute($sql);
+	}
 
-	//function Add($res_id, $data)
 	function Move($id, $res_id)
 	{
 		$sql = sprintf(
@@ -34,30 +21,28 @@ class ResComment extends Res
 			$id
 			);
 
-		return $this->db->Execute($sql);
-	} // Show
+		return DB::Execute($sql);
+	}
 
 	function Add()
 	{
 		list($res_id, $data) = func_get_args();
 
-		$this->InitDb();
+		// $this->InitDb();
 
 		$Comment = new Comment();
-		$Comment->setDb($this->db);
+		// $Comment->setDb($this->db);
 		if(!$Comment->Add($data)) {
 			return false;
 		}
 
-		$c_id = $this->db->LastID();
+		$c_id = DB::LastID();
 
 		return ($this->Connect($res_id, $c_id) ? $c_id : false);
-	} // Add
+	}
 
 	function Get(Array $params = array())
 	{
-		$this->InitDb();
-
 		# NOTE: Man liekas, ka comment_map nah nav vajadzīgs, 2014-03-01
 /*
 		$sql = "
@@ -140,11 +125,10 @@ LEFT JOIN logins l ON l.l_id = r.login_id
 
 		if(!empty($params['c_id']))
 		{
-			return $this->db->ExecuteSingle($sql);
+			return DB::ExecuteSingle($sql);
 		} else {
-			return $this->db->Execute($sql);
+			return DB::Execute($sql);
 		}
-	} // Get
+	}
 
-} // class::ResComment
-
+}

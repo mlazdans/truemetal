@@ -23,14 +23,12 @@ class Forum extends Res
 
 	protected $table_id = Table::FORUM;
 
-	function __construct()
-	{
-		global $db;
+	// function __construct()
+	// {
+	// 	parent::__construct();
 
-		parent::__construct();
-
-		$this->SetDb($db);
-	} // __construct
+	// 	$this->SetDb($db);
+	// } // __construct
 
 	function setPage($page)
 	{
@@ -110,7 +108,7 @@ FROM
 				$sql .= sprintf(" LIMIT %s,%s", ($this->page - 1) * $this->fpp, $this->fpp);
 		}
 
-		return (isset($params['forum_id']) || isset($params['res_id']) ? $this->db->ExecuteSingle($sql) : $this->db->Execute($sql));
+		return (isset($params['forum_id']) || isset($params['res_id']) ? DB::ExecuteSingle($sql) : DB::Execute($sql));
 	} // load
 
 	function setItemsPerPage($fpp)
@@ -210,7 +208,7 @@ FROM
 		}
 
 		$data['login_id'] = $data['login_id'] ? $data['login_id'] : "NULL";
-		$data2 = $this->db->QuoteArray($data);
+		$data2 = DB::Quote($data);
 
 		$this->login_id = $data['login_id'];
 		if(!($res_id = parent::Add())) {
@@ -225,12 +223,12 @@ INSERT INTO forum (
 	forum_allowchilds, forum_active, forum_closed
 ) VALUES (
 	$res_id, '$data2[forum_name]', '$data2[forum_username]', $data2[login_id],
-	'$data2[forum_userlogin]', '$data2[forum_useremail]', '$ip', ".$this->db->now().",
+	'$data2[forum_userlogin]', '$data2[forum_useremail]', '$ip', ".DB::now().",
 	$forum_id, '$data2[forum_data]', '$data2[forum_datacompiled]',
 	'$data2[forum_allowchilds]', '$data2[forum_active]', '$data2[forum_closed]'
 )";
 
-		return ($this->db->Execute($sql) ? $this->db->LastID() : false);
+		return (DB::Execute($sql) ? DB::LastID() : false);
 	} // add
 
 	function save(&$data, $validate = Res::ACT_DONTVALIDATE)
@@ -241,7 +239,7 @@ INSERT INTO forum (
 		if(!$data['forum_id'])
 			return true;
 
-		$data2 = $this->db->QuoteArray($data);
+		$data2 = DB::Quote($data);
 
 		$sql = 'UPDATE forum SET ';
 		$sql .= $data2['forum_name'] ? "forum_name = '$data2[forum_name]', " : '';
@@ -259,7 +257,7 @@ INSERT INTO forum (
 		$sql = substr($sql, 0, -2);
 		$sql .= 'WHERE forum_id = '.$data2['forum_id'];
 
-		return $this->db->Execute($sql);
+		return DB::Execute($sql);
 	} // save
 
 	function del_under($forum_id)
@@ -272,13 +270,13 @@ INSERT INTO forum (
 		$ret = true;
 
 		$sql = "SELECT forum_id FROM forum WHERE forum_forumid = ".$forum_id;
-		$data = $this->db->Execute($sql);
+		$data = DB::Execute($sql);
 		foreach($data as $item)
 			$ret = $ret && $this->del($item['forum_id']);
 
 		$sql = "DELETE FROM forum WHERE forum_forumid = ".$forum_id;
 
-		return $ret && $this->db->Execute($sql);
+		return $ret && DB::Execute($sql);
 	} // del_under
 
 	function del($forum_id)
@@ -292,7 +290,7 @@ INSERT INTO forum (
 
 		$sql = 'DELETE FROM forum WHERE forum_id = '.$forum_id;
 
-		return $ret && $this->db->Execute($sql);
+		return $ret && DB::Execute($sql);
 	} // del
 
 	function open($forum_id)
@@ -300,7 +298,7 @@ INSERT INTO forum (
 		$forum_id = (int)$forum_id;
 		$sql = 'UPDATE forum SET forum_closed = "'.Forum::OPEN.'" WHERE forum_id = '.$forum_id;
 
-		return $this->db->Execute($sql);
+		return DB::Execute($sql);
 	} // open
 
 	function close($forum_id)
@@ -308,7 +306,7 @@ INSERT INTO forum (
 		$forum_id = (int)$forum_id;
 		$sql = 'UPDATE forum SET forum_closed = "'.Forum::CLOSED.'" WHERE forum_id = '.$forum_id;
 
-		return $this->db->Execute($sql);
+		return DB::Execute($sql);
 	} // close
 
 	function activate($forum_id)
@@ -316,7 +314,7 @@ INSERT INTO forum (
 		$forum_id = (int)$forum_id;
 		$sql = 'UPDATE forum SET forum_active = "Y" WHERE forum_id = '.$forum_id;
 
-		return $this->db->Execute($sql);
+		return DB::Execute($sql);
 	} // activate
 
 	function deactivate($forum_id)
@@ -324,7 +322,7 @@ INSERT INTO forum (
 		$forum_id = (int)$forum_id;
 		$sql = 'UPDATE forum SET forum_active = "N" WHERE forum_id = '.$forum_id;
 
-		return $this->db->Execute($sql);
+		return DB::Execute($sql);
 	} // deactivate
 
 	function move($forum_id, $new_forum_forumid)
@@ -336,7 +334,7 @@ INSERT INTO forum (
 
 		$sql = 'UPDATE forum SET forum_forumid = '.$new_forum_forumid.' WHERE forum_id = '.$forum_id;
 
-		return $this->db->Execute($sql);
+		return DB::Execute($sql);
 	} // deactivate
 
 	function process_action(&$data, $action)

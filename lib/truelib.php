@@ -5,7 +5,7 @@ use dqdp\TemplateBlock;
 
 function forum_add_theme(MainModule $template, Template $T, int $forum_id, array $data): bool
 {
-	global $db, $ip;
+	global $ip;
 
 	if(!user_loged())
 	{
@@ -68,23 +68,22 @@ function forum_add_theme(MainModule $template, Template $T, int $forum_id, array
 	$data['forum_username'] = $_SESSION['login']['l_nick'];
 	$data['forum_allowchilds'] = Forum::PROHIBIT_CHILDS;
 
-	$db->AutoCommit(false);
-	$forum->setDb($db);
-	if($id = $forum->add($forum_id, $data))
-	{
-		$newforum = new Forum;
-		$new_data = $newforum->load(["forum_id"=>$id]);
-
-		$res_id = (int)$new_data['res_id'];
-		if(add_comment($db, $res_id, $data['forum_data']))
+	DB::withNewTrans(function() use ($forum, $forum_id, $data){
+		if($id = $forum->add($forum_id, $data))
 		{
-			$db->Commit();
-			header("Location: /forum/$id-".rawurlencode(urlize($data['forum_name'])));
-			return true;
+			$newforum = new Forum;
+			$new_data = $newforum->load(["forum_id"=>$id]);
+
+			$res_id = (int)$new_data['res_id'];
+			if(add_comment($res_id, $data['forum_data']))
+			{
+				header("Location: /forum/$id-".rawurlencode(urlize($data['forum_name'])));
+				return true;
+			}
 		}
-	}
-	$db->Rollback();
-	$db->AutoCommit(true);
+
+		return false;
+	});
 
 	return false;
 }
@@ -262,8 +261,6 @@ function forum_det(
 	string $hl,
 ): ?Template
 {
-	global $db;
-
 	$res_id = (int)$forum_data['res_id']??0;
 
 	// $forum = new Forum;
@@ -334,7 +331,7 @@ function forum_det(
 		}
 
 		if(!$error_msg) {
-			if($c_id = add_comment($db, $res_id, $data['c_data']))
+			if($c_id = add_comment($res_id, $data['c_data']))
 			{
 				header("Location: ".Forum::Route($forum_data, $c_id));
 				return null;
@@ -449,15 +446,13 @@ function comment_list(Template $C, array $comments, string $hl): void
 }
 
 function get_attendees(int $res_id){
-	global $db;
-
 	$sql = "SELECT a.*, l.l_nick, l.l_hash
 	FROM attend a
 	JOIN logins l ON l.l_id = a.l_id
 	WHERE res_id = $res_id
 	ORDER BY a_entered";
 
-	return $db->Execute($sql);
+	return DB::Execute($sql);
 }
 
 // TODO: izvākt is_private
@@ -588,7 +583,7 @@ function public_profile(MainModule $template, string $l_hash): ?Template
 
 function private_profile(MainModule $template): ?Template
 {
-	global $db, $user_pic_w, $user_pic_h, $user_pic_tw, $user_pic_th;
+	global $user_pic_w, $user_pic_h, $user_pic_tw, $user_pic_th;
 
 	$module_root = "/user/profile";
 
@@ -612,25 +607,24 @@ function private_profile(MainModule $template): ?Template
 		}
 	}
 
-	// save
-	if(isset($_POST['data']))
+	$post_data = post('data', []);
+	if($post_data || $_FILES)
 	{
 		$login = new Logins;
-		$login_data = $_POST['data'];
 
-		if($data = $login->update_profile($login_data))
+		if($data = $login->update_profile($post_data))
 		{
-			unset($data['l_sessiondata']);
-			$_SESSION['login'] = $data;
+			// unset($data['l_sessiondata']);
+			// $_SESSION['login'] = $data;
 			header("Location: $module_root/");
 			return null;
 		} else {
 			$template->error($login->error_msg);
 		}
-		$login_data = array_merge($_SESSION['login'], $login_data);
+		$login_data = array_merge($_SESSION['login'], $post_data);
 	} else {
 		$login_data = $_SESSION['login'];
-	} // post
+	}
 
 	$T = $template->add_file('user/profile/private.tpl');
 
@@ -665,8 +659,7 @@ function private_profile(MainModule $template): ?Template
 
 		$ids[$r] = array_map(function($v) {
 			return $v['res_id'];
-		}, $db->Execute($sql));
-		// $ids[$r] = $db->Execute($sql);
+		}, DB::Execute($sql));
 	}
 
 	if($ids[0] || $ids[1]){
@@ -704,7 +697,7 @@ function private_profile(MainModule $template): ?Template
 
 		$BLOCK_truecomment_item = $T->get_block('BLOCK_truecomment_item');
 
-		$data = $db->Execute($sql);
+		$data = DB::Execute($sql);
 		foreach($data as $item)
 		{
 			$plus_count = $item['plus_count'];
@@ -734,7 +727,7 @@ function private_profile(MainModule $template): ?Template
 	JOIN bad_pass bp ON bp.pass_hash = l.l_password
 	WHERE l.l_id = %d", $_SESSION['login']['l_id']);
 
-	if($data = $db->ExecuteSingle($sql)){
+	if($data = DB::ExecuteSingle($sql)){
 		$T->set_var('bad_pass_class', 'blink');
 		$T->set_var('bad_pass_style', 'color: red');
 		if($data['is_dict'] && $data['is_brute']){
@@ -1148,7 +1141,7 @@ function set_error_fields(TemplateBlock $T, array $fields){
 	}
 }
 
-function add_comment(SQLLayer $db, int $res_id, string $c_data)
+function add_comment(int $res_id, string $c_data)
 {
 	global $ip;
 
@@ -1195,10 +1188,7 @@ function add_comment(SQLLayer $db, int $res_id, string $c_data)
 		'c_userip'=>$ip,
 		);
 
-	$ResComment = new ResComment();
-	$ResComment->setDb($db);
-
-	return $ResComment->add($res_id, $cData);
+	return (new ResComment)->add($res_id, $cData);
 }
 
 function forum_root(MainModule $template): Template
@@ -1522,7 +1512,7 @@ function gallery_image(int $gd_id, string $gal_type)
 
 function gallery_view(MainModule $template, int $gd_id): ?Template
 {
-	global $db, $CACHE_ENABLE;
+	global $CACHE_ENABLE;
 
 	$action = post('action');
 
@@ -1555,9 +1545,8 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 		if(empty($error_msg)){
 			$res_id = (int)$galdata['res_id'];
 			$data = post('data');
-			if($c_id = add_comment($db, $res_id, $data['c_data']))
+			if($c_id = add_comment($res_id, $data['c_data']))
 			{
-				$db->Commit();
 				header("Location: ".GalleryData::Route($galdata, $c_id));
 				return null;
 			} else {
@@ -1649,7 +1638,7 @@ function admin_comment_list(
 
 function vote(MainModule $template, string $value, int $res_id): ?TrueResponseInterface
 {
-	global $db, $ip;
+	global $ip;
 
 	$json = isset($_GET['json']);
 
@@ -1660,7 +1649,6 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 	}
 
 	$Res = new Res();
-	$Res->setDb($db);
 
 	if(!($res_data = $Res->Get(['res_id'=>$res_id]))){
 		$template->not_found();
@@ -1685,7 +1673,7 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 		$date
 	);
 
-	$countCheck = $db->ExecuteSingle($check_sql);
+	$countCheck = DB::ExecuteSingle($check_sql);
 	if($countCheck['cv_count'] >= 24)
 	{
 		$template->msg("Pārsniegtiņš divdesmitčetriņu stundiņu limitiņš balsošaniņai.");
@@ -1701,7 +1689,7 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 		$ip
 	);
 
-	if(!$db->Execute($insert_sql))
+	if(!DB::Execute($insert_sql))
 	{
 		$template->error("Datubāzes kļūda");
 		return null;
@@ -1725,8 +1713,6 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 
 function attend(MainModule $template, int $res_id, ?string $off = null): ?TrueResponseInterface
 {
-	global $db;
-
 	$json = isset($_GET['json']);
 
 	if(!user_loged())
@@ -1735,9 +1721,7 @@ function attend(MainModule $template, int $res_id, ?string $off = null): ?TrueRe
 		return null;
 	}
 
-	$Res = new Res();
-	$Res->setDb($db);
-	if(!($item = $Res->GetAllData($res_id)))
+	if(!($item = (new Res)->GetAllData($res_id)))
 	{
 		$template->not_found();
 		return null;
@@ -1762,7 +1746,7 @@ function attend(MainModule $template, int $res_id, ?string $off = null): ?TrueRe
 		$sql = "INSERT INTO attend (l_id, res_id) VALUES ($login_id, $res_id) ON DUPLICATE KEY UPDATE a_attended = 1";
 	}
 
-	if(!$db->Execute($sql))
+	if(!DB::Execute($sql))
 	{
 		$template->error("Datubāzes kļūda");
 		return null;
@@ -1788,9 +1772,7 @@ function attendees(MainModule $template, int|array $res): ?Template
 
 	if(is_int($res))
 	{
-		$Res = new Res();
-		// $Res->setDb($db);
-		if(!($res = $Res->GetAllData($res)))
+		if(!($res = (new Res)->GetAllData($res)))
 		{
 			$template->not_found();
 			return null;
@@ -1825,6 +1807,59 @@ function attendees(MainModule $template, int|array $res): ?Template
 	$ts = strtotime(date('d.m.Y', strtotime($res['event_startdate']))) + 24 * 3600;
 	if(time() < $ts){
 		$T->enable('BLOCK_attend_'.($me_attended ? 'off' : 'on'));
+	}
+
+	return $T;
+}
+
+function archive(MainModule $template): ?Template
+{
+	$T = $template->add_file('archive.tpl');
+
+	$q = DB::Query("SELECT * FROM view_mainpage");
+
+	# ja ir kaadi ieraksti shajaa datumaa, paraadam
+	# ja nee, tad paraadam attieciigu pazinjojumu
+	if(DB::rowCount() > 0)
+		$T->enable('BLOCK_archive_items');
+	else
+		$T->enable('BLOCK_no_archive');
+
+	$old_date = '';
+	// $formatter = new IntlDateFormatter("lv", IntlDateFormatter::SHORT, IntlDateFormatter::NONE);
+
+	while($item = DB::Fetch($q))
+	{
+		$ts = strtotime($item['art_entered']);
+		$date = date('Ym', $ts);
+		if($old_date && ($old_date != $date))
+		{
+			$T->enable('BLOCK_archive_sep');
+		} else {
+			$T->disable('BLOCK_archive_sep');
+		}
+
+		// $D = date_create()->setTimestamp($ts);
+		// $art_date = $D->format("Y F");
+		$art_date = date("Y F", $ts);
+
+		if($old_date != $date)
+		{
+			// $art_date = $formatter->format($ts);
+			// $art_date = mb_convert_case($art_date, MB_CASE_TITLE);
+			$T->enable('BLOCK_archive_date');
+			$T->set_var('art_date', $art_date);
+			$T->parse_block('BLOCK_archive_date');
+			$old_date = $date;
+		} else {
+			$T->disable('BLOCK_archive_date');
+		}
+
+		$T->set_var('art_id', $item['art_id']);
+		$T->set_var('art_name', $item['art_name']);
+		$T->set_var('art_module_id', $item['module_id']);
+		$T->set_var('art_name_urlized', rawurlencode(urlize($item['art_name'])));
+		$T->parse_block('BLOCK_archive_items', TMPL_APPEND);
 	}
 
 	return $T;

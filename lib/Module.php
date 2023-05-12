@@ -27,8 +27,6 @@ class Module
 
 	function load($mod_id = 0)
 	{
-		global $db;
-
 		if($mod_id)
 			$where = ' WHERE mod_id = '.$mod_id;
 		else
@@ -36,7 +34,7 @@ class Module
 
 		$this->data = array();
 		$sql = 'SELECT * FROM modules'.$where.' ORDER BY mod_modid, module_pos';
-		$data = $db->execute($sql);
+		$data = DB::execute($sql);
 		$this->data = array();
 		foreach($data as $item)
 			$this->data[$item[$this->primary_key]] = $item;
@@ -52,8 +50,6 @@ class Module
 
 	function insert(&$data)
 	{
-		global $db;
-
 		$sql = "INSERT INTO `modules` (".
 			"module_id, mod_modid, module_name, module_descr,".
 			"module_active, module_pos, module_data, module_entered,".
@@ -64,17 +60,17 @@ class Module
 			"'$data[module_visible]', '$data[module_type]'".
 		")";
 
-		$ret = $db->Execute($sql);
+		$ret = DB::Execute($sql);
 
 		if($ret) {
-			$last_id = $db->LastID();
+			$last_id = DB::LastID();
 			$sql = "UPDATE `modules` SET ".
 				"module_pos = module_pos + 1 ".
 				"WHERE ".
 				"module_pos >= $data[module_pos] AND ".
 				"mod_id != $last_id AND ".
 				"mod_modid = $data[mod_modid]";
-			$db->execute($sql);
+			DB::execute($sql);
 			return $last_id;
 		}
 
@@ -83,8 +79,6 @@ class Module
 
 	function update(&$data)
 	{
-		global $db;
-
 		$data2 = $this->get_item($data['mod_id']);
 
 		$sql = "UPDATE `modules` SET ".
@@ -96,7 +90,7 @@ class Module
 		"WHERE ".
 			"mod_id = $data[mod_id]";
 
-		$ret = $db->execute($sql);
+		$ret = DB::execute($sql);
 
 		if($ret) {
 			$sql = '';
@@ -117,7 +111,7 @@ class Module
 					"mod_id != $data[mod_id] AND ".
 					"mod_modid = $data2[mod_modid]";
 			if($sql)
-				$db->execute($sql);
+				DB::execute($sql);
 			return $data['mod_id'];
 		}
 
@@ -156,8 +150,6 @@ class Module
 
 	function del_under($mod_id)
 	{
-		global $db;
-
 		$mod_id = (integer)$mod_id;
 
 		if(!$mod_id)
@@ -166,19 +158,17 @@ class Module
 		$ret = true;
 
 		$sql = "SELECT mod_id FROM `modules` WHERE mod_modid = ".$mod_id;
-		$data = $db->Execute($sql);
+		$data = DB::Execute($sql);
 		foreach($data as $item)
 			$ret = $ret && $this->del($item['mod_id']);
 
 		$sql = "DELETE FROM `modules` WHERE mod_modid = ".$mod_id;
 
-		return $ret && $db->Execute($sql);
+		return $ret && DB::Execute($sql);
 	} // del_under
 
 	function del($mod_id)
 	{
-		global $db;
-
 		$mod_id = (integer)$mod_id;
 		$data = $this->get_item($mod_id);
 
@@ -188,7 +178,7 @@ class Module
 		$ret = $this->del_under($mod_id);
 
 		$sql = "DELETE FROM `modules` WHERE mod_id = $mod_id";
-		$ret2 = $db->Execute($sql);
+		$ret2 = DB::Execute($sql);
 
 		if($ret2) {
 			$sql = "UPDATE `modules` SET ".
@@ -196,7 +186,7 @@ class Module
 				"WHERE ".
 				"module_pos > $data[module_pos] AND ".
 				"mod_modid = $data[mod_modid]";
-			$db->execute($sql);
+			DB::execute($sql);
 		}
 
 		return $ret && $ret2;
@@ -204,42 +194,34 @@ class Module
 
 	function activate($mod_id)
 	{
-		global $db;
-
 		$mod_id = (integer)$mod_id;
 		$sql = "UPDATE `modules` SET module_active = '".MOD_ACTIVE."' WHERE mod_id = $mod_id";
 
-		return $db->Execute($sql);
+		return DB::Execute($sql);
 	} // activate
 
 	function deactivate($mod_id)
 	{
-		global $db;
-
 		$mod_id = (integer)$mod_id;
 		$sql = "UPDATE `modules` SET module_active = '".MOD_INACTIVE."' WHERE mod_id = $mod_id";
 
-		return $db->Execute($sql);
+		return DB::Execute($sql);
 	} // deactivate
 
 	function show($mod_id)
 	{
-		global $db;
-
 		$mod_id = (integer)$mod_id;
 		$sql = "UPDATE `modules` SET module_visible = '".MOD_VISIBLE."' WHERE mod_id = $mod_id";
 
-		return $db->Execute($sql);
+		return DB::Execute($sql);
 	} // show
 
 	function hide($mod_id)
 	{
-		global $db;
-
 		$mod_id = (integer)$mod_id;
 		$sql = "UPDATE `modules` SET module_visible = '".MOD_INVISIBLE."' WHERE mod_id = $mod_id";
 
-		return $db->Execute($sql);
+		return DB::Execute($sql);
 	} // hide
 
 	function process_action(&$data, $action)
@@ -273,8 +255,6 @@ class Module
 
 	function load_tree($mod_modid = 0, $q = '', $registrated = false)
 	{
-		global $db;
-
 		$sql_add = array(
 			"module_active = '".MOD_ACTIVE."'",
 			);
@@ -296,7 +276,7 @@ class Module
 		$sql .= " ORDER BY module_pos";
 
 		$ret = array();
-		$data = $db->Execute($sql);
+		$data = DB::Execute($sql);
 		foreach($data as $item) {
 			$ret[$item['module_id']] = $this->load_tree($item['mod_id'], $q, ($registrated ? $registrated : $item['module_type']));
 			$ret[$item['module_id']]['_data_'] = $item;
@@ -336,8 +316,6 @@ class Module
 
 	function get_path($mod_id, $mod_modid = 0, $path = '')
 	{
-		global $db;
-
 		$sql_add = array();
 		if(!$mod_modid){
 			$sql_add[] = "mod_modid IS NULL";
@@ -349,7 +327,7 @@ class Module
 		if($sql_add)
 			$sql .= " WHERE ".join(" AND ", $sql_add);
 
-		$data = $db->Execute($sql);
+		$data = DB::Execute($sql);
 
 		if(!count($data))
 			return '';
@@ -419,8 +397,6 @@ class Module
 	function set_modules(&$template, $mod_id = 0, $block = 'BLOCK_modules',
 		$mod_modid = 0, $d = 0, $module_path = '')
 	{
-		global $db;
-
 		$sql_add = array(
 			"module_active = '".MOD_ACTIVE."'",
 			"module_visible = '".MOD_VISIBLE."'",
@@ -437,7 +413,7 @@ class Module
 
 		$sql .= " ORDER BY module_pos";
 
-		$data = $db->Execute($sql);
+		$data = DB::Execute($sql);
 
 		if($d > 5)
 			return;
@@ -454,8 +430,6 @@ class Module
 	function set_modules_all(&$template, $mod_id = 0, $block = 'BLOCK_modules',
 		$mod_modid = 0, $d = 0, $module_path = '')
 	{
-		global $db;
-
 		$sql_add = array();
 		if(!$mod_modid){
 			$sql_add[] = "mod_modid IS NULL";
@@ -468,7 +442,7 @@ class Module
 			$sql .= " WHERE ".join(" AND ", $sql_add);
 		$sql .= " ORDER BY module_pos";
 
-		$data = $db->Execute($sql);
+		$data = DB::Execute($sql);
 
 		if($d > 5)
 			return;

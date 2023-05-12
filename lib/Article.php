@@ -1,13 +1,4 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
-
-require_once('lib/Module.php');
-require_once('lib/Res.php');
-require_once('lib/Table.php');
+<?php declare(strict_types = 1);
 
 class Article extends Res
 {
@@ -18,14 +9,14 @@ class Article extends Res
 
 	protected $table_id = Table::ARTICLE;
 
-	function __construct()
-	{
-		global $db;
+	// function __construct()
+	// {
+	// 	global $db;
 
-		parent::__construct();
+	// 	parent::__construct();
 
-		$this->SetDb($db);
-	} // __construct
+	// 	$this->SetDb($db);
+	// } // __construct
 
 	function set_date_format($new_date)
 	{
@@ -85,7 +76,7 @@ JOIN `res` r ON r.`res_id` = a.`res_id`
 		if(isset($params['limit']))
 			$sql .= " LIMIT $params[limit]";
 
-		return (isset($params['art_id']) || isset($params['res_id']) ? $this->db->ExecuteSingle($sql) : $this->db->Execute($sql));
+		return (isset($params['art_id']) || isset($params['res_id']) ? DB::ExecuteSingle($sql) : DB::Execute($sql));
 	} // load
 
 	function insert(&$data, $validate = Res::ACT_VALIDATE)
@@ -100,11 +91,11 @@ JOIN `res` r ON r.`res_id` = a.`res_id`
 		if($validate)
 			$this->validate($data);
 
-		$date = $this->db->now();
+		$date = DB::Now();
 		if($data['art_entered'])
 			$date = "'$data[art_entered]'";
 
-		$data2 = $this->db->QuoteArray($data);
+		$data2 = DB::Quote($data);
 
 		$sql = "
 INSERT INTO article (
@@ -117,7 +108,7 @@ INSERT INTO article (
 	$this->login_id
 )";
 
-		return ($this->db->Execute($sql) ? $this->db->LastID() : false);
+		return (DB::Execute($sql) ? DB::LastID() : false);
 	}
 
 	function update($art_id, &$data, $validate = Res::ACT_VALIDATE)
@@ -134,7 +125,7 @@ INSERT INTO article (
 		if($validate)
 			$this->validate($data);
 
-		$data2 = $this->db->QuoteArray($data);
+		$data2 = DB::Quote($data);
 
 		$sql = 'UPDATE article SET ';
 		$sql .= $data2['art_name'] ? "art_name = '$data2[art_name]', " : '';
@@ -147,7 +138,7 @@ INSERT INTO article (
 		$sql = substr($sql, 0, -2);
 		$sql .= ' WHERE art_id = '.$art_id;
 
-		return ($this->db->Execute($sql) ? $art_id : false);
+		return (DB::Execute($sql) ? $art_id : false);
 	}
 
 	function save($art_id, &$data)
@@ -186,7 +177,7 @@ INSERT INTO article (
 
 		$sql = 'DELETE FROM `article` WHERE art_id = '.$art_id;
 
-		return $this->db->Execute($sql);
+		return DB::Execute($sql);
 	}
 
 	function activate($art_id)
@@ -196,7 +187,7 @@ INSERT INTO article (
 		$art_id = (integer)$art_id;
 		$sql = 'UPDATE `article` SET art_active = "'.Res::STATE_ACTIVE.'" WHERE art_id = '.$art_id;
 
-		return $this->db->Execute($sql);
+		return DB::Execute($sql);
 	}
 
 	function deactivate($art_id)
@@ -206,7 +197,7 @@ INSERT INTO article (
 		$art_id = (integer)$art_id;
 		$sql = 'UPDATE `article` SET art_active = "'.Res::STATE_INACTIVE.'" WHERE art_id = '.$art_id;
 
-		return $this->db->Execute($sql);
+		return DB::Execute($sql);
 	}
 
 	// actionu preprocessors
@@ -286,7 +277,7 @@ INSERT INTO article (
 		if($sql_add)
 			$sql .= " WHERE $sql_add";
 
-		$data = $this->db->ExecuteSingle($sql);
+		$data = DB::ExecuteSingle($sql);
 
 		return $data['art_count'];
 	} // get_total
@@ -295,5 +286,5 @@ INSERT INTO article (
 	{
 		return "/$resource[module_id]/$resource[art_id]-".urlize($resource['art_name']).($c_id ? "#comment$c_id" : "");
 	} // Route
-} // class::Article
+}
 
