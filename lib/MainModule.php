@@ -105,8 +105,6 @@ class MainModule
 			$jsonData->html = $this->Index->get_block('BLOCK_container')->parse();
 			print json_encode($jsonData);
 		} else {
-			header('Content-Type: text/html; charset='.$sys_encoding);
-
 			if(isset($this->TRight)){
 				$this->Index->set_block_string($this->TRight->parse(), 'BLOCK_right');
 			}
