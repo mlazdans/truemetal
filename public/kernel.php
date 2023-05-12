@@ -33,6 +33,7 @@ require_once($sys_root.'/include/config.php');
 
 $i_am_admin = (php_sapi_name() == 'cli') || in_array($ip, $sys_admins);
 $sys_debug = ($i_am_admin ? true : false);
+$DQDP_DEBUG = $sys_debug;
 
 ini_set('display_errors', (bool)$sys_debug);
 ini_set('expose_php', (bool)$sys_debug);
