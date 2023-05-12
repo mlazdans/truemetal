@@ -2,7 +2,7 @@
 	Profils: {l_nick}
 </div>
 
-<form action="" method="post" enctype="multipart/form-data" id="profile_edit">
+<form method="post" enctype="multipart/form-data">
 <table class="Main">
 <tr>
 	<td align="right"><b>Segvārds:</b></td>
