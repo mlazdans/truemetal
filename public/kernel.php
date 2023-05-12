@@ -86,20 +86,11 @@ if(!in_array($sys_module_id, $sys_nosess_modules)){
 
 register_shutdown_function("tm_shutdown");
 
-if(user_loged())
+# Legacy
+if(isset($_SESSION['login']))
 {
-	# Sync login data
-	if($l = Logins::load_by_id((int)$_SESSION['login']['l_id'])) {
-		session_decode($l['l_sessiondata']);
-		unset($l['l_sessiondata']);
-		unset($l['l_password']);
-		$_SESSION['login'] = $l;
-		DB::Execute("UPDATE logins SET l_lastaccess = CURRENT_TIMESTAMP, l_logedin = 'Y' WHERE l_id = ?", $l['l_id']);
-	} else {
-		Logins::logoff();
-		redirect();
-		return;
-	}
+	User::data($_SESSION['login']);
+	unset($_SESSION['login']);
 }
 
 $module_root = "/$sys_module_id";
@@ -136,6 +127,7 @@ foreach($sys_parameters as $k=>$v)
 
 $_GET = _GET();
 
+header('Content-Type: text/html; charset='.$sys_encoding);
 header('X-Powered-By: TRUEMETAL');
 
 if($i_am_admin)

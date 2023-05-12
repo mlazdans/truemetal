@@ -600,11 +600,6 @@ function search_to_spider($q, $fields)
 // 	return $ret;
 // } // email
 
-function user_loged()
-{
-	return !empty($_SESSION['login']['l_id']);
-} // user_loged
-
 function save_upload($id, $save_path): bool
 {
 	return empty($_FILES[$id]) ? false : move_uploaded_file($_FILES[$id]['tmp_name'], $save_path);
@@ -849,13 +844,13 @@ function user_blacklisted()
 	}
 
 	# 1 week
-	if(user_loged() && (time() - strtotime($_SESSION['login']['l_lastaccess'])) < 604800)
+	if(user_loged() && ((time() - strtotime(User::get_val('l_lastaccess'))) < 604800))
 	{
 		return false;
 	} else {
 		return ip_blacklisted($GLOBALS['ip']);
 	}
-} // user_blacklisted
+}
 
 function tm_shutdown()
 {
@@ -881,19 +876,7 @@ function tm_shutdown()
 			print '<script>hljs.highlightAll();</script>';
 		}
 	}
-
-	if(user_loged())
-	{
-		$_SESSION['login']['l_lastaccess'] = date('Y-m-d H:i:s');
-		Logins::save_session_data();
-		session_commit();
-	} else {
-		if(session_id()){
-			session_destroy();
-			session_commit();
-		}
-	}
-} // tm_shutdown
+}
 
 function cache_save($h, $data)
 {

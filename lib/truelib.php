@@ -3,6 +3,11 @@
 use dqdp\Template;
 use dqdp\TemplateBlock;
 
+function user_loged(): bool
+{
+	return User::logged();
+}
+
 function forum_add_theme(MainModule $template, Template $T, int $forum_id, array $data): bool
 {
 	global $ip;
@@ -37,7 +42,7 @@ function forum_add_theme(MainModule $template, Template $T, int $forum_id, array
 		$params = [
 			'get_votes'=>true,
 			'get_comment_count'=>true,
-			'l_id'=>$_SESSION['login']['l_id'],
+			'l_id'=>User::id(),
 		];
 		$Logins = new Logins();
 		$ldata = $Logins->load($params);
@@ -62,10 +67,10 @@ function forum_add_theme(MainModule $template, Template $T, int $forum_id, array
 
 	$forum = new Forum;
 	$forum->validate($data);
-	$data['login_id'] = $_SESSION['login']['l_id'];
-	$data['forum_userlogin'] = $_SESSION['login']['l_login'];
-	$data['forum_useremail'] = $_SESSION['login']['l_email'];
-	$data['forum_username'] = $_SESSION['login']['l_nick'];
+	$data['login_id'] = User::id();
+	$data['forum_userlogin'] = User::get_val('l_login');
+	$data['forum_useremail'] = User::get_val('l_email');
+	$data['forum_username'] = User::get_val('l_nick');
 	$data['forum_allowchilds'] = Forum::PROHIBIT_CHILDS;
 
 	DB::withNewTrans(function() use ($forum, $forum_id, $data){
@@ -126,7 +131,7 @@ function forum_themes(
 	if(user_loged())
 	{
 		$T->enable('BLOCK_loggedin');
-		$T->set_var('forum_username', $_SESSION['login']['l_nick'], 'BLOCK_loggedin');
+		$T->set_var('forum_username', User::nick(), 'BLOCK_loggedin');
 	} else {
 		$T->enable('BLOCK_notloggedin');
 	}
@@ -135,10 +140,7 @@ function forum_themes(
 	$forum_items->setItemsPerPage($fpp);
 	$forum_items->setPage($page_id);
 
-	if(
-		isset($_SESSION['login']['l_forumsort_themes']) &&
-		($_SESSION['login']['l_forumsort_themes'] == Forum::SORT_LASTCOMMENT)
-	)
+	if(User::get_val('l_forumsort_themes') == Forum::SORT_LASTCOMMENT)
 	{
 		$items = $forum_items->load(array(
 			"forum_forumid"=>$forum_id,
@@ -271,11 +273,10 @@ function forum_det(
 	$C = $template->add_file('comments.tpl');
 
 	# Comments
-	$params['order'] =
-		isset($_SESSION['login']['l_forumsort_msg']) &&
-		($_SESSION['login']['l_forumsort_msg'] == Forum::SORT_DESC)
+	$params['order'] = User::get_val('l_forumsort_msg') == Forum::SORT_DESC
 		? "c_entered DESC"
-		: "c_entered";
+		: "c_entered"
+	;
 
 	$comments = get_res_comments($res_id, $params);
 
@@ -283,10 +284,7 @@ function forum_det(
 	if(($forum_data['forum_display'] == Forum::DISPLAY_DATA) && !empty($comments[0]))
 	{
 		# Ja sakārtots dilstoši, tad jāaiztiek ir pēdējais komments
-		if(
-			isset($_SESSION['login']['l_forumsort_msg']) &&
-			($_SESSION['login']['l_forumsort_msg'] == Forum::SORT_DESC)
-			)
+		if(User::get_val('l_forumsort_msg') == Forum::SORT_DESC)
 		{
 			array_unshift($comments, array_pop($comments));
 		}
@@ -368,8 +366,8 @@ function comment_list(Template $C, array $comments, string $hl): void
 	if(user_loged())
 	{
 		$C->enable('BLOCK_comment_form');
-		$C->set_var('c_username', $_SESSION['login']['l_nick']);
-		$disabled_users = CommentDisabled::get($_SESSION['login']['l_id']);
+		$C->set_var('c_username', User::nick());
+		$disabled_users = CommentDisabled::get(User::id());
 	} else {
 		$C->enable('BLOCK_notloggedin');
 		$disabled_users = array();
@@ -535,14 +533,14 @@ function public_profile(MainModule $template, string $l_hash): ?Template
 	# Disable comments
 	if(
 		($action == 'disable_comments') &&
-		($_SESSION['login']['l_id'] != $login_data['l_id'])
+		(User::id() != $login_data['l_id'])
 		)
 	{
 		if(isset($_POST['disable_comments']))
 		{
-			$ret = CommentDisabled::disable($_SESSION['login']['l_id'], $login_data['l_id']);
+			$ret = CommentDisabled::disable(User::id(), $login_data['l_id']);
 		} else {
-			$ret = CommentDisabled::enable($_SESSION['login']['l_id'], $login_data['l_id']);
+			$ret = CommentDisabled::enable(User::id(), $login_data['l_id']);
 		}
 
 		if($ret)
@@ -555,14 +553,14 @@ function public_profile(MainModule $template, string $l_hash): ?Template
 		}
 	}
 
-	if(CommentDisabled::get($_SESSION['login']['l_id'], $login_data['l_id']))
+	if(CommentDisabled::get(User::id(), $login_data['l_id']))
 	{
 		$T->set_var('disable_comments_checked', ' checked="checked"');
 	} else {
 		$T->set_var('disable_comments_checked', '');
 	}
 
-	if($_SESSION['login']['l_id'] != $login_data['l_id'])
+	if(User::id() != $login_data['l_id'])
 	{
 		$T->enable('BLOCK_disable_comments');
 	}
@@ -613,16 +611,14 @@ function private_profile(MainModule $template): ?Template
 
 		if($data = $login->update_profile($post_data))
 		{
-			// unset($data['l_sessiondata']);
-			// $_SESSION['login'] = $data;
 			header("Location: $module_root/");
 			return null;
 		} else {
 			$template->error($login->error_msg);
 		}
-		$login_data = array_merge($_SESSION['login'], $post_data);
+		$login_data = array_merge(User::data(), $post_data);
 	} else {
-		$login_data = $_SESSION['login'];
+		$login_data = User::data();
 	}
 
 	$T = $template->add_file('user/profile/private.tpl');
@@ -652,13 +648,13 @@ function private_profile(MainModule $template): ?Template
 		}
 
 		$sql = "SELECT r.res_id FROM res r
-		WHERE r.login_id = {$_SESSION['login']['l_id']}
+		WHERE r.login_id = ?
 		ORDER BY $v
 		LIMIT 10";
 
 		$ids[$r] = array_map(function($v) {
 			return $v['res_id'];
-		}, DB::Execute($sql));
+		}, DB::Execute($sql, User::id()));
 	}
 
 	if($ids[0] || $ids[1]){
@@ -724,7 +720,7 @@ function private_profile(MainModule $template): ?Template
 	$sql = sprintf("SELECT bp.*
 	FROM logins l
 	JOIN bad_pass bp ON bp.pass_hash = l.l_password
-	WHERE l.l_id = %d", $_SESSION['login']['l_id']);
+	WHERE l.l_id = %d", User::id());
 
 	if($data = DB::ExecuteSingle($sql)){
 		$T->set_var('bad_pass_class', 'blink');
@@ -776,7 +772,7 @@ function change_email(MainModule $template): ?Template
 		return null;
 	}
 
-	$old_email = trim($_SESSION['login']['l_email']);
+	$old_email = trim(User::email());
 
 	$T = $template->add_file('user/emailch.tpl');
 	$T->set_var('old_email', specialchars($old_email));
@@ -839,7 +835,7 @@ function change_email(MainModule $template): ?Template
 		return false;
 	};
 
-	$result = !$error_msg && $do_code($_SESSION['login']['l_login'], $new_email, $error_msg);
+	$result = !$error_msg && $do_code(User::login(), $new_email, $error_msg);
 
 	if($result)
 	{
@@ -878,7 +874,7 @@ function change_pw(MainModule $template): ?Template
 		$error_msgs[] = 'Nav ievadīta vecā parole';
 		$error_fields[] = 'old_password';
 	} else {
-		if(Logins::auth($_SESSION['login']['l_login'], $_POST['data']['old_password'])){
+		if(Logins::auth(User::login(), $_POST['data']['old_password'])){
 			if(!pw_validate($data['l_password'], $data['l_password2'], $error_msgs)){
 				$error_fields[] = 'l_password';
 			}
@@ -889,7 +885,7 @@ function change_pw(MainModule $template): ?Template
 	}
 
 	if(!$error_msgs){
-		if((new Logins)->update_password($_SESSION['login']['l_login'], $data['l_password'])){
+		if((new Logins)->update_password(User::login(), $data['l_password'])){
 			$template->msg("Parole nomainīta.");
 			return null;
 		} else {
@@ -1179,10 +1175,10 @@ function add_comment(int $res_id, string $c_data)
 	// }
 
 	$cData = array(
-		'login_id'=>$_SESSION['login']['l_id'],
-		'c_userlogin'=>$_SESSION['login']['l_login'],
-		'c_username'=>$_SESSION['login']['l_nick'],
-		'c_useremail'=>$_SESSION['login']['l_email'],
+		'login_id'=>User::id(),
+		'c_userlogin'=>User::login(),
+		'c_username'=>User::nick(),
+		'c_useremail'=>User::email(),
 		'c_data'=>$c_data,
 		'c_userip'=>$ip,
 		);
@@ -1562,9 +1558,7 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 	$params = array('res_id'=>$galdata['res_id']);
 
 	# TODO: izvākt un ielikt kaut kur zem list.inc.php
-	$params['order'] =
-		isset($_SESSION['login']['l_forumsort_msg']) &&
-		($_SESSION['login']['l_forumsort_msg'] == Forum::SORT_DESC)
+	$params['order'] = User::get_val('l_forumsort_msg') == Forum::SORT_DESC
 		? "c_entered DESC"
 		: "c_entered";
 
@@ -1653,7 +1647,7 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 		return null;
 	}
 
-	$login_id = (int)$_SESSION['login']['l_id'];
+	$login_id = User::id();
 	$res_login_id = (int)$res_data['login_id'];
 
 	if($res_login_id == $login_id)
@@ -1725,7 +1719,7 @@ function attend(MainModule $template, int $res_id, ?string $off = null): ?TrueRe
 		return null;
 	}
 
-	$login_id = (int)$_SESSION['login']['l_id'];
+	$login_id = User::id();
 
 	if($item['type_id'] != Res::TYPE_EVENT)
 	{
@@ -1790,7 +1784,7 @@ function attendees(MainModule $template, int|array $res): ?Template
 		$BLOCK_attend_list = $T->enable('BLOCK_attend_list');
 		$c = count($data);
 		foreach($data as $k=>$item){
-			if($item['a_attended'] && ($_SESSION['login']['l_id'] == $item['l_id'])){
+			if($item['a_attended'] && (User::id() == $item['l_id'])){
 				$me_attended = true;
 			}
 			if(!$item['a_attended']){
@@ -1882,4 +1876,12 @@ function search_log(MainModule $template): ?Template
 	}
 
 	return $T;
+}
+
+function filter_login_data(array $data): array
+{
+	unset($data['l_sessiondata']);
+	unset($data['l_password']);
+
+	return $data;
 }

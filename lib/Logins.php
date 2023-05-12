@@ -211,14 +211,16 @@ class Logins
 		return (new Logins)->load($params);
 	}
 
-	static function banned24h($ip)
+	static function banned24h($ip): bool
 	{
-		$d = date('Y-m-d H:i:s', strtotime('-24 hours'));
-		$sql = "SELECT COUNT(*) banned FROM `logins` WHERE l_active='N' AND l_userip='$ip' AND l_lastaccess > '$d'";
-		$item = DB::ExecuteSingle($sql);
+		$d = date('Y-m-d H:i:s', strtotime('-10 minutes'));
+		$item = DB::ExecuteSingle(
+			"SELECT COUNT(*) banned FROM logins WHERE l_active = ? AND l_userip = ? AND l_lastaccess > ?",
+			Res::STATE_INACTIVE, $ip, $d
+		);
 
 		return $item['banned'] > 0;
-	} // banned24h
+	}
 
 	static function get_active()
 	{
@@ -230,25 +232,11 @@ class Logins
 		return DB::Execute($sql);
 	}
 
-	static function save_session_data($data = '')
-	{
-		if(user_loged())
-		{
-			$l_id = $_SESSION['login']['l_id'];
-			if(empty($data)){
-				$data = session_encode();
-			}
-			$sql = "UPDATE logins SET l_sessiondata ='$data', l_lastaccess = NOW(), l_logedin = 'Y' WHERE l_id = $l_id";
-			DB::Execute($sql);
-			// DB::Commit();
-		}
-	} // save_session_data
-
 	static function delete_image()
 	{
 		global $sys_user_root;
 
-		$l_id = user_loged() ? $_SESSION['login']['l_id'] : 0;
+		$l_id = User::id();
 
 		if(empty($l_id))
 			return false;
@@ -268,16 +256,14 @@ class Logins
 		return true;
 	} // delete_image
 
-	function update_profile($data, int $l_id = 0)
+	function update_profile($data, ?int $l_id = null)
 	{
 		global $sys_user_root, $user_pic_w, $user_pic_h, $user_pic_tw, $user_pic_th;
-
-		$l_id = (int)$l_id;
 
 		// check vai noraadiits id, vai ir ielogojies
 		if(empty($l_id))
 		{
-			$l_id = user_loged() ? (int)$_SESSION['login']['l_id'] : 0;
+			$l_id = User::id();
 		}
 
 		if(empty($l_id))
@@ -372,20 +358,16 @@ class Logins
 	function login(string $l_login, string $l_pass)
 	{
 		if($data = static::auth($l_login, $l_pass)) {
-			DB::Execute("UPDATE logins SET l_logedin ='Y' WHERE l_id = $data[l_id]");
+			// DB::Execute("UPDATE logins SET l_logedin ='Y' WHERE l_id = ?", $data['l_id']);
 			return $data;
 		}
 	}
 
-	static function logoff()
+	static function logoff(): bool
 	{
 		if(user_loged())
 		{
-			$l_id = $_SESSION['login']['l_id'];
-			Logins::save_session_data();
 			session_destroy();
-			DB::Execute("UPDATE logins SET l_logedin ='N' WHERE l_id = $l_id");
-
 			return true;
 		}
 

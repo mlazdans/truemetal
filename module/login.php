@@ -1,19 +1,9 @@
 <?php declare(strict_types = 1);
 
-/*
-# Blacklisted
-if(user_blacklisted())
-{
-	print "Blacklisted: $ip";
-	return;
-}
-*/
-
 $action = array_shift($sys_parameters);
 if($action == 'logoff')
 {
-	$my_login = new Logins;
-	if($my_login->logoff())
+	if(Logins::logoff())
 	{
 		header("Location: /");
 		return;
@@ -35,9 +25,7 @@ if(isset($_POST['data']))
 			session_decode($login_data['l_sessiondata']);
 		}
 
-		unset($login_data['l_sessiondata']);
-		unset($login_data['l_password']);
-		$_SESSION['login'] = $login_data;
+		User::data(filter_login_data($login_data));
 
 		$referer = empty($data['referer']) ? false : urldecode($data['referer']);
 		if(
@@ -57,7 +45,7 @@ if(isset($_POST['data']))
 		$T->enable('BLOCK_login_err');
 		$T->set_var('error_msg', 'Nepareizs login vai parole!');
 		$T->set_array($data);
-		$_SESSION['login'] = array();
+		User::data([]);
 	}
 }
 

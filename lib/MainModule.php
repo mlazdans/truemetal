@@ -28,7 +28,7 @@ class MainModule
 		$this->Index->set_var('user_pic_h', $user_pic_h);
 		$this->Index->set_var('user_pic_tw', $user_pic_tw);
 		$this->Index->set_var('user_pic_th', $user_pic_th);
-		$this->Index->set_var('disable_youtube', (empty($_SESSION['login']['l_disable_youtube']) ? 0 : 1));
+		$this->Index->set_var('disable_youtube', empty(User::get_val('l_disable_youtube')) ? 0 : 1);
 
 		$this->set_descr("Metāls Latvijā");
 		$this->set_banner_top();
@@ -194,7 +194,7 @@ class MainModule
 		if(user_loged()){
 			$name = "Login";
 			$TLogin_form->enable('BLOCK_login_data');
-			$TLogin_form->set_var('login_nick', $_SESSION['login']['l_nick']);
+			$TLogin_form->set_var('login_nick', User::get_val('l_nick'));
 		} else {
 			$TLogin_form->enable('BLOCK_login_form');
 		}

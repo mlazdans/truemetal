@@ -1,25 +1,16 @@
 <?php declare(strict_types = 1);
 
-$cookie_time = 31536000; # 1 year
+$cookie_time = 3600 * 24 * 365;
 
-//ini_set('session.save_handler', 'user');
 ini_set('session.use_cookies', true);
 ini_set('session.name', 'sid');
 ini_set('session.cookie_lifetime', $cookie_time);
 ini_set('session.serialize_handler', 'php');
 ini_set('session.gc_probability', 1);
-ini_set('session.gc_divisor', 1000);
+ini_set('session.gc_divisor', 100);
+ini_set('session.gc_maxlifetime', $cookie_time);
 
-$sess_handler = new SessHandler();
-
-session_set_save_handler(
-	array(&$sess_handler, "sess_open"),
-	array(&$sess_handler, "sess_close"),
-	array(&$sess_handler, "sess_read"),
-	array(&$sess_handler, "sess_write"),
-	array(&$sess_handler, "sess_destroy"),
-	array(&$sess_handler, "sess_gc")
-);
+session_set_save_handler(new SessHandler);
 
 session_set_cookie_params($cookie_time, '/');
 

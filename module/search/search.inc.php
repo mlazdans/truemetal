@@ -47,7 +47,7 @@ if($search_log)
 		) VALUES (
 			%s, ?, ?, CURRENT_TIMESTAMP
 		)",
-		user_loged() ? (int)$_SESSION['login']['l_id'] : "NULL"
+		user_loged() ? User::id() : "NULL"
 	);
 
 	DB::Execute($sql, $search_q, $_SERVER['REMOTE_ADDR']);
