@@ -3,7 +3,10 @@
 $admins = [3];
 
 if(!(user_loged() && in_array($_SESSION['login']['l_id'], $admins))){
-	header403();
+	$template = new MainModule("admin");
+	$template->not_found();
+	$template->set_right_defaults();
+	$template->out(null);
 	return;
 }
 
