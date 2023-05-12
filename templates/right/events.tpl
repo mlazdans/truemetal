@@ -10,7 +10,7 @@
 	<div style="display: none;" id="MoreEvents">
 	<!-- END BLOCK_more_events_start -->
 <div class="List-item{event_class}">
-	<a href="{event_url}" title="{event_title}">{event_name}</a>
+	<a href="{event_url}" title="{event_title}" style="display: block;">{event_name}</a>
 </div>
 <!-- END BLOCK_events_list -->
 

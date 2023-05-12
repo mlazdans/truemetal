@@ -367,13 +367,20 @@ input[type=button]:active {
 
 .List-item {
 	padding: 0.2em;
-	margin: 0.1em;
+	margin: 1px;
+	margin-top: 0;
 	background: #660000;
 	border-bottom: 0.1em dotted #220000;
 }
 
-.List-item.actual {
-	background: #660000 url("/img/bums.gif");
+.List-item.actual0 {
+	background: #990000;
+}
+.List-item.actual1 {
+	background: #880000;
+}
+.List-item.actual2 {
+	background: #770000;
 }
 
 .List-sep {

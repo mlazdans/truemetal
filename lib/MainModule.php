@@ -386,7 +386,6 @@ class MainModule
 
 		$TEvents = $this->add_file('right/events.tpl');
 
-		$timeout = 7*24*60*60;
 		$c = 0;
 		$tc = count($data);
 		foreach($data as $item){
@@ -395,7 +394,7 @@ class MainModule
 			$Dw = date('w', $ts);
 			$M = date('m', $ts);
 
-			$diff = $ts - time();
+			$diff = floor(($ts - time()) / (3600 * 24));
 
 			$TEvents->set_var('event_class', "");
 			$TEvents->set_var('event_url', Forum::Route($item));
@@ -403,8 +402,12 @@ class MainModule
 			//$TEvents->set_var('event_name', ent($item['forum_name']));
 			$TEvents->set_var('event_name', $item['forum_name']);
 
-			if($diff<$timeout){
-				$TEvents->set_var('event_class', " actual");
+			if($diff<2){
+				$TEvents->set_var('event_class', " actual0");
+			} elseif($diff<4){
+				$TEvents->set_var('event_class', " actual1");
+			} elseif($diff<7){
+				$TEvents->set_var('event_class', " actual2");
 			}
 
 			if($tc > 5){
