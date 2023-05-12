@@ -1258,14 +1258,14 @@ function user_image(string $l_hash, bool $thumb = false)
 	}
 }
 
-function whatsnew(MainModule $template): Template
+function whatsnew(MainModule $template): ?Template
 {
 	$T = $template->add_file('whatsnew.tpl');
 
 	if(!User::logged())
 	{
 		$template->not_logged();
-		return false;
+		return null;
 	}
 
 	# Forum
