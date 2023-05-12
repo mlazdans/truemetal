@@ -3,7 +3,7 @@ Options -Indexes
 # Maintenance mode
 # RewriteEngine on
 # RewriteCond %{REQUEST_FILENAME} !-f
-# RewriteCond expr "! -R '80.232.240.71'"
+# RewriteCond expr "! -R '80.232.240.76'"
 # RewriteRule ^(.*)$ /maint.html [L]
 # <Files maint.html>
 # 	FileETag None
