@@ -106,7 +106,7 @@ function forum_add_theme(MainModule $template, Template $T, int $forum_id, array
 
 	set_error_fields($T, $error_fields);
 
-	$T->set_array(specialchars($data));
+	$T->set_array(specialchars($data), 'BLOCK_loggedin');
 
 	if($error_msg){
 		return false;
@@ -173,6 +173,10 @@ function forum_themes(
 		{
 			return null;
 		}
+	} else {
+		# TODO: kaut kā stulbi. Name collision
+		$T->set_var('forum_name', '-', 'BLOCK_loggedin');
+		$T->set_var('forum_data', '--', 'BLOCK_loggedin');
 	}
 
 	if(User::logged())
