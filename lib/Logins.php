@@ -292,7 +292,7 @@ class Logins
 		$UPDATE = (new Update('logins'))
 			->Set("l_emailvisible", $data['l_emailvisible'])
 			->Set("l_disable_youtube", $data['l_disable_youtube'])
-			->Where("l_id", $l_id)
+			->Where(["l_id = ?", $l_id])
 		;
 
 		if($data['l_forumsort_themes'])$UPDATE->Set("l_forumsort_themes", $data['l_forumsort_themes']);
