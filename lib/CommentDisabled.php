@@ -1,41 +1,40 @@
 <?php declare(strict_types = 1);
 
+use dqdp\SQL\Select;
+
 class CommentDisabled
 {
-	public static function get($login_id, $disable_login_id = 0)
+	public static function get(int $login_id, ?int $disable_login_id = null): array
 	{
-		$ret = array();
-
-		$sql = sprintf("SELECT * FROM comment_disabled WHERE login_id = %d", $login_id);
+		$sql = (new Select)->From('comment_disabled')->Where(['login_id = ?', $login_id]);
 		if($disable_login_id)
-			$sql .= sprintf(" AND disable_login_id = %d", $disable_login_id);
+		{
+			$sql->Where(['disable_login_id = ?', $disable_login_id]);
+		}
 
-		$data = DB::Execute($sql);
-		foreach($data as $item)
+		$q = DB::Query($sql);
+		while($item = DB::Fetch($q)){
 			$ret[$item['disable_login_id']] = true;
+		}
 
-		return $ret;
+		return $ret??[];
 	}
 
-	public static function disable($login_id, $disable_login_id)
+	public static function disable(int $login_id, int $disable_login_id): bool
 	{
-		$sql = sprintf(
-			"INSERT IGNORE INTO comment_disabled (login_id, disable_login_id) VALUES(%d, %d)",
+		return DB::Execute(
+			"INSERT IGNORE INTO comment_disabled (login_id, disable_login_id) VALUES(?, ?)",
 			$login_id,
 			$disable_login_id
-			);
-
-		return DB::Execute($sql);
+		);
 	}
 
-	public static function enable($login_id, $disable_login_id)
+	public static function enable(int $login_id, int $disable_login_id): bool
 	{
-		$sql = sprintf(
-			"DELETE FROM comment_disabled WHERE login_id = %d AND disable_login_id = %d",
+		return DB::Execute(
+			"DELETE FROM comment_disabled WHERE login_id = ? AND disable_login_id = ?",
 			$login_id,
 			$disable_login_id
-			);
-
-		return DB::Execute($sql);
+		);
 	}
 }

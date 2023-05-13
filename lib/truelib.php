@@ -585,9 +585,9 @@ function public_profile(MainModule $template, string $l_hash): ?Template
 	{
 		if(isset($_POST['disable_comments']))
 		{
-			$ret = CommentDisabled::disable(User::id(), $login_data['l_id']);
+			$ret = CommentDisabled::disable(User::id(), (int)$login_data['l_id']);
 		} else {
-			$ret = CommentDisabled::enable(User::id(), $login_data['l_id']);
+			$ret = CommentDisabled::enable(User::id(), (int)$login_data['l_id']);
 		}
 
 		if($ret)
@@ -600,7 +600,7 @@ function public_profile(MainModule $template, string $l_hash): ?Template
 		}
 	}
 
-	if(CommentDisabled::get(User::id(), $login_data['l_id']))
+	if(CommentDisabled::get(User::id(), (int)$login_data['l_id']))
 	{
 		$T->set_var('disable_comments_checked', ' checked="checked"');
 	} else {
