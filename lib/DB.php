@@ -71,7 +71,17 @@ class DB
 
 	static function Fetch($q)
 	{
+		return static::FetchAssoc($q);
+	}
+
+	static function FetchAssoc($q)
+	{
 		return static::$db->fetch_assoc($q);
+	}
+
+	static function FetchObject($q)
+	{
+		return static::$db->fetch_object($q);
 	}
 
 	static function rowCount($q = null): int {
