@@ -137,24 +137,19 @@ class Res
 		return $location;
 	}
 
-	public static function hasNewComments($item)
+	public static function hasNewComments($item): bool
 	{
-		if(!User::logged()){
+		if(!User::logged() || empty($item['res_id'])){
 			return false;
 		}
 
-		if(empty($item['res_id'])){
-			$t = debug_backtrace();
-			$e = sprintf("Empty res_id: %s\nTrace: %s\n", mlog($item), mlog($t));
-			trigger_error($e);
-			return false;
-		}
+		$res_id = $item['res_id'];
 
-		if(isset($_SESSION['res']['viewed_date'][$item['res_id']]) && $item['res_comment_lastdate'])
-			return (strtotime($item['res_comment_lastdate']) > strtotime($_SESSION['res']['viewed_date'][$item['res_id']]));
+		if(isset($_SESSION['res']['viewed_date'][$res_id]) && $item['res_comment_lastdate'])
+			return (strtotime($item['res_comment_lastdate']) > strtotime($_SESSION['res']['viewed_date'][$res_id]));
 
-		if(isset($_SESSION['res']['viewed'][$item['res_id']]))
-			return ($item['res_comment_count'] > $_SESSION['res']['viewed'][$item['res_id']]);
+		if(isset($_SESSION['res']['viewed'][$res_id]))
+			return ($item['res_comment_count'] > $_SESSION['res']['viewed'][$res_id]);
 
 		if(isset($_SESSION['res']['viewed_before']) && $item['res_comment_lastdate'])
 			return ($_SESSION['res']['viewed_before'] < strtotime($item['res_comment_lastdate']));
@@ -162,9 +157,10 @@ class Res
 		return ($item['res_comment_count'] > 0);
 	}
 
-	public static function markCommentCount($item)
+	public static function markCommentCount($item): void
 	{
-		$_SESSION['res']['viewed_date'][$item['res_id']] = $item['res_comment_lastdate'];
+		if(User::logged()){
+			$_SESSION['res']['viewed_date'][$item['res_id']] = $item['res_comment_lastdate'];
+		}
 	}
-
 }

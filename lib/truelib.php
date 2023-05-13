@@ -3,6 +3,58 @@
 use dqdp\Template;
 use dqdp\TemplateBlock;
 
+function tm_shutdown()
+{
+	global $i_am_admin;
+
+	if($i_am_admin)
+	{
+		$is_html = 0;
+		$headers = headers_list();
+		foreach($headers as $h)
+		{
+			if(stripos(strtolower($h), "content-type: text/html") === 0)
+			{
+				$is_html = 1;
+				break;
+			}
+		}
+
+		if($is_html)
+		{
+			print '<link rel=stylesheet href="/css/highlight/vs.min.css">';
+			print '<script src="/js/highlight.min.js"></script>';
+			print '<script>hljs.highlightAll();</script>';
+		}
+	}
+}
+
+function pw_validate(string $p1, string $p2, array &$error_msg): bool {
+	if($p1 != $p2){
+		$error_msg[] = 'Paroles nesakrīt!';
+		return false;
+	}
+
+	$resut = PwValidator::validate($p1);
+
+	if(PwValidator::valid_pass($resut)){
+		return true;
+	}
+
+	if(!$resut->HAS_LEN)        $error_msg[] = 'Parole par īsu';
+	if(!$resut->HAS_ALPHA)      $error_msg[] = 'Parolē nav standarta burtu';
+	if(!$resut->HAS_NON_ALPHA)  $error_msg[] = 'Parolē nav simbolu vai ciparu';
+	if(!$resut->HAS_NO_REPEATS) $error_msg[] = 'Parolē ir sacīgi simboli';
+
+	return false;
+}
+
+function new_template(string $file_name): ?Template {
+	global $sys_template_root;
+
+	return new Template($sys_template_root.DIRECTORY_SEPARATOR.$file_name);
+}
+
 function forum_add_theme(MainModule $template, Template $T, int $forum_id, array $data): bool
 {
 	global $ip;
@@ -13,7 +65,7 @@ function forum_add_theme(MainModule $template, Template $T, int $forum_id, array
 		return false;
 	}
 
-	if(user_blacklisted())
+	if(User::blacklisted())
 	{
 		$error_msg[] = "Blacklisted IP: $ip";
 		return false;
@@ -1131,6 +1183,8 @@ function set_error_fields(TemplateBlock $T, array $fields){
 	}
 }
 
+# TODO: varbūt vajadzētu kaut kā apvienot daudzās vietas, kur šis tiek izsaukt, jo
+# patlaban datu validācija notiek katrā izsaukšanas vietā
 function add_comment(int $res_id, string $c_data)
 {
 	global $ip;

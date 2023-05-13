@@ -2,25 +2,6 @@
 
 require_once('../include/boot.php');
 
-// # Config
-// require_once($sys_root.'/include/config.php');
-
-// $i_am_admin = (php_sapi_name() == 'cli') || in_array($ip, $sys_admins);
-// $sys_debug = ($i_am_admin ? true : false);
-// $DQDP_DEBUG = $sys_debug;
-
-// ini_set('display_errors', (bool)$sys_debug);
-// ini_set('expose_php', (bool)$sys_debug);
-// error_reporting($sys_error_reporting);
-
-// # Include paths
-// $include_path = array_unique(array_merge($sys_include_paths, explode(PATH_SEPARATOR, ini_get('include_path'))));
-// ini_set('include_path', join(PATH_SEPARATOR, $include_path));
-
-// if(!empty($KERNEL_LEAVE_AFTER_INIT)){
-// 	return;
-// }
-
 # Bans
 if(isset($sys_banned[$ip]))
 {
@@ -29,12 +10,6 @@ if(isset($sys_banned[$ip]))
 }
 
 require_once('include/dbconnect.php');
-// require_once('stdlib.php');
-// require_once('lib/truelib.php');
-// require_once('lib/utils.php');
-
-// mb_regex_encoding($sys_encoding);
-// mb_internal_encoding($sys_encoding);
 
 # dabuujam parametrus no mod_rewrite
 if(!isset($_SERVER["SERVER_PROTOCOL"]))
@@ -47,7 +22,7 @@ $_SERVER["REQUEST_URI"] = array_shift($parts);
 $_SERVER["QUERY_STRING"] = join("?", $parts);
 
 $sys_parameters = explode('/', $_SERVER["REQUEST_URI"]);
-$sys_parameters = parse_params($sys_parameters);
+$sys_parameters = rawurldecode_params($sys_parameters);
 
 $sys_module_id = array_shift($sys_parameters);
 # ja nav ne1 modulis selekteets

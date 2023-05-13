@@ -47,4 +47,18 @@ class User
 	{
 		return static::$_LOGIN[$k] ?? null;
 	}
+
+	static function blacklisted(): bool
+	{
+		global $ip;
+
+		# 1 week
+		if(User::logged() && ((time() - strtotime(User::get_val('l_lastaccess'))) < 604800))
+		{
+			return false;
+		} else {
+			return ip_blacklisted($ip);
+		}
+	}
+
 }

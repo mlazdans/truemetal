@@ -2,87 +2,43 @@
 
 use dqdp\Template;
 
-define('M', array(
-	'janvārī', 'februārī', 'martā', 'aprīlī', 'maijā', 'jūnijā', 'jūlijā', 'augustā', 'septembrī',
-	'oktobrī', 'novembrī', 'decembrī'
-	));
-
-define('D', array('svētdiena', 'pirmdiena', 'otrdiena', 'trešdiena', 'ceturtdiena', 'piektdiena', 'sestdiena'));
-
 function invalid(string $value): bool
 {
 	return !$value || preg_match("/[^a-z^A-Z^0-9_]/", $value);
 }
 
-function valid($value)
+function valid(string $value): bool
 {
 	return !invalid($value);
-} // valid
+}
 
-function parse_params($data)
+function rawurldecode_params(array $data): array
 {
-	$ret = array();
-	foreach($data as $key=>$value)
+	foreach($data as $value)
 	{
 		if(trim($value))
 			$ret[] = rawurldecode($value);
 	}
 
-	return $ret;
-} // parse_params
+	return $ret??[];
+}
 
-
-function my_strip_tags(&$text)
+function my_strip_tags(string &$text): void
 {
 	$text = htmlspecialchars($text, ENT_QUOTES);
-} // my_strip_tags
+}
 
-function get_month($i){
-	return M[$i];
-} // get_month
+function get_month(int $i): ?string
+{
+	return [
+		'janvārī', 'februārī', 'martā', 'aprīlī', 'maijā', 'jūnijā', 'jūlijā',
+		'augustā', 'septembrī', 'oktobrī', 'novembrī', 'decembrī'
+	][$i]??null;
+}
 
-function get_day($i){
-	return D[$i];
-} // get_day
-
-// function proc_date($date)
-// {
-// 	$D = array(
-// 		'šodien',
-// 		'vakar',
-// 		'aizvakar'
-// 	);
-
-// 	$date_now = date("Y:m:j:H:i");
-// 	list($y0, $m0, $d0, $h0, $min0) = explode(":", date("Y:m:j:H:i", strtotime($date)));
-// 	list($y1, $m1, $d1, $h1, $min1) = explode(":", $date_now);
-// 	// mktime ( [int hour [, int minute [, int second [, int month [, int day [, int year [, int is_dst]]]]]]])
-// 	$dlong0 = mktime($h0, $min0, 0, $m0, $d0, $y0);
-// 	$dlong1 = mktime($h1, $min1, 0, $m1, $d1, $y1);
-// 	$diff = date('z', $dlong1) - date('z', $dlong0);
-// 	$retdate = '';
-
-// 	if( ($diff < 3) && ($y1 == $y0) )
-// 	//if( ($diff < 3) /*&& ($y1 == $y0)*/ )
-// 	{
-// 		$retdate .= $D[$diff];
-// 	} else {
-// 		if($y1 != $y0)
-// 			$retdate .= "$y0. gada ";
-// 		$retdate.= "$d0. ".get_month($m0 - 1);
-// 	}
-
-// 	//if((integer)$h0 || (integer)$min0)
-// 		$retdate .= ", plkst. $h0:$min0";
-
-// 	return $retdate;
-// } // proc_date
-
-// function url_pattern()
-// {
-// 	$url_patt = $path_patt = '';
-// 	return "/(http(s?):\/\/|ftp:\/\/|telnet:\/\/|dchub:\/\/|ed2k:\/\/|mailto:|callto:)([^\/\s\t\n\r\!\'\<>\(\)]".$url_patt."*)([^\s\t\n\r\'\<>]".$path_patt."*)/is";
-// } // url_pattern
+function get_day(int $i): ?string {
+	return ['svētdiena', 'pirmdiena', 'otrdiena', 'trešdiena', 'ceturtdiena', 'piektdiena', 'sestdiena'][$i]??null;
+}
 
 # TODO: test https://www.metal-archives.com/bands/Jumpin%27_Jesus/6714
 function parse_text_data(&$data)
@@ -207,94 +163,9 @@ function parse_text_data(&$data)
 		$data .= '...';
 
 	$data = $data;
-} // parse_text_data
+}
 
-// function substitute_change($str)
-// {
-// 	$patt = array(
-// 		"'Ā'", "'Č'", "'Ē'", "'Ģ'", "'Ī'", "'Ķ'", "'Ļ'", "'Ņ'", "'Ō'", "'Ŗ'", "'Š'", "'Ū'", "'Ž'",
-// 		"'ā'", "'č'", "'ē'", "'ģ'", "'ī'", "'ķ'", "'ļ'", "'ņ'", "'ō'", "'ŗ'", "'š'", "'ū'", "'ž'",
-// 	);
-// 	$repl = array(
-// 		"A", "C", "E", "G", "I", "K", "L", "N", "O", "R", "S", "U", "Z",
-// 		"a", "c", "e", "g", "i", "k", "l", "n", "o", "r", "s", "u", "z",
-// 	);
-
-// 	return preg_replace($patt, $repl, $str);
-// } // substitute_change
-
-// function substitute($str)
-// {
-// 	/*
-// 	$patt = array(
-// 		"/([ĀČĒĢĪĶĻŅŌŖŠŪŽ])/iue"
-// 	);
-// 	$repl = array(
-// 		"'[$1|'.substitute_change('$1').']'"
-// 	);
-// 	return preg_replace($patt, $repl, $str);
-// 	*/
-// 	$patt = array(
-// 		"/([ĀČĒĢĪĶĻŅŌŖŠŪŽ])/iu"
-// 	);
-// 	return preg_replace_callback(
-// 		$patt,
-// 		function($m){
-// 			//if(false && $i_am_admin)
-// 				return "[".$m[1]."|".substitute_change($m[1])."]";
-// 			//else
-// 			//	return "'[".$m[1]."|'".substitute_change($m[1])."']'";
-// 		},
-// 		$str);
-// } // substitute
-
-// function valid_host($host)
-// {
-// 	$testip = gethostbyname($host);
-// 	$test1 = ip2long($testip);
-// 	$test2 = long2ip($test1);
-
-// 	return ($testip == $test2);
-// } // valid_host
-
-// function valid_email($email)
-// {
-// 	if(!$email)
-// 		return false;
-
-// 	$parts = explode('@', $email);
-
-// 	if(count($parts) != 2)
-// 		return false;
-
-// 	list($username, $domain) = $parts;
-
-// 	return ($username and $domain and (valid_host($domain) || checkdnsrr($domain)));
-// 	//return $username and $domain and valid_host($domain);
-// } // valid_email
-
-function get_modules($admin = false)
-{
-	global $sys_root;
-
-	if($admin)
-		$path = $sys_root.'/modules/admin';
-	else
-		$path = $sys_root.'/modules';
-
-	$modules = array();
-	if($dir = opendir($path)) {
-		while($file = readdir($dir))
-			if(filetype($path.'/'.$file) != 'dir') {
-				if(preg_match('/^module\.(.*).php/i', $file, $m))
-					$modules[] = $m[1];
-			}
-	} // open dir
-
-	sort($modules);
-	return $modules;
-} // get_modules
-
+# TODO: dqdp imager
 function image_resample(&$in_im, $w = 0, $h = 0, $percent = 0)
 {
 	$im_h = imagesy($in_im);
@@ -359,7 +230,7 @@ function image_resample(&$in_im, $w = 0, $h = 0, $percent = 0)
 	imagecopyresized($out_im, $tmp_im, 0,0, $startx,$starty, $w,$h, $w,$h);
 
 	return $out_im;
-} // image_resample
+}
 
 function image_save(&$image, $file, $type, $quality = 80)
 {
@@ -371,7 +242,7 @@ function image_save(&$image, $file, $type, $quality = 80)
 		return FALSE;
 
 	return TRUE;
-} // image_save
+}
 
 function image_load(&$image, $file)
 {
@@ -410,93 +281,7 @@ function image_load(&$image, $file)
 	}
 
 	return $type;
-} // image_load
-
-function strip_script(&$data, &$keys, &$scripts)
-{
-	$patts = array(
-		'/<script[^>]*>([^<]*)<\/script>/imsU',
-		'/<title[^>]*>([^<]*)<\/title>/imsU',
-		'/<head[^>]*>([^<]*)<\/head>/imsU',
-		'/<style[^>]*>([^<]*)<\/style>/imsU',
-		'/<object[^>]*>([^<]*)<\/object>/imsU',
-		'/&[^;]*;/sU'
-		//&nbsp;
-	);
-	foreach($patts as $patt) {
-		preg_match_all($patt, $data, $m);
-		for($r = 0; $r < count($m[0]); ++$r) {
-			$token = '<'.md5(uniqid((string)rand(), true)).'>';
-			$keys[] = $token;
-			$scripts[] = $m[0][$r];
-			$data = str_replace($m[0][$r], $token, $data);
-		}
-	}
-} // strip_script
-
-function unstrip_script(&$data, &$keys, &$scripts)
-{
-	if(!is_array($keys))
-		return;
-
-	for($r = 0; $r < count($keys); ++$r)
-		$data = str_replace($keys[$r], $scripts[$r], $data);
-} // unstrip_script
-
-// function parse_search_q($q)
-// {
-// 	$q = preg_quote($q);
-// 	//$q = preg_replace('/[\h\v]/ims', ' ', $q);
-// 	//$q = preg_replace('/[\pPSZ]/uims', ' ', $q);
-// 	$q = preg_replace('/[\pP\pZ\pS\pC}]/uims', ' ', $q);
-// 	//$q = preg_replace('/(\n\r|\n)+/ims', ' ', $q);
-// 	$q = preg_replace('/(\s)+/uims', ' ', $q);
-
-// 	return trim($q);
-// } // parse_search_q
-
-function parse_mysql_search_q($q)
-{
-	return preg_replace('/[%\'_]/', '\$1', parse_search_q($q));
-} // parse_mysql_search_q
-
-// function hl(&$data, $kw)
-// {
-// 	strip_script($data, $keys, $scripts);
-// 	$colors = array('white', 'white', 'black', 'white');
-// 	$bg = array('red', 'blue', 'yellow', 'magenta');
-// 	$cc = count($colors);
-// 	$bc = count($bg);
-
-// 	$kw = trim(preg_replace("/[\*\(\)\-\+\/\:]/", " ", $kw));
-
-// 	$words = explode(' ', $kw);
-// 	// duplikaati nafig
-// 	$words = array_unique($words);
-
-// 	//$tokens = array();
-// 	foreach($words as $index=>$word)
-// 	{
-// 		$word = preg_replace('/[<>\/]/', '', $word);
-// 		//$word = substitute(preg_quote($word));
-// 		$word = substitute(preg_quote($word));
-
-// 		if(empty($word))
-// 			continue;
-
-// 		$color = $colors[$index % $cc];
-// 		$bgcolor = $bg[$index % $bc];
-// 		$data = ">$data<";
-// 		//$patt = "/(>[^<]*)(".substitute(preg_quote($word)).")([^>]*)<?/imsUu";
-// 		//$patt = "/(>[^<]*)(".substitute($word).")([^>]*)<?/imsUu";
-// 		$patt = "/(>[^<]*)(".$word.")([^>]*)<?/imsUu";
-
-// 		$data = preg_replace($patt, "$1<span style=\"background-color: $bgcolor; color: $color; font-weight: bold;\">$2</span>$3", $data);
-// 		$data = mb_substr($data, 1, mb_strlen($data)-2);
-// 	}
-
-// 	unstrip_script($data, $keys, $scripts);
-// } // hl
+}
 
 # TODO: vecais search - get rid off
 function search_to_sql_legacy($q, $fields)
@@ -520,97 +305,12 @@ function search_to_sql_legacy($q, $fields)
 	if($match)
 		return "($match)";
 	//$match = ",(module_name REGEXP '$q' OR module_data REGEXP '$q') score";
-} // search_to_sql
+}
 
-function search_to_spider($q, $fields)
-{
-	$ret = array();
-
-	$words = explode(' ', $q);
-	if(!is_array($fields))
-		$fields = array($fields);
-
-	$match = '';
-//	$words = array_unique($words);
-	foreach($words as $word)
-	{
-		$tmp = '';
-		foreach($fields as $field)
-			if($field)
-				$tmp .= "$field = '".addslashes(preg_quote($word))."' OR ";
-		$tmp = substr($tmp, 0, -4);
-		if($tmp)
-			$match .= "($tmp) OR ";
-	}
-	$match = substr($match, 0, -4);
-
-	if($match)
-	{
-		$ret['match'] = "($match)";
-		$ret['words'] = $words;
-
-		return $ret;
-	}
-} // search_to_spider
-
-// function email($to, $subj, $msg, $attachments = array())
-// {
-// 	global $sys_mail_from, $sys_mail_params;
-
-// 	$headers = array(
-// 		'To'=>$to,
-// 		'From'=>$sys_mail_from,
-// 		'Subject'=>$subj,
-// 		// 'Return-Path'=>'returns-truemetal@mail.dqdp.net',
-// 	);
-
-// 	$mime = new Mail_Mime("\n");
-// 	$mime->setTxtBody($msg);
-// 	foreach($attachments as $file)
-// 	{
-// 		$filename = $file['tmp_name'];
-// 		$filename_show = $file['name'];
-// 		$type = $file['type'];
-// 		$mime->addAttachment($filename, $type, $filename_show);
-// 	}
-
-// 	$param['text_charset'] = 'utf-8';
-// 	$param['html_charset'] = 'utf-8';
-// 	$param['head_charset'] = 'utf-8';
-
-// 	$body = $mime->get($param);
-// 	$hdrs = $mime->headers($headers);
-
-// 	if(empty($sys_mail_params))
-// 	{
-// 		$mail = Mail::factory('mail');
-// 	} else {
-// 		$mail = Mail::factory($sys_mail_params['driver'], $sys_mail_params);
-// 	}
-// 	$e = $mail->send($to, $hdrs, $body);
-
-// 	if($e !== TRUE)
-// 	{
-// 		$GLOBALS['php_errormsg'] = $e;
-// 		$ret = false;
-// 	} else {
-// 		$ret = true;
-// 	}
-
-// 	return $ret;
-// } // email
-
-function save_upload($id, $save_path): bool
+function save_upload(string $id, string $save_path): bool
 {
 	return empty($_FILES[$id]) ? false : move_uploaded_file($_FILES[$id]['tmp_name'], $save_path);
 }
-
-function mlog(&$data)
-{
-	ob_start();
-	print_r($data);
-	return ob_get_clean();
-} // mlog
 
 function _GET()
 {
@@ -641,57 +341,10 @@ function _GET()
 	return $ret;
 }
 
-// function get($key, $default = '')
-// {
-// 	return isset($_GET[$key]) ? $_GET[$key] : $default;
-// } // get
-
-// function post($key, $default = '')
-// {
-// 	return isset($_POST[$key]) ? $_POST[$key] : $default;
-// } // post
-
-// function postget($key, $default = '')
-// {
-// 	return isset($_POST[$key]) ? $_POST[$key] : get($key, $default);
-// } // postget
-
-// function sess($key, $default = '')
-// {
-// 	return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
-// } // sess
-
-// function cookie($key, $default = '')
-// {
-// 	return isset($_COOKIE[$key]) ? $_COOKIE[$key] : $default;
-// } // cookie
-
-// function server($key, $default = '')
-// {
-// 	return isset($_SERVER[$key]) ? $_SERVER[$key] : $default;
-// } // server
-
-// function upload($key, $default = '')
-// {
-// 	return isset($_FILES[$key]) ? $_FILES[$key] : $default;
-// } // upload
-
-// function redirect($url = '')
-// {
-// 	$url = $url ? $url : php_self();
-
-// 	return header("Location: $url");
-// } // redirect
-
-// function php_self()
-// {
-// 	return isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-// } // php_self
-
 function is_not_empty($v)
 {
 	return !empty($v);
-} // is_not_empty
+}
 
 function innerHTML(&$dom, &$node, $html = false)
 {
@@ -716,165 +369,6 @@ function innerHTML(&$dom, &$node, $html = false)
 		$f = $dom->createDocumentFragment();
 		$f->appendXML($html);
 		$node->appendChild( $f );
-	}
-} // innerHTML
-
-// function urlize($name)
-// {
-// 	$name = preg_replace("/[%]/", " ", $name);
-// 	$name = html_entity_decode($name, ENT_QUOTES, "UTF-8");
-// 	$name = mb_strtolower($name);
-// 	$name = strip_tags($name);
-// 	$name = preg_replace("/[\|\:\/\?\#\[\]\@\"'\(\)\.,&;\+=\\\]/", " ", $name);
-// 	$name = trim($name);
-// 	$name = preg_replace("/\s+/", "-", $name);
-// 	$name = preg_replace("/-+/", "-", $name);
-
-// 	return $name;
-// } // urlize
-
-// function queryl($format = '', $allowed = array())
-// {
-// 	return __query($_SERVER['QUERY_STRING'], $format, '&', $allowed);
-// } // queryl
-
-// function query($format = '', $allowed = array())
-// {
-// 	return __query($_SERVER['QUERY_STRING'], $format, '&amp;', $allowed);
-// } // query
-
-// function __query($query_string = '', $format = '', $delim = '&amp;', $allowed = array())
-// {
-// 	$QS = query_split($query_string);
-// 	$FORMAT = query_split($format);
-
-// 	# Unset disallowd
-// 	if($allowed)
-// 	{
-// 		foreach($QS as $k=>$v)
-// 			if(!in_array($k, $allowed))
-// 				unset($QS[$k]);
-// 	}
-
-// 	foreach($FORMAT as $k=>$v)
-// 	{
-// 		if($k[0] == '-')
-// 		{
-// 			if( ($k2 = substr($k, 1)) && (!$v || ($QS[$k2] == $v)))
-// 				unset($QS[$k2]);
-// 		} else
-// 			$QS[$k] = $v;
-// 	}
-
-// 	return query_join($QS, $delim);
-// } // __query
-
-// function query_split($q)
-// {
-// 	if(!$q)
-// 		return array();
-
-// 	# XXX: dirty hack :)
-// 	$q = str_replace("&amp;", "|||", $q);
-
-// 	$ret = array();
-// 	$parts = explode('&', html_entity_decode($q));
-
-// 	foreach($parts as $val)
-// 	{
-// 		$x = explode('=', $val);
-// 		//admin_print_r($x);
-// 		$x[0] = str_replace("|||", "&amp;", $x[0]);
-// 		$x[1] = str_replace("|||", "&amp;", $x[1]);
-// 		$ret[$x[0]] = $x[1];
-// 		if(!isset($x[1]))
-// 			trigger_error("\$x[1] not set $q");
-// 	}
-
-// 	return $ret;
-// } // query_split
-
-// function query_join(Array $QS, $delim)
-// {
-// 	$ret = array();
-// 	foreach($QS as $k=>$v)
-// 		$ret[] = "$k=$v";
-
-// 	return join($delim, $ret);
-// } // query_join
-
-// function ip_rev($ip)
-// {
-// 	return implode('.', array_reverse(explode('.', $ip)));
-// } // ip_rev
-
-// function ip_blacklisted($ip)
-// {
-// 	$dnsbl = array(
-// 		'bl.blocklist.de',
-// 		'xbl.spamhaus.org',
-// 		'cbl.abuseat.org',
-// 		//'l2.apews.org',
-// 		'all.s5h.net',
-// 		);
-
-// 	$iprev = ip_rev($ip);
-// 	foreach($dnsbl as $bl)
-// 	{
-// 		# return 1 - not found; 0 - listed
-// 		//$c = "host -W 1 -t any $iprev.$bl";
-// 		$c = "host -W 1 $iprev.$bl";
-// 		$ret = exec($c, $o, $rv);
-// 		if(!$rv){
-// 			trigger_error("blacklisted $ip: $ret");
-// 			return true;
-// 		}
-// 	}
-
-// 	return false;
-// } // ip_blacklisted
-
-function user_blacklisted()
-{
-	global $sys_whitelist;
-
-	if(!empty($sys_whitelist)){
-		if(in_array($GLOBALS['ip'], $sys_whitelist))
-			return false;
-	}
-
-	# 1 week
-	if(User::logged() && ((time() - strtotime(User::get_val('l_lastaccess'))) < 604800))
-	{
-		return false;
-	} else {
-		return ip_blacklisted($GLOBALS['ip']);
-	}
-}
-
-function tm_shutdown()
-{
-	global $i_am_admin;
-
-	if($i_am_admin)
-	{
-		$is_html = 0;
-		$headers = headers_list();
-		foreach($headers as $h)
-		{
-			if(stripos(strtolower($h), "content-type: text/html") === 0)
-			{
-				$is_html = 1;
-				break;
-			}
-		}
-
-		if($is_html)
-		{
-			print '<link rel=stylesheet href="/css/highlight/vs.min.css">';
-			print '<script src="/js/highlight.min.js"></script>';
-			print '<script>hljs.highlightAll();</script>';
-		}
 	}
 }
 
@@ -934,77 +428,3 @@ function cache_hash($id, $levels = 2)
 
 	return $path;
 } // cache_hash
-
-// function specialchars($data){
-// 	return htmlspecialchars($data);
-// }
-
-function pw_validate(string $p1, string $p2, array &$error_msg): bool {
-	if($p1 != $p2){
-		$error_msg[] = 'Paroles nesakrīt!';
-		return false;
-	}
-
-	$resut = PwValidator::validate($p1);
-
-	if(PwValidator::valid_pass($resut)){
-		return true;
-	}
-
-	if(!$resut->HAS_LEN)        $error_msg[] = 'Parole par īsu';
-	if(!$resut->HAS_ALPHA)      $error_msg[] = 'Parolē nav standarta burtu';
-	if(!$resut->HAS_NON_ALPHA)  $error_msg[] = 'Parolē nav simbolu vai ciparu';
-	if(!$resut->HAS_NO_REPEATS) $error_msg[] = 'Parolē ir sacīgi simboli';
-
-	return false;
-}
-
-function mysql_password(string $p): string {
-	return "*".strtoupper(sha1(sha1($p, true)));
-}
-
-// https://onlinephp.io/code/a7a66c7e4b79b52aaa9f948fc8b8f23fe2644492
-function hex_hash2bin($hex) {
-	$bin = "";
-	$len = strlen($hex);
-	for ($i = 0; $i < $len; $i += 2) {
-		$byte_hex  = substr($hex, $i, 2);
-		$byte_dec  = hexdec($byte_hex);
-		$byte_char = chr($byte_dec);
-		$bin .= $byte_char;
-	}
-
-	return $bin;
-}
-function mysql_old_password($input, $hex = true) {
-	$nr    = 1345345333;
-	$add   = 7;
-	$nr2   = 0x12345671;
-	$tmp   = null;
-	$inlen = strlen($input);
-	for ($i = 0; $i < $inlen; $i++) {
-		$byte = substr($input, $i, 1);
-		if ($byte == ' ' || $byte == "\t") {
-			continue;
-		}
-		$tmp = ord($byte);
-		$nr ^= ((($nr & 63) + $add) * $tmp) + (($nr << 8) & 0xFFFFFFFF);
-		$nr2 += (($nr2 << 8) & 0xFFFFFFFF) ^ $nr;
-		$add += $tmp;
-	}
-	$out_a  = $nr & ((1 << 31) - 1);
-	$out_b  = $nr2 & ((1 << 31) - 1);
-	$output = sprintf("%08x%08x", $out_a, $out_b);
-	if ($hex) {
-		return $output;
-	}
-
-	return hex_hash2bin($output);
-}
-
-
-function new_template(string $file_name): ?Template {
-	global $sys_template_root;
-
-	return new Template($sys_template_root.DIRECTORY_SEPARATOR.$file_name);
-}

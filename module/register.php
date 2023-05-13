@@ -4,7 +4,7 @@ $template = new MainModule($sys_module_id, 'index.tpl');
 $template->set_title("Reģistrācija");
 $template->set_right_defaults();
 
-if(user_blacklisted())
+if(User::blacklisted())
 {
 	$template->forbidden("Blacklisted IP: $ip");
 } elseif(Logins::banned24h($ip)){
