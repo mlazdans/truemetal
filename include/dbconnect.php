@@ -9,4 +9,8 @@ if(!$D->get_conn()){
 	die('True DB error!');
 }
 
+// TODO: explore
+// SET [GLOBAL|SESSION] innodb_strict_mode=mode
+// SET SESSION sql_mode = 'modes'; +STRICT_TRANS_TABLES
+
 DB::set_db($D);
