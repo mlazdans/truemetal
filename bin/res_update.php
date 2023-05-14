@@ -42,15 +42,17 @@ DB::withNewTrans(function(){
 			NULL,
 			$r->forum_data,
 			$r->forum_datacompiled,
-			// $r->forum_allowchilds == 'Y' ? 1 : 0,
+			$r->forum_allowchilds == 'Y' ? 1 : 0,
 			isset($PARENT) ? $PARENT['res_id'] : NULL,
 			$r->res_id
 		];
+
 		if(!$p->execute($data)){
 			sqlr($sql);
 			printr($data);
 			return false;
 		}
+
 		$p->closeCursor();
 	}
 	unset($q);
@@ -84,11 +86,13 @@ DB::withNewTrans(function(){
 			$r->res_resid,
 			$r->res_id
 		];
+
 		if(!$p->Execute($data)){
 			sqlr($sql);
 			printr($data);
 			return false;
 		}
+
 		$p->closeCursor();
 	}
 	unset($q);
@@ -180,11 +184,13 @@ DB::withNewTrans(function(){
 			isset($PARENT) ? $PARENT['res_id'] : NULL,
 			$r->res_id
 		];
+
 		if(!$p->Execute($data)){
 			sqlr($sql);
 			printr($data);
 			return false;
 		}
+
 		$p->closeCursor();
 	}
 	unset($q);
