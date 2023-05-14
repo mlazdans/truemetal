@@ -34,9 +34,7 @@ class SessHandler implements SessionHandlerInterface
 	public function read(string $id): string|false
 	{
 		# TODO: ip check
-		$sql = "SELECT * FROM logins WHERE l_sess_id = ? AND l_active = ? AND l_accepted = ?";
-
-		if($sess = DB::ExecuteSingle($sql, $id, Res::STATE_ACTIVE, Logins::ACCEPTED))
+		if($sess = DB::ExecuteSingle("SELECT * FROM logins WHERE l_sess_id = ? AND l_active = 1 AND l_accepted = 1", $id))
 		{
 			User::data(filter_login_data($sess));
 
