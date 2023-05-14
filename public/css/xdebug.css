@@ -1,0 +1,27 @@
+.xdebug-error th
+{
+    font-family:monospace;
+    font-weight:normal;
+    font-size:15px;
+    padding: 6px 6px 6px 6px;
+    border:1px solid black;
+    background: #FFCC99;
+    color:#000000;
+}
+.xdebug-error > tr:first-child > th:first-child,
+.xdebug-error > tbody > tr:first-child > th:first-child
+{
+    line-height:1.6em;
+    padding: 10px 10px 10px 10px;
+    border:1px solid #000000;
+    background: #000000;
+    color:#FFFFFF;
+}
+.xdebug-error td
+{
+    font-size:14px;
+    padding: 6px 6px 6px 6px;
+    border:1px solid green;
+    background: #D1FFE8;
+	color: black;
+}
