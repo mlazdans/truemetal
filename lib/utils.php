@@ -1,7 +1,5 @@
 <?php declare(strict_types = 1);
 
-use dqdp\Template;
-
 function invalid(string $value): bool
 {
 	return !$value || preg_match("/[^a-z^A-Z^0-9_]/", $value);
@@ -10,17 +8,6 @@ function invalid(string $value): bool
 function valid(string $value): bool
 {
 	return !invalid($value);
-}
-
-function rawurldecode_params(array $data): array
-{
-	foreach($data as $value)
-	{
-		if(trim($value))
-			$ret[] = rawurldecode($value);
-	}
-
-	return $ret??[];
 }
 
 function my_strip_tags(string &$text): void
