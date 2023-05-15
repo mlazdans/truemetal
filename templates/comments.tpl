@@ -2,7 +2,7 @@
 <!-- BEGIN BLOCK_comment disabled -->
 <div class="Comment" id="comment{c_id}">
 	<div class="header">
-		<div class="nick">{c_username}</div>
+		<div class="nick">{res_nickname}</div>
 		<!-- BEGIN BLOCK_email disabled -->
 		, <a href="mailto:{c_useremail}" class="A-small">{c_useremail}</a>
 		<!-- END BLOCK_email -->
@@ -31,7 +31,7 @@
 		<div class="center unselectable">&nbsp;</div>
 	</div>
 	<div class="data{c_disabled_user_class}">
-		{c_datacompiled}
+		{res_data_compiled}
 	</div>
 </div>
 <!-- END BLOCK_comment -->
@@ -64,7 +64,7 @@
 		<input type="hidden" name="c_referrer" value="{c_referrer}">
 		Vārds:
 	</td>
-	<td style="width: 100%">{c_username}</td>
+	<td style="width: 100%">{USER_l_nick}</td>
 </tr>
 <tr>
 	<td colspan="2" valign="top">Ziņa:</td>

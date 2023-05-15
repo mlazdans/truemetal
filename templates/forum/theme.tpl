@@ -1,23 +1,23 @@
-<div class="TD-cat">{forum_name}</div>
+<div class="TD-cat">{current_theme_name}</div>
 
 <!-- BEGIN BLOCK_is_pages disabled -->
 <div class="Forum-cat" style="margin-bottom: 0;">
 	<!-- BEGIN BLOCK_page_prev -->
 	<div class="Forum-Page-prev">
-		<a href="/forum/{current_forum_id}-{current_forum_name_urlized}/page/{prev_page_id}/"><img src="/img/left.png" alt="Pa kreisi"></a>
+		<a href="{current_theme_route}/page/{prev_page_id}/"><img src="/img/left.png" alt="Pa kreisi"></a>
 	</div>
 	<!-- END BLOCK_page_prev -->
 
 	<!-- BEGIN BLOCK_page_next -->
 	<div class="Forum-Page-next">
-		<a href="/forum/{current_forum_id}-{current_forum_name_urlized}/page/{next_page_id}/"><img src="/img/right.png" alt="Pa labi"></a>
+		<a href="{current_theme_route}/page/{next_page_id}/"><img src="/img/right.png" alt="Pa labi"></a>
 	</div>
 	<!-- END BLOCK_page_next -->
 
 	<div class="Forum-Pager">
 	<!-- BEGIN BLOCK_page -->{page_seperator}
 		<!-- BEGIN BLOCK_page_switcher -->
-			<a href="/forum/{current_forum_id}-{current_forum_name_urlized}/page/{page_id}/"{page_style}>[{p_id}]</a>
+			<a href="{current_theme_route}/page/{page_id}/"{page_style}>[{p_id}]</a>
 		<!-- END BLOCK_page_switcher -->
 	<!-- END BLOCK_page -->
 	</div>
@@ -34,13 +34,13 @@
 <!-- BEGIN BLOCK_forum -->
 <tr>
 	<td class="Forum-Theme-name">
-		<a href="/forum/{forum_id}-{forum_name_urlized}" title="Datums: {forum_date}"><b>{forum_name}</b></a>
+		<a href="{res_route}" title="Datums: {forum_date}"><b>{res_name}</b></a>
 	</td>
 	<td class="Forum-Theme-childcount<!-- BEGIN BLOCK_comments_new disabled --> Comment-new<!-- END BLOCK_comments_new -->">
 		{res_comment_count}
 	</td>
 	<td class="Forum-Theme-username">
-		{forum_username}
+		{res_nickname}
 	</td>
 </tr>
 <!-- END BLOCK_forum -->

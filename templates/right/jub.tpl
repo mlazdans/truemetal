@@ -6,6 +6,6 @@
 
 <!-- BEGIN BLOCK_jub_item_notloged disabled -->
 <div class="List-item">
-	{jub_name}{jub_info}
+	{l_nick}{jub_info}
 </div>
 <!-- END BLOCK_jub_item_notloged -->

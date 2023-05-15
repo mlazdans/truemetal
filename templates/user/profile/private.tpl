@@ -94,7 +94,7 @@
 <table class="Main">
 <!-- BEGIN BLOCK_truecomment_item -->
 <tr>
-	<td><a href="{c_href}">{c_data}</a></td>
+	<td><a href="{res_href}">{res_data}</a></td>
 	<td class="vote-plus">{plus_count}</td>
 	<td class="vote-minus">{minus_count}</td>
 </tr>

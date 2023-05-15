@@ -1,4 +1,4 @@
-<div class="TD-cat">{forum_name}</div>
+<div class="TD-cat">{res_name}</div>
 
 <!-- BEGIN BLOCK_attend --><!-- END BLOCK_attend -->
 
