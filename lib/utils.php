@@ -317,10 +317,10 @@ function _GET(?string $qs = null): array
 		$v = $parts[1] ?? "";
 
 		if(str_ends_with($k, '[]'))
-			{
+		{
 			$ret[substr($k, 0, -2)][] = $v;
-			} else {
-				$ret[$k] = $v;
+		} else {
+			$ret[$k] = $v;
 		}
 	}
 
@@ -414,3 +414,18 @@ function cache_hash($id, $levels = 2)
 
 	return $path;
 } // cache_hash
+
+function ignored(?array $data, string $field): bool
+{
+	return falsed($data, $field);
+}
+
+function defaulted(?array $data, string $field): bool
+{
+	return !isset($data[$field]);
+}
+
+function falsed(?array $data, string $field): bool
+{
+	return isset($data[$field]) && ($data[$field] === false);
+}
