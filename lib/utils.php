@@ -299,29 +299,25 @@ function save_upload(string $id, string $save_path): bool
 	return empty($_FILES[$id]) ? false : move_uploaded_file($_FILES[$id]['tmp_name'], $save_path);
 }
 
-function _GET()
+function _GET(?string $qs = null): array
 {
-	$ret = array();
-	$qs = isset($_SERVER["QUERY_STRING"]) ? $_SERVER["QUERY_STRING"] : '';
-	if($qs)
-	{
-		$pairs = explode('&', $qs);
-		foreach($pairs as $kv)
-		{
-			$parts = explode('=', $kv);
-			$k = isset($parts[0]) ? urldecode($parts[0]) : false;
-			$v = isset($parts[1]) ? urldecode($parts[1]) : false;
+	$qs = trim($qs??$_SERVER["QUERY_STRING"]??"");
 
-			# Arrays
-			if(substr($k, -2) == '[]')
+	if(!$qs){
+		return [];
+	}
+
+	foreach(explode('&', $qs) as $pair)
+	{
+		$parts = explode('=', $pair, 2);
+		$k = $parts[0] ?? "";
+		$v = $parts[1] ?? "";
+
+		if(str_ends_with($k, '[]'))
 			{
-				$ka = substr($k, 0, -2);
-				if(empty($ret[$ka]))
-					$ret[$ka] = array();
-				$ret[$ka][] = $v;
+			$ret[substr($k, 0, -2)][] = $v;
 			} else {
 				$ret[$k] = $v;
-			}
 		}
 	}
 
