@@ -6,9 +6,14 @@ class DB
 {
 	private static MySQL_PDO $db;
 
-	static function set_db(MySQL_PDO $db)
+	static function setDB(MySQL_PDO $db)
 	{
 		static::$db = $db;
+	}
+
+	static function getDB(): MySQL_PDO
+	{
+		return static::$db;
 	}
 
 	static function Execute()

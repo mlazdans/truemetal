@@ -13,4 +13,4 @@ if(!$D->get_conn()){
 // SET [GLOBAL|SESSION] innodb_strict_mode=mode
 // SET SESSION sql_mode = 'modes'; +STRICT_TRANS_TABLES
 
-DB::set_db($D);
+DB::setDB($D);
