@@ -33,9 +33,9 @@ if($forum_id)
 		return;
 	}
 
-	$forum_name_urlized = urlize($forum_data['forum_name']);
-	$test_urlized = "$forum_id-$forum_name_urlized";
-	if($forum_name_urlized && ($test_urlized != $forum_id_urlized))
+	$res_name_urlized = urlize($forum_data['res_name']);
+	$test_urlized = "$forum_id-$res_name_urlized";
+	if($res_name_urlized && ($test_urlized != $forum_id_urlized))
 	{
 		$qs = (empty($_SERVER['QUERY_STRING']) ? "" : "?".$_SERVER['QUERY_STRING']);
 		$new_url = "/forum/$test_urlized$qs";
@@ -43,18 +43,15 @@ if($forum_id)
 		return;
 	}
 
-	$forum_title .= ' - '.$forum_data['forum_name'].($hl ? sprintf(", meklēšana: %s", $hl) : "");
-	$forum_descr .= ($hl ? sprintf(", meklēšana: %s", $hl) : "").' - '.$forum_data['forum_name'];
+	$forum_title .= ' - '.$forum_data['res_name'].($hl ? sprintf(", meklēšana: %s", $hl) : "");
+	$forum_descr .= ($hl ? sprintf(", meklēšana: %s", $hl) : "").' - '.$forum_data['res_name'];
 	if($page == 'page')
 	{
 		$forum_title .= " - $page_id. lapa";
 		$forum_descr .= " - $page_id. lapa";
 	}
 
-	// $template->set_var('current_forum_id', $forum_id);
-	// $template->set_var('current_forum_name_urlized', rawurlencode(urlize($forum_data['forum_name'])));
-
-	if($forum_data['forum_allowchilds'] == Forum::ALLOW_CHILDS)
+	if($forum_data['forum_allow_childs'])
 	{
 		$T = forum_themes($forum_id, $forum_data, $template, $action, $fpp, $page_id, $pages_visible_to_sides);
 	} else {

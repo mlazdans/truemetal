@@ -1,5 +1,7 @@
 <?php declare(strict_types = 1);
 
+use dqdp\TODO;
+
 $q = postget('q');
 $sort = postget('sort');
 $desc = true;
@@ -28,8 +30,6 @@ if($sort == 'votes'){
 
 $params = array(
 	'limit'=>200,
-	'get_votes'=>true,
-	'get_comment_count'=>true,
 	'l_active'=>Res::STATE_ALL,
 	'l_accepted'=>Res::STATE_ALL,
 	'order'=>($sortr ? $sortr.($desc ? " DESC" : " ASC") : ""),
@@ -61,6 +61,7 @@ if($action == 'search')
 	if(postget('l_notloggedever'))
 	{
 		$params['l_lastaccess'] = '0000-00-00 00:00:00';
+		new TODO('comment_count_equal is gone');
 		$params['comment_count_equal'] = 0;
 		$T->set_var('ls_l_notloggedever_checked', 'checked="checked"');
 	} else {
