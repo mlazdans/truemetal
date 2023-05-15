@@ -10,10 +10,10 @@ function valid(string $value): bool
 	return !invalid($value);
 }
 
-function my_strip_tags(string &$text): void
-{
-	$text = htmlspecialchars($text, ENT_QUOTES);
-}
+// function my_strip_tags(string &$text): void
+// {
+// 	$text = htmlspecialchars($text, ENT_QUOTES);
+// }
 
 function get_month(int $i): ?string
 {
@@ -27,8 +27,9 @@ function get_day(int $i): ?string {
 	return ['svētdiena', 'pirmdiena', 'otrdiena', 'trešdiena', 'ceturtdiena', 'piektdiena', 'sestdiena'][$i]??null;
 }
 
+# TODO: rewrite!!!
 # TODO: test https://www.metal-archives.com/bands/Jumpin%27_Jesus/6714
-function parse_text_data(&$data)
+function parse_text_data(string $data): string
 {
 	// proc url's - 1pass
 	$patt = url_pattern();
@@ -86,7 +87,9 @@ function parse_text_data(&$data)
 	array_splice($tmp[1], FORUM_MAXWORDS * 2);
 
 	$data = join("", $tmp[1]);
-	my_strip_tags($data);
+	// my_strip_tags($data);
+	# TODO: glabāt vajadzētu bez parsēšans
+	$data = htmlspecialchars($data, ENT_QUOTES);
 	$data = preg_replace('/(\r\n|\n)/', '<br />\1', $data);
 
 	// proc pre
@@ -149,7 +152,7 @@ function parse_text_data(&$data)
 	if($w_count > FORUM_MAXWORDS)
 		$data .= '...';
 
-	$data = $data;
+	return $data;
 }
 
 # TODO: dqdp imager
