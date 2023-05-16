@@ -2,8 +2,7 @@ CREATE OR REPLACE VIEW view_mainpage AS
 (SELECT
 	m.module_id,
 	a.res_id,
-	a.art_id,
-	NULL AS forum_id,
+	a.art_id AS doc_id,
 	r.res_name,
 	r.res_intro,
 	r.res_data,
@@ -25,8 +24,7 @@ UNION
 (SELECT
 	m.module_id,
 	r.res_id,
-	NULL AS art_id,
-	forum.forum_id,
+	forum.forum_id AS doc_id,
 	r.res_name,
 	r.res_intro,
 	r.res_data,
@@ -48,8 +46,7 @@ UNION
 (SELECT
 	'forum' AS module_id,
 	r.res_id,
-	NULL AS art_id,
-	forum.forum_id,
+	forum.forum_id AS doc_id,
 	r.res_name,
 	r.res_intro,
 	r.res_data,
