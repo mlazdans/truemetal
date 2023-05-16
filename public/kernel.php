@@ -13,22 +13,26 @@ if(isset($sys_banned[$ip]))
 
 require_once('include/dbconnect.php');
 
-# dabuujam parametrus no mod_rewrite
+# Dabūjam parametrus no mod_rewrite
 if(!isset($_SERVER["SERVER_PROTOCOL"]))$_SERVER["SERVER_PROTOCOL"] = "HTTP/1.0";
 if(!isset($_SERVER["REQUEST_URI"]))$_SERVER["REQUEST_URI"] = "";
 
-(function(){
+$sys_parameters = (function(): array {
 	$parts = explode('?', $_SERVER["REQUEST_URI"], 2);
-	if(isset($parts[0]))$_SERVER["REQUEST_URI"] = rawurldec($parts[0]);
-	if(isset($parts[1]))$_SERVER["QUERY_STRING"] = urldec($parts[1]);
-})();
-
-$sys_parameters = [];
-foreach(explode('/', $_SERVER["REQUEST_URI"]) as $k=>$v){
-	if($v2 = trim($v)){
-		$sys_parameters[$k] = $v;
+	if(isset($parts[0])){
+		$path_segment = rawurldec($parts[0]);
+		foreach(explode('/', $path_segment) as $k=>$v){
+			if($v = trim($v)){
+				$sys_parameters[$k] = $v;
+			}
+		}
 	}
-}
+
+	# Šeit mums vajag dekodēt un arī pārrakstīt QUERY_STRING ērtākai izmantošanai
+	if(isset($parts[1]))$_SERVER["QUERY_STRING"] = urldec($parts[1]);
+
+	return $sys_parameters??[];
+})();
 
 $sys_module_id = array_shift($sys_parameters);
 
