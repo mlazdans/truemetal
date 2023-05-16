@@ -1,9 +1,4 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
 class Table
 {
@@ -13,7 +8,7 @@ class Table
 	const GALLERY = 4;
 	const GALLERY_DATA = 5;
 
-	static function getName($id)
+	static function getName($id): string
 	{
 		if($id == Table::COMMENT){
 			return 'comment';
@@ -30,7 +25,7 @@ class Table
 		if($id == Table::GALLERY_DATA){
 			return 'gallery_data';
 		}
-		return false;
-	}
-} // class::Table
 
+		throw new InvalidArgumentException("Invalid table ID: $id");
+	}
+}
