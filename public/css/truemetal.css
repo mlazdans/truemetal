@@ -177,70 +177,6 @@ input[type=button]:active {
 	/*border-bottom: 0.1em solid #000;*/
 }
 
-
-.Comment-new {
-	color: red;
-}
-.Comment {
-	clear: both;
-	margin-bottom: 1em;
-}
-.Comment .header {
-	margin-bottom: 0.1em;
-	background-color: #660000;
-}
-.Comment .nick,
-.Comment .date,
-.Comment .center,
-.vote,
-.Comment .profile,
-.Comment .link {
-	padding: 0.3em;
-}
-
-.Comment .nick,
-.Comment .date {
-	float: left;
-}
-.vote,
-.Comment .profile,
-.Comment .link {
-	border-left: 0.1em solid #220000;
-	float: right;
-}
-.Comment .nick {
-	font-weight: bold;
-	padding-right: 0;
-}
-.Comment .date {
-	padding-left: 0;
-}
-.vote, .vote-plus, .vote-minus {
-	color: #676767;
-	font-weight: bold;
-	text-align: center;
-	width: 2em;
-}
-.vote-value {
-	width: 3em;
-	text-align: right;
-}
-.plus, .vote-plus { color: #00a400; }
-.minus, .vote-minus { color: #c70000; }
-
-.Comment .data,
-.Comment .disabled {
-	clear: both;
-	padding: 0.2em;
-	background-color: #444444;
-}
-
-.Comment .disabled {
-	background-color: #600000;
-	text-align: center;
-	font-style: italic;
-}
-
 /* Article */
 .Article-item {
 	clear: both;
@@ -530,5 +466,58 @@ label > input {
 
 .disabled {
 	/* background-color: #660000; */
+	font-style: italic;
+}
+
+
+/******************/
+.Comment-new {
+	color: red;
+}
+.Comment {
+	/* clear: both; */
+	margin-bottom: 1em;
+}
+
+.profile-header {
+	display: flex;
+	/* margin-bottom: 1px; */
+	background-color: #660000;
+}
+.profile-header .user-info {
+}
+.profile-header .controls {
+	margin-left: auto;
+}
+
+/* iekš .controls un .user-info */
+.profile-header > div > div {
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+	padding: 0.2em;
+	text-align: center;
+}
+
+.user-info .nick {
+	font-weight: bold;
+	padding-right: 0;
+}
+.vote-plus, .vote-minus, .vote-zero {
+	font-weight: bold;
+}
+.vote-zero { color: #676767; }
+.vote-plus { color: #00a400; }
+.vote-minus { color: #c70000; }
+
+.res-data {
+	padding: 0 0.4em;
+	background-color: #444444;
+}
+
+.Comment .disabled {
+	padding: 0.3em 0;
+	background-color: #440000;
+	text-align: center;
 	font-style: italic;
 }

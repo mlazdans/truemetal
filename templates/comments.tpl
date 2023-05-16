@@ -1,36 +1,37 @@
-<a name="comments"></a>
 <!-- BEGIN BLOCK_comment disabled -->
 <div class="Comment" id="comment{c_id}">
-	<div class="header">
-		<div class="nick">{res_nickname}</div>
-		<!-- BEGIN BLOCK_email disabled -->
-		, <a href="mailto:{c_useremail}" class="A-small">{c_useremail}</a>
-		<!-- END BLOCK_email -->
-
-		<div class="date">, {c_date}</div>
-
-		<div class="link unselectable">
-			<a href="/resroute/{res_id}/?c_id={c_id}">[#{comment_nr}]</a>
+	<div class="profile-header">
+		<div class="user-info">
+			<div class="nick">{res_nickname},</div>
+			<div class="date">{c_date}</div>
 		</div>
-		<!-- BEGIN BLOCK_profile_link disabled -->
-		<div class="profile unselectable">
-			<a href="/user/profile/{l_hash}/" class="ProfilePopup" data-hash="{l_hash}">[Profils]</a>
-		</div>
-		<!-- END BLOCK_profile_link -->
-		<!-- BEGIN BLOCK_comment_vote disabled -->
-			<div class="vote unselectable">
-				<a href="/vote/down/{res_id}/" title="-" onclick="Truemetal.Vote('{res_id}', 'down', '#comment{c_id} .vote-value'); return false;">[&ndash;]</a>
-			</div>
-			<div class="vote unselectable">
-				<a href="/vote/up/{res_id}/" title="+" onclick="Truemetal.Vote('{res_id}', 'up', '#comment{c_id} .vote-value'); return false;">[+]</a>
-			</div>
-		<!-- END BLOCK_comment_vote -->
-			<div class="vote {comment_vote_class} vote-value unselectable" title="+{res_votes_plus_count} -{res_votes_minus_count}">
+
+		<div class="controls">
+			<div class="vote unselectable {comment_vote_class}" title="+{res_votes_plus_count} -{res_votes_minus_count}">
 				{res_votes}
 			</div>
-		<div class="center unselectable">&nbsp;</div>
+
+			<!-- BEGIN BLOCK_comment_vote disabled -->
+			<div class="unselectable">
+				<a href="/vote/up/{res_id}/" title="+" onclick="Truemetal.Vote('{res_id}', 'up', '#comment{c_id} .vote'); return false;">[&plus;]</a>
+			</div>
+			<div class="unselectable">
+				<a href="/vote/down/{res_id}/" title="-" onclick="Truemetal.Vote('{res_id}', 'down', '#comment{c_id} .vote'); return false;">[&ndash;]</a>
+			</div>
+			<!-- END BLOCK_comment_vote -->
+
+			<!-- BEGIN BLOCK_profile_link disabled -->
+			<div class="unselectable">
+				<a href="/user/profile/{l_hash}/" class="ProfilePopup" data-hash="{l_hash}">[Profils]</a>
+			</div>
+			<!-- END BLOCK_profile_link -->
+
+			<div class="unselectable">
+				<a href="/resroute/{res_id}/?c_id={c_id}">[#{comment_nr}]</a>
+			</div>
+		</div>
 	</div>
-	<div class="data{c_disabled_user_class}">
+	<div class="res-data{c_disabled_user_class}">
 		{res_data_compiled}
 	</div>
 </div>
