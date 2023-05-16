@@ -6,11 +6,11 @@
 	<!-- END BLOCK_archive_sep -->
 	<!-- BEGIN BLOCK_archive_date disabled -->
 	<div class="TD-cat">
-		{art_date}
+		{res_date}
 	</div>
 	<!-- END BLOCK_archive_date -->
 	<div class="List-item">
-		<a href="/{art_module_id}/{art_id}-{art_name_urlized}">{art_name}</a>
+		<a href="{res_route}">{res_name}</a>
 	</div>
 <!-- END BLOCK_archive_items -->
 

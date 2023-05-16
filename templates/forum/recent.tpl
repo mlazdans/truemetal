@@ -1,6 +1,6 @@
 <!-- BEGIN BLOCK_forum_r_items -->
 <div class="List-item">
-	<a href="{forum_path}">{res_name}</a>
+	<a href="{res_route}">{res_name}</a>
 	<span<!-- BEGIN BLOCK_forum_r_comments_new disabled --> class="Comment-new"<!-- END BLOCK_forum_r_comments_new -->><strong>({res_comment_count})</strong></span>
 </div>
 <!-- END BLOCK_forum_r_items -->

@@ -95,8 +95,8 @@
 <!-- BEGIN BLOCK_truecomment_item -->
 <tr>
 	<td><a href="{res_href}">{res_data}</a></td>
-	<td class="vote-plus">{plus_count}</td>
-	<td class="vote-minus">{minus_count}</td>
+	<td class="vote-plus">{res_votes_plus_count}</td>
+	<td class="vote-minus">{res_votes_minus_count}</td>
 </tr>
 <!-- END BLOCK_truecomment_item -->
 </table>
