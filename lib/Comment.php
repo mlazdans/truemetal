@@ -1,17 +1,77 @@
 <?php declare(strict_types = 1);
 
-class Comment extends Res
+use dqdp\SQL\Select;
+use dqdp\TODO;
+
+class Comment implements ResourceInterface
 {
-	protected $table_id = Table::COMMENT;
+	static function load(array $params)
+	{
+		$sql = (new Select("comment.*, res.*, res_meta.*"))
+			->From('res')
+			->Join('res_meta', 'res_meta.res_id = res.res_id')
+			->Join('comment', 'comment.res_id = res.res_id')
+		;
+
+		join_logins($sql);
+
+		if(isset($params['c_id'])){
+			$sql->Where(["comment.c_id = ?", $params['c_id']]);
+		}
+
+		if(isset($params['res_id'])){
+			$sql->Where(["comment.res_id = ?", $params['res_id']]);
+		}
+
+		if(isset($params['login_id'])){
+			$sql->Where(["res.login_id = ?", $params['login_id']]);
+		}
+
+		if(isset($params['c_visible']))
+		{
+			new TODO('c_visible: use res_visible');
+		}
+
+		if(defaulted($params, 'res_visible'))
+		{
+			$sql->Where("res.res_visible = 1");
+		} elseif(!ignored($params, 'res_visible')){
+			$sql->Where(["res.res_visible = ?", $params['res_visible']]);
+		}
+
+		if(isset($params['sort'])){
+			new TODO('sort: use order');
+		}
+
+		if(empty($params['order'])){
+			$sql->OrderBy("res.res_entered DESC");
+		} else {
+			$sql->OrderBy($params['order']);
+		}
+
+		if(isset($params['rows']))
+		{
+			$sql->Rows((int)$params['rows']);
+		}
+
+		if(isset($params['limit']))
+		{
+			new TODO("Nodalīt rows un offset");
+			// $sql .= " LIMIT $params[limit]";
+		}
+
+		return (isset($params['c_id']) || isset($params['res_id']) ? DB::ExecuteSingle($sql) : DB::Execute($sql));
+	}
 
 	function Add()
 	{
 		list($data) = func_get_args();
 
 		$this->login_id = $data['login_id'];
-		if(!($res_id = parent::Add())) {
-			return false;
-		}
+		new TODO("Get res_id");
+		// if(!($res_id = parent::Add())) {
+		// 	return false;
+		// }
 
 		$this->validate($data);
 		$data = DB::Quote($data);
@@ -31,44 +91,45 @@ INSERT INTO comment (
 		return DB::Execute($sql);
 	}
 
-	function Get(Array $params = array())
+
+	function Get2(Array $params = array())
 	{
-		$sql = "
-SELECT
-	comment.*,
-	r.res_votes
-FROM comment
-JOIN res r ON r.res_id = comment.res_id
-";
+// 		$sql = "
+// SELECT
+// 	comment.*,
+// 	r.res_votes
+// FROM comment
+// JOIN res r ON r.res_id = comment.res_id
+// ";
 
-		$sql_add = array();
+// 		$sql_add = array();
 
-		if(!empty($params['c_id']))
-			$sql_add[] = sprintf("(c_id = %d)", $params['c_id']);
+		// if(!empty($params['c_id']))
+		// 	$sql_add[] = sprintf("(c_id = %d)", $params['c_id']);
 
-		if(isset($params['res_id']))
-			$sql_add[] = sprintf("comment.res_id = %d", $params['res_id']);
+		// if(isset($params['res_id']))
+		// 	$sql_add[] = sprintf("comment.res_id = %d", $params['res_id']);
 
-		if(isset($params['c_visible']))
-		{
-			if($params['c_visible'])
-				$sql_add[] = sprintf("c_visible = '%s'", $params['c_visible']);
-		} else {
-			$sql_add[] = sprintf("c_visible = '%s'", Res::STATE_VISIBLE);
-		}
+		// if(isset($params['c_visible']))
+		// {
+		// 	if($params['c_visible'])
+		// 		$sql_add[] = sprintf("c_visible = '%s'", $params['c_visible']);
+		// } else {
+		// 	$sql_add[] = sprintf("c_visible = '%s'", Res::STATE_VISIBLE);
+		// }
 
-		if($sql_add)
-			$sql .= " WHERE ".join(' AND ', $sql_add);
+		// if($sql_add)
+		// 	$sql .= " WHERE ".join(' AND ', $sql_add);
 
-		if(empty($params['sort']))
-			$sql .= " ORDER BY c_entered ";
-		else
-			$sql .= " ORDER BY $params[sort] ";
+		// if(empty($params['sort']))
+		// 	$sql .= " ORDER BY c_entered ";
+		// else
+		// 	$sql .= " ORDER BY $params[sort] ";
 
-		if(!empty($params['limit']))
-			$sql .= " LIMIT ".$params['limit'];
+		// if(!empty($params['limit']))
+		// 	$sql .= " LIMIT ".$params['limit'];
 
-		return (isset($params['c_id']) || isset($params['res_id']) ? DB::ExecuteSingle($sql) : DB::Execute($sql));
+		// return (isset($params['c_id']) || isset($params['res_id']) ? DB::ExecuteSingle($sql) : DB::Execute($sql));
 	}
 
 	function Delete($id)
@@ -119,6 +180,18 @@ JOIN res r ON r.res_id = comment.res_id
 		else
 			$data['c_visible'] = Res::STATE_VISIBLE;
 
+	}
+
+	static function RouteFromRes(array $res, int $c_id = 0): string
+	{
+		new TODO("Route");
+		// return static::Route($res['forum_id'], $res['res_name'], $c_id);
+	}
+
+	static function Route(int $forum_id, string $forum_name, int $c_id = 0): string
+	{
+		new TODO("Route");
+		// return "/forum/$forum_id-".urlize($forum_name).($c_id ? "#comment$c_id" : "");
 	}
 
 }

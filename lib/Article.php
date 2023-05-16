@@ -1,71 +1,124 @@
 <?php declare(strict_types = 1);
 
-class Article extends Res
+use dqdp\SQL\Select;
+use dqdp\TODO;
+
+class Article implements ResourceInterface
 {
-	var $date_format;
+	// var $date_format;
 	var $limit;
 	var $error_msg;
 	var $order;
 
-	protected $table_id = Table::ARTICLE;
+	// protected $table_id = Table::ARTICLE;
 
-	function set_date_format($new_date)
+	// function set_date_format($new_date)
+	// {
+	// 	$this->date_format = $new_date;
+	// }
+
+	static function load(array $params)
 	{
-		$this->date_format = $new_date;
-	}
+		$sql = (new Select('article.*, modules.*, res.*, res_meta.*'))
+			->From('res')
+			->Join('res_meta', 'res_meta.res_id = res.res_id')
+			->Join('article', 'article.res_id = res.res_id')
+			->Join('modules', 'article.art_modid = modules.mod_id')
+		;
 
-	function load(Array $params = array())
-	{
-		$sql_add = array();
+		join_logins($sql);
 
-		if(isset($params['art_id']))
-			$sql_add[] = sprintf("art_id = %d", $params['art_id']);
-
-		if(isset($params['res_id']))
-			$sql_add[] = sprintf("a.res_id = %d", $params['res_id']);
-
-		if(isset($params['art_ids']) && is_array($params['art_ids']))
-			$sql_add[] = sprintf("art_id IN (%s)", join(",", $params['art_ids']));
-
-		if(isset($params['res_ids']) && is_array($params['res_ids']))
-			$sql_add[] = sprintf("a.res_id IN (%s)", join(",", $params['res_ids']));
-
-		if(isset($params['art_active']))
-		{
-			if($params['art_active'])
-				$sql_add[] = sprintf("art_active = '%s'", $params['art_active']);
-		} else {
-			$sql_add[] = sprintf("art_active = '%s'", Res::STATE_ACTIVE);
+		# TODO: abstract out
+		$fields = ['art_id', 'res_id', 'art_modid'];
+		foreach($fields as $f){
+			if(isset($params[$f])){
+				$sql->Where(["article.$f = ?", $params[$f]]);
+			}
 		}
 
-		if(isset($params['art_modid']))
-			$sql_add[] = sprintf("art_modid = %d", $params['art_modid']);
+		if(isset($params['res_ids'])){
+			$sql->WhereIn("article.res_id", $params['res_id']);
+		}
 
-		if(isset($params['end_date']))
-			$sql_add[] = sprintf("art_entered <= '%s'", $params['end_date']);
+		if(defaulted($params, 'art_active'))
+		{
+			$sql->Where("res.res_visible = 1");
+		} elseif(!ignored($params, 'art_active')){
+			$sql->Where(["res.res_visible = ?", $params['art_active']]);
+		}
 
-		$sql = "
-SELECT
-	a.*,
-	m.*,
-	r.*,
-	COALESCE(res_comment_count, 0) AS res_comment_count,
-	res_comment_lastdate
-FROM
-	`article` a
-JOIN `modules` m ON (a.art_modid = m.mod_id)
-JOIN `res` r ON r.`res_id` = a.`res_id`
-";
+		if(empty($params['order'])){
+			$sql->OrderBy("res_entered DESC");
+		} else {
+			$sql->OrderBy($params['order']);
+		}
 
-		if($sql_add)
-			$sql .= " WHERE ".join(" AND ", $sql_add);
-
-		$sql .= (empty($params['order']) ? " ORDER BY art_entered DESC " : " ORDER BY $params[order] ");
+		if(isset($params['rows']))
+		{
+			$sql->Rows((int)$params['rows']);
+		}
 
 		if(isset($params['limit']))
-			$sql .= " LIMIT $params[limit]";
+		{
+			new TODO("Nodalīt rows un offset");
+			// $sql .= " LIMIT $params[limit]";
+		}
 
 		return (isset($params['art_id']) || isset($params['res_id']) ? DB::ExecuteSingle($sql) : DB::Execute($sql));
+	}
+
+	function load2(Array $params = array())
+	{
+		// $sql_add = array();
+
+		// if(isset($params['art_id']))
+		// 	$sql_add[] = sprintf("art_id = %d", $params['art_id']);
+
+		// if(isset($params['res_id']))
+		// 	$sql_add[] = sprintf("a.res_id = %d", $params['res_id']);
+
+		// if(isset($params['art_ids']) && is_array($params['art_ids']))
+		// 	$sql_add[] = sprintf("art_id IN (%s)", join(",", $params['art_ids']));
+
+		// if(isset($params['res_ids']) && is_array($params['res_ids']))
+		// 	$sql_add[] = sprintf("a.res_id IN (%s)", join(",", $params['res_ids']));
+
+		// if(isset($params['art_active']))
+		// {
+		// 	if($params['art_active'])
+		// 		$sql_add[] = sprintf("art_active = '%s'", $params['art_active']);
+		// } else {
+		// 	$sql_add[] = sprintf("art_active = '%s'", Res::STATE_ACTIVE);
+		// }
+
+		// if(isset($params['art_modid']))
+		// 	$sql_add[] = sprintf("art_modid = %d", $params['art_modid']);
+
+		// if(isset($params['end_date']))
+		// 	$sql_add[] = sprintf("art_entered <= '%s'", $params['end_date']);
+
+// 		$sql = "
+// SELECT
+// 	a.*,
+// 	m.*,
+// 	r.*,
+// 	COALESCE(res_comment_count, 0) AS res_comment_count,
+// 	res_comment_lastdate
+// FROM
+// 	`article` a
+// JOIN `modules` m ON (a.art_modid = m.mod_id)
+// JOIN `res` r ON r.`res_id` = a.`res_id`
+// ";
+
+// 		if($sql_add)
+// 			$sql .= " WHERE ".join(" AND ", $sql_add);
+
+		// $sql .= (empty($params['order']) ? " ORDER BY art_entered DESC " : " ORDER BY $params[order] ");
+
+		// if(isset($params['limit']))
+		// 	$sql .= " LIMIT $params[limit]";
+
+		// return (isset($params['art_id']) || isset($params['res_id']) ? DB::ExecuteSingle($sql) : DB::Execute($sql));
 	} // load
 
 	function insert(&$data, $validate = Res::ACT_VALIDATE)
@@ -73,9 +126,10 @@ JOIN `res` r ON r.`res_id` = a.`res_id`
 		global $ip;
 
 		$this->login_id = 3;
-		if(!($res_id = parent::Add())) {
-			return false;
-		}
+		new TODO("get res_id");
+		// if(!($res_id = parent::Add())) {
+		// 	return false;
+		// }
 
 		if($validate)
 			$this->validate($data);
@@ -260,9 +314,14 @@ INSERT INTO article (
 		return $data['art_count'];
 	}
 
-	public static function Route($resource, $c_id = 0)
+	static function RouteFromRes(array $res, int $c_id = 0): string
 	{
-		return "/$resource[module_id]/$resource[art_id]-".urlize($resource['art_name']).($c_id ? "#comment$c_id" : "");
+		return static::Route($res['module_id'], $res['art_id']??$res['doc_id'], $res['res_name'], $c_id);
+	}
+
+	static function Route(string $module_id, int $art_id, string $res_name, int $c_id = 0): string
+	{
+		return "/$module_id/$art_id-".urlize($res_name).($c_id ? "#comment$c_id" : "");
 	}
 }
 

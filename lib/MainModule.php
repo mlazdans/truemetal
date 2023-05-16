@@ -30,6 +30,10 @@ class MainModule
 		$this->Index->set_var('user_pic_th', $user_pic_th);
 		$this->Index->set_var('disable_youtube', empty(User::get_val('l_disable_youtube')) ? 0 : 1);
 
+		if(User::logged()){
+			$this->Index->set_array_prefix("USER_", User::data());
+		}
+
 		$this->set_descr("Metāls Latvijā");
 		$this->set_banner_top();
 	}
@@ -191,22 +195,25 @@ class MainModule
 
 	function set_recent_forum()
 	{
-		$data = (new Forum)->load(array(
-			"fields"=>array('forum_id', 'forum_name', 'f.res_id'),
-			"order"=>'res_comment_lastdate DESC',
-			"limit"=>'10',
-			"forum_allowchilds"=>Forum::PROHIBIT_CHILDS,
-			));
+		$data = Forum::load([
+			"fields"=>array('forum.forum_id', 'res.res_name', 'forum.res_id', 'res_meta.res_comment_last_date', 'res_meta.res_comment_count'),
+			"order"=>'COALESCE(res_meta.res_comment_last_date, res_entered) DESC',
+			"rows"=>10,
+			"forum_allow_childs"=>0,
+		]);
+
+		// printr($data);
+		// die;
 
 		if(count($data))
 		{
 			$TThemes = $this->add_file('forum/recent.tpl');
 			foreach($data as $item)
 			{
-				$TThemes->enable_if(Forum::hasNewComments($item), 'BLOCK_forum_r_comments_new');
-				$TThemes->set_var('forum_r_name', addslashes($item['forum_name']));
-				$TThemes->set_var('forum_r_comment_count', $item['res_comment_count']);
-				$TThemes->set_var('forum_r_path', "forum/{$item['forum_id']}-".rawurlencode(urlize($item["forum_name"])));
+				$TThemes->enable_if(Res::hasNewComments($item), 'BLOCK_forum_r_comments_new');
+				$TThemes->set_var('res_name', specialchars($item['res_name']));
+				$TThemes->set_var('res_comment_count', $item['res_comment_count']);
+				$TThemes->set_var('res_route', Forum::RouteFromRes($item));
 				$TThemes->parse_block('BLOCK_forum_r_items', TMPL_APPEND);
 			}
 
@@ -243,55 +250,24 @@ class MainModule
 		return $this->add_right_item("Online [$online_total]", $TLogin->parse());
 	}
 
-	// function set_recent_reviews($limit = 4)
-	// {
-	// 	global $module_tree;
-
-	// 	$article = new Article;
-
-	// 	$data = $article->load(array(
-	// 		'art_modid'=>$module_tree['reviews']['_data_']['mod_id'],
-	// 		'limit'=>$limit,
-	// 		'order'=>'art_entered DESC',
-	// 		));
-
-	// 	if(empty($data))
-	// 		return;
-
-	// 	$this->set_file('FILE_r_review', 'right/review_recent.tpl');
-	// 	foreach($data as $item)
-	// 	{
-	// 		$this->{(Article::hasNewComments($item) ? "enable" : "disable")}('BLOCK_review_r_comments_new');
-
-	// 		$this->set_var('review_r_name', $item['art_name'], 'BLOCK_review_r_items');
-	// 		$this->set_var('review_r_comment_count', $item['res_comment_count'], 'BLOCK_review_r_items');
-	// 		$this->set_var('review_r_path', "reviews/{$item['art_id']}-".urlize($item['art_name']), 'BLOCK_review_r_items');
-	// 		$this->parse_block('BLOCK_review_r_items', TMPL_APPEND);
-	// 	}
-
-	// 	$this->parse_block('FILE_r_review');
-	// 	$this->set_var('right_item_data', $this->get_parsed_content('FILE_r_review'), 'BLOCK_right_item');
-	// 	$this->parse_block('BLOCK_right_item', TMPL_APPEND);
-	// } // set_recent_reviews
-
 	function set_recent_comments($limit = 10)
 	{
 		$Article = new Article;
 
-		$data = $Article->load(array(
-			'order'=>'res_comment_lastdate DESC',
-			'limit'=>$limit,
-			));
+		$data = $Article->load([
+			'order'=>'res_comment_last_date DESC',
+			'rows'=>$limit,
+		]);
 
 		$T = $this->add_file('right/comment_recent.tpl');
 
 		foreach($data as $item)
 		{
-			$T->enable_if(Article::hasNewComments($item), 'BLOCK_comment_r_comments_new');
+			$T->enable_if(Res::hasNewComments($item), 'BLOCK_comment_r_comments_new');
 
-			$T->set_var('comment_r_name', $item['art_name']);
-			$T->set_var('comment_r_comment_count', $item['res_comment_count']);
-			$T->set_var('comment_r_path', "{$item['module_id']}/{$item['art_id']}-".urlize($item['art_name']));
+			$T->set_var('res_name',  specialchars($item['res_name']));
+			$T->set_var('res_comment_count', $item['res_comment_count']);
+			$T->set_var('res_route', Article::RouteFromRes($item));
 			$T->parse_block('BLOCK_comment_r_items', TMPL_APPEND);
 		}
 
@@ -331,8 +307,10 @@ class MainModule
 
 	function set_jubilars()
 	{
-		$Logins = new Logins();
-		if(!($jubs = $Logins->load(['jubilars'=>true]))){
+		# TODO: get from proc/view
+		return $this;
+
+		if(!($jubs = Logins::load(new LoginsFilter(jubilars: true)))){
 			return $this;
 		}
 
@@ -376,13 +354,14 @@ class MainModule
 	{
 		$forum = new Forum;
 		$data = $forum->load(array(
-			"fields"=>array('forum_id', 'forum_name', 'event_startdate', 'f.res_id'),
+			"fields"=>array('forum.forum_id', 'res.res_name', 'forum.event_startdate', 'forum.res_id'),
 			"actual_events"=>true,
-			"order"=>'event_startdate',
+			"order"=>'forum.event_startdate',
 		));
 
-		if(!$data)
+		if(!$data){
 			return;
+		}
 
 		$TEvents = $this->add_file('right/events.tpl');
 
@@ -397,10 +376,10 @@ class MainModule
 			$diff = floor(($ts - time()) / (3600 * 24));
 
 			$TEvents->set_var('event_class', "");
-			$TEvents->set_var('event_url', Forum::Route($item));
+			$TEvents->set_var('event_url', Forum::RouteFromRes($item));
 			$TEvents->set_var('event_title', ent($D.". ".get_month($M - 1).", ".get_day($Dw - 0)));
 			//$TEvents->set_var('event_name', ent($item['forum_name']));
-			$TEvents->set_var('event_name', $item['forum_name']);
+			$TEvents->set_var('event_name', $item['res_name']);
 
 			if($diff<2){
 				$TEvents->set_var('event_class', " actual0");

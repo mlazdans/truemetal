@@ -1,65 +1,83 @@
 <?php declare(strict_types = 1);
 
+use dqdp\SQL\Select;
+use dqdp\TODO;
+
 class Res
 {
 	const TYPE_STD = 0;
 	const TYPE_EVENT = 1;
 
-	const STATE_ACTIVE = 'Y';
-	const STATE_INACTIVE = 'N';
-	const STATE_VISIBLE = 'Y';
-	const STATE_INVISIBLE = 'N';
-	const STATE_ALL = false;
+	// const STATE_ACTIVE = 'Y';
+	// const STATE_INACTIVE = 'N';
+	// const STATE_VISIBLE = 'Y';
+	// const STATE_INVISIBLE = 'N';
+	// const STATE_ALL = false;
 
-	const ACT_VALIDATE = true;
-	const ACT_DONTVALIDATE = false;
+	// const ACT_VALIDATE = true;
+	// const ACT_DONTVALIDATE = false;
 
-	var $types = array(
+	var array $types = [
 		Res::TYPE_STD=>'Forums',
 		Res::TYPE_EVENT=>'Pasākums',
-		);
+	];
 
-	protected $table_id;
-	protected $login_id;
+	// protected $table_id;
+	// protected $login_id;
 
-	function Get(Array $params = array())
+	static function load(array $params)
 	{
-		$sql = "SELECT * FROM `res`";
+		$sql = (new Select('res.*, res_meta.*'))
+		->Join('res_meta', 'res_meta.res_id = res.res_id')
+		->From('res')
+		;
 
-		$sql_add = array();
+		join_logins($sql);
 
-		if(!empty($params['res_id']))
-			$sql_add[] = sprintf("res_id = %d", $params['res_id']);
+		if(!empty($params['res_id'])){
+			$sql->Where(["res.res_id = ?", $params['res_id']]);
+		}
 
-		if($sql_add)
-			$sql .= " WHERE ".join(' AND ', $sql_add);
+		if(defaulted($params, 'res_visible'))
+		{
+			$sql->Where("res.res_visible = 1");
+		} elseif(!ignored($params, 'res_visible')){
+			$sql->Where(["res.res_visible = ?", $params['res_visible']]);
+		}
 
-		if(!empty($params['order']))
-			$sql .= " ORDER BY $params[order] ";
+		if(empty($params['order'])){
+			$sql->OrderBy("res.res_entered DESC");
+		} else {
+			$sql->OrderBy($params['order']);
+		}
 
-		if(!empty($params['limit']))
-			$sql .= " LIMIT ".$params['limit'];
+		if(isset($params['rows']))
+		{
+			$sql->Rows((int)$params['rows']);
+		}
+
+		if(isset($params['limit']))
+		{
+			new TODO("Nodalīt rows un offset");
+		}
 
 		return (empty($params['res_id']) ? DB::Execute($sql) : DB::ExecuteSingle($sql));
 	}
 
-	function Add()
-	{
-		$sql = sprintf(
-			"INSERT INTO `res` (`table_id`, `login_id`, `res_entered`) VALUES (%s, %s, CURRENT_TIMESTAMP);",
-			($this->table_id ? $this->table_id : "NULL"),
-			($this->login_id ? $this->login_id : "NULL"),
-		);
+	// function Add()
+	// {
+	// 	$sql = sprintf(
+	// 		"INSERT INTO `res` (`table_id`, `login_id`, `res_entered`) VALUES (%s, %s, CURRENT_TIMESTAMP);",
+	// 		($this->table_id ? $this->table_id : "NULL"),
+	// 		($this->login_id ? $this->login_id : "NULL"),
+	// 	);
 
-		return (DB::Execute($sql) ? DB::LastID() : false);
-	}
+	// 	return (DB::Execute($sql) ? DB::LastID() : false);
+	// }
 
-	# TODO: katrā klasē atsevišķi
-	function GetAllData($res_id)
+	static function GetAll(int $res_id)
 	{
-		$res_data = $this->Get(array(
-			'res_id'=>$res_id,
-			));
+		$res_data = static::load(['res_id'=>$res_id]);
 
 		if(!$res_data) {
 			return false;
@@ -68,76 +86,75 @@ class Res
 		switch($res_data['table_id'])
 		{
 			case Table::ARTICLE:
-				$D = new Article();
-				return array_merge($res_data, $D->load(array(
-					'res_id'=>$res_data['res_id'],
-					)));
+				return Article::load(['res_id'=>$res_id]);
 			case Table::FORUM:
-				$D = new Forum();
-				return array_merge($res_data, $D->load(array(
-					'res_id'=>$res_data['res_id'],
-					)));
-				break;
+				return Forum::load(['res_id'=>$res_id]);
+				// $D = new Forum();
+				// return array_merge($res_data, $D->load(array(
+				// 	'res_id'=>$res_data['res_id'],
+				// 	)));
 			case Table::COMMENT:
-				$D = new Comment();
-				return array_merge($res_data, $D->Get(array(
-					'res_id'=>$res_data['res_id'],
-					)));
-				break;
+				return Comment::load(['res_id'=>$res_id]);
+				// $D = new Comment();
+				// return array_merge($res_data, $D->Get(array(
+				// 	'res_id'=>$res_data['res_id'],
+				// 	)));
+				// break;
 			case Table::GALLERY:
-				$D = new Gallery();
-				return array_merge($res_data, $D->load(array(
-					'res_id'=>$res_data['res_id'],
-					)));
-				break;
+				new TODO("Get Gallery");
+				// $D = new Gallery();
+				// return array_merge($res_data, $D->load(array(
+				// 	'res_id'=>$res_data['res_id'],
+				// 	)));
+				// break;
 			case Table::GALLERY_DATA:
-				$D = new GalleryData();
-				return array_merge($res_data, $D->load(array(
-					'res_id'=>$res_data['res_id'],
-					)));
-				break;
+				new TODO("Get GalleryData");
+				// $D = new GalleryData();
+				// return array_merge($res_data, $D->load(array(
+				// 	'res_id'=>$res_data['res_id'],
+				// 	)));
+				// break;
 		}
 
-		return false;
+		throw new InvalidArgumentException("Table unknown: $res_data[table_id]");
 	}
 
 	# TODO: katrā klasē atsevišķi
-	public static function Route($res_id, $c_id = 0)
+	static function Route(int $res_id, int $c_id = 0): string
 	{
-		$location = "/";
-
-		$Res = new Res();
-		if(!($resource = $Res->GetAllData($res_id))){
-			return $location;
+		if(!($res = Res::GetAll($res_id))){
+			return "/";
 		}
 
-		switch($resource['table_id'])
-		{
-			case Table::ARTICLE:
-				$location = Article::Route($resource, $c_id);;
-				break;
-			case Table::FORUM:
-				$location = Forum::Route($resource, $c_id);
-				break;
-			case Table::COMMENT:
-				$RC = new ResComment;
-				$C = $RC->get(array(
-					'c_id'=>$resource['c_id'],
-					));
-				$location = Res::Route($C['parent_res_id'], $resource['c_id']);
-				break;
-			case Table::GALLERY:
-				$location = Gallery::Route($resource, $c_id);
-				break;
-			case Table::GALLERY_DATA:
-				$location = GalleryData::Route($resource, $c_id);
-				break;
-		}
-
-		return $location;
+		return static::RouteFromRes($res, $c_id);
 	}
 
-	public static function hasNewComments($item): bool
+	static function RouteFromRes(array $res, int $c_id = 0): string
+	{
+		# TODO: visās uz res balstītās tabulās primary key pārsaukt par doc_id
+		switch($res['table_id'])
+		{
+			case Table::ARTICLE:
+				return Article::RouteFromRes($res, $c_id);
+			case Table::FORUM:
+				return Forum::RouteFromRes($res, $c_id);
+			case Table::COMMENT:
+				$comment = Comment::load(["res_id"=>$res["res_id"]]);
+				printr($c_id, $res, $comment);
+				// $location = Res::Route($parent['res_id'], $res['c_id']);
+				new TODO("Comment::route");
+				// $RC = new ResComment;
+				// $C = $RC->get(['c_id'=>$res['c_id']]);
+				// $location = Res::Route($C['parent_res_id'], $res['c_id']);
+				break;
+			case Table::GALLERY:
+				return Gallery::Route($res, $c_id);
+			case Table::GALLERY_DATA:
+				return GalleryData::Route($res, $c_id);
+		}
+	}
+
+	static function hasNewComments($item): bool
 	{
 		if(!User::logged() || empty($item['res_id'])){
 			return false;
@@ -145,22 +162,22 @@ class Res
 
 		$res_id = $item['res_id'];
 
-		if(isset($_SESSION['res']['viewed_date'][$res_id]) && $item['res_comment_lastdate'])
-			return (strtotime($item['res_comment_lastdate']) > strtotime($_SESSION['res']['viewed_date'][$res_id]));
+		if(isset($_SESSION['res']['viewed_date'][$res_id]) && $item['res_comment_last_date'])
+			return (strtotime($item['res_comment_last_date']) > strtotime($_SESSION['res']['viewed_date'][$res_id]));
 
 		if(isset($_SESSION['res']['viewed'][$res_id]))
 			return ($item['res_comment_count'] > $_SESSION['res']['viewed'][$res_id]);
 
-		if(isset($_SESSION['res']['viewed_before']) && $item['res_comment_lastdate'])
-			return ($_SESSION['res']['viewed_before'] < strtotime($item['res_comment_lastdate']));
+		if(isset($_SESSION['res']['viewed_before']) && $item['res_comment_last_date'])
+			return ($_SESSION['res']['viewed_before'] < strtotime($item['res_comment_last_date']));
 
 		return ($item['res_comment_count'] > 0);
 	}
 
-	public static function markCommentCount($item): void
+	static function markCommentCount($item): void
 	{
 		if(User::logged()){
-			$_SESSION['res']['viewed_date'][$item['res_id']] = $item['res_comment_lastdate'];
+			$_SESSION['res']['viewed_date'][$item['res_id']] = $item['res_comment_last_date'];
 		}
 	}
 }

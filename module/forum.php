@@ -1,14 +1,11 @@
 <?php
 
-$hl = rawurldecode(get("hl"));
+$template = new MainModule($sys_module_id);
+$forum_descr = $forum_title = 'Forums';
 
+$hl = get("hl");
 $action = post('action');
-
-$fpp = 20;
-$pages_visible_to_sides = 8;
-$forum_id_urlized = rawurldecode(array_shift($sys_parameters)??"");
-$forum_id = (int)$forum_id_urlized;
-
+$forum_route = array_shift($sys_parameters);
 $page = array_shift($sys_parameters);
 
 if($page == 'page'){
@@ -19,43 +16,53 @@ if(empty($page_id)){
 	$page_id = 1;
 }
 
-$template = new MainModule($sys_module_id);
 
-# ja izveeleets forums, paraadam teemu sarakstu
-$forum_title = 'Diskusijas';
-$forum_descr = "Metāliskās diskusijas";
-
-if($forum_id)
+if($forum_route)
 {
-	if(!($forum_data = (new Forum())->load(["forum_id"=>$forum_id])))
+	$forum_data = (function(MainModule $template, string $forum_route)
 	{
-		header("Location: /forum/");
-		return;
-	}
+		$forum_id = (int)$forum_route;
 
-	$res_name_urlized = urlize($forum_data['res_name']);
-	$test_urlized = "$forum_id-$res_name_urlized";
-	if($res_name_urlized && ($test_urlized != $forum_id_urlized))
-	{
-		$qs = (empty($_SERVER['QUERY_STRING']) ? "" : "?".$_SERVER['QUERY_STRING']);
-		$new_url = "/forum/$test_urlized$qs";
-		header("Location: $new_url", true, 301);
-		return;
-	}
+		if(!($forum_data = (new Forum())->load(["forum_id"=>$forum_id])))
+		{
+			$template->not_found();
+			return null;
+		}
 
-	$forum_title .= ' - '.$forum_data['res_name'].($hl ? sprintf(", meklēšana: %s", $hl) : "");
-	$forum_descr .= ($hl ? sprintf(", meklēšana: %s", $hl) : "").' - '.$forum_data['res_name'];
-	if($page == 'page')
-	{
-		$forum_title .= " - $page_id. lapa";
-		$forum_descr .= " - $page_id. lapa";
-	}
+		# NOTE: redirektējam uz jaunajām adresēm, pēc gada (2011-04-30) varēs noņemt
+		# TODO: append query_string? ?hl=
+		if($forum_route)
+		{
+			$forum_real_route = Forum::RouteFromRes($forum_data);
+			if(!str_ends_with($forum_real_route, "/$forum_route"))
+			{
+				header("Location: $forum_real_route", true, 301);
+				return null;
+			}
+		}
 
-	if($forum_data['forum_allow_childs'])
+		return $forum_data;
+	})($template, $forum_route);
+
+	if($forum_data)
 	{
-		$T = forum_themes($forum_id, $forum_data, $template, $action, $fpp, $page_id, $pages_visible_to_sides);
-	} else {
-		$T = forum_det($forum_id, $forum_data, $template, $action, $hl);
+		$forum_title .= ' - '.$forum_data['res_name'].($hl ? sprintf(", meklēšana: %s", $hl) : "");
+		$forum_descr .= ($hl ? sprintf(", meklēšana: %s", $hl) : "").' - '.$forum_data['res_name'];
+		if($page == 'page')
+		{
+			$forum_title .= " - $page_id. lapa";
+			$forum_descr .= " - $page_id. lapa";
+		}
+
+		if($forum_data['forum_allow_childs'])
+		{
+			$fpp = 20;
+			$pages_visible_to_sides = 8;
+
+			$T = forum_themes($template, $forum_data, $action, $fpp, $page_id, $pages_visible_to_sides);
+		} else {
+			$T = forum_det($template, $forum_data, $action, $hl);
+		}
 	}
 } else {
 	$T = forum_root($template);
@@ -73,4 +80,4 @@ $template->set_login();
 $template->set_search();
 $template->set_jubilars();
 
-$template->out($T);
+$template->out($T??null);

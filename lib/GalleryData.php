@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class GalleryData extends Res
+class GalleryData
 {
 	protected $table_id = Table::GALLERY_DATA;
 

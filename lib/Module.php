@@ -1,52 +1,91 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
-define('MOD_ALL', -1);
-define('MOD_NONE', -2);
-define('MOD_ACTIVE', 'Y');
-define('MOD_INACTIVE', 'N');
-define('MOD_VISIBLE', 'Y');
-define('MOD_INVISIBLE', 'N');
-define('MOD_TYPE_OPEN', 'O');
-define('MOD_TYPE_REGISTRATED', 'R');
+use dqdp\SQL\Select;
+
+// define('MOD_ALL', -1);
+// define('MOD_NONE', -2);
+// define('MOD_ACTIVE', 'Y');
+// define('MOD_INACTIVE', 'N');
+// define('MOD_VISIBLE', 'Y');
+// define('MOD_INVISIBLE', 'N');
+// define('MOD_TYPE_OPEN', 'O');
+// define('MOD_TYPE_REGISTRATED', 'R');
 
 class Module
 {
 	var $data = array();
 	var $error_msg;
-	var $primary_key;
 
-	function __construct()
+	static function load(array $params)
 	{
-		$this->primary_key = 'mod_id';
-	} // Module
+		$sql = (new Select)->From("modules");
 
-	function load($mod_id = 0)
-	{
-		if($mod_id)
-			$where = ' WHERE mod_id = '.$mod_id;
-		else
-			$where = '';
+		if(isset($params['mod_id'])){
+			$sql->Where(["mod_id = ?", $params['mod_id']]);
+		}
 
-		$this->data = array();
-		$sql = 'SELECT * FROM modules'.$where.' ORDER BY mod_modid, module_pos';
-		$data = DB::execute($sql);
-		$this->data = array();
-		foreach($data as $item)
-			$this->data[$item[$this->primary_key]] = $item;
-	} // load
+		if(isset($params['module_id'])){
+			$sql->Where(["module_id = ?", $params['module_id']]);
+		}
 
-	function get_item($key)
-	{
-		if(!isset($this->data) || !count($this->data))
-			$this->load($key);
+		if(falsed($params, 'modules.mod_modid'))
+		{
+			$sql->Where("modules.mod_modid = NULL");
+		} elseif(!empty($params['mod_modid'])){
+			$sql->Where(["modules.mod_modid = ?", $params['mod_modid']]);
+		}
 
-		return isset($this->data[$key]) ? $this->data[$key] : false;
-	} // get_item
+		if(defaulted($params, 'module_active'))
+		{
+			$sql->Where("modules.module_active = 1");
+		} elseif(!ignored($params, 'module_active')){
+			$sql->Where(["modules.module_active = ?", $params['module_active']]);
+		}
+
+		if(defaulted($params, 'module_visible'))
+		{
+			$sql->Where("modules.module_visible = 1");
+		} elseif(!ignored($params, 'module_visible')){
+			$sql->Where(["modules.module_visible = ?", $params['module_visible']]);
+		}
+
+		$sql->OrderBy("modules.mod_modid, modules.module_pos");
+
+		if(
+			isset($params['mod_id']) ||
+			(isset($params['module_id']) && isset($params['mod_modid']))
+			)
+		{
+			return DB::ExecuteSingle($sql);
+		} else {
+			return DB::Execute($sql);
+		}
+	}
+
+	static function get_tree(?int $mod_modid, array $params = []): array  {
+		if($mod_modid){
+			$params = ['mod_modid'=>$mod_modid];
+		} else {
+			$params = ['mod_modid'=>false];
+		}
+
+		$data = static::load($params);
+
+		foreach($data as $item){
+			$item['module_tree'] = static::get_tree($item['mod_id'], $params);
+			$ret[$item['module_id']] = $item;
+		}
+
+		return $ret??[];
+	}
+
+	// function get_item($key)
+	// {
+	// 	if(!isset($this->data) || !count($this->data))
+	// 		$this->load($key);
+
+	// 	return isset($this->data[$key]) ? $this->data[$key] : false;
+	// } // get_item
 
 	function insert(&$data)
 	{
@@ -253,7 +292,7 @@ class Module
 		return $ret;
 	} // process_action
 
-	function load_tree($mod_modid = 0, $q = '', $registrated = false)
+	private function load_tree2(int $mod_modid = 0, $q = '', $registrated = false)
 	{
 		$sql_add = array(
 			"module_active = '".MOD_ACTIVE."'",
