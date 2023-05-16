@@ -110,9 +110,9 @@ var Truemetal = {
 			}
 		});
 	},
-	Vote(cId, value, voteXpath){
+	Vote(res_id, value){
 		$.ajax({
-			url: "/vote/" + value + "/" + cId + "/?json",
+			url: "/vote/" + value + "/" + res_id + "/?json",
 			dataType: 'json',
 			complete: function(req, status){
 				let data = req?.responseJSON;
@@ -120,12 +120,14 @@ var Truemetal = {
 					return Truemetal.HandleStandardJson(req, status);
 				}
 
+				let voteXpath = "#votes-" + res_id;
+
 				if(data.Votes > 0){
-					$(voteXpath).html('+' + data.Votes).removeClass("minus").addClass("plus");
+					$(voteXpath).html('+' + data.Votes).removeClass("vote-minus vote-zero").addClass("vote-plus");
 				} else if(data.Votes < 0) {
-					$(voteXpath).html(data.Votes).addClass("minus").removeClass("plus");
+					$(voteXpath).html(data.Votes).removeClass("vote-plus vote-zero").addClass("vote-minus");
 				} else {
-					$(voteXpath).html(data.Votes).removeClass("minus").removeClass("plus").addClass("Comment-Vote");
+					$(voteXpath).html(data.Votes).removeClass("vote-minus vote-plus").addClass("vote-zero");
 				}
 			}
 		});
@@ -250,6 +252,14 @@ var Truemetal = {
 			let hash = this?.dataset?.hash;
 			if(hash){
 				Truemetal.displayProfileImage(hash, this?.dataset?.nick);
+				return false;
+			}
+		});
+		$(truemetal).on("click", ".SendVote", function() {
+			let res_id = this?.dataset?.res_id;
+			let vote = this?.dataset?.vote;
+			if(res_id && vote){
+				Truemetal.Vote(res_id, vote);
 				return false;
 			}
 		});

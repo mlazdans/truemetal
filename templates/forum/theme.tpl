@@ -34,7 +34,7 @@
 <!-- BEGIN BLOCK_forum -->
 <tr>
 	<td class="Forum-Theme-name">
-		<a href="{res_route}" title="Datums: {forum_date}"><b>{res_name}</b></a>
+		<a href="{res_route}" title="Datums: {res_date}"><b>{res_name}</b></a>
 	</td>
 	<td class="Forum-Theme-childcount<!-- BEGIN BLOCK_comments_new disabled --> Comment-new<!-- END BLOCK_comments_new -->">
 		{res_comment_count}
@@ -49,12 +49,12 @@
 
 <!-- BEGIN BLOCK_info_sort_T disabled -->
 <div class="List-item">
-	Tēmas sakārtotas pēc ievadīšanas datuma
+	Tēmas sakārtotas pēc to ievadīšanas datuma
 </div>
 <!-- END BLOCK_info_sort_T -->
 <!-- BEGIN BLOCK_info_sort_C disabled -->
 <div class="List-item">
-	Tēmas sakārtotas pēc pēdējā komentāra datuma
+	Tēmas sakārtotas pēc to pēdējā komentāra datuma
 </div>
 <!-- END BLOCK_info_sort_C -->
 
@@ -68,6 +68,9 @@
 
 <div class="TD-cat">
 	Pievienot jaunu tēmu
+</div>
+<div class="List-item">
+	Atceries - stulbs tēmas nosaukums garantē tēmas izdzēšanu un daudz mīnusus!
 </div>
 
 <!-- BEGIN BLOCK_notloggedin disabled -->
@@ -96,7 +99,7 @@
 		<input type="hidden" name="action" value="add_theme">
 		Segvārds:
 	</td>
-	<td style="width: 100%;">{forum_username}</td>
+	<td style="width: 100%;">{USER_l_nick}</td>
 </tr>
 <tr>
 	<td style="white-space: nowrap;" align="right"{error_forum_name}>Jauna tēma:</td>
@@ -112,9 +115,5 @@
 </tr>
 </table>
 </form>
-
-<div class="List-item">
-	Atceries - stulbs tēmas nosaukums garantē tēmas izdzēšanu un daudz mīnusus!
-</div>
 <!-- END BLOCK_loggedin -->
 

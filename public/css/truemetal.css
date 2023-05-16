@@ -504,6 +504,7 @@ label > input {
 	padding-right: 0;
 }
 .vote-plus, .vote-minus, .vote-zero {
+	min-width: 2em;
 	font-weight: bold;
 }
 .vote-zero { color: #676767; }

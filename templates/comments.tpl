@@ -3,20 +3,20 @@
 	<div class="profile-header">
 		<div class="user-info">
 			<div class="nick">{res_nickname},</div>
-			<div class="date">{c_date}</div>
+			<div class="date">{res_date}</div>
 		</div>
 
 		<div class="controls">
-			<div class="vote unselectable {comment_vote_class}" title="+{res_votes_plus_count} -{res_votes_minus_count}">
+			<div class="vote unselectable {comment_vote_class}" id="votes-{res_id}">
 				{res_votes}
 			</div>
 
 			<!-- BEGIN BLOCK_comment_vote disabled -->
 			<div class="unselectable">
-				<a href="/vote/up/{res_id}/" title="+" onclick="Truemetal.Vote('{res_id}', 'up', '#comment{c_id} .vote'); return false;">[&plus;]</a>
+				<a href="/vote/up/{res_id}/" class="SendVote" data-res_id="{res_id}" data-vote="up">[&plus;]</a>
 			</div>
 			<div class="unselectable">
-				<a href="/vote/down/{res_id}/" title="-" onclick="Truemetal.Vote('{res_id}', 'down', '#comment{c_id} .vote'); return false;">[&ndash;]</a>
+				<a href="/vote/down/{res_id}/" class="SendVote" data-res_id="{res_id}" data-vote="down">[&ndash;]</a>
 			</div>
 			<!-- END BLOCK_comment_vote -->
 
