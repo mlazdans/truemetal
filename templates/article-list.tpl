@@ -3,7 +3,7 @@
 	<div class="TD-cat">
 		<div class="date">{res_date}</div>
 		<div class="comments">
-			<a href="{res_route}#comments">Komentāri</a>
+			<a href="{res_route}#art-comments-{doc_id}">Komentāri</a>
 			<span<!-- BEGIN BLOCK_comments_new disabled --> class="Comment-new"<!-- END BLOCK_comments_new -->>({res_comment_count})</span>
 		</div>
 		<div class="caption"><a class="caption" href="{res_route}">{res_name}</a></div>

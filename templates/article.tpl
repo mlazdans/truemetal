@@ -2,7 +2,7 @@
 	<div class="TD-cat">
 		<div class="date">{res_date}</div>
 		<div class="comments">
-			<a href="{res_route}#comments">Komentāri</a>
+			<a href="{res_route}#art-comments-{art_id}">Komentāri</a>
 			<span<!-- BEGIN BLOCK_comments_new disabled --> class="Comment-new"<!-- END BLOCK_comments_new -->>({res_comment_count})</span>
 		</div>
 		<div class="caption"><a class="caption" href="{res_route}">{res_name}</a></div>
@@ -21,10 +21,9 @@
 </div>
 
 <!-- BEGIN BLOCK_article_comments_head disabled -->
-<div class="TD-cat">
+<div class="TD-cat" id="art-comments-{art_id}">
 	Komentāri
 </div>
 <!-- END BLOCK_article_comments_head -->
 
 <!-- BEGIN BLOCK_article_comments --><!-- END BLOCK_article_comments -->
-
