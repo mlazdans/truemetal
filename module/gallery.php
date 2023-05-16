@@ -17,7 +17,7 @@ if(!User::logged()){
 
 $gal_id = array_shift($sys_parameters);
 $gd_id = (int)array_shift($sys_parameters);
-$hl = rawurldecode(get("hl"));
+$hl = get("hl");
 $action = post('action');
 
 # TODO: atsevišķs TrueResponseInterface priekš bildēm

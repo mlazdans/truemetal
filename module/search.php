@@ -37,7 +37,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST")
 	$search_q = post('search_q');
 } else {
 	$search_log = false;
-	$search_q = urldecode(get('search_q'));
+	$search_q = get('search_q');
 }
 
 $ent_search_q = ent($search_q);
