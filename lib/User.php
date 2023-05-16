@@ -2,9 +2,9 @@
 
 class User
 {
-	static private array $_LOGIN = [];
+	static private ?LoginsType $_LOGIN = null;
 
-	static function data(?array $data = null): array
+	static function data(?LoginsType $data = null): ?LoginsType
 	{
 		if(!is_null($data)){
 			static::$_LOGIN = $data;
@@ -15,12 +15,12 @@ class User
 
 	static function logged(): bool
 	{
-		return !empty(static::$_LOGIN['l_id']);
+		return !empty(static::get_val('l_id'));
 	}
 
 	static function id(): ?int
 	{
-		return ($v = static::get_val('l_id')) ? (int)$v : $v;
+		return static::get_val('l_id');
 	}
 
 	static function nick(): ?string
@@ -38,14 +38,9 @@ class User
 		return static::get_val('l_email');
 	}
 
-	static function isset(string $k): bool
-	{
-		return isset(static::$_LOGIN['l_id'][$k]);
-	}
-
 	static function get_val(string $k): mixed
 	{
-		return static::$_LOGIN[$k] ?? null;
+		return static::$_LOGIN->{$k} ?? null;
 	}
 
 	static function blacklisted(): bool
@@ -61,4 +56,10 @@ class User
 		}
 	}
 
+	static function ip(): string
+	{
+		global $ip;
+
+		return $ip;
+	}
 }

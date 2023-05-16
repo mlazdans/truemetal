@@ -1,225 +1,87 @@
 <?php declare(strict_types = 1);
 
-use dqdp\SQL\Select;
 use dqdp\SQL\Update;
+use dqdp\TODO;
 
 class Logins
 {
 	var $error_msg = [];
 
-	const ACCEPTED = 'Y';
-	const NOT_ACCEPTED = 'N';
-	const EMAIL_VISIBLE = 'Y';
-	const EMAIL_INVISIBLE = 'N';
-
-	# TODO: bind params
-	function load(Array $params = array())
+	static function load_single(LoginsFilter $F): ?LoginsType
 	{
-		$sql_add = array();
-		$sql_having = array();
-
-		$params = DB::Quote($params);
-
-		if(isset($params['l_id']))
-			$sql_add[] = sprintf("l_id = %d", $params['l_id']);
-
-		if(isset($params['l_login']))
-			$sql_add[] = sprintf("l_login = '%s'", $params['l_login']);
-
-		if(isset($params['l_email']))
-			$sql_add[] = sprintf("l_email = '%s'", $params['l_email']);
-
-		if(isset($params['l_hash']))
-			$sql_add[] = sprintf("l_hash = '%s'", $params['l_hash']);
-
-		if(isset($params['l_nick']))
-			$sql_add[] = sprintf("l_nick = '%s'", $params['l_nick']);
-
-		if(isset($params['l_logedin']))
-			$sql_add[] = sprintf("l_logedin = '%s'", $params['l_logedin']);
-
-		if(isset($params['l_lastaccess']))
-			$sql_add[] = sprintf("l_lastaccess = '%s'", $params['l_lastaccess']);
-
-		if(!empty($params['jubilars']))
-		{
-			$d0 = date('Y-m-d H:i:s', strtotime("-6 month"));
-			$d1 = date('Y-m-d H:i:s', strtotime("-2 day"));
-			$d2 = date('Y-m-d H:i:s', strtotime("+2 day"));
-			$sql_add[] = "(DATE_FORMAT(l_entered, '%m%d') >= DATE_FORMAT('$d1', '%m%d') AND DATE_FORMAT(l_entered, '%m%d') <= DATE_FORMAT('$d2', '%m%d'))";
-			$sql_add[] = sprintf("l_lastaccess >= '%s'", $d0);
-		}
-
-		if(isset($params['l_active']))
-		{
-			if($params['l_active'] != Res::STATE_ALL)
-				$sql_add[] = sprintf("l_active = '%s'", $params['l_active']);
-		} else {
-			$sql_add[] = sprintf("l_active = '%s'", Res::STATE_ACTIVE);
-		}
-
-		if(isset($params['l_accepted']))
-		{
-			if($params['l_accepted'] != Res::STATE_ALL)
-				$sql_add[] = sprintf("l_accepted = '%s'", $params['l_accepted']);
-		} else {
-			$sql_add[] = sprintf("l_accepted = '%s'", Logins::ACCEPTED);
-		}
-
-		if(isset($params['q']))
-		{
-			$search_sql = search_to_sql_legacy($params['q'], array('l_nick', 'l_login', 'l_email', 'l_userip'));
-			if($search_sql)
-				$sql_add[] = $search_sql;
-		}
-
-		$sql = " SELECT * ";
-
-		if(!empty($params['jubilars'])){
-			$sql .= ", DATE_FORMAT(l_entered, '%m%d') AS entered_stamp ";
-			$sql .= ", DATEDIFF(CURRENT_TIMESTAMP, l_entered) AS age ";
-		}
-
-		if(!empty($params['get_all_ips']))
-		{
-			$d = date('Y-m-d H:i:s', strtotime('-1 year'));
-			$sql .= ", (SELECT GROUP_CONCAT(DISTINCT c_userip) FROM comment WHERE login_id = l_id AND c_entered > '$d') all_ips ";
-		}
-
-		$sql .= " FROM logins ";
-
-		if(!empty($params['get_comment_count']))
-		{
-			if(isset($params['comment_count_more_than']))
-			{
-				$sql_add[] = sprintf("comment_count > %d", $params['comment_count_more_than']);
-			}
-			if(isset($params['comment_count_equal']))
-			{
-				$sql_add[] = sprintf("comment_count = %d", $params['comment_count_equal']);
-			}
-			if(isset($params['comment_count_less_than']))
-			{
-				$sql_add[] = sprintf("comment_count < %d", $params['comment_count_less_than']);
-			}
-		}
-
-		if($sql_add)
-			$sql .= " WHERE ".join(" AND ", $sql_add);
-
-		if($sql_having)
-			$sql .= " HAVING ".join(" AND ", $sql_having);
-
-		if(empty($params['order']))
-		{
-			if(!empty($params['jubilars'])){
-				$sql .= " ORDER BY entered_stamp ASC ";
-			} else {
-				$sql .= " ORDER BY l_entered DESC ";
-			}
-		} else {
-			$sql .= " ORDER BY $params[order] ";
-		}
-
-		if(isset($params['limit'])){
-			$sql .= " LIMIT $params[limit]";
-		}
-
-		if(
-			isset($params['l_id']) ||
-			isset($params['l_login']) ||
-			isset($params['l_email']) ||
-			isset($params['l_hash']) ||
-			isset($params['single'])
-			)
-		{
-			return DB::ExecuteSingle($sql);
-		} else {
-			return DB::Execute($sql);
-		}
+		return (new LoginsEntity)->getSingle($F);
 	}
 
-	static function load_by_id(int $l_id, bool $all = false)
+	static function load(LoginsFilter $F): LoginsCollection
 	{
-		$params = [ 'l_id'=>$l_id ];
+		return (new LoginsEntity)->getAll($F);
 
-		if($all)
-		{
-			$params['l_active'] = Res::STATE_ALL;
-			$params['l_accepted'] = Res::STATE_ALL;
-		}
+		// $sql = (new Select('logins.*'))->From('logins');
 
-		return (new Logins)->load($params);
+		// $F->apply($sql);
+
+		// if($F->l_id || $F->l_login || $F->l_email || $F->l_hash)
+		// {
+		// 	return DB::ExecuteSingle($sql);
+		// } else {
+		// 	return DB::Execute($sql);
+		// }
 	}
 
-	static function load_by_login(string $login, bool $all = false)
+	static function load_by_email(string $email, bool $ignore_disabled = false)
 	{
-		$params = [ 'l_login'=>$login ];
-
-		if($all)
-		{
-			$params['l_active'] = Res::STATE_ALL;
-			$params['l_accepted'] = Res::STATE_ALL;
-		}
-
-		return (new Logins)->load($params);
+		return static::load_single(LoginsFilter::ignore_disabled(new LoginsFilter(l_email: $email), $ignore_disabled));
 	}
 
-	static function load_by_nick(string $nick, bool $all = false)
+	static function load_by_id(int $id, bool $ignore_disabled = false)
 	{
-		$params = [ 'l_nick'=>$nick ];
-
-		if($all)
-		{
-			$params['l_active'] = Res::STATE_ALL;
-			$params['l_accepted'] = Res::STATE_ALL;
-		}
-
-		return (new Logins)->load($params);
+		return static::load_single(LoginsFilter::ignore_disabled(new LoginsFilter(l_id: $id), $ignore_disabled));
 	}
 
-	static function load_by_login_hash(string $l_hash)
+	static function load_by_login(string $login, bool $ignore_disabled = false)
 	{
-		return (new Logins)->load(['l_hash'=>$l_hash]);
+		return static::load_single(LoginsFilter::ignore_disabled(new LoginsFilter(l_login: $login), $ignore_disabled));
+	}
+
+	static function load_by_nick(string $nick, bool $ignore_disabled = false)
+	{
+		return static::load_single(LoginsFilter::ignore_disabled(new LoginsFilter(l_nick: $nick), $ignore_disabled));
+	}
+
+	static function load_by_login_hash(string $hash, bool $ignore_disabled = false)
+	{
+		return static::load_single(LoginsFilter::ignore_disabled(new LoginsFilter(l_hash: $hash), $ignore_disabled));
+	}
+
+	static function load_by_sess_id(string $sess_id, bool $ignore_disabled = false)
+	{
+		return static::load_single(LoginsFilter::ignore_disabled(new LoginsFilter(l_sess_id: $sess_id), $ignore_disabled));
 	}
 
 	# TODO: vajadzētu MySQL collation, kas respektē garumzīmes?
 	static function email_exists(string $email): bool {
 		$data = static::load_by_email($email, true);
 
-		return $data && (count($data) > 0);
+		return $data !== null;
 	}
 
 	static function login_exists(string $login): bool {
 		$data = static::load_by_login($login, true);
 
-		return $data && (count($data) > 0);
+		return $data !== null;
 	}
 
 	static function nick_exists(string $nick): bool {
 		$data = static::load_by_nick($nick, true);
 
-		return $data && (count($data) > 0);
-	}
-
-	static function load_by_email(string $email, bool $all = false)
-	{
-		$params = [ 'l_email'=>$email ];
-
-		if($all)
-		{
-			$params['l_active'] = Res::STATE_ALL;
-			$params['l_accepted'] = Res::STATE_ALL;
-		}
-
-		return (new Logins)->load($params);
+		return $data !== null;
 	}
 
 	static function banned24h($ip): bool
 	{
 		$item = DB::ExecuteSingle(
-			"SELECT COUNT(*) banned FROM logins WHERE l_active = ? AND l_userip = ? AND l_lastaccess > ?",
-			Res::STATE_INACTIVE, $ip, date('Y-m-d H:i:s', strtotime('-10 minutes'))
+			"SELECT COUNT(*) banned FROM logins WHERE l_active = 0 AND l_userip = ? AND l_lastaccess > ?",
+			$ip, date('Y-m-d H:i:s', strtotime('-10 minutes'))
 		);
 
 		return $item['banned'] > 0;
@@ -234,7 +96,7 @@ class Logins
 		return DB::Execute($sql);
 	}
 
-	static function delete_image()
+	static function delete_image(): bool
 	{
 		global $sys_user_root;
 
@@ -254,100 +116,6 @@ class Logins
 			rename($save_path, $save_path1);
 		if(file_exists($tsave_path))
 			rename($tsave_path, $tsave_path1);
-
-		return true;
-	} // delete_image
-
-	function update_profile($data, ?int $l_id = null): bool
-	{
-		global $sys_user_root, $user_pic_w, $user_pic_h, $user_pic_tw, $user_pic_th;
-
-		if(empty($l_id))
-		{
-			$l_id = User::id();
-		}
-
-		if(empty($l_id))
-		{
-			$this->error_msg[] = 'Neizdevās saglabāt profilu. Hacking?';
-			return false;
-		}
-
-		// load data
-		$OLD = Logins::load_by_id($l_id);
-
-		if(empty($OLD))
-		{
-			$this->error_msg[] = 'Konts nav atrasts vai ir neaktīvs!';
-			return false;
-		}
-
-		$this->validate($data);
-
-		if($this->error_msg)
-		{
-			return false;
-		}
-
-		$UPDATE = (new Update('logins'))
-			->Set("l_emailvisible", $data['l_emailvisible'])
-			->Set("l_disable_youtube", $data['l_disable_youtube'])
-			->Where(["l_id = ?", $l_id])
-		;
-
-		if($data['l_forumsort_themes'])$UPDATE->Set("l_forumsort_themes", $data['l_forumsort_themes']);
-		if($data['l_forumsort_msg'])$UPDATE->Set("l_forumsort_msg", $data['l_forumsort_msg']);
-
-		if(!DB::Execute($UPDATE))
-		{
-			$this->error_msg[] = "Datubāzes kļūda";
-			return false;
-		}
-
-		# TODO: db FS
-		if($_FILES['l_picfile']['tmp_name'])
-		{
-			Logins::delete_image();
-			$save_path = $sys_user_root.'/pic/'.$l_id.'.jpg';
-			$tsave_path = $sys_user_root.'/pic/thumb/'.$l_id.'.jpg';
-			# ja bilde
-			if($ct = save_upload('l_picfile', $save_path))
-			{
-				if(!($type = image_load($in_img, $save_path)))
-				{
-					$this->error_msg[] = 'Nevar nolasīt failu ['.$_FILES['l_picfile']['name'].']';
-					if(isset($GLOBALS['image_load_error']) && $GLOBALS['image_load_error'])
-						$this->error_msg[] = " ($GLOBALS[image_load_error])";
-					return false;
-				}
-
-				list($w, $h, $type, $html) = getimagesize($save_path);
-				if($w > $user_pic_w || $h > $user_pic_h)
-				{
-					$out_img = image_resample($in_img, $user_pic_w, $user_pic_h);
-					if(!image_save($out_img, $save_path, IMAGETYPE_JPEG))
-					{
-						$this->error_msg[] = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
-						return false;
-					}
-				}
-
-				if($w > $user_pic_tw || $h > $user_pic_th)
-				{
-					$out_img = image_resample($in_img, $user_pic_tw, $user_pic_th);
-					if(!image_save($out_img, $tsave_path, IMAGETYPE_JPEG))
-					{
-						$this->error_msg[] = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
-						return false;
-					}
-				}
-
-				return true;
-			} else {
-				$this->error_msg[] = 'Nevar saglabāt failu ['.$_FILES['l_picfile']['name'].']';
-				return false;
-			}
-		}
 
 		return true;
 	}
@@ -374,6 +142,7 @@ class Logins
 		return strtoupper(md5(uniqid('')));
 	}
 
+	# TODO: apvienot accept un forget
 	static function insert_accept_code($login, $new_email = null): ?string
 	{
 		$accept_code = static::genCode();
@@ -419,7 +188,7 @@ class Logins
 	{
 		if(email($email, $subj, $msg))
 		{
-			return DB::Execute("UPDATE login_accept SET la_sent = 'Y' WHERE la_login = ?", $login);
+			return DB::Execute("UPDATE login_accept SET la_sent = 1 WHERE la_login = ?", $login);
 		}
 
 		return false;
@@ -429,13 +198,13 @@ class Logins
 	{
 		$timeout = static::codes_timeout();
 
-		$sql = "SELECT * FROM login_accept WHERE la_code = '$code' AND UNIX_TIMESTAMP() - UNIX_TIMESTAMP(la_entered) < $timeout AND la_accepted = '0000-00-00 00:00:00'";
+		$sql = "SELECT * FROM login_accept WHERE la_code = ? AND UNIX_TIMESTAMP() - UNIX_TIMESTAMP(la_entered) < ? AND la_accepted IS NULL'";
 
-		if($data = DB::ExecuteSingle($sql))
+		if($data = DB::ExecuteSingle($sql, $code, $timeout))
 		{
 			return DB::withNewTrans(function() use ($data) {
 				$logins_update = (new Update('logins'))
-					->Set('l_accepted', Logins::ACCEPTED)
+					->Set('l_accepted', 1)
 					->Where(['l_login = ?', $data['la_login']])
 				;
 
@@ -468,6 +237,7 @@ class Logins
 
 	function insert($data, $validate = Res::ACT_VALIDATE): bool
 	{
+		new TODO("Logins::insert");
 		if($validate){
 			$this->validate($data);
 		}
@@ -522,6 +292,8 @@ class Logins
 
 	function update(array $data, $validate = Res::ACT_VALIDATE): bool
 	{
+		new TODO("Logins::update");
+
 		# TODO: pārbaudīt citur!!!
 		if(!$this->valid_login($data['l_login']))
 		{
@@ -552,17 +324,17 @@ class Logins
 
 	static function accept(int $l_id): bool
 	{
-		return DB::Execute("UPDATE logins SET l_accepted = ? WHERE l_id = ?", Logins::ACCEPTED, $l_id);
+		return DB::Execute("UPDATE logins SET l_accepted = 1 WHERE l_id = ?", $l_id);
 	}
 
 	static function activate(int $l_id): bool
 	{
-		return DB::Execute("UPDATE logins SET l_active = ? WHERE l_id = ?", Res::STATE_ACTIVE, $l_id);
+		return DB::Execute("UPDATE logins SET l_active = 1 WHERE l_id = ?", $l_id);
 	}
 
 	static function deactivate(int $l_id): bool
 	{
-		return DB::Execute("UPDATE logins SET l_active = ? WHERE l_id = ?", Res::STATE_INACTIVE, $l_id);
+		return DB::Execute("UPDATE logins SET l_active = 0 WHERE l_id = ?", $l_id);
 	}
 
 	function process_action(array $data, string $action): bool
@@ -600,86 +372,12 @@ class Logins
 		});
 	}
 
-	function validate(&$data)
-	{
-		if(isset($data['l_active']))
-			$data['l_active'] = (preg_match('/[YN]/', $data['l_active']) ? $data['l_active'] : '');
-		else
-			$data['l_active'] = Res::STATE_ACTIVE;
-
-		if(isset($data['l_emailvisible']))
-			$data['l_emailvisible'] = Logins::EMAIL_VISIBLE;
-		else
-			$data['l_emailvisible'] = Logins::EMAIL_INVISIBLE;
-
-		if(!isset($data['l_login']))
-			$data['l_login'] = '';
-
-		if(!isset($data['l_password']))
-			$data['l_password'] = '';
-
-		if(!isset($data['l_firstname']))
-			$data['l_firstname'] = '';
-
-		if(!isset($data['l_lastname']))
-			$data['l_lastname'] = '';
-
-		if(!isset($data['l_phone']))
-			$data['l_phone'] = '';
-
-		if(!isset($data['l_email']))
-			$data['l_email'] = '';
-
-		if(!isset($data['l_birth']))
-			$data['l_birth'] = '';
-
-		if(isset($data['l_type']))
-			$data['l_type'] = (preg_match('/[\d]*/', $data['l_type']) ?  (int)$data['l_type'] : 0);
-		else
-			$data['l_type'] = 0;
-
-		if(isset($data['l_spec']))
-			$data['l_spec'] = (preg_match('/[\d]*/', $data['l_spec']) ? (int)$data['l_spec'] : 0);
-		else
-			$data['l_spec'] = 0;
-
-		if(!isset($data['l_sertnr']))
-			$data['l_sertnr'] = '';
-
-		if(!isset($data['l_sertexpire']))
-			$data['l_sertexpire'] = '';
-
-		if(!isset($data['l_entered']))
-			$data['l_entered'] = '';
-
-		if(isset($data['l_accepted']))
-			$data['l_accepted'] = (preg_match('/[YN]/', $data['l_accepted']) ? $data['l_accepted'] : '');
-		else
-			$data['l_accepted'] = Logins::NOT_ACCEPTED;
-
-		if(isset($data['l_forumsort_themes']))
-			$data['l_forumsort_themes'] = (preg_match('/[TC]/', $data['l_forumsort_themes']) ? $data['l_forumsort_themes'] : '');
-		else
-			$data['l_forumsort_themes'] = Forum::SORT_THEME;
-
-		if(isset($data['l_forumsort_msg']))
-			$data['l_forumsort_msg'] = (preg_match('/[AD]/', $data['l_forumsort_msg']) ? $data['l_forumsort_msg'] : '');
-		else
-			$data['l_forumsort_msg'] = Forum::SORT_THEME;
-
-		if(isset($data['l_disable_youtube']))
-			$data['l_disable_youtube'] = 1;
-		else
-			$data['l_disable_youtube'] = 0;
-
-	} // validate
-
 	static function valid_login($user_login)
 	{
 		return valid($user_login) && (strlen($user_login) > 0);
 	}
 
-	static function update_password(string $login, string $password)
+	static function update_password(string $login, string $password): bool
 	{
 		return DB::Execute(
 			"UPDATE logins SET l_password = ? WHERE l_login = ?",
@@ -746,25 +444,22 @@ GROUP BY
 		return password_hash($str, PASSWORD_BCRYPT, ['cost'=>12]);
 	}
 
-	static function auth(string $login, string $pass, bool $all = false) {
-		$sql = (new Select)->From("logins")->Where(["l_login = ?", $login]);
-
-		if(!$all){
-			$sql->Where(["l_active = ?", Res::STATE_ACTIVE]);
-			$sql->Where(["l_accepted = ?", Logins::ACCEPTED]);
-		}
-
-		if($data = DB::ExecuteSingle($sql)){
+	static function auth(string $login, string $pass, bool $ignore_disabled = false): ?LoginsType
+	{
+		if($data = static::load_by_login($login, $ignore_disabled))
+		{
 			$pass_ok =
-				password_verify($pass, $data['l_password']) ||
-				(mysql_password($pass) == $data['l_password']) ||
-				(mysql_old_password($pass) == $data['l_password'])
+				password_verify($pass, $data->l_password) ||
+				(mysql_password($pass) == $data->l_password) ||
+				(mysql_old_password($pass) == $data->l_password)
 			;
 
 			if($pass_ok){
 				return $data;
 			}
 		}
+
+		return null;
 	}
 
 	static function gen_login_hash(): string

@@ -20,14 +20,14 @@ if(!($login_data = Logins::load_by_login_hash($l_hash))){
 	return;
 }
 
-$pic_path = "/user/image/$login_data[l_hash]/";
+$pic_path = "/user/image/$login_data->l_hash/";
 
 $T->enable("BLOCK_userpic");
 
 $T->set_var('pic_path', $pic_path);
-$T->set_var('l_nick', $login_data['l_nick']);
+$T->set_var('l_nick', $login_data->l_nick);
 
-$template->set_title(" - $login_data[l_nick] bilde");
+$template->set_title(" - $login_data->l_nick bilde");
 $template->set_right_defaults();
 $template->out($T);
 

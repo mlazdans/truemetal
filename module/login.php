@@ -21,9 +21,9 @@ if(isset($_POST['data']))
 	$data = post('data');
 	if($login_data = $my_login->login($data['login']??"", $data['password']??""))
 	{
-		User::data(filter_login_data($login_data));
+		User::data($login_data);
 
-		$referer = empty($data['referer']) ? false : urldecode($data['referer']);
+		$referer = empty($data['referer']) ? false : $data['referer'];
 		if(
 			empty($data['referer']) ||
 			(strpos($referer, "/register/") !== false) ||
@@ -41,7 +41,7 @@ if(isset($_POST['data']))
 		$T->enable('BLOCK_login_err');
 		$T->set_var('error_msg', 'Nepareizs login vai parole!');
 		$T->set_array($data);
-		User::data([]);
+		User::data(null);
 	}
 }
 
