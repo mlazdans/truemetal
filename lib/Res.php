@@ -139,19 +139,14 @@ class Res
 			case Table::FORUM:
 				return Forum::RouteFromRes($res, $c_id);
 			case Table::COMMENT:
-				$comment = Comment::load(["res_id"=>$res["res_id"]]);
-				printr($c_id, $res, $comment);
-				// $location = Res::Route($parent['res_id'], $res['c_id']);
-				new TODO("Comment::route");
-				// $RC = new ResComment;
-				// $C = $RC->get(['c_id'=>$res['c_id']]);
-				// $location = Res::Route($C['parent_res_id'], $res['c_id']);
-				break;
-			case Table::GALLERY:
-				return Gallery::Route($res, $c_id);
-			case Table::GALLERY_DATA:
-				return GalleryData::Route($res, $c_id);
+				return Comment::RouteFromRes($res, $c_id);
+			// case Table::GALLERY:
+			// 	return Gallery::RouteFromRes($res, $c_id);
+			// case Table::GALLERY_DATA:
+			// 	return GalleryData::RouteFromRes($res, $c_id);
 		}
+
+		throw new InvalidArgumentException("Table unknown: $res[table_id]");
 	}
 
 	static function hasNewComments($item): bool
