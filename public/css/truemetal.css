@@ -1,5 +1,4 @@
 * {
-	font-size: 11px;
 	font-family: "Verdana", arial, serif;
 }
 body {
@@ -28,7 +27,7 @@ hr {
 
 
 .img-thumb {
-	border: 0.1em dotted #660000;
+	border: 1px dotted #660000;
 }
 
 .error {
@@ -89,10 +88,10 @@ P {
 	color: white;
 	font-weight: bold;
 	padding: 0.3em 0.4em 0.4em 0.4em;
-	border-left: 0.1em solid white;
-	border-top: 0.1em solid white;
-	border-bottom: 0.1em solid #220000;
-	border-right: 0.1em solid #220000;
+	border-left: 1px solid white;
+	border-top: 1px solid white;
+	border-bottom: 1px solid #220000;
+	border-right: 1px solid #220000;
 	cursor: default;
 }
 .TD-cat a.caption {
@@ -117,7 +116,7 @@ dl, dt { padding:0; margin: 0; }
 dt {
 	padding: 0.2em;
 	background-color: #660000;
-	border-bottom: 0.1em dotted #220000;
+	border-bottom: 1px dotted #220000;
 	font-weight: bold;
 }
 dd {
@@ -129,7 +128,7 @@ dd {
 button,
 input, textarea {
 	text-decoration: unset;
-	border: 0.1em solid white;
+	border: 1px solid white;
 	background-color: #660000;
 	color: white;
 	font-weight: normal;
@@ -147,19 +146,19 @@ input[type=submit],
 input[type=button] {
 	color: white;
 	padding: 0 1em;
-	border-top: 0.1em solid white;
-	border-left: 0.1em solid white;
-	border-right: 0.1em solid #220000;
-	border-bottom: 0.1em solid #220000;
+	border-top: 1px solid white;
+	border-left: 1px solid white;
+	border-right: 1px solid #220000;
+	border-bottom: 1px solid #220000;
 }
 .button:active,
 button:active,
 input[type=submit]:active,
 input[type=button]:active {
-	border-top: 0.1em solid #220000;
-	border-left: 0.1em solid #220000;
-	border-right: 0.1em solid white;
-	border-bottom: 0.1em solid white;
+	border-top: 1px solid #220000;
+	border-left: 1px solid #220000;
+	border-right: 1px solid white;
+	border-bottom: 1px solid white;
 }
 
 #content {
@@ -190,7 +189,7 @@ input[type=button]:active {
 	text-align: justify;
 }
 .Article-item .data .intro {
-	border-bottom: 0.1em dotted #220000;
+	border-bottom: 1px dotted #220000;
 	margin-bottom: 1em;
 }
 .Article-item img.left {
@@ -258,39 +257,6 @@ input[type=button]:active {
 	background: none;
 }
 
-#header .logo,
-#header .logo .logo-inside {
-	cursor: pointer;
-	width: 58.0em;
-	height: 8.0em;
-}
-#header .logo {
-	position: relative;
-	background: url("../img/logo-background.png") no-repeat top left;
-	float: left;
-	border-bottom: 0.1em dotted #220000;
-}
-#header .logo .logo-inside {
-	display: block;
-	background: url("../img/truemetal.lv-logo.png") no-repeat center 2.2em;
-}
-#header .banner {
-	width: 17.0em;
-	height: 11em;
-	position: absolute;
-	right: 0.1em;
-	text-align: center;
-	vertical-align: middle;
-	background-color: #330000;
-}
-
-#header .menu {
-	width: 58.0em;
-	height: 3em;
-	position: relative;
-	float: left;
-}
-
 #header .menu table {
 	width: 100%;
 	border-collapse: separate;
@@ -303,10 +269,10 @@ input[type=button]:active {
 
 .List-item {
 	padding: 0.2em;
-	margin: 1px;
+	/* margin: 1px; */
 	margin-top: 0;
 	background: #660000;
-	border-bottom: 0.1em dotted #220000;
+	border-bottom: 1px dotted #220000;
 }
 
 .List-item.actual0 {
@@ -327,18 +293,13 @@ input[type=button]:active {
 	width: 100%;
 	background: #660000;
 	vertical-align: top;
-	border-top: 0.1em dotted #220000;
+	border-top: 1px dotted #220000;
 }
 
 /* Forum */
 table.Forums {
 	width: 100%;
 	border-collapse: separate;
-}
-.Forum-cat {
-	background-color: #660000;
-	padding: 0.3em 0.4em 0.4em 0.3em;
-	margin-bottom: 0.1em;
 }
 .Forum-descr {
 	background-color: #444444;
@@ -372,7 +333,7 @@ table.Forums {
 
 .Forum-Theme-name, .Forum-Theme-childcount, .Forum-Theme-username {
 	background: #444444;
-	border-bottom: 0.1em dotted #220000;
+	border-bottom: 1px dotted #220000;
 	white-space: nowrap;
 }
 .Forum-Theme-name {
@@ -386,37 +347,29 @@ table.Forum-Theme, table.Forum-Theme-form {
 	border-collapse: separate;
 }
 
-/* Poll */
-.Poll-result {
-	clear: both;
-	background: #440000;
-	font-weight: bold;
-	text-align: right;
-	margin-bottom: 1em;
-}
-.Poll-bar {
-	float: left;
-	height: auto;
-	background: red;
-}
-
 .Info {
 	padding: 3em 1em 4em 1em;
 }
-
 
 table.Main {
 	width: 100%;
 	min-width: 50%;
 	border-collapse: separate;
-	border-spacing: 0.1em;
+	/* border-spacing: 0.1em; */
 	background-color: #660000;
-	border: 0.1em solid #220000;
+	border: 1px solid #220000;
 	border-top: none;
 }
 table.Main td {
-	border-bottom: 0.1em dotted #220000;
+	border-bottom: 1px dotted #220000;
 	padding: 0.2em;
+}
+
+table.Main tr:last-child td {
+	border-bottom: none;
+	/* background-color: #00a400; */
+	/* border-bottom: 1px dotted #220000;
+	padding: 0.2em; */
 }
 
 div.clear {
@@ -471,6 +424,103 @@ label > input {
 
 
 /******************/
+#container {
+	display: grid;
+	grid-template-areas:
+		"a a a a b"
+		"c c c c b"
+		"d d d d e"
+	;
+
+	grid-template-rows:
+		minmax(10vh, 90px)
+		minmax(2vh, 40px)
+		1fr
+	;
+
+	/* grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) */
+	grid-template-columns: 20% 20% 20% 20% 1fr;
+
+	/* TODO: width atkarībā no viewport */
+	/* width: 75%; */
+	max-width: 1580px;
+	margin: auto;
+	/* justify-content: center; */
+	/* align-content: stretch; */
+	/* align-content: center; */
+
+	/* border: 1px solid yellow; */
+}
+
+#container > .logo {
+	grid-area: a;
+	background-color: #330000;
+	border-radius: 10%/100% 0 0 0;
+}
+
+/* TODO: pārģenerēt logo kā .svg */
+#container > .logo a {
+	display: block;
+	height: 100%;
+	/* border-bottom: 0.1em dotted #220000; */
+	background: url("../img/truemetal.lv-logo.png") no-repeat center center;
+	background-size: 60%;
+}
+
+#container > .banner {
+	grid-area: b;
+	/* object-fit: contain; */
+	/* background-color: green; */
+}
+
+#container > .menu {
+	grid-area: c;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: center;
+	background-color: #330000;
+	/* border: 1px solid blue; */
+}
+/* TODO: pārģenerēt menu kā .svg */
+#container > .menu a {
+	display: inline;
+	width: 20%;
+	height: 80%;
+	/* margin: auto; */
+	/* width: minmax(125px, 20%); */
+	/* padding: 0.1em 2em; */
+	/* border: 1px solid green; */
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+#container > .menu a.menu-root{
+	background-image: url("../img/buttons/article.png");
+}
+#container > .menu a.menu-forum{
+	background-image: url("../img/buttons/forum.png");
+}
+#container > .menu a.menu-reviews{
+	background-image: url("../img/buttons/reviews.png");
+}
+#container > .menu a.menu-interviews{
+	background-image: url("../img/buttons/interviews.png");
+}
+
+#container > .content {
+	grid-area: d;
+	margin-top: 3px;
+	/* border: 1px solid blue; */
+}
+
+#container > .right {
+	grid-area: e;
+	margin-top: 3px;
+	margin-left: 3px;
+	/* border: 1px solid cyan; */
+}
+
 .Comment-new {
 	color: red;
 }
@@ -521,4 +571,10 @@ label > input {
 	background-color: #440000;
 	text-align: center;
 	font-style: italic;
+}
+
+.Forum-cat {
+	background-color: #660000;
+	padding: 0.3em 0.4em 0.4em 0.3em;
+	margin-bottom: 1px;
 }

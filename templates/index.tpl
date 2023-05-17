@@ -9,42 +9,35 @@
 <link href="/css/?v={script_version}" rel="stylesheet" type="text/css">
 </head>
 <body>
-<!-- BEGIN BLOCK_body -->
-<div id="header">
-	<div class="logo"><a href="/" class="logo-inside"></a></div>
+
+<div id="container">
+	<div class="logo"><a href="/"></a></div>
 	<div class="menu">
-		<table cellpadding="5" cellspacing="0">
-		<tr>
-			<td><a href="/"><img src="/img/buttons/article{menu_active_article}.png" alt="JAUNUMI" width="94" height="20"></a></td>
-			<td><a href="/forum/"><img src="/img/buttons/forum{menu_active_forum}.png" alt="FORUMS" width="85" height="20"></a></td>
-			<td><a href="/reviews/"><img src="/img/buttons/reviews{menu_active_reviews}.png" alt="RECENZIJAS" width="124" height="20"></a></td>
-			<td><a href="/interviews/"><img src="/img/buttons/interviews{menu_active_interviews}.png" alt="INTERVIJAS" width="121" height="20"></a></td>
-		</tr>
-		</table>
+		<a href="/" class="menu-root"></a>
+		<a href="/forum/" class="menu-forum"></a>
+		<a href="/reviews/" class="menu-reviews"></a>
+		<a href="/interviews/" class="menu-interviews"></a>
 	</div>
-	<div class="banner"><!-- BEGIN BLOCK_banner_top --><a href="{banner_href}"><img src="/img/{banner_img}" width="{banner_width}" height="{banner_height}" alt="{banner_alt}"></a><!-- END BLOCK_banner_top --></div>
-</div>
-<div class="colmask rightmenu">
-	<div class="colleft">
-		<div id="main" class="col1 {block_middle_class}">
-			<div class="clear"></div>
-			<!-- BEGIN BLOCK_container -->
-				<!-- BEGIN BLOCK_error disabled -->
-					<div class="TD-cat">Kļūda:</div>
-					<div class="Info error-form">{error_msg}</div>
-				<!-- END BLOCK_error -->
-				<!-- BEGIN BLOCK_msg disabled --><div class="Info">{msg}</div><!-- END BLOCK_msg -->
-				<!-- BEGIN BLOCK_not_loged disabled --><div class="Info">{msg}</div><!-- END BLOCK_not_loged -->
-				<!-- BEGIN BLOCK_not_found disabled --><div class="Info">{msg}</div><!-- END BLOCK_not_found -->
-				<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->
-			<!-- END BLOCK_container -->
-		</div>
-		<div class="col2">
-			<!-- BEGIN BLOCK_right disabled --><!-- END BLOCK_right -->
-		</div>
+	<div class="banner">
+		<!-- BEGIN BLOCK_banner_top -->
+			<a href="{banner_href}"><img src="/img/{banner_img}" width="{banner_width}" height="{banner_height}" alt="{banner_alt}"></a>
+		<!-- END BLOCK_banner_top -->
 	</div>
+	<div class="content" id="main" class="{block_middle_class}">
+		<!-- BEGIN BLOCK_container -->
+			<!-- BEGIN BLOCK_error disabled -->
+				<div class="TD-cat">Kļūda:</div>
+				<div class="Info error-form">{error_msg}</div>
+			<!-- END BLOCK_error -->
+			<!-- BEGIN BLOCK_msg disabled --><div class="Info">{msg}</div><!-- END BLOCK_msg -->
+			<!-- BEGIN BLOCK_not_loged disabled --><div class="Info">{msg}</div><!-- END BLOCK_not_loged -->
+			<!-- BEGIN BLOCK_not_found disabled --><div class="Info">{msg}</div><!-- END BLOCK_not_found -->
+			<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->
+		<!-- END BLOCK_container -->
+	</div>
+	<div class="right"><!-- BEGIN BLOCK_right disabled --><!-- END BLOCK_right --></div>
 </div>
-<!-- END BLOCK_body -->
+
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/jsload/?v={script_version}"></script>
