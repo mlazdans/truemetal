@@ -5,12 +5,12 @@
 <tr>
 	<td colspan="2">
 		<input type="hidden" name="data[referer]" value="{referer}">
-		<input style="width: 160px;" type="text" name="data[login]" value="Lietotāja vārds" onfocus="if(this.value=='Lietotāja vārds')this.value=''">
+		<input style="width: 100%;" type="text" name="data[login]" placeholder="Lietotāja vārds">
 	</td>
 </tr>
 <tr>
-	<td><input style="width: 113px;" type="password" name="data[password]" size="13"></td>
-	<td><input type="submit" class="input" value=" OK "></td>
+	<td><input style="width: 100%;" type="password" name="data[password]" size="13" placeholder="Parole"></td>
+	<td style="text-align: center;"><input type="submit" class="input" value=" OK "></td>
 </tr>
 </table>
 </form>
