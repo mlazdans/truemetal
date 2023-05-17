@@ -1,7 +1,6 @@
 <?php declare(strict_types = 1);
 
 use dqdp\SQL\Update;
-use dqdp\TODO;
 
 class Logins
 {
@@ -9,7 +8,13 @@ class Logins
 
 	static function load_single(LoginsFilter $F): ?LoginsType
 	{
-		return (new LoginsEntity)->getSingle($F);
+		if($data = (new LoginsEntity)->getAll($F))
+		{
+			assert(count($data) == 1);
+			return $data[0];
+		}
+
+		return null;
 	}
 
 	static function load(LoginsFilter $F): LoginsCollection
