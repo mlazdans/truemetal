@@ -173,9 +173,9 @@ class Logins
 		return false;
 	}
 
-	static function send_accept_code(string $l_email,  $subj, $msg): bool
+	static function send_accept_code(string $l_email, string $to_email, string $subj, string $msg): bool
 	{
-		if(email($l_email, $subj, $msg))
+		if(email($to_email, $subj, $msg))
 		{
 			return DB::Execute("UPDATE login_accept SET la_sent = 1 WHERE la_email = ?", $l_email);
 		}
@@ -251,7 +251,7 @@ class Logins
 
 			$subj = "$sys_domain - reģistrācija";
 
-			if(!Logins::send_accept_code($L->l_email, $subj, $msg))
+			if(!Logins::send_accept_code($L->l_email, $L->l_email, $subj, $msg))
 			{
 				return false;
 			}
