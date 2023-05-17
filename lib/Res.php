@@ -78,7 +78,7 @@ class Res
 		switch($res_data['table_id'])
 		{
 			case Table::ARTICLE:
-				return Article::load(['res_id'=>$res_id]);
+				return Article::load_by_res_id($res_id);
 			case Table::FORUM:
 				return Forum::load_by_res_id($res_id);
 				// $D = new Forum();

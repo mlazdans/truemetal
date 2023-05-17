@@ -1469,7 +1469,7 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 	$gal = $gallery->load($galdata['gal_id']);
 
 	# Komenti
-	Res::markAsSeen($galdata);
+	Res::markAsSeen($galdata['res_id']);
 
 	$T = $template->add_file('gallery.tpl');
 	$C = new_template('comments.tpl');
@@ -1792,7 +1792,7 @@ function archive(MainModule $template): ?Template
 		}
 
 		$T->set_var('res_name', specialchars($item['res_name']));
-		$T->set_var('res_route', Res::RouteFromRes($item));
+		$T->set_var('res_route', '/resroute/'.$item['res_id']);
 		$T->parse_block('BLOCK_archive_items', TMPL_APPEND);
 	}
 
