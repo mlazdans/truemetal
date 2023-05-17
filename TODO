@@ -1,3 +1,4 @@
 *) Pārbaudīt vecos ierakstus, kuri DB tika ievietoti ar my_strip_tags() (resp ar
 htmlspecialchars()). Stripot jau vajadzētu tikai pie attēlošanas!
 
+*) main-item, kā whatnew.tpl, pārsaukt TD-cat un vispār savest kārtībā stilus

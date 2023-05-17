@@ -511,3 +511,7 @@ label > input {
 	padding: 0.3em 0.4em 0.4em 0.3em;
 	margin-bottom: 1px;
 }
+
+.main-item {
+	margin: 0 0.2em 0.2em 0.2em;
+}

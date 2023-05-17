@@ -1223,42 +1223,39 @@ function whatsnew(MainModule $template): ?Template
 	}
 
 	# Forum
-	$data = Forum::load([
-		"order"=>'res_comment_last_date DESC',
-		"rows"=>50,
-		"forum_allowchilds"=>0,
-	]);
+	$F = (new ResForumFilter(forum_allow_childs: 0))->rows(50)->orderBy('res_comment_last_date DESC');
 
-	if($data)
+	$data = Forum::load($F);
+
+	if($data->count())
 	{
 		$R = new_template('forum/recent.tpl');
 		foreach($data as $item)
 		{
-			$R->enable_if(Res::hasNewComments($item), 'BLOCK_forum_r_comments_new');
-			$R->set_var('res_name', specialchars($item['res_name']));
-			$R->set_var('res_comment_count', $item['res_comment_count']);
-			$R->set_var('res_route', Forum::RouteFromRes($item));
+			$R->enable_if(Forum::hasNewComments($item), 'BLOCK_forum_r_comments_new');
+			$R->set_var('res_name', specialchars($item->res_name));
+			$R->set_var('res_comment_count', $item->res_comment_count);
+			$R->set_var('res_route', $item->Route());
 			$R->parse_block('BLOCK_forum_r_items', TMPL_APPEND);
 		}
 		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_forum');
 	}
 
 	# Articles
-	$data = Article::load([
-		'order'=>'res_comment_last_date DESC',
-		'rows'=>50,
-	]);
+	$F = (new ResArticleFilter)->rows(50)->orderBy('res_comment_last_date DESC');
 
-	if($data)
+	$data = Article::load($F);
+
+	if($data->count())
 	{
 		$R = new_template('right/comment_recent.tpl');
 		foreach($data as $item)
 		{
-			$R->enable_if(Res::hasNewComments($item), 'BLOCK_comment_r_comments_new');
+			$R->enable_if(Article::hasNewComments($item), 'BLOCK_comment_r_comments_new');
 
-			$R->set_var('res_name', specialchars($item['res_name']));
-			$R->set_var('res_comment_count', $item['res_comment_count']);
-			$R->set_var('res_route', Article::RouteFromRes($item));
+			$R->set_var('res_name', specialchars($item->res_name));
+			$R->set_var('res_comment_count', $item->res_comment_count);
+			$R->set_var('res_route', $item->Route());
 			$R->parse_block('BLOCK_comment_r_items', TMPL_APPEND);
 		}
 		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_comments');
