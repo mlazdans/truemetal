@@ -262,32 +262,32 @@ class Logins
 		return $new_l_id ? $new_l_id : null;
 	}
 
-	function update(array $data, $validate = Res::ACT_VALIDATE): bool
-	{
-		new TODO("Logins::update");
+	// function update(array $data, $validate = Res::ACT_VALIDATE): bool
+	// {
+	// 	new TODO("Logins::update");
 
-		# TODO: pārbaudīt citur!!!
-		if(!$this->valid_login($data['l_login']))
-		{
-			$this->error_msg[] = 'Nav norādīts vai nepareizs lietotāja logins';
-			return false;
-		}
+	// 	# TODO: pārbaudīt citur!!!
+	// 	if(!$this->valid_login($data['l_login']))
+	// 	{
+	// 		$this->error_msg[] = 'Nav norādīts vai nepareizs lietotāja logins';
+	// 		return false;
+	// 	}
 
-		if($validate)
-			$this->validate($data);
+	// 	if($validate)
+	// 		$this->validate($data);
 
-		$sql = 'UPDATE logins SET ';
-		$sql .= "l_nick = '$data[l_nick]', ";
-		$sql .= "l_email = '$data[l_email]', ";
-		$sql .= "l_active = '$data[l_active]', ";
-		$sql .= "l_accepted = '$data[l_accepted]', ";
-		$sql .= "l_emailvisible = '$data[l_emailvisible]', ";
-		$sql .= "l_logedin = '$data[l_logedin]', ";
-		$sql = substr($sql, 0, -2);
-		$sql .= " WHERE l_login = '$data[l_login]'";
+	// 	$sql = 'UPDATE logins SET ';
+	// 	$sql .= "l_nick = '$data[l_nick]', ";
+	// 	$sql .= "l_email = '$data[l_email]', ";
+	// 	$sql .= "l_active = '$data[l_active]', ";
+	// 	$sql .= "l_accepted = '$data[l_accepted]', ";
+	// 	$sql .= "l_emailvisible = '$data[l_emailvisible]', ";
+	// 	$sql .= "l_logedin = '$data[l_logedin]', ";
+	// 	$sql = substr($sql, 0, -2);
+	// 	$sql .= " WHERE l_login = '$data[l_login]'";
 
-		return DB::Execute($sql);
-	}
+	// 	return DB::Execute($sql);
+	// }
 
 	static function delete(int $l_id): bool
 	{
