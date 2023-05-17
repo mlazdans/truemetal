@@ -1063,15 +1063,15 @@ function forgot_accept(MainModule $template, string $code): ?Template
 		$OK = DB::withNewTrans(function() use($L, $code, $data) {
 			return
 				Logins::accept($L->l_id) &&
-		Logins::remove_forgot_code($code) &&
+				Logins::remove_forgot_code($code) &&
 				Logins::update_password($L->l_login, $data['l_password'])
 			;
 		});
 
 		if($OK) {
-		header("Location: /forgot/accept/ok/");
-		return null;
-	}
+			header("Location: /forgot/accept/ok/");
+			return null;
+		}
 	}
 
 	$T->set_array($data);
@@ -2150,7 +2150,7 @@ function update_profile(MainModule $template, array $data): bool
 
 	$l_id = User::id();
 
-	$OLD = Logins::load(new LoginsFilter(l_id: $l_id));
+	$OLD = Logins::load_by_id($l_id);
 
 	if(empty($OLD))
 	{
@@ -2172,7 +2172,7 @@ function update_profile(MainModule $template, array $data): bool
 
 	if(!(new LoginsEntity)->update($l_id, new LoginsType($upd)))
 	{
-		$template->not_found("Datubāzes kļūda");
+		$template->error("Datubāzes kļūda");
 		return false;
 	}
 
