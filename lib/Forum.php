@@ -486,7 +486,7 @@ class Forum implements ResourceInterface
 		if(isset($_SESSION['res']['viewed_before']))
 			return ($_SESSION['res']['viewed_before'] < strtotime($item['res_child_last_date']));
 
-		return ($item['forum_themecount'] > 0);
+		return ($item['forum_themecount']??0 > 0);
 	}
 
 	public static function markThemeCount($item)
