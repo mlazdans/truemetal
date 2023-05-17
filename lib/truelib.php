@@ -106,7 +106,7 @@ function forum_add_theme(MainModule $template, Template $T, array $forum_data, a
 		return false;
 	}
 
-	$R = prepare_res(
+	$R = Res::prepare_with_user(
 		res_resid: $forum_data['res_id'],
 		table_id: Table::FORUM,
 		res_name: $post_data['forum_name'],
@@ -122,7 +122,10 @@ function forum_add_theme(MainModule $template, Template $T, array $forum_data, a
 		}
 	});
 
-	new TODO("redirect");
+	if($forum_id)
+	{
+		header("Location: ".Forum::Route($forum_id, $post_data['forum_name']));
+	}
 
 	return (bool)$forum_id;
 }
@@ -379,7 +382,7 @@ function forum_det(
 		}
 
 		if(!$error_msg) {
-			if($c_id = res_add_comment($res_id, $data['c_data']))
+			if($c_id = Res::user_add_comment($res_id, $data['c_data']))
 			{
 				header("Location: ".Forum::RouteFromRes($forum_data, $c_id));
 				return null;
@@ -422,10 +425,6 @@ function get_res_comments(int $res_id, array $params = [])
 
 	if(isset($params['login_id'])){
 		$sql->Where(["res.login_id = ?", $params['login_id']]);
-	}
-
-	if(isset($params['c_visible'])){
-		new TODO('c_visible: use res_visible');
 	}
 
 	if(defaulted($params, 'res_visible'))
@@ -1194,25 +1193,6 @@ function set_error_fields(TemplateBlock $T, array $fields){
 	}
 }
 
-# TODO: varbūt vajadzētu kaut kā apvienot daudzās vietas, kur šis tiek izsaukt, jo
-# patlaban datu validācija notiek katrā izsaukšanas vietā
-function res_add_comment(int $res_id, string $c_data)
-{
-	$R = prepare_res(
-		res_resid: $res_id,
-		table_id: Table::COMMENT,
-		res_data: $c_data,
-	);
-
-	return DB::withNewTrans(function() use ($R){
-		if($res_id = $R->insert()){
-			return CommentType::initFrom(new CommentDummy(
-				res_id: $res_id
-			))->insert();
-		}
-	});
-}
-
 function forum_root(MainModule $template): Template
 {
 	$forum_data = (new Forum())->load([
@@ -1566,7 +1546,7 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 		if(empty($error_msg)){
 			$res_id = (int)$galdata['res_id'];
 			$data = post('data');
-			if($c_id = res_add_comment($res_id, $data['c_data']))
+			if($c_id = Res::user_add_comment($res_id, $data['c_data']))
 			{
 				header("Location: ".GalleryData::Route($galdata, $c_id));
 				return null;
@@ -1641,7 +1621,7 @@ function admin_comment_list(
 
 		$C->set_array($item, 'BLOCK_comment_item');
 
-		if($item['c_visible'] == Res::STATE_VISIBLE)
+		if($item['res_visible'])
 		{
 			$C->enable('BLOCK_c_visible');
 			$C->disable('BLOCK_c_invisible');
@@ -1965,7 +1945,7 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 		}
 
 		if(!$error_msg){
-			if($c_id = res_add_comment($res_id, $data['c_data']))
+			if($c_id = Res::user_add_comment($res_id, $data['c_data']))
 			{
 				header("Location: ".Article::RouteFromRes($art, $c_id));
 				return null;
@@ -2227,29 +2207,6 @@ function update_profile(MainModule $template, array $data): bool
 	}
 
 	return true;
-}
-
-function prepare_res(
-	int $res_resid = null,
-	int $table_id,
-	string $res_data,
-	?string $res_name = null,
-	?string $res_intro = null,
-	?string $res_data_compiled = null,
-	): ResType
-{
-	return ResType::initFrom(new ResDummy(
-		res_resid: $res_resid,
-		table_id: $table_id,
-		login_id: User::id(),
-		res_nickname: User::get_val('l_nick'),
-		res_email: User::get_val('l_email'),
-		res_ip: User::ip(),
-		res_name: $res_name,
-		res_intro: $res_intro,
-		res_data: $res_data,
-		res_data_compiled: $res_data_compiled ? $res_data_compiled : parse_text_data($res_data),
-	));
 }
 
 # TODO: pēc migrēšanas uz Entity, te jau būs ?int

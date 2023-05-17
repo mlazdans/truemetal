@@ -175,4 +175,48 @@ class Res
 			$_SESSION['res']['viewed_date'][$item['res_id']] = $item['res_comment_last_date'];
 		}
 	}
+
+	# Uzstāda res objektu, par pamatu ņemot logged in useri
+	static function prepare_with_user(
+		int $res_resid = null,
+		int $table_id,
+		string $res_data,
+		?string $res_name = null,
+		?string $res_intro = null,
+		?string $res_data_compiled = null,
+		): ResType
+	{
+		return ResType::initFrom(new ResDummy(
+			res_resid: $res_resid,
+			table_id: $table_id,
+			login_id: User::id(),
+			res_nickname: User::get_val('l_nick'),
+			res_email: User::get_val('l_email'),
+			res_ip: User::ip(),
+			res_name: $res_name,
+			res_intro: $res_intro,
+			res_data: $res_data,
+			res_data_compiled: $res_data_compiled ? $res_data_compiled : parse_text_data($res_data),
+		));
+	}
+
+	# TODO: varbūt vajadzētu kaut kā apvienot daudzās vietas, kur šis tiek izsaukt, jo
+	# patlaban datu validācija notiek katrā izsaukšanas vietā
+	static function user_add_comment(int $res_id, string $c_data)
+	{
+		$R = static::prepare_with_user(
+			res_resid: $res_id,
+			table_id: Table::COMMENT,
+			res_data: $c_data,
+		);
+
+		return DB::withNewTrans(function() use ($R){
+			if($res_id = $R->insert()){
+				return CommentType::initFrom(new CommentDummy(
+					res_id: $res_id
+				))->insert();
+			}
+		});
+	}
+
 }
