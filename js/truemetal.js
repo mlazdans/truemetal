@@ -189,7 +189,7 @@ var Truemetal = {
 		});
 	},
 	initYouTubeUrls: function(){
-		$('.col1 a').each(function(i,a){
+		$('#main a').each(function(i,a){
 			// youtube.com
 			if(a.hostname.match(/youtube.com$/i) || a.hostname.match(/youtu.be$/i)){
 				$(a).addClass("youtube");
@@ -202,29 +202,29 @@ var Truemetal = {
 		$(window).bind('scroll', ytA, Truemetal.scrollYouTube);
 		Truemetal.scrollYouTube(ytA);
 	},
-	initMenu: function(){
-		$('.menu img').each(function(){
-			var src = this.src;
-			var parts = this.src.split('.');
-			var ext = parts.pop();
-			try {
-				var srcOver = parts.join('.');
-				if(srcOver.substr(srcOver.length-5) != '_over')
-				{
-					srcOver = srcOver + "_over." + ext;
-				} else {
-					srcOver = srcOver + "." + ext;
-				}
-				$(this).mouseenter(function(){
-						this.src = srcOver;
-				});
-				$(this).mouseleave(function(){
-						this.src = src;
-				});
-			} catch(e1) {
-			}
-		});
-	},
+	// initMenu: function(){
+	// 	$('.menu img').each(function(){
+	// 		var src = this.src;
+	// 		var parts = this.src.split('.');
+	// 		var ext = parts.pop();
+	// 		try {
+	// 			var srcOver = parts.join('.');
+	// 			if(srcOver.substr(srcOver.length-5) != '_over')
+	// 			{
+	// 				srcOver = srcOver + "_over." + ext;
+	// 			} else {
+	// 				srcOver = srcOver + "." + ext;
+	// 			}
+	// 			$(this).mouseenter(function(){
+	// 					this.src = srcOver;
+	// 			});
+	// 			$(this).mouseleave(function(){
+	// 					this.src = src;
+	// 			});
+	// 		} catch(e1) {
+	// 		}
+	// 	});
+	// },
 	initUnselectable: function(){
 		//$(".unselectable").unselectable();
 		$('.unselectable').on('selectstart dragstart select', function(evt){ evt.preventDefault(); return false; });

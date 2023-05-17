@@ -2,7 +2,7 @@
 	font-family: "Verdana", arial, serif;
 }
 body {
-	margin: 0 0 1em 0;
+	margin: 0 1em;
 	padding: 0;
 	border:0;
 	background: url("/img/image4.gif") black;
@@ -161,21 +161,6 @@ input[type=button]:active {
 	border-bottom: 1px solid white;
 }
 
-#content {
-	margin: 1em auto;
-	margin-top: 0;
-	width: 75.2em;
-}
-
-#header {
-	position: relative;
-	width: 75.2em;
-	height: 11.1em;
-	margin: 0 auto;
-	padding: 0;
-	/*border-bottom: 0.1em solid #000;*/
-}
-
 /* Article */
 .Article-item {
 	clear: both;
@@ -208,62 +193,6 @@ input[type=button]:active {
 	font-weight: normal;
 }
 .Article-item .caption {
-	text-align: center;
-}
-
-
-/* column container */
-.colmask {
-	position:relative;    /* This fixes the IE7 overflow hidden bug */
-	clear: both;
-	width: 75.2em;
-	margin: 0 auto;
-	overflow:hidden;      /* This chops off any overhanging divs */
-	padding-bottom: 1em;
-	/*border-bottom: 1px dotted #660000;*/
-}
-/* common column settings */
-.colright,
-.colmid,
-.colleft {
-	float:left;
-	width:100%;
-	position:relative;
-}
-.col1,
-.col2,
-.col3 {
-	float: left;
-	position: relative;
-	padding: 0 0 0 0;
-	overflow: hidden;
-}
-/* 2 Column (right menu) settings */
-.rightmenu .colleft {
-	right: 17.0em;       /* right column width */
-}
-.rightmenu .col1 {
-	width:58.0em;       /* left column content width (left column width minus left and right padding) */
-	left: 17.0em;        /* (right column width) plus (left column left padding) */
-}
-.rightmenu .col2 {
-	width: 17.0em;       /* right column content width (right column width minus left and right padding) */
-	left: 17.1em;        /* (right column width) plus (left column left and right padding) plus (right column left padding) */
-}
-.col1, .col2 {
-	background: #220000;
-}
-.light {
-	background: none;
-}
-
-#header .menu table {
-	width: 100%;
-	border-collapse: separate;
-}
-
-#header .menu td {
-	background: #330000;
 	text-align: center;
 }
 
@@ -519,6 +448,10 @@ label > input {
 	margin-top: 3px;
 	margin-left: 3px;
 	/* border: 1px solid cyan; */
+}
+
+#main {
+	background: #220000;
 }
 
 .Comment-new {

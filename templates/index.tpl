@@ -23,7 +23,8 @@
 			<a href="{banner_href}"><img src="/img/{banner_img}" width="{banner_width}" height="{banner_height}" alt="{banner_alt}"></a>
 		<!-- END BLOCK_banner_top -->
 	</div>
-	<div class="content" id="main" class="{block_middle_class}">
+	<div class="content" class="{block_middle_class}">
+		<div id="main">
 		<!-- BEGIN BLOCK_container -->
 			<!-- BEGIN BLOCK_error disabled -->
 				<div class="TD-cat">Kļūda:</div>
@@ -34,6 +35,7 @@
 			<!-- BEGIN BLOCK_not_found disabled --><div class="Info">{msg}</div><!-- END BLOCK_not_found -->
 			<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->
 		<!-- END BLOCK_container -->
+		</div>
 	</div>
 	<div class="right"><!-- BEGIN BLOCK_right disabled --><!-- END BLOCK_right --></div>
 </div>
@@ -47,7 +49,7 @@
 	};
 
 	$(truemetal).ready(function(){
-		Truemetal.initMenu();
+		// Truemetal.initMenu();
 		Truemetal.initUnselectable();
 		Truemetal.initProfiles();
 		if(!User.disableYoutube){
