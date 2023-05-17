@@ -32,57 +32,39 @@ class LoginsFilter extends AbstractFilter
 		return $F;
 	}
 
-	function apply_filter(Select $sql): Select
+	protected function apply_filter(Select $sql): Select
 	{
-		$this->apply_set_fields($sql, ['l_id', 'l_login', 'l_email', 'l_hash', 'l_nick', 'l_sess_id'], "logins.");
-		$this->apply_falsed_fields($sql, ['l_active', 'l_accepted', 'l_logedin'], "logins.");
+		$prefix = "";
+
+		$this->apply_set_fields($sql, ['l_id', 'l_login', 'l_email', 'l_hash', 'l_nick', 'l_sess_id'], $prefix);
+		$this->apply_falsed_fields($sql, ['l_active', 'l_accepted', 'l_logedin'], $prefix);
 
 		if($this->jubilars)
 		{
 			new TODO("move to proc/view");
-			$d0 = date('Y-m-d H:i:s', strtotime("-6 month"));
-			$d1 = date('Y-m-d H:i:s', strtotime("-2 day"));
-			$d2 = date('Y-m-d H:i:s', strtotime("+2 day"));
-			$sql->Where("(DATE_FORMAT(l_entered, '%m%d') >= DATE_FORMAT('$d1', '%m%d') AND DATE_FORMAT(l_entered, '%m%d') <= DATE_FORMAT('$d2', '%m%d'))");
-			$sql->Where("l_lastaccess >= '$d0'");
+			// $d0 = date('Y-m-d H:i:s', strtotime("-6 month"));
+			// $d1 = date('Y-m-d H:i:s', strtotime("-2 day"));
+			// $d2 = date('Y-m-d H:i:s', strtotime("+2 day"));
+			// $sql->Where("(DATE_FORMAT(l_entered, '%m%d') >= DATE_FORMAT('$d1', '%m%d') AND DATE_FORMAT(l_entered, '%m%d') <= DATE_FORMAT('$d2', '%m%d'))");
+			// $sql->Where("l_lastaccess >= '$d0'");
 
-			$sql->Select("DATE_FORMAT(l_entered, '%m%d')", "entered_stamp");
-			$sql->Select("DATEDIFF(CURRENT_TIMESTAMP, l_entered)", "age");
+			// $sql->Select("DATE_FORMAT(l_entered, '%m%d')", "entered_stamp");
+			// $sql->Select("DATEDIFF(CURRENT_TIMESTAMP, l_entered)", "age");
+			// 	if(!empty($params['jubilars'])){
+			// 		$sql->OrderBy("entered_stamp ASC");
 		}
 
 		if($this->q)
 		{
-			$sql->Where(search_to_sql_cond($this->q, array('logins.l_nick', 'logins.l_login', 'logins.l_email', 'logins.l_userip')));
+			$sql->Where(search_to_sql_cond($this->q, [$prefix.'l_nick', $prefix.'l_login', $prefix.'l_email', $prefix.'l_userip']));
 		}
 
 		if($this->get_all_ips)
 		{
-			$d = date('Y-m-d H:i:s', strtotime('-1 year'));
-			$sql->Select("(SELECT GROUP_CONCAT(DISTINCT c_userip) FROM comment WHERE login_id = logins.l_id AND c_entered > '$d')", "all_ips");
+			new TODO("get_all_ips: move to View/Proc");
+			// $d = date('Y-m-d H:i:s', strtotime('-1 year'));
+			// $sql->Select("(SELECT GROUP_CONCAT(DISTINCT c_userip) FROM comment WHERE login_id = logins.l_id AND c_entered > '$d')", "all_ips");
 		}
-
-		// TODO: jānotestē, vai var padot konstruktorā limit, row, offset
-		// if(empty($params['order']))
-		// {
-		// 	if(!empty($params['jubilars'])){
-		// 		$sql->OrderBy("entered_stamp ASC");
-		// 	} else {
-		// 		$sql->OrderBy("logins.l_entered DESC");
-		// 	}
-		// } else {
-		// 	$sql->OrderBy($params['order']);
-		// }
-
-		// if(isset($params['rows']))
-		// {
-		// 	$sql->Rows((int)$params['rows']);
-		// }
-
-		// if(isset($params['limit'])){
-		// 	new TODO("Nodalīt rows un offset");
-		// 	$sql .= " LIMIT $params[limit]";
-		// }
-
 
 		return $sql;
 	}
