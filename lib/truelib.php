@@ -861,10 +861,10 @@ function change_email(MainModule $template): ?Template
 		}
 	}
 
-	$do_code = function(string $login, string $new_email, array &$error_msg): bool {
+	$do_code = function(string $l_email, string $new_email, array &$error_msg): bool {
 		global $sys_domain;
 
-		$accept_code = Logins::insert_accept_code($login, $new_email);
+		$accept_code = Logins::insert_accept_code($l_email, $new_email);
 
 		if(!$accept_code){
 			$error_msg[] = "Datubāzes kļūda";
@@ -880,7 +880,7 @@ function change_email(MainModule $template): ?Template
 		$subj = "$sys_domain - e-pasta apstiprināšana";
 
 		try {
-			if(Logins::send_accept_code($login, $new_email, $subj, $msg))
+			if(Logins::send_accept_code($l_email, $new_email, $subj, $msg))
 			{
 				return true;
 			} else {
@@ -893,7 +893,7 @@ function change_email(MainModule $template): ?Template
 		return false;
 	};
 
-	$result = !$error_msg && $do_code(User::login(), $new_email, $error_msg);
+	$result = !$error_msg && $do_code(User::email(), $new_email, $error_msg);
 
 	if($result)
 	{
@@ -980,12 +980,12 @@ function forgot(MainModule $template): ?Template {
 	} else {
 		if($data['l_login'])
 		{
-			$login_data = Logins::load_by_login($data['l_login']);
+			$L = Logins::load_by_login($data['l_login']);
 		} elseif($data['l_email']) {
-			$login_data = Logins::load_by_email($data['l_email']);
+			$L = Logins::load_by_email($data['l_email']);
 		}
 
-		if(empty($login_data))
+		if(empty($L))
 		{
 			$error_msg[] = 'Lietotājs netika atrasts vai ir bloķēts';
 		}
@@ -993,19 +993,18 @@ function forgot(MainModule $template): ?Template {
 
 	if(empty($error_msg))
 	{
-		$l_login = $login_data['l_login'];
-		if($forgot_code = Logins::insert_forgot_code($l_login)){
+		if($forgot_code = Logins::insert_forgot_code($L->l_email)){
 			try {
-				if(Logins::send_forgot_code($l_login, $forgot_code, $login_data['l_email']))
+				if(Logins::send_forgot_code($L->l_email, $forgot_code))
 				{
-					$T->set_var('l_email', $login_data['l_email']);
+					$T->set_var('l_email', $L->l_email);
 					$T->enable('BLOCK_forgot_ok');
 					$T->disable('BLOCK_forgot_form');
 				} else {
-					$error_msg[] = "Nevar nosūtīt kodu uz $login_data[l_email]";
+					$error_msg[] = "Nevar nosūtīt kodu uz $L->l_email";
 				}
 			} catch (Exception $e) {
-				$error_msg[] = "Nevar nosūtīt kodu uz $login_data[l_email]<br>".$e->getMessage();
+				$error_msg[] = "Nevar nosūtīt kodu uz $L->l_email<br>".$e->getMessage();
 			}
 		} else {
 			$error_msg[] = "Datubāzes kļūda";
@@ -1038,16 +1037,16 @@ function forgot_accept(MainModule $template, string $code): ?Template
 		return $T;
 	}
 
-	$login_data = Logins::load_by_login($forgot_data['f_login']);
+	$L = Logins::load_by_email($forgot_data['f_email']);
 
-	if(empty($login_data))
+	if(empty($L))
 	{
 		$template->error('Lietotājs netika atrasts vai ir bloķēts');
 		return $T;
 	}
 
 	$T->enable('BLOCK_forgot_pwch_form');
-	$T->set_except(['l_password', 'l_sessiondata'], $login_data);
+	$T->set_except(['l_password', 'l_sessiondata'], $L);
 
 	if(!isset($_POST['data']))
 	{
@@ -1055,22 +1054,24 @@ function forgot_accept(MainModule $template, string $code): ?Template
 	}
 
 	$data = $_POST['data'];
-
 	$error_msg = [];
 	pw_validate($data['l_password']??"", $data['l_password2']??"", $error_msg);
 
-	if(
-		!$error_msg &&
-		Logins::accept((int)$login_data['l_id']) &&
+	if($error_msg){
+		$template->error($error_msg);
+	} else {
+		$OK = DB::withNewTrans(function() use($L, $code, $data) {
+			return
+				Logins::accept($L->l_id) &&
 		Logins::remove_forgot_code($code) &&
-		Logins::update_password($login_data['l_login'], $data['l_password'])
-	) {
+				Logins::update_password($L->l_login, $data['l_password'])
+			;
+		});
+
+		if($OK) {
 		header("Location: /forgot/accept/ok/");
 		return null;
 	}
-
-	if($error_msg){
-		$template->error($error_msg);
 	}
 
 	$T->set_array($data);
@@ -1109,8 +1110,6 @@ function register(MainModule $template, array $sys_parameters = []): ?Template
 	{
 		return $T;
 	}
-
-	$logins = new Logins;
 
 	$check = [ 'l_login', 'l_nick', 'l_password', 'l_email' ];
 	$data = $_POST['data'];
@@ -1162,8 +1161,9 @@ function register(MainModule $template, array $sys_parameters = []): ?Template
 		$error_msg[] = 'Šāds segvārds jau eksistē';
 	}
 
-	if(!$error_msg && !$error_field) {
-		if($logins->insert($data)){
+	if(!$error_msg && !$error_field)
+	{
+		if(Logins::register($data)){
 			try {
 				email($sys_mail, '[truemetal] jauns lietotajs', "$data[l_login] ($data[l_nick])\n\nIP:$_SERVER[REMOTE_ADDR]");
 			} catch (Exception $e) {

@@ -15,17 +15,6 @@ class Logins
 	static function load(LoginsFilter $F): LoginsCollection
 	{
 		return (new LoginsEntity)->getAll($F);
-
-		// $sql = (new Select('logins.*'))->From('logins');
-
-		// $F->apply($sql);
-
-		// if($F->l_id || $F->l_login || $F->l_email || $F->l_hash)
-		// {
-		// 	return DB::ExecuteSingle($sql);
-		// } else {
-		// 	return DB::Execute($sql);
-		// }
 	}
 
 	static function load_by_email(string $email, bool $ignore_disabled = false)
@@ -143,69 +132,69 @@ class Logins
 	}
 
 	# TODO: apvienot accept un forget
-	static function insert_accept_code($login, $new_email = null): ?string
+	static function insert_accept_code(string $l_email, ?string $new_email = null): ?string
 	{
-		$accept_code = static::genCode();
+		$LA = LoginAcceptType::initFrom(new LoginAcceptDummy(
+			la_email: $l_email,
+			la_new_email: $new_email,
+			la_code: static::genCode(),
+		));
 
-		return DB::Execute(
-			"INSERT INTO login_accept (la_login, la_new_email, la_code, la_entered) VALUES (?, ?, ?, CURRENT_TIMESTAMP)",
-				$login, $new_email, $accept_code
-		) ? $accept_code : null;
+		return $LA->insert() ? $LA->la_code : null;
 	}
 
-	static function insert_forgot_code($login): ?string
+	static function insert_forgot_code(string $l_email): ?string
 	{
-		$accept_code = static::genCode();
+		$F = LoginForgotType::initFrom(new LoginForgotDummy(
+			f_email: $l_email,
+			f_code: static::genCode(),
+		));
 
-		return DB::Execute(
-			"INSERT INTO login_forgot (f_login, f_code, f_entered) VALUES (?, ?, CURRENT_TIMESTAMP)",
-			$login, $accept_code
-		) ? $accept_code : null;
+		return $F->insert() ? $F->f_code : null;
 	}
 
-	static function send_forgot_code($login, $code, $email): bool
+	static function send_forgot_code(string $l_email, string $code): bool
 	{
 		global $sys_domain;
 
 		$t = new_template('emails/forgot.tpl');
 		$t->set_var('ip', $_SERVER['REMOTE_ADDR']);
-		$t->set_var('login', $login);
 		$t->set_var('sys_domain', $sys_domain);
 		$t->set_var('code', $code);
 		$msg = $t->parse();
 
 		$subj = "$sys_domain - aizmirsi paroli?";
 
-		if(email($email, $subj, $msg))
+		if(email($l_email, $subj, $msg))
 		{
-			return DB::Execute("UPDATE login_forgot SET f_sent = 'Y' WHERE f_login = ?", $login);
+			return DB::Execute("UPDATE login_forgot SET f_sent = 1 WHERE f_email = ?", $l_email);
 		}
 
 		return false;
 	}
 
-	static function send_accept_code($login, $email, $subj, $msg): bool
+	static function send_accept_code(string $l_email,  $subj, $msg): bool
 	{
-		if(email($email, $subj, $msg))
+		if(email($l_email, $subj, $msg))
 		{
-			return DB::Execute("UPDATE login_accept SET la_sent = 1 WHERE la_login = ?", $login);
+			return DB::Execute("UPDATE login_accept SET la_sent = 1 WHERE la_email = ?", $l_email);
 		}
 
 		return false;
 	}
 
-	static function accept_login($code): bool
+	static function accept_login(string $code): bool
 	{
 		$timeout = static::codes_timeout();
 
-		$sql = "SELECT * FROM login_accept WHERE la_code = ? AND UNIX_TIMESTAMP() - UNIX_TIMESTAMP(la_entered) < ? AND la_accepted IS NULL'";
+		$sql = "SELECT * FROM login_accept WHERE la_code = ? AND UNIX_TIMESTAMP() - UNIX_TIMESTAMP(la_entered) < ? AND la_accepted IS NULL";
 
 		if($data = DB::ExecuteSingle($sql, $code, $timeout))
 		{
 			return DB::withNewTrans(function() use ($data) {
 				$logins_update = (new Update('logins'))
 					->Set('l_accepted', 1)
-					->Where(['l_login = ?', $data['la_login']])
+					->Where(['l_email = ?', $data['la_email']])
 				;
 
 				if($data['la_new_email'])
@@ -214,7 +203,7 @@ class Logins
 				}
 
 				return
-					DB::Execute("UPDATE login_accept SET la_accepted = CURRENT_TIMESTAMP WHERE la_login = ?", $data['la_login']) &&
+					DB::Execute("UPDATE login_accept SET la_accepted = CURRENT_TIMESTAMP WHERE la_email = ?", $data['la_email']) &&
 					DB::Execute($logins_update);
 			});
 		}
@@ -235,59 +224,42 @@ class Logins
 		);
 	}
 
-	function insert($data, $validate = Res::ACT_VALIDATE): bool
+	static function register(array $post_data): ?int
 	{
-		new TODO("Logins::insert");
-		if($validate){
-			$this->validate($data);
-		}
+		$L = LoginsType::initFrom(new LoginsDummy(
+			l_hash: Logins::gen_login_hash(),
+			l_login: $post_data['l_login'],
+			l_nick: $post_data['l_nick'],
+			l_password: Logins::gen_password_hash($post_data['l_password']),
+			l_email: $post_data['l_email'],
+			l_userip: User::ip()
+		));
 
-		$data['l_hash'] = Logins::gen_login_hash();
+		$new_l_id = DB::withNewTrans(function() use ($L) {
+			global $sys_domain;
 
-		return DB::withNewTrans(function() use ($data) {
-			global $sys_domain, $ip;
-
-			if(!($accept_code = $this->insert_accept_code($data['l_login'])))
+			if(!($accept_code = Logins::insert_accept_code($L->l_email)))
 			{
 				return false;
 			}
 
 			$t = new_template('emails/registered.tpl');
-			$t->set_var('ip', $_SERVER['REMOTE_ADDR']);
+			$t->set_var('ip', $L->l_userip);
 			$t->set_var('sys_domain', $sys_domain);
 			$t->set_var('code', $accept_code);
 			$msg = $t->parse();
 
 			$subj = "$sys_domain - reģistrācija";
 
-			if(!$this->send_accept_code($data['l_login'], $data['l_email'], $subj, $msg))
+			if(!Logins::send_accept_code($L->l_email, $subj, $msg))
 			{
 				return false;
 			}
 
-			$sql = "INSERT INTO logins (
-				l_login, l_hash, l_email,
-				l_active, l_accepted, l_nick,
-				l_userip, l_entered
-			) VALUES (
-				?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP
-			)";
-
-			$args = [
-				$data['l_login'], $data['l_hash'], $data['l_email'], $data['l_active'],
-				$data['l_accepted'], $data['l_nick'], $ip
-			];
-
-			if(DB::Execute($sql, ...$args))
-			{
-				if($this->update_password($data['l_login'], $data['l_password']))
-				{
-					return true;
-				}
-			}
-
-			return false;
+			return $L->insert();
 		});
+
+		return $new_l_id ? $new_l_id : null;
 	}
 
 	function update(array $data, $validate = Res::ACT_VALIDATE): bool
