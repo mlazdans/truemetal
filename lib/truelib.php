@@ -2089,7 +2089,7 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 		if($item['table_id'] == Table::FORUM)
 		{
 			if($item['type_id']){
-				$intro = mb_substr($item['res_data'], 0, 200);
+				$intro = mb_substr($item['res_data'], 0, 300);
 				$intro = specialchars($intro);
 				if(mb_strlen($item['res_data']) > 300){
 					$intro .= "...";
