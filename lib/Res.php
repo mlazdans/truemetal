@@ -5,9 +5,6 @@ use dqdp\TODO;
 
 class Res
 {
-	const TYPE_STD = 0;
-	const TYPE_EVENT = 1;
-
 	// const STATE_ACTIVE = 'Y';
 	// const STATE_INACTIVE = 'N';
 	// const STATE_VISIBLE = 'Y';
@@ -16,11 +13,6 @@ class Res
 
 	// const ACT_VALIDATE = true;
 	// const ACT_DONTVALIDATE = false;
-
-	var array $types = [
-		Res::TYPE_STD=>'Forums',
-		Res::TYPE_EVENT=>'Pasākums',
-	];
 
 	// protected $table_id;
 	// protected $login_id;
@@ -75,12 +67,12 @@ class Res
 	// 	return (DB::Execute($sql) ? DB::LastID() : false);
 	// }
 
-	static function GetAll(int $res_id)
+	static function GetAll(int $res_id): ?ResourceTypeInterface
 	{
 		$res_data = static::load(['res_id'=>$res_id]);
 
 		if(!$res_data) {
-			return false;
+			return null;
 		}
 
 		switch($res_data['table_id'])
@@ -88,13 +80,13 @@ class Res
 			case Table::ARTICLE:
 				return Article::load(['res_id'=>$res_id]);
 			case Table::FORUM:
-				return Forum::load(['res_id'=>$res_id]);
+				return Forum::load_by_res_id($res_id);
 				// $D = new Forum();
 				// return array_merge($res_data, $D->load(array(
 				// 	'res_id'=>$res_data['res_id'],
 				// 	)));
 			case Table::COMMENT:
-				return Comment::load(['res_id'=>$res_id]);
+				return Comment::load_by_res_id($res_id);
 				// $D = new Comment();
 				// return array_merge($res_data, $D->Get(array(
 				// 	'res_id'=>$res_data['res_id'],
@@ -120,59 +112,41 @@ class Res
 	}
 
 	# TODO: katrā klasē atsevišķi
-	static function Route(int $res_id, int $c_id = 0): string
+	// static function Route(int $res_id, int $c_id = 0): string
+	// {
+	// 	if(!($res = Res::GetAll($res_id))){
+	// 		return "/";
+	// 	}
+
+	// 	return static::RouteFromRes($res, $c_id);
+	// }
+
+	// static function RouteFromRes(ResourceInterface $res, ?int $c_id = null): string
+	// {
+	// 	return $res->Route($c_id);
+	// }
+
+	static function hasNewComments(int $res_id, ?string $date = null, ?int $comment_count = null): bool
 	{
-		if(!($res = Res::GetAll($res_id))){
-			return "/";
-		}
-
-		return static::RouteFromRes($res, $c_id);
-	}
-
-	static function RouteFromRes(array $res, int $c_id = 0): string
-	{
-		# TODO: visās uz res balstītās tabulās primary key pārsaukt par doc_id
-		switch($res['table_id'])
-		{
-			case Table::ARTICLE:
-				return Article::RouteFromRes($res, $c_id);
-			case Table::FORUM:
-				return Forum::RouteFromRes($res, $c_id);
-			case Table::COMMENT:
-				return Comment::RouteFromRes($res, $c_id);
-			// case Table::GALLERY:
-			// 	return Gallery::RouteFromRes($res, $c_id);
-			// case Table::GALLERY_DATA:
-			// 	return GalleryData::RouteFromRes($res, $c_id);
-		}
-
-		throw new InvalidArgumentException("Table unknown: $res[table_id]");
-	}
-
-	static function hasNewComments($item): bool
-	{
-		if(!User::logged() || empty($item['res_id'])){
+		if(!User::logged()){
 			return false;
 		}
 
-		$res_id = $item['res_id'];
+		# TODO: pārkonvertēt datumus jau uz timestamp!!!
+		if(isset($_SESSION['res']['viewed_date'][$res_id]) && $date){
+			return (strtotime($date) > strtotime($_SESSION['res']['viewed_date'][$res_id]));
+		} elseif(isset($_SESSION['res']['viewed_before']) && $date){
+			return ($_SESSION['res']['viewed_before'] < strtotime($date));
+		}
 
-		if(isset($_SESSION['res']['viewed_date'][$res_id]) && $item['res_comment_last_date'])
-			return (strtotime($item['res_comment_last_date']) > strtotime($_SESSION['res']['viewed_date'][$res_id]));
-
-		if(isset($_SESSION['res']['viewed'][$res_id]))
-			return ($item['res_comment_count'] > $_SESSION['res']['viewed'][$res_id]);
-
-		if(isset($_SESSION['res']['viewed_before']) && $item['res_comment_last_date'])
-			return ($_SESSION['res']['viewed_before'] < strtotime($item['res_comment_last_date']));
-
-		return ($item['res_comment_count'] > 0);
+		return $comment_count > 0;
 	}
 
-	static function markCommentCount($item): void
+	# TODO: saglabāt time stamp. Pirms tam jāpārkonvertē arī sessijās
+	static function markAsSeen(int $res_id): void
 	{
 		if(User::logged()){
-			$_SESSION['res']['viewed_date'][$item['res_id']] = $item['res_comment_last_date'];
+			$_SESSION['res']['viewed_date'][$res_id] = date('Y-m-d H:i:s');
 		}
 	}
 
@@ -202,7 +176,7 @@ class Res
 
 	# TODO: varbūt vajadzētu kaut kā apvienot daudzās vietas, kur šis tiek izsaukt, jo
 	# patlaban datu validācija notiek katrā izsaukšanas vietā
-	static function user_add_comment(int $res_id, string $c_data)
+	static function user_add_comment(int $res_id, string $c_data): ?int
 	{
 		$R = static::prepare_with_user(
 			res_resid: $res_id,
@@ -217,6 +191,17 @@ class Res
 				))->insert();
 			}
 		});
+	}
+
+	static function get_comments(int $res_id, ?ResFilter $F = new ResFilter()): ViewResCommentsCollection
+	{
+		$F->res_resid = $res_id;
+
+		if(empty($F->getOrderBy())){
+			$F->OrderBy('res_entered');
+		}
+
+		return (new ViewResCommentsEntity())->getAll($F);
 	}
 
 }

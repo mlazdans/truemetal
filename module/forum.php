@@ -19,11 +19,11 @@ if(empty($page_id)){
 
 if($forum_route)
 {
-	$forum_data = (function(MainModule $template, string $forum_route)
+	$forum_data = (function(MainModule $template, string $forum_route): ViewResForumType
 	{
 		$forum_id = (int)$forum_route;
 
-		if(!($forum_data = (new Forum())->load(["forum_id"=>$forum_id])))
+		if(!($forum_data = Forum::load_by_id($forum_id)))
 		{
 			$template->not_found();
 			return null;
@@ -33,7 +33,7 @@ if($forum_route)
 		# TODO: append query_string? ?hl=
 		if($forum_route)
 		{
-			$forum_real_route = Forum::RouteFromRes($forum_data);
+			$forum_real_route = $forum_data->Route();
 			if(!str_ends_with($forum_real_route, "/$forum_route"))
 			{
 				header("Location: $forum_real_route", true, 301);
@@ -46,15 +46,15 @@ if($forum_route)
 
 	if($forum_data)
 	{
-		$forum_title .= ' - '.$forum_data['res_name'].($hl ? sprintf(", meklēšana: %s", $hl) : "");
-		$forum_descr .= ($hl ? sprintf(", meklēšana: %s", $hl) : "").' - '.$forum_data['res_name'];
+		$forum_title .= ' - '.$forum_data->res_name.($hl ? sprintf(", meklēšana: %s", $hl) : "");
+		$forum_descr .= ($hl ? sprintf(", meklēšana: %s", $hl) : "").' - '.$forum_data->res_name;
 		if($page == 'page')
 		{
 			$forum_title .= " - $page_id. lapa";
 			$forum_descr .= " - $page_id. lapa";
 		}
 
-		if($forum_data['forum_allow_childs'])
+		if($forum_data->forum_allow_childs)
 		{
 			$fpp = 20;
 			$pages_visible_to_sides = 8;

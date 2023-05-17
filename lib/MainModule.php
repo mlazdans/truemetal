@@ -195,25 +195,21 @@ class MainModule
 
 	function set_recent_forum()
 	{
-		$data = Forum::load([
-			"fields"=>array('forum.forum_id', 'res.res_name', 'forum.res_id', 'res_meta.res_comment_last_date', 'res_meta.res_comment_count'),
-			"order"=>'COALESCE(res_meta.res_comment_last_date, res_entered) DESC',
-			"rows"=>10,
-			"forum_allow_childs"=>0,
-		]);
+		# TODO: fields
+		// "fields"=>array('forum.forum_id', 'res.res_name', 'forum.res_id', 'res_meta.res_comment_last_date', 'res_meta.res_comment_count'),
 
-		// printr($data);
-		// die;
+		$F = (new ResForumFilter(forum_allow_childs: 0))->rows(10)->orderBy("COALESCE(res_comment_last_date, res_entered) DESC");
+		$data = Forum::load($F);
 
 		if(count($data))
 		{
 			$TThemes = $this->add_file('forum/recent.tpl');
 			foreach($data as $item)
 			{
-				$TThemes->enable_if(Res::hasNewComments($item), 'BLOCK_forum_r_comments_new');
-				$TThemes->set_var('res_name', specialchars($item['res_name']));
-				$TThemes->set_var('res_comment_count', $item['res_comment_count']);
-				$TThemes->set_var('res_route', Forum::RouteFromRes($item));
+				$TThemes->enable_if(Res::hasNewComments($item->res_id, $item->res_comment_last_date, $item->res_comment_count), 'BLOCK_forum_r_comments_new');
+				$TThemes->set_var('res_name', specialchars($item->res_name));
+				$TThemes->set_var('res_comment_count', $item->res_comment_count);
+				$TThemes->set_var('res_route', $item->Route());
 				$TThemes->parse_block('BLOCK_forum_r_items', TMPL_APPEND);
 			}
 
@@ -252,22 +248,19 @@ class MainModule
 
 	function set_recent_comments($limit = 10)
 	{
-		$Article = new Article;
+		$F = (new ResArticleFilter())->orderBy('res_comment_last_date DESC')->rows($limit);
 
-		$data = $Article->load([
-			'order'=>'res_comment_last_date DESC',
-			'rows'=>$limit,
-		]);
+		$data = Article::load($F);
 
 		$T = $this->add_file('right/comment_recent.tpl');
 
 		foreach($data as $item)
 		{
-			$T->enable_if(Res::hasNewComments($item), 'BLOCK_comment_r_comments_new');
+			$T->enable_if(Article::hasNewComments($item), 'BLOCK_comment_r_comments_new');
 
-			$T->set_var('res_name',  specialchars($item['res_name']));
-			$T->set_var('res_comment_count', $item['res_comment_count']);
-			$T->set_var('res_route', Article::RouteFromRes($item));
+			$T->set_var('res_name',  specialchars($item->res_name));
+			$T->set_var('res_comment_count', $item->res_comment_count);
+			$T->set_var('res_route', $item->Route());
 			$T->parse_block('BLOCK_comment_r_items', TMPL_APPEND);
 		}
 
@@ -352,14 +345,14 @@ class MainModule
 
 	function set_events()
 	{
-		$forum = new Forum;
-		$data = $forum->load(array(
-			"fields"=>array('forum.forum_id', 'res.res_name', 'forum.event_startdate', 'forum.res_id'),
-			"actual_events"=>true,
-			"order"=>'forum.event_startdate',
-		));
+		# TODO: fields
+		// 	"fields"=>array('forum.forum_id', 'res.res_name', 'forum.event_startdate', 'forum.res_id'),
 
-		if(!$data){
+		$F = (new ResForumFilter(actual_events: true))->orderBy('event_startdate');
+
+		$data = Forum::load($F);
+
+		if(!$data->count()){
 			return;
 		}
 
@@ -368,7 +361,7 @@ class MainModule
 		$c = 0;
 		$tc = count($data);
 		foreach($data as $item){
-			$ts = strtotime($item['event_startdate']);
+			$ts = strtotime($item->event_startdate);
 			$D = date('j', $ts);
 			$Dw = date('w', $ts);
 			$M = date('m', $ts);
@@ -376,10 +369,10 @@ class MainModule
 			$diff = floor(($ts - time()) / (3600 * 24));
 
 			$TEvents->set_var('event_class', "");
-			$TEvents->set_var('event_url', Forum::RouteFromRes($item));
+			$TEvents->set_var('event_url', $item->Route());
 			$TEvents->set_var('event_title', ent($D.". ".get_month($M - 1).", ".get_day($Dw - 0)));
 			//$TEvents->set_var('event_name', ent($item['forum_name']));
-			$TEvents->set_var('event_name', $item['res_name']);
+			$TEvents->set_var('event_name', $item->res_name);
 
 			if($diff<2){
 				$TEvents->set_var('event_class', " actual0");

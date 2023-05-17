@@ -57,7 +57,7 @@ function new_template(string $file_name): ?Template {
 	return new Template($sys_template_root.DIRECTORY_SEPARATOR.$file_name);
 }
 
-function forum_add_theme(MainModule $template, Template $T, array $forum_data, array $post_data): bool
+function forum_add_theme(MainModule $template, Template $T, ViewResForumType $forum, array $post_data): bool
 {
 	global $ip;
 
@@ -87,7 +87,7 @@ function forum_add_theme(MainModule $template, Template $T, array $forum_data, a
 	}
 
 	# Tirgus
-	if($forum_data['forum_id'] == 107488){
+	if($forum->forum_id == 107488){
 		$entered_days = time() - strtotime(User::get_val('l_entered')) / (3600 * 24);
 		if(($entered_days < 10) || (User::get_val('votes_plus') - User::get_val('votes_minus') < 10)){
 			$error_msg[] = 'Nepietiekams reitings. Jābūt vismaz 10 dienu vecam vai (plusi - mīnusi) vismaz 10';
@@ -107,7 +107,7 @@ function forum_add_theme(MainModule $template, Template $T, array $forum_data, a
 	}
 
 	$R = Res::prepare_with_user(
-		res_resid: $forum_data['res_id'],
+		res_resid: $forum->res_id,
 		table_id: Table::FORUM,
 		res_name: $post_data['forum_name'],
 		res_data: $post_data['forum_data'],
@@ -124,15 +124,16 @@ function forum_add_theme(MainModule $template, Template $T, array $forum_data, a
 
 	if($forum_id)
 	{
-		header("Location: ".Forum::Route($forum_id, $post_data['forum_name']));
+		header("Location: ".Forum::RouteFromStr($forum_id, $post_data['forum_name']));
+		return true;
 	}
 
-	return (bool)$forum_id;
+	return false;
 }
 
 function forum_themes(
 	MainModule $template,
-	array $forum_data,
+	ViewResForumType $forum,
 	string $action,
 	int $fpp,
 	int $page_id,
@@ -141,16 +142,16 @@ function forum_themes(
 {
 	if(User::logged())
 	{
-		Forum::markThemeCount($forum_data);
+		Forum::markThemeCount($forum);
 	}
 
 	$T = $template->add_file('forum/theme.tpl');
-	$T->set_array($forum_data);
+	$T->set_array($forum);
 
-	$T->set_var('current_theme_name', specialchars($forum_data['res_name']));
-	$T->set_var('current_theme_route', Forum::RouteFromRes($forum_data));
+	$T->set_var('current_theme_name', specialchars($forum->res_name));
+	$T->set_var('current_theme_route', $forum->Route());
 
-	if($forum_data['forum_id'] == 107488){
+	if($forum->forum_id == 107488){
 		$T->enable('BLOCK_forumdata_bazar');
 	}
 
@@ -158,7 +159,7 @@ function forum_themes(
 
 	if($action == 'add_theme')
 	{
-		if(forum_add_theme($template, $T, $forum_data, post('data')))
+		if(forum_add_theme($template, $T, $forum, post('data')))
 		{
 			return null;
 		}
@@ -175,23 +176,24 @@ function forum_themes(
 		$T->enable('BLOCK_notloggedin');
 	}
 
-	$params = [
-		"res_resid"=>$forum_data['res_id'],
-		"page"=>$page_id,
-		"items_per_page"=>$fpp,
-	];
+	// $params = [
+	// 	"res_resid"=>$forum->res_id,
+	// 	"page"=>$page_id,
+	// 	"items_per_page"=>$fpp,
+	// ];
+
+	$F = (new ResForumFilter(res_resid: $forum->res_id))->page($page_id, $fpp);
 
 	if(User::get_val('l_forumsort_themes') == Forum::SORT_LASTCOMMENT)
 	{
-		$params["order"] = "COALESCE(res_comment_last_date, res_entered) DESC";
-
+		$F->orderBy("COALESCE(res_comment_last_date, res_entered) DESC");
 		$T->enable('BLOCK_info_sort_C');
 	} else {
-		$params["order"] = "res_entered DESC";
+		$F->orderBy("res_entered DESC");
 		$T->enable('BLOCK_info_sort_T');
 	}
 
-	$items = Forum::load($params);
+	$items = Forum::load($F);
 
 	if($items)
 	{
@@ -203,15 +205,16 @@ function forum_themes(
 	$BLOCK_forum = $T->get_block('BLOCK_forum');
 	foreach($items as $item)
 	{
-		$BLOCK_forum->enable_if(Res::hasNewComments($item), 'BLOCK_comments_new');
+		$BLOCK_forum->enable_if(Forum::hasNewComments($item), 'BLOCK_comments_new');
 
-		$BLOCK_forum->set_array(specialchars($item));
-		$BLOCK_forum->set_var('res_route', Forum::RouteFromRes($item));
-		$BLOCK_forum->set_var('res_date', proc_date($item['res_entered']));
+		$BLOCK_forum->set_object(specialchars($item));
+		$BLOCK_forum->set_var('res_route', $item->Route());
+		$BLOCK_forum->set_var('res_date', proc_date($item->res_entered));
 		$BLOCK_forum->parse(TMPL_APPEND);
 	}
 
-	$forum_count = (int)$forum_data['res_child_count'];
+	$forum_count = $forum->res_child_count;
+
 	forum_pages($page_id, $forum_count, $fpp, $pages_visible_to_sides, $T);
 
 	// $forum->set_forum_path($T, $forum_id);
@@ -292,28 +295,23 @@ function forum_pages(
 
 function forum_det(
 	MainModule $template,
-	array $forum_data,
+	ViewResForumType $forum,
 	string $action,
 	string $hl,
 ): ?Template
 {
-	$res_id = (int)$forum_data['res_id']??0;
-
-	// $forum = new Forum;
-
 	$T = $template->add_file('forum/det.tpl');
-	// $T->set_var('res_name', specialchars($forum_data['res_name']));
 
-	$T->set_array($forum_data);
-	$T->set_var('res_date', proc_date($forum_data['res_entered']));
-	$T->set_var('res_votes', format_vote($forum_data['res_votes']));
-	$T->set_var('comment_vote_class', comment_vote_class($forum_data['res_votes']));
+	$T->set_array($forum);
+	$T->set_var('res_date', proc_date($forum->res_entered));
+	$T->set_var('res_votes', format_vote($forum->res_votes));
+	$T->set_var('comment_vote_class', comment_vote_class($forum->res_votes));
 
 	if(User::logged()){
 		$T->enable('BLOCK_vote_control');
 	}
 
-	if(User::logged() && $forum_data['l_hash']){
+	if(User::logged() && $forum->l_hash){
 		$T->enable('BLOCK_profile_link');
 	} else {
 		$T->disable('BLOCK_profile_link');
@@ -322,14 +320,16 @@ function forum_det(
 	$C = $template->add_file('comments.tpl');
 
 	# Comments
-	$params['order'] = User::get_val('l_forumsort_msg') == Forum::SORT_DESC
-		? "res_entered DESC"
-		: "res_entered"
-	;
+	$F = (new ResFilter())->orderBy(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? "res_entered DESC" : "res_entered");
+	// $params['order'] = User::get_val('l_forumsort_msg') == Forum::SORT_DESC
+	// 	? "res_entered DESC"
+	// 	: "res_entered"
+	// ;
 
 	$T->enable(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? 'BLOCK_info_sort_D': 'BLOCK_info_sort_A');
 
-	$comments = get_res_comments($res_id, $params);
+	$comments = Res::get_comments($forum->res_id, $F);
+
 	// printr($forum_data, $params, $comments);
 	// die;
 
@@ -354,9 +354,9 @@ function forum_det(
 	# 3) pārkopēt foruma pirmā komenta votes uz foruma votēm
 	# 4) izvākt pirmo foruma komentu
 
-	Res::markCommentCount($forum_data);
+	Res::markAsSeen($forum->res_id);
 
-	if($forum_data['forum_closed'])
+	if($forum->forum_closed)
 	{
 		$C->disable('BLOCK_addcomment');
 		$T->enable('BLOCK_forum_closed');
@@ -369,7 +369,7 @@ function forum_det(
 			return null;
 		}
 
-		if($forum_data['forum_closed'])
+		if($forum->forum_closed)
 		{
 			$error_msg[] = "Tēma slēgta";
 		}
@@ -382,9 +382,9 @@ function forum_det(
 		}
 
 		if(!$error_msg) {
-			if($c_id = Res::user_add_comment($res_id, $data['c_data']))
+			if($c_id = Res::user_add_comment($forum->res_id, $data['c_data']))
 			{
-				header("Location: ".Forum::RouteFromRes($forum_data, $c_id));
+				header("Location: ".$forum->Route($c_id));
 				return null;
 			} else {
 				$error_msg[] = "Neizdevās pievienot komentāru";
@@ -399,7 +399,7 @@ function forum_det(
 	$T->set_block_string($C->parse(), 'BLOCK_forum_comments');
 
 	# Attendees
-	if(User::logged() && ($forum_data['type_id'] == Res::TYPE_EVENT) && ($A = attendees($template, $forum_data)))
+	if(User::logged() && ($forum->type_id === Forum::TYPE_EVENT) && ($A = attendees($template, $forum)))
 	{
 		$T->set_block_string($A->parse(), 'BLOCK_attend');
 	}
@@ -407,65 +407,7 @@ function forum_det(
 	return $T;
 }
 
-function get_res_comments(int $res_id, array $params = [])
-{
-	$sql = (new Select("comment.*, res.*, res_meta.*"))
-		->From('res', 'parent_res')
-		->Join('res', 'res.res_resid = parent_res.res_id')
-		->Join('res_meta', 'res_meta.res_id = res.res_id')
-		->Join('comment', 'comment.res_id = res.res_id')
-		->Where(["parent_res.res_id = ?", $res_id])
-	;
-
-	join_logins($sql);
-
-	// if(isset($params['c_id'])){
-	// 	$sql->Where(["comment.c_id = ?", $params['c_id']]);
-	// }
-
-	if(isset($params['login_id'])){
-		$sql->Where(["res.login_id = ?", $params['login_id']]);
-	}
-
-	if(defaulted($params, 'res_visible'))
-	{
-		$sql->Where("res.res_visible = 1");
-	} elseif(!ignored($params, 'res_visible')){
-		$sql->Where(["res.res_visible = ?", $params['res_visible']]);
-	}
-
-	if(isset($params['ips']))
-	{
-		if(is_array($params['ips']))
-		{
-			$sql->WhereIn('res.res_ip', $params['ips']);
-		} else {
-			# TODO: tikai viena tipa arg - vai nu array vai string!!
-			$sql->Where('res.res_ip = ?', $params['ips']);
-		}
-	}
-
-	if(empty($params['order'])) {
-		$sql->OrderBy('res_entered');
-	} else {
-		$sql->OrderBy($params['order']);
-	}
-
-	if(isset($params['rows']))
-	{
-		$sql->Rows((int)$params['rows']);
-	}
-
-	if(isset($params['limit']))
-	{
-		new TODO("Nodalīt rows un offset");
-		// $sql .= " LIMIT $params[limit]";
-	}
-
-	return DB::Execute($sql);
-}
-
-function comment_list(Template $C, array $comments, string $hl): void
+function comment_list(Template $C, ViewResCommentsCollection $comments, string $hl): void
 {
 	if(User::logged())
 	{
@@ -476,7 +418,7 @@ function comment_list(Template $C, array $comments, string $hl): void
 		$disabled_users = array();
 	}
 
-	if($comments)
+	if($comments->count())
 	{
 		$BLOCK_comment = $C->enable('BLOCK_comment');
 	} else {
@@ -488,34 +430,34 @@ function comment_list(Template $C, array $comments, string $hl): void
 	foreach($comments as $item)
 	{
 		$comment_nr++;
-		// $item['res_votes'] = (int)$item['res_votes'];
 
 		# balsošana
 		if(User::logged() && $BLOCK_comment->block_exists('BLOCK_comment_vote')){
 			$BLOCK_comment->enable('BLOCK_comment_vote');
 		}
 
+		$BLOCK_comment->set_array($item);
+
 		if($hl){
-			$item['res_data_compiled'] = hl($item['res_data_compiled'], $hl);
+			$BLOCK_comment->set_var('res_data_compiled', hl($item->res_data_compiled, $hl));
 		}
 
-		$item['res_nickname'] = specialchars($item['res_nickname']);
-		if(empty($disabled_users[$item['login_id']])){
+		if(empty($disabled_users[$item->login_id])){
 			$BLOCK_comment->set_var('c_disabled_user_class', '');
 		} else {
 			$BLOCK_comment->set_var('c_disabled_user_class', ' disabled');
-			$item['res_data_compiled'] = '-neredzams komentārs-';
+			$BLOCK_comment->set_var('res_data_compiled', '-neredzams komentārs-');
 		}
 
-		$BLOCK_comment->set_array($item);
-		$BLOCK_comment->set_var('res_date', proc_date($item['res_entered']));
-		$BLOCK_comment->set_var('res_votes', format_vote($item['res_votes']));
-		$BLOCK_comment->set_var('comment_vote_class', comment_vote_class($item['res_votes']));
+		$BLOCK_comment->set_var('res_nickname', specialchars($item->res_nickname));
+		$BLOCK_comment->set_var('res_date', proc_date($item->res_entered));
+		$BLOCK_comment->set_var('res_votes', format_vote($item->res_votes));
+		$BLOCK_comment->set_var('comment_vote_class', comment_vote_class($item->res_votes));
 
 		// Joined from logins
 		// if(User::logged() && ($item['l_login'] || $item['c_userlogin'] || $item['login_id'])){
-		if(User::logged() && $item['l_hash']){
-			$BLOCK_comment->set_var('l_hash', $item['l_hash']);
+		if(User::logged() && $item->l_hash){
+			$BLOCK_comment->set_var('l_hash', $item->l_hash);
 			$BLOCK_comment->enable('BLOCK_profile_link');
 		} else {
 			$BLOCK_comment->disable('BLOCK_profile_link');
@@ -1078,6 +1020,7 @@ function forgot_accept(MainModule $template, string $code): ?Template
 	return $T;
 }
 
+# TODO: pārbaudīt lauku garumus
 function register(MainModule $template, array $sys_parameters = []): ?Template
 {
 	global $sys_mail;
@@ -1195,10 +1138,9 @@ function set_error_fields(TemplateBlock $T, array $fields){
 
 function forum_root(MainModule $template): Template
 {
-	$forum_data = (new Forum())->load([
-		"res_resid"=>0,
-		"order"=>"forum_id ASC",
-	]);
+	$F = (new ResForumFilter(res_resid: false))->orderBy("forum_id ASC");
+
+	$forum_data = Forum::load($F);
 
 	$T = $template->add_file('forum.tpl');
 
@@ -1213,8 +1155,8 @@ function forum_root(MainModule $template): Template
 	{
 		$T->enable_if(Forum::hasNewThemes($item), 'BLOCK_comments_new');
 		$T->set_array($item);
-		$T->set_var('res_route', Forum::RouteFromRes($item));
-		$T->set_var('forum_date', proc_date($item['res_entered']));
+		$T->set_var('res_route', $item->Route());
+		$T->set_var('forum_date', proc_date($item->res_entered));
 		$T->parse_block('BLOCK_forum', TMPL_APPEND);
 	}
 
@@ -1345,13 +1287,15 @@ function user_comments(MainModule $template, string $l_hash, string $hl): ?Templ
 	// $T->set_array($login_data);
 
 	# Comments
-	$params = [
-		'login_id'=>$login_data->l_id,
-		'rows'=>100,
-		'order'=>"res_entered DESC",
-	];
+	// $params = [
+	// 	'login_id'=>$login_data->l_id,
+	// 	'rows'=>100,
+	// 	'order'=>"res_entered DESC",
+	// ];
 
-	$comments = Comment::load($params);
+	$F = (new ResCommentFilter(login_id: $login_data->l_id))->rows(100)->orderBy("res_entered DESC");
+
+	$comments = Comment::load($F);
 
 	comment_list($C, $comments, $hl);
 
@@ -1528,7 +1472,7 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 	$gal = $gallery->load($galdata['gal_id']);
 
 	# Komenti
-	Res::markCommentCount($galdata);
+	Res::markAsSeen($galdata);
 
 	$T = $template->add_file('gallery.tpl');
 	$C = new_template('comments.tpl');
@@ -1726,7 +1670,7 @@ function attend(MainModule $template, int $res_id, ?string $off = null): ?TrueRe
 
 	$login_id = User::id();
 
-	if($item['type_id'] != Res::TYPE_EVENT)
+	if($item['type_id'] !== Forum::TYPE_EVENT)
 	{
 		$template->forbidden("Nav pasākums");
 		return null;
@@ -1757,7 +1701,7 @@ function attend(MainModule $template, int $res_id, ?string $off = null): ?TrueRe
 	}
 }
 
-function attendees(MainModule $template, int|array $res): ?Template
+function attendees(MainModule $template, ViewResForumType $forum): ?Template
 {
 	$T = $template->add_file('forum/attend.tpl');
 
@@ -1767,24 +1711,24 @@ function attendees(MainModule $template, int|array $res): ?Template
 		return null;
 	}
 
-	if(is_int($res))
-	{
-		if(!($res = Res::GetAll($res)))
-		{
-			$template->not_found();
-			return null;
-		}
-	}
+	// if(is_int($res))
+	// {
+	// 	if(!($res = Res::GetAll($res)))
+	// 	{
+	// 		$template->not_found();
+	// 		return null;
+	// 	}
+	// }
 
-	if($res['type_id'] != Res::TYPE_EVENT)
+	if($forum->type_id !== Forum::TYPE_EVENT)
 	{
 		$template->forbidden("Nav pasākums");
 		return null;
 	}
 
 	$me_attended = false;
-	$T->set_var('res_id', $res['res_id']);
-	if($data = get_attendees((int)$res['res_id']))
+	$T->set_var('res_id', $forum->res_id);
+	if($data = get_attendees($forum->res_id))
 	{
 		$BLOCK_attend_list = $T->enable('BLOCK_attend_list');
 		$c = count($data);
@@ -1801,7 +1745,7 @@ function attendees(MainModule $template, int|array $res): ?Template
 		}
 	}
 
-	$ts = strtotime(date('d.m.Y', strtotime($res['event_startdate']))) + 24 * 3600;
+	$ts = strtotime(date('d.m.Y', strtotime($forum->event_startdate))) + 24 * 3600;
 	if(time() < $ts){
 		$T->enable('BLOCK_attend_'.($me_attended ? 'off' : 'on'));
 	}
@@ -1897,7 +1841,7 @@ function join_logins(Select $sql)
 function article(MainModule $template, int $art_id, string $hl, ?string $article_route = null): ?Template
 {
 	# TODO: vote, profile, etc
-	if(!($art = Article::load(['art_id'=>$art_id]))){
+	if(!($art = Article::load_by_id($art_id))){
 		$template->not_found();
 		return null;
 	}
@@ -1907,7 +1851,7 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 	# NOTE: redirektējam uz jaunajām adresēm, pēc gada (2011-04-30) varēs noņemt
 	if($article_route)
 	{
-		$article_real_route = Article::RouteFromRes($art);
+		$article_real_route = $art->Route();
 		if(!str_ends_with($article_real_route, "/$article_route"))
 		{
 			header("Location: $article_real_route", true, 301);
@@ -1916,12 +1860,6 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 	}
 
 	$T = $template->add_file('article.tpl');
-
-	if($hl)
-	{
-		$art['res_intro'] = hl($art['res_intro'], $hl);
-		$art['res_data'] = hl($art['res_data'], $hl);
-	}
 
 	# Comments
 	$T->enable('BLOCK_article_comments_head');
@@ -1936,7 +1874,6 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 			return null;
 		}
 
-		$res_id = $art['res_id'];
 		$data = post('data');
 		$C->set_array(specialchars($data));
 
@@ -1945,9 +1882,9 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 		}
 
 		if(!$error_msg){
-			if($c_id = Res::user_add_comment($res_id, $data['c_data']))
+			if($c_id = Res::user_add_comment($art->res_id, $data['c_data']))
 			{
-				header("Location: ".Article::RouteFromRes($art, $c_id));
+				header("Location: ".$art->Route($c_id));
 				return null;
 			} else {
 				$error_msg[] = "Neizdevās pievienot komentāru";
@@ -1960,16 +1897,24 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 		$C->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
 	}
 
-	Res::markCommentCount($art);
-	$comments = get_res_comments((int)$art['res_id']);
+	Res::markAsSeen($art->res_id);
+
+	$comments = Res::get_comments($art->res_id);
+
 	comment_list($C, $comments, $hl);
+
 	$T->set_block_string($C->parse(), 'BLOCK_article_comments');
 
 	// $art_title .= (isset($art['art_name']) ? " - ".$art['art_name'] : "");
 
-	$art['res_date_f'] = proc_date($art['res_entered']);
-
 	$T->set_array($art);
+	$T->set_var('res_date_f', proc_date($art->res_entered));
+
+	if($hl)
+	{
+		$T->set_var('res_intro', hl($art->res_intro, $hl));
+		$T->set_var('res_data', hl($art->res_data, $hl));
+	}
 
 	return $T;
 }
@@ -2089,9 +2034,9 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 					$item['res_data'] = '';
 				}
 			}
-			$item['res_route'] = Forum::Route((int)$item['doc_id'], $item['res_name']);
+			$item['res_route'] = Forum::RouteFromStr((int)$item['doc_id'], $item['res_name']);
 		} elseif($item['table_id'] == Table::ARTICLE){
-			$item['res_route'] = Article::Route($item['module_id'], (int)$item['doc_id'], $item['res_name']);
+			$item['res_route'] = Article::RouteFromStr($item['module_id'], (int)$item['doc_id'], $item['res_name']);
 		} else {
 			throw new InvalidArgumentException("Unexpected table ID: $item[table_id]");
 		}
@@ -2103,7 +2048,7 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 			$T->disable('BLOCK_art_cont');
 		}
 
-		$T->enable_if(Res::hasNewComments($item), 'BLOCK_comments_new');
+		$T->enable_if(Res::hasNewComments($item['res_id'], $item['res_entered'], $item['res_comment_count']), 'BLOCK_comments_new');
 
 		# TODO: route
 		// $T->set_var('res_route')

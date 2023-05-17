@@ -1,10 +1,9 @@
 <?php declare(strict_types = 1);
 
-use dqdp\SQL\Select;
 use dqdp\Template;
 use dqdp\TODO;
 
-class Forum implements ResourceInterface
+class Forum
 {
 	const DISPLAY_DATACOMPILED = 0;
 	const DISPLAY_DATA = 1;
@@ -14,166 +13,106 @@ class Forum implements ResourceInterface
 	const SORT_DESC = 'D';
 	const SORT_ASC = 'A';
 
-	static function load(array $params)
+	const TYPE_STD = 0;
+	const TYPE_EVENT = 1;
+
+	var array $types = [
+		self::TYPE_STD=>'Forums',
+		self::TYPE_EVENT=>'Pasākums',
+	];
+
+	# TODO: $params['fields']
+	static function load(ResForumFilter $F): ViewResForumCollection
 	{
-		$sql = (new Select)
-			->From('res')
-			->Join('res_meta', 'res_meta.res_id = res.res_id')
-			->Join('forum', 'forum.res_id = res.res_id')
-		;
-
-		if(isset($params['fields'])){
-			$sql->Select(join(',', $params['fields']));
-		} else {
-			$sql->Select("forum.*, res.*, res_meta.*");
-		}
-
-		join_logins($sql);
-
-		# TODO: abstract out
-		$fields = ['forum_id', 'type_id', 'res_id'];
-		foreach($fields as $f){
-			if(isset($params[$f])){
-				$sql->Where(["forum.$f = ?", $params[$f]]);
-			}
-		}
-
-		if(isset($params['actual_events'])){
-			$sql->Where(["forum.type_id = ?", Res::TYPE_EVENT]);
-			$sql->Where(["forum.event_startdate >= ?", date('Y-m-d')]);
-		}
-
-		// if(isset($params['forum_ids'])){
-		// 	$sql->WhereIn("forum.forum_id", $params['forum_ids']);
-		// }
-
-		if(isset($params['res_ids'])){
-			$sql->WhereIn("forum.res_id", $params['res_id']);
-		}
-
-		if(isset($params['forum_forumid'])){
-			throw new TODO('forum_forumid uz res_resid');
-		}
-
-		if(isset($params['res_resid'])){
-			// throw new TODO('$params[forum_forumid]');
-			# TODO: izdomāt kā labāk padot NULL
-			if(empty($params['res_resid'])){
-				$sql->Where("res.res_resid IS NULL");
-			} else {
-				$sql->Where(["res.res_resid = ?", $params['res_resid']]);
-			}
-		}
-
-		if(isset($params['forum_active'])){
-			new TODO('forum_active: use res_visible');
-		}
-
-		if(defaulted($params, 'res_visible'))
-		{
-			$sql->Where("res.res_visible = 1");
-		} elseif(!ignored($params, 'res_visible')){
-			$sql->Where(["res.res_visible = ?", $params['res_visible']]);
-		}
-
-		// if(defaulted($params, 'forum_active'))
-		// {
-		// 	$sql->Where("res.res_visible = 1");
-		// } elseif(!ignored($params, 'forum_active')){
-		// 	$sql->Where(["res.res_visible = ?", $params['forum_active']]);
-		// }
-
-		if(isset($params['forum_allow_childs'])){
-			$sql->Where(["forum.forum_allow_childs = ?", $params['forum_allow_childs']]);
-		}
-
-		if(empty($params['order'])){
-			$sql->OrderBy("res.res_entered DESC");
-		} else {
-			$sql->OrderBy($params['order']);
-		}
-		// $sql .= (empty($params['order']) ? " ORDER BY f.forum_entered DESC " : " ORDER BY $params[order] ");
-
-		if(isset($params['rows']))
-		{
-			$sql->Rows((int)$params['rows']);
-		}
-
-		if(isset($params['limit']))
-		{
-			new TODO("Nodalīt rows un offset");
-			// $sql .= " LIMIT $params[limit]";
-		}
-
-		if(isset($params['page']) && isset($params['items_per_page'])){
-			$sql->Page((int)$params['page'], (int)$params['items_per_page']);
-			// $sql .= sprintf(" LIMIT %s,%s", ($this->page - 1) * $this->fpp, $this->fpp);
-		}
-
-		return (isset($params['forum_id']) || isset($params['res_id']) ? DB::ExecuteSingle($sql) : DB::Execute($sql));
+		return (new ViewResForumEntity)->getAll($F);
 	}
 
-	function get_tree($forum_id)
+	# TODO: abstract between all res classess
+	static function load_single(ResForumFilter $F): ?ViewResForumType
 	{
-		$forum_id = (int)$forum_id;
+		$data = Forum::load($F);
 
-		if(!$forum_id)
-			return;
+		assert($data->count() <= 1);
 
-		$data = $this->load(array(
-			"forum_id"=>$forum_id,
-			));
-
-		$data2 = array();
-		if(isset($data['forum_forumid']))
-			$data2 = $this->get_tree($data['forum_forumid']);
-
-		if(!empty($data2) || !empty($data)) {
-			$data2[] = $data;
+		if($data->count())
+		{
+			return $data[0];
 		}
 
-		return $data2;
+		return null;
 	}
 
-	function get_all_tree($forum_id = 0, $d = 0)
+	static function load_by_id(int $forum_id): ?ViewResForumType
 	{
-		if($d == 2)
-		{
-			return array();
-		}
-
-		$forum_id = (int)$forum_id;
-
-		$data2 = array();
-		//if($data = $this->load(0, $forum_id))
-		$data = $this->load(array(
-			"forum_forumid"=>$forum_id
-			));
-
-		if($data)
-		{
-			foreach($data as $item)
-			{
-				if(isset($item['forum_id']))
-				{
-					$tmp = $this->get_all_tree($item['forum_id'], $d + 1);
-					if($tmp)
-					{
-						//$data2['_data_'] = $item;
-						$data2[$item['forum_id']] = $tmp;
-					}
-					//$data2 = array_merge($data2, $tmp);
-				}
-			}
-		}
-
-		if(!empty($data2) || !empty($data))
-		{
-			$data2['_data_'] = $data;
-		}
-
-		return $data2;
+		return Forum::load_single(new ResForumFilter(forum_id: $forum_id));
 	}
+
+	static function load_by_res_id(int $res_id): ?ViewResForumType
+	{
+		return Forum::load_single(new ResForumFilter(res_id: $res_id));
+	}
+
+	// function get_tree($forum_id)
+	// {
+	// 	$forum_id = (int)$forum_id;
+
+	// 	if(!$forum_id)
+	// 		return;
+
+	// 	$data = $this->load(array(
+	// 		"forum_id"=>$forum_id,
+	// 		));
+
+	// 	$data2 = array();
+	// 	if(isset($data['forum_forumid']))
+	// 		$data2 = $this->get_tree($data['forum_forumid']);
+
+	// 	if(!empty($data2) || !empty($data)) {
+	// 		$data2[] = $data;
+	// 	}
+
+	// 	return $data2;
+	// }
+
+	// function get_all_tree($forum_id = 0, $d = 0)
+	// {
+	// 	if($d == 2)
+	// 	{
+	// 		return array();
+	// 	}
+
+	// 	$forum_id = (int)$forum_id;
+
+	// 	$data2 = array();
+	// 	//if($data = $this->load(0, $forum_id))
+	// 	$data = $this->load(array(
+	// 		"forum_forumid"=>$forum_id
+	// 		));
+
+	// 	if($data)
+	// 	{
+	// 		foreach($data as $item)
+	// 		{
+	// 			if(isset($item['forum_id']))
+	// 			{
+	// 				$tmp = $this->get_all_tree($item['forum_id'], $d + 1);
+	// 				if($tmp)
+	// 				{
+	// 					//$data2['_data_'] = $item;
+	// 					$data2[$item['forum_id']] = $tmp;
+	// 				}
+	// 				//$data2 = array_merge($data2, $tmp);
+	// 			}
+	// 		}
+	// 	}
+
+	// 	if(!empty($data2) || !empty($data))
+	// 	{
+	// 		$data2['_data_'] = $data;
+	// 	}
+
+	// 	return $data2;
+	// }
 
 // 	function Add()
 // 	{
@@ -470,41 +409,48 @@ class Forum implements ResourceInterface
 	// 	return true;
 	// }
 
-	public static function hasNewThemes($item)
+	public static function hasNewComments(ViewResForumType $item)
+	{
+		return Res::hasNewComments($item->res_id, $item->res_comment_last_date, $item->res_child_count);
+	}
+
+	public static function hasNewThemes(ViewResForumType $item)
 	{
 		if(!User::logged()){
 			return false;
 		}
 
-		// res_child_last_date
-		if(isset($_SESSION['forums']['viewed_date'][$item['forum_id']]))
-			return (strtotime($item['res_child_last_date']) > strtotime($_SESSION['forums']['viewed_date'][$item['forum_id']]));
-
-		if(isset($_SESSION['forums']['viewed'][$item['forum_id']]))
-			return ($item['forum_themecount'] > $_SESSION['forums']['viewed'][$item['forum_id']]);
-
-		if(isset($_SESSION['res']['viewed_before']))
-			return ($_SESSION['res']['viewed_before'] < strtotime($item['res_child_last_date']));
-
-		return ($item['forum_themecount']??0 > 0);
-	}
-
-	public static function markThemeCount($item)
-	{
-		if(!User::logged()){
-			return false;
+		if(isset($_SESSION['forums']['viewed_date'][$item->forum_id])){
+			return (strtotime($item->res_child_last_date) > strtotime($_SESSION['forums']['viewed_date'][$item->forum_id]));
 		}
-		$_SESSION['forums']['viewed_date'][$item['forum_id']] = $item['res_child_last_date'];
+
+		// Šķiet šis 'viewed' ir kaut kāds vecs artifakts
+		// if(isset($_SESSION['forums']['viewed'][$item->forum_id]))
+		// 	return ($item->res_child_count > $_SESSION['forums']['viewed'][$item->forum_id]);
+
+		// if(isset($_SESSION['res']['viewed_before']))
+		// 	return ($_SESSION['res']['viewed_before'] < strtotime($item->res_child_last_date));
+
+		return $item->res_child_count > 0;
 	}
 
-	static function RouteFromRes(array $res, int $c_id = 0): string
-	{
-		return static::Route($res['forum_id']??$res['doc_id'], $res['res_name'], $c_id);
-	}
+	// static function RouteFromRes(array $res, int $c_id = 0): string
+	// {
+	// 	return static::Route($res['forum_id']??$res['doc_id'], $res['res_name'], $c_id);
+	// }
 
-	static function Route(int $forum_id, string $forum_name, int $c_id = 0): string
+	static function RouteFromStr(int $forum_id, string $forum_name, ?int $c_id = null): string
 	{
 		return "/forum/$forum_id-".urlize($forum_name).($c_id ? "#comment$c_id" : "");
 	}
 
+	# TODO: izpētīt vai var apvienot ar $_SESSION['res']['viewed_date'][$res_id]
+	static function markThemeCount(ViewResForumType $item)
+	{
+		if(!User::logged()){
+			return false;
+		}
+
+		$_SESSION['forums']['viewed_date'][$item->forum_id] = date('Y-m-d H:i:s');
+	}
 }

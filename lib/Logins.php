@@ -8,9 +8,12 @@ class Logins
 
 	static function load_single(LoginsFilter $F): ?LoginsType
 	{
-		if($data = (new LoginsEntity)->getAll($F))
+		$data = (new LoginsEntity)->getAll($F);
+
+		assert($data->count() <= 1);
+
+		if($data->count())
 		{
-			assert(count($data) == 1);
 			return $data[0];
 		}
 
