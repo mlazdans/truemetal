@@ -2149,6 +2149,8 @@ function load_res(int $res_id): ?ResourceTypeInterface
 	{
 		return load_specific_res($res->res_id, $res->table_id);
 	}
+
+	return null;
 }
 
 function tm_search(SearchParams $params)
