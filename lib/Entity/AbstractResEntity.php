@@ -20,6 +20,7 @@ abstract class AbstractResEntity extends Entity
 	// 	return $this->load_single();
 	// }
 
+	# TODO: vajadzētu izdomāt, kā enforcēt, lai bugus var ātrāk izķert
 	// protected function _load_single(): ?DataObject
 	// {
 	// 	$data = $this->load();
