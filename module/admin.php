@@ -10,6 +10,8 @@ if(!(User::logged() && in_array(User::id(), $admins))){
 	return;
 }
 
+require_once("lib/adminlib.php");
+
 $admin_modules = array(
 	'modules'=>'Moduļi',
 	'article'=>'Ziņas',

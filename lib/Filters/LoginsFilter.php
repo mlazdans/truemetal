@@ -1,24 +1,26 @@
 <?php declare(strict_types = 1);
 
 use dqdp\DBA\AbstractFilter;
+use dqdp\DBA\Types\None;
 use dqdp\SQL\Select;
 use dqdp\TODO;
 
 class LoginsFilter extends AbstractFilter
 {
 	function __construct(
-		public ?int $l_id                 = null,
-		public ?string $l_login           = null,
-		public ?string $l_email           = null,
-		public ?string $l_hash            = null,
-		public ?string $l_nick            = null,
-		public ?string $l_sess_id         = null,
-		public null|int|false $l_logedin  = false,
-		public null|int|false $l_active   = 1,
-		public null|int|false $l_accepted = 1,
-		public ?string $q                 = null,
-		public ?bool $jubilars            = false,
-		public ?bool $get_all_ips         = false,
+		public ?int $l_id                      = null,
+		public ?string $l_login                = null,
+		public ?string $l_email                = null,
+		public ?string $l_hash                 = null,
+		public ?string $l_nick                 = null,
+		public ?string $l_sess_id              = null,
+		public null|int|false $l_logedin       = false,
+		public null|int|false $l_active        = 1,
+		public null|int|false $l_accepted      = 1,
+		public ?None $l_lastaccess             = null,
+		public ?string $q                      = null,
+		public ?bool $jubilars                 = false,
+		public ?bool $get_all_ips              = false,
 	) {}
 
 	static function ignore_disabled(LoginsFilter $F, bool $ignore_disabled): LoginsFilter
@@ -38,6 +40,11 @@ class LoginsFilter extends AbstractFilter
 
 		$this->apply_set_fields($sql, ['l_id', 'l_login', 'l_email', 'l_hash', 'l_nick', 'l_sess_id'], $prefix);
 		$this->apply_falsed_fields($sql, ['l_active', 'l_accepted', 'l_logedin'], $prefix);
+
+		if($this->l_lastaccess instanceof None)
+		{
+			$sql->Where("l_lastaccess IS NULL");
+		}
 
 		if($this->jubilars)
 		{

@@ -1,12 +1,16 @@
 <?php declare(strict_types = 1);
 
+use dqdp\TODO;
+
 $l_id = (int)array_shift($sys_parameters);
 $action = postget('action');
-$actions = array('delete_multiple', 'activate_multiple', 'deactivate_multiple');
-$logins = new Logins;
 
-if(in_array($action, $actions))
+$template = new AdminModule("logins");
+
+if(in_array($action, ['delete_multiple', 'activate_multiple', 'deactivate_multiple']))
 {
+	new TODO("process_action");
+	$logins = new Logins;
 	if($logins->process_action($_POST, $action)){
 		redirect_referer();
 		// header("Location: $module_root/");
@@ -17,6 +21,8 @@ if(in_array($action, $actions))
 
 if($action == 'save')
 {
+	new TODO("save");
+	$logins = new Logins;
 	if($logins->update($_POST['data'], Res::ACT_DONTVALIDATE))
 		header("Location: $module_root/".($l_id ? "$l_id/" : ""));
 	else
@@ -30,8 +36,9 @@ $action = get('action');
 
 if($l_id)
 {
-	include('module/admin/logins/edit.inc.php');
+	$T = admin_logins_edit($template, $l_id);
 } else {
-	include('module/admin/logins/list.inc.php');
+	$T = admin_logins_list($template);
 }
 
+$template->out($T);

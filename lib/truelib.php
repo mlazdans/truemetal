@@ -1536,10 +1536,10 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 
 function admin_comment_list(
 	Template $C,
-	array $comments
+	ViewResCommentCollection $comments
 ){
 
-	if($comments)
+	if($comments->count())
 	{
 		$C->enable('BLOCK_comments');
 	} else {
@@ -1548,12 +1548,12 @@ function admin_comment_list(
 
 	foreach($comments as $item)
 	{
-		$item['c_origin_href'] = "/resroute/$item[parent_res_id]/?c_id=$item[c_id]";
-		$item['c_origin_name'] = "#comment$item[c_id]";
-
 		$C->set_array($item, 'BLOCK_comment_item');
 
-		if($item['res_visible'])
+		$C->set_var('c_origin_href', "/resroute/$item->res_resid/?c_id=$item->c_id");
+		$C->set_var('c_origin_name', "#comment$item->c_id");
+
+		if($item->res_visible)
 		{
 			$C->enable('BLOCK_c_visible');
 			$C->disable('BLOCK_c_invisible');

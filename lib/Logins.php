@@ -1,6 +1,7 @@
 <?php declare(strict_types = 1);
 
 use dqdp\SQL\Update;
+use dqdp\TODO;
 
 class Logins
 {
@@ -346,6 +347,7 @@ class Logins
 
 	static function collectUsersByIP($ips, $exclude_l_ids = array(), $exclude_ips = array(), $d = 0)
 	{
+		new TODO("fix collectUsersByIP");
 		if($d > 3)
 			return false;
 
