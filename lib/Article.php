@@ -1,37 +1,31 @@
 <?php declare(strict_types = 1);
 
-class Article
+class Article extends AbstractRes
 {
-	var $error_msg;
+	protected ResArticleFilter $F;
 
-	static function load(ResArticleFilter $F): ViewResArticleCollection
+	function __construct(ResArticleFilter $F = new ResArticleFilter)
 	{
-		return (new ViewResArticleEntity)->getAll($F);
+		$this->F = $F;
 	}
 
-	# TODO: abstract between all res classess
-	static function load_single(ResArticleFilter $F): ?ViewResArticleType
+	function load(): ViewResArticleCollection
 	{
-		$data = Article::load($F);
-
-		assert($data->count() <= 1);
-
-		if($data->count())
-		{
-			return $data[0];
-		}
-
-		return null;
+		return (new ViewResArticleEntity)->getAll($this->F);
 	}
 
 	static function load_by_id(int $art_id): ?ViewResArticleType
 	{
-		return Article::load_single(new ResArticleFilter(art_id: $art_id));
+		$F = new ResArticleFilter(art_id:$art_id);
+
+		return (new static($F))->load_single();
 	}
 
 	static function load_by_res_id(int $res_id): ?ViewResArticleType
 	{
-		return Article::load_single(new ResArticleFilter(res_id: $res_id));
+		$F = new ResArticleFilter(res_id:$res_id);
+
+		return (new static($F))->load_single();
 	}
 
 	public static function hasNewComments(ViewResArticleType $item)

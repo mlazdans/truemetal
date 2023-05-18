@@ -193,7 +193,7 @@ function forum_themes(
 		$T->enable('BLOCK_info_sort_T');
 	}
 
-	$items = Forum::load($F);
+	$items = (new Forum($F))->load();
 
 	if($items)
 	{
@@ -1140,7 +1140,7 @@ function forum_root(MainModule $template): Template
 {
 	$F = (new ResForumFilter(res_resid: false))->orderBy("forum_id ASC");
 
-	$forum_data = Forum::load($F);
+	$forum_data = (new Forum($F))->load();
 
 	$T = $template->add_file('forum.tpl');
 
@@ -1225,7 +1225,7 @@ function whatsnew(MainModule $template): ?Template
 	# Forum
 	$F = (new ResForumFilter(forum_allow_childs: 0))->rows(50)->orderBy('res_comment_last_date DESC');
 
-	$data = Forum::load($F);
+	$data = (new Forum($F))->load();
 
 	if($data->count())
 	{
@@ -1244,7 +1244,7 @@ function whatsnew(MainModule $template): ?Template
 	# Articles
 	$F = (new ResArticleFilter)->rows(50)->orderBy('res_comment_last_date DESC');
 
-	$data = Article::load($F);
+	$data = (new Article($F))->load();
 
 	if($data->count())
 	{

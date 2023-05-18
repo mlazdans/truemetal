@@ -3,7 +3,7 @@
 use dqdp\Template;
 use dqdp\TODO;
 
-class Forum
+class Forum extends AbstractRes
 {
 	const DISPLAY_DATACOMPILED = 0;
 	const DISPLAY_DATA = 1;
@@ -21,36 +21,36 @@ class Forum
 		self::TYPE_EVENT=>'Pasākums',
 	];
 
-	# TODO: $params['fields']
-	static function load(ResForumFilter $F): ViewResForumCollection
+	protected ResForumFilter $F;
+
+	function __construct(ResForumFilter $F = new ResForumFilter)
 	{
-		return (new ViewResForumEntity)->getAll($F);
+		$this->F = $F;
 	}
 
-	# TODO: abstract between all res classess
-	static function load_single(ResForumFilter $F): ?ViewResForumType
+	function load(): ViewResForumCollection
 	{
-		$data = Forum::load($F);
-
-		assert($data->count() <= 1);
-
-		if($data->count())
-		{
-			return $data[0];
-		}
-
-		return null;
+		return (new ViewResForumEntity)->getAll($this->F);
 	}
 
 	static function load_by_id(int $forum_id): ?ViewResForumType
 	{
-		return Forum::load_single(new ResForumFilter(forum_id: $forum_id));
+		$F = new ResForumFilter(forum_id:$forum_id);
+
+		return (new static($F))->load_single();
 	}
 
 	static function load_by_res_id(int $res_id): ?ViewResForumType
 	{
-		return Forum::load_single(new ResForumFilter(res_id: $res_id));
+		$F = new ResForumFilter(res_id:$res_id);
+
+		return (new static($F))->load_single();
 	}
+
+	// function get_filter(): ResForumFilter
+	// {
+	// 	return $this->F;
+	// }
 
 	// function get_tree($forum_id)
 	// {

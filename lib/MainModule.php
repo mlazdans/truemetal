@@ -199,9 +199,10 @@ class MainModule
 		// "fields"=>array('forum.forum_id', 'res.res_name', 'forum.res_id', 'res_meta.res_comment_last_date', 'res_meta.res_comment_count'),
 
 		$F = (new ResForumFilter(forum_allow_childs: 0))->rows(10)->orderBy("COALESCE(res_comment_last_date, res_entered) DESC");
-		$data = Forum::load($F);
 
-		if(count($data))
+		$data = (new Forum($F))->load();
+
+		if($data->count())
 		{
 			$TThemes = $this->add_file('forum/recent.tpl');
 			foreach($data as $item)
@@ -250,7 +251,7 @@ class MainModule
 	{
 		$F = (new ResArticleFilter())->orderBy('res_comment_last_date DESC')->rows($limit);
 
-		$data = Article::load($F);
+		$data = (new Article($F))->load();
 
 		$T = $this->add_file('right/comment_recent.tpl');
 
@@ -350,7 +351,7 @@ class MainModule
 
 		$F = (new ResForumFilter(actual_events: true))->orderBy('event_startdate');
 
-		$data = Forum::load($F);
+		$data = (new Forum($F))->load();
 
 		if(!$data->count()){
 			return;
