@@ -207,7 +207,7 @@ function forum_themes(
 	{
 		$BLOCK_forum->enable_if(Forum::hasNewComments($item), 'BLOCK_comments_new');
 
-		$BLOCK_forum->set_object(specialchars($item));
+		$BLOCK_forum->set_array(specialchars($item));
 		$BLOCK_forum->set_var('res_route', $item->Route());
 		$BLOCK_forum->set_var('res_date', proc_date($item->res_entered));
 		$BLOCK_forum->parse(TMPL_APPEND);

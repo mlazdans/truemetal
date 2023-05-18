@@ -94,7 +94,7 @@ function admin_logins_list(AdminModule $template): ?Template
 	$logins_count = 0;
 	foreach($logins as $item)
 	{
-		$T->set_object(specialchars($item));
+		$T->set_array(specialchars($item));
 
 		// if(is_null($item->l_lastaccess)){
 		// 	$T->set_var('l_lastaccess', "<i>-nekad-</i>");
@@ -202,6 +202,7 @@ function admin_logins_edit(AdminModule $template, int $l_id): ?Template
 
 	# Pic history
 	$files = scandir("$sys_user_root/pic/thumb", 1);
+	printr($files);
 	foreach($files as $k=>$v){
 		if(preg_match("/^$l_id(-\d+).jpg\$/", $v, $m)){
 			$pic_suffixes[] = $m[1];

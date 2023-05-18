@@ -31,7 +31,7 @@ class MainModule
 		$this->Index->set_var('disable_youtube', empty(User::get_val('l_disable_youtube')) ? 0 : 1);
 
 		if(User::logged()){
-			$this->Index->set_array_prefix("USER_", User::data());
+			$this->Index->set_with_prefix("USER_", User::data());
 		}
 
 		$this->set_descr("Metāls Latvijā");
