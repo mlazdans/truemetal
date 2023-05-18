@@ -5,6 +5,8 @@ if(!$i_am_admin)
 	return;
 }
 
+# TODO: mkdir sphinx/data, sphinx/log sphinx/binlog
+
 // Fix mysql dump
 // sed -i 's/ALTER DATABASE `truemetal` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ;//g' truemetal.sql
 // sed -i 's/ALTER DATABASE `truemetal` CHARACTER SET utf8 COLLATE utf8_unicode_ci ;//g' truemetal.sql
