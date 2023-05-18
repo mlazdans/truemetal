@@ -1579,15 +1579,12 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 		return null;
 	}
 
-	if(!($res_data = Res::load_by_id($res_id))){
+	if(!($res = Res::load_by_id($res_id))){
 		$template->not_found();
 		return null;
 	}
 
-	$login_id = User::id();
-	$res_login_id = (int)$res_data['login_id'];
-
-	if($res_login_id == $login_id)
+	if(User::id() == $res->login_id)
 	{
 		$msg = specialchars($value == 'up' ? ":)" : ">:)");
 		$template->msg($msg);
@@ -1598,7 +1595,7 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 	$date = date('Y-m-d H:i:s', time() - 24 * 3600); // 24h
 	$check_sql = sprintf(
 		"SELECT COUNT(*) cv_count FROM `res_vote` WHERE login_id = %d AND rv_entered >= '%s'",
-		$login_id,
+		User::id(),
 		$date
 	);
 
@@ -1613,7 +1610,7 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 	$insert_sql = sprintf(
 		"INSERT IGNORE INTO res_vote (res_id, login_id, rv_value, rv_userip, rv_entered) VALUES (%d, %d, %d, '%s', NOW())",
 		$res_id,
-		$login_id,
+		User::id(),
 		$value == 'up' ? 1 : -1,
 		$ip
 	);
@@ -1632,7 +1629,7 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 
 	if($json){
 		$retJson = new StdClass;
-		$retJson->Votes = $new_data['res_votes'];
+		$retJson->Votes = $new_data->res_votes;
 		return new JsonResponse($retJson);
 	} else {
 		redirect_referer();
