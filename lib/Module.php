@@ -187,50 +187,6 @@ class Module
 		$data['module_type'] = ereg('[^OR]', $data['module_type']) ? '' : $data['module_type'];
 	} // validate
 
-	function del_under($mod_id)
-	{
-		$mod_id = (integer)$mod_id;
-
-		if(!$mod_id)
-			return true;
-
-		$ret = true;
-
-		$sql = "SELECT mod_id FROM `modules` WHERE mod_modid = ".$mod_id;
-		$data = DB::Execute($sql);
-		foreach($data as $item)
-			$ret = $ret && $this->del($item['mod_id']);
-
-		$sql = "DELETE FROM `modules` WHERE mod_modid = ".$mod_id;
-
-		return $ret && DB::Execute($sql);
-	} // del_under
-
-	function del($mod_id)
-	{
-		$mod_id = (integer)$mod_id;
-		$data = $this->get_item($mod_id);
-
-		if(!$mod_id)
-			return true;
-
-		$ret = $this->del_under($mod_id);
-
-		$sql = "DELETE FROM `modules` WHERE mod_id = $mod_id";
-		$ret2 = DB::Execute($sql);
-
-		if($ret2) {
-			$sql = "UPDATE `modules` SET ".
-				"module_pos = module_pos - 1 ".
-				"WHERE ".
-				"module_pos > $data[module_pos] AND ".
-				"mod_modid = $data[mod_modid]";
-			DB::execute($sql);
-		}
-
-		return $ret && $ret2;
-	} // del
-
 	function activate($mod_id)
 	{
 		$mod_id = (integer)$mod_id;

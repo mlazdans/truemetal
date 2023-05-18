@@ -1579,7 +1579,7 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 		return null;
 	}
 
-	if(!($res_data = Res::load(['res_id'=>$res_id]))){
+	if(!($res_data = Res::load_by_id($res_id))){
 		$template->not_found();
 		return null;
 	}
@@ -1624,7 +1624,7 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 		return null;
 	}
 
-	if(!($new_data = Res::load(['res_id'=>$res_id])))
+	if(!($new_data = Res::load_by_id($res_id)))
 	{
 		$template->error("Datubāzes kļūda");
 		return null;
