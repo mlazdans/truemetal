@@ -98,7 +98,7 @@
 <tr>
 	<td>
 		<!-- BEGIN BLOCK_logins_pics_item -->
-		<img src="/user/thumb/{l_login}/{l_pic_suffix}/" alt="">
+		<img src="/user/thumb/{l_hash}/{l_pic_suffix}/" alt="">
 		<!-- END BLOCK_logins_pics_item -->
 	</td>
 </tr>

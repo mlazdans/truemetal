@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Language" content="lv">
 <meta http-equiv="Content-Type" content="text/html; charset={encoding}">
-<title>{title} ({USER_name})</title>
+<title>{title} ({USER_l_nick})</title>
 <meta http-equiv="Pragma" content="no-cache">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" integrity="sha512-ELV+xyi8IhEApPS/pSj66+Jiw+sOT1Mqkzlh8ExXihe4zfqbWkxPRi8wptXIO9g73FSlhmquFlUOuMSoXz5IRw==" crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -53,7 +53,7 @@ initEditor();
 <body>
 
 <div id="header">
-	<h1>Admin: {USER_name}</h1>
+	<h1>Admin: {USER_l_nick}</h1>
 </div>
 
 <div id="menu">
