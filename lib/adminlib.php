@@ -202,14 +202,16 @@ function admin_logins_edit(AdminModule $template, int $l_id): ?Template
 
 	# Pic history
 	$files = scandir("$sys_user_root/pic/thumb", 1);
+
 	foreach($files as $k=>$v){
-		if(preg_match("/^$l_id(-\d+).jpg\$/", $v, $m)){
+		if(preg_match("/^$l_id-(\d+).jpg\$/", $v, $m)){
 			$pic_suffixes[] = $m[1];
 		}
 	}
 
 	if($pic_suffixes)
 	{
+		rsort($pic_suffixes);
 		$T->enable('BLOCK_logins_pics');
 		foreach($pic_suffixes as $suffix){
 			$T->set_var('l_pic_suffix', $suffix, 'BLOCK_logins_pics_item');

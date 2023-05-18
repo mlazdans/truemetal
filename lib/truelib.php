@@ -1151,7 +1151,7 @@ function forum_root(MainModule $template): Template
 	return $T;
 }
 
-function user_image(string $l_hash, bool $thumb = false)
+function user_image(string $l_hash, bool $thumb = false, string $suffix = "")
 {
 	global $sys_user_root, $sys_public_root;
 
@@ -1160,7 +1160,7 @@ function user_image(string $l_hash, bool $thumb = false)
 		return;
 	}
 
-	$suffix = "";
+	$suffix = $suffix ? "-$suffix" : "";
 
 	$login_data = Logins::load_by_login_hash($l_hash);
 	if(empty($login_data)){
@@ -1174,7 +1174,7 @@ function user_image(string $l_hash, bool $thumb = false)
 
 	$pic_localpath = join(DIRECTORY_SEPARATOR, $parts);
 
-	if($info = getimagesize($pic_localpath))
+	if(file_exists($pic_localpath) && ($info = getimagesize($pic_localpath)))
 	{
 		$last_modified_time = filemtime($pic_localpath);
 		$etag = md5_file($pic_localpath);
