@@ -1,7 +1,5 @@
 <?php declare(strict_types = 1);
 
-use dqdp\TODO;
-
 class Res extends AbstractRes
 {
 	protected ResFilter $F;
@@ -82,7 +80,7 @@ class Res extends AbstractRes
 	{
 		$R = static::prepare_with_user(
 			res_resid: $res_id,
-			table_id: Table::COMMENT->value,
+			table_id: ResKind::COMMENT,
 			res_data: $c_data,
 		);
 
