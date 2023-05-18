@@ -4,23 +4,21 @@
 
 <!-- BEGIN BLOCK_forum_edit disabled -->
 <div class="TD-cat-active">
-	Labot forumu <em>{forum_name}</em>
+	Labot forumu <em>{res_name}</em>
 </div>
 
 <form action="" method="post" id="forum_edit">
 <table class="Main">
-<!-- BEGIN BLOCK_forum_resid disabled -->
 <tr>
 	<td class="right nowrap">Res ID:</td>
 	<td>{res_id}</td>
 </tr>
-<!-- END BLOCK_forum_resid -->
 <tr>
 	<td class="right nowrap">Nosaukums:</td>
 	<td>
 		<input type="hidden" name="action" value="save_forum">
 		<input type="hidden" name="data[forum_id]" value="{forum_id}">
-		<input type="text" name="data[forum_name]" value="{forum_name}" size="64">
+		<input type="text" name="data[res_name]" value="{res_name}" size="64">
 	</td>
 </tr>
 <tr>
@@ -40,36 +38,27 @@
 	</td>
 </tr>
 <tr>
-	<td class="right nowrap">Aktīvs?:</td>
+	<td class="right nowrap"></td>
 	<td>
-		<select name="data[forum_active]">
-			<option value="Y"{forum_active_sel}>Jā</option>
-			<option value="N"{forum_inactive_sel}>Nē</option>
-		</select>
+		<label><input type="checkbox" name="data[res_visible]"{res_visible1}> aktīvs</label>
 	</td>
 </tr>
 <tr>
-	<td class="right nowrap">Var būt apakštēmas?:</td>
+	<td class="right nowrap"></td>
 	<td>
-		<select name="data[forum_allowchilds]">
-			<option value="N"{forum_prohibitchilds_sel}>Nē</option>
-			<option value="Y"{forum_allowchilds_sel}>Jā</option>
-		</select>
+		<label><input type="checkbox" name="data[forum_allow_childs]"{forum_allow_childs1}> var būt apakštēmas</label>
 	</td>
 </tr>
 <tr>
-	<td class="right nowrap">Slēgts?:</td>
+	<td class="right nowrap"></td>
 	<td>
-		<select name="data[forum_closed]">
-			<option value="N"{forum_open_sel}>Nē</option>
-			<option value="Y"{forum_closed_sel}>Jā</option>
-		</select>
+		<label><input type="checkbox" name="data[forum_closed]"{forum_closed1}> tēma slēgta</label>
 	</td>
 </tr>
 <tr>
 	<td class="right nowrap">Ievadīts:</td>
 	<td>
-		<input type="text" name="data[forum_entered]" value="{forum_entered}">
+		<input type="text" name="data[res_entered]" value="{res_entered}">
 	</td>
 </tr>
 <!--
@@ -84,8 +73,8 @@
 	<td class="right nowrap">Rādīt:</td>
 	<td>
 		<select name="data[forum_display]">
-			<option value="0"{forum_display_0_selected}>Data Compiled</option>
-			<option value="1"{forum_display_1_selected}>Data</option>
+			<option value="0"{forum_display0}>Data Compiled</option>
+			<option value="1"{forum_display1}>Data</option>
 		</select>
 	</td>
 </tr>
@@ -103,7 +92,7 @@
 <tr>
 	<td class="right nowrap" valign="top">Dati:</td>
 	<td>
-		<textarea id="forum_data" name="data[forum_data]" rows="15" cols="150">{forum_data}</textarea>
+		<textarea id="res_data" name="data[res_data]" rows="15" cols="150">{res_data}</textarea>
 		<p><input
 			type="button"
 			value="Editor"
@@ -123,15 +112,15 @@ if($('#forum_data').hasClass('edit'))
 </tr>
 <tr>
 	<td class="right nowrap">Lietotāja vārds:</td>
-	<td><input type="text" name="data[forum_username]" value="{forum_username}"></td>
+	<td><input type="text" name="data[res_nickname]" value="{res_nickname}"></td>
 </tr>
 <tr>
 	<td class="right nowrap">Lietotāja e-pasts:</td>
-	<td><input type="text" name="data[forum_useremail]" value="{forum_useremail}"></td>
+	<td><input type="text" name="data[res_email]" value="{res_email}"></td>
 </tr>
 <tr>
 	<td class="right nowrap">Lietotāja IP:</td>
-	<td><input type="text" name="data[forum_userip]" value="{forum_userip}"></td>
+	<td><input type="text" name="data[res_ip]" value="{res_ip}"></td>
 </tr>
 <tr>
 	<td colspan="2">
@@ -153,7 +142,7 @@ if($('#forum_data').hasClass('edit'))
 </tr>
 <tr>
 	<td>Nosaukums:</td>
-	<td><input type="text" name="data[forum_name]" maxlength="32" size="20"></td>
+	<td><input type="text" name="data[res_name]" maxlength="32" size="20"></td>
 	<td><input type="submit" value="Pievienot"></td>
 </tr>
 </table>
@@ -177,9 +166,9 @@ Nav nevienas tēmas
 		<input type="checkbox" name="forum_checked[{forum_id}]">
 	</td>
 	<td class="{forum_color_class}" style="white-space: nowrap;">
-		{forum_padding}<a href="{module_root}/{forum_id}/">{forum_name}</a>
+		{forum_padding}<a href="{module_root}/{forum_id}/">{res_name}</a>
 	</td>
-	<td class="{forum_color_class}">{res_comment_count}</td>
+	<td class="{forum_color_class}">{res_child_count}</td>
 	<td class="{forum_color_class}">
 		<!-- BEGIN BLOCK_forum_inactive disabled -->neaktīvs<!-- END BLOCK_forum_inactive -->
 		<!-- BEGIN BLOCK_forum_closed disabled -->slēgts<!-- END BLOCK_forum_closed -->

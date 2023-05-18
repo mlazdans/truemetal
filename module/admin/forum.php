@@ -2,9 +2,7 @@
 
 use dqdp\Template;
 
-function set_themes(Template $T, &$data, $d = 0) {
-	global $forum;
-
+function set_themes(Template $T, ViewResForumCollection $data, $d = 0) {
 	if($d == 2)
 		return 0;
 
@@ -13,24 +11,23 @@ function set_themes(Template $T, &$data, $d = 0) {
 	else
 		$T->enable('BLOCK_forum_nothemes');
 
-	foreach($data as $item) {
-		$T->set_var('forum_id', $item['forum_id'], 'BLOCK_forum_theme_item');
-		$T->set_var('res_comment_count', $item['res_comment_count'], 'BLOCK_forum_theme_item');
-		$T->set_var('forum_name', $item['forum_name'], 'BLOCK_forum_theme_item');
+	foreach($data as $item)
+	{
+		$T->set_array($item);
 
 		# ja aktiivs vai nee - kaukaa iekraaso to
 		$T->disable('BLOCK_forum_inactive');
 		$T->disable('BLOCK_forum_closed');
-		if($item['forum_active'] == Res::STATE_ACTIVE) {
-			$T->set_var('forum_color_class', 'box-normal', 'BLOCK_forum_theme_item');
+		if($item->res_visible) {
+			$T->set_var('forum_color_class', 'box-normal');
 		} else {
 			$T->enable('BLOCK_forum_inactive');
-			$T->set_var('forum_color_class', 'box-inactive', 'BLOCK_forum_theme_item');
+			$T->set_var('forum_color_class', 'box-inactive');
 		}
 
-		if($item['forum_closed'] == Forum::CLOSED) {
+		if($item->forum_closed) {
 			$T->enable('BLOCK_forum_closed');
-			$T->set_var('forum_color_class', 'box-inactive', 'BLOCK_forum_theme_item');
+			$T->set_var('forum_color_class', 'box-inactive');
 		}
 
 		$T->set_var('forum_padding', str_repeat('&nbsp;', 3 * $d));
@@ -38,8 +35,91 @@ function set_themes(Template $T, &$data, $d = 0) {
 	}
 }
 
-$forum = new Forum();
-$module = new Module();
+function root_forum(AdminModule $template): Template
+{
+	$T = $template->add_file("admin/forum.tpl");
+
+	$F = new ResForumFilter(
+		res_resid:false,
+		res_visible:false,
+	);
+
+	$items = (new Forum($F))->load();
+
+	set_themes($T, $items);
+
+	# jauna teema
+	$T->enable('BLOCK_forum_theme_new');
+
+	return $T;
+}
+
+function open_forum(AdminModule $template, int $forum_id): Template
+{
+	$T = $template->add_file("admin/forum.tpl");
+
+	$T->set_var('forum_id', $forum_id);
+
+	# TODO: wrapper funkcijas priekš admin??
+	$F = new ResForumFilter(
+		res_visible:false,
+	);
+
+	$forum = (new Forum($F))->load_by_id($forum_id);
+
+	if($forum->forum_allow_childs)
+	{
+		$F = (new ResForumFilter(
+			res_resid:$forum->res_id,
+			res_visible:false,
+		))
+		->rows(500)
+		->orderBy("res_entered DESC");
+
+		set_themes($T, (new Forum($F))->load());
+
+		# jauna teema
+		$T->enable('BLOCK_forum_theme_new');
+	} else {
+
+		$CF = (new ResCommentFilter(
+			res_resid: $forum->res_id,
+			res_visible:false,
+		))->orderBy("res_entered DESC");
+
+		$comments = (new Comment($CF))->load();
+
+		$C = new_template("admin/comment/list.tpl");
+
+		admin_comment_list($C, $comments);
+
+		$T->set_block_string($C->parse(), 'BLOCK_forum_comments');
+	}
+
+	$T->enable('BLOCK_forum_edit');
+
+	$T->set_array($forum);
+	$T->set_var('res_data', specialchars($forum->res_data));
+
+	$T->set_var('res_visible'.$forum->res_visible, ' checked');
+	$T->set_var('forum_closed'.$forum->forum_closed, ' checked');
+	$T->set_var('forum_allow_childs'.$forum->forum_allow_childs, ' checked');
+
+	foreach(Forum::$types as $type_id=>$type_name){
+		$T->set_var('type_id', $type_id);
+		$T->set_var('type_name', $type_name);
+		$T->set_var('type_id_selected', '');
+		$T->set_var('type_id_selected', $type_id == $forum->type_id ? 'selected' : '');
+		$T->parse_block('BLOCK_forum_type_list', TMPL_APPEND);
+	}
+
+	// $module->set_modules_all($T, $forum->forum_modid, 'BLOCK_modules_under_list');
+
+	$T->set_var("forum_display".$forum->forum_display, ' selected="selected"');
+
+	return $T;
+}
+
 
 $forum_id = (int)array_shift($sys_parameters);
 $action = post('action');
@@ -93,88 +173,15 @@ if($action == 'add_forum') {
 
 $template = new AdminModule('forum');
 $template->set_title('Admin :: forumi');
-$T = $template->add_file("admin/forum.tpl");
 
-$T->set_var('forum_id', $forum_id);
-$forum->set_forum_path($T, $forum_id);
-
-$items = $forum->load(array(
-	'forum_forumid'=>$forum_id,
-	'forum_active'=>Res::STATE_ALL,
-	));
+// $forum->set_forum_path($T, $forum_id);
 
 # Forums atvērts
 if($forum_id)
 {
-	$forum_data = $forum->load(array(
-		'forum_id'=>$forum_id,
-		'forum_active'=>Res::STATE_ALL,
-		));
-
-	if($forum_data['forum_allowchilds'] == Forum::ALLOW_CHILDS)
-	{
-		set_themes($T, $items);
-		# jauna teema
-		$T->enable('BLOCK_forum_theme_new');
-	} else {
-		$T->enable('BLOCK_forum_resid');
-
-		$RC = new ResComment();
-		$comments = $RC->Get(array(
-			'res_id'=>$forum_data['res_id'],
-			'c_visible'=>Res::STATE_ALL,
-		));
-
-		$C = new_template("admin/comment/list.tpl");
-		admin_comment_list($C, $comments);
-
-		$T->set_block_string($C->parse(), 'BLOCK_forum_comments');
-	}
-
-	$T->enable('BLOCK_forum_edit');
-
-	$T->set_array($forum_data, 'BLOCK_forum_edit');
-	$T->set_var('forum_data', specialchars($forum_data['forum_data']), 'BLOCK_forum_edit');
-
-	if($forum_data['forum_active'] == Res::STATE_ACTIVE)
-	{
-		$T->set_var('forum_active_sel', ' selected="selected"', 'BLOCK_forum_edit');
-	} else {
-		$T->set_var('forum_inactive_sel', ' selected="selected"', 'BLOCK_forum_edit');
-	}
-
-	if($forum_data['forum_closed'] == Forum::CLOSED)
-	{
-		$T->set_var('forum_closed_sel', ' selected="selected"', 'BLOCK_forum_edit');
-	} else {
-		$T->set_var('forum_open_sel', ' selected="selected"', 'BLOCK_forum_edit');
-	}
-
-	if($forum_data['forum_allowchilds'] == Forum::ALLOW_CHILDS)
-	{
-		$T->set_var('forum_allowchilds_sel', ' selected="selected"', 'BLOCK_forum_edit');
-	} else {
-		$T->set_var('forum_prohibitchilds_sel', ' selected="selected"', 'BLOCK_forum_edit');
-	}
-
-	foreach($forum->types as $type_id=>$type_name){
-		$T->set_var('type_id', $type_id, 'BLOCK_forum_type_list');
-		$T->set_var('type_name', $type_name, 'BLOCK_forum_type_list');
-		$T->set_var('type_id_selected', '', 'BLOCK_forum_type_list');
-		if($type_id == $forum_data['type_id']){
-			$T->set_var('type_id_selected', ' selected="selected"', 'BLOCK_forum_type_list');
-		}
-		$T->parse_block('BLOCK_forum_type_list', TMPL_APPEND);
-	}
-
-	$module->set_modules_all($T, $forum_data['forum_modid'], 'BLOCK_modules_under_list');
-	$T->set_var("forum_display_$forum_data[forum_display]_selected", ' selected="selected"', 'BLOCK_forum_edit');
+	$T = open_forum($template, $forum_id);
 } else {
-	# Root
-	set_themes($T, $items);
-
-	# jauna teema
-	$T->enable('BLOCK_forum_theme_new');
+	$T = root_forum($template);
 }
 
-$template->out($T);
+$template->out($T??null);
