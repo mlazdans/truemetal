@@ -202,7 +202,6 @@ function admin_logins_edit(AdminModule $template, int $l_id): ?Template
 
 	# Pic history
 	$files = scandir("$sys_user_root/pic/thumb", 1);
-	printr($files);
 	foreach($files as $k=>$v){
 		if(preg_match("/^$l_id(-\d+).jpg\$/", $v, $m)){
 			$pic_suffixes[] = $m[1];
