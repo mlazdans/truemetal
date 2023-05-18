@@ -108,7 +108,7 @@ function forum_add_theme(MainModule $template, Template $T, ViewResForumType $fo
 
 	$R = Res::prepare_with_user(
 		res_resid: $forum->res_id,
-		table_id: Table::FORUM,
+		table_id: Table::FORUM->value,
 		res_name: $post_data['forum_name'],
 		res_data: $post_data['forum_data'],
 	);
@@ -1650,7 +1650,7 @@ function attend(MainModule $template, int $res_id, ?string $off = null): ?TrueRe
 		return null;
 	}
 
-	if(!($item = Res::GetAll($res_id)))
+	if(!($item = load_res($res_id)))
 	{
 		$template->not_found();
 		return null;
@@ -1698,15 +1698,6 @@ function attendees(MainModule $template, ViewResForumType $forum): ?Template
 		$template->not_logged();
 		return null;
 	}
-
-	// if(is_int($res))
-	// {
-	// 	if(!($res = Res::GetAll($res)))
-	// 	{
-	// 		$template->not_found();
-	// 		return null;
-	// 	}
-	// }
 
 	if($forum->type_id !== Forum::TYPE_EVENT)
 	{
@@ -1999,7 +1990,7 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 
 		$item['res_date'] = date('d.m.Y', strtotime($item['res_entered']));
 
-		if($item['table_id'] == Table::FORUM)
+		if($item['table_id'] == Table::FORUM->value)
 		{
 			if($item['type_id']){
 				$intro = mb_substr($item['res_data'], 0, 300);
@@ -2023,7 +2014,7 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 				}
 			}
 			$item['res_route'] = Forum::RouteFromStr((int)$item['doc_id'], $item['res_name']);
-		} elseif($item['table_id'] == Table::ARTICLE){
+		} elseif($item['table_id'] == Table::ARTICLE->value){
 			$item['res_route'] = Article::RouteFromStr($item['module_id'], (int)$item['doc_id'], $item['res_name']);
 		} else {
 			throw new InvalidArgumentException("Unexpected table ID: $item[table_id]");
@@ -2044,7 +2035,7 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 		$T->set_array($item, 'BLOCK_article');
 
 		# XXX: fix module_id
-		if($item['table_id'] == Table::FORUM)
+		if($item['table_id'] == Table::FORUM->value)
 		{
 			$T->set_var('module_id', "forum", 'BLOCK_article');
 		} else {
@@ -2168,5 +2159,32 @@ function comment_vote_class(mixed $res_votes): string
 		return "vote-minus";
 	} else {
 		return "vote-zero";
+	}
+}
+
+function load_specific_res(int $res_id, int $table_id): ?ResourceTypeInterface
+{
+	switch($table_id)
+	{
+		case Table::ARTICLE->value:
+			return Article::load_by_res_id($res_id);
+		case Table::FORUM->value:
+			return Forum::load_by_res_id($res_id);
+		case Table::COMMENT->value:
+			return Comment::load_by_res_id($res_id);
+		case Table::GALLERY->value:
+			new TODO("Get Gallery");
+		case Table::GALLERY_DATA->value:
+			new TODO("Get GalleryData");
+	}
+
+	throw new InvalidArgumentException("Table unknown: $table_id");
+}
+
+function load_res(int $res_id): ?ResourceTypeInterface
+{
+	if($res = Res::load_by_id($res_id))
+	{
+		return load_specific_res($res->res_id, $res->table_id);
 	}
 }

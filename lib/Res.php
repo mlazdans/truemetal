@@ -28,31 +28,6 @@ class Res extends AbstractRes
 		return static::load_by_id($res_id);
 	}
 
-	static function GetAll(int $res_id): ?ResourceTypeInterface
-	{
-		$res_data = static::load_by_id($res_id);
-
-		if(!$res_data) {
-			return null;
-		}
-
-		switch($res_data->table_id)
-		{
-			case Table::ARTICLE:
-				return Article::load_by_res_id($res_id);
-			case Table::FORUM:
-				return Forum::load_by_res_id($res_id);
-			case Table::COMMENT:
-				return Comment::load_by_res_id($res_id);
-			case Table::GALLERY:
-				new TODO("Get Gallery");
-			case Table::GALLERY_DATA:
-				new TODO("Get GalleryData");
-		}
-
-		throw new InvalidArgumentException("Table unknown: $res_data->table_id");
-	}
-
 	static function hasNewComments(int $res_id, ?string $date = null, ?int $comment_count = null): bool
 	{
 		if(!User::logged()){
@@ -107,7 +82,7 @@ class Res extends AbstractRes
 	{
 		$R = static::prepare_with_user(
 			res_resid: $res_id,
-			table_id: Table::COMMENT,
+			table_id: Table::COMMENT->value,
 			res_data: $c_data,
 		);
 

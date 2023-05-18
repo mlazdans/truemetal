@@ -4,7 +4,7 @@
 $res_id = (int)array_shift($sys_parameters);
 $c_id = (int)get('c_id');
 
-if($res = Res::GetAll($res_id))
+if($res = load_res($res_id))
 {
 	$location = $res->Route($c_id ? $c_id : null);
 	header("Location: $location");

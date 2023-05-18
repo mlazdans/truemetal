@@ -7,7 +7,7 @@ class ViewResCommentType extends DataObject implements ResourceTypeInterface {
 
 	function Route(int $c_id = null): string
 	{
-		$parent = Res::GetAll($this->res_resid);
+		$parent = load_res($this->res_resid);
 
 		return $parent->Route($this->c_id);
 	}
