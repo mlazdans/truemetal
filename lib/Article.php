@@ -2,32 +2,6 @@
 
 class Article
 {
-	// protected ResArticleFilter $F;
-
-	// function __construct(ResArticleFilter $F = new ResArticleFilter)
-	// {
-	// 	$this->F = $F;
-	// }
-
-	// function load(): ViewResArticleCollection
-	// {
-	// 	return (new ViewResArticleEntity)->getAll($this->F);
-	// }
-
-	// function load_by_id(int $art_id): ?ViewResArticleType
-	// {
-	// 	$this->F->art_id = $art_id;
-
-	// 	return $this->load_single();
-	// }
-
-	// function load_by_res_id(int $res_id): ?ViewResArticleType
-	// {
-	// 	$this->F->res_id = $res_id;
-
-	// 	return $this->load_single();
-	// }
-
 	public static function hasNewComments(ViewResArticleType $item)
 	{
 		return Res::hasNewComments($item->res_id, $item->res_comment_last_date, $item->res_child_count);

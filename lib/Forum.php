@@ -20,42 +20,6 @@ class Forum
 		self::TYPE_EVENT=>'Pasākums',
 	];
 
-	// protected ResForumFilter $F;
-
-	// function __construct(ResForumFilter $F = new ResForumFilter)
-	// {
-	// 	$this->F = $F;
-	// }
-
-	// function get_filter(): ResForumFilter
-	// {
-	// 	return $this->F;
-	// }
-
-	// function load_single(): ?ViewResForumType
-	// {
-	// 	return parent::_load_single();
-	// }
-
-	// function load(): ViewResForumCollection
-	// {
-	// 	return (new ViewResForumEntity)->getAll($this->F);
-	// }
-
-	// function load_by_id(int $forum_id): ?ViewResForumType
-	// {
-	// 	$this->F->forum_id = $forum_id;
-
-	// 	return $this->load_single();
-	// }
-
-	// function load_by_res_id(int $res_id): ?ViewResForumType
-	// {
-	// 	$this->F->res_id = $res_id;
-
-	// 	return $this->load_single();
-	// }
-
 	function open(int $forum_id): bool
 	{
 		$sql = 'UPDATE forum SET forum_closed = 0 WHERE forum_id = ?';
