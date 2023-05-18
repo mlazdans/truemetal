@@ -44,7 +44,7 @@ function root_forum(AdminModule $template): Template
 		res_visible:false,
 	);
 
-	$items = (new Forum($F))->load();
+	$items = (new ViewResForumEntity)->getAll($F);
 
 	set_themes($T, $items);
 
@@ -60,12 +60,7 @@ function open_forum(AdminModule $template, int $forum_id): Template
 
 	$T->set_var('forum_id', $forum_id);
 
-	# TODO: wrapper funkcijas priekš admin??
-	$F = new ResForumFilter(
-		res_visible:false,
-	);
-
-	$forum = (new Forum($F))->load_by_id($forum_id);
+	$forum = (new ViewResForumEntity)->getById($forum_id, true);
 
 	if($forum->forum_allow_childs)
 	{
@@ -76,7 +71,7 @@ function open_forum(AdminModule $template, int $forum_id): Template
 		->rows(500)
 		->orderBy("res_entered DESC");
 
-		set_themes($T, (new Forum($F))->load());
+		set_themes($T, (new ViewResForumEntity)->getAll($F));
 
 		# jauna teema
 		$T->enable('BLOCK_forum_theme_new');
@@ -87,7 +82,7 @@ function open_forum(AdminModule $template, int $forum_id): Template
 			res_visible:false,
 		))->orderBy("res_entered DESC");
 
-		$comments = (new Comment($CF))->load();
+		$comments = (new ViewResCommentEntity)->getAll($CF);
 
 		$C = new_template("admin/comment/list.tpl");
 

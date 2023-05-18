@@ -2,6 +2,7 @@
 
 use dqdp\DBA\Types\None;
 use dqdp\Template;
+use dqdp\TODO;
 
 function admin_logins_list(AdminModule $template): ?Template
 {
@@ -168,7 +169,7 @@ function admin_logins_edit(AdminModule $template, int $l_id): ?Template
 		res_visible:false,
 	))->rows(500)->orderBy("res_entered DESC");
 
-	$comments = (new Comment($CF))->load();
+	$comments = (new ViewResCommentEntity)->getAll($CF);
 
 	// $comments = (new ResComment)->get([
 	// 	'login_id'=>$l_id,

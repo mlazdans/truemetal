@@ -26,15 +26,10 @@ if($module == 'original' && $action == 'view')
 {
 	$T = $template->add_file('admin/comment/original/view.json.tpl');
 
-	$F = new ResCommentFilter(
-		res_id: $res_id,
-		res_visible:false
-	);
+	$data = ViewResCommentEntity::getByResId($res_id, true);
 
-	$data = (new Comment($F))->load();
-
-	if($data->count()){
-		$T->set_array($data[0]);
+	if($data){
+		$T->set_array($data);
 	}
 }
 
