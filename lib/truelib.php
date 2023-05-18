@@ -1781,29 +1781,6 @@ function archive(MainModule $template): ?Template
 	return $T;
 }
 
-function search_log(MainModule $template): ?Template
-{
-	$T = $template->add_file('search/log.tpl');
-
-	$sql = "SELECT DISTINCT sl_q FROM `search_log` ORDER BY `sl_id` DESC LIMIT 0,200";
-	if(!($q = DB::Query($sql)))
-	{
-		$template->error("Datubāzes kļūda");
-		return null;
-	}
-
-	$B = $T->enable('BLOCK_search_log');
-
-	while($r = DB::Fetch($q))
-	{
-		$B->set_array(specialchars($r));
-		$B->set_var('sl_q_encoded', urlencode($r['sl_q']));
-		$B->parse(TMPL_APPEND);
-	}
-
-	return $T;
-}
-
 function filter_login_data(array $data): array
 {
 	unset($data['l_sessiondata']);
@@ -2187,4 +2164,168 @@ function load_res(int $res_id): ?ResourceTypeInterface
 	{
 		return load_specific_res($res->res_id, $res->table_id);
 	}
+}
+
+function tm_search(SearchParams $params)
+{
+	require_once("lib/sphinxapi.php");
+
+	# Sphinx
+	$spx = new SphinxClient();
+	$spx->SetConnectTimeout(4);
+	if($params->limit){
+		$spx->SetLimits(0, $params->limit);
+	}
+	$spx->SetServer('127.0.0.1', 3313);
+	$spx->SetSortMode(SPH_SORT_ATTR_DESC, "doc_comment_last_date");
+
+	if($params->filters){
+		foreach($params->filters as $k=>$v){
+			$spx->SetFilter($k, $v);
+		}
+	}
+
+	return [
+		$spx->Query($spx->EscapeString($params->q), $params->index),
+		$spx
+	];
+}
+
+
+function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
+{
+	$spx_limit = 250;
+
+	$index = post('only_titles') ? "doc_titles" : "doc";
+	$checked_sources = post('sources', array_keys($DOC_SOURCES));
+
+	if($_SERVER['REQUEST_METHOD'] == "POST"){
+		if(!User::logged()){
+			$err_msg[] = "Meklētājs tikai reģistrētiem lietotājiem";
+			return null;
+		}
+		$do_log = post('spam') ? false : true;
+		$search_q = trim(post('search_q'));
+	} else {
+		$do_log = false;
+		$search_q = trim(get('search_q'));
+	}
+
+	$template->set_title("Meklēšana: ".specialchars($search_q));
+
+	$T = $template->add_file("search.tpl");
+
+	foreach($DOC_SOURCES as $id=>$sect){
+		$T->set_var('source_id', $id);
+		$T->set_var('source_name', $sect['name']);
+		if(empty($checked_sources) || in_array($id, $checked_sources)){
+			$T->set_var('source_checked', ' checked');
+		} else {
+			$T->set_var('source_checked', '');
+		}
+		$T->parse_block('BLOCK_search_sources', TMPL_APPEND);
+	}
+
+	$T->set_var("doc_count", 0, 'BLOCK_search');
+	$T->set_var('search_q', specialchars($search_q));
+
+	// if($search_q && (mb_strlen($search_q) < 3)){
+	// 	$err_msg[] = "Jāievada vismaz 3 simbolus";
+	// }
+
+	if(!$search_q){
+		$T->enable('BLOCK_search_help');
+		return $T;
+	}
+
+	# TODO: kārtošana pēc datuma gan article, gan forum. Tagad kārtojas atsevišķi
+	$params = new SearchParams(
+		q:$search_q,
+		index:$index,
+		filters:['doc_source_id'=>$checked_sources],
+		limit:$spx_limit
+	);
+
+	# Log
+	if($do_log){
+		$sql = "INSERT INTO search_log (login_id, sl_q, sl_ip) VALUES (?,?,?)";
+		DB::Execute($sql, User::id(), $search_q, User::ip());
+	}
+
+	list($res, $spx) = tm_search($params);
+
+	$search_msg = [];
+	if($res === false){
+		$search_msg[] = "Meklētāja tehniska kļūda";
+		user_error($spx->GetLastError(), E_USER_WARNING);
+	} elseif($res['total_found'] == 0) {
+		$search_msg[] = "Nekas netika atrasts";
+	}
+
+	if($res['total_found'] > $spx_limit){
+		$search_msg[] = "Uzmanību: atrasti ".$res['total_found']." rezultāti, rādam $spx_limit";
+	}
+
+	// [doc_res_id] => 246469
+	// [doc_source_id] => 4
+	// [doc_name] => Disco @ Morgue / ELEKTRA
+	// [doc_comment_count] => 18
+	// [doc_comment_last_date] => 1243812143
+	// [doc_entered] => 1243535226
+	if(!empty($res['matches'])){
+		$T->set_var("doc_count", $res['total_found'], 'BLOCK_search');
+		$T->enable('BLOCK_search');
+		$T->enable('BLOCK_search_item');
+		foreach($res['matches'] as $doc){
+			$item = $doc['attrs'];
+			$item['doc_module_name'] = $DOC_SOURCES[$item['doc_source_id']]['name'];
+
+			 # TODO: optimize
+			if($item['doc_source_id'] == 4){
+				$table_id = ResKind::FORUM;
+			} elseif(in_array($item['doc_source_id'], [1,2,3])){
+				$table_id = ResKind::ARTICLE;
+			} else {
+				throw new InvalidArgumentException("Unknown doc source: $item[doc_source_id]");
+			}
+			$r = load_specific_res((int)$item['doc_res_id'], $table_id);
+			$item['res_route'] =  $r->Route()."?hl=".urlencode($search_q);
+			##
+
+			$item['doc_comment_last_date'] = date('d.m.Y', $item['doc_comment_last_date']);
+			$T->set_array($item, 'BLOCK_search_item');
+			$T->parse_block('BLOCK_search_item', TMPL_APPEND);
+		}
+	}
+
+	if($search_msg){
+		$T->enable('BLOCK_search_msg')->set_var('search_msg', join("<br/>\n", $search_msg));
+	}
+
+	return $T;
+}
+
+function search_log(MainModule $template): ?Template
+{
+	$template->set_title("Ko mēs meklējam");
+
+	$T = $template->add_file('search/log.tpl');
+
+	$sql = "SELECT DISTINCT sl_q FROM `search_log` ORDER BY `sl_id` DESC LIMIT 0,200";
+	if(!($q = DB::Query($sql)))
+	{
+		$template->error("Datubāzes kļūda");
+		return null;
+	}
+
+	$B = $T->enable('BLOCK_search_log');
+
+	while($r = DB::Fetch($q))
+	{
+		$B->set_array(specialchars($r));
+		$B->set_var('sl_q_encoded', urlencode($r['sl_q']));
+		$B->parse(TMPL_APPEND);
+	}
+
+	return $T;
 }

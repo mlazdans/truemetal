@@ -14,5 +14,5 @@
 </div>
 
 <div class="List-item">
-	<a href="/search_log/">Ko mēs meklējam?</a>
+	<a href="/search/log/">Ko mēs meklējam?</a>
 </div>
