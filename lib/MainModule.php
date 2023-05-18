@@ -200,7 +200,7 @@ class MainModule
 
 		$F = (new ResForumFilter(forum_allow_childs: 0))->rows(10)->orderBy("COALESCE(res_comment_last_date, res_entered) DESC");
 
-		$data = (new Forum($F))->load();
+		$data = (new ViewResForumEntity)->getAll($F);
 
 		if($data->count())
 		{
@@ -251,7 +251,7 @@ class MainModule
 	{
 		$F = (new ResArticleFilter())->orderBy('res_comment_last_date DESC')->rows($limit);
 
-		$data = (new Article($F))->load();
+		$data = (new ViewResArticleEntity)->getAll($F);
 
 		$T = $this->add_file('right/comment_recent.tpl');
 
@@ -351,7 +351,7 @@ class MainModule
 
 		$F = (new ResForumFilter(actual_events: true))->orderBy('event_startdate');
 
-		$data = (new Forum($F))->load();
+		$data = (new ViewResForumEntity())->getAll($F);
 
 		if(!$data->count()){
 			return;

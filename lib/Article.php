@@ -1,32 +1,32 @@
 <?php declare(strict_types = 1);
 
-class Article extends AbstractRes
+class Article
 {
-	protected ResArticleFilter $F;
+	// protected ResArticleFilter $F;
 
-	function __construct(ResArticleFilter $F = new ResArticleFilter)
-	{
-		$this->F = $F;
-	}
+	// function __construct(ResArticleFilter $F = new ResArticleFilter)
+	// {
+	// 	$this->F = $F;
+	// }
 
-	function load(): ViewResArticleCollection
-	{
-		return (new ViewResArticleEntity)->getAll($this->F);
-	}
+	// function load(): ViewResArticleCollection
+	// {
+	// 	return (new ViewResArticleEntity)->getAll($this->F);
+	// }
 
-	static function load_by_id(int $art_id): ?ViewResArticleType
-	{
-		$F = new ResArticleFilter(art_id:$art_id);
+	// function load_by_id(int $art_id): ?ViewResArticleType
+	// {
+	// 	$this->F->art_id = $art_id;
 
-		return (new static($F))->load_single();
-	}
+	// 	return $this->load_single();
+	// }
 
-	static function load_by_res_id(int $res_id): ?ViewResArticleType
-	{
-		$F = new ResArticleFilter(res_id:$res_id);
+	// function load_by_res_id(int $res_id): ?ViewResArticleType
+	// {
+	// 	$this->F->res_id = $res_id;
 
-		return (new static($F))->load_single();
-	}
+	// 	return $this->load_single();
+	// }
 
 	public static function hasNewComments(ViewResArticleType $item)
 	{

@@ -193,7 +193,7 @@ function forum_themes(
 		$T->enable('BLOCK_info_sort_T');
 	}
 
-	$items = (new Forum($F))->load();
+	$items = (new ViewResForumEntity)->getAll($F);
 
 	if($items)
 	{
@@ -661,8 +661,8 @@ function private_profile(MainModule $template): ?Template
 		login_id:User::id()
 	))->rows(10);
 
-	$top_comments[0] = (new Comment($F->orderBy('res_votes_plus_count DESC')))->load();
-	$top_comments[1] = (new Comment($F->orderBy('res_votes_minus_count DESC')))->load();
+	$top_comments[0] = (new ViewResCommentEntity)->getAll($F->orderBy('res_votes_plus_count DESC'));
+	$top_comments[1] = (new ViewResCommentEntity)->getAll($F->orderBy('res_votes_minus_count DESC'));
 
 	if($top_comments[0] || $top_comments[1]){
 		$T->enable('BLOCK_truecomments');
@@ -1128,7 +1128,7 @@ function forum_root(MainModule $template): Template
 {
 	$F = (new ResForumFilter(res_resid: false))->orderBy("forum_id ASC");
 
-	$forum_data = (new Forum($F))->load();
+	$forum_data = (new ViewResForumEntity)->getAll($F);
 
 	$T = $template->add_file('forum.tpl');
 
@@ -1213,7 +1213,7 @@ function whatsnew(MainModule $template): ?Template
 	# Forum
 	$F = (new ResForumFilter(forum_allow_childs: 0))->rows(50)->orderBy('res_comment_last_date DESC');
 
-	$data = (new Forum($F))->load();
+	$data = (new ViewResForumEntity)->getAll($F);
 
 	if($data->count())
 	{
@@ -1232,7 +1232,7 @@ function whatsnew(MainModule $template): ?Template
 	# Articles
 	$F = (new ResArticleFilter)->rows(50)->orderBy('res_comment_last_date DESC');
 
-	$data = (new Article($F))->load();
+	$data = (new ViewResArticleEntity)->getAll($F);
 
 	if($data->count())
 	{
@@ -1271,7 +1271,7 @@ function user_comments(MainModule $template, string $l_hash, string $hl): ?Templ
 
 	$F = (new ResCommentFilter(login_id: $login_data->l_id))->rows(100)->orderBy("res_entered DESC");
 
-	$comments = (new Comment($F))->load();
+	$comments = (new ViewResCommentEntity)->getAll($F);
 
 	comment_list($C, $comments, $hl);
 
@@ -1567,7 +1567,7 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 		return null;
 	}
 
-	if(!($res = Res::load_by_id($res_id))){
+	if(!($res = ResEntity::get($res_id))){
 		$template->not_found();
 		return null;
 	}
@@ -1609,7 +1609,7 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 		return null;
 	}
 
-	if(!($new_data = Res::load_by_id($res_id)))
+	if(!($new_data = ViewResEntity::getById($res_id)))
 	{
 		$template->error("Datubāzes kļūda");
 		return null;
@@ -1782,7 +1782,7 @@ function join_logins(Select $sql)
 function article(MainModule $template, int $art_id, string $hl, ?string $article_route = null): ?Template
 {
 	# TODO: vote, profile, etc
-	if(!($art = Article::load_by_id($art_id))){
+	if(!($art = ViewResArticleEntity::getById($art_id))){
 		$template->not_found();
 		return null;
 	}
@@ -2129,11 +2129,11 @@ function load_specific_res(int $res_id, int $table_id): ?ResourceTypeInterface
 	switch($table_id)
 	{
 		case ResKind::ARTICLE:
-			return Article::load_by_res_id($res_id);
+			return ViewResArticleEntity::getByResId($res_id);
 		case ResKind::FORUM:
-			return Forum::load_by_res_id($res_id);
+			return ViewResForumEntity::getByResId($res_id);
 		case ResKind::COMMENT:
-			return Comment::load_by_res_id($res_id);
+			return ViewResCommentEntity::getByResId($res_id);
 		case ResKind::GALLERY:
 			new TODO("Get Gallery");
 		case ResKind::GALLERY_DATA:
@@ -2145,7 +2145,7 @@ function load_specific_res(int $res_id, int $table_id): ?ResourceTypeInterface
 
 function load_res(int $res_id): ?ResourceTypeInterface
 {
-	if($res = Res::load_by_id($res_id))
+	if($res = ResEntity::get($res_id))
 	{
 		return load_specific_res($res->res_id, $res->table_id);
 	}

@@ -2,7 +2,7 @@
 
 use dqdp\TODO;
 
-class Forum extends AbstractRes
+class Forum
 {
 	const DISPLAY_DATACOMPILED = 0;
 	const DISPLAY_DATA = 1;
@@ -15,36 +15,46 @@ class Forum extends AbstractRes
 	const TYPE_STD = 0;
 	const TYPE_EVENT = 1;
 
-	var array $types = [
+	static array $types = [
 		self::TYPE_STD=>'Forums',
 		self::TYPE_EVENT=>'Pasākums',
 	];
 
-	protected ResForumFilter $F;
+	// protected ResForumFilter $F;
 
-	function __construct(ResForumFilter $F = new ResForumFilter)
-	{
-		$this->F = $F;
-	}
+	// function __construct(ResForumFilter $F = new ResForumFilter)
+	// {
+	// 	$this->F = $F;
+	// }
 
-	function load(): ViewResForumCollection
-	{
-		return (new ViewResForumEntity)->getAll($this->F);
-	}
+	// function get_filter(): ResForumFilter
+	// {
+	// 	return $this->F;
+	// }
 
-	static function load_by_id(int $forum_id): ?ViewResForumType
-	{
-		$F = new ResForumFilter(forum_id:$forum_id);
+	// function load_single(): ?ViewResForumType
+	// {
+	// 	return parent::_load_single();
+	// }
 
-		return (new static($F))->load_single();
-	}
+	// function load(): ViewResForumCollection
+	// {
+	// 	return (new ViewResForumEntity)->getAll($this->F);
+	// }
 
-	static function load_by_res_id(int $res_id): ?ViewResForumType
-	{
-		$F = new ResForumFilter(res_id:$res_id);
+	// function load_by_id(int $forum_id): ?ViewResForumType
+	// {
+	// 	$this->F->forum_id = $forum_id;
 
-		return (new static($F))->load_single();
-	}
+	// 	return $this->load_single();
+	// }
+
+	// function load_by_res_id(int $res_id): ?ViewResForumType
+	// {
+	// 	$this->F->res_id = $res_id;
+
+	// 	return $this->load_single();
+	// }
 
 	function open(int $forum_id): bool
 	{

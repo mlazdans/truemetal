@@ -19,11 +19,11 @@ if(empty($page_id)){
 
 if($forum_route)
 {
-	$forum_data = (function(MainModule $template, string $forum_route): ViewResForumType
+	$forum_data = (function(MainModule $template, string $forum_route): ?ViewResForumType
 	{
 		$forum_id = (int)$forum_route;
 
-		if(!($forum_data = Forum::load_by_id($forum_id)))
+		if(!($forum_data = ViewResForumEntity::getById($forum_id)))
 		{
 			$template->not_found();
 			return null;

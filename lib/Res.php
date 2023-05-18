@@ -1,30 +1,40 @@
 <?php declare(strict_types = 1);
 
-class Res extends AbstractRes
+class Res
 {
-	protected ResFilter $F;
+	// protected ResFilter $F;
 
-	function __construct(ResFilter $F = new ResFilter)
-	{
-		$this->F = $F;
-	}
+	// function __construct(ResFilter $F = new ResFilter)
+	// {
+	// 	$this->F = $F;
+	// }
 
-	function load(): ViewResCollection
-	{
-		return (new ViewResEntity)->getAll($this->F);
-	}
+	// function get_filter(): ResFilter
+	// {
+	// 	return $this->F;
+	// }
 
-	static function load_by_id(int $res_id): ?ViewResType
-	{
-		$F = new ResFilter(res_id:$res_id);
+	// function load_single(): ?ViewResType
+	// {
+	// 	return parent::_load_single();
+	// }
 
-		return (new static($F))->load_single();
-	}
+	// function load(): ViewResCollection
+	// {
+	// 	return (new ViewResEntity)->getAll($this->F);
+	// }
 
-	static function load_by_res_id(int $res_id): ?ViewResType
-	{
-		return static::load_by_id($res_id);
-	}
+	// function load_by_id(int $res_id): ?ViewResType
+	// {
+	// 	$this->F->res_id = $res_id;
+
+	// 	return $this->load_single();
+	// }
+
+	// function load_by_res_id(int $res_id): ?ViewResType
+	// {
+	// 	return $this->load_by_id($res_id);
+	// }
 
 	static function hasNewComments(int $res_id, ?string $date = null, ?int $comment_count = null): bool
 	{
