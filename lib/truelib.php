@@ -1281,18 +1281,9 @@ function user_comments(MainModule $template, string $l_hash, string $hl): ?Templ
 	$T = $template->add_file('user/comments.tpl');
 	$C = new_template('comments.tpl');
 
-	// $T->set_array($login_data);
-
-	# Comments
-	// $params = [
-	// 	'login_id'=>$login_data->l_id,
-	// 	'rows'=>100,
-	// 	'order'=>"res_entered DESC",
-	// ];
-
 	$F = (new ResCommentFilter(login_id: $login_data->l_id))->rows(100)->orderBy("res_entered DESC");
 
-	$comments = Comment::load($F);
+	$comments = (new Comment($F))->load();
 
 	comment_list($C, $comments, $hl);
 

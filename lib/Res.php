@@ -30,62 +30,28 @@ class Res extends AbstractRes
 
 	static function GetAll(int $res_id): ?ResourceTypeInterface
 	{
-		$res_data = static::load(['res_id'=>$res_id]);
+		$res_data = static::load_by_id($res_id);
 
 		if(!$res_data) {
 			return null;
 		}
 
-		switch($res_data['table_id'])
+		switch($res_data->table_id)
 		{
 			case Table::ARTICLE:
 				return Article::load_by_res_id($res_id);
 			case Table::FORUM:
 				return Forum::load_by_res_id($res_id);
-				// $D = new Forum();
-				// return array_merge($res_data, $D->load(array(
-				// 	'res_id'=>$res_data['res_id'],
-				// 	)));
 			case Table::COMMENT:
 				return Comment::load_by_res_id($res_id);
-				// $D = new Comment();
-				// return array_merge($res_data, $D->Get(array(
-				// 	'res_id'=>$res_data['res_id'],
-				// 	)));
-				// break;
 			case Table::GALLERY:
 				new TODO("Get Gallery");
-				// $D = new Gallery();
-				// return array_merge($res_data, $D->load(array(
-				// 	'res_id'=>$res_data['res_id'],
-				// 	)));
-				// break;
 			case Table::GALLERY_DATA:
 				new TODO("Get GalleryData");
-				// $D = new GalleryData();
-				// return array_merge($res_data, $D->load(array(
-				// 	'res_id'=>$res_data['res_id'],
-				// 	)));
-				// break;
 		}
 
-		throw new InvalidArgumentException("Table unknown: $res_data[table_id]");
+		throw new InvalidArgumentException("Table unknown: $res_data->table_id");
 	}
-
-	# TODO: katrā klasē atsevišķi
-	// static function Route(int $res_id, int $c_id = 0): string
-	// {
-	// 	if(!($res = Res::GetAll($res_id))){
-	// 		return "/";
-	// 	}
-
-	// 	return static::RouteFromRes($res, $c_id);
-	// }
-
-	// static function RouteFromRes(ResourceInterface $res, ?int $c_id = null): string
-	// {
-	// 	return $res->Route($c_id);
-	// }
 
 	static function hasNewComments(int $res_id, ?string $date = null, ?int $comment_count = null): bool
 	{
@@ -103,7 +69,7 @@ class Res extends AbstractRes
 		return $comment_count > 0;
 	}
 
-	# TODO: saglabāt time stamp. Pirms tam jāpārkonvertē arī sessijās
+	# TODO: saglabāt tikai time stamp. Pirms tam jāpārkonvertē arī sessijās
 	static function markAsSeen(int $res_id): void
 	{
 		if(User::logged()){
