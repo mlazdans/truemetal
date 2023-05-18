@@ -407,7 +407,7 @@ function forum_det(
 	return $T;
 }
 
-function comment_list(Template $C, ViewResCommentsCollection $comments, string $hl): void
+function comment_list(Template $C, ViewResCommentCollection $comments, string $hl): void
 {
 	if(User::logged())
 	{

@@ -154,7 +154,7 @@ class Res extends AbstractRes
 		});
 	}
 
-	static function get_comments(int $res_id, ?ResFilter $F = new ResFilter()): ViewResCommentsCollection
+	static function get_comments(int $res_id, ?ResFilter $F = new ResFilter()): ViewResCommentCollection
 	{
 		$F->res_resid = $res_id;
 
@@ -162,7 +162,7 @@ class Res extends AbstractRes
 			$F->OrderBy('res_entered');
 		}
 
-		return (new ViewResCommentsEntity())->getAll($F);
+		return (new ViewResCommentEntity())->getAll($F);
 	}
 
 }

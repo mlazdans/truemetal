@@ -1,34 +1,30 @@
 <?php declare(strict_types = 1);
 
-class Comment
+class Comment extends AbstractRes
 {
-	static function load(ResCommentFilter $F): ViewResCommentsCollection
+	protected ResCommentFilter $F;
+
+	function __construct(ResCommentFilter $F = new ResCommentFilter)
 	{
-		return (new ViewResCommentsEntity)->getAll($F);
+		$this->F = $F;
 	}
 
-	# TODO: abstract between all res classess
-	static function load_single(ResCommentFilter $F): ?ViewResCommentsType
+	function load(): ViewResCommentCollection
 	{
-		$data = Comment::load($F);
-
-		assert($data->count() <= 1);
-
-		if($data->count())
-		{
-			return $data[0];
-		}
-
-		return null;
+		return (new ViewResCommentEntity)->getAll($this->F);
 	}
 
-	static function load_by_id(int $c_id): ?ViewResCommentsType
+	static function load_by_id(int $c_id): ?ViewResCommentType
 	{
-		return Comment::load_single(new ResCommentFilter(c_id: $c_id));
+		$F = new ResCommentFilter(c_id:$c_id);
+
+		return (new static($F))->load_single();
 	}
 
-	static function load_by_res_id(int $res_id): ?ViewResCommentsType
+	static function load_by_res_id(int $res_id): ?ViewResCommentType
 	{
-		return Comment::load_single(new ResCommentFilter(res_id: $res_id));
+		$F = new ResCommentFilter(res_id:$res_id);
+
+		return (new static($F))->load_single();
 	}
 }

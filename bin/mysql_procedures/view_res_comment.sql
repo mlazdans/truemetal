@@ -1,4 +1,4 @@
-CREATE OR REPLACE VIEW view_res_comments AS
+CREATE OR REPLACE VIEW view_res_comment AS
 SELECT
 comment.c_id,
 view_res.*

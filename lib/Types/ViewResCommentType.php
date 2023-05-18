@@ -2,8 +2,8 @@
 
 use dqdp\DataObject;
 
-class ViewResCommentsType extends DataObject implements ResourceTypeInterface {
-	use ViewResCommentsTypeTrait;
+class ViewResCommentType extends DataObject implements ResourceTypeInterface {
+	use ViewResCommentTypeTrait;
 
 	function Route(int $c_id = null): string
 	{
