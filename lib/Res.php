@@ -1,71 +1,32 @@
 <?php declare(strict_types = 1);
 
-use dqdp\SQL\Select;
 use dqdp\TODO;
 
-class Res
+class Res extends AbstractRes
 {
-	// const STATE_ACTIVE = 'Y';
-	// const STATE_INACTIVE = 'N';
-	// const STATE_VISIBLE = 'Y';
-	// const STATE_INVISIBLE = 'N';
-	// const STATE_ALL = false;
+	protected ResFilter $F;
 
-	// const ACT_VALIDATE = true;
-	// const ACT_DONTVALIDATE = false;
-
-	// protected $table_id;
-	// protected $login_id;
-
-	static function load(array $params)
+	function __construct(ResFilter $F = new ResFilter)
 	{
-		$sql = (new Select('res.*, res_meta.*'))
-		->Join('res_meta', 'res_meta.res_id = res.res_id')
-		->From('res')
-		;
-
-		join_logins($sql);
-
-		if(!empty($params['res_id'])){
-			$sql->Where(["res.res_id = ?", $params['res_id']]);
-		}
-
-		if(defaulted($params, 'res_visible'))
-		{
-			$sql->Where("res.res_visible = 1");
-		} elseif(!ignored($params, 'res_visible')){
-			$sql->Where(["res.res_visible = ?", $params['res_visible']]);
-		}
-
-		if(empty($params['order'])){
-			$sql->OrderBy("res.res_entered DESC");
-		} else {
-			$sql->OrderBy($params['order']);
-		}
-
-		if(isset($params['rows']))
-		{
-			$sql->Rows((int)$params['rows']);
-		}
-
-		if(isset($params['limit']))
-		{
-			new TODO("Nodalīt rows un offset");
-		}
-
-		return (empty($params['res_id']) ? DB::Execute($sql) : DB::ExecuteSingle($sql));
+		$this->F = $F;
 	}
 
-	// function Add()
-	// {
-	// 	$sql = sprintf(
-	// 		"INSERT INTO `res` (`table_id`, `login_id`, `res_entered`) VALUES (%s, %s, CURRENT_TIMESTAMP);",
-	// 		($this->table_id ? $this->table_id : "NULL"),
-	// 		($this->login_id ? $this->login_id : "NULL"),
-	// 	);
+	function load(): ViewResCollection
+	{
+		return (new ViewResEntity)->getAll($this->F);
+	}
 
-	// 	return (DB::Execute($sql) ? DB::LastID() : false);
-	// }
+	static function load_by_id(int $res_id): ?ViewResType
+	{
+		$F = new ResFilter(res_id:$res_id);
+
+		return (new static($F))->load_single();
+	}
+
+	static function load_by_res_id(int $res_id): ?ViewResType
+	{
+		return static::load_by_id($res_id);
+	}
 
 	static function GetAll(int $res_id): ?ResourceTypeInterface
 	{
