@@ -657,24 +657,12 @@ function private_profile(MainModule $template): ?Template
 
 	set_profile($T, $login_data, true);
 
-	$top_comments = [];
-	for($r=0; $r<2; $r++)
-	{
-		if($r == 0){
-			$v = 'res_meta.res_votes_plus_count DESC';
-		} elseif($r == 1){
-			$v = 'res_meta.res_votes_minus_count DESC';
-		}
+	$F = (new ResCommentFilter(
+		login_id:User::id()
+	))->rows(10);
 
-		$sql = "SELECT comment.*, res.*, res_meta.* FROM res
-		JOIN res_meta ON res_meta.res_id = res.res_id
-		JOIN comment ON comment.res_id = res.res_id
-		WHERE res.login_id = ? AND res.res_visible = 1
-		ORDER BY $v
-		LIMIT 10";
-
-		$top_comments[$r] = DB::Execute($sql, User::id());
-	}
+	$top_comments[0] = (new Comment($F->orderBy('res_votes_plus_count DESC')))->load();
+	$top_comments[1] = (new Comment($F->orderBy('res_votes_minus_count DESC')))->load();
 
 	if($top_comments[0] || $top_comments[1]){
 		$T->enable('BLOCK_truecomments');
@@ -696,17 +684,17 @@ function private_profile(MainModule $template): ?Template
 		$BLOCK_truecomment_item = $T->get_block('BLOCK_truecomment_item');
 		foreach($data as $item)
 		{
-			$res_data = $item['res_data'];
+			$res_data = $item->res_data;
 			if(mb_strlen($res_data) > 70){
 				$res_data = mb_substr($res_data, 0, 70).'...';
 			}
 
-			$res_href = "/resroute/{$item['res_resid']}/?c_id={$item['c_id']}";
+			$res_href = "/resroute/{$item->res_resid}/?c_id={$item->c_id}";
 
 			$BLOCK_truecomment_item
-			->set_var('res_votes_plus_count', $item['res_votes_plus_count'])
-			->set_var('res_votes_minus_count', $item['res_votes_minus_count'])
-			->set_var('res_data', $res_data)
+			->set_var('res_votes_plus_count', $item->res_votes_plus_count)
+			->set_var('res_votes_minus_count', $item->res_votes_minus_count)
+			->set_var('res_data', specialchars($res_data))
 			->set_var('res_href', $res_href)
 			->parse(TMPL_APPEND);
 
