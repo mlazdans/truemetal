@@ -387,6 +387,7 @@ label > input {
 	background-color: #330000;
 	border-radius: 5em 0 0 0;
 	/* border-radius: 10%/100% 0 0 0; */
+	/* border: 1px solid yellow; */
 }
 
 /* TODO: pārģenerēt logo kā .svg */
@@ -394,8 +395,11 @@ label > input {
 	display: block;
 	height: 100%;
 	/* border-bottom: 0.1em dotted #220000; */
-	background: url("../img/truemetal.lv-logo.png") no-repeat center center;
-	background-size: 70%;
+	background: url("../img/truemetal.lv-top-logo.svg") no-repeat center center;
+	background-size: contain;
+	/* 	margin: 2em; */
+	/* background-size: auto 0%; */
+	/* background-size: 70%; */
 }
 
 #container > .banner {
@@ -408,35 +412,35 @@ label > input {
 	grid-area: c;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-around;
+	/* justify-content: space-around; */
+	justify-content: space-evenly;
 	align-items: center;
 	background-color: #330000;
 	/* border: 1px solid blue; */
 }
 /* TODO: pārģenerēt menu kā .svg */
 #container > .menu a {
-	display: inline;
+	display: block;
 	width: 20%;
-	height: 80%;
+	height: 100%;
 	/* margin: auto; */
 	/* width: minmax(125px, 20%); */
-	/* padding: 0.1em 2em; */
-	/* border: 1px solid green; */
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-size: contain;
+	/* background-size: auto; */
 }
 #container > .menu a.menu-root{
-	background-image: url("../img/buttons/article.png");
+	background-image: url("../img/buttons/jaunumi2.svg");
 }
 #container > .menu a.menu-forum{
-	background-image: url("../img/buttons/forum.png");
+	background-image: url("../img/buttons/forums2.svg");
 }
 #container > .menu a.menu-reviews{
-	background-image: url("../img/buttons/reviews.png");
+	background-image: url("../img/buttons/recenzijas2.svg");
 }
 #container > .menu a.menu-interviews{
-	background-image: url("../img/buttons/interviews.png");
+	background-image: url("../img/buttons/intervijas2.svg");
 }
 
 #container > .content {
