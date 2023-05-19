@@ -481,14 +481,8 @@ function comment_list(Template $C, ViewResCommentCollection $comments, string $h
 	}
 }
 
-function get_attendees(int $res_id){
-	$sql = "SELECT a.*, l.l_nick, l.l_hash
-	FROM attend a
-	JOIN logins l ON l.l_id = a.l_id
-	WHERE res_id = $res_id
-	ORDER BY a_entered";
-
-	return DB::Execute($sql);
+function get_attendees(int $res_id): ViewAttendCollection {
+	return ViewAttendEntity::getByResId($res_id);
 }
 
 // TODO: izvākt is_private
@@ -1635,32 +1629,25 @@ function attend(MainModule $template, int $res_id, ?string $off = null): ?TrueRe
 		return null;
 	}
 
-	if(!($item = load_res($res_id)))
+	# TODO: kādreiz atdalīt pasākumus savā klasē
+	if(!($item = ViewResForumEntity::getByResId($res_id)))
 	{
 		$template->not_found();
 		return null;
 	}
 
-	$login_id = User::id();
-
-	if($item['type_id'] !== Forum::TYPE_EVENT)
+	if($item->type_id !== Forum::TYPE_EVENT)
 	{
 		$template->forbidden("Nav pasākums");
 		return null;
 	}
 
-	if(time() > (strtotime(date('d.m.Y', strtotime($item['event_startdate']))) + 24 * 3600)){
+	if(time() > (strtotime(date('d.m.Y', strtotime($item->event_startdate))) + 24 * 3600)){
 		$template->msg("Par vēlu");
 		return null;
 	}
 
-	if($off == 'off'){
-		$sql = "UPDATE attend SET a_attended = 0 WHERE l_id = $login_id AND res_id = $res_id";
-	} else {
-		$sql = "INSERT INTO attend (l_id, res_id) VALUES ($login_id, $res_id) ON DUPLICATE KEY UPDATE a_attended = 1";
-	}
-
-	if(!DB::Execute($sql))
+	if(!AttendEntity::attend(User::id(), $res_id, $off == 'off' ? 0 : 1))
 	{
 		$template->error("Datubāzes kļūda");
 		return null;
@@ -1692,19 +1679,22 @@ function attendees(MainModule $template, ViewResForumType $forum): ?Template
 
 	$me_attended = false;
 	$T->set_var('res_id', $forum->res_id);
-	if($data = get_attendees($forum->res_id))
+
+	$data = get_attendees($forum->res_id);
+
+	if($c = count($data))
 	{
 		$BLOCK_attend_list = $T->enable('BLOCK_attend_list');
-		$c = count($data);
 		foreach($data as $k=>$item){
-			if($item['a_attended'] && (User::id() == $item['l_id'])){
+			if($item->a_attended && (User::id() == $item->l_id)){
 				$me_attended = true;
 			}
-			if(!$item['a_attended']){
-				$item['l_nick'] = "<strike>$item[l_nick]</strike>";
-			}
-			$BLOCK_attend_list->set_var('l_nick_sep', ($k+1 < $c ? ', ' : ''));
 			$BLOCK_attend_list->set_array($item);
+			$BLOCK_attend_list->set_var('l_nick_sep', ($k+1 < $c ? ', ' : ''));
+			if(!$item->a_attended){
+				$BLOCK_attend_list->set_var('l_nick', "<strike>$item->l_nick</strike>");
+			}
+
 			$BLOCK_attend_list->parse(TMPL_APPEND);
 		}
 	}
