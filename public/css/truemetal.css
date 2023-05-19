@@ -372,7 +372,7 @@ label > input {
 
 	/* TODO: width atkarībā no viewport */
 	/* width: 75%; */
-	max-width: 1580px;
+	max-width: 1200px;
 	margin: auto;
 	/* justify-content: center; */
 	/* align-content: stretch; */
@@ -383,8 +383,10 @@ label > input {
 
 #container > .logo {
 	grid-area: a;
+	/* background: url("../img/logo-background.png") no-repeat top left; */
 	background-color: #330000;
-	border-radius: 10%/100% 0 0 0;
+	border-radius: 5em 0 0 0;
+	/* border-radius: 10%/100% 0 0 0; */
 }
 
 /* TODO: pārģenerēt logo kā .svg */
@@ -393,7 +395,7 @@ label > input {
 	height: 100%;
 	/* border-bottom: 0.1em dotted #220000; */
 	background: url("../img/truemetal.lv-logo.png") no-repeat center center;
-	background-size: 60%;
+	background-size: 70%;
 }
 
 #container > .banner {
