@@ -1276,90 +1276,89 @@ function user_comments(MainModule $template, string $l_hash, string $hl): ?Templ
 	return $T;
 }
 
-function gallery_thumbs_list(MainModule $template, int $gal_id): ?Template
-{
-	global $CACHE_ENABLE;
+// function gallery_thumbs_list(MainModule $template, int $gal_id): ?Template
+// {
+// 	global $CACHE_ENABLE;
 
-	$gallery = new Gallery;
-	if(!($gal = $gallery->load($gal_id))){
-		$template->not_found();
-		return null;
-	}
+// 	$gallery = new Gallery;
+// 	if(!($gal = $gallery->load($gal_id))){
+// 		$template->not_found();
+// 		return null;
+// 	}
 
-	$GD = new GalleryData;
-	$T = $template->add_file('gallery.tpl');
+// 	$GD = new GalleryData;
+// 	$T = $template->add_file('gallery.tpl');
 
-	// # ja skataas bildi, nocheko vai attieciigaa galerija ir pieejama
-	// if($gal_id == 'view' && $gd_id)
-	// {
-	// 	$galdata = $GD->load($gd_id);
-	// 	if(!isset($galdata['gal_id'])) {
-	// 		header("Location: /");
-	// 		exit;
-	// 	}
-	// 	$gal = $gallery->load($galdata['gal_id']);
-	// } else {
-	// 	$gal = $gallery->load($gal_id);
-	// }
+// 	// # ja skataas bildi, nocheko vai attieciigaa galerija ir pieejama
+// 	// if($gal_id == 'view' && $gd_id)
+// 	// {
+// 	// 	$galdata = $GD->load($gd_id);
+// 	// 	if(!isset($galdata['gal_id'])) {
+// 	// 		header("Location: /");
+// 	// 		exit;
+// 	// 	}
+// 	// 	$gal = $gallery->load($galdata['gal_id']);
+// 	// } else {
+// 	// 	$gal = $gallery->load($gal_id);
+// 	// }
 
-	$gal_name = "";
-	if($gal['gal_ggid'])
-		$gal_name .= "$gal[gg_name] / ";
-	$gal_name .= "$gal[gal_name]";
+// 	$gal_name = "";
+// 	if($gal['gal_ggid'])
+// 		$gal_name .= "$gal[gg_name] / ";
+// 	$gal_name .= "$gal[gal_name]";
 
-	$T->set_var('gal_name', $gal_name);
-	$T->set_var('gal_id', $gal['gal_id']);
-	$template->set_title('Galerija '.$gal_name);
+// 	$T->set_var('gal_name', $gal_name);
+// 	$T->set_var('gal_id', $gal['gal_id']);
+// 	$template->set_title('Galerija '.$gal_name);
 
-	if($gal['gal_ggid']){
-		$T->set_var('gal_jump_id', "gg_".$gal['gal_ggid']);
-	} else {
-		$T->set_var('gal_jump_id', "gal_".$gal['gal_id']);
-	}
+// 	if($gal['gal_ggid']){
+// 		$T->set_var('gal_jump_id', "gg_".$gal['gal_ggid']);
+// 	} else {
+// 		$T->set_var('gal_jump_id', "gal_".$gal['gal_id']);
+// 	}
 
-	$T->enable('BLOCK_thumb_list');
+// 	$T->enable('BLOCK_thumb_list');
 
-	# ielasam thumbus
-	$tpr = 5;
-	$c = 0;
-	$data = $GD->load(['gal_id'=>$gal_id]);
-	$thumb_count = count($data);
-	foreach($data as $thumb)
-	{
-		++$c;
-		if($c % $tpr == 1)
-			$T->enable('BLOCK_tr1');
-		else
-			$T->disable('BLOCK_tr1');
-		if(($c % $tpr == 0) || ($c == $thumb_count))
-			$T->enable('BLOCK_tr2');
-		else
-			$T->disable('BLOCK_tr2');
+// 	# ielasam thumbus
+// 	$tpr = 5;
+// 	$c = 0;
+// 	$data = $GD->load(['gal_id'=>$gal_id]);
+// 	$thumb_count = count($data);
+// 	foreach($data as $thumb)
+// 	{
+// 		++$c;
+// 		if($c % $tpr == 1)
+// 			$T->enable('BLOCK_tr1');
+// 		else
+// 			$T->disable('BLOCK_tr1');
+// 		if(($c % $tpr == 0) || ($c == $thumb_count))
+// 			$T->enable('BLOCK_tr2');
+// 		else
+// 			$T->disable('BLOCK_tr2');
 
-		if($CACHE_ENABLE && ($hash = cache_hash($thumb['gd_id']."thumb.jpg")) && cache_exists($hash)){
-			$T->set_var('thumb_path', cache_http_path($hash), 'BLOCK_thumb');
-		} else {
-			$T->set_var('thumb_path', "/gallery/thumb/$thumb[gd_id]/", 'BLOCK_thumb');
-		}
+// 		if($CACHE_ENABLE && ($hash = cache_hash($thumb['gd_id']."thumb.jpg")) && cache_exists($hash)){
+// 			$T->set_var('thumb_path', cache_http_path($hash), 'BLOCK_thumb');
+// 		} else {
+// 			$T->set_var('thumb_path', "/gallery/thumb/$thumb[gd_id]/", 'BLOCK_thumb');
+// 		}
 
-		$T->enable_if(GalleryData::hasNewComments($thumb), 'BLOCK_comments_new');
+// 		$T->enable_if(GalleryData::hasNewComments($thumb), 'BLOCK_comments_new');
 
-		if($thumb['res_votes'] > 0)
-		{
-			$T->set_var('comment_vote_class', 'plus', 'BLOCK_thumb');
-			$thumb['res_votes'] = '+'.$thumb['res_votes'];
-		} elseif($thumb['res_votes'] < 0) {
-			$T->set_var('comment_vote_class', 'minus', 'BLOCK_thumb');
-		} else {
-			$T->set_var('comment_vote_class', '', 'BLOCK_thumb');
-		}
-		$T->set_array($thumb, 'BLOCK_thumb');
-		$T->parse_block('BLOCK_thumb', TMPL_APPEND);
-	}
+// 		if($thumb['res_votes'] > 0)
+// 		{
+// 			$T->set_var('comment_vote_class', 'plus', 'BLOCK_thumb');
+// 			$thumb['res_votes'] = '+'.$thumb['res_votes'];
+// 		} elseif($thumb['res_votes'] < 0) {
+// 			$T->set_var('comment_vote_class', 'minus', 'BLOCK_thumb');
+// 		} else {
+// 			$T->set_var('comment_vote_class', '', 'BLOCK_thumb');
+// 		}
+// 		$T->set_array($thumb, 'BLOCK_thumb');
+// 		$T->parse_block('BLOCK_thumb', TMPL_APPEND);
+// 	}
 
-	return $T;
-}
-
+// 	return $T;
+// }
 
 function gallery_root(MainModule $template): ?Template
 {
@@ -1425,96 +1424,96 @@ function gallery_image(int $gd_id, string $gal_type): void
 	print $jpeg;
 }
 
-function gallery_view(MainModule $template, int $gd_id): ?Template
-{
-	global $CACHE_ENABLE;
+// function gallery_view(MainModule $template, int $gd_id): ?Template
+// {
+// 	global $CACHE_ENABLE;
 
-	$action = post('action');
+// 	$action = post('action');
 
-	$GD = new GalleryData;
+// 	$GD = new GalleryData;
 
-	if(!($galdata = $GD->load($gd_id))){
-		$template->not_found();
-		return null;
-	}
+// 	if(!($galdata = $GD->load($gd_id))){
+// 		$template->not_found();
+// 		return null;
+// 	}
 
-	$gallery = new Gallery;
-	$gal = $gallery->load($galdata['gal_id']);
+// 	$gallery = new Gallery;
+// 	$gal = $gallery->load($galdata['gal_id']);
 
-	# Komenti
-	Res::markAsSeen($galdata['res_id']);
+// 	# Komenti
+// 	Res::markAsSeen($galdata['res_id']);
 
-	$T = $template->add_file('gallery.tpl');
-	$C = new_template('comments.tpl');
+// 	$T = $template->add_file('gallery.tpl');
+// 	$C = new_template('comments.tpl');
 
-	$error_msg = [];
-	if($action == 'add_comment')
-	{
-		$data = post('data');
-		$C->set_array(specialchars($data));
+// 	$error_msg = [];
+// 	if($action == 'add_comment')
+// 	{
+// 		$data = post('data');
+// 		$C->set_array(specialchars($data));
 
-		if(empty($data['c_data'])){
-			$error_msg[] = "Kaut kas jau jāieraksta";
-		}
+// 		if(empty($data['c_data'])){
+// 			$error_msg[] = "Kaut kas jau jāieraksta";
+// 		}
 
-		if(empty($error_msg)){
-			$res_id = (int)$galdata['res_id'];
-			$data = post('data');
-			if($c_id = Res::user_add_comment($res_id, $data['c_data']))
-			{
-				header("Location: ".GalleryData::Route($galdata, $c_id));
-				return null;
-			} else {
-				$error_msg[] = "Never pievienot komentāru";
-			}
-		}
-	}
+// 		if(empty($error_msg)){
+// 			$res_id = (int)$galdata['res_id'];
+// 			$data = post('data');
+// 			if($c_id = Res::user_add_comment($res_id, $data['c_data']))
+// 			{
+// 				header("Location: ".GalleryData::Route($galdata, $c_id));
+// 				return null;
+// 			} else {
+// 				$error_msg[] = "Never pievienot komentāru";
+// 			}
+// 		}
+// 	}
 
-	if($error_msg)
-	{
-		$C->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
-	}
+// 	if($error_msg)
+// 	{
+// 		$C->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
+// 	}
 
 
-	$params = array('res_id'=>$galdata['res_id']);
+// 	$params = array('res_id'=>$galdata['res_id']);
 
-	# TODO: izvākt un ielikt kaut kur zem list.inc.php
-	$params['order'] = User::get_val('l_forumsort_msg') == Forum::SORT_DESC
-		? "c_entered DESC"
-		: "c_entered";
+// 	# TODO: izvākt un ielikt kaut kur zem list.inc.php
+// 	$params['order'] = User::get_val('l_forumsort_msg') == Forum::SORT_DESC
+// 		? "c_entered DESC"
+// 		: "c_entered";
 
-	$comments = (new ResComment)->Get($params);
-	comment_list($C, $comments, "");
-	$T->set_block_string($C->parse(), 'BLOCK_gallery_comments');
+// 	$comments = (new ResComment)->Get($params);
+// 	comment_list($C, $comments, "");
+// 	$T->set_block_string($C->parse(), 'BLOCK_gallery_comments');
 
-	# ja skataas pa vienai
-	$T->enable('BLOCK_image');
+// 	# ja skataas pa vienai
+// 	$T->enable('BLOCK_image');
 
-	if($CACHE_ENABLE && ($hash = cache_hash($gd_id."image.jpg")) && cache_exists($hash)){
-		$T->set_var('image_path', cache_http_path($hash), 'BLOCK_image');
-	} else {
-		$T->set_var('image_path', "/gallery/image/$gd_id/", 'BLOCK_image');
-	}
+// 	if($CACHE_ENABLE && ($hash = cache_hash($gd_id."image.jpg")) && cache_exists($hash)){
+// 		$T->set_var('image_path', cache_http_path($hash), 'BLOCK_image');
+// 	} else {
+// 		$T->set_var('image_path', "/gallery/image/$gd_id/", 'BLOCK_image');
+// 	}
 
-	$galdata['res_votes'] = (int)$galdata['res_votes'];
-	if($galdata['res_votes'] > 0)
-	{
-		$T->set_var('comment_vote_class', 'plus', 'BLOCK_image');
-		$galdata['res_votes'] = '+'.$galdata['res_votes'];
-	} elseif($galdata['res_votes'] < 0) {
-		$T->set_var('comment_vote_class', 'minus', 'BLOCK_image');
-	} else {
-		$T->set_var('comment_vote_class', '', 'BLOCK_image');
-	}
+// 	$galdata['res_votes'] = (int)$galdata['res_votes'];
+// 	if($galdata['res_votes'] > 0)
+// 	{
+// 		$T->set_var('comment_vote_class', 'plus', 'BLOCK_image');
+// 		$galdata['res_votes'] = '+'.$galdata['res_votes'];
+// 	} elseif($galdata['res_votes'] < 0) {
+// 		$T->set_var('comment_vote_class', 'minus', 'BLOCK_image');
+// 	} else {
+// 		$T->set_var('comment_vote_class', '', 'BLOCK_image');
+// 	}
 
-	# nechekojam, vai ir veel bildes
-	$next_id = $GD->get_next_data($gal['gal_id'], $gd_id);
-	$T->set_var('gd_nextid', $next_id ? $next_id : $gd_id, 'BLOCK_image');
+// 	# nechekojam, vai ir veel bildes
+// 	$next_id = $GD->get_next_data($gal['gal_id'], $gd_id);
+// 	$T->set_var('gd_nextid', $next_id ? $next_id : $gd_id, 'BLOCK_image');
 
-	$T->set_array($galdata, 'BLOCK_image');
+// 	$T->set_array($galdata, 'BLOCK_image');
 
-	return $T;
-}
+// 	return $T;
+// }
 
 function admin_comment_list(
 	Template $C,
