@@ -230,15 +230,16 @@ class MainModule
 
 		$block = User::logged() ? 'BLOCK_online_item' : 'BLOCK_online_item_notloged';
 
-		if($active_sessions = Logins::get_active())
+		$active_sessions = Logins::get_active();
+		if($active_sessions->count())
 		{
 			$TLogin->enable($block);
 		}
 
 		foreach($active_sessions as $data)
 		{
-			$TLogin->set_var('online_nick', $data['l_nick']);
-			$TLogin->set_var('online_hash', $data['l_hash']);
+			$TLogin->set_var('online_nick', $data->l_nick);
+			$TLogin->set_var('online_hash', $data->l_hash);
 			$TLogin->parse_block($block, TMPL_APPEND);
 		}
 
@@ -371,8 +372,7 @@ class MainModule
 
 			$TEvents->set_var('event_class', "");
 			$TEvents->set_var('event_url', $item->Route());
-			$TEvents->set_var('event_title', ent($D.". ".get_month($M - 1).", ".get_day($Dw - 0)));
-			//$TEvents->set_var('event_name', ent($item['forum_name']));
+			$TEvents->set_var('event_title', specialchars($D.". ".get_month($M - 1).", ".get_day($Dw - 0)));
 			$TEvents->set_var('event_name', $item->res_name);
 
 			if($diff<2){

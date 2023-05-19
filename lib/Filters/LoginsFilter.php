@@ -21,6 +21,7 @@ class LoginsFilter extends AbstractFilter
 		public ?string $q                      = null,
 		public ?bool $jubilars                 = false,
 		public ?bool $get_all_ips              = false,
+		public ?bool $get_actitve_sessions     = false,
 	) {}
 
 	static function ignore_disabled(LoginsFilter $F, bool $ignore_disabled): LoginsFilter
@@ -71,6 +72,10 @@ class LoginsFilter extends AbstractFilter
 			new TODO("get_all_ips: move to View/Proc");
 			// $d = date('Y-m-d H:i:s', strtotime('-1 year'));
 			// $sql->Select("(SELECT GROUP_CONCAT(DISTINCT c_userip) FROM comment WHERE login_id = logins.l_id AND c_entered > '$d')", "all_ips");
+		}
+
+		if($this->get_actitve_sessions){
+			$sql->Where("l_logedin = 1 AND TIMESTAMPDIFF(second, l_lastaccess, CURRENT_TIMESTAMP) < 600");
 		}
 
 		return $sql;

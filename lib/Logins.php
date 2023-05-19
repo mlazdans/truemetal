@@ -85,13 +85,9 @@ class Logins
 		return $item['banned'] > 0;
 	}
 
-	static function get_active()
+	static function get_active(): LoginsCollection
 	{
-		$sql = sprintf("SELECT * FROM logins WHERE l_logedin = 'Y' AND '%s' < l_lastaccess",
-			date('Y-m-d H:i:s', time() - 600)
-		);
-
-		return DB::Execute($sql);
+		return (new LoginsEntity)->getAll(new LoginsFilter(get_actitve_sessions: true));
 	}
 
 	static function delete_image(): bool
