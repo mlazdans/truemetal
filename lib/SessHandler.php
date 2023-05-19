@@ -26,7 +26,7 @@ class SessHandler implements SessionHandlerInterface
 			$sql = "UPDATE logins SET l_sess_id = ?, l_sess_ip = ?, l_lastaccess = CURRENT_TIMESTAMP WHERE l_id = ?";
 			return DB::Execute($sql, $id, $ip, User::id());
 		} else {
-			$sql = "UPDATE logins SET l_sess_id = ?, l_sessiondata = ?, l_sess_ip = ?, l_lastaccess = CURRENT_TIMESTAMP, l_logedin = 'Y' WHERE l_id = ?";
+			$sql = "UPDATE logins SET l_sess_id = ?, l_sessiondata = ?, l_sess_ip = ?, l_lastaccess = CURRENT_TIMESTAMP, l_logedin = 1 WHERE l_id = ?";
 			return DB::Execute($sql, $id, $data, $ip, User::id());
 		}
 	}
@@ -46,14 +46,14 @@ class SessHandler implements SessionHandlerInterface
 
 	function destroy($sess_id): bool
 	{
-		return DB::Execute("UPDATE logins SET l_sess_id = NULL, l_logedin ='N' WHERE l_sess_id = ?", $sess_id);
+		return DB::Execute("UPDATE logins SET l_sess_id = NULL, l_logedin = 0 WHERE l_sess_id = ?", $sess_id);
 	}
 
 	function gc(int $max_lifetime): int|false
 	{
 		$period = date('Y-m-d', time() - $max_lifetime);
 
-		DB::Execute("UPDATE logins SET l_sess_id = NULL, l_logedin ='N' WHERE `l_lastaccess` < ?", $period);
+		DB::Execute("UPDATE logins SET l_sess_id = NULL, l_logedin = 0 WHERE l_lastaccess < ?", $period);
 
 		return DB::rowCount();
 	}

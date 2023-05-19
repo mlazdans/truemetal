@@ -59,8 +59,8 @@
 	<td class="right nowrap">Ielogojies?:</td>
 	<td>
 		<select name="data[l_logedin]">
-			<option value="N"{l_logedin_N_sel}>Nē</option>
-			<option value="Y"{l_logedin_Y_sel}>Jā</option>
+			<option value="0"{l_logedin_0_sel}>Nē</option>
+			<option value="1"{l_logedin_1_sel}>Jā</option>
 		</select>
 	</td>
 </tr>
