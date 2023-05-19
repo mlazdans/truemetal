@@ -2,9 +2,16 @@
 
 use dqdp\DBA\driver\MySQL_PDO;
 
+enum DBFetchFunction: string
+{
+	case FetchAssoc = "FetchAssoc";
+	case FetchObject = "FetchObject";
+}
+
 class DB
 {
 	private static MySQL_PDO $db;
+	private static DBFetchFunction $fetch_function = DBFetchFunction::FetchAssoc;
 
 	static function setDB(MySQL_PDO $db)
 	{
@@ -16,25 +23,31 @@ class DB
 		return static::$db;
 	}
 
+	static function setFetchFunction(DBFetchFunction $function)
+	{
+		static::$fetch_function = $function;
+	}
+
 	static function Execute()
 	{
-		$q = static::$db->query(...func_get_args());
-		while($r = static::$db->fetch_assoc($q)){
+		$q = static::Query(...func_get_args());
+		while($r = static::{static::$fetch_function->value}($q)){
 			$res[] = $r;
 		}
 
-		return $res ?? ($q->columnCount() ? [] : (bool)$q);
+		return $res ?? ($q->columnCount() ? null : (bool)$q);
 	}
 
 	static function ExecuteSingle()
 	{
-		$q = static::$db->query(...func_get_args());
-		if($r = static::$db->fetch_assoc($q))
+		$q = static::Query(...func_get_args());
+
+		if($r = static::{static::$fetch_function->value}($q))
 		{
 			$res = $r;
 		}
 
-		return $res ?? ($q->columnCount() ? [] : (bool)$q);
+		return $res ?? ($q->columnCount() ? null : (bool)$q);
 	}
 
 	static function Quote($p)
@@ -59,9 +72,9 @@ class DB
 		return static::$db->with_new_trans(...func_get_args());
 	}
 
-	static function Query($sql)
+	static function Query()
 	{
-		return static::$db->query($sql);
+		return static::$db->query(...func_get_args());
 	}
 
 	static function Prepare()
@@ -71,12 +84,19 @@ class DB
 
 	static function ExecutePrepared()
 	{
-		return static::$db->execute(...func_get_args());
+		$q = static::$db->execute(...func_get_args());
+		if($r = static::{static::$fetch_function->value}($q))
+		{
+			$res = $r;
+		}
+
+		return $res ?? ($q->columnCount() ? null : (bool)$q);
+		// return static::$db->execute(...func_get_args());
 	}
 
 	static function Fetch($q)
 	{
-		return static::FetchAssoc($q);
+		return static::{static::$fetch_function->value}($q);
 	}
 
 	static function FetchAssoc($q)
