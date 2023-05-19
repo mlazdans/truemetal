@@ -176,12 +176,6 @@ function forum_themes(
 		$T->enable('BLOCK_notloggedin');
 	}
 
-	// $params = [
-	// 	"res_resid"=>$forum->res_id,
-	// 	"page"=>$page_id,
-	// 	"items_per_page"=>$fpp,
-	// ];
-
 	$F = (new ResForumFilter(res_resid: $forum->res_id))->page($page_id, $fpp);
 
 	if(User::get_val('l_forumsort_themes') == Forum::SORT_LASTCOMMENT)
@@ -349,9 +343,13 @@ function forum_det(
 
 	// $forum->set_forum_path($T, $forum_id);
 
+	# TODO: izdomāt, kā returnot konkrēta res objektu, nevis array
+	# TODO: apsvērt res_route glabāt DB
+	// $tree = get_res_tree($forum->res_id, $forum->table_id);
+
 	# TODO: Vajag uztaisīt:
-	# 1) lai rāda foruma datus
-	# 2) uztaisīt balsošanu par articles un forum
+	# OK?) lai rāda foruma datus
+	# OK?) uztaisīt balsošanu par articles un forum
 	# 3) pārkopēt foruma pirmā komenta votes uz foruma votēm
 	# 4) izvākt pirmo foruma komentu
 
@@ -2125,6 +2123,21 @@ function load_res(int $res_id): ?ResourceTypeInterface
 	if($res = ResEntity::get($res_id))
 	{
 		return load_specific_res($res->res_id, $res->table_id);
+	}
+
+	return null;
+}
+
+function get_res_tree(?int $res_id = null, ?int $table_id = null): ?array
+{
+	if(is_null($res_id)){
+		return null;
+	}
+
+	$f = $table_id ? load_specific_res($res_id, $table_id) : load_res($res_id);
+
+	if($f){
+		return [$f, get_res_tree($f->res_resid, $table_id)];
 	}
 
 	return null;
