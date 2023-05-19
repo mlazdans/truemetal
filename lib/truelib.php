@@ -1756,19 +1756,6 @@ function archive(MainModule $template): ?Template
 	return $T;
 }
 
-function filter_login_data(array $data): array
-{
-	unset($data['l_sessiondata']);
-	unset($data['l_password']);
-
-	return $data;
-}
-
-function join_logins(Select $sql)
-{
-	$sql->Select("logins.l_hash")->LeftJoin("logins", "res.login_id = logins.l_id");
-}
-
 function article(MainModule $template, int $art_id, string $hl, ?string $article_route = null): ?Template
 {
 	# TODO: vote, profile, etc
