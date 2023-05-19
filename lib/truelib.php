@@ -305,6 +305,7 @@ function forum_det(
 	$T->set_array($forum);
 	$T->set_var('res_date', proc_date($forum->res_entered));
 	$T->set_var('res_votes', format_vote($forum->res_votes));
+	$T->set_var('res_route', $forum->Route());
 	$T->set_var('comment_vote_class', comment_vote_class($forum->res_votes));
 
 	if(User::logged()){

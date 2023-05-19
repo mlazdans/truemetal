@@ -70,7 +70,7 @@
 	Pievienot jaunu tēmu
 </div>
 <div class="List-item">
-	Atceries - stulbs tēmas nosaukums garantē tēmas izdzēšanu un daudz mīnusus!
+	Ņem vērā - stulbs tēmas nosaukums garantē tēmas izdzēšanu un daudz mīnusus!
 </div>
 
 <!-- BEGIN BLOCK_notloggedin disabled -->

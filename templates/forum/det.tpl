@@ -1,4 +1,5 @@
 <div class="TD-cat">{res_name}</div>
+
 <!-- BEGIN BLOCK_attend --><!-- END BLOCK_attend -->
 <div class="profile-header">
 	<div class="user-info">
@@ -25,6 +26,9 @@
 			<a href="/user/profile/{l_hash}/" class="ProfilePopup" data-hash="{l_hash}">[Profils]</a>
 		</div>
 		<!-- END BLOCK_profile_link -->
+		<div class="unselectable">
+			<a href="{res_route}">[#]</a>
+		</div>
 	</div>
 </div>
 <div class="res-data{c_disabled_user_class}">
@@ -35,11 +39,9 @@
 <div class="error">{error_msg}</div>
 <!-- END BLOCK_forum_error -->
 
-<div class="List-sep"></div>
-
-<div class="TD-cat" id="theme-comments-{forum_id}">
+<!-- <div class="TD-cat" id="theme-comments-{forum_id}">
 	Komentāri
-</div>
+</div> -->
 
 <div class="List-item">
 	<!-- BEGIN BLOCK_info_sort_A disabled -->
@@ -50,6 +52,8 @@
 	Komentāri sakārtoti pēc to ievadīšanas datuma dilstoši
 	<!-- END BLOCK_info_sort_D -->
 </div>
+
+<div class="List-sep"></div>
 
 <!-- BEGIN BLOCK_forum_comments --><!-- END BLOCK_forum_comments -->
 
