@@ -73,6 +73,7 @@ initEditor();
 
 <div id="middle">
 <!-- BEGIN BLOCK_container -->
+	<!-- BEGIN BLOCK_not_found disabled --><div class="Info">{msg}</div><!-- END BLOCK_not_found -->
 	<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->
 <!-- END BLOCK_container -->
 </div>

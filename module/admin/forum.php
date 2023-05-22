@@ -54,13 +54,19 @@ function root_forum(AdminModule $template): Template
 	return $T;
 }
 
-function open_forum(AdminModule $template, int $forum_id): Template
+function open_forum(AdminModule $template, int $forum_id): ?Template
 {
 	$T = $template->add_file("admin/forum.tpl");
 
 	$T->set_var('forum_id', $forum_id);
 
 	$forum = (new ViewResForumEntity)->getById($forum_id, true);
+
+	if(!$forum)
+	{
+		$template->not_found();
+		return null;
+	}
 
 	if($forum->forum_allow_childs)
 	{
