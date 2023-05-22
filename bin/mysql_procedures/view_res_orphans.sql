@@ -1,3 +1,4 @@
+-- SELECT * FROM view_res JOIN view_res_orphans USING (res_id)
 CREATE OR REPLACE VIEW view_res_orphans AS
 SELECT r.res_id, 'article' FROM res r
 LEFT JOIN article f ON r.res_id = f.res_id
