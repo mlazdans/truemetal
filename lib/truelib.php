@@ -2306,3 +2306,26 @@ function search_log(MainModule $template): ?Template
 
 	return $T;
 }
+
+function merge_comment_into_theme(int $forum_res_id, int $comment_res_id)
+{
+	$merge_fields = ['login_id', 'res_entered', 'res_nickname', 'res_email', 'res_ip', 'res_data', 'res_data_compiled'];
+
+	$sql_fields = [];
+	foreach($merge_fields as $f){
+		$sql_fields[] = "fres.$f = cres.$f";
+	}
+
+	$fields = join(",\n", $sql_fields);
+
+	$sql1 = "UPDATE res fres
+	JOIN res cres ON cres.res_id = $comment_res_id
+	SET $fields
+	WHERE fres.res_id = $forum_res_id;";
+
+	$sql2 = "UPDATE res_vote SET res_id=$forum_res_id WHERE res_id = $comment_res_id;";
+
+	$sql3 = "DELETE FROM res WHERE res_id = $comment_res_id;";
+
+	return DB::Execute($sql1) && DB::Execute($sql2) && DB::Execute($sql3);
+}
