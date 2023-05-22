@@ -9,7 +9,7 @@ $res = DB::withNewTrans(function(){
 	$q = DB::Query("SELECT * FROM res_merge WHERE ignored = 0");
 	while($r = DB::FetchObject($q))
 	{
-		if(merge_comment_into_theme($r->forum_res_id, $r->comment_res_id)){
+		if(transform_comment_into_theme($r->forum_res_id, $r->comment_res_id)){
 			println("Merged: $r->forum_res_id, $r->comment_res_id");
 		} else {
 			return false;

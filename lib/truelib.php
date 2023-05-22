@@ -2307,7 +2307,7 @@ function search_log(MainModule $template): ?Template
 	return $T;
 }
 
-function merge_comment_into_theme(int $forum_res_id, int $comment_res_id)
+function transform_comment_into_theme(int $forum_res_id, int $comment_res_id)
 {
 	$merge_fields = ['login_id', 'res_entered', 'res_nickname', 'res_email', 'res_ip', 'res_data', 'res_data_compiled'];
 
