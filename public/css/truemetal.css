@@ -6,6 +6,7 @@ body {
 	padding: 0;
 	border:0;
 	background: url("/img/image4.gif") black;
+	background-size: 50vh;
 	color: white;
 	font-weight: normal;
 }
