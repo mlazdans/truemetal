@@ -17,10 +17,15 @@ WHERE
 ORDER BY vf.forum_id
 
 -- Pēc update
--- SELECT vf.*, comm.*
--- FROM view_res_forum AS vf
--- JOIN view_res_comment AS comm ON comm.res_id = (
--- 	SELECT res_id FROM res WHERE res_resid = vf.res_id AND res.table_id = 3 ORDER BY res.res_entered LIMIT 1
--- )
--- WHERE vf.forum_allow_childs = 0 AND (vf.res_data = comm.res_data OR vf.res_data_compiled = comm.res_data_compiled)
--- ORDER BY vf.forum_id
+SELECT vf.*, comm.*
+FROM view_res_forum AS vf
+JOIN view_res_comment AS comm ON comm.res_id = (
+	SELECT res_id FROM res WHERE res_resid = vf.res_id AND res.table_id = 3 ORDER BY res.res_entered LIMIT 1
+)
+WHERE
+	vf.forum_display = 0 AND
+	vf.forum_allow_childs = 0 AND
+	(vf.res_data != comm.res_data OR vf.res_data_compiled != comm.res_data_compiled) AND
+	NOT EXISTS (SELECT * FROM res_merge WHERE forum_res_id = vf.res_id)
+
+ORDER BY vf.forum_id
