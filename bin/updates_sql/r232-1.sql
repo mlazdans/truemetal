@@ -10,7 +10,7 @@
 
 ALTER TABLE `res`
 	CHANGE `table_id` `table_id` INTEGER UNSIGNED NOT NULL,
-	ADD `res_nickname` VARCHAR(16),
+	ADD `res_nickname` VARCHAR(32),
 	ADD `res_email` VARCHAR(64),
 	ADD `res_ip` VARCHAR(32),
 	ADD `res_visible` TINYINT UNSIGNED NOT NULL DEFAULT 1,
@@ -32,7 +32,7 @@ ALTER TABLE `res`
 
 CREATE TABLE `res_meta` (
  `res_id` INTEGER UNSIGNED NOT NULL,
- `res_votes` INTEGER UNSIGNED DEFAULT 0,
+ `res_votes` INTEGER DEFAULT 0,
  `res_votes_plus_count` INTEGER UNSIGNED DEFAULT 0,
  `res_votes_minus_count` INTEGER UNSIGNED DEFAULT 0,
  `res_child_count` INTEGER UNSIGNED DEFAULT 0,
