@@ -16,7 +16,6 @@ DB::withNewTrans(function(){
 	res_intro = ?,
 	res_data = ?,
 	res_data_compiled = ?,
-	-- res_allow_childs = ?,
 	res_resid = ?
 	WHERE res_id = ?";
 
@@ -42,7 +41,6 @@ DB::withNewTrans(function(){
 			NULL,
 			$r->forum_data,
 			$r->forum_datacompiled,
-			$r->forum_allowchilds == 'Y' ? 1 : 0,
 			isset($PARENT) ? $PARENT['res_id'] : NULL,
 			$r->res_id
 		];
@@ -82,7 +80,6 @@ DB::withNewTrans(function(){
 			NULL,
 			$r->c_data,
 			$r->c_datacompiled,
-			//0,
 			$r->res_resid,
 			$r->res_id
 		];
@@ -112,7 +109,6 @@ DB::withNewTrans(function(){
 			$r->art_intro,
 			$r->art_data,
 			NULL,
-			//0,
 			NULL,
 			$r->res_id
 		];
@@ -143,7 +139,6 @@ DB::withNewTrans(function(){
 			NULL,
 			$r->gal_data,
 			NULL,
-			//0,
 			NULL,
 			$r->res_id
 		];
@@ -180,7 +175,6 @@ DB::withNewTrans(function(){
 			NULL,
 			$r->gd_descr,
 			NULL,
-			//0,
 			isset($PARENT) ? $PARENT['res_id'] : NULL,
 			$r->res_id
 		];
