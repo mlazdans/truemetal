@@ -302,6 +302,10 @@ function forum_det(
 	$T->set_var('res_route', $forum->Route());
 	$T->set_var('comment_vote_class', comment_vote_class($forum->res_votes));
 
+	if($forum->forum_display == Forum::DISPLAY_DATA){
+		$T->set_var('res_data_compiled', $forum->res_data);
+	}
+
 	if(User::logged()){
 		$T->enable('BLOCK_vote_control');
 	}
