@@ -11,8 +11,11 @@ if(!$i_am_admin)
 // Linux iespējams vajag single-quote
 // sed -i "s/ALTER DATABASE `truemetal` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ;//g" truemetal.sql
 // sed -i "s/ALTER DATABASE `truemetal` CHARACTER SET utf8 COLLATE utf8_unicode_ci ;//g" truemetal.sql
-// sed -i "s/DEFINER=[^*]*\*/\*/g" truemetal.sql
-// sed -i "s/ DEFINER=`root`@`localhost`//g" truemetal.sql
+// sed -i "s/^CREATE DEFINER=`root`@`localhost`/CREATE/g" truemetal.sql
+// sed -i "s/!5001. DEFINER//g" truemetal.sql
+
+// *old* sed -i "s/DEFINER=[^*]*\*/\*/g" truemetal.sql
+// *old* sed -i "s/ DEFINER=`root`@`localhost`//g" truemetal.sql
 
 (function(){
 	global $sys_root, $sys_user_root;
