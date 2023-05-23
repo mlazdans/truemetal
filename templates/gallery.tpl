@@ -15,7 +15,7 @@
 
 	<!-- BEGIN BLOCK_gallery_data -->
 	<div id="gal{gal_id}" style="padding-left: 20px;">
-		<a href="/gallery/{gal_id}/">{gal_name}</a> {gal_data}
+		<a href="/gallery/{gal_id}/">{res_name}</a> {res_data}
 	</div>
 	<!-- END BLOCK_gallery_data -->
 </div>
@@ -23,7 +23,7 @@
 
 <!-- BEGIN BLOCK_thumb_list disabled -->
 <div class="TD-cat">
-	<a href="/gallery/#{gal_jump_id}">Galerijas</a> / {gal_name}
+	<a href="/gallery/#{gal_jump_id}">Galerijas</a> / {res_name}
 </div>
 	<!-- BEGIN BLOCK_thumb -->
 		<!-- BEGIN BLOCK_tr1 --><div style="text-align: center; margin-bottom: 1em;"><!-- END BLOCK_tr1 -->
@@ -41,21 +41,38 @@
 <!-- BEGIN BLOCK_image disabled -->
 <div class="TD-cat" id="pic-holder">
 	<a class="A-cat" href="/gallery/#{gal_jump_id}">Galerijas</a> /
-	<a class="A-cat" href="/gallery/{gal_id}/">{gal_name}</a>
+	<a class="A-cat" href="/gallery/{gal_id}/">{res_name}</a>
 </div>
 
-<div class="Comment" id="gal_id{gal_id}" style="margin: 0;">
-	<div class="header">
-		<div class="vote unselectable">
-			<a href="/vote/down/{res_id}/" title="-" onclick="Truemetal.Vote('{res_id}', 'down', '#gal_id{gal_id} .vote-value'); return false;">[&ndash;]</a>
-		</div>
-		<div class="vote unselectable">
-			<a href="/vote/up/{res_id}/" title="+" onclick="Truemetal.Vote('{res_id}', 'up', '#gal_id{gal_id} .vote-value'); return false;">[+]</a>
-		</div>
-		<div class="vote {comment_vote_class} vote-value unselectable">
+<div class="profile-header">
+	<div class="user-info">
+		<div class="nick">{res_nickname},</div>
+		<div class="date">{res_date}</div>
+	</div>
+
+	<div class="controls">
+		<div class="vote unselectable {comment_vote_class}" id="votes-{res_id}" title="+{res_votes_plus_count} - {res_votes_minus_count}">
 			{res_votes}
 		</div>
-		<div class="center unselectable">&nbsp;</div>
+
+		<!-- BEGIN BLOCK_comment_vote disabled -->
+		<div class="unselectable">
+			<a href="/vote/up/{res_id}/" class="SendVote" data-res_id="{res_id}" data-vote="up">[&plus;]</a>
+		</div>
+		<div class="unselectable">
+			<a href="/vote/down/{res_id}/" class="SendVote" data-res_id="{res_id}" data-vote="down">[&ndash;]</a>
+		</div>
+		<!-- END BLOCK_comment_vote -->
+
+		<!-- BEGIN BLOCK_profile_link disabled -->
+		<div class="unselectable">
+			<a href="/user/profile/{l_hash}/" class="ProfilePopup" data-hash="{l_hash}">[Profils]</a>
+		</div>
+		<!-- END BLOCK_profile_link -->
+
+		<div class="unselectable">
+			<a href="{res_route}">[#]</a>
+		</div>
 	</div>
 </div>
 <div style="text-align: center;"><a href="/gallery/view/{gd_nextid}/#pic-holder"><img src="{image_path}" alt="Nākamā" width="500"></a></div>
