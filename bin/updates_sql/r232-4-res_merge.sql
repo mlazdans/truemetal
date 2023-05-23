@@ -1,3 +1,10 @@
+DROP TABLE IF EXISTS res_redirect;
+CREATE TABLE `res_redirect` (
+  `from_res_id` int(10) UNSIGNED NOT NULL,
+  `to_res_id` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`from_res_id`,`to_res_id`)
+) ENGINE=InnoDB;
+
 DROP TABLE IF EXISTS res_merge;
 CREATE TABLE `res_merge` (
   `forum_res_id` INTEGER UNSIGNED NOT NULL,

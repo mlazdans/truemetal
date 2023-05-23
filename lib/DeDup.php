@@ -16,6 +16,7 @@ class DeDup
 	private $upd_fres;
 	private $upd_votes;
 	private $del_res;
+	private $redir_p;
 
 	function __construct()
 	{
@@ -34,6 +35,7 @@ class DeDup
 		$this->upd_fres = DB::Prepare("UPDATE res fres JOIN res cres ON cres.res_id = ? SET $fields WHERE fres.res_id = ?");
 		$this->upd_votes = DB::Prepare("UPDATE res_vote SET res_id = ? WHERE res_id = ?");
 		$this->del_res = DB::Prepare("DELETE FROM res WHERE res_id = ?");
+		$this->redir_p  = DB::Prepare("INSERT INTO res_redirect (from_res_id, to_res_id) VALUES (?,?)");
 	}
 
 	function get_first_comment(int $res_id): ?ViewResCommentType
@@ -50,10 +52,25 @@ class DeDup
 	{
 		# TODO: saglabāt pirmā komenta redirektu uz tēmu? (/resroute/293859/?c_id=282374)
 		return
+			$this->res_redirect($comment_res_id, $forum_res_id) &&
 			DB::ExecutePrepared($this->upd_fres, $comment_res_id, $forum_res_id) &&
 			DB::ExecutePrepared($this->upd_votes, $forum_res_id, $comment_res_id) &&
 			DB::ExecutePrepared($this->del_res, $comment_res_id)
 		;
+	}
+
+	function transform_comment_into_event(int $forum_res_id, int $comment_res_id)
+	{
+		return
+			$this->res_redirect($comment_res_id, $forum_res_id) &&
+			DB::ExecutePrepared($this->upd_votes, $forum_res_id, $comment_res_id) &&
+			DB::ExecutePrepared($this->del_res, $comment_res_id)
+		;
+	}
+
+	function res_redirect(int $from_res_id, int $to_res_id)
+	{
+		return DB::ExecutePrepared($this->redir_p, $from_res_id, $to_res_id);
 	}
 
 }

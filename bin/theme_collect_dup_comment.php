@@ -31,9 +31,14 @@ class DeDupFirstComment extends DeDup
 				continue;
 			}
 
-			// Skip forum_data
+			// Show forum_data (manuāls formatējums). Šiem vienmēr pirmais koments ir kā duplikāts no tēmas datiem un netika rādīts.
 			if($fres->forum_display == 1)
 			{
+				if($this->transform_comment_into_event($fres->res_id, $comm->res_id, 0)){
+					print "Merged forum_display=1: $fres->res_id, $comm->res_id\n";
+				} else {
+					return false;
+				}
 				continue;
 			}
 
@@ -55,7 +60,7 @@ class DeDupFirstComment extends DeDup
 				} else {
 					// Ar tēmu vienādais koments
 					if($this->transform_comment_into_theme($fres->res_id, $comm->res_id, 0)){
-						print "Merged: $fres->res_id, $comm->res_id\n";
+						print "Merged 1st comment: $fres->res_id, $comm->res_id\n";
 					} else {
 						return false;
 					}
@@ -74,7 +79,7 @@ class DeDupFirstComment extends DeDup
 		while($r = DB::FetchObject($q))
 		{
 			if($this->transform_comment_into_theme($r->forum_res_id, $r->comment_res_id)){
-				print "Merged: $r->forum_res_id, $r->comment_res_id\n";
+				print "Merged manual: $r->forum_res_id, $r->comment_res_id\n";
 			} else {
 				return false;
 			}
@@ -90,7 +95,9 @@ $ret =
 	DB::Query("DROP TRIGGER IF EXISTS res_trigger3") &&
 	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger1") &&
 	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger2") &&
-	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger3")
+	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger3") &&
+	DB::Query("CALL res_update_meta(NULL)") &&
+	DB::Query("CALL logins_update_meta(NULL)")
 ;
 
 if(!$ret){
@@ -110,7 +117,8 @@ if($res){
 	print "FAIL\n";
 }
 
+DB::Query("CALL res_update_meta(NULL)");
+DB::Query("CALL logins_update_meta(NULL)");
+
 print "\nTODO:\n";
 print "Re-create triggers!\n";
-print "CALL res_update_meta(null);\n";
-print "CALL logins_update_meta(null);\n";
