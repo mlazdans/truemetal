@@ -152,20 +152,20 @@ var Truemetal = {
 			}
 		}
 
-		if(videoId)
-		{
-			$(el).attr("id", "yt-" + videoId);
-			$(el).html('<img class="lazy" src="https://img.youtube.com/vi/' + videoId + '/0.jpg" width="480" height="395">');
-			$(el).wrap('<' + 'div style="text-align: center; height: 395px;"' +'><' + '/div>');
+		if(videoId){
+			// $(el).attr("id", "yt-" + videoId);
+			let wrap = $('<div class="yt" style="background-image: url(https://img.youtube.com/vi/' + videoId + '/mqdefault.jpg")"></div>');
+			// $(el).html('<img src="https://img.youtube.com/vi/' + videoId + '/mqdefault.jpg" />');
 
-			var params = { allowScriptAccess: "always", wmode: "transparent" };
-			var atts = { align: 'center' };
+			$(wrap).on('click', function () {
+				//$(div).html('<embed src="https://www.youtube.com/v/' + videoId + '?version=3&autoplay=1' + (t ? '&start=' + t : '') + '" type="application/x-shockwave-flash" width="480" height="395" allowscriptaccess="always" wmode="transparent"></embed>');
+				//$(div).html('<embed src="https://www.youtube.com/v/' + videoId + '?version=3&autoplay=1' + (t ? '&start=' + t : '') + '" type="application/x-shockwave-flash" style="width: 90%; height: 500px;" allowscriptaccess="always" wmode="transparent"></embed>');
+				$(this).replaceWith('<div class="yt"><iframe src="https://www.youtube.com/embed/' + videoId + '?&autoplay=1' + (t ? '&start=' + t : '') + '" frameborder="0" allowfullscreen style="width: 100%; height: 30vh"></iframe></div>');
 
-			$(el).on('click', function () {
-					var div = this.parentNode;
-					$(div).html('<embed src="https://www.youtube.com/v/' + videoId + '?version=3&autoplay=1' + (t ? '&start=' + t : '') + '" type="application/x-shockwave-flash" width="480" height="395" allowscriptaccess="always" wmode="transparent"></embed>');
-					return false;
+				return false;
 			});
+
+			$(el).replaceWith(wrap);
 		}
 	},
 	scrollYouTube: function(e){

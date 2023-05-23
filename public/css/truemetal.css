@@ -522,3 +522,19 @@ label > input {
 .main-item {
 	margin: 0 2px 2px 2px;
 }
+
+.yt {
+	width: 80%;
+	min-height: 30vh;
+	margin: auto;
+	text-align: center;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: contain;
+}
+
+.yt iframe {
+	min-height: 30vh;
+	margin: 0;
+	padding: 0;
+}
