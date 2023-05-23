@@ -60,7 +60,7 @@ ALTER TABLE `gallery`
 	DROP FOREIGN KEY `gallery_ibfk_1`,
 	DROP FOREIGN KEY `gallery_ibfk_2`;
 ALTER TABLE `gallery`
-	CHANGE `res_id` `res_id` INT(10) UNSIGNED NULL DEFAULT NULL,
+	CHANGE `res_id` `res_id` INTEGER UNSIGNED NULL DEFAULT NULL,
 	DROP `login_id`,
 	DROP `gal_visible`,
 	DROP `gal_entered`,
@@ -72,7 +72,7 @@ ALTER TABLE `gallery`
 ;
 
 ALTER TABLE `gallery_data`
-	CHANGE `res_id` `res_id` INT(10) UNSIGNED NULL DEFAULT NULL,
+	CHANGE `res_id` `res_id` INTEGER UNSIGNED NULL DEFAULT NULL,
 	DROP FOREIGN KEY `gallery_data_ibfk_1`;
 ALTER TABLE `gallery_data`
 	DROP FOREIGN KEY `gallery_data_ibfk_2`,

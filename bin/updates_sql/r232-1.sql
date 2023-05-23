@@ -9,7 +9,7 @@
 -- INSERT INTO `tables` VALUES (3, 'gallery');
 
 ALTER TABLE `res`
-	CHANGE `table_id` `table_id` INT UNSIGNED NOT NULL,
+	CHANGE `table_id` `table_id` INTEGER UNSIGNED NOT NULL,
 	ADD `res_nickname` VARCHAR(16),
 	ADD `res_email` VARCHAR(64),
 	ADD `res_ip` VARCHAR(32),
@@ -18,12 +18,11 @@ ALTER TABLE `res`
 	DROP `res_votes`,
 	DROP `res_votes_plus_count`,
 	DROP `res_votes_minus_count`,
-	ADD `res_resid` INT UNSIGNED NULL AFTER `res_id`,
+	ADD `res_resid` INTEGER UNSIGNED NULL AFTER `res_id`,
 	ADD `res_name` TINYTEXT,
 	ADD `res_intro` TEXT,
 	ADD `res_data` MEDIUMTEXT,
 	ADD `res_data_compiled` MEDIUMTEXT,
-	-- ADD res_allow_childs TINYINT UNSIGNED NOT NULL DEFAULT 0,
 	DROP `res_comment_count`,
 	DROP `res_comment_lastdate`;
 ALTER TABLE `res`
@@ -32,14 +31,14 @@ ALTER TABLE `res`
 ;
 
 CREATE TABLE `res_meta` (
- `res_id` int(10) unsigned NOT NULL,
- `res_votes` int(11) DEFAULT NULL,
- `res_votes_plus_count` int(11) DEFAULT NULL,
- `res_votes_minus_count` int(11) DEFAULT NULL,
- `res_child_count` int(10) unsigned DEFAULT NULL,
- `res_child_last_date` datetime DEFAULT NULL,
- `res_comment_count` int(10) unsigned DEFAULT NULL,
- `res_comment_last_date` datetime DEFAULT NULL,
+ `res_id` INTEGER UNSIGNED NOT NULL,
+ `res_votes` INTEGER UNSIGNED DEFAULT 0,
+ `res_votes_plus_count` INTEGER UNSIGNED DEFAULT 0,
+ `res_votes_minus_count` INTEGER UNSIGNED DEFAULT 0,
+ `res_child_count` INTEGER UNSIGNED DEFAULT 0,
+ `res_child_last_date` DATETIME DEFAULT NULL,
+ `res_comment_count` INTEGER UNSIGNED DEFAULT 0,
+ `res_comment_last_date` DATETIME DEFAULT NULL,
  CONSTRAINT `res_meta_u1` UNIQUE KEY(`res_id`),
  CONSTRAINT `res_meta_fk1` FOREIGN KEY (`res_id`) REFERENCES `res` (`res_id`) ON DELETE CASCADE ON UPDATE CASCADE
 );

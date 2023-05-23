@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS res_merge;
 CREATE TABLE `res_merge` (
-  `forum_res_id` int(10) UNSIGNED NOT NULL,
-  `comment_res_id` int(10) UNSIGNED NOT NULL,
+  `forum_res_id` INTEGER UNSIGNED NOT NULL,
+  `comment_res_id` INTEGER UNSIGNED NOT NULL,
   `ignored` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`forum_res_id`,`comment_res_id`)
 ) ENGINE=InnoDB;
