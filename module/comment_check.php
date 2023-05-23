@@ -19,29 +19,17 @@ if($action == 'merge')
 	return;
 }
 
-/**
- * @return FCache[]
- * */
-function load_cache(string $file_name): ?array
-{
-	global $sys_root;
-
-	$f = join_paths($sys_root, '..', $file_name);
-	if(file_exists($f)){
-		return unserialize(file_get_contents($f));
-	}
-
-	return null;
-}
-
-/**
- * @param FCache[] $data
- * */
-function process_data(MainModule $template, array $data)
+function process_data(MainModule $template)
 {
 	$T = $template->Index;
 	$c = 0;
 	$erase_data = [];
+
+	/**
+	 * Salīdzina tēmas ar pirmo komentu. $data tika ievākts no faila, kas tika ģenerēts ar skriptu, kurš tagad ir izdzēsts
+	 * Ideja - ielasīt visu forumu, tad dabūt pirmo komentāru un tad salīdzināt res_data un res_data_compiled
+	 * Pēc merge vairs īsti nav aktuāls, bet var noderēt par pamatu kādam citam compare.
+	 * */
 	foreach($data as $item)
 	{
 		$fres = $item->fres;
@@ -89,11 +77,6 @@ function process_data(MainModule $template, array $data)
 
 $template = new MainModule("cmp", 'cmp.tpl');
 
-if(!($data = load_cache("themes_first_comment.txt")))
-{
-	new Exception("No cache found");
-}
-
-process_data($template, $data);
+process_data($template);
 
 $template->out(null);
