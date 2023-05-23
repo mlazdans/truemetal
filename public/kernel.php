@@ -47,10 +47,6 @@ if(file_exists("$sys_root/module/$sys_module_id.php"))
 	$sys_module_id = $sys_module_map[$sys_module_id];
 }
 
-if(!in_array($sys_module_id, $sys_nosess_modules)){
-	require_once('include/session_handler.php');
-}
-
 $module_root = "/$sys_module_id";
 
 $_GET = _GET();
@@ -60,6 +56,10 @@ header('X-Powered-By: TRUEMETAL');
 
 if($i_am_admin)
 {
+	if(!in_array($sys_module_id, $sys_nosess_modules)){
+		require_once('include/session_handler.php');
+	}
+
 	if(file_exists("$sys_root/module/$sys_module_id.php")) {
 		include("$sys_root/module/$sys_module_id.php");
 	} else {
@@ -67,15 +67,28 @@ if($i_am_admin)
 	}
 } else {
 	try {
+		if(!in_array($sys_module_id, $sys_nosess_modules)){
+			require_once('include/session_handler.php');
+		}
+
 		if(file_exists("$sys_root/module/$sys_module_id.php")) {
 			include("$sys_root/module/$sys_module_id.php");
 		} else {
 			include("$sys_root/module/$sys_default_module.php");
 		}
+	} catch(PDOException $e){
+		$template = new MainModule("error");
+		$template->error("Datubāzes kļūda. Ielogota un tiks apskatīta.");
+		$template->out(null);
+		throw $e;
 	} catch(Throwable $e) {
 		$template = new MainModule("error");
-		$template->error("True Kļūda");
+		$template->error("True Kļūda. Ielogota un tiks apskatīta.");
 		$template->set_right_defaults();
+		try {
+			$template->set_right_defaults();
+		} catch(Throwable $e) {
+		}
 		$template->out(null);
 		throw $e;
 	}
