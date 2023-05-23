@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS res_redirect;
 CREATE TABLE `res_redirect` (
   `from_res_id` int(10) UNSIGNED NOT NULL,
   `to_res_id` int(10) UNSIGNED NOT NULL,
-  PRIMARY KEY (`from_res_id`,`to_res_id`)
+  PRIMARY KEY (`from_res_id`,`to_res_id`),
+  UNIQUE KEY `from_res_id` (`from_res_id`)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS res_merge;
