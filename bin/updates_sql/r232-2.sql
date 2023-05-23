@@ -16,10 +16,12 @@ ALTER TABLE `forum`
 	DROP `forum_name`,
 	DROP `forum_data`,
 	DROP `forum_datacompiled`,
-	CHANGE `forum_allowchilds` `forum_allow_childs` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-	-- DROP `forum_allowchilds`,
+	CHANGE `forum_allowchilds` `forum_allow_childs` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0,
 	DROP `forum_forumid`
 ;
+
+UPDATE `forum` SET forum_allow_childs = 0;
+UPDATE `forum` SET forum_allow_childs = 1 WHERE forum_id IN (1,14,15,16,107488);
 
 ALTER TABLE `comment`
 	DROP FOREIGN KEY `comment_ibfk_4`,
