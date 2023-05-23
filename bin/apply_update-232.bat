@@ -11,3 +11,5 @@ mysql -uroot truemetal_remote < updates_sql\r235.sql
 call mysql_procedures/import_procedures.bat
 C:\php82\php.exe sess_update.php
 C:\php82\php.exe theme_collect_dup_comment.php > theme_comment_merged.log
+mysql -uroot truemetal_remote < updates_sql\r261.sql
+call mysql_procedures/import_procedures.bat
