@@ -18,16 +18,28 @@
 <!-- BEGIN cmp -->
 <table class="{table_class}">
 <tr>
-	<td>res_id:</td>
-	<td>{merge_status}{res_id}, <a href="https://truemetal.lv/resroute/{res_id}/">tm.lv</a>, <a href="http://truemetal-remote/resroute/{res_id}/">local</a></td>
+	<td>{item_count} res_id:</td>
+	<td>{merge_status}{forum_res_id}, <a href="https://truemetal.lv/resroute/{forum_res_id}/">tm.lv</a>, <a href="http://truemetal-remote/resroute/{forum_res_id}/">local</a></td>
+</tr>
+<tr>
+	<td>login_id:</td>
+	<td>{forum_login_id}-{comment_login_id}</td>
+</tr>
+<tr>
+	<td>nickname:</td>
+	<td>{forum_res_nickname}-{comment_res_nickname}</td>
+</tr>
+<tr>
+	<td>res_entered:</td>
+	<td>{entered_diff}={forum_res_entered}-{comment_res_entered}</td>
 </tr>
 <tr>
 	<td>forum_id:</td>
-	<td>{forum_id}</td>
+	<td>{forum_forum_id}</td>
 </tr>
 <tr>
 	<td>res_visible:</td>
-	<td>{res_visible}</td>
+	<td>{forum_res_visible}</td>
 </tr>
 <tr>
 	<td>res_data:</td>
