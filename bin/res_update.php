@@ -23,7 +23,7 @@ DB::withNewTrans(function(){
 
 	# Forums
 	print "Forums:";
-	$q = DB::Query("SELECT * FROM forum");
+	$q = DB::Query("SELECT * FROM forum ORDER BY forum_id");
 	while($r = DB::FetchObject($q))
 	{
 		unset($PARENT);
@@ -56,48 +56,9 @@ DB::withNewTrans(function(){
 	unset($q);
 	print "done\n";
 
-	# Komenti
-	print "Comments:";
-	//$q = $db->Query("SELECT * FROM comment");
-	$q = DB::Query("SELECT
-		c.*,
-		r2.res_id AS res_resid
-	FROM res_comment rc
-	JOIN comment c ON c.c_id = rc.c_id
-	JOIN res r ON r.res_id = c.res_id
-	JOIN res r2 ON r2.res_id = rc.res_id
-	");
-
-	while($r = DB::FetchObject($q))
-	{
-		$data = [
-			$r->c_username,
-			$r->c_useremail,
-			$r->c_userip,
-			$r->c_entered,
-			$r->c_visible == 'Y' ? 1 : 0,
-			NULL,
-			NULL,
-			$r->c_data,
-			$r->c_datacompiled,
-			$r->res_resid,
-			$r->res_id
-		];
-
-		if(!$p->Execute($data)){
-			sqlr($sql);
-			printr($data);
-			return false;
-		}
-
-		$p->closeCursor();
-	}
-	unset($q);
-	print "done\n";
-
 	# Articles
 	print "Articles:";
-	$q = DB::Query("SELECT * FROM article");
+	$q = DB::Query("SELECT * FROM article ORDER BY art_id");
 	while($r = DB::FetchObject($q)){
 		$data = [
 			'BigUgga',
@@ -126,7 +87,7 @@ DB::withNewTrans(function(){
 
 	# Gallery
 	print "Gallery:";
-	$q = DB::Query("SELECT * FROM gallery");
+	$q = DB::Query("SELECT * FROM gallery ORDER BY gal_id");
 	while($r = DB::FetchObject($q))
 	{
 		$data = [
@@ -157,7 +118,7 @@ DB::withNewTrans(function(){
 	# Gallery data
 	print "Gallery data:";
 	//`gd_id`, `res_id`, `gal_id`, `gd_filename`, `gd_visible`, `gd_mime`, `gd_data`, `gd_thumb`, `gd_descr`, `gd_entered`
-	$q = DB::Query("SELECT `res_id`, `gal_id`, `gd_filename`, `gd_visible`, `gd_descr`, `gd_entered` FROM gallery_data");
+	$q = DB::Query("SELECT `res_id`, `gal_id`, `gd_filename`, `gd_visible`, `gd_descr`, `gd_entered` FROM gallery_data ORDER BY gd_id");
 	while($r = DB::FetchObject($q))
 	{
 		unset($PARENT);
@@ -176,6 +137,66 @@ DB::withNewTrans(function(){
 			$r->gd_descr,
 			NULL,
 			isset($PARENT) ? $PARENT['res_id'] : NULL,
+			$r->res_id
+		];
+
+		if(!$p->Execute($data)){
+			sqlr($sql);
+			printr($data);
+			return false;
+		}
+
+		$p->closeCursor();
+	}
+	unset($q);
+	print "done\n";
+
+	# Komenti
+	print "Comments:";
+	// UPDATE res
+	// JOIN (SELECT
+	// 	c.*,
+	// 	r2.res_id AS res_resid
+	// FROM res_comment rc
+	// JOIN comment c ON c.c_id = rc.c_id
+	// JOIN res r ON r.res_id = c.res_id
+	// JOIN res r2 ON r2.res_id = rc.res_id
+	// ) AS comm ON comm.res_id = res.res_id
+	// SET
+	// 	res.res_nickname = comm.c_username,
+	// 	res.res_email = comm.c_useremail,
+	// 	res.res_ip = comm.c_userip,
+	// 	res.res_entered = comm.c_entered,
+	// 	res.res_visible = CASE WHEN comm.c_visible = 'Y' THEN 1 ELSE 0 END,
+	// 	res.res_name = NULL,
+	// 	res.res_intro = NULL,
+	// 	res.res_data = comm.c_data,
+	// 	res.res_data_compiled = comm.c_datacompiled,
+	// 	res.res_resid = comm.res_resid
+
+	$q = DB::Query("SELECT
+		c.*,
+		r2.res_id AS res_resid
+	FROM res_comment rc
+	JOIN comment c ON c.c_id = rc.c_id
+	JOIN res r ON r.res_id = c.res_id
+	JOIN res r2 ON r2.res_id = rc.res_id
+	ORDER BY c.c_id
+	");
+
+	while($r = DB::FetchObject($q))
+	{
+		$data = [
+			$r->c_username,
+			$r->c_useremail,
+			$r->c_userip,
+			$r->c_entered,
+			$r->c_visible == 'Y' ? 1 : 0,
+			NULL,
+			NULL,
+			$r->c_data,
+			$r->c_datacompiled,
+			$r->res_resid,
 			$r->res_id
 		];
 
