@@ -62,9 +62,11 @@ DROP TRIGGER IF EXISTS `res_vote_trigger3`;
 -- palaist bin/mysql_procedures/import_procedures.bat
 -- r232-2.sql
 -- r232-3.sql
+-- r232-4-res_merge.sql
+-- r232-5-null.sql
 -- CALL res_update_meta(NULL);
 -- CALL logins_update_meta(NULL);
 -- palaist bin/sess_update.php
 -- izdzēst esošās sessijas, lai ielādētu jauno session_data
--- ieimportēt bin/updates_sql/r232-4-res_merge.sql < šiet pārceļ pirmo komentāru kā foruma tēmu, tiem ierakstiem,
--- palaist bin/merge_theme_first_comment.php       < kuriem pirmais ieraksts atšķiras no tēmas ieraksta
+-- ^ šiet manuāli pārcelti pirmie komentāri, kuriem pirmais ieraksts kaut kādu iemeslu dēļ atšķiras no tēmas ieraksta
+-- palaist bin/theme_collect_dup_comment.php

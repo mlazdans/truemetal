@@ -1,42 +1,10 @@
--- phpMyAdmin SQL Dump
--- version 5.0.1
--- https://www.phpmyadmin.net/
---
--- Host: localhost:3306
--- Generation Time: May 22, 2023 at 05:59 PM
--- Server version: 10.5.18-MariaDB-log
--- PHP Version: 7.4.16
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `truemetal_remote`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `res_merge`
---
-
+DROP TABLE IF EXISTS res_merge;
 CREATE TABLE `res_merge` (
   `forum_res_id` int(10) UNSIGNED NOT NULL,
   `comment_res_id` int(10) UNSIGNED NOT NULL,
-  `ignored` tinyint(4) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `res_merge`
---
+  `ignored` tinyint(4) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`forum_res_id`,`comment_res_id`)
+) ENGINE=InnoDB;
 
 INSERT INTO `res_merge` (`forum_res_id`, `comment_res_id`, `ignored`) VALUES
 (246788, 141087, 1),
@@ -105,18 +73,3 @@ INSERT INTO `res_merge` (`forum_res_id`, `comment_res_id`, `ignored`) VALUES
 (290778, 290779, 0),
 (292206, 292803, 1),
 (293520, 293522, 1);
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `res_merge`
---
-ALTER TABLE `res_merge`
-  ADD PRIMARY KEY (`forum_res_id`,`comment_res_id`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
