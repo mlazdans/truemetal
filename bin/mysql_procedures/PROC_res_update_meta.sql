@@ -14,7 +14,7 @@ BEGIN
 	FROM res r
 	LEFT JOIN res_vote rv ON rv.res_id = r.res_id
 	WHERE r.res_id = COALESCE(p_res_id, r.res_id)
-	-- GROUP BY r.res_id
+	GROUP BY r.res_id
 	ON DUPLICATE KEY UPDATE
 		res_votes=VALUES(res_votes),
 		res_votes_plus_count=VALUES(res_votes_plus_count),
@@ -33,7 +33,7 @@ BEGIN
 	FROM res r
 	LEFT JOIN res parent ON parent.res_resid = r.res_id AND parent.res_visible = 1
 	WHERE r.res_id = COALESCE(p_res_id, r.res_id)
-	-- GROUP BY r.res_id
+	GROUP BY r.res_id
 	ON DUPLICATE KEY UPDATE
 		res_child_count=VALUES(res_child_count),
 		res_comment_count=VALUES(res_comment_count),
