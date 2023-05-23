@@ -6,7 +6,8 @@ require_once('include/dbconnect.php');
 ini_set('session.use_cookies', false);
 
 session_start();
-DB::withNewTrans(function(){
+
+$res = DB::withNewTrans(function(){
 	$allowed = ['forums', 'res'];
 	$p = DB::Prepare("UPDATE logins SET l_sess_id = ?, l_sessiondata = ? WHERE l_id = ?");
 	$q = DB::Query("SELECT * FROM sessions ORDER BY sess_lastaccess DESC");
@@ -35,3 +36,9 @@ DB::withNewTrans(function(){
 
 	return true;
 });
+
+if($res){
+	print "Sessions updated\n";
+} else {
+	print "FAIL\n";
+}

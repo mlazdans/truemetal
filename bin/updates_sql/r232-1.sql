@@ -57,15 +57,16 @@ DROP TRIGGER IF EXISTS `res_vote_trigger2`;
 DROP TRIGGER IF EXISTS `res_vote_trigger3`;
 -- add extlibs
 -- config izmaiņas
+-- r232-1.sql (šis fails)
 -- palaist bin/res_update.php
--- palaist bin/mysql_procedures/import_procedures.bat
 -- r232-2.sql
 -- r232-3.sql
 -- r232-4-res_merge.sql
 -- r232-5-null.sql
+-- r235.sql
+-- palaist bin/mysql_procedures/import_procedures.bat
 -- CALL res_update_meta(NULL);
 -- CALL logins_update_meta(NULL);
 -- palaist bin/sess_update.php
--- izdzēst esošās sessijas, lai ielādētu jauno session_data
--- ^ šiet manuāli pārcelti pirmie komentāri, kuriem pirmais ieraksts kaut kādu iemeslu dēļ atšķiras no tēmas ieraksta
 -- palaist bin/theme_collect_dup_comment.php
+-- ^ šiet manuāli pārcelti pirmie komentāri, kuriem pirmais ieraksts kaut kādu iemeslu dēļ atšķiras no tēmas ieraksta

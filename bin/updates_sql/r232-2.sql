@@ -1,3 +1,6 @@
+UPDATE `forum` set `forum_allowchilds`='1' WHERE forum_allowchilds='Y';
+UPDATE `forum` set `forum_allowchilds`='0' WHERE forum_allowchilds='N';
+
 ALTER TABLE `forum`
 	-- DROP FOREIGN KEY `forum_ibfk_4`,
 	DROP FOREIGN KEY `forum_ibfk_5`,
@@ -19,9 +22,6 @@ ALTER TABLE `forum`
 	CHANGE `forum_allowchilds` `forum_allow_childs` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0,
 	DROP `forum_forumid`
 ;
-
-UPDATE `forum` SET forum_allow_childs = 0;
-UPDATE `forum` SET forum_allow_childs = 1 WHERE forum_id IN (1,14,15,16,107488);
 
 ALTER TABLE `comment`
 	DROP FOREIGN KEY `comment_ibfk_4`,
