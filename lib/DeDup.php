@@ -50,7 +50,6 @@ class DeDup
 
 	function transform_comment_into_theme(int $forum_res_id, int $comment_res_id)
 	{
-		# TODO: saglabāt pirmā komenta redirektu uz tēmu? (/resroute/293859/?c_id=282374)
 		return
 			$this->res_redirect($comment_res_id, $forum_res_id) &&
 			DB::ExecutePrepared($this->upd_fres, $comment_res_id, $forum_res_id) &&
