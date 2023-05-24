@@ -547,12 +547,16 @@ function public_profile(MainModule $template, string $l_hash): ?Template
 		return null;
 	}
 
-	if(!($login_data = Logins::load_by_login_hash($l_hash))){
+	if(!($login_data = Logins::load_by_login_hash($l_hash, true))){
 		$template->not_found();
 		return null;
 	}
 
 	$T = $template->add_file('user/profile/user.tpl');
+
+	if(!$login_data->l_active){
+		$T->set_var('is_blocked', ' (bloķēts)');
+	}
 
 	# Disable comments
 	if(
@@ -1257,13 +1261,18 @@ function user_comments(MainModule $template, string $l_hash, string $hl): ?Templ
 		return null;
 	}
 
-	if(!($login_data = Logins::load_by_login_hash($l_hash)))
+	if(!($login_data = Logins::load_by_login_hash($l_hash, true)))
 	{
 		$template->not_found();
 		return null;
 	}
 
 	$T = $template->add_file('user/comments.tpl');
+	$T->set_var('l_nick', $login_data->l_nick);
+	if(!$login_data->l_active){
+		$T->set_var('is_blocked', ' (bloķēts)');
+	}
+
 	$C = new_template('comments.tpl');
 
 	$F = (new ResCommentFilter(login_id: $login_data->l_id))->rows(100)->orderBy("res_entered DESC");

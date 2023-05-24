@@ -1,4 +1,4 @@
-<div class="TD-cat">Profils: {l_nick}</div>
+<div class="TD-cat">Profils: {l_nick}{is_blocked}</div>
 <table>
 	<tr>
 		<td rowspan="4" class="List-item text-nowrap" style="vertical-align: middle;">
