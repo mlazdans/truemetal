@@ -136,7 +136,6 @@ class Gallery
 		return $ret;
 	}
 
-	# TODO: validāciju atstāt izsaucēja ziņā
 	// function validate(&$data)
 	// {
 	// 	if(isset($data['gal_visible']))

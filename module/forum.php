@@ -29,7 +29,6 @@ if($forum_route)
 			return null;
 		}
 
-		# NOTE: redirektējam uz jaunajām adresēm, pēc gada (2011-04-30) varēs noņemt
 		# TODO: append query_string? ?hl=
 		if($forum_route)
 		{

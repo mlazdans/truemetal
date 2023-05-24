@@ -28,7 +28,6 @@ function get_day(int $i): ?string {
 }
 
 # TODO: rewrite!!!
-# TODO: test https://www.metal-archives.com/bands/Jumpin%27_Jesus/6714
 function parse_text_data(string $data): string
 {
 	// proc url's - 1pass

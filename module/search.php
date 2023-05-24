@@ -1,6 +1,5 @@
 <?php declare(strict_types = 1);
 
-# TODO: generalize
 $DOC_SOURCES = [
 	1=>['name'=>"Jaunumi"],
 	2=>['name'=>"Recenzijas"],

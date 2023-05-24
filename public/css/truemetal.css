@@ -392,7 +392,6 @@ label > input {
 	/* border: 1px solid yellow; */
 }
 
-/* TODO: pārģenerēt logo kā .svg */
 #container > .logo a {
 	display: block;
 	height: 100%;
@@ -420,7 +419,6 @@ label > input {
 	background-color: #330000;
 	/* border: 1px solid blue; */
 }
-/* TODO: pārģenerēt menu kā .svg */
 #container > .menu a {
 	display: block;
 	width: 20%;

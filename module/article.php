@@ -29,9 +29,6 @@ $art_title = $module['module_name'];
 $tc = 0;
 $tp = 0;
 
-# TODO: merge no īstā
-$tableName = "view_mainpage";
-
 if($art_id)
 {
 	$T = article($template, $art_id, $hl, $article_route);

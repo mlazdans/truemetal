@@ -7,8 +7,6 @@
  * Mēģinājums savest kārtībā.
  * */
 
-# TODO: forum_display = 1
-
 class DeDup
 {
 	private $for_p;

@@ -1991,9 +1991,6 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 
 		$T->enable_if(Res::hasNewComments($item['res_id'], $item['res_entered']), 'BLOCK_comments_new');
 
-		# TODO: route
-		// $T->set_var('res_route')
-		$item['art_name_urlized'] = rawurlencode(urlize($item['res_name']));
 		$T->set_array($item, 'BLOCK_article');
 
 		# XXX: fix module_id
@@ -2180,7 +2177,6 @@ function tm_search(SearchParams $params)
 	}
 	$spx->SetServer('127.0.0.1', 3313);
 
-	# TODO: params
 	$spx->SetSortMode(SPH_SORT_ATTR_DESC, "doc_comment_last_date");
 	// $spx->SetSortMode(SPH_SORT_RELEVANCE);
 
@@ -2257,7 +2253,6 @@ function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
 		return $T;
 	}
 
-	# TODO: only_titles un include_comments ir abpusēji izslēdzošs. Vajadzētu checkboxos ar js apstrādāt
 	if($only_titles){
 		$index = "doc_titles";
 	} else {
@@ -2307,23 +2302,12 @@ function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
 			$item = $doc['attrs'];
 			$item['doc_module_name'] = $DOC_SOURCES[$item['doc_source_id']]['name'];
 
-			//  # TODO: optimize
-			// if(in_array($item['doc_source_id'], [1,2,3])){
-			// 	$table_id = ResKind::ARTICLE;
-			// } elseif($item['doc_source_id'] == 4){
-			// 	$table_id = ResKind::FORUM;
-			// // } elseif($item['doc_source_id'] == 5){
-			// // 	$table_id = ResKind::COMMENT;
-			// } else {
-			// 	throw new InvalidArgumentException("Unknown doc source: $item[doc_source_id]");
-			// }
 			if($r = load_specific_res((int)$item['res_id'], (int)$item['table_id'])){
 				$item['res_route'] =  $r->Route()."?hl=".urlencode($search_q);
 			} else {
 				trigger_error("No res for search item:".printrr($item), E_USER_WARNING);
 				$item['res_route'] = "/";
 			}
-			##
 
 			$item['doc_date'] = date('d.m.Y', $item['doc_entered']);
 			$T->set_array($item, 'BLOCK_search_item');
