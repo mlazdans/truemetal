@@ -302,9 +302,16 @@ function forum_det(
 	$T->set_var('res_route', $forum->Route());
 	$T->set_var('comment_vote_class', comment_vote_class($forum->res_votes));
 
+	$res_data = $forum->res_data_compiled;
 	if($forum->forum_display == Forum::DISPLAY_DATA){
-		$T->set_var('res_data_compiled', $forum->res_data);
+		$res_data = $forum->res_data;
 	}
+
+	if($hl) {
+		$res_data = hl($res_data, $hl);
+	}
+
+	$T->set_var('res_data_compiled', $res_data);
 
 	if(User::logged()){
 		$T->enable('BLOCK_vote_control');
@@ -2172,7 +2179,10 @@ function tm_search(SearchParams $params)
 		$spx->SetLimits(0, $params->limit);
 	}
 	$spx->SetServer('127.0.0.1', 3313);
+
+	# TODO: params
 	$spx->SetSortMode(SPH_SORT_ATTR_DESC, "doc_comment_last_date");
+	// $spx->SetSortMode(SPH_SORT_RELEVANCE);
 
 	if($params->filters){
 		foreach($params->filters as $k=>$v){
@@ -2181,7 +2191,8 @@ function tm_search(SearchParams $params)
 	}
 
 	return [
-		$spx->Query($spx->EscapeString($params->q), $params->index),
+		// $spx->Query($spx->EscapeString($params->q), $params->index),
+		$spx->Query($params->q, $params->index),
 		$spx
 	];
 }
@@ -2191,10 +2202,20 @@ function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
 {
 	$spx_limit = 250;
 
-	$index = post('only_titles') ? "doc_titles" : "doc";
-	$checked_sources = post('sources', array_keys($DOC_SOURCES));
+	if(request_method() == "POST"){
+		$only_titles       =  (bool)post('only_titles');
+		$include_comments  =  (bool)post('include_comments');
+		$checked_sources   =  post('sources', []);
+	} else {
+		$only_titles       =  false;
+		$include_comments  =  true;
+	}
 
-	if($_SERVER['REQUEST_METHOD'] == "POST"){
+	if(empty($checked_sources)){
+		$checked_sources   =  array_keys($DOC_SOURCES);
+	}
+
+	if(request_method() == "POST"){
 		if(!User::logged()){
 			$err_msg[] = "Meklētājs tikai reģistrētiem lietotājiem";
 			return null;
@@ -2209,6 +2230,9 @@ function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
 	$template->set_title("Meklēšana: ".specialchars($search_q));
 
 	$T = $template->add_file("search.tpl");
+
+	$T->set_var("include_comments_checked", $include_comments ? " checked" : "");
+	$T->set_var("only_titles_checked", $only_titles ? " checked" : "");
 
 	foreach($DOC_SOURCES as $id=>$sect){
 		$T->set_var('source_id', $id);
@@ -2233,6 +2257,17 @@ function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
 		return $T;
 	}
 
+	# TODO: only_titles un include_comments ir abpusēji izslēdzošs. Vajadzētu checkboxos ar js apstrādāt
+	if($only_titles){
+		$index = "doc_titles";
+	} else {
+		if($include_comments){
+			$index = "doc_with_comments";
+		} else {
+			$index = "doc";
+		}
+	}
+
 	# TODO: kārtošana pēc datuma gan article, gan forum. Tagad kārtojas atsevišķi
 	$params = new SearchParams(
 		q:$search_q,
@@ -2251,8 +2286,9 @@ function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
 
 	$search_msg = [];
 	if($res === false){
-		$search_msg[] = "Meklētāja tehniska kļūda";
+		$template->error("Meklētāja kļūda");
 		user_error($spx->GetLastError(), E_USER_WARNING);
+		return $T;
 	} elseif($res['total_found'] == 0) {
 		$search_msg[] = "Nekas netika atrasts";
 	}
@@ -2261,33 +2297,35 @@ function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
 		$search_msg[] = "Uzmanību: atrasti ".$res['total_found']." rezultāti, rādam $spx_limit";
 	}
 
-	// [doc_res_id] => 246469
-	// [doc_source_id] => 4
-	// [doc_name] => Disco @ Morgue / ELEKTRA
-	// [doc_comment_count] => 18
-	// [doc_comment_last_date] => 1243812143
-	// [doc_entered] => 1243535226
-	if(!empty($res['matches'])){
+	$T->enable('BLOCK_search');
+
+	if(!empty($res['matches']))
+	{
 		$T->set_var("doc_count", $res['total_found'], 'BLOCK_search');
-		$T->enable('BLOCK_search');
 		$T->enable('BLOCK_search_item');
 		foreach($res['matches'] as $doc){
 			$item = $doc['attrs'];
 			$item['doc_module_name'] = $DOC_SOURCES[$item['doc_source_id']]['name'];
 
-			 # TODO: optimize
-			if($item['doc_source_id'] == 4){
-				$table_id = ResKind::FORUM;
-			} elseif(in_array($item['doc_source_id'], [1,2,3])){
-				$table_id = ResKind::ARTICLE;
+			//  # TODO: optimize
+			// if(in_array($item['doc_source_id'], [1,2,3])){
+			// 	$table_id = ResKind::ARTICLE;
+			// } elseif($item['doc_source_id'] == 4){
+			// 	$table_id = ResKind::FORUM;
+			// // } elseif($item['doc_source_id'] == 5){
+			// // 	$table_id = ResKind::COMMENT;
+			// } else {
+			// 	throw new InvalidArgumentException("Unknown doc source: $item[doc_source_id]");
+			// }
+			if($r = load_specific_res((int)$item['res_id'], (int)$item['table_id'])){
+				$item['res_route'] =  $r->Route()."?hl=".urlencode($search_q);
 			} else {
-				throw new InvalidArgumentException("Unknown doc source: $item[doc_source_id]");
+				trigger_error("No res for search item:".printrr($item), E_USER_WARNING);
+				$item['res_route'] = "/";
 			}
-			$r = load_specific_res((int)$item['doc_res_id'], $table_id);
-			$item['res_route'] =  $r->Route()."?hl=".urlencode($search_q);
 			##
 
-			$item['doc_comment_last_date'] = date('d.m.Y', $item['doc_comment_last_date']);
+			$item['doc_date'] = date('d.m.Y', $item['doc_entered']);
 			$T->set_array($item, 'BLOCK_search_item');
 			$T->parse_block('BLOCK_search_item', TMPL_APPEND);
 		}

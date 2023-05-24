@@ -2,7 +2,7 @@
 
 # TODO: generalize
 $DOC_SOURCES = [
-	1=>['name'=>"Ziņas"],
+	1=>['name'=>"Jaunumi"],
 	2=>['name'=>"Recenzijas"],
 	3=>['name'=>"Intervijas"],
 	4=>['name'=>"Forums"],

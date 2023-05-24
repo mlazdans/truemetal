@@ -293,5 +293,21 @@ var Truemetal = {
 				}
 			})
 		);
+	},
+	clickSearchOptions(e){
+		let include_comments = $("input[name=include_comments]", e.form).get(0);
+		let only_titles = $("input[name=only_titles]", e.form).get(0);
+
+		if(e.name == "include_comments"){
+			if(only_titles.checked){
+				only_titles.checked = !e.checked;
+			}
+		}
+
+		if(e.name == "only_titles"){
+			if(include_comments.checked){
+				include_comments.checked = !e.checked;
+			}
+		}
 	}
 };

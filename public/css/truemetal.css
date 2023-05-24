@@ -122,7 +122,8 @@ dt {
 }
 dd {
 	padding: 0.2em;
-	margin-bottom: 1em;
+	/* margin-bottom: 1em; */
+	margin-left: 1em;
 }
 
 .button,

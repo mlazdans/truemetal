@@ -62,8 +62,7 @@ LEFT JOIN `res_meta` rm ON rm.`res_id` = r.`res_id`
 WHERE
 	r.res_visible = 1 AND
 	forum.type_id = 1 AND
-	-- TODO forum_modid NULL
-	forum.forum_modid = 0
+	forum.forum_modid IS NULL
 )
 ORDER BY
 	res_entered DESC;
