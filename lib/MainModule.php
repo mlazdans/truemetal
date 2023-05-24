@@ -212,7 +212,7 @@ class MainModule
 			$TThemes = $this->add_file('forum/recent.tpl');
 			foreach($data as $item)
 			{
-				$TThemes->enable_if(Res::hasNewComments($item->res_id, $item->res_comment_last_date, $item->res_comment_count), 'BLOCK_forum_r_comments_new');
+				$TThemes->enable_if(Forum::hasNewComments($item), 'BLOCK_forum_r_comments_new');
 				$TThemes->set_var('res_name', specialchars($item->res_name));
 				$TThemes->set_var('res_comment_count', $item->res_comment_count);
 				$TThemes->set_var('res_route', $item->Route());

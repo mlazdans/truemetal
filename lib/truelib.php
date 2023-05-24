@@ -1982,7 +1982,7 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 			$T->disable('BLOCK_art_cont');
 		}
 
-		$T->enable_if(Res::hasNewComments($item['res_id'], $item['res_entered'], $item['res_comment_count']), 'BLOCK_comments_new');
+		$T->enable_if(Res::hasNewComments($item['res_id'], $item['res_entered']), 'BLOCK_comments_new');
 
 		# TODO: route
 		// $T->set_var('res_route')

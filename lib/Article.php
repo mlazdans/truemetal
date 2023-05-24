@@ -4,7 +4,7 @@ class Article
 {
 	public static function hasNewComments(ViewResArticleType $item)
 	{
-		return Res::hasNewComments($item->res_id, $item->res_comment_last_date, $item->res_child_count);
+		return Res::hasNewComments($item->res_id, $item->res_comment_last_date);
 	}
 
 	function del($art_id)

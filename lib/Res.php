@@ -2,20 +2,27 @@
 
 class Res
 {
-	static function hasNewComments(int $res_id, ?string $date = null, ?int $comment_count = null): bool
+	# TODO: pārsaukt par ResSeen vai ko tādu
+	static function hasNewComments(int $res_id, ?string $date = null): bool
 	{
 		if(!User::logged()){
 			return false;
 		}
 
+		if(empty($date)){
+			return false;
+		}
+
 		# TODO: pārkonvertēt datumus jau uz timestamp!!!
-		if(isset($_SESSION['res']['viewed_date'][$res_id]) && $date){
+		if(isset($_SESSION['res']['viewed_date'][$res_id])){
 			return (strtotime($date) > strtotime($_SESSION['res']['viewed_date'][$res_id]));
-		} elseif(isset($_SESSION['res']['viewed_before']) && $date){
+		}
+
+		if(isset($_SESSION['res']['viewed_before'])){
 			return ($_SESSION['res']['viewed_before'] < strtotime($date));
 		}
 
-		return $comment_count > 0;
+		return false;
 	}
 
 	# TODO: saglabāt tikai time stamp. Pirms tam jāpārkonvertē arī sessijās

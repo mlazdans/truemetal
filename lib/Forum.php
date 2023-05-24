@@ -130,7 +130,7 @@ class Forum
 
 	public static function hasNewComments(ViewResForumType $item)
 	{
-		return Res::hasNewComments($item->res_id, $item->res_comment_last_date, $item->res_child_count);
+		return Res::hasNewComments($item->res_id, $item->res_comment_last_date);
 	}
 
 	public static function hasNewThemes(ViewResForumType $item)
@@ -139,18 +139,23 @@ class Forum
 			return false;
 		}
 
+		if(empty($item->res_child_last_date)){
+			return false;
+		}
+
 		if(isset($_SESSION['forums']['viewed_date'][$item->forum_id])){
 			return (strtotime($item->res_child_last_date) > strtotime($_SESSION['forums']['viewed_date'][$item->forum_id]));
+		}
+
+		if(isset($_SESSION['res']['viewed_before'])){
+			return ($_SESSION['res']['viewed_before'] < strtotime($item->res_child_last_date));
 		}
 
 		// Šķiet šis 'viewed' ir kaut kāds vecs artifakts
 		// if(isset($_SESSION['forums']['viewed'][$item->forum_id]))
 		// 	return ($item->res_child_count > $_SESSION['forums']['viewed'][$item->forum_id]);
 
-		// if(isset($_SESSION['res']['viewed_before']))
-		// 	return ($_SESSION['res']['viewed_before'] < strtotime($item->res_child_last_date));
-
-		return $item->res_child_count > 0;
+		return false;
 	}
 
 	static function RouteFromStr(int $forum_id, string $forum_name, ?int $c_id = null): string
