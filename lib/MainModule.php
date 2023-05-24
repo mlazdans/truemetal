@@ -307,10 +307,9 @@ class MainModule
 
 	function set_jubilars()
 	{
-		# TODO: get from proc/view
-		return $this;
+		$jubs = (new ViewJubilarsEntity)->getAll();
 
-		if(!($jubs = Logins::load(new LoginsFilter(jubilars: true)))){
+		if(!$jubs->count()){
 			return $this;
 		}
 
@@ -319,28 +318,26 @@ class MainModule
 		$TJub = $this->add_file('right/jub.tpl');
 		$TJub->enable($block);
 
-		foreach($jubs as $data)
+		foreach($jubs as $j)
 		{
-			$age = round($data['age'] / 365);
-
 			$jub_year = '';
-			if($age == 0){
+			if($j->age == 0){
 				$jub_year = 'jauniņais';
-			} elseif($age == 1){
+			} elseif($j->age == 1){
 				$jub_year = ' gadiņš';
 			} else {
-				if((substr((string)$age, -2) != 11) && ($age % 10 == 1)){
+				if((substr((string)$j->age, -2) != 11) && ($j->age % 10 == 1)){
 					$jub_year = ' gads';
 				} else {
 					$jub_year = ' gadi';
 				}
 			}
 
-			$TJub->set_var('l_nick', $data['l_nick']);
-			$TJub->set_var('l_hash', $data['l_hash']);
+			$TJub->set_var('l_nick', $j->l_nick);
+			$TJub->set_var('l_hash', $j->l_hash);
 
-			if($age){
-				$TJub->set_var('jub_info', " ($age $jub_year)");
+			if($j->age){
+				$TJub->set_var('jub_info', " ($j->age $jub_year)");
 			} else {
 				$TJub->set_var('jub_info', " ($jub_year)");
 			}

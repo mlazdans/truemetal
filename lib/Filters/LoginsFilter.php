@@ -19,7 +19,6 @@ class LoginsFilter extends AbstractFilter
 		public null|int|false $l_accepted      = 1,
 		public ?None $l_lastaccess             = null,
 		public ?string $q                      = null,
-		public ?bool $jubilars                 = false,
 		public ?bool $get_all_ips              = false,
 		public ?bool $get_actitve_sessions     = false,
 	) {}
@@ -45,21 +44,6 @@ class LoginsFilter extends AbstractFilter
 		if($this->l_lastaccess instanceof None)
 		{
 			$sql->Where("l_lastaccess IS NULL");
-		}
-
-		if($this->jubilars)
-		{
-			new TODO("move to proc/view");
-			// $d0 = date('Y-m-d H:i:s', strtotime("-6 month"));
-			// $d1 = date('Y-m-d H:i:s', strtotime("-2 day"));
-			// $d2 = date('Y-m-d H:i:s', strtotime("+2 day"));
-			// $sql->Where("(DATE_FORMAT(l_entered, '%m%d') >= DATE_FORMAT('$d1', '%m%d') AND DATE_FORMAT(l_entered, '%m%d') <= DATE_FORMAT('$d2', '%m%d'))");
-			// $sql->Where("l_lastaccess >= '$d0'");
-
-			// $sql->Select("DATE_FORMAT(l_entered, '%m%d')", "entered_stamp");
-			// $sql->Select("DATEDIFF(CURRENT_TIMESTAMP, l_entered)", "age");
-			// 	if(!empty($params['jubilars'])){
-			// 		$sql->OrderBy("entered_stamp ASC");
 		}
 
 		if($this->q)
