@@ -405,7 +405,7 @@ class MainModule
 
 	function not_found(string $msg = NULL)
 	{
-		$msg = $msg??"Resurss nav atrasts!";
+		$msg = $msg??"Resurss nav atrasts vai ir bloķēts!";
 		$this->Index->enable('BLOCK_not_found')->set_var('msg', $msg);
 
 		header404($msg);

@@ -8,14 +8,13 @@ $moved = false;
 if(!($res = load_res($res_id))){
 	if($redirect_res = DB::ExecuteSingle("SELECT * FROM res_redirect WHERE from_res_id = ?", $res_id)){
 		$moved = true;
-		$res = $res = load_res($redirect_res['to_res_id']);
+		$res = load_res($redirect_res['to_res_id']);
 		$c_id = 0;
 	}
 }
 
-if($res)
+if($res && ($location = $res->Route($c_id ? $c_id : null)))
 {
-	$location = $res->Route($c_id ? $c_id : null);
 	if($moved){
 		redirectp($location);
 	} else {

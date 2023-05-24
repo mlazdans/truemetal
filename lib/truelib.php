@@ -690,7 +690,7 @@ function private_profile(MainModule $template): ?Template
 				$res_data = mb_substr($res_data, 0, 70).'...';
 			}
 
-			$res_href = "/resroute/{$item->res_resid}/?c_id={$item->c_id}";
+			$res_href = "/resroute/{$item->res_id}/";
 
 			$BLOCK_truecomment_item
 			->set_var('res_votes_plus_count', $item->res_votes_plus_count)
@@ -1548,7 +1548,7 @@ function admin_comment_list(
 	{
 		$C->set_array($item, 'BLOCK_comment_item');
 
-		$C->set_var('c_origin_href', "/resroute/$item->res_resid/?c_id=$item->c_id");
+		$C->set_var('c_origin_href', "/resroute/$item->res_id/");
 		$C->set_var('c_origin_name', "#comment$item->c_id");
 
 		if($item->res_visible)

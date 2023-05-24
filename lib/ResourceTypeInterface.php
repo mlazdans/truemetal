@@ -2,5 +2,5 @@
 
 interface ResourceTypeInterface
 {
-	function Route(?int $c_id = null): string;
+	function Route(?int $c_id = null): ?string;
 }
