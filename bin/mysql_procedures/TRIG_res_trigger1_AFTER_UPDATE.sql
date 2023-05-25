@@ -15,8 +15,8 @@ FOR EACH ROW BEGIN
 	END IF;
 	IF OLD.login_id != NEW.login_id THEN
 		CALL logins_update_meta(OLD.login_id);
-		CALL logins_update_meta(NEW.login_id);
 	END IF;
+	CALL logins_update_meta(NEW.login_id);
 END; $$
 
 DELIMITER ;
