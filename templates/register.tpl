@@ -16,9 +16,14 @@
 <form method="post" action="">
 <table class="Main">
 <tr>
-	<td align="right"{error_l_login}>Login:</td>
-	<td><input type="text" name="data[l_login]" value="{l_login}"></td>
-	<td>vismaz 5 simboli (a-z0-9_)</td>
+	<td align="right"{error_l_email}>E-pasts:</td>
+	<td><input type="text" name="data[l_email]" value="{l_email}" autocomplete="email"></td>
+	<td>jānorāda pareiza e-pasta adrese, uz kuru tiks nosūtīts pārbaudes kods</td>
+</tr>
+<tr>
+	<td align="right"{error_l_nick}>Segvārds:</td>
+	<td><input type="text" name="data[l_nick]" value="{l_nick}" autocomplete="nickname"></td>
+	<td>vismaz viens simbols</td>
 </tr>
 <tr>
 	<td align="right"{error_l_password}>Parole:</td>
@@ -29,16 +34,6 @@
 	<td align="right"{error_l_password} style="white-space: nowrap;">Parole 2x:</td>
 	<td><input type="password" name="data[l_password2]" value="{l_password2}"></td>
 	<td></td>
-</tr>
-<tr>
-	<td align="right"{error_l_nick}>Segvārds:</td>
-	<td><input type="text" name="data[l_nick]" value="{l_nick}" autocomplete="nickname"></td>
-	<td>vismaz viens simbols</td>
-</tr>
-<tr>
-	<td align="right"{error_l_email}>E-pasts:</td>
-	<td><input type="text" name="data[l_email]" value="{l_email}" autocomplete="email"></td>
-	<td>jānorāda pareiza e-pasta adrese, uz kuru tiks nosūtīts pārbaudes kods</td>
 </tr>
 <tr>
 	<td></td>

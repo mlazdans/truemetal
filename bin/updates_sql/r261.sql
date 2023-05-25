@@ -46,3 +46,8 @@ ALTER TABLE `logins` ADD UNIQUE(`l_nick`);
 -- Update l_lastaccess pēc pēdējā komenta datuma
 UPDATE logins l SET l.l_lastaccess = (SELECT res.res_entered FROM res WHERE res.login_id = l.l_id AND res.table_id = 3 ORDER BY res.res_entered DESC LIMIT 1)
 WHERE l.l_lastaccess IS NULL AND l.comment_count > 0
+
+ALTER TABLE `logins`
+	CHANGE `l_nick` `l_nick` VARCHAR(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+	CHANGE `l_login` `l_login` VARCHAR(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL
+;

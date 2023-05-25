@@ -849,7 +849,7 @@ function change_pw(MainModule $template): ?Template
 		$error_msgs[] = 'Nav ievadīta vecā parole';
 		$error_fields[] = 'old_password';
 	} else {
-		if(Logins::auth(User::login(), $_POST['data']['old_password'])){
+		if(Logins::auth(User::email(), $_POST['data']['old_password'])){
 			if(!pw_validate($data['l_password'], $data['l_password2'], $error_msgs)){
 				$error_fields[] = 'l_password';
 			}
@@ -860,7 +860,7 @@ function change_pw(MainModule $template): ?Template
 	}
 
 	if(!$error_msgs){
-		if((new Logins)->update_password(User::login(), $data['l_password'])){
+		if((new Logins)->update_password(User::email(), $data['l_password'])){
 			$template->msg("Parole nomainīta.");
 			return null;
 		} else {
@@ -895,11 +895,10 @@ function forgot(MainModule $template): ?Template {
 	{
 		$error_msg[] = 'Jānorāda logins vai e-pasts';
 	} else {
-		if($data['l_login'])
-		{
-			$L = Logins::load_by_login($data['l_login']);
-		} elseif($data['l_email']) {
+		if($data['l_email']) {
 			$L = Logins::load_by_email($data['l_email']);
+		} elseif($data['l_login']){
+			$L = Logins::load_by_login($data['l_login']);
 		}
 
 		if(empty($L))
@@ -981,7 +980,7 @@ function forgot_accept(MainModule $template, string $code): ?Template
 			return
 				Logins::accept($L->l_id) &&
 				Logins::remove_forgot_code($code) &&
-				Logins::update_password($L->l_login, $data['l_password'])
+				Logins::update_password($L->l_email, $data['l_password'])
 			;
 		});
 
@@ -1029,7 +1028,7 @@ function register(MainModule $template, array $sys_parameters = []): ?Template
 		return $T;
 	}
 
-	$check = [ 'l_login', 'l_nick', 'l_password', 'l_email' ];
+	$check = ['l_nick', 'l_password', 'l_email' ];
 	$data = $_POST['data'];
 
 	$error_msg = $error_field = [];
@@ -1040,7 +1039,6 @@ function register(MainModule $template, array $sys_parameters = []): ?Template
 		}
 	}
 
-	$data['l_login'] = strtolower($data['l_login']);
 	$data['l_email'] = strtolower($data['l_email']);
 
 	if(empty($data['l_password'])){
@@ -1054,19 +1052,9 @@ function register(MainModule $template, array $sys_parameters = []): ?Template
 		}
 	}
 
-	if(invalid($data['l_login']) || strlen($data['l_login']) < 5) {
-		$error_msg[] = 'Neatļauti simboli vai īss logins';
-		$error_field[] = 'l_login';
-	}
-
 	if(!is_valid_email($data['l_email'])) {
 		$error_msg[] = 'Nekorekta e-pasta adrese';
 		$error_field[] = 'l_email';
-	}
-
-	if(Logins::login_exists($data['l_login'])) {
-		$error_field[] = 'l_login';
-		$error_msg[] = 'Šāds login jau eksistē';
 	}
 
 	if(Logins::email_exists($data['l_email'])){
@@ -1083,7 +1071,7 @@ function register(MainModule $template, array $sys_parameters = []): ?Template
 	{
 		if(Logins::register($data)){
 			try {
-				email($sys_mail, '[truemetal] jauns lietotajs', "$data[l_login] ($data[l_nick])\n\nIP:$_SERVER[REMOTE_ADDR]");
+				email($sys_mail, '[truemetal] jauns lietotajs', "$data[l_email] ($data[l_nick])\n\nIP:$_SERVER[REMOTE_ADDR]");
 			} catch (Exception $e) {
 			}
 			header("Location: /register/ok/");

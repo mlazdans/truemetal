@@ -5,7 +5,7 @@
 <tr>
 	<td colspan="2">
 		<input type="hidden" name="data[referer]" value="{referer}">
-		<input style="width: 100%;" type="text" name="data[login]" placeholder="Lietotāja vārds">
+		<input style="width: 100%;" type="text" name="data[login]" placeholder="Logins / e-pasts">
 	</td>
 </tr>
 <tr>

@@ -114,9 +114,9 @@ class Logins
 		return true;
 	}
 
-	function login(string $l_login, string $l_pass)
+	function login(string $login_or_email, string $l_pass)
 	{
-		if($data = static::auth($l_login, $l_pass)) {
+		if($data = static::auth($login_or_email, $l_pass)) {
 			return $data;
 		}
 	}
@@ -233,7 +233,6 @@ class Logins
 	{
 		$L = LoginsType::initFrom(new LoginsDummy(
 			l_hash: Logins::gen_login_hash(),
-			l_login: $post_data['l_login'],
 			l_nick: $post_data['l_nick'],
 			l_password: Logins::gen_password_hash($post_data['l_password']),
 			l_email: $post_data['l_email'],
@@ -327,12 +326,12 @@ class Logins
 		return valid($user_login) && (strlen($user_login) > 0);
 	}
 
-	static function update_password(string $login, string $password): bool
+	static function update_password(string $email, string $password): bool
 	{
 		return DB::Execute(
-			"UPDATE logins SET l_password = ? WHERE l_login = ?",
+			"UPDATE logins SET l_password = ? WHERE l_email = ?",
 			static::gen_password_hash($password),
-			$login
+			$email
 		);
 	}
 
@@ -395,9 +394,12 @@ GROUP BY
 		return password_hash($str, PASSWORD_BCRYPT, ['cost'=>12]);
 	}
 
-	static function auth(string $login, string $pass, bool $ignore_disabled = false): ?LoginsType
+	static function auth(string $login_or_email, string $pass, bool $ignore_disabled = false): ?LoginsType
 	{
-		if($data = static::load_by_login($login, $ignore_disabled))
+		if(
+			($data = static::load_by_login($login_or_email, $ignore_disabled)) ||
+			($data = static::load_by_email($login_or_email, $ignore_disabled))
+		)
 		{
 			$pass_ok =
 				password_verify($pass, $data->l_password) ||

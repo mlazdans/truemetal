@@ -18,12 +18,12 @@
 	<td colspan="2">Ievadi <b>vienu</b>: savu login <u>vai</u> e-pastu!</td>
 </tr>
 <tr>
-	<td align="right"{error_l_login}>Login:</td>
-	<td><input type="text" name="data[l_login]" value="{l_login}" ></td>
-</tr>
-<tr>
 	<td align="right"{error_l_email}>E-pasts:</td>
 	<td><input type="text" name="data[l_email]" value="{l_email}" autocomplete="email"></td>
+</tr>
+<tr>
+	<td align="right"{error_l_login}>Login:</td>
+	<td><input type="text" name="data[l_login]" value="{l_login}" ></td>
 </tr>
 <tr>
 	<td></td>
