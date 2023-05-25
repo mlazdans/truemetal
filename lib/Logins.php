@@ -56,7 +56,6 @@ class Logins
 		return static::load_single(LoginsFilter::ignore_disabled(new LoginsFilter(l_sess_id: $sess_id), $ignore_disabled));
 	}
 
-	# TODO: vajadzētu MySQL collation, kas respektē garumzīmes?
 	static function email_exists(string $email): bool {
 		$data = static::load_by_email($email, true);
 
