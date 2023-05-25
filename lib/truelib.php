@@ -793,6 +793,7 @@ function change_email(MainModule $template): ?Template
 		$t->set_var('ip', $_SERVER['REMOTE_ADDR']);
 		$t->set_var('sys_domain', $sys_domain);
 		$t->set_var('code', $accept_code);
+		$t->set_var('code_timeout', round(Logins::codes_timeout() / 60));
 		$msg = $t->parse();
 
 		$subj = "$sys_domain - e-pasta apstiprināšana";
