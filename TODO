@@ -11,3 +11,5 @@ Vakaru karstāku padarīs uguns šovs, bet tas, kādi priekšnesumi tiks rādīt
 Ieeja no 18:00, bez maksas.
 
 *) Salikt login_id res (galerijām, tēmām, utml)
+
+*) trim ievadlaukus, kuriem ir UNIQUE index. Kā izrādās, MySQL ļauj VARCHAR laukos ievadīt priekšā un pakaļā space un UNIQUE indexam pohuj!!!
