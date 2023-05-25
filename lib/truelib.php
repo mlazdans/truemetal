@@ -652,12 +652,13 @@ function private_profile(MainModule $template): ?Template
 	$top_comments[0] = (new ViewResCommentEntity)->getAll($F->orderBy('res_votes_plus_count DESC'));
 	$top_comments[1] = (new ViewResCommentEntity)->getAll($F->orderBy('res_votes_minus_count DESC'));
 
-	if($top_comments[0] || $top_comments[1]){
+	if(count($top_comments[0]) || count($top_comments[1])){
 		$T->enable('BLOCK_truecomments');
 	}
 
-	foreach($top_comments as $r=>$data){
-		if (!$data){
+	foreach($top_comments as $r=>$data)
+	{
+		if (!$data->count()){
 			continue;
 		}
 
