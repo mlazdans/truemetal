@@ -26,6 +26,20 @@ UPDATE comment_disabled SET login_id = 264 WHERE login_id = 820;
 UPDATE comment_disabled SET disable_login_id = 264 WHERE disable_login_id = 820;
 DELETE FROM logins WHERE l_id = 820;
 
+UPDATE attend SET l_id = 687 WHERE l_id = 651;
+UPDATE res SET login_id = 687 WHERE login_id = 651;
+UPDATE res_vote SET login_id = 687 WHERE login_id = 651;
+UPDATE comment_disabled SET login_id = 687 WHERE login_id = 651;
+UPDATE comment_disabled SET disable_login_id = 687 WHERE disable_login_id = 651;
+DELETE FROM logins WHERE l_id = 651;
+
+UPDATE attend SET l_id = 687 WHERE l_id = 735;
+UPDATE res SET login_id = 687 WHERE login_id = 735;
+UPDATE res_vote SET login_id = 687 WHERE login_id = 735;
+UPDATE comment_disabled SET login_id = 687 WHERE login_id = 735;
+UPDATE comment_disabled SET disable_login_id = 687 WHERE disable_login_id = 735;
+DELETE FROM logins WHERE l_id = 735;
+
 ALTER TABLE `logins` DROP INDEX `l_nick`;
 ALTER TABLE `logins` ADD UNIQUE(`l_nick`);
 
