@@ -19,7 +19,6 @@ class LoginsFilter extends AbstractFilter
 		public null|int|false $l_accepted      = 1,
 		public ?None $l_lastaccess             = null,
 		public ?string $q                      = null,
-		public ?bool $get_all_ips              = false,
 		public ?bool $get_actitve_sessions     = false,
 	) {}
 
@@ -49,13 +48,6 @@ class LoginsFilter extends AbstractFilter
 		if($this->q)
 		{
 			$sql->Where(search_to_sql_cond($this->q, [$prefix.'l_nick', $prefix.'l_login', $prefix.'l_email', $prefix.'l_userip']));
-		}
-
-		if($this->get_all_ips)
-		{
-			new TODO("get_all_ips: move to View/Proc");
-			// $d = date('Y-m-d H:i:s', strtotime('-1 year'));
-			// $sql->Select("(SELECT GROUP_CONCAT(DISTINCT c_userip) FROM comment WHERE login_id = logins.l_id AND c_entered > '$d')", "all_ips");
 		}
 
 		if($this->get_actitve_sessions){
