@@ -1,7 +1,7 @@
 DELIMITER $$
 
-DROP TRIGGER IF EXISTS `res_trigger1` $$
-CREATE TRIGGER res_trigger1 AFTER UPDATE ON `res`
+DROP TRIGGER IF EXISTS res_trigger_AU $$
+CREATE TRIGGER res_trigger_AU AFTER UPDATE ON res
 FOR EACH ROW BEGIN
 	CALL res_update_meta(OLD.res_id);
 	IF OLD.res_resid IS NOT NULL THEN
