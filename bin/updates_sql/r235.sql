@@ -12,10 +12,10 @@ ALTER TABLE `modules`
 
 UPDATE `forum` set `forum_closed`=1 WHERE forum_closed='Y';
 UPDATE `forum` set `forum_closed`=0 WHERE forum_closed='N';
-UPDATE `forum` set `forum_allow_childs`=1 WHERE forum_allow_childs='Y';
-UPDATE `forum` set `forum_allow_childs`=0 WHERE forum_allow_childs='N';
+UPDATE `forum` set `forum_allowchilds`=1 WHERE forum_allowchilds='Y';
+UPDATE `forum` set `forum_allowchilds`=0 WHERE forum_allowchilds='N';
 ALTER TABLE `forum`
-	CHANGE `forum_allow_childs` `forum_allow_childs` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+	CHANGE `forum_allowchilds` `forum_allow_childs` TINYINT UNSIGNED NOT NULL DEFAULT 0,
 	CHANGE `forum_closed` `forum_closed` TINYINT UNSIGNED NOT NULL DEFAULT 0
 ;
 
