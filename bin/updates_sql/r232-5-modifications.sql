@@ -18,6 +18,21 @@ ALTER TABLE logins
 	MODIFY l_sess_ip VARCHAR(32) CHARACTER SET ascii COLLATE ascii_general_ci
 ;
 
+ALTER TABLE res
+	MODIFY res_email VARCHAR(128) CHARACTER SET ascii COLLATE ascii_general_ci,
+	MODIFY res_ip VARCHAR(32) CHARACTER SET ascii COLLATE ascii_general_ci
+;
+
+-- Warning: #1366 Incorrect string value: '\xC4\x81ns' for column `truemetal_remote`.`res`.`res_email` at row 1347
+-- Warning: #1366 Incorrect string value: '\xC4\x81ls \xE2...' for column `truemetal_remote`.`res`.`res_email` at row 3205
+-- Warning: #1366 Incorrect string value: '\xC4\x81ls \xE2...' for column `truemetal_remote`.`res`.`res_email` at row 3206
+-- Warning: #1366 Incorrect string value: '\xC4\x81nam' for column `truemetal_remote`.`res`.`res_email` at row 8958
+-- Warning: #1366 Incorrect string value: '\xC4\x81' for column `truemetal_remote`.`res`.`res_email` at row 9171
+-- Warning: #1366 Incorrect string value: '\xC5\xABdzu ...' for column `truemetal_remote`.`res`.`res_email` at row 9266
+-- Warning: #1366 Incorrect string value: '\xC4\xABms' for column `truemetal_remote`.`res`.`res_email` at row 9733
+-- Warning: #1366 Incorrect string value: '\xC4\x81vim ...' for column `truemetal_remote`.`res`.`res_email` at row 118133
+-- Warning: #1366 Incorrect string value: '\xC4\x81ls \xE2...' for column `truemetal_remote`.`res`.`res_email` at row 236377
+
 ALTER DATABASE CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 DROP TABLE poll_votes;
 DROP TABLE poll;
