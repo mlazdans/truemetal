@@ -23,7 +23,7 @@ class SessHandler implements SessionHandlerInterface
 
 		if(empty($data))
 		{
-			$sql = "UPDATE logins SET l_sess_id = ?, l_sess_ip = ?, l_lastaccess = CURRENT_TIMESTAMP WHERE l_id = ?";
+			$sql = "UPDATE logins SET l_sess_id = ?, l_sess_ip = ?, l_lastaccess = CURRENT_TIMESTAMP, l_logedin = 1 WHERE l_id = ?";
 			return DB::Execute($sql, $id, $ip, User::id());
 		} else {
 			$sql = "UPDATE logins SET l_sess_id = ?, l_sessiondata = ?, l_sess_ip = ?, l_lastaccess = CURRENT_TIMESTAMP, l_logedin = 1 WHERE l_id = ?";
