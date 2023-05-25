@@ -53,10 +53,6 @@
 	</td>
 </tr>
 <tr>
-	<td align="right">Login:</td>
-	<td colspan="2">{l_login}</td>
-</tr>
-<tr>
 	<td align="right">E-pasts:</td>
 	<td colspan="2">{l_email}</td>
 </tr>
