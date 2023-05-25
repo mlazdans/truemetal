@@ -358,12 +358,6 @@ function forum_det(
 	# TODO: apsvērt res_route glabāt DB
 	// $tree = get_res_tree($forum->res_id, $forum->table_id);
 
-	# TODO: Vajag uztaisīt:
-	# OK?) lai rāda foruma datus
-	# OK?) uztaisīt balsošanu par articles un forum
-	# 3) pārkopēt foruma pirmā komenta votes uz foruma votēm
-	# 4) izvākt pirmo foruma komentu
-
 	Res::markAsSeen($forum->res_id);
 
 	if($forum->forum_closed)
@@ -464,26 +458,12 @@ function comment_list(Template $C, ViewResCommentCollection $comments, string $h
 		$BLOCK_comment->set_var('res_votes', format_vote($item->res_votes));
 		$BLOCK_comment->set_var('comment_vote_class', comment_vote_class($item->res_votes));
 
-		// Joined from logins
-		// if(User::logged() && ($item['l_login'] || $item['c_userlogin'] || $item['login_id'])){
 		if(User::logged() && $item->l_hash){
 			$BLOCK_comment->set_var('l_hash', $item->l_hash);
 			$BLOCK_comment->enable('BLOCK_profile_link');
 		} else {
 			$BLOCK_comment->disable('BLOCK_profile_link');
 		}
-
-		// if($item['l_login'])
-		// 	$C->set_var('user_login_id', $item['l_login']);
-		// elseif($item['c_userlogin']) // legacy
-		// 	$C->set_var('user_login_id', $item['c_userlogin']);
-		// elseif($item['login_id']) // legacy
-		// 	$C->set_var('user_login_id', $item['login_id']);
-
-		// if(User::logged() && ($item['c_userlogin'] || $item['login_id']))
-		// 	$C->enable('BLOCK_profile_link');
-		// else
-		// 	$C->disable('BLOCK_profile_link');
 
 		$BLOCK_comment->set_var('comment_nr', $comment_nr);
 

@@ -3,7 +3,6 @@
 use dqdp\DBA\AbstractFilter;
 use dqdp\DBA\Types\None;
 use dqdp\SQL\Select;
-use dqdp\TODO;
 
 class LoginsFilter extends AbstractFilter
 {
@@ -35,10 +34,8 @@ class LoginsFilter extends AbstractFilter
 
 	protected function apply_filter(Select $sql): Select
 	{
-		$prefix = "";
-
-		$this->apply_set_fields($sql, ['l_id', 'l_login', 'l_email', 'l_hash', 'l_nick', 'l_sess_id'], $prefix);
-		$this->apply_falsed_fields($sql, ['l_active', 'l_accepted', 'l_logedin'], $prefix);
+		$this->apply_set_fields($sql, ['l_id', 'l_login', 'l_email', 'l_hash', 'l_nick', 'l_sess_id']);
+		$this->apply_falsed_fields($sql, ['l_active', 'l_accepted', 'l_logedin']);
 
 		if($this->l_lastaccess instanceof None)
 		{
@@ -47,7 +44,7 @@ class LoginsFilter extends AbstractFilter
 
 		if($this->q)
 		{
-			$sql->Where(search_to_sql_cond($this->q, [$prefix.'l_nick', $prefix.'l_login', $prefix.'l_email', $prefix.'l_userip']));
+			$sql->Where(search_to_sql_cond($this->q, ['l_nick', 'l_login', 'l_email', 'l_userip']));
 		}
 
 		if($this->get_actitve_sessions){
