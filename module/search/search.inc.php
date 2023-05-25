@@ -16,19 +16,19 @@ $index = ($only_titles ? "doc_titles" : "doc");
 
 $sources = array();
 if(in_array('article', $sections)){
-	$T->set_var('section_article_checked', ' checked="checked"', 'BLOCK_middle');
+	$T->set_var('section_article_checked', ' checked="checked"');
 	$sources[] = 1;
 }
 if(in_array('reviews', $sections)){
-	$T->set_var('section_reviews_checked', ' checked="checked"', 'BLOCK_middle');
+	$T->set_var('section_reviews_checked', ' checked="checked"');
 	$sources[] = 2;
 }
 if(in_array('forum', $sections)){
-	$T->set_var('section_forum_checked', ' checked="checked"', 'BLOCK_middle');
+	$T->set_var('section_forum_checked', ' checked="checked"');
 	$sources[] = 3;
 }
 if($only_titles){
-	$T->set_var('only_titles_checked', ' checked="checked"', 'BLOCK_middle');
+	$T->set_var('only_titles_checked', ' checked="checked"');
 }
 
 $params = array(
