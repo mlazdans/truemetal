@@ -1561,42 +1561,37 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 
 	if(User::id() == $res->login_id)
 	{
-		$msg = specialchars($value == 'up' ? ":)" : ">:)");
-		$template->msg($msg);
+		$template->msg(htmlspecialchars($value == 'up' ? ":)" : ">:)"));
 		return null;
 	}
 
-	# Check count
-	$date = date('Y-m-d H:i:s', time() - 24 * 3600); // 24h
-	$check_sql = sprintf(
-		"SELECT COUNT(*) cv_count FROM `res_vote` WHERE login_id = %d AND rv_entered >= '%s'",
-		User::id(),
-		$date
+	# Check count 24h
+	$countCheck = DB::ExecuteSingle(
+		"SELECT COUNT(*) cc FROM res_vote WHERE login_id = ? AND rv_entered > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 24 HOUR)",
+		User::id()
 	);
 
-	$countCheck = DB::ExecuteSingle($check_sql);
-	if($countCheck['cv_count'] >= 24)
-	{
-		$template->msg("Pārsniegtiņš divdesmitčetriņu stundiņu limitiņš balsošaniņai.");
-		return null;
-	}
-
-	# Insert
-	$insert_sql = sprintf(
-		"INSERT IGNORE INTO res_vote (res_id, login_id, rv_value, rv_userip, rv_entered) VALUES (%d, %d, %d, '%s', NOW())",
-		$res_id,
-		User::id(),
-		$value == 'up' ? 1 : -1,
-		$ip
-	);
-
-	if(!DB::Execute($insert_sql))
+	if(!$countCheck)
 	{
 		$template->error("Datubāzes kļūda");
 		return null;
 	}
 
-	if(!($new_data = ViewResEntity::getById($res_id)))
+	if($countCheck['cc'] > 24)
+	{
+		$template->msg("Pārsniegtiņš divdesmitčetriņu stundiņu limitiņš balsošaniņai.");
+		return null;
+	}
+
+	$inserted = DB::Execute(
+		"INSERT IGNORE INTO res_vote (res_id, login_id, rv_value, rv_userip) VALUES (?, ?, ?, ?)",
+		$res->res_id,
+		User::id(),
+		$value == 'up' ? 1 : -1,
+		$ip
+	);
+
+	if(!$inserted || !($new_data = ViewResEntity::getById($res_id)))
 	{
 		$template->error("Datubāzes kļūda");
 		return null;
