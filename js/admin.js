@@ -2,7 +2,7 @@ var Admin = {
 	viewCommentVotes: function(c_id) {
 		var dOptions = {
 			width: 400,
-			dialogClass: "loading",
+			dialogClass: "loading1",
 			buttons: {
 				"Aizvērt": function(){
 					$(this).dialog("destroy");
@@ -23,7 +23,7 @@ var Admin = {
 	viewCommentOriginal: function(c_id) {
 		var dOptions = {
 			width: 800,
-			dialogClass: "loading",
+			dialogClass: "loading1",
 			buttons: {
 				"Aizvērt": function(){
 					$(this).dialog("destroy");

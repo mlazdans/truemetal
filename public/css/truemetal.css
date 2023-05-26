@@ -307,10 +307,16 @@ div.clear {
 	clear: both;
 }
 
-div.loading {
-	background-image: url("/img/loading1.gif");
-	background-repeat: no-repeat;
-	background-position: center center;
+/* http://ajaxloadingimages.net/ */
+.loading1, .loading2 {
+	background-repeat: no-repeat !important;
+	background-position: center center !important;
+}
+.loading1 {
+	background-image: url("/img/loading1.gif") !important;
+}
+.loading2 {
+	background-image: url("/img/loading2.gif") !important;
 }
 
 .unselectable {

@@ -7,14 +7,14 @@
 			<!-- END BLOCK_nopicture -->
 			<!-- BEGIN BLOCK_picture disabled -->
 				<div
-					class="loading"
+					class="loading1"
 					style="min-height: 50px; min-width: {user_pic_tw}px;"
 				><a
 					href="/user/viewimage/{l_hash}/"
 					class="ProfileImage"
 					data-hash="{l_hash}"
 					data-nick="{l_nick}"
-				><img src="/user/thumb/{l_hash}/" onload="$(this).parent().parent().removeClass('loading');" alt=""></a></div>
+				><img src="/user/thumb/{l_hash}/" onload="$(this).parent().parent().removeClass('loading1');" alt=""></a></div>
 			<!-- END BLOCK_picture -->
 		</td>
 		<th class="List-item">Manīts:</th>

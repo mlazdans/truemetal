@@ -13,7 +13,7 @@ var Truemetal = {
 			// classes: {
 			// 	'ui-dialog': 'loading'
 			// },
-			dialogClass: "loading",
+			dialogClass: "loading1",
 			title: "Ielāde...",
 			height: "auto",
 			// buttons: [{
@@ -111,16 +111,20 @@ var Truemetal = {
 		});
 	},
 	Vote(res_id, value){
+		const voteXpath = "#votes-" + res_id;
+
+		$(voteXpath).addClass('loading2');
+
 		$.ajax({
 			url: "/vote/" + value + "/" + res_id + "/?json",
 			dataType: 'json',
 			complete: function(req, status){
+				$(voteXpath).removeClass('loading2');
+
 				let data = req?.responseJSON;
 				if(data?.Votes === undefined){
 					return Truemetal.HandleStandardJson(req, status);
 				}
-
-				let voteXpath = "#votes-" + res_id;
 
 				if(data.Votes > 0){
 					$(voteXpath).html('+' + data.Votes).removeClass("vote-minus vote-zero").addClass("vote-plus");
