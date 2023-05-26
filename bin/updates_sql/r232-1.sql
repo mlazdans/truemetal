@@ -65,8 +65,8 @@ DROP TRIGGER IF EXISTS `res_vote_trigger3`;
 -- r232-5-null.sql
 -- r235.sql
 -- palaist bin/mysql_procedures/import_procedures.bat
--- CALL res_update_meta(NULL);
--- CALL logins_update_meta(NULL);
+-- CALL res_meta_update(NULL);
+-- CALL logins_meta_update(NULL);
 -- palaist bin/sess_update.php
 -- palaist bin/theme_collect_dup_comment.php
 -- ^ šiet manuāli pārcelti pirmie komentāri, kuriem pirmais ieraksts kaut kādu iemeslu dēļ atšķiras no tēmas ieraksta

@@ -96,8 +96,8 @@ $ret =
 	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger1") &&
 	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger2") &&
 	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger3") &&
-	DB::Query("CALL res_update_meta(NULL)") &&
-	DB::Query("CALL logins_update_meta(NULL)")
+	DB::Query("CALL res_meta_update(NULL)") &&
+	DB::Query("CALL logins_meta_update(NULL)")
 ;
 
 if(!$ret){
@@ -117,8 +117,8 @@ if($res){
 	print "FAIL\n";
 }
 
-DB::Query("CALL res_update_meta(NULL)");
-DB::Query("CALL logins_update_meta(NULL)");
+DB::Query("CALL res_meta_update(NULL)");
+DB::Query("CALL logins_meta_update(NULL)");
 
 print "\nTODO:\n";
 print "Re-create triggers!\n";
