@@ -8,12 +8,12 @@ mysql -uroot truemetal_remote < %~dp0%PROC_logins_meta_update.sql
 
 mysql -uroot truemetal_remote < %~dp0%logins_trigger_BI.sql
 
-@REM mysql -uroot truemetal_remote < %~dp0%res_trigger_AU.sql
-@REM mysql -uroot truemetal_remote < %~dp0%res_trigger_AD.sql
-@REM mysql -uroot truemetal_remote < %~dp0%res_trigger_AI.sql
-@REM mysql -uroot truemetal_remote < %~dp0%res_vote_trigger_AI.sql
-@REM mysql -uroot truemetal_remote < %~dp0%res_vote_trigger_AD.sql
-@REM mysql -uroot truemetal_remote < %~dp0%res_vote_trigger_AU.sql
+mysql -uroot truemetal_remote < %~dp0%res_trigger_AU.sql
+mysql -uroot truemetal_remote < %~dp0%res_trigger_AD.sql
+mysql -uroot truemetal_remote < %~dp0%res_trigger_AI.sql
+mysql -uroot truemetal_remote < %~dp0%res_vote_trigger_AI.sql
+mysql -uroot truemetal_remote < %~dp0%res_vote_trigger_AD.sql
+mysql -uroot truemetal_remote < %~dp0%res_vote_trigger_AU.sql
 
 mysql -uroot truemetal_remote < %~dp0%view_res.sql
 mysql -uroot truemetal_remote < %~dp0%view_attend.sql

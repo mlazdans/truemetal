@@ -13,10 +13,6 @@ FOR EACH ROW BEGIN
 	IF OLD.res_resid != NEW.res_resid AND NEW.res_resid IS NOT NULL THEN
 		CALL res_update_meta(NEW.res_resid);
 	END IF;
-	-- IF OLD.login_id != NEW.login_id THEN
-	-- 	CALL logins_update_meta(OLD.login_id);
-	-- END IF;
-	-- CALL logins_update_meta(NEW.login_id);
 END; $$
 
 DELIMITER ;
