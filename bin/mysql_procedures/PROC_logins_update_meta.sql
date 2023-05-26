@@ -1,7 +1,7 @@
 DELIMITER $$
 
-DROP PROCEDURE IF EXISTS `logins_update_meta` $$
-CREATE PROCEDURE `logins_update_meta` (p_l_id INT)
+DROP PROCEDURE IF EXISTS logins_update_meta $$
+CREATE PROCEDURE logins_update_meta (p_l_id INT)
 BEGIN
 	UPDATE logins l
 	LEFT JOIN (

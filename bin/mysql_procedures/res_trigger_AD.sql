@@ -6,7 +6,7 @@ FOR EACH ROW BEGIN
 	IF OLD.res_resid IS NOT NULL THEN
 		CALL res_update_meta(OLD.res_resid);
 	END IF;
-	CALL logins_update_meta(OLD.login_id);
+	-- CALL logins_update_meta(OLD.login_id);
 END; $$
 
 DELIMITER ;
