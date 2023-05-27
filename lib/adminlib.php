@@ -130,9 +130,9 @@ function admin_logins_edit(AdminModule $template, int $l_id): ?Template
 	# Comment actions
 	if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
 	{
-		new TODO("Safixot vājprātu");
+		# TODO: move to function
 		if(include('module/admin/comment/action.inc.php')){
-			header("Location: ".($l_id ? "$module_root/$l_id/" : "$module_root"));
+			header("Location: ".($l_id ? "/admin/logins/$l_id/" : "/admin/logins/"));
 		}
 		return null;
 	}

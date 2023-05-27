@@ -1,15 +1,10 @@
 <?php declare(strict_types = 1);
 
-$c_ids = post('c_id');
+$res_ids = (array)post('res_ids');
 $new_res_id = post('new_res_id');
-
-if(!is_array($c_ids))
-	$c_ids = array($c_id);
 
 $ok = true;
 $func = substr($action, 8);
-
-$db->AutoCommit(false);
 
 if($func == 'move'){
 	$RC = new ResComment;
@@ -19,14 +14,12 @@ if($func == 'move'){
 
 	if($ok)
 		$db->Commit();
+
+	return $ok;
+} elseif($func == 'show'){
+	return (new ResEntity)->show($res_ids);
+} elseif($func == 'hide'){
+	return (new ResEntity)->hide($res_ids);
 } else {
-	$Comment = new Comment;
-	$Comment->setDb($db);
-	foreach($c_ids as $c_id)
-		$ok = $Comment->{$func}($c_id) ? $ok : false;
-
-	if($ok)
-		$db->Commit();
+	throw new InvalidArgumentException("Unknow action: $func");
 }
-
-return $ok;

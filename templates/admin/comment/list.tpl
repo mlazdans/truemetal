@@ -17,7 +17,7 @@
 <!-- BEGIN BLOCK_comment_item -->
 <tr>
 	<th class="{c_color_class}">
-		<input type="checkbox" name="c_id[]" value="{c_id}">
+		<input type="checkbox" name="res_ids[]" value="{res_id}">
 	</th>
 	<th class="{c_color_class} nowrap"><a href="/admin/logins/{login_id}/">{res_nickname}</a></th>
 	<th class="{c_color_class}"><a href="/admin/reports/?report=ip&amp;ips={res_ip}">{res_ip}</a></th>
