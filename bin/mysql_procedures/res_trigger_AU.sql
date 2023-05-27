@@ -10,18 +10,18 @@ FOR EACH ROW BEGIN
 -- 5) NEW.res_resid =    1 && OLD.res_resid = 2    => update OLD.res_resid && update NEW.res_resid
 
 	-- 1
-	IF COALESCE(NEW.res_resid, OLD.res_resid) IS NOT NULL THEN -- at least one is not null
+	IF COALESCE(NEW.res_resid, OLD.res_resid) IS NOT NULL THEN -- at least one is not null, not both
+		-- 4
+		IF NEW.res_resid <=> OLD.res_resid THEN -- NULL-safe equal to operator
+			IF NOT (NEW.res_visible <=> OLD.res_visible AND NEW.table_id <=> OLD.table_id) THEN
+				CALL res_meta_update_childs(NEW.res_resid);
+			END IF;
 		-- 2
-		IF NEW.res_resid IS NULL THEN
+		ELSEIF NEW.res_resid IS NULL THEN
 			CALL res_meta_update_childs(OLD.res_resid);
 		-- 3
 		ELSEIF OLD.res_resid IS NULL THEN
 			CALL res_meta_update_childs(NEW.res_resid);
-		-- 4
-		ELSEIF NEW.res_resid <=> OLD.res_resid THEN -- NULL-safe equal to operator
-			IF NEW.res_visible <=> OLD.res_visible OR NEW.table_id <=> OLD.table_id THEN
-				CALL res_meta_update_childs(NEW.res_resid);
-			END IF;
 		-- 5
 		ELSE
 			CALL res_meta_update_childs(NEW.res_resid);
