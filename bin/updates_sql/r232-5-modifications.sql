@@ -40,3 +40,5 @@ DROP TABLE poll;
 
 -- Cleanup invalid session data
 UPDATE logins SET l_sessiondata = NULL WHERE l_id IN (2385, 2564, 2680) OR l_sessiondata = '';
+
+ALTER TABLE res ADD INDEX(table_id);
