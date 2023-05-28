@@ -15,7 +15,8 @@ ALTER TABLE logins
 	MODIFY l_email VARCHAR(128) CHARACTER SET ascii COLLATE ascii_general_ci,
 	MODIFY l_userip VARCHAR(32) CHARACTER SET ascii COLLATE ascii_general_ci,
 	MODIFY l_sess_id VARCHAR(32) CHARACTER SET ascii COLLATE ascii_general_ci,
-	MODIFY l_sess_ip VARCHAR(32) CHARACTER SET ascii COLLATE ascii_general_ci
+	MODIFY l_sess_ip VARCHAR(32) CHARACTER SET ascii COLLATE ascii_general_ci,
+	MODIFY l_sessiondata MEDIUMTEXT NULL
 ;
 
 ALTER TABLE res
@@ -36,3 +37,6 @@ ALTER TABLE res
 ALTER DATABASE CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 DROP TABLE poll_votes;
 DROP TABLE poll;
+
+-- Cleanup invalid session data
+UPDATE logins SET l_sessiondata = NULL WHERE l_id IN (2385, 2564, 2680) OR l_sessiondata = '';
