@@ -649,8 +649,8 @@ function private_profile(MainModule $template): ?Template
 		login_id:User::id()
 	))->rows(10);
 
-	$top_comments[0] = (new ViewResCommentEntity)->getAll($F->orderBy('res_votes_plus_count DESC'));
-	$top_comments[1] = (new ViewResCommentEntity)->getAll($F->orderBy('res_votes_minus_count DESC'));
+	$top_comments[0] = (new ViewResEntity)->getAll($F->orderBy('res_votes_plus_count DESC'));
+	$top_comments[1] = (new ViewResEntity)->getAll($F->orderBy('res_votes_minus_count DESC'));
 
 	if(count($top_comments[0]) || count($top_comments[1])){
 		$T->enable('BLOCK_truecomments');
