@@ -21,6 +21,7 @@ if(!($module = Module::load(['module_id'=>$sys_module_id, 'mod_modid'=>false])))
 	$template->not_found();
 	$template->set_right_defaults();
 	$template->out(null);
+	return;
 }
 
 $art_title = '';
