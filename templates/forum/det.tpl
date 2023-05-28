@@ -8,7 +8,7 @@
 	</div>
 
 	<div class="controls">
-		<div class="vote unselectable {comment_vote_class}" id="votes-{res_id}">
+		<div class="vote unselectable {comment_vote_class}" id="votes-{res_id}" title="+{res_votes_plus_count} - {res_votes_minus_count}">
 			{res_votes}
 		</div>
 
