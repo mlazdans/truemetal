@@ -40,6 +40,30 @@ UPDATE comment_disabled SET login_id = 687 WHERE login_id = 735;
 UPDATE comment_disabled SET disable_login_id = 687 WHERE disable_login_id = 735;
 DELETE FROM logins WHERE l_id = 735;
 
+UPDATE attend SET l_id = 1787 WHERE l_id = 1342;
+UPDATE res SET login_id = 1787 WHERE login_id = 1342;
+UPDATE res_vote SET login_id = 1787 WHERE login_id = 1342;
+UPDATE comment_disabled SET login_id = 1787 WHERE login_id = 1342;
+UPDATE comment_disabled SET disable_login_id = 1787 WHERE disable_login_id = 1342;
+DELETE FROM logins WHERE l_id = 1342;
+UPDATE res SET res_nickname = '<Enemy>' WHERE res_nickname='&lt;Enemy&gt;';
+
+UPDATE res SET res_nickname = 'Irēna', login_id = 28 WHERE res_nickname='Irēna,----&gt;';
+UPDATE res SET res_nickname = 'RuncisRenars', login_id = 137 WHERE res_id = 10627;
+UPDATE res SET res_nickname = 'Fauns', login_id = 50 WHERE res_id = 9104;
+
+UPDATE res SET res_nickname = 'minka->lv pagani' WHERE res_id = 1859;
+UPDATE res SET res_email = 'peace, love &drum\'n\'bass' WHERE res_id = 10757;
+UPDATE res SET res_nickname = 'corpse&fucin Jew' WHERE res_id = 10775;
+UPDATE res SET res_nickname = 'Termit&Apofeozs' WHERE res_id = 11056;
+UPDATE res SET res_nickname = ';::\"::' WHERE res_id = 11845;
+UPDATE res SET res_nickname = ';::\"::' WHERE res_id = 11847;
+UPDATE res SET res_nickname = ';::\"::' WHERE res_id = 11848;
+UPDATE res SET res_nickname = 'E&G.corp' WHERE res_id = 34334;
+UPDATE res SET res_nickname = 'E&G.corp' WHERE res_id = 34520;
+UPDATE res SET res_nickname = 'E&G.corp' WHERE res_id = 34532;
+UPDATE res SET res_nickname = 'E&P' WHERE res_id = 56905;
+
 ALTER TABLE `logins` DROP INDEX `l_nick`;
 ALTER TABLE `logins` ADD UNIQUE(`l_nick`);
 
