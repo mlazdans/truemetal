@@ -9,13 +9,5 @@ mysql -uroot truemetal_remote < updates_sql\r261.sql
 call mysql_procedures/import_procedures.bat
 C:\php82\php.exe sess_update.php
 
-@REM CALL res_meta_update(NULL);
-@REM CALL logins_meta_update(NULL);
-
-exit
-
 C:\php82\php.exe theme_collect_dup_comment.php > theme_comment_merged.log
 call mysql_procedures/import_procedures.bat
-
-@REM CALL res_meta_update(NULL);
-@REM CALL logins_meta_update(NULL);
