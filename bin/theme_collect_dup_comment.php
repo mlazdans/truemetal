@@ -90,12 +90,12 @@ class DeDupFirstComment extends DeDup
 }
 
 $ret =
-	DB::Query("DROP TRIGGER IF EXISTS res_trigger1") &&
-	DB::Query("DROP TRIGGER IF EXISTS res_trigger2") &&
-	DB::Query("DROP TRIGGER IF EXISTS res_trigger3") &&
-	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger1") &&
-	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger2") &&
-	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger3") &&
+	DB::Query("DROP TRIGGER IF EXISTS res_trigger_AD") &&
+	DB::Query("DROP TRIGGER IF EXISTS res_trigger_AI") &&
+	DB::Query("DROP TRIGGER IF EXISTS res_trigger_AU") &&
+	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger_AD") &&
+	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger_AI") &&
+	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger_AU") &&
 	DB::Query("CALL res_meta_update(NULL)") &&
 	DB::Query("CALL logins_meta_update(NULL)")
 ;
