@@ -2,8 +2,6 @@
 
 spl_autoload_register();
 
-set_time_limit(5);
-
 # TODO: mainot galerijām/foruma/commention utt login_id, trigerī nomainās arī res tabulā
 # TODO: mainot paroli chrome piedāvā ieseivot arī pie fail
 

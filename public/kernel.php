@@ -2,6 +2,8 @@
 
 require_once('../include/boot.php');
 
+set_time_limit(5);
+
 register_shutdown_function("tm_shutdown");
 
 # Bans
