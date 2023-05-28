@@ -44,7 +44,11 @@ class LoginsFilter extends AbstractFilter
 
 		if($this->q)
 		{
-			$sql->Where(search_to_sql_cond($this->q, ['l_nick', 'l_login', 'l_email', 'l_userip']));
+			if(preg_match('/[^\x20-\x7e]/', $this->q)){
+				$sql->Where(search_to_sql_cond($this->q, ['l_nick', 'l_login']));
+			} else {
+				$sql->Where(search_to_sql_cond($this->q, ['l_nick', 'l_login', 'l_email', 'l_userip']));
+			}
 		}
 
 		if($this->get_actitve_sessions){
