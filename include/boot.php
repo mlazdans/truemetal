@@ -1,6 +1,9 @@
 <?php declare(strict_types = 1);
 
 spl_autoload_register();
+
+set_time_limit(5);
+
 # TODO: mainot galerijām/foruma/commention utt login_id, trigerī nomainās arī res tabulā
 # TODO: mainot paroli chrome piedāvā ieseivot arī pie fail
 
@@ -31,6 +34,7 @@ $today                 = date("d.m.Y");
 # Config
 require_once($sys_root.'/include/config.php');
 
+# XXX: tad jebkurš mudaks, palaižot no cli, tagad ir admins?!
 $i_am_admin = (php_sapi_name() == 'cli') || in_array($ip, $sys_admins);
 $sys_debug = ($i_am_admin ? true : false);
 $DQDP_DEBUG = $sys_debug;
