@@ -55,6 +55,12 @@ DROP TRIGGER IF EXISTS `res_comment_trigger4`;
 DROP TRIGGER IF EXISTS `res_vote_trigger1`;
 DROP TRIGGER IF EXISTS `res_vote_trigger2`;
 DROP TRIGGER IF EXISTS `res_vote_trigger3`;
+
+DROP PROCEDURE IF EXISTS logins_update_meta_all;
+DROP PROCEDURE IF EXISTS logins_update_meta;
+DROP PROCEDURE IF EXISTS res_update_meta_all;
+DROP PROCEDURE IF EXISTS res_update_meta;
+
 -- add extlibs
 -- config izmaiņas
 -- r232-1.sql (šis fails)
