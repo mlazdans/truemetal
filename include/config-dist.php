@@ -15,6 +15,11 @@ $sys_include_paths = [
 	".",
 	$sys_root,
 	$sys_root.DIRECTORY_SEPARATOR.'lib',
+	$sys_root.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'Types',
+	$sys_root.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'Entity',
+	$sys_root.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'Filters',
+	$sys_root.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'gen'.DIRECTORY_SEPARATOR.'Traits',
+	$sys_root.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'gen'.DIRECTORY_SEPARATOR.'Types',
 	'/www/dqdp8',
 ];
 $sys_mail = 'info@truemetal.lv';
@@ -53,4 +58,4 @@ $top_banners = [
 
 $sys_css      = [ 'truemetal', 'article', 'jquery-ui' ];
 $sys_js       = [ 'truemetal' ];
-$sys_admin_js = [ 'truemetal', 'admin.js', 'tiny.config.js' ];
+$sys_admin_js = [ 'truemetal', 'admin', 'tiny.config' ];
