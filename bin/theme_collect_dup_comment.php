@@ -89,19 +89,26 @@ class DeDupFirstComment extends DeDup
 	}
 }
 
-$ret =
+$res =
 	DB::Query("DROP TRIGGER IF EXISTS res_trigger_AD") &&
 	DB::Query("DROP TRIGGER IF EXISTS res_trigger_AI") &&
 	DB::Query("DROP TRIGGER IF EXISTS res_trigger_AU") &&
 	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger_AD") &&
 	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger_AI") &&
-	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger_AU") &&
-	DB::Query("CALL res_meta_update(NULL)") &&
-	DB::Query("CALL logins_meta_update(NULL)")
+	DB::Query("DROP TRIGGER IF EXISTS res_vote_trigger_AU")
 ;
 
-if(!$ret){
+if(!$res){
 	print "Drop triggers failed\n";
+	exit(1);
+}
+
+$res = DB::withNewTrans(function(){
+	return DB::Query("CALL res_meta_update(NULL)") && DB::Query("CALL logins_meta_update(NULL)");
+});
+
+if(!$res){
+	print "Call update metas failed\n";
 	exit(1);
 }
 
@@ -117,8 +124,14 @@ if($res){
 	print "FAIL\n";
 }
 
-DB::Query("CALL res_meta_update(NULL)");
-DB::Query("CALL logins_meta_update(NULL)");
-
 print "\nTODO:\n";
 print "Re-create triggers!\n";
+
+$res = DB::withNewTrans(function(){
+	return DB::Query("CALL res_meta_update(NULL)") && DB::Query("CALL logins_meta_update(NULL)");
+});
+
+if(!$res){
+	print "Final Call update metas failed\n";
+	exit(1);
+}
