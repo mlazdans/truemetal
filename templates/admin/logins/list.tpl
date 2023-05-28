@@ -29,11 +29,12 @@ Nav neviena logina
 <form action="" method="post" id="logins_list">
 <table class="Main">
 <tr>
-	<td class="TD-cat">Nr</td>
 	<td class="TD-cat">
 		<input type="hidden" name="logins_count" value="{logins_count}">
 		<input type="checkbox" name="logins_check_all" onclick="Truemetal.checkAll(this);">
 	</td>
+	<td class="TD-cat">Nr</td>
+	<td class="TD-cat">ID</td>
 	<td class="TD-cat">Logins</td>
 	<td class="TD-cat">Segvārds</td>
 	<td class="TD-cat"><a href="?{q_sort_votes}">Reitings</a></td>
@@ -48,11 +49,12 @@ Nav neviena logina
 </tr>
 <!-- BEGIN BLOCK_logins -->
 <tr>
-	<td class="{l_color_class}">{logins_nr}</td>
 	<td class="{l_color_class}">
 		<input type="hidden" name="l_id{logins_nr}" value="{l_id}">
 		<input type="checkbox" name="l_checked{logins_nr}">
 	</td>
+	<td class="{l_color_class}">{logins_nr}</td>
+	<td class="{l_color_class}">{l_id}</td>
 	<td class="{l_color_class}">
 		<a href="{module_root}/{l_id}/" style="font-weight: bold;">{l_login}</a>
 	</td>
@@ -73,7 +75,7 @@ Nav neviena logina
 </tr>
 <!-- END BLOCK_logins -->
 <tr>
-	<td colspan="12">
+	<td colspan="13">
 		Iezīmētos:
 		<select name="action">
 			<option value="">---</option>
