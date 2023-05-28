@@ -10,11 +10,6 @@ function valid(string $value): bool
 	return !invalid($value);
 }
 
-// function my_strip_tags(string &$text): void
-// {
-// 	$text = htmlspecialchars($text, ENT_QUOTES);
-// }
-
 function get_month(int $i): ?string
 {
 	return [
@@ -86,8 +81,6 @@ function parse_text_data(string $data): string
 	array_splice($tmp[1], FORUM_MAXWORDS * 2);
 
 	$data = join("", $tmp[1]);
-	// my_strip_tags($data);
-	# TODO: glabāt vajadzētu bez parsēšans
 	$data = htmlspecialchars($data, ENT_QUOTES);
 	$data = preg_replace('/(\r\n|\n)/', '<br />\1', $data);
 

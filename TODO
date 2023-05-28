@@ -1,5 +1,13 @@
 *) Pārbaudīt vecos ierakstus, kuri DB tika ievietoti ar my_strip_tags() (resp ar
-htmlspecialchars()). Stripot jau vajadzētu tikai pie attēlošanas!
+parse_text_data($data['forum_datacompiled']);
+my_strip_tags($data['forum_name']);
+my_strip_tags($data['forum_username']);
+my_strip_tags($data['forum_useremail']);
+
+my_strip_tags($data['art_name']);
+
+parse_text_data($data['c_datacompiled']);
+
 
 *) main-item, kā whatnew.tpl, pārsaukt TD-cat un vispār savest kārtībā stilus
 

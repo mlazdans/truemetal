@@ -49,11 +49,6 @@ class Article
 		return $ret;
 	}
 
-	// function validate(&$data)
-	// {
-	// 	my_strip_tags($data['art_name']);
-	// }
-
 	function get_total($art_modid = 0)
 	{
 		$sql_add = '';

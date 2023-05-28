@@ -100,14 +100,6 @@ class Forum
 		return $ret;
 	}
 
-	// function validate(&$data)
-	// {
-	// 	parse_text_data($data['forum_datacompiled']);
-	// 	my_strip_tags($data['forum_name']);
-	// 	my_strip_tags($data['forum_username']);
-	// 	my_strip_tags($data['forum_useremail']);
-	// }
-
 	// public function set_forum_path(Template $template, $forum_id)
 	// {
 	// 	if(!($tree = $this->get_tree($forum_id)))
