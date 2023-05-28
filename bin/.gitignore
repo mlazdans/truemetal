@@ -1,2 +1,4 @@
 import.bat
 import_res.bat
+apply_update-232.sh
+mysql_procedures/import_procedures.sh
