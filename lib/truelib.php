@@ -307,7 +307,7 @@ function forum_det(
 		$res_data = $forum->res_data;
 	}
 
-	if($hl) {
+	if($res_data && $hl) {
 		$res_data = hl($res_data, $hl);
 	}
 
@@ -442,7 +442,7 @@ function comment_list(Template $C, ViewResCommentCollection $comments, string $h
 
 		$BLOCK_comment->set_array($item);
 
-		if($hl){
+		if($item->res_data_compiled && $hl){
 			$BLOCK_comment->set_var('res_data_compiled', hl($item->res_data_compiled, $hl));
 		}
 
@@ -1816,9 +1816,13 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 	$T->set_array($art);
 	$T->set_var('res_date_f', proc_date($art->res_entered));
 
-	if($hl)
+	if($art->res_intro && $hl)
 	{
 		$T->set_var('res_intro', hl($art->res_intro, $hl));
+	}
+
+	if($art->res_data && $hl)
+	{
 		$T->set_var('res_data', hl($art->res_data, $hl));
 	}
 
