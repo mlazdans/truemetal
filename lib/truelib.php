@@ -663,9 +663,9 @@ function private_profile(MainModule $template): ?Template
 		}
 
 		if($r == 0){
-			$T->set_var('truecomment_msg', 'Visvairāk plusotie komenti:');
+			$T->set_var('truecomment_msg', 'Visvairāk plusotie ieraksti:');
 		} elseif($r == 1){
-			$T->set_var('truecomment_msg', 'Visvairāk mīnusotie komenti:');
+			$T->set_var('truecomment_msg', 'Visvairāk mīnusotie ieraksti:');
 		} else {
 			assert(false, "unreachable");
 		}
