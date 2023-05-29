@@ -2,7 +2,7 @@
 
 class ViewResGDDataEntity extends AbstractResEntity
 {
-	use ViewResGDDataEntityTrait;
+	use ViewResGdDataEntityTrait;
 
 	static function getById(int $id, bool $ignore_disabled = false, ?ResGDFilter $F = new ResGDFilter): ?ViewResGDDataType
 	{
