@@ -17,7 +17,6 @@ $sess_ids = DB::withNewTrans(function(){
 	ob_start();
 	$allowed = ['forums', 'res'];
 	$p = DB::Prepare("UPDATE logins SET l_sess_id = ?, l_sessiondata = ? WHERE l_id = ?");
-	// $q = DB::Query("SELECT * FROM sessions ORDER BY sess_lastaccess DESC");
 	$q = DB::Query("SELECT * FROM logins");
 	$sess_ids = [];
 	while($data = DB::Fetch($q))
