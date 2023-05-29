@@ -61,7 +61,7 @@ source titles : pages
 
 source with_comments : pages
 {
-	sql_query            = SELECT doc_id, table_id, res_id, res_resid, doc_source_id, doc_name, doc_content_with_comments, doc_comment_count, doc_comment_last_date, doc_entered FROM view_documents;
+	sql_query            = SELECT doc_id, table_id, res_id, res_resid, doc_source_id, doc_name, res_name, doc_content_with_comments, doc_comment_count, doc_comment_last_date, doc_entered FROM view_documents;
 }
 
 # inherited source example
