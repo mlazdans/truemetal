@@ -1,12 +1,10 @@
 /* Plusotākie komenti */
 SELECT
-	l_nick,
-	res_votes,
-	c_data
+	r.login_id,
+	r.res_nickname,
+	rm.*
 FROM res r
-JOIN logins ON l_id = r.login_id
-JOIN comment f ON f.res_id = r.res_id
-ORDER BY
-	res_votes DESC
+JOIN res_meta rm ON rm.res_id = r.res_id
+ORDER BY rm.res_votes DESC
 LIMIT 10
 
