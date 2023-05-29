@@ -236,11 +236,9 @@ class MainModule
 		$block = User::logged() ? 'BLOCK_online_item' : 'BLOCK_online_item_notloged';
 
 		$active_sessions = Logins::get_active();
-		if($active_sessions->count())
-		{
-			$TLogin->enable($block);
-		}
+		$online_total = count($active_sessions);
 
+		$TLogin->enable_if($online_total > 0, $block);
 		foreach($active_sessions as $data)
 		{
 			$TLogin->set_var('online_nick', $data->l_nick);
@@ -248,7 +246,6 @@ class MainModule
 			$TLogin->parse_block($block, TMPL_APPEND);
 		}
 
-		$online_total = count($active_sessions);
 
 		return $this->add_right_item("Online [$online_total]", $TLogin->parse());
 	}
