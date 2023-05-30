@@ -2140,10 +2140,11 @@ function tm_search(SearchParams $params)
 
 	# Sphinx
 	$spx = new SphinxClient();
-	$spx->SetConnectTimeout(4);
+	$spx->_mode = SPH_MATCH_BOOLEAN;
 	if($params->limit){
 		$spx->SetLimits(0, $params->limit);
 	}
+	$spx->SetConnectTimeout(4);
 	$spx->SetServer('127.0.0.1', 3313);
 
 	$spx->SetSortMode(SPH_SORT_ATTR_DESC, "doc_comment_last_date");
@@ -2250,7 +2251,7 @@ function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
 
 	$search_msg = [];
 	if($res === false){
-		$template->error("Meklētāja kļūda");
+		$template->error("Meklētāja kļūda. Ļoti iespējams nekorekta vai nepabeigta meklēšanas izteiksme ar simboliem: ()-!");
 		user_error($spx->GetLastError(), E_USER_WARNING);
 		return $T;
 	} elseif($res['total_found'] == 0) {
