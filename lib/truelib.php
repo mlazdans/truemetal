@@ -2056,32 +2056,25 @@ function update_profile(MainModule $template, array $data): bool
 	return true;
 }
 
-# TODO: pēc migrēšanas uz Entity, te jau būs ?int
-function format_vote(mixed $res_votes): string
+function format_vote(?int $res_votes): string
 {
-	$res_votes = (int)$res_votes;
-
-	if($res_votes > 0)
-	{
+	if(empty($res_votes)){
+		return "0";
+	} elseif($res_votes > 0){
 		return "+$res_votes";
 	} elseif($res_votes < 0) {
 		return "$res_votes";
-	} else {
-		return "0";
 	}
 }
 
-function comment_vote_class(mixed $res_votes): string
+function comment_vote_class(?int $res_votes): string
 {
-	$res_votes = (int)$res_votes;
-
-	if($res_votes > 0)
-	{
+	if(empty($res_votes)){
+		return "vote-zero";
+	} elseif($res_votes > 0){
 		return "vote-plus";
 	} elseif($res_votes < 0) {
 		return "vote-minus";
-	} else {
-		return "vote-zero";
 	}
 }
 
