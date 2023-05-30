@@ -10,3 +10,7 @@ Ieeja no 18:00, bez maksas.
 *) Salikt login_id res (galerijām, tēmām, utml)
 
 *) trim ievadlaukus, kuriem ir UNIQUE index. Kā izrādās, MySQL ļauj VARCHAR laukos ievadīt priekšā un pakaļā space un UNIQUE indexam pohuj!!!
+
+*) notestēt res_name (u.c. laukus) ar htmlspecialchars, ieskaitot hl()
+
+*) Atdalīt: Pasākumi, Interviews, Reviews no Forums
