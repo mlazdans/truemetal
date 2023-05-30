@@ -15,8 +15,8 @@ trait StatsTypeTrait {
 	readonly int $stat_userip;
 	readonly string $stat_entered;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null) {
-		parent::__construct($data, $defaults);
+	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
+		parent::__construct($data, $defaults, $is_dirty);
 	}
 
 	static function initstat_module(mixed $v): string {

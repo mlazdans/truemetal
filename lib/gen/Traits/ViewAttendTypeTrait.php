@@ -15,8 +15,8 @@ trait ViewAttendTypeTrait {
 	readonly string $l_nick;
 	readonly ?string $l_hash;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null) {
-		parent::__construct($data, $defaults);
+	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
+		parent::__construct($data, $defaults, $is_dirty);
 		if(!prop_initialized($this, 'a_attended'))$this->a_attended = (int)1;
 	}
 

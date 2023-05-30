@@ -44,8 +44,8 @@ trait ViewResArticleTypeTrait {
 	readonly ?string $res_comment_last_date;
 	readonly ?string $l_hash;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null) {
-		parent::__construct($data, $defaults);
+	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
+		parent::__construct($data, $defaults, $is_dirty);
 		if(!prop_initialized($this, 'module_active'))$this->module_active = (int)1;
 		if(!prop_initialized($this, 'module_visible'))$this->module_visible = (int)1;
 		if(!prop_initialized($this, 'res_visible'))$this->res_visible = (int)1;

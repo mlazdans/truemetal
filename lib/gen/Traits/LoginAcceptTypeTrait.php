@@ -16,8 +16,8 @@ trait LoginAcceptTypeTrait {
 	readonly ?string $la_accepted;
 	readonly int $la_sent;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null) {
-		parent::__construct($data, $defaults);
+	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
+		parent::__construct($data, $defaults, $is_dirty);
 	}
 
 	static function initla_email(mixed $v): string {

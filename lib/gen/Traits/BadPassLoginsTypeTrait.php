@@ -11,8 +11,8 @@ trait BadPassLoginsTypeTrait {
 	readonly string $pass_hash;
 	readonly int $l_id;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null) {
-		parent::__construct($data, $defaults);
+	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
+		parent::__construct($data, $defaults, $is_dirty);
 	}
 
 	static function initpass_hash(mixed $v): string {

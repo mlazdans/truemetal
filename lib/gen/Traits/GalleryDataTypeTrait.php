@@ -14,8 +14,8 @@ trait GalleryDataTypeTrait {
 	readonly string $gd_data;
 	readonly string $gd_thumb;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null) {
-		parent::__construct($data, $defaults);
+	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
+		parent::__construct($data, $defaults, $is_dirty);
 	}
 
 	static function initgd_mime(mixed $v): string {

@@ -14,8 +14,8 @@ trait ViewJubilarsTypeTrait {
 	readonly string $l_nick;
 	readonly ?string $l_hash;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null) {
-		parent::__construct($data, $defaults);
+	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
+		parent::__construct($data, $defaults, $is_dirty);
 	}
 
 	static function initentered_stamp(mixed $v): string {

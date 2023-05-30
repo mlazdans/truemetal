@@ -21,8 +21,8 @@ trait ViewMainpageTypeTrait {
 	readonly ?string $res_comment_last_date;
 	readonly ?string $type_id;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null) {
-		parent::__construct($data, $defaults);
+	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
+		parent::__construct($data, $defaults, $is_dirty);
 		if(!prop_initialized($this, 'module_id'))$this->module_id = '';
 	}
 

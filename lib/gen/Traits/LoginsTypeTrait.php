@@ -32,8 +32,8 @@ trait LoginsTypeTrait {
 	readonly ?int $votes_minus;
 	readonly ?int $comment_count;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null) {
-		parent::__construct($data, $defaults);
+	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
+		parent::__construct($data, $defaults, $is_dirty);
 		if(!prop_initialized($this, 'l_active'))$this->l_active = (int)1;
 	}
 

@@ -11,8 +11,8 @@ trait ArticleTypeTrait {
 	readonly ?int $res_id;
 	readonly int $art_modid;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null) {
-		parent::__construct($data, $defaults);
+	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
+		parent::__construct($data, $defaults, $is_dirty);
 	}
 
 	function save(): mixed {

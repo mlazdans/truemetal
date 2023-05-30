@@ -16,8 +16,8 @@ trait ResMetaTypeTrait {
 	readonly ?int $res_comment_count;
 	readonly ?string $res_comment_last_date;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null) {
-		parent::__construct($data, $defaults);
+	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
+		parent::__construct($data, $defaults, $is_dirty);
 	}
 
 	function save(): mixed {

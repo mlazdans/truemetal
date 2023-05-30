@@ -21,8 +21,8 @@ trait ModulesTypeTrait {
 	readonly string $module_entered;
 	readonly string $module_type;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null) {
-		parent::__construct($data, $defaults);
+	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
+		parent::__construct($data, $defaults, $is_dirty);
 		if(!prop_initialized($this, 'module_active'))$this->module_active = (int)1;
 		if(!prop_initialized($this, 'module_visible'))$this->module_visible = (int)1;
 	}
