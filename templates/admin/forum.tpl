@@ -13,14 +13,14 @@
 	<td class="right nowrap">Nosaukums:</td>
 	<td>
 		<input type="hidden" name="action" value="save_forum">
-		<input type="hidden" name="data[forum_id]" value="{forum_id}">
-		<input type="text" name="data[res_name]" value="{res_name}" size="64">
+		<input type="hidden" name="forum[forum_id]" value="{forum_id}">
+		<input type="text" name="res[res_name]" value="{res_name}" size="64">
 	</td>
 </tr>
 <tr>
 	<td class="right nowrap">Tips</td>
 	<td>
-		<select name="data[type_id]">
+		<select name="forum[type_id]">
 		<!-- BEGIN BLOCK_forum_type_list -->
 		<option value="{type_id}"{type_id_selected}>{type_name}</option>
 		<!-- END BLOCK_forum_type_list -->
@@ -30,31 +30,31 @@
 <tr>
 	<td class="right nowrap">Pasākuma sākums:</td>
 	<td>
-		<input type="text" name="data[event_startdate]" value="{event_startdate}">
+		<input type="text" name="forum[event_startdate]" value="{event_startdate}">
 	</td>
 </tr>
 <tr>
 	<td class="right nowrap"></td>
 	<td>
-		<label><input type="checkbox" name="data[res_visible]"{res_visible1}> aktīvs</label>
+		<label><input type="checkbox" value="1" name="res[res_visible]"{res_visible1}> aktīvs</label>
 	</td>
 </tr>
 <tr>
 	<td class="right nowrap"></td>
 	<td>
-		<label><input type="checkbox" name="data[forum_allow_childs]"{forum_allow_childs1}> var būt apakštēmas</label>
+		<label><input type="checkbox" value="1" name="forum[forum_allow_childs]"{forum_allow_childs1}> var būt apakštēmas</label>
 	</td>
 </tr>
 <tr>
 	<td class="right nowrap"></td>
 	<td>
-		<label><input type="checkbox" name="data[forum_closed]"{forum_closed1}> tēma slēgta</label>
+		<label><input type="checkbox" value="1" name="forum[forum_closed]"{forum_closed1}> tēma slēgta</label>
 	</td>
 </tr>
 <tr>
 	<td class="right nowrap">Ievadīts:</td>
 	<td>
-		<input type="text" name="data[res_entered]" value="{res_entered}">
+		<input type="text" name="res[res_entered]" value="{res_entered}">
 	</td>
 </tr>
 <!--
@@ -68,7 +68,7 @@
 <tr>
 	<td class="right nowrap">Rādīt:</td>
 	<td>
-		<select name="data[forum_display]">
+		<select name="forum[forum_display]">
 			<option value="0"{forum_display0}>Data Compiled</option>
 			<option value="1"{forum_display1}>Data</option>
 		</select>
@@ -77,7 +77,7 @@
 <tr>
 	<td class="right nowrap">Rādīt arī zem</td>
 	<td>
-		<select name="data[forum_modid]">
+		<select name="forum[forum_modid]">
 		<option value="" style="font-style: italic;">-nerādīt-</option>
 		<!-- BEGIN BLOCK_modules_under_list -->
 		<option value="{mod_id}"{module_selected}>{module_padding}{module_name}</option>
@@ -88,7 +88,7 @@
 <tr>
 	<td class="right nowrap" valign="top">Dati:</td>
 	<td>
-		<textarea id="res_data" name="data[res_data]" rows="15" cols="150">{res_data}</textarea>
+		<textarea id="res_data" name="res[res_data]" rows="15" cols="150">{res_data}</textarea>
 		<p><input
 			type="button"
 			value="Editor"
@@ -108,15 +108,15 @@ if($('#forum_data').hasClass('edit'))
 </tr>
 <tr>
 	<td class="right nowrap">Lietotāja vārds:</td>
-	<td><input type="text" name="data[res_nickname]" value="{res_nickname}"></td>
+	<td><input type="text" name="res[res_nickname]" value="{res_nickname}"></td>
 </tr>
 <tr>
 	<td class="right nowrap">Lietotāja e-pasts:</td>
-	<td><input type="text" name="data[res_email]" value="{res_email}"></td>
+	<td><input type="text" name="res[res_email]" value="{res_email}"></td>
 </tr>
 <tr>
 	<td class="right nowrap">Lietotāja IP:</td>
-	<td><input type="text" name="data[res_ip]" value="{res_ip}"></td>
+	<td><input type="text" name="res[res_ip]" value="{res_ip}"></td>
 </tr>
 <tr>
 	<td colspan="2">
@@ -138,7 +138,7 @@ if($('#forum_data').hasClass('edit'))
 </tr>
 <tr>
 	<td>Nosaukums:</td>
-	<td><input type="text" name="data[res_name]" maxlength="32" size="20"></td>
+	<td><input type="text" name="res[res_name]" maxlength="32" size="20"></td>
 	<td><input type="submit" value="Pievienot"></td>
 </tr>
 </table>

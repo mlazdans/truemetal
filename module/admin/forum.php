@@ -1,8 +1,10 @@
 <?php declare(strict_types = 1);
 
 use dqdp\Template;
+use dqdp\TODO;
 
-function set_themes(Template $T, ViewResForumCollection $data, $d = 0) {
+function set_themes(Template $T, ViewResForumCollection $data, $d = 0)
+{
 	if($d == 2)
 		return 0;
 
@@ -54,15 +56,42 @@ function root_forum(AdminModule $template): Template
 	return $T;
 }
 
+function save_forum(ViewResForumType $OLD)
+{
+	$Res              = ResType::initFromDirty(post('res'));
+	$Res->res_id      = $OLD->res_id;
+	$Res->res_visible = (int)isset($Res->res_visible);
+
+	$Forum                     = ForumType::initFromDirty(post('forum'));
+	$Forum->forum_id           = $OLD->forum_id;
+	$Forum->forum_closed       = (int)isset($Forum->forum_closed);
+	$Forum->forum_allow_childs = (int)isset($Forum->forum_allow_childs);
+	$Forum->event_startdate    = empty($Forum->event_startdate) ? null : date('Y-m-d', strtotime($Forum->event_startdate));
+
+	if(empty($Forum->event_startdate))
+	{
+		$Forum->type_id = Forum::TYPE_STD;
+		$Forum->event_startdate = null;
+	} else {
+		$Forum->type_id = Forum::TYPE_EVENT;
+	}
+
+	return DB::withNewTrans(function() use ($Res, $Forum){
+		return $Res->update() && $Forum->update();
+	});
+}
+
 function open_forum(AdminModule $template, int $forum_id): ?Template
 {
+	global $module_root;
+
+	$action = post('action');
+
 	$T = $template->add_file("admin/forum.tpl");
 
 	$T->set_var('forum_id', $forum_id);
 
-	$forum = (new ViewResForumEntity)->getById($forum_id, true);
-
-	if(!$forum)
+	if(!($forum = (new ViewResForumEntity)->getById($forum_id, true)))
 	{
 		$template->not_found();
 		return null;
@@ -118,6 +147,17 @@ function open_forum(AdminModule $template, int $forum_id): ?Template
 
 	$T->set_var("forum_display".$forum->forum_display, ' selected="selected"');
 
+	if($action == 'save_forum')
+	{
+		if(save_forum($forum))
+		{
+			header("Location: $module_root/$forum_id/");
+			return null;
+		} else {
+			$T->set_array(specialchars($_POST));
+		}
+	}
+
 	return $T;
 }
 
@@ -136,41 +176,31 @@ if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide', 'co
 
 if(in_array($action, array('delete_multiple', 'activate_multiple', 'deactivate_multiple', 'move_multiple', 'close_multiple', 'open_multiple')))
 {
-	if($forum->process_action($_POST, $action, Res::ACT_VALIDATE))
-	{
-		if($forum_id)
-			header("Location: $module_root/$forum_id/");
-		else
-			header("Location: $module_root/");
-	}
-	return;
+	new TODO("Implement multi action");
+	// if($forum->process_action($_POST, $action, Res::ACT_VALIDATE))
+	// {
+	// 	if($forum_id)
+	// 		header("Location: $module_root/$forum_id/");
+	// 	else
+	// 		header("Location: $module_root/");
+	// }
+	// return;
 }
 
-if($action == 'save_forum') {
-	if(isset($_POST['data'])) {
-		if($forum->save($_POST['data'], Res::ACT_VALIDATE))
-			if($forum_id)
-				header("Location: $module_root/$forum_id/");
-			else
-				header("Location: $module_root/");
-	}
-	return;
-}
-
-if($action == 'add_forum') {
-	if(isset($_POST['data'])) {
-		$_POST['data']['forum_allowchilds'] = 'Y';
-		$_POST['data']['forum_active'] = 'N';
-		if($forum->add($forum_id, $_POST['data'], Res::ACT_VALIDATE, Res::STATE_ALL))
-		{
-			if($forum_id)
-				header("Location: $module_root/$forum_id/");
-			else
-				header("Location: $module_root/");
-		}
-	}
-	return;
-}
+// if($action == 'add_forum') {
+// 	if(isset($_POST['data'])) {
+// 		$_POST['data']['forum_allowchilds'] = 'Y';
+// 		$_POST['data']['forum_active'] = 'N';
+// 		if($forum->add($forum_id, $_POST['data'], Res::ACT_VALIDATE, Res::STATE_ALL))
+// 		{
+// 			if($forum_id)
+// 				header("Location: $module_root/$forum_id/");
+// 			else
+// 				header("Location: $module_root/");
+// 		}
+// 	}
+// 	return;
+// }
 
 $template = new AdminModule('forum');
 $template->set_title('Admin :: forumi');
