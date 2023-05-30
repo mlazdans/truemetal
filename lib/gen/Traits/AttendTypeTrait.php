@@ -7,14 +7,16 @@ use dqdp\PropertyInitTrait;
 trait AttendTypeTrait {
 	use PropertyInitTrait;
 
-	readonly int $l_id;
-	readonly int $res_id;
-	readonly int $a_attended;
-	readonly string $a_entered;
+	var int $l_id;
+	var int $res_id;
+	var int $a_attended;
+	var string $a_entered;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
-		parent::__construct($data, $defaults, $is_dirty);
-		if(!prop_initialized($this, 'a_attended'))$this->a_attended = (int)1;
+	function __construct(?int $l_id = null, ?int $res_id = null, ?int $a_attended = null, ?string $a_entered = null) {
+		if(isset($l_id))$this->l_id = $l_id;
+		if(isset($res_id))$this->res_id = $res_id;
+		if(isset($a_attended))$this->a_attended = $a_attended;
+		if(isset($a_entered))$this->a_entered = $a_entered;
 	}
 
 	function save(): mixed {

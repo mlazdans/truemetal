@@ -7,11 +7,12 @@ use dqdp\PropertyInitTrait;
 trait CommentTypeTrait {
 	use PropertyInitTrait;
 
-	readonly int $c_id;
-	readonly ?int $res_id;
+	var int $c_id;
+	var ?int $res_id;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
-		parent::__construct($data, $defaults, $is_dirty);
+	function __construct(?int $c_id = null, ?int $res_id = null) {
+		if(isset($c_id))$this->c_id = $c_id;
+		if(isset($res_id))$this->res_id = $res_id;
 	}
 
 	function save(): mixed {

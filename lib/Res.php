@@ -43,7 +43,7 @@ class Res
 		?string $res_data_compiled = null,
 		): ResType
 	{
-		return ResType::initFrom(new ResDummy(
+		return new ResType(
 			res_resid: $res_resid,
 			table_id: $table_id,
 			login_id: User::id(),
@@ -54,7 +54,7 @@ class Res
 			res_intro: $res_intro,
 			res_data: $res_data,
 			res_data_compiled: $res_data_compiled ? $res_data_compiled : parse_text_data($res_data),
-		));
+		);
 	}
 
 	# TODO: varbūt vajadzētu kaut kā apvienot daudzās vietas, kur šis tiek izsaukt, jo
@@ -69,7 +69,7 @@ class Res
 
 		return DB::withNewTrans(function() use ($R){
 			if($res_id = $R->insert()){
-				return CommentType::initFrom(new CommentDummy(
+				return (new CommentType(
 					res_id: $res_id
 				))->insert();
 			}

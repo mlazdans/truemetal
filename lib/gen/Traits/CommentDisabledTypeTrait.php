@@ -7,11 +7,12 @@ use dqdp\PropertyInitTrait;
 trait CommentDisabledTypeTrait {
 	use PropertyInitTrait;
 
-	readonly int $login_id;
-	readonly int $disable_login_id;
+	var int $login_id;
+	var int $disable_login_id;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
-		parent::__construct($data, $defaults, $is_dirty);
+	function __construct(?int $login_id = null, ?int $disable_login_id = null) {
+		if(isset($login_id))$this->login_id = $login_id;
+		if(isset($disable_login_id))$this->disable_login_id = $disable_login_id;
 	}
 
 	function save(): mixed {

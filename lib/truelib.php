@@ -115,7 +115,7 @@ function forum_add_theme(MainModule $template, Template $T, ViewResForumType $fo
 
 	$forum_id = DB::withNewTrans(function() use ($R){
 		if($res_id = $R->insert()){
-			return ForumType::initFrom(new ForumDummy(
+			return (new ForumType(
 				res_id: $res_id,
 				forum_allow_childs: 0
 			))->insert();
@@ -1985,9 +1985,11 @@ function update_profile(MainModule $template, array $data): bool
 		return false;
 	}
 
-	$upd = new LoginsDummy();
-	$upd->l_emailvisible = empty($data['l_emailvisible']) ? 0 : 1;
-	$upd->l_disable_youtube = empty($data['l_disable_youtube']) ? 0 : 1;
+	$upd = new LoginsType(
+		l_id: $l_id,
+		l_emailvisible: empty($data['l_emailvisible']) ? 0 : 1,
+		l_disable_youtube: empty($data['l_disable_youtube']) ? 0 : 1,
+	);
 
 	# TODO: constrain in DB?
 	if(in_array($data['l_forumsort_themes'], [Forum::SORT_THEME, Forum::SORT_LASTCOMMENT])){
@@ -1997,7 +1999,7 @@ function update_profile(MainModule $template, array $data): bool
 		$upd->l_forumsort_msg = $data['l_forumsort_msg'];
 	}
 
-	if(!(new LoginsEntity)->update($l_id, new LoginsType($upd)))
+	if(!$upd->update())
 	{
 		$template->error("Datubāzes kļūda");
 		return false;

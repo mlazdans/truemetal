@@ -1,8 +1,6 @@
 <?php declare(strict_types = 1);
 
-use dqdp\DataObject;
-
-class ViewResArticleType extends DataObject implements ResourceTypeInterface {
+class ViewResArticleType implements ResourceTypeInterface {
 	use ViewResArticleTypeTrait;
 
 	function Route(int $c_id = null): string

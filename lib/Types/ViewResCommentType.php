@@ -1,8 +1,6 @@
 <?php declare(strict_types = 1);
 
-use dqdp\DataObject;
-
-class ViewResCommentType extends DataObject implements ResourceTypeInterface {
+class ViewResCommentType implements ResourceTypeInterface {
 	use ViewResCommentTypeTrait;
 
 	function Route(int $c_id = null): ?string

@@ -7,17 +7,24 @@ use dqdp\PropertyInitTrait;
 trait ForumTypeTrait {
 	use PropertyInitTrait;
 
-	readonly int $forum_id;
-	readonly ?int $res_id;
-	readonly ?int $forum_modid;
-	readonly int $forum_allow_childs;
-	readonly int $forum_closed;
-	readonly int $forum_display;
-	readonly int $type_id;
-	readonly ?string $event_startdate;
+	var int $forum_id;
+	var ?int $res_id;
+	var ?int $forum_modid;
+	var int $forum_allow_childs;
+	var int $forum_closed;
+	var int $forum_display;
+	var int $type_id;
+	var ?string $event_startdate;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
-		parent::__construct($data, $defaults, $is_dirty);
+	function __construct(?int $forum_id = null, ?int $res_id = null, ?int $forum_modid = null, ?int $forum_allow_childs = null, ?int $forum_closed = null, ?int $forum_display = null, ?int $type_id = null, ?string $event_startdate = null) {
+		if(isset($forum_id))$this->forum_id = $forum_id;
+		if(isset($res_id))$this->res_id = $res_id;
+		if(isset($forum_modid))$this->forum_modid = $forum_modid;
+		if(isset($forum_allow_childs))$this->forum_allow_childs = $forum_allow_childs;
+		if(isset($forum_closed))$this->forum_closed = $forum_closed;
+		if(isset($forum_display))$this->forum_display = $forum_display;
+		if(isset($type_id))$this->type_id = $type_id;
+		if(isset($event_startdate))$this->event_startdate = $event_startdate;
 	}
 
 	function save(): mixed {

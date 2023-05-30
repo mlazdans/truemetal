@@ -6,12 +6,10 @@ class AttendEntity extends Entity
 
 	static function attend(int $login_id, int $res_id, int $attend)
 	{
-		$D = new AttendDummy(
+		return (new AttendType(
 			l_id:$login_id,
 			res_id:$res_id,
 			a_attended:$attend
-		);
-
-		return AttendType::initFrom($D)->save();
+		))->save();
 	}
 }

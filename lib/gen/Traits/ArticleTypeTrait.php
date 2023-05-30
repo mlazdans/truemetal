@@ -7,12 +7,14 @@ use dqdp\PropertyInitTrait;
 trait ArticleTypeTrait {
 	use PropertyInitTrait;
 
-	readonly int $art_id;
-	readonly ?int $res_id;
-	readonly int $art_modid;
+	var int $art_id;
+	var ?int $res_id;
+	var int $art_modid;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
-		parent::__construct($data, $defaults, $is_dirty);
+	function __construct(?int $art_id = null, ?int $res_id = null, ?int $art_modid = null) {
+		if(isset($art_id))$this->art_id = $art_id;
+		if(isset($res_id))$this->res_id = $res_id;
+		if(isset($art_modid))$this->art_modid = $art_modid;
 	}
 
 	function save(): mixed {

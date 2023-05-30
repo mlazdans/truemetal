@@ -7,12 +7,14 @@ use dqdp\PropertyInitTrait;
 trait GalleryTypeTrait {
 	use PropertyInitTrait;
 
-	readonly int $gal_id;
-	readonly ?int $res_id;
-	readonly int $gal_ggid;
+	var int $gal_id;
+	var ?int $res_id;
+	var int $gal_ggid;
 
-	function __construct(array|object|null $data = null, array|object|null $defaults = null, bool $is_dirty = false) {
-		parent::__construct($data, $defaults, $is_dirty);
+	function __construct(?int $gal_id = null, ?int $res_id = null, ?int $gal_ggid = null) {
+		if(isset($gal_id))$this->gal_id = $gal_id;
+		if(isset($res_id))$this->res_id = $res_id;
+		if(isset($gal_ggid))$this->gal_ggid = $gal_ggid;
 	}
 
 	function save(): mixed {

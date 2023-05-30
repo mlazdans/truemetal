@@ -138,21 +138,21 @@ class Logins
 	# TODO: apvienot accept un forget
 	static function insert_accept_code(string $l_email, ?string $new_email = null): ?string
 	{
-		$LA = LoginAcceptType::initFrom(new LoginAcceptDummy(
+		$LA = new LoginAcceptType(
 			la_email: $l_email,
 			la_new_email: $new_email,
 			la_code: static::genCode(),
-		));
+		);
 
 		return $LA->insert() ? $LA->la_code : null;
 	}
 
 	static function insert_forgot_code(string $l_email): ?string
 	{
-		$F = LoginForgotType::initFrom(new LoginForgotDummy(
+		$F = new LoginForgotType(
 			f_email: $l_email,
 			f_code: static::genCode(),
-		));
+		);
 
 		return $F->insert() ? $F->f_code : null;
 	}
@@ -231,13 +231,13 @@ class Logins
 
 	static function register(array $post_data): ?int
 	{
-		$L = LoginsType::initFrom(new LoginsDummy(
+		$L = new LoginsType(
 			l_hash: Logins::gen_login_hash(),
 			l_nick: $post_data['l_nick'],
 			l_password: Logins::gen_password_hash($post_data['l_password']),
 			l_email: $post_data['l_email'],
 			l_userip: User::ip()
-		));
+		);
 
 		$new_l_id = DB::withNewTrans(function() use ($L) {
 			global $sys_domain;
