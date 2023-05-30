@@ -301,6 +301,7 @@ function forum_det(
 	$T->set_var('res_votes', format_vote($forum->res_votes));
 	$T->set_var('res_route', $forum->Route());
 	$T->set_var('comment_vote_class', comment_vote_class($forum->res_votes));
+	$T->set_var_if($forum->res_name && $hl, 'res_name', hl($forum->res_name, $hl));
 
 	$res_data = $forum->res_data_compiled;
 	if($forum->forum_display == Forum::DISPLAY_DATA){
@@ -1816,15 +1817,9 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 	$T->set_array($art);
 	$T->set_var('res_date_f', proc_date($art->res_entered));
 
-	if($art->res_intro && $hl)
-	{
-		$T->set_var('res_intro', hl($art->res_intro, $hl));
-	}
-
-	if($art->res_data && $hl)
-	{
-		$T->set_var('res_data', hl($art->res_data, $hl));
-	}
+	$T->set_var_if($art->res_intro && $hl, 'res_intro', hl($art->res_intro, $hl));
+	$T->set_var_if($art->res_data && $hl, 'res_data', hl($art->res_data, $hl));
+	$T->set_var_if($art->res_name && $hl, 'res_name', hl($art->res_name, $hl));
 
 	return $T;
 }
