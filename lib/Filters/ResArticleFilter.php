@@ -5,7 +5,7 @@ use dqdp\SQL\Select;
 class ResArticleFilter extends ResFilter
 {
 	function __construct(
-		// NOTE: keep sync with ResFilter
+		# keep sync with ResFilter
 		public ?int $res_id                = null,
 		public null|int|false $res_resid   = null, // false: WHERE res_resid IS NULL
 		public ?int $table_id              = null,
@@ -13,11 +13,12 @@ class ResArticleFilter extends ResFilter
 		public null|int|false $res_visible = 1,
 		public ?array $ips                 = null,
 		public ?array $res_ids             = null,
-		// ArticleFilter
+
+		# ArticleFilter
 		public ?int $art_id              = null,
 		public ?int $art_modid              = null,
 
-		// Module filter
+		# Module filter
 		public null|int|false $module_active = 1,
 
 	) {}

@@ -5,7 +5,7 @@ use dqdp\SQL\Select;
 class ResForumFilter extends ResFilter
 {
 	function __construct(
-		// NOTE: keep sync with ResFilter
+		# keep sync with ResFilter
 		public ?int $res_id                = null,
 		public null|int|false $res_resid   = null, // false: WHERE res_resid IS NULL
 		public ?int $table_id              = null,
@@ -13,7 +13,8 @@ class ResForumFilter extends ResFilter
 		public null|int|false $res_visible = 1,
 		public ?array $ips                 = null,
 		public ?array $res_ids             = null,
-		// ForumFilter
+
+		# ForumFilter
 		public ?int $forum_id              = null,
 		public ?bool $actual_events        = null,
 		public ?int $forum_allow_childs    = null,

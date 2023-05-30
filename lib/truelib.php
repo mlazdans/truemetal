@@ -2228,7 +2228,6 @@ function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
 		}
 	}
 
-	# TODO: kārtošana pēc datuma gan article, gan forum. Tagad kārtojas atsevišķi
 	$params = new SearchParams(
 		q:$search_q,
 		index:$index,

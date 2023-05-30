@@ -5,8 +5,8 @@ use dqdp\SQL\Select;
 
 class ResFilter extends AbstractFilter
 {
-	# NOTE: ja te kaut ko liek klāt, tad labāk sync ar pārējām klasēm, kas extendo šo
 	function __construct(
+		# ja te kaut ko liek klāt, tad labāk sync ar pārējām klasēm, kas extendo šo
 		public ?int $res_id                = null,
 		public null|int|false $res_resid   = null, // false: WHERE res_resid IS NULL
 		public ?int $table_id              = null,
@@ -18,24 +18,21 @@ class ResFilter extends AbstractFilter
 
 	protected function apply_filter(Select $sql): Select
 	{
-		// $prefix = "res.";
-		$prefix = "";
-
-		$this->apply_set_fields($sql, ['res_id', 'table_id', 'login_id'], $prefix);
-		$this->apply_falsed_fields($sql, ['res_visible'], $prefix);
+		$this->apply_set_fields($sql, ['res_id', 'table_id', 'login_id']);
+		$this->apply_falsed_fields($sql, ['res_visible']);
 
 		if(isset($this->res_resid))
 		{
 			if($this->res_resid === false)
 			{
-				$sql->Where($prefix."res_resid IS NULL");
+				$sql->Where("res_resid IS NULL");
 			} else {
-				$sql->Where([$prefix."res_resid = ?", $this->res_resid]);
+				$sql->Where(["res_resid = ?", $this->res_resid]);
 			}
 		}
 
 		if(!is_null($this->ips)){
-			$sql->WhereIn($prefix.'res_ip', $this->ips);
+			$sql->WhereIn('res_ip', $this->ips);
 		}
 
 		if(!is_null($this->res_ids)){
