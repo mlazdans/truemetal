@@ -9,7 +9,7 @@ trait LoginsTypeTrait {
 
 	var int $l_id;
 	var ?string $l_hash;
-	var string $l_login;
+	var ?string $l_login;
 	var string $l_nick;
 	var ?string $l_password;
 	var ?string $l_email;
