@@ -13,7 +13,10 @@
 <!-- END BLOCK_accept_error -->
 
 <!-- BEGIN BLOCK_register_form disabled -->
-<form method="post" action="">
+<form method="post" action="" onsubmit="this.exp_val.value = parseInt(this.exp1.value) + parseInt(this.exp2.value);">
+<input type="hidden" name="exp1" value="{exp1}">
+<input type="hidden" name="exp2" value="{exp2}">
+<input type="hidden" name="exp_val">
 <table class="Main">
 <tr>
 	<td align="right"{error_l_email}>E-pasts:</td>

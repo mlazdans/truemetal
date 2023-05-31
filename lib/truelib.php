@@ -1026,13 +1026,21 @@ function register(MainModule $template, array $sys_parameters = []): ?Template
 
 	$T->enable('BLOCK_register_form');
 
+	$T->set_var('exp1', rand(0, 100000));
+	$T->set_var('exp2', rand(0, 100000));
+
 	if(!isset($_POST['data']))
 	{
 		return $T;
 	}
 
 	$check = ['l_nick', 'l_password', 'l_email' ];
+
 	$data = $_POST['data'];
+
+	$exp1 = (int)post('exp1');
+	$exp2 = (int)post('exp2');
+	$exp_val = post('exp_val');
 
 	$error_msg = $error_field = [];
 	foreach($check as $c) {
@@ -1040,6 +1048,10 @@ function register(MainModule $template, array $sys_parameters = []): ?Template
 		if(empty($data[$c])){
 			$error_field[] = $c;
 		}
+	}
+
+	if($exp1 + $exp2 != $exp_val){
+		$error_msg[] = 'Spam check fail';
 	}
 
 	$data['l_email'] = strtolower($data['l_email']);
