@@ -9,7 +9,6 @@ $template = new AdminModule("logins");
 
 if(in_array($action, ['delete_multiple', 'activate_multiple', 'deactivate_multiple']))
 {
-	new TODO("process_action");
 	$logins = new Logins;
 	if($logins->process_action($_POST, $action)){
 		redirect_referer();

@@ -290,7 +290,7 @@ class Logins
 	function process_action(array $data, string $action): bool
 	{
 		if($action == 'delete_multiple')
-			$func = 'del';
+			$func = 'delete';
 
 		if($action == 'activate_multiple')
 			$func = 'activate';
