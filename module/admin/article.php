@@ -1,14 +1,4 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
-
-require_once('lib/Article.php');
-require_once('lib/Module.php');
-require_once('lib/Comment.php');
-require_once('lib/ResComment.php');
+<?php declare(strict_types = 1);
 
 $action = post('action');
 $art_id = array_shift($sys_parameters);
@@ -18,6 +8,8 @@ $module = new Module();
 
 $template = new AdminModule($admin_module);
 $template->set_title('Admin :: raksti');
+
+$T = $template->add_file("admin/article.tpl");
 
 # Comment actions
 if(in_array($action, array('comment_delete', 'comment_show', 'comment_hide')))
@@ -47,27 +39,27 @@ if($action == 'art_save')
 		header("Location: $module_root/$id/");
 		return;
 	} else {
-		$template->enable('BLOCK_article_error');
-		$template->set_var('error_msg', $article->error_msg, 'BLOCK_article_error');
+		$T->enable('BLOCK_article_error');
+		$T->set_var('error_msg', $article->error_msg, 'BLOCK_article_error');
 	}
-	$template->out();
+	$template->out($T);
 	return;
 }
 
 # new
 if($action == 'art_new')
 {
-	$module->set_modules_all($template, 0, 'BLOCK_modules_under_list');
-	$template->enable('BLOCK_article_edit');
-	$template->set_var('art_name_edit', 'jauns', 'BLOCK_article_edit');
-	$template->out();
+	$module->set_modules_all($T, 0, 'BLOCK_modules_under_list');
+	$T->enable('BLOCK_article_edit');
+	$T->set_var('art_name_edit', 'jauns', 'BLOCK_article_edit');
+	$template->out($T);
 	return;
 }
 
 # List
 if(!$art_id)
 {
-	$template->enable('BLOCK_articles_list');
+	$T->enable('BLOCK_articles_list');
 
 	$articles = $article->load(array(
 		'art_active'=>Res::STATE_ALL,
@@ -75,49 +67,49 @@ if(!$art_id)
 		));
 
 	if(count($articles))
-		$template->enable('BLOCK_articles');
+		$T->enable('BLOCK_articles');
 	else
-		$template->enable('BLOCK_noarticles');
+		$T->enable('BLOCK_noarticles');
 
 	$article_count = 0;
+	$BLOCK_article_item = $T->get_block('BLOCK_article_item');
 	foreach($articles as $item)
 	{
 		++$article_count;
-		$template->set_var('article_nr', $article_count, 'BLOCK_article_item');
-		$template->set_var('art_name', $item['art_name'], 'BLOCK_article_item');
-		$template->set_var('art_id', $item['art_id'], 'BLOCK_article_item');
-		$template->set_var('module_id', $item['module_id'], 'BLOCK_article_item');
+		$BLOCK_article_item->set_var('article_nr', $article_count);
+		$BLOCK_article_item->set_var('art_name', $item['art_name']);
+		$BLOCK_article_item->set_var('art_id', $item['art_id']);
+		$BLOCK_article_item->set_var('module_id', $item['module_id']);
+		$BLOCK_article_item->set_var('art_entered', $item['art_entered']);
 
-		$template->set_var('art_color_class', 'box-normal', 'BLOCK_article_item');
-		if($item['art_active'] != Res::STATE_ACTIVE)
-			$template->set_var('art_color_class', 'box-inactive', 'BLOCK_article_item');
+		$BLOCK_article_item->set_var('art_color_class', 'box-normal');
+		if($item['art_active'] != Res::STATE_ACTIVE){
+			$BLOCK_article_item->set_var('art_color_class', 'box-inactive');
+		}
 
-		$template->parse_block('BLOCK_article_item', TMPL_APPEND);
+		$BLOCK_article_item->parse(TMPL_APPEND);
 	}
-	$template->set_var('article_count', $article_count);
+
+	$T->set_var('article_count', $article_count);
 } elseif($art = $article->load(array(
 	'art_id'=>$art_id,
 	'art_active'=>Res::STATE_ALL,
 	)))
 {
 	# Edit
-	$template->enable('BLOCK_article_edit');
-	$template->set_var('art_name_edit', $art['art_name'], 'BLOCK_article_edit');
+	$T->enable('BLOCK_article_edit');
+	$T->set_var('art_name_edit', $art['art_name'], 'BLOCK_article_edit');
 
 	if($art['art_active'] == Res::STATE_ACTIVE)
-		$template->set_var('art_active_y', ' selected="selected"');
+		$T->set_var('art_active_y', ' selected="selected"');
 	else
-		$template->set_var('art_active_n', ' selected="selected"');
+		$T->set_var('art_active_n', ' selected="selected"');
 
-	$art['art_intro'] = parse_form_data($art['art_intro']);
-	$art['art_data'] = parse_form_data($art['art_data']);
-	$template->set_array($art);
+	$art['art_intro'] = specialchars($art['art_intro']);
+	$art['art_data'] = specialchars($art['art_data']);
+	$T->set_array($art);
 
-	$module->set_modules_all($template, $art['art_modid'], 'BLOCK_modules_under_list');
-
-	# komentaari
-	$template->set_file('FILE_comment_list', 'comment/list.tpl');
-	$template->copy_block('BLOCK_article_comments', 'FILE_comment_list');
+	$module->set_modules_all($T, $art['art_modid'], 'BLOCK_modules_under_list');
 
 	$RC = new ResComment();
 	$comments = $RC->Get(array(
@@ -125,8 +117,12 @@ if(!$art_id)
 		'c_visible'=>Res::STATE_ALL,
 		));
 
-	include('module/admin/comment/list.inc.php');
+	$C = new_template("admin/comment/list.tpl");
+	admin_comment_list($C, $comments);
+
+	$T->set_block_string($C->parse(), 'BLOCK_article_comments');
+
 }
 
-$template->out();
+$template->out($T);
 

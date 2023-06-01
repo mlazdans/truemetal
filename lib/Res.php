@@ -1,210 +1,90 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
-
-require_once('lib/ResComment.php');
+<?php declare(strict_types = 1);
 
 class Res
 {
-	const TYPE_STD = 0;
-	const TYPE_EVENT = 1;
-
-	const STATE_ACTIVE = 'Y';
-	const STATE_INACTIVE = 'N';
-	const STATE_VISIBLE = 'Y';
-	const STATE_INVISIBLE = 'N';
-	const STATE_ALL = false;
-
-	const ACT_VALIDATE = true;
-	const ACT_DONTVALIDATE = false;
-
-	var $types = array(
-		Res::TYPE_STD=>'Forums',
-		Res::TYPE_EVENT=>'Pasākums',
-		);
-
-	protected $table_id;
-	protected $login_id;
-	protected $db = null;
-
-	function __construct() {
-	} // __construct
-
-	function Get(Array $params = array())
+	# TODO: pārsaukt par ResSeen vai ko tādu
+	static function hasNewComments(int $res_id, ?string $date = null): bool
 	{
-		$this->InitDb();
-
-		$sql = "SELECT * FROM `res`";
-
-		$sql_add = array();
-
-		if(!empty($params['res_id']))
-			$sql_add[] = sprintf("res_id = %d", $params['res_id']);
-
-		if($sql_add)
-			$sql .= " WHERE ".join(' AND ', $sql_add);
-
-		if(!empty($params['order']))
-			$sql .= " ORDER BY $params[order] ";
-
-		if(!empty($params['limit']))
-			$sql .= " LIMIT ".$params['limit'];
-
-		return (empty($params['res_id']) ? $this->db->Execute($sql) : $this->db->ExecuteSingle($sql));
-	} // Get
-
-	function Add()
-	{
-		$this->InitDb();
-
-		$sql = sprintf(
-			"INSERT INTO `res` (`table_id`, `login_id`, `res_entered`) VALUES (%s, %s, %s);",
-			($this->table_id ? $this->table_id : "NULL"),
-			($this->login_id ? $this->login_id : "NULL"),
-			$this->db->now()
-			);
-
-		return ($this->db->Execute($sql) ? $this->db->LastID() : false);
-	} // Add
-
-	function Commit() {
-		$this->db->Commit();
-	} // Commit
-
-	function Rollback() {
-		$this->db->Rollback();
-	} // Rollback
-
-	function SetDb($db)
-	{
-		$this->db = $db;
-	} // SetDb
-
-	function GetAllData($res_id)
-	{
-		$res_data = $this->Get(array(
-			'res_id'=>$res_id,
-			));
-
-		if(!$res_data) {
+		if(!User::logged()){
 			return false;
 		}
 
-		switch($res_data['table_id'])
-		{
-			case Table::ARTICLE:
-				require_once('lib/Article.php');
-				$D = new Article();
-				return array_merge($res_data, $D->load(array(
-					'res_id'=>$res_data['res_id'],
-					)));
-			case Table::FORUM:
-				require_once('lib/Forum.php');
-				$D = new Forum();
-				return array_merge($res_data, $D->load(array(
-					'res_id'=>$res_data['res_id'],
-					)));
-				break;
-			case Table::COMMENT:
-				require_once('lib/Comment.php');
-				$D = new Comment();
-				return array_merge($res_data, $D->Get(array(
-					'res_id'=>$res_data['res_id'],
-					)));
-				break;
-			case Table::GALLERY:
-				require_once('lib/Gallery.php');
-				$D = new Gallery();
-				return array_merge($res_data, $D->load(array(
-					'res_id'=>$res_data['res_id'],
-					)));
-				break;
-			case Table::GALLERY_DATA:
-				require_once('lib/GalleryData.php');
-				$D = new GalleryData();
-				return array_merge($res_data, $D->load(array(
-					'res_id'=>$res_data['res_id'],
-					)));
-				break;
+		if(empty($date)){
+			return false;
+		}
+
+		# TODO: pārkonvertēt datumus jau uz timestamp!!!
+		if(isset($_SESSION['res']['viewed_date'][$res_id])){
+			return (strtotime($date) > strtotime($_SESSION['res']['viewed_date'][$res_id]));
+		}
+
+		if(isset($_SESSION['res']['viewed_before'])){
+			return ($_SESSION['res']['viewed_before'] < strtotime($date));
 		}
 
 		return false;
-	} // GetAllData
+	}
 
-	protected function InitDb()
+	# TODO: saglabāt tikai time stamp. Pirms tam jāpārkonvertē arī sessijās
+	static function markAsSeen(int $res_id): void
 	{
-		if(!$this->db)
-		{
-			require('include/dbconnect.php');
-			$this->db = $db;
-			$this->db->AutoCommit(false);
+		if(User::logged()){
+			$_SESSION['res']['viewed_date'][$res_id] = date('Y-m-d H:i:s');
 		}
-	} // InitDb
+	}
 
-	public static function Route($res_id, $c_id = 0)
+	# Uzstāda res objektu, par pamatu ņemot logged in useri
+	static function prepare_with_user(
+		int $res_resid = null,
+		int $table_id,
+		string $res_data,
+		?string $res_name = null,
+		?string $res_intro = null,
+		?string $res_data_compiled = null,
+		): ResType
 	{
-		$location = "/";
+		return new ResType(
+			res_resid: $res_resid,
+			table_id: $table_id,
+			login_id: User::id(),
+			res_nickname: User::get_val('l_nick'),
+			res_email: User::get_val('l_email'),
+			res_ip: User::ip(),
+			res_name: $res_name,
+			res_intro: $res_intro,
+			res_data: $res_data,
+			res_data_compiled: $res_data_compiled ? $res_data_compiled : parse_text_data($res_data),
+		);
+	}
 
-		$Res = new Res();
-		if(!($resource = $Res->GetAllData($res_id))){
-			return $location;
-		}
-
-		switch($resource['table_id'])
-		{
-			case Table::ARTICLE:
-				$location = Article::Route($resource, $c_id);;
-				break;
-			case Table::FORUM:
-				$location = Forum::Route($resource, $c_id);
-				break;
-			case Table::COMMENT:
-				$RC = new ResComment;
-				$C = $RC->get(array(
-					'c_id'=>$resource['c_id'],
-					));
-				$location = Res::Route($C['parent_res_id'], $resource['c_id']);
-				break;
-			case Table::GALLERY:
-				$location = Gallery::Route($resource, $c_id);
-				break;
-			case Table::GALLERY_DATA:
-				$location = GalleryData::Route($resource, $c_id);
-				break;
-		}
-
-		return $location;
-	} // Route
-
-	public static function hasNewComments($item)
+	# TODO: varbūt vajadzētu kaut kā apvienot daudzās vietas, kur šis tiek izsaukt, jo
+	# patlaban datu validācija notiek katrā izsaukšanas vietā
+	static function user_add_comment(int $res_id, string $c_data): ?int
 	{
-		if(!user_loged()){
-			return false;
-		}
+		$R = static::prepare_with_user(
+			res_resid: $res_id,
+			table_id: ResKind::COMMENT,
+			res_data: $c_data,
+		);
 
-		if(empty($item['res_id'])){
-			$t = debug_backtrace();
-			$e = sprintf("Empty res_id: %s\nTrace: %s\n", mlog($item), mlog($t));
-			trigger_error($e);
-			return false;
-		}
+		return DB::withNewTrans(function() use ($R){
+			if($res_id = $R->insert()){
+				return (new CommentType(
+					res_id: $res_id
+				))->insert();
+			}
+		});
+	}
 
-		if(isset($_SESSION['res']['viewed'][$item['res_id']]))
-			return ($item['res_comment_count'] > $_SESSION['res']['viewed'][$item['res_id']]);
-
-		if(isset($_SESSION['res']['viewed_before']))
-			return ($_SESSION['res']['viewed_before'] < strtotime($item['res_comment_lastdate']));
-
-		return ($item['res_comment_count'] > 0);
-	} // hasNewComments
-
-	public static function markCommentCount($item)
+	static function get_comments(int $res_id, ?ResFilter $F = new ResFilter()): ViewResCommentCollection
 	{
-		$_SESSION['res']['viewed'][$item['res_id']] = $item['res_comment_count'];
-	} // markCommentCount
+		$F->res_resid = $res_id;
 
-} // class::Res
+		if(empty($F->getOrderBy())){
+			$F->OrderBy('res_entered');
+		}
 
+		return (new ViewResCommentEntity())->getAll($F);
+	}
+
+}

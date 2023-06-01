@@ -42,18 +42,26 @@ source pages
 
 	sql_query_pre        = SET NAMES utf8
 	sql_query_pre        = SET group_concat_max_len = 4194304
-	sql_query            = SELECT doc_res_id AS doc_id, view_documents.* FROM view_documents;
+	sql_query            = SELECT doc_id, table_id, res_id, res_resid, doc_source_id, doc_name, doc_content, doc_comment_count, doc_comment_last_date, doc_entered FROM view_documents;
 
-	sql_attr_uint        = doc_res_id
+	sql_attr_uint        = res_id
+	sql_attr_uint        = table_id
+	sql_attr_uint        = res_resid
 	sql_attr_uint        = doc_source_id
+	sql_attr_string      = doc_name
 	sql_attr_uint        = doc_comment_count
 	sql_attr_timestamp   = doc_entered
-	sql_attr_timestamp   = doc_comment_lastdate
+	sql_attr_timestamp   = doc_comment_last_date
 }
 
 source titles : pages
 {
-	sql_query            = SELECT doc_res_id AS doc_id, view_document_titles.* FROM view_document_titles;
+	sql_query            = SELECT doc_id, table_id, res_id, res_resid, doc_source_id, doc_name, res_name, doc_comment_count, doc_comment_last_date, doc_entered FROM view_documents;
+}
+
+source with_comments : pages
+{
+	sql_query            = SELECT doc_id, table_id, res_id, res_resid, doc_source_id, doc_name, res_name, doc_content_with_comments, doc_comment_count, doc_comment_last_date, doc_entered FROM view_documents;
 }
 
 # inherited source example
@@ -78,14 +86,11 @@ source titles : pages
 index doc
 {
 	source               = pages
-	path                 = /www/truemetal.lv/sphinx/data/doc
+	path                 = /www/truemetal.lv/site/sphinx/data/doc
 
-	charset_type         = utf-8
-	enable_star          = 1
 	min_prefix_len       = 3
 	min_word_len         = 1
 	html_strip           = 1
-	docinfo              = inline
 
 	# a list of morphology preprocessors to apply
 	# optional, default is empty
@@ -134,7 +139,13 @@ index doc
 index doc_titles : doc
 {
 	source               = titles
-	path                 = /www/truemetal.lv/sphinx/data/doc_titles
+	path                 = /www/truemetal.lv/site/sphinx/data/doc_titles
+}
+
+index doc_with_comments : doc
+{
+	source               = with_comments
+	path                 = /www/truemetal.lv/site/sphinx/data/doc_with_comments
 }
 
 # inherited index example
@@ -179,21 +190,21 @@ searchd
 	# IP address to bind on
 	# optional, default is 0.0.0.0 (ie. listen on all interfaces)
 	#
-	address				= 127.0.0.1
+	listen				= 127.0.0.1:3313
 	# address				= 192.168.0.1
 
 
 	# searchd TCP port number
 	# mandatory, default is 3312
-	port				= 3312
 
 	# log file, searchd run info is logged here
 	# optional, default is 'searchd.log'
-	log					= /www/truemetal.lv/sphinx/log/searchd.log
+	log					= /www/truemetal.lv/site/sphinx/log/searchd.log
+	binlog_path			= /www/truemetal.lv/site/sphinx/binlog
 
 	# query log file, all search queries are logged here
 	# optional, default is empty (do not log queries)
-	query_log			= /www/truemetal.lv/sphinx/log/query.log
+	query_log			= /www/truemetal.lv/site/sphinx/log/query.log
 
 	# client read timeout, seconds
 	# optional, default is 5
@@ -205,12 +216,7 @@ searchd
 
 	# PID file, searchd process ID file name
 	# mandatory
-	pid_file			= /www/truemetal.lv/sphinx/log/searchd.pid
-
-	# max amount of matches the daemon ever keeps in RAM, per-index
-	# WARNING, THERE'S ALSO PER-QUERY LIMIT, SEE SetLimits() API CALL
-	# default is 1000 (just like Google)
-	max_matches			= 1000
+	pid_file			= /www/truemetal.lv/site/sphinx/log/searchd.pid
 
 	# seamless rotate, prevents rotate stalls if precaching huge datasets
 	# optional, default is 1

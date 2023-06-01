@@ -1,10 +1,8 @@
 SELECT
 	COUNT(*) AS active_logins
 FROM
-	`logins`
+	logins
 WHERE
-	`l_active`='Y' AND
-	`l_accepted`='Y' AND
-	`l_lastaccess` >= DATE_SUB(NOW(),INTERVAL 1 YEAR);
-
-
+	l_active=1 AND
+	l_accepted=1 AND
+	l_lastaccess >= DATE_SUB(NOW(),INTERVAL 1 YEAR);

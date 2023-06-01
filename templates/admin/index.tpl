@@ -1,19 +1,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="lv-LV">
 <head>
-<meta http-equiv="Content-Language" content="lv" />
-<meta http-equiv="Content-Type" content="text/html; charset={encoding}" />
-<title>{title} ({USER_name})</title>
-<meta http-equiv="Pragma" content="no-cache" />
-<link rel="stylesheet" type="text/css" href="/css/admin_styles.css?{script_version}" />
-<link rel="stylesheet" type="text/css" href="/css/admin/jquery-ui.css?{script_version}" />
-<script type="text/javascript" src="/js/tiny.config.js?{script_version}"></script>
-<script type="text/javascript" src="/js/jquery.js?{script_version}"></script>
-<script type="text/javascript" src="/js/jquery-ui.js?{script_version}"></script>
-<script type="text/javascript" src="/js/truemetal.js?{script_version}"></script>
-<script type="text/javascript" src="/js/admin.js?{script_version}"></script>
-<script type="text/javascript" src="/tiny_mce/tiny_mce.js?{script_version}"></script>
-<script type="text/javascript" src="/tiny_mce/plugins/tinybrowser/tb_tinymce.js.php?{script_version}"></script>
+<meta http-equiv="Content-Language" content="lv">
+<meta http-equiv="Content-Type" content="text/html; charset={encoding}">
+<title>{title} ({USER_l_nick})</title>
+<meta http-equiv="Pragma" content="no-cache">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" integrity="sha512-ELV+xyi8IhEApPS/pSj66+Jiw+sOT1Mqkzlh8ExXihe4zfqbWkxPRi8wptXIO9g73FSlhmquFlUOuMSoXz5IRw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet" type="text/css" href="/css/admin_styles.css?{script_version}">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/jsload/?v={script_version}"></script>
+<script src="/tiny_mce/tiny_mce.js?{script_version}"></script>
+<script src="/tiny_mce/plugins/tinybrowser/tb_tinymce.js.php?{script_version}"></script>
 
 <script type="text/javascript">
 function initEditor(){
@@ -53,7 +53,7 @@ initEditor();
 <body>
 
 <div id="header">
-	<h1>Admin: {USER_name}</h1>
+	<h1>Admin: {USER_l_nick}</h1>
 </div>
 
 <div id="menu">
@@ -61,7 +61,7 @@ initEditor();
 <tr>
 	<!-- BEGIN BLOCK_adminmodules -->
 	<td class="{adminmodule_class}">
-		<a class="A-cat" href="{admin_root}/{adminmodule_id}/">{adminmodule_name}</a>
+		<a class="A-cat" href="/admin/{adminmodule_id}/">{adminmodule_name}</a>
 	</td>
 	<!-- END BLOCK_adminmodules -->
 	<td class="TD-menu">
@@ -72,15 +72,21 @@ initEditor();
 </div>
 
 <div id="middle">
-<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->
+<!-- BEGIN BLOCK_container -->
+	<!-- BEGIN BLOCK_not_found disabled --><div class="Info">{msg}</div><!-- END BLOCK_not_found -->
+	<!-- BEGIN BLOCK_middle --><!-- END BLOCK_middle -->
+<!-- END BLOCK_container -->
 </div>
 
-<hr />
+<hr>
 
 <div id="footer">
 	Copyright &copy; Norge Datorsistēmas 2003-2008<br/>
-	Copyright &copy; dqdp.net 2008-{year}
+	Copyright &copy; dqdp.net 2008-{year}<br/>
 </div>
+
+<hr>
+{tmpl_finished}
 
 </body>
 </html>

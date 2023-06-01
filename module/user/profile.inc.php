@@ -1,26 +1,16 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
-$login = array_shift($sys_parameters);
-
-if($login)
-{
-	include('module/user/profile/user.inc.php');
-	return;
-}
+$l_hash = array_shift($sys_parameters);
 
 $template = new MainModule($sys_module_id);
 $template->set_title('Profils');
-$template->set_file('FILE_module', 'user/profile/private.tpl');
-$template->copy_block('BLOCK_middle', 'FILE_module');
 
-# View and edit private profile
-include('module/user/profile/private.inc.php');
+if($l_hash)
+{
+	$T = public_profile($template, $l_hash);
+} else {
+	$T = private_profile($template);
+}
 
 $template->set_right_defaults();
-$template->out();
-
+$template->out($T);

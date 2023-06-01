@@ -10,13 +10,13 @@
 </tr>
 <tr>
 	<td>
-		<input type="hidden" name="report" value="ip" />
+		<input type="hidden" name="report" value="ip">
 		<textarea name="ips" rows="10" cols="80">{ips}</textarea>
 	</td>
 </tr>
 <tr>
 	<td>
-		<input type="submit" value="Meklēt" />
+		<input type="submit" value="Meklēt">
 	</td>
 </tr>
 </table>

@@ -12,8 +12,8 @@ Nav neviena logina
 <!-- BEGIN BLOCK_logins_search_from -->
 <form action="" method="get" id="logins_search">
 <div>
-<input type="hidden" name="action" value="search" />
-<label for="ls_q">IP;E-mail;Login;Nick: <input type="text" name="q" id="ls_q" value="{q}" /></label>
+<input type="hidden" name="action" value="search">
+<label for="ls_q">IP;E-mail;Login;Nick: <input type="text" name="q" id="ls_q" value="{q}"></label>
 <label for="ls_l_active_n"><input type="checkbox" name="l_active_n" id="ls_l_active_n" {ls_l_active_n_checked}/> neaktīvie</label>
 <label for="ls_l_accepted_n"><input type="checkbox" name="l_accepted_n" id="ls_l_accepted_n" {ls_l_accepted_n_checked}/> neakceptētie</label>
 &nbsp;
@@ -30,11 +30,13 @@ Nav neviena logina
 <table class="Main">
 <tr>
 	<td class="TD-cat">
-		<input type="hidden" name="logins_count" value="{logins_count}" />
-		<input type="checkbox" name="logins_check_all" onclick="Truemetal.checkAll(this);" />
+		<input type="hidden" name="logins_count" value="{logins_count}">
+		<input type="checkbox" name="logins_check_all" onclick="Truemetal.checkAll(this);">
 	</td>
+	<td class="TD-cat">Nr</td>
+	<td class="TD-cat">ID</td>
 	<td class="TD-cat">Logins</td>
-	<td class="TD-cat">Niks</td>
+	<td class="TD-cat">Segvārds</td>
 	<td class="TD-cat"><a href="?{q_sort_votes}">Reitings</a></td>
 	<td class="TD-cat">Lietderība</td>
 	<td class="TD-cat"><a href="?{q_sort_comment_count}">Komentāri</a></td>
@@ -42,20 +44,22 @@ Nav neviena logina
 	<td class="TD-cat" title="Aktīvs">Akt</td>
 	<td class="TD-cat" title="Akceptēts">Akc</td>
 	<td class="TD-cat">IP</td>
-	<td class="TD-cat">Manīts</td>
+	<td class="TD-cat"><a href="?{q_sort_l_lastaccess}">Manīts</a></td>
 	<td class="TD-cat"><a href="?{q_sort_l_entered}">Pievienojies</a></td>
 </tr>
 <!-- BEGIN BLOCK_logins -->
 <tr>
 	<td class="{l_color_class}">
-		<input type="hidden" name="l_id{logins_nr}" value="{l_id}" />
-		<input type="checkbox" name="l_checked{logins_nr}" />
+		<input type="hidden" name="l_id{logins_nr}" value="{l_id}">
+		<input type="checkbox" name="l_checked{logins_nr}">
 	</td>
+	<td class="{l_color_class}">{logins_nr}</td>
+	<td class="{l_color_class}">{l_id}</td>
 	<td class="{l_color_class}">
 		<a href="{module_root}/{l_id}/" style="font-weight: bold;">{l_login}</a>
 	</td>
 	<td class="{l_color_class}">{l_nick}</td>
-	<td class="{l_color_class}">{votes}({votes_plus}-{votes_minus})</td>
+	<td class="{l_color_class} nowrap">{votes}({votes_plus}-{votes_minus})</td>
 	<td class="{l_color_class}">{votes_perc}%</td>
 	<td class="{l_color_class}">{comment_count}</td>
 	<td class="{l_color_class}">
@@ -71,7 +75,7 @@ Nav neviena logina
 </tr>
 <!-- END BLOCK_logins -->
 <tr>
-	<td colspan="11">
+	<td colspan="13">
 		Iezīmētos:
 		<select name="action">
 			<option value="">---</option>
@@ -79,7 +83,7 @@ Nav neviena logina
 			<option value="deactivate_multiple">Deaktivizēt</option>
 			<option value="delete_multiple">Dzēst</option>
 		</select>
-		<input type="submit" value="  OK  " />
+		<input type="submit" value="  OK  ">
 	</td>
 </tr>
 </table>

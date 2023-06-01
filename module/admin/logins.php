@@ -1,43 +1,43 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
-require_once('lib/Logins.php');
-require_once('lib/Module.php');
-require_once('lib/Article.php');
-require_once('lib/Forum.php');
+use dqdp\TODO;
 
 $l_id = (int)array_shift($sys_parameters);
 $action = postget('action');
-$actions = array('delete_multiple', 'activate_multiple', 'deactivate_multiple');
 
-$logins = new Logins;
+$template = new AdminModule("logins");
 
-if(in_array($action, $actions))
+if(in_array($action, ['delete_multiple', 'activate_multiple', 'deactivate_multiple']))
 {
-	if($logins->process_action($_POST, $action))
-		header("Location: $module_root/");
+	$logins = new Logins;
+	if($logins->process_action($_POST, $action)){
+		redirect_referer();
+		// header("Location: $module_root/");
+	}
 
 	return;
 }
 
 if($action == 'save')
 {
+	new TODO("save");
+	$logins = new Logins;
 	if($logins->update($_POST['data'], Res::ACT_DONTVALIDATE))
 		header("Location: $module_root/".($l_id ? "$l_id/" : ""));
 	else
-		print $logins->error_msg;
+		print join("<br>", $logins->error_msg);
 
 	return;
 }
 
+// XXX: ja post tukšs
+$action = get('action');
+
 if($l_id)
 {
-	include('module/admin/logins/edit.inc.php');
+	$T = admin_logins_edit($template, $l_id);
 } else {
-	include('module/admin/logins/list.inc.php');
+	$T = admin_logins_list($template);
 }
 
+$template->out($T);

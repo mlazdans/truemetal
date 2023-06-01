@@ -1,61 +1,57 @@
-<a name="comments"></a>
 <!-- BEGIN BLOCK_comment disabled -->
-<!-- BEGIN BLOCK_comment_list -->
 <div class="Comment" id="comment{c_id}">
-	<div class="header">
-		<div class="nick">{c_username}</div>
-		<!-- BEGIN BLOCK_email disabled -->
-		, <a href="mailto:{c_useremail}" class="A-small">{c_useremail}</a>
-		<!-- END BLOCK_email -->
-
-		<div class="date">, {c_date}</div>
-
-		<div class="link unselectable">
-			<a href="/resroute/{res_id}/?c_id={c_id}">[#{comment_nr}]</a>
+	<div class="profile-header">
+		<div class="user-info">
+			<div class="nick">{res_nickname},</div>
+			<div class="date">{res_date}</div>
 		</div>
-		<!-- BEGIN BLOCK_profile_link disabled -->
-		<div class="profile unselectable">
-			<a href="/user/profile/{user_login_id}/" onclick="Truemetal.viewProfile('{user_login_id}'); return false;">[Profils]</a>
-		</div>
-		<!-- END BLOCK_profile_link -->
-		<!-- BEGIN BLOCK_comment_vote disabled -->
-			<div class="vote unselectable">
-				<a href="/vote/down/{res_id}/" title="-" onclick="Truemetal.Vote('{res_id}', 'down', '#comment{c_id} .vote-value'); return false;">[&ndash;]</a>
-			</div>
-			<div class="vote unselectable">
-				<a href="/vote/up/{res_id}/" title="+" onclick="Truemetal.Vote('{res_id}', 'up', '#comment{c_id} .vote-value'); return false;">[+]</a>
-			</div>
-		<!-- END BLOCK_comment_vote -->
-			<div class="vote {comment_vote_class} vote-value unselectable" title="+{res_votes_plus_count} -{res_votes_minus_count}">
+
+		<div class="controls">
+			<div class="vote unselectable {comment_vote_class}" id="votes-{res_id}" title="+{res_votes_plus_count} - {res_votes_minus_count}">
 				{res_votes}
 			</div>
-		<div class="center unselectable">&nbsp;</div>
+
+			<!-- BEGIN BLOCK_comment_vote disabled -->
+			<div class="unselectable">
+				<a href="/vote/up/{res_id}/" class="SendVote" data-res_id="{res_id}" data-vote="up">[&plus;]</a>
+			</div>
+			<div class="unselectable">
+				<a href="/vote/down/{res_id}/" class="SendVote" data-res_id="{res_id}" data-vote="down">[&ndash;]</a>
+			</div>
+			<!-- END BLOCK_comment_vote -->
+
+			<!-- BEGIN BLOCK_profile_link disabled -->
+			<div class="unselectable">
+				<a href="/user/profile/{l_hash}/" class="ProfilePopup" data-hash="{l_hash}">[Profils]</a>
+			</div>
+			<!-- END BLOCK_profile_link -->
+
+			<div class="unselectable">
+				<a href="/resroute/{res_id}/">[#{comment_nr}]</a>
+			</div>
+		</div>
 	</div>
-	<div class="data{c_disabled_user_class}">
-		{c_datacompiled}
+	<div class="res-data{c_disabled_user_class}">
+		{res_data_compiled}
 	</div>
 </div>
-<!-- END BLOCK_comment_list -->
 <!-- END BLOCK_comment -->
 
 <!-- BEGIN BLOCK_nocomment disabled -->
-<div class="Info">
-	Šim resursam nav neviena komentāra!
-</div>
+<div class="Info">Šim resursam nav neviena komentāra!</div>
 <!-- END BLOCK_nocomment -->
 
-<div class="TD-cat">
-	Pievienot komentāru
-</div>
+<!-- BEGIN BLOCK_addcomment -->
+<div class="TD-cat">Pievienot komentāru</div>
 
 <!-- BEGIN BLOCK_notloggedin disabled -->
 <div class="Info">
-	Komentārus rakstīt var tikai reģistrēti lietotāji, tapēc ielogojies vai
+	Komentārus rakstīt var tikai reģistrēti lietotāji, tapēc <a href="/login/">ielogojies</a> vai
 	<a href="/register/">reģistrējies</a>!
 </div>
 <!-- END BLOCK_notloggedin -->
 
-<!-- BEGIN BLOCK_addcomment disabled -->
+<!-- BEGIN BLOCK_comment_form disabled -->
 <form action="#add_comment" method="post" id="add_comment">
 <table width="100%" cellpadding="2" cellspacing="0">
 <!-- BEGIN BLOCK_comment_error disabled -->
@@ -65,11 +61,11 @@
 <!-- END BLOCK_comment_error -->
 <tr>
 	<td align="right">
-		<input type="hidden" name="action" value="add_comment" />
-		<input type="hidden" name="c_referrer" value="{c_referrer}" />
+		<input type="hidden" name="action" value="add_comment">
+		<input type="hidden" name="c_referrer" value="{c_referrer}">
 		Vārds:
 	</td>
-	<td style="width: 100%">{c_username}</td>
+	<td style="width: 100%">{USER_l_nick}</td>
 </tr>
 <tr>
 	<td colspan="2" valign="top">Ziņa:</td>
@@ -81,7 +77,7 @@
 </tr>
 <tr>
 	<td colspan="2" style="padding-left: 16px; padding-right: 16px;">
-		<input type="submit" value="Pievienot" />
+		<input type="submit" value="Pievienot">
 	</td>
 </tr>
 </table>
@@ -102,5 +98,6 @@
 		<li>Tirgojoties obligāti jānorāda cena</li>
 	</ul>
 </div>
+<!-- END BLOCK_comment_form -->
 <!-- END BLOCK_addcomment -->
 

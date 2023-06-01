@@ -1,27 +1,16 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
-require_once('lib/SQLLayer.php');
+use dqdp\DBA\driver\MySQL_PDO;
+use dqdp\DBA\Types\MySQLConnectParams;
 
-if(empty($GLOBALS['sys_database_type']))
-{
-	$db = null;
-	$db->AutoCommit(true);
-} else {
-	$db = new SQLLayer($GLOBALS['sys_database_type']);
-	$db->connect(
-		$GLOBALS['sys_db_host'],
-		$GLOBALS['sys_db_user'],
-		$GLOBALS['sys_db_password'],
-		$GLOBALS['sys_db_name'], $GLOBALS['sys_db_port']
-		);
-
-	if(!$db->conn){
-		die('True DB error!');
-	}
+$params = new MySQLConnectParams(database: $sys_db_name, username: $sys_db_user, password: $sys_db_password, charset: 'utf8mb4');
+$D = (new MySQL_PDO($params))->connect();
+if(!$D->get_conn()){
+	die('True DB error!');
 }
 
+// TODO: explore
+// SET [GLOBAL|SESSION] innodb_strict_mode=mode
+// SET SESSION sql_mode = 'modes'; +STRICT_TRANS_TABLES
+
+DB::setDB($D);

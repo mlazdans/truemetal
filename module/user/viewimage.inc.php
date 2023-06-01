@@ -1,38 +1,33 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
-$login = array_shift($sys_parameters);
-$login_data = Logins::load_by_login($login);
+$l_hash = array_shift($sys_parameters)??"";
 
 $template = new MainModule('atteli');
-$template->set_file('FILE_viewimage', 'user/viewimage.tpl');
-$template->copy_block('BLOCK_body', 'FILE_viewimage');
+$T = $template->add_file('user/viewimage.tpl');
 
-if(!user_loged())
+if(!User::logged())
 {
-	header($_SERVER["SERVER_PROTOCOL"]." 403 Forbidden");
-	$template->enable('BLOCK_not_loged');
-	$template->out();
+	$template->not_logged();
+	$template->set_right_defaults();
+	$template->out(null);
 	return;
 }
 
-$template->enable("BLOCK_userpic");
-
-if(
-	$login_data &&
-	($pic_path = "/user/image/$login_data[l_login]/")
-	)
-{
-	$template->set_title(" - $login_data[l_nick] bilde");
-	$template->set_var('pic_path', $pic_path);
-} else {
-	$template->set_title(" - not found");
-	$template->set_var('pic_path', '/img/1x1.gif');
+if(!($login_data = Logins::load_by_login_hash($l_hash))){
+	$template->not_found();
+	$template->set_right_defaults();
+	$template->out(null);
+	return;
 }
 
-$template->out();
+$pic_path = "/user/image/$login_data->l_hash/";
+
+$T->enable("BLOCK_userpic");
+
+$T->set_var('pic_path', $pic_path);
+$T->set_var('l_nick', $login_data->l_nick);
+
+$template->set_title(" - $login_data->l_nick bilde");
+$template->set_right_defaults();
+$template->out($T);
 

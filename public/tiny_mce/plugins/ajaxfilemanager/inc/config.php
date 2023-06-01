@@ -12,6 +12,12 @@
 //FILESYSTEM CONFIG	<br>
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "class.auth.php");
 define('CONFIG_QUERY_STRING_ENABLE', true); //Enable passed query string to setting the system configuration
+if($_SERVER['REMOTE_ADDR'] != '80.232.240.76'){
+	$SERVER_PROTOCOL = $_ENV['SERVER_PROTOCOL']??($_SERVER['SERVER_PROTOCOL']??'');
+	header("$SERVER_PROTOCOL 403 Forbidden", true, 403);
+	exit;
+}
+
 if(!isset($_SESSION))
 {
 	session_start();

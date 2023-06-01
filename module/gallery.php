@@ -1,41 +1,49 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
-
-require_once('lib/ResComment.php');
-require_once('lib/Gallery.php');
-require_once('lib/GalleryData.php');
-require_once('lib/MainModule.php');
+<?php declare(strict_types = 1);
 
 $CACHE_ENABLE = true;
 if($i_am_admin){
-	//$CACHE_ENABLE = false;
+	// $CACHE_ENABLE = false;
 }
+
+$template = new MainModule($sys_module_id);
+$template->set_title('Galerijas');
+
+if(!User::logged()){
+	$template->not_logged();
+	$template->set_right_defaults();
+	$template->out(null);
+	return;
+}
+
 $gal_id = array_shift($sys_parameters);
 $gd_id = (int)array_shift($sys_parameters);
-$hl = rawurldecode(get("hl"));
+$hl = get("hl");
 $action = post('action');
 
-# thumbs per row
-$tpr = 5;
-
-$GD = new GalleryData;
-$gallery = new Gallery;
-
-if(($gal_id == 'thumb' || $gal_id == 'image') && $gd_id && user_loged())
-{
-	include('gallery/image.inc.php');
+# TODO: atsevišķs TrueResponseInterface priekš bildēm
+if(($gal_id == 'thumbs') && $gd_id){
+	$gal_id = $gd_id;
+	$gd_id = (int)array_shift($sys_parameters);
+	if($gd_id){
+		gallery_image($gd_id, 'thumb');
+		return;
+	}
+	$template->not_found();
+} elseif(($gal_id == 'thumb') && $gd_id){
+	gallery_image($gd_id, 'thumb');
+	return;
+} elseif(($gal_id == 'image') && $gd_id) {
+	gallery_image($gd_id, 'image');
+	return;
 } else {
-	$template = new MainModule($sys_module_id);
-	$template->set_file('FILE_gallery', 'gallery.tpl');
-	$template->copy_block('BLOCK_middle', 'FILE_gallery');
-
-	include('gallery/root.inc.php');
-
-	$template->set_right_defaults();
-	$template->out();
+	if($gal_id == 'view'){
+		$T = gallery_view($template, $gd_id);
+	} elseif($gal_id){
+		$T = gallery_thumbs_list($template, (int)$gal_id);
+	} else {
+		$T = gallery_root($template);
+	}
 }
 
+$template->set_right_defaults();
+$template->out($T??null);

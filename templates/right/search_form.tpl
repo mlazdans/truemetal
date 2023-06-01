@@ -1,33 +1,18 @@
-<div class="TD-cat" title="Meklētājs">
-	Meklētājs
-</div>
-
-<div class="List-item">
 <form
 	id="search_form"
 	method="post"
 	action="/search/"
 	onsubmit="$('#search_form').attr('action', '/search/?search_q=' + $('#search_form_search_q').val()); $('#search_sPPAAMMcheck').val(0);"
 >
-<table cellpadding="1" cellspacing="1" width="100%">
-<tr>
-	<td>
-		<input id="search_sPPAAMMcheck" type="hidden" name="spam" value="1" />
-		<input type="text" name="search_q" id="search_form_search_q" class="input" style="width: 113px;" value="{search_q}" />
-	</td>
-	<td>
-		<input type="submit" class="input" value="OK" />
-	</td>
-</tr>
-</table>
+<input id="search_sPPAAMMcheck" type="hidden" name="spam" value="1">
+<div class="List-item"><input type="text" name="search_q" id="search_form_search_q" class="input" style="width: 100%;" value="{search_q}"></div>
+<div class="List-item"><input type="submit" class="input" value=" Meklēt "></div>
 </form>
-</div>
 
 <div class="List-item">
 	<a href="/search/">Advanced</a>
 </div>
 
 <div class="List-item">
-	<a href="/search_log/">Ko mēs meklējam?</a>
+	<a href="/search/log/">Ko mēs meklējam?</a>
 </div>
-

@@ -1,29 +1,25 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
-require_once('lib/Comment.php');
-
-$c_ids = post('c_id');
-if(!is_array($c_ids))
-	$c_ids = array($c_id);
+$res_ids = (array)post('res_ids');
+$new_res_id = post('new_res_id');
 
 $ok = true;
 $func = substr($action, 8);
 
-$db->AutoCommit(false);
+if($func == 'move'){
+	$RC = new ResComment;
+	$RC->setDb($db);
+	foreach($c_ids as $c_id)
+		$ok = $RC->{$func}($c_id, $new_res_id) ? $ok : false;
 
-$Comment = new Comment;
-$Comment->setDb($db);
-foreach($c_ids as $c_id)
-	$ok = $Comment->{$func}($c_id) ? $ok : false;
+	if($ok)
+		$db->Commit();
 
-if($ok)
-	$db->Commit();
-
-return $ok;
-
-
+	return $ok;
+} elseif($func == 'show'){
+	return (new ResEntity)->show($res_ids);
+} elseif($func == 'hide'){
+	return (new ResEntity)->hide($res_ids);
+} else {
+	throw new InvalidArgumentException("Unknow action: $func");
+}

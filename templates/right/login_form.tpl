@@ -1,20 +1,16 @@
 <!-- BEGIN BLOCK_login_form disabled -->
-<div class="TD-cat" title="Pieslēgties sistēmai">
-	Pieslēgties
-</div>
-
 <div class="List-item">
 <form action="/login/" method="post">
 <table cellpadding="1" cellspacing="1" width="100%">
 <tr>
 	<td colspan="2">
-		<input type="hidden" name="data[referer]" value="{referer}" />
-		<input style="width: 160px;" type="text" name="data[login]" value="Lietotāja vārds" onfocus="if(this.value=='Lietotāja vārds')this.value=''" />
+		<input type="hidden" name="data[referer]" value="{referer}">
+		<input style="width: 100%;" type="text" name="data[login]" placeholder="Logins / e-pasts">
 	</td>
 </tr>
 <tr>
-	<td><input style="width: 113px;" type="password" name="data[password]" size="13" /></td>
-	<td><input type="submit" class="input" value=" OK " /></td>
+	<td><input style="width: 100%;" type="password" name="data[password]" size="13" placeholder="Parole"></td>
+	<td style="text-align: center;"><input type="submit" class="input" value=" OK "></td>
 </tr>
 </table>
 </form>
@@ -29,9 +25,6 @@
 <!-- END BLOCK_login_form -->
 
 <!-- BEGIN BLOCK_login_data disabled -->
-<div class="TD-cat" title="Pieslēgties sistēmai">
-	Login
-</div>
 <div class="List-item">
 	{login_nick}
 </div>
@@ -45,4 +38,3 @@
 	<a href="/mark/" title="Iezīmēt visus komentārus kā izlasītus">Mark all as read</a>
 </div>
 <!-- END BLOCK_login_data -->
-
