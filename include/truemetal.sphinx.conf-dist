@@ -40,19 +40,19 @@ source pages
 	#
 	# mysql_connect_flags = 32 # enable compression
 
-	sql_query_pre        = SET NAMES utf8
-	sql_query_pre        = SET group_concat_max_len = 4194304
-	sql_query            = SELECT doc_id, table_id, res_id, res_resid, doc_source_id, doc_name, doc_content, doc_comment_count, doc_comment_last_date, doc_entered FROM view_documents;
+	sql_query_pre   = SET NAMES utf8
+	sql_query_pre   = SET group_concat_max_len = 4194304
+	sql_query       = SELECT doc_id, table_id, res_id, res_resid, doc_source_id, doc_name, doc_content, doc_comment_count, doc_comment_last_date, doc_entered FROM view_documents;
 
-	sql_attr_uint        = res_id
-	sql_attr_uint        = table_id
-	sql_attr_uint        = res_resid
-	sql_attr_uint        = doc_source_id
-	sql_attr_string      = doc_name
-	sql_attr_uint        = doc_comment_count
-	sql_attr_timestamp   = doc_entered
-	sql_attr_timestamp   = doc_comment_last_date
-}
+	sql_attr_uint   = res_id
+	sql_attr_uint   = table_id
+	sql_attr_uint   = res_resid
+	sql_attr_uint   = doc_source_id
+	sql_attr_string = doc_name
+	sql_attr_uint   = doc_comment_count
+	sql_attr_uint   = doc_entered
+	sql_attr_uint   = doc_comment_last_date
+
 
 source titles : pages
 {
