@@ -52,7 +52,7 @@ source pages
 	sql_attr_uint   = doc_comment_count
 	sql_attr_uint   = doc_entered
 	sql_attr_uint   = doc_comment_last_date
-
+}
 
 source titles : pages
 {
