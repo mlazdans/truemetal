@@ -149,7 +149,7 @@ function forum_themes(
 	$T->set_array($forum);
 
 	$T->set_var('current_theme_name', specialchars($forum->res_name));
-	$T->set_var('current_theme_route', $forum->Route());
+	$T->set_var('current_theme_route', $forum->res_route);
 
 	if($forum->forum_id == 107488){
 		$T->enable('BLOCK_forumdata_bazar');
@@ -202,7 +202,7 @@ function forum_themes(
 		$BLOCK_forum->enable_if(Forum::hasNewComments($item), 'BLOCK_comments_new');
 
 		$BLOCK_forum->set_array(specialchars($item));
-		$BLOCK_forum->set_var('res_route', $item->Route());
+		$BLOCK_forum->set_var('res_route', $item->res_route);
 		$BLOCK_forum->set_var('res_date', proc_date($item->res_entered));
 		$BLOCK_forum->parse(TMPL_APPEND);
 	}
@@ -292,7 +292,7 @@ function set_res(Template $T, ViewResType&ResourceTypeInterface $res, string $hl
 	$T->set_var('res_date_short', proc_date_short($res->res_entered));
 	$T->set_var('res_votes', format_vote($res->res_votes));
 	$T->set_var('comment_vote_class', comment_vote_class($res->res_votes));
-	$T->set_var('res_route', $res->Route());
+	$T->set_var('res_route', $res->res_route);
 	$T->set_var_if($res->res_name && $hl, 'res_name', hl($res->res_name, $hl));
 
 	if(User::logged()){
@@ -394,7 +394,7 @@ function forum_det(
 		if(!$error_msg) {
 			if($c_id = Res::user_add_comment($forum->res_id, $data['c_data']))
 			{
-				header("Location: ".$forum->Route($c_id));
+				header("Location: ".$forum->Route().'#'.$c_id);
 				return null;
 			} else {
 				$error_msg[] = "Neizdevās pievienot komentāru";
@@ -1139,7 +1139,6 @@ function forum_root(MainModule $template): Template
 	{
 		$T->enable_if(Forum::hasNewThemes($item), 'BLOCK_comments_new');
 		$T->set_array($item);
-		$T->set_var('res_route', $item->Route());
 		$T->set_var('forum_date', proc_date($item->res_entered));
 		$T->parse_block('BLOCK_forum', TMPL_APPEND);
 	}
@@ -1219,7 +1218,7 @@ function whatsnew(MainModule $template): ?Template
 			$R->enable_if(Forum::hasNewComments($item), 'BLOCK_forum_r_comments_new');
 			$R->set_var('res_name', specialchars($item->res_name));
 			$R->set_var('res_comment_count', $item->res_comment_count);
-			$R->set_var('res_route', $item->Route());
+			$R->set_var('res_route', $item->res_route);
 			$R->parse_block('BLOCK_forum_r_items', TMPL_APPEND);
 		}
 		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_forum');
@@ -1239,7 +1238,7 @@ function whatsnew(MainModule $template): ?Template
 
 			$R->set_var('res_name', specialchars($item->res_name));
 			$R->set_var('res_comment_count', $item->res_comment_count);
-			$R->set_var('res_route', $item->Route());
+			$R->set_var('res_route', $item->res_route);
 			$R->parse_block('BLOCK_comment_r_items', TMPL_APPEND);
 		}
 		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_comments');
@@ -1472,7 +1471,7 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 			$data = post('data');
 			if($c_id = Res::user_add_comment($res_id, $data['c_data']))
 			{
-				header("Location: ".GalleryData::Route($galdata, $c_id));
+				header("Location: ".$galdata->res_route.'#'.$c_id);
 				return null;
 			} else {
 				$error_msg[] = "Never pievienot komentāru";
@@ -1775,7 +1774,7 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 	# NOTE: redirektējam uz jaunajām adresēm, pēc gada (2011-04-30) varēs noņemt
 	if($article_route)
 	{
-		$article_real_route = $art->Route();
+		$article_real_route = $art->res_route;
 		if(!str_ends_with($article_real_route, "/$article_route"))
 		{
 			header("Location: $article_real_route", true, 301);
@@ -1809,7 +1808,7 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 		if(!$error_msg){
 			if($c_id = Res::user_add_comment($art->res_id, $data['c_data']))
 			{
-				header("Location: ".$art->Route($c_id));
+				header("Location: ".$art->Route().'#'.$c_id);
 				return null;
 			} else {
 				$error_msg[] = "Neizdevās pievienot komentāru";

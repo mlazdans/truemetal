@@ -218,7 +218,7 @@ class MainModule
 				$TThemes->enable_if(Forum::hasNewComments($item), 'BLOCK_forum_r_comments_new');
 				$TThemes->set_var('res_name', specialchars($item->res_name));
 				$TThemes->set_var('res_comment_count', $item->res_comment_count);
-				$TThemes->set_var('res_route', $item->Route());
+				$TThemes->set_var('res_route', $item->res_route);
 				$TThemes->parse_block('BLOCK_forum_r_items', TMPL_APPEND);
 			}
 
@@ -267,7 +267,7 @@ class MainModule
 
 			$T->set_var('res_name',  specialchars($item->res_name));
 			$T->set_var('res_comment_count', $item->res_comment_count);
-			$T->set_var('res_route', $item->Route());
+			$T->set_var('res_route', $item->res_route);
 			$T->parse_block('BLOCK_comment_r_items', TMPL_APPEND);
 		}
 
@@ -373,9 +373,9 @@ class MainModule
 			$diff = floor(($ts - time()) / (3600 * 24));
 
 			$TEvents->set_var('event_class', "");
-			$TEvents->set_var('event_url', $item->Route());
 			$TEvents->set_var('event_title', specialchars($D.". ".get_month($M - 1).", ".get_day($Dw - 0)));
-			$TEvents->set_var('event_name', $item->res_name);
+			$TEvents->set_var('event_name', specialchars($item->res_name));
+			$TEvents->set_var('event_url', $item->res_route);
 
 			if($diff<2){
 				$TEvents->set_var('event_class', " actual0");

@@ -32,7 +32,7 @@ if($forum_route)
 		# TODO: append query_string? ?hl=
 		if($forum_route)
 		{
-			$forum_real_route = $forum_data->Route();
+			$forum_real_route = $forum_data->res_route;
 			if(!str_ends_with($forum_real_route, "/$forum_route"))
 			{
 				header("Location: $forum_real_route", true, 301);
