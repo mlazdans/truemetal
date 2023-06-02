@@ -7,7 +7,6 @@ class ViewResCommentEntity extends AbstractResEntity
 	static function getById(int $id, bool $ignore_disabled = false, ?ResCommentFilter $F = new ResCommentFilter): ?ViewResCommentType
 	{
 		$F->c_id = $id;
-		printr($F);
 		if($ignore_disabled){
 			$F->res_visible = false;
 		}
