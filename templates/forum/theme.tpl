@@ -1,4 +1,5 @@
 <div class="TD-cat">{current_theme_name}</div>
+<div class="TD-content">
 
 <!-- BEGIN BLOCK_is_pages disabled -->
 <div class="Forum-cat" style="margin-bottom: 0;">
@@ -117,3 +118,4 @@
 </form>
 <!-- END BLOCK_loggedin -->
 
+</div>

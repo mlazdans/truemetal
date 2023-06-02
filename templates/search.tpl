@@ -34,16 +34,18 @@
 
 <!-- BEGIN BLOCK_search_help -->
 <div class="TD-cat">Piemēri</div>
-<dl>
-	<dt>truemetal</dt>
-		<dd>Atrodam precīzi &quot;truemetal&quot;</dd>
-	<dt>true*</dt>
-		<dd>Atrodam frāzes, kas sākas ar &quot;true&quot;</dd>
-	<dt>truemetal -gay</dt>
-		<dd>Atrodam &quot;truemetal&quot;, bet tikai bez līksmes</dd>
-	<dt>(true | metal) -gay -emo*</dt>
-		<dd>Atrodam precīzi &quot;true&quot; vai &quot;metal&quot; bez līksmes un frāzēm, kas sākas ar &quot;emo&quot;</dd>
-</dl>
+<div class="TD-content">
+	<dl>
+		<dt>truemetal</dt>
+			<dd>Atrodam precīzi &quot;truemetal&quot;</dd>
+		<dt>true*</dt>
+			<dd>Atrodam frāzes, kas sākas ar &quot;true&quot;</dd>
+		<dt>truemetal -gay</dt>
+			<dd>Atrodam &quot;truemetal&quot;, bet tikai bez līksmes</dd>
+		<dt>(true | metal) -gay -emo*</dt>
+			<dd>Atrodam precīzi &quot;true&quot; vai &quot;metal&quot; bez līksmes un frāzēm, kas sākas ar &quot;emo&quot;</dd>
+	</dl>
+</div>
 <!-- END BLOCK_search_help -->
 
 <!-- BEGIN BLOCK_search disabled -->
@@ -52,9 +54,11 @@
 	Rezultāti: {doc_count}
 </div>
 
-<!-- BEGIN BLOCK_search_msg disabled -->
-<div class="List-item">{search_msg}</div>
-<!-- END BLOCK_search_msg -->
+<div class="TD-content">
+	<!-- BEGIN BLOCK_search_msg disabled -->
+	<div class="List-item">{search_msg}</div>
+	<!-- END BLOCK_search_msg -->
+</div>
 
 <table class="Main">
 	<!-- BEGIN BLOCK_search_item disabled -->
@@ -66,4 +70,3 @@
 	<!-- END BLOCK_search_item -->
 </table>
 <!-- END BLOCK_search -->
-

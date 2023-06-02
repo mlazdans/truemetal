@@ -1,4 +1,5 @@
 <div class="TD-cat">Profils: {l_nick}{is_blocked}</div>
+<div class="TD-content">
 <table>
 	<tr>
 		<td rowspan="4" class="List-item text-nowrap" style="vertical-align: middle;">
@@ -53,3 +54,4 @@
 </div>
 </form>
 <!-- END BLOCK_disable_comments -->
+</div>

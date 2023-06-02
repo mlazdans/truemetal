@@ -43,6 +43,7 @@
 
 <!-- BEGIN BLOCK_addcomment -->
 <div class="TD-cat">Pievienot komentāru</div>
+<div class="TD-content">
 
 <!-- BEGIN BLOCK_notloggedin disabled -->
 <div class="Info">
@@ -99,5 +100,7 @@
 	</ul>
 </div>
 <!-- END BLOCK_comment_form -->
+</div>
+
 <!-- END BLOCK_addcomment -->
 

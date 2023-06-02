@@ -1,14 +1,16 @@
 <div class="TD-cat">Reģistrācija</div>
 
 <!-- BEGIN BLOCK_accept_error disabled -->
-<div class="List-item  error-form">Diemžēl e-pastu neizdevās apstiprināt!</div>
-<div class="List-item">
-	Varianti:<ol>
-		<li>nokavēts 15 min. apstiprināšanas termiņš</li>
-		<li>nepareizs vai izlietots kods</li>
-		<li>e-pasts jau ir apstiprināts</li>
-	</ol>
-	<p>Ja kas, tad raksti uz <a href="mailto:info@truemetal.lv">info@truemetal.lv</a></p>
+<div class="TD-content">
+	<div class="List-item  error-form">Diemžēl e-pastu neizdevās apstiprināt!</div>
+	<div class="List-item">
+		Varianti:<ol>
+			<li>nokavēts 15 min. apstiprināšanas termiņš</li>
+			<li>nepareizs vai izlietots kods</li>
+			<li>e-pasts jau ir apstiprināts</li>
+		</ol>
+		<p>Ja kas, tad raksti uz <a href="mailto:info@truemetal.lv">info@truemetal.lv</a></p>
+	</div>
 </div>
 <!-- END BLOCK_accept_error -->
 
@@ -58,15 +60,17 @@
 <!-- END BLOCK_register_form -->
 
 <!-- BEGIN BLOCK_register_ok disabled -->
-<div class="List-item">
-	<p>OK - reģistrācija veiksmīga!</p>
-	<p>Uz norādīto epasta adresi tika nosūtīts kods, ar kuru jāaktivizē jaunais profils.</p>
-	<p>Ja kautkas noiet greizi, ziņo uz <a href="mailto:info@truemetal.lv">info@truemetal.lv</a></p>
+<div class="TD-content">
+	<div class="List-item">
+		<p>OK - reģistrācija veiksmīga!</p>
+		<p>Uz norādīto epasta adresi tika nosūtīts kods, ar kuru jāaktivizē jaunais profils.</p>
+		<p>Ja kautkas noiet greizi, ziņo uz <a href="mailto:info@truemetal.lv">info@truemetal.lv</a></p>
+	</div>
 </div>
 <!-- END BLOCK_register_ok -->
 
 <!-- BEGIN BLOCK_accept_ok disabled -->
-<div class="List-item">
-	E-pasts apstiptināts veiksmīgi!
+<div class="TD-content">
+	<div class="List-item">E-pasts apstiptināts veiksmīgi!</div>
 </div>
 <!-- END BLOCK_accept_ok -->

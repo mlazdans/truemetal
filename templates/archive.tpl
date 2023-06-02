@@ -1,16 +1,17 @@
 <div class="TD-cat">Arhīvs</div>
-
 <!-- BEGIN BLOCK_archive_items -->
 	<!-- BEGIN BLOCK_archive_sep disabled -->
 	<div class="List-sep"></div>
 	<!-- END BLOCK_archive_sep -->
+
 	<!-- BEGIN BLOCK_archive_date disabled -->
-	<div class="TD-cat">
-		{res_date}
-	</div>
+	<div class="TD-cat">{res_date}</div>
 	<!-- END BLOCK_archive_date -->
-	<div class="List-item">
-		<a href="{res_route}">{res_name}</a>
+
+	<div class="TD-content">
+		<div class="List-item">
+			<a href="{res_route}">{res_name}</a>
+		</div>
 	</div>
 <!-- END BLOCK_archive_items -->
 

@@ -1,4 +1,5 @@
 <div class="TD-cat">{res_name}</div>
+<div class="TD-content">
 
 <!-- BEGIN BLOCK_attend --><!-- END BLOCK_attend -->
 <div class="profile-header">
@@ -55,7 +56,9 @@
 
 <div class="List-sep"></div>
 
+<div class="TD-content">
 <!-- BEGIN BLOCK_forum_comments --><!-- END BLOCK_forum_comments -->
+</div>
 
 <!-- BEGIN BLOCK_forum_closed disabled -->
 <div class="Info">
@@ -63,3 +66,4 @@
 </div>
 <!-- END BLOCK_forum_closed -->
 
+</div>

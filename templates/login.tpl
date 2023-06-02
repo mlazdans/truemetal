@@ -1,7 +1,9 @@
 <div class="TD-cat">Login</div>
 
 <!-- BEGIN BLOCK_login_err disabled -->
-<div class=" List-item error-form">{error_msg}</div>
+<div class="TD-content">
+	<div class=" List-item error-form">{error_msg}</div>
+</div>
 <!-- END BLOCK_login_err -->
 
 <form method="post" action="/login/">

@@ -1,5 +1,3 @@
-*) main-item, kā whatnew.tpl, pārsaukt TD-cat un vispār savest kārtībā stilus
-
 *) l_logedin u.c. 0/1 values CONSTRAINT un not NULL!!!
 
 *) Notestēt komentus, kas beidzas ar linku:

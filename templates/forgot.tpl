@@ -1,13 +1,15 @@
 <div class="TD-cat">Aizmirsu paroli</div>
 
 <!-- BEGIN BLOCK_forgot_code_error disabled -->
-<div class="List-item error-form">Diemžēl šāds pieprasījums netika atrasts!</div>
-<div class="List-item">
-	Varianti:<ol>
-		<li>nokavēts 15 min. apstiprināšanas termiņš</li>
-		<li>nepareizs vai izlietots kods</li>
-	</ol>
-	<p>Ja kas, tad raksti uz <a href="mailto:info@truemetal.lv">info@truemetal.lv</a></p>
+<div class="TD-content">
+	<div class="List-item error-form">Diemžēl šāds pieprasījums netika atrasts!</div>
+	<div class="List-item">
+		Varianti:<ol>
+			<li>nokavēts 15 min. apstiprināšanas termiņš</li>
+			<li>nepareizs vai izlietots kods</li>
+		</ol>
+		<p>Ja kas, tad raksti uz <a href="mailto:info@truemetal.lv">info@truemetal.lv</a></p>
+	</div>
 </div>
 <!-- END BLOCK_forgot_code_error -->
 
@@ -34,13 +36,15 @@
 <!-- END BLOCK_forgot_form -->
 
 <!-- BEGIN BLOCK_forgot_ok disabled -->
-<div class="List-item">
-	Lai nomainītu paroli, iečeko savu e-pastu ({l_email}), tur Tu
-	atradīsi kodu, kuru izmantojot varēsi ievadīt jaunu paroli.
-</div>
-<div class="List-item">
-	Ja kautkas noiet greizi, droši ziņo uz
-	<a href="mailto:info@truemetal.lv">info@truemetal.lv</a>
+<div class="TD-content">
+	<div class="List-item">
+		Lai nomainītu paroli, iečeko savu e-pastu ({l_email}), tur Tu
+		atradīsi kodu, kuru izmantojot varēsi ievadīt jaunu paroli.
+	</div>
+	<div class="List-item">
+		Ja kautkas noiet greizi, droši ziņo uz
+		<a href="mailto:info@truemetal.lv">info@truemetal.lv</a>
+	</div>
 </div>
 <!-- END BLOCK_forgot_ok -->
 

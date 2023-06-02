@@ -1,7 +1,7 @@
 <div class="TD-cat">
 	Infected - Chemical Reaction (Daugavpils 2004-12-17)
 </div>
-<div>
+<div class="TD-content">
 	<table cellpadding="2" cellspacing="1" width="100%">
 	<tr>
 		<td><img src="/video/infected_daugavpils_2004-12.jpg" alt="Infected"></td>
@@ -19,7 +19,7 @@
 <div class="TD-cat">
 	Baltijas Saule 2004
 </div>
-<div>
+<div class="TD-content">
 	<table cellpadding="2" cellspacing="1" width="100%">
 	<tr>
 		<td><a href="/video/baltijas_saule_2004_metsatoll.avi"><img src="/video/baltijas_saule_2004_metsatoll.jpg" alt="Baltijas Saule 2004 - Metsatoll"></a></td>
@@ -53,7 +53,7 @@
 <div class="TD-cat">
 	Skyforger live in Parnu
 </div>
-<div>
+<div class="TD-content">
 	<table cellpadding="2" cellspacing="1" width="100%">
 	<tr>
 		<td><a href="/video/Skyforger_-_Tumsa_un_Sala_(live_in_Parnu).avi"><img src="/video/Skyforger_-_Tumsa_un_Sala_(live_in_Parnu).jpg" alt="Skyforger - Tumsā un Salā"></a></td>
@@ -70,7 +70,7 @@
 <div class="TD-cat">
 	Impaled Nazarene live in Riga
 </div>
-<div>
+<div class="TD-content">
 	<table cellpadding="2" cellspacing="1" width="100%">
 	<tr>
 		<td><a href="/video/Impaled_-_Nazarene_-_Sadhu_Satana_(live_in_Riga).avi"><img src="/video/Impaled_-_Nazarene_-_Sadhu_Satana_(live_in_Riga).jpg" alt="Impaled Nazarene - Sadhu Satana"></a></td>
@@ -88,7 +88,7 @@
 <div class="TD-cat">
 	Intervijas ar Obtest un Skyforger sadarbībā ar Andi un Artūru
 </div>
-<div>
+<div class="TD-content">
 	<table cellpadding="2" cellspacing="1" width="100%">
 	<tr>
 		<td><a href="/video/Obtest-Interview_210903-WM_256Kbps.wmv"><img src="/video/Obtest-Interview_210903-WM_256Kbps.jpg" alt="Intervija ar Obtest"></a></td>
@@ -113,7 +113,7 @@
 <div class="TD-cat">
 	Baltijas Saule 2003, filmē Artūrs (mepisins)
 </div>
-<div>
+<div class="TD-content">
 	<table cellpadding="2" cellspacing="1" width="100%">
 	<tr>
 		<td><a href="/video/BS2003-Obtest.wmv"><img src="/video/BS2003-Obtest.jpg" alt="Obtest"></a></td>
@@ -138,7 +138,7 @@
 <div class="TD-cat">
 	Baltijas Saule 2002, no Trejasmens materiāliem
 </div>
-<div>
+<div class="TD-content">
 	<table cellpadding="2" cellspacing="1" width="100%">
 	<tr>
 		<td><a href="/video/baltijas_saule_2002a.avi"><img src="/video/bs_2002a.jpg" alt="Baltijas Saule 2002, 1. daļa"></a></td>

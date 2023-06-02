@@ -23,7 +23,7 @@
 			<a href="{banner_href}"><img src="/img/{banner_img}" width="{banner_width}" height="{banner_height}" alt="{banner_alt}"></a>
 		<!-- END BLOCK_banner_top -->
 	</div>
-	<div class="content" class="{block_middle_class}">
+	<div class="content">
 		<div id="main">
 		<!-- BEGIN BLOCK_container -->
 			<!-- BEGIN BLOCK_error disabled -->

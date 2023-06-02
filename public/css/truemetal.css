@@ -84,26 +84,6 @@ P {
 	margin-top: 0;
 }
 
-.TD-cat {
-	background-color: #660000;
-	color: white;
-	font-weight: bold;
-	padding: 0.3em 0.4em 0.4em 0.4em;
-	border-left: 1px solid white;
-	border-top: 1px solid white;
-	border-bottom: 1px solid #220000;
-	border-right: 1px solid #220000;
-	cursor: default;
-}
-.TD-cat a.caption {
-	color: white;
-	font-weight: bold;
-	text-decoration: underline;
-}
-.TD-cat a.caption:hover {
-	text-decoration: none;
-}
-
 .TD-weekend {
 	background-color: #990000;
 }
@@ -165,7 +145,6 @@ input[type=button]:active {
 
 /* Article */
 .Article-item {
-	clear: both;
 	margin-bottom: 1em;
 }
 .Article-item .data {
@@ -301,10 +280,6 @@ table.Main tr:last-child td {
 	/* background-color: #00a400; */
 	/* border-bottom: 1px dotted #220000;
 	padding: 0.2em; */
-}
-
-div.clear {
-	clear: both;
 }
 
 /* http://ajaxloadingimages.net/ */
@@ -470,7 +445,6 @@ label > input {
 	color: red;
 }
 .Comment {
-	/* clear: both; */
 	margin-bottom: 1em;
 }
 
@@ -496,6 +470,7 @@ label > input {
 
 .user-info .nick {
 	font-weight: bold;
+	padding-left: 0.4em;
 	padding-right: 0;
 }
 .vote-plus, .vote-minus, .vote-zero {
@@ -524,10 +499,6 @@ label > input {
 	margin-bottom: 1px;
 }
 
-.main-item {
-	margin: 0 2px 2px 2px;
-}
-
 .yt {
 	width: 80%;
 	min-height: 30vh;
@@ -542,4 +513,47 @@ label > input {
 	min-height: 30vh;
 	margin: 0;
 	padding: 0;
+}
+
+.TD-cat {
+	display: flex;
+	background-color: #660000;
+	color: white;
+	font-weight: bold;
+	padding: 0.4em 0.4em 0.4em 0.4em;
+	border-left: 1px solid white;
+	border-top: 1px solid white;
+	border-bottom: 1px solid #220000;
+	border-right: 1px solid #220000;
+	cursor: default;
+}
+.TD-cat a.caption {
+	color: white;
+	font-weight: bold;
+	text-decoration: underline;
+}
+.TD-cat a.caption:hover {
+	text-decoration: none;
+}
+
+.TD-content {
+	margin: 0 1px;
+}
+
+.res-name {
+	text-align: center;
+	white-space: nowrap;
+	width: 100%;
+}
+.res-name a {
+	color: white;
+	font-weight: bold;
+	text-decoration: underline;
+}
+.res-name a:hover {
+	text-decoration: none;
+}
+
+.res-comments-link {
+	white-space: nowrap;
 }

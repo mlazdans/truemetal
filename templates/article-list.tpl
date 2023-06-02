@@ -1,14 +1,14 @@
 <!-- BEGIN BLOCK_article -->
-<div class="Article-item">
-	<div class="TD-cat">
-		<div class="date">{res_date}</div>
-		<div class="comments">
-			<a href="{res_route}#art-comments-{doc_id}">Komentāri</a>
-			<span<!-- BEGIN BLOCK_comments_new disabled --> class="Comment-new"<!-- END BLOCK_comments_new -->>({res_comment_count})</span>
-		</div>
-		<div class="caption"><a class="caption" href="{res_route}">{res_name}</a></div>
+<div class="TD-cat">
+	<div class="res-date">{res_date}</div>
+	<div class="res-name"><a href="{res_route}">{res_name}</a></div>
+	<div class="res-comments-link">
+		<a href="{res_route}#art-comments-{doc_id}">Komentāri</a>
+		<span<!-- BEGIN BLOCK_comments_new disabled --> class="Comment-new"<!-- END BLOCK_comments_new -->>({res_comment_count})</span>
 	</div>
+</div>
 
+<div class="Article-item">
 	<div class="data">
 		{res_intro}
 		<!-- BEGIN BLOCK_art_cont disabled -->
@@ -16,7 +16,6 @@
 			<a href="{res_route}">..tālāk..</a>
 		</div>
 		<!-- END BLOCK_art_cont -->
-		<div class="clear"></div>
 	</div>
 </div>
 <!-- END BLOCK_article -->
