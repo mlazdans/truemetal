@@ -3,8 +3,8 @@
 class ViewResArticleType extends ViewResType implements ResourceTypeInterface {
 	use ViewResArticleTypeTrait;
 
-	function Route(int $c_id = null): string
+	function Route(): string
 	{
-		return Article::RouteFromStr($this->module_id, $this->art_id, $this->res_name, $c_id);
+		return Article::RouteFromStr($this->module_id, $this->art_id, $this->res_name);
 	}
 }

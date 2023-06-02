@@ -3,14 +3,8 @@
 class ViewResCommentType extends ViewResType implements ResourceTypeInterface {
 	use ViewResCommentTypeTrait;
 
-	function Route(int $c_id = null): ?string
+	function Route(): string
 	{
-		if($parent = load_res($this->res_resid))
-		{
-			return $parent->Route().'#'.$this->c_id;
-		}
-
-		return null;
+		return $this->parent_res_route.'#'.$this->c_id;
 	}
-
 }
