@@ -113,22 +113,23 @@ function forum_add_theme(MainModule $template, Template $T, ViewResForumType $fo
 		res_data: $post_data['forum_data'],
 	);
 
-	$forum_id = DB::withNewTrans(function() use ($R){
+	return DB::withNewTrans(function() use ($R){
 		if($res_id = $R->insert()){
-			return (new ForumType(
+			if($forum_id = (new ForumType(
 				res_id: $res_id,
 				forum_allow_childs: 0
-			))->insert();
-		}
-	});
-
-	if($forum_id)
-	{
-		header("Location: ".Forum::RouteFromStr($forum_id, $post_data['forum_name']));
+			))->insert()){
+				$new = ViewResForumEntity::getById($forum_id);
+				$U = new ResType(res_id:$res_id, res_route:$new->Route());
+				if($U->update()){
+					header("Location: $U->res_route");
 		return true;
+				}
+			}
 	}
 
 	return false;
+	});
 }
 
 function forum_themes(
