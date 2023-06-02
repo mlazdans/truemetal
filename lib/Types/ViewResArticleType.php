@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class ViewResArticleType implements ResourceTypeInterface {
+class ViewResArticleType extends ViewResType implements ResourceTypeInterface {
 	use ViewResArticleTypeTrait;
 
 	function Route(int $c_id = null): string

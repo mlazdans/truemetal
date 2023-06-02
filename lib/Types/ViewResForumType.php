@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
-class ViewResForumType implements ResourceTypeInterface {
+class ViewResForumType extends ViewResType implements ResourceTypeInterface {
 	use ViewResForumTypeTrait;
 
-	function Route(int $c_id = null): string
+	function Route(): string
 	{
-		return Forum::RouteFromStr($this->forum_id, $this->res_name, $c_id);
+		return Forum::RouteFromStr($this->forum_id, $this->res_name);
 	}
 }
