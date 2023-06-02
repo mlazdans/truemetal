@@ -150,9 +150,9 @@ class Forum
 		return false;
 	}
 
-	static function RouteFromStr(int $forum_id, string $forum_name, ?int $c_id = null): string
+	static function RouteFromStr(int $forum_id, string $forum_name): string
 	{
-		return "/forum/$forum_id-".urlize($forum_name).($c_id ? "#comment$c_id" : "");
+		return "/forum/$forum_id-".urlize($forum_name);
 	}
 
 	# TODO: izpētīt vai var apvienot ar $_SESSION['res']['viewed_date'][$res_id]

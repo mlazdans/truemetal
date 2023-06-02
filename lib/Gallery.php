@@ -157,9 +157,9 @@ class Gallery
 	// 		$data['gal_ggid'] = 0;
 	// }
 
-	public static function Route($resource, $c_id = 0)
-	{
-		return "/gallery/$resource->gal_id/".($c_id ? "#comment$c_id" : "");
-	}
+	// public static function Route($resource)
+	// {
+	// 	return "/gallery/$resource->gal_id/";
+	// }
 
 }

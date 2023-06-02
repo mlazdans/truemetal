@@ -66,9 +66,9 @@ class Article
 		return $data['art_count'];
 	}
 
-	static function RouteFromStr(string $module_id, int $art_id, string $res_name, ?int $c_id = null): string
+	static function RouteFromStr(string $module_id, int $art_id, string $res_name): string
 	{
-		return "/$module_id/$art_id-".urlize($res_name).($c_id ? "#comment$c_id" : "");
+		return "/$module_id/$art_id-".urlize($res_name);
 	}
 }
 

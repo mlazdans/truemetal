@@ -18,10 +18,10 @@ class GalleryData
 	// 	return DB::Execute($sql);
 	// }
 
-	public static function Route($resource, $c_id = 0)
-	{
-		return "/gallery/view/$resource->gd_id/".($c_id ? "#comment$c_id" : "");
-	}
+	// public static function Route($resource)
+	// {
+	// 	return "/gallery/view/$resource->gd_id/";
+	// }
 
 	public static function hasNewComments(ViewResGDType $item)
 	{
