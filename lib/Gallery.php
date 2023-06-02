@@ -162,4 +162,9 @@ class Gallery
 	// 	return "/gallery/$resource->gal_id/";
 	// }
 
+	public static function RouteFromStr(int $gal_id)
+	{
+		return "/gallery/$gal_id";
+	}
+
 }

@@ -23,6 +23,11 @@ class GalleryData
 	// 	return "/gallery/view/$resource->gd_id/";
 	// }
 
+	public static function RouteFromStr(int $gd_id)
+	{
+		return "/gallery/view/$gd_id";
+	}
+
 	public static function hasNewComments(ViewResGDType $item)
 	{
 		return Res::hasNewComments($item->res_id, $item->res_comment_last_date);
