@@ -1958,9 +1958,7 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 					$item['res_data'] = '';
 				}
 			}
-			$item['res_route'] = Forum::RouteFromStr((int)$item['doc_id'], $item['res_name']);
 		} elseif($item['table_id'] == ResKind::ARTICLE){
-			$item['res_route'] = Article::RouteFromStr($item['module_id'], (int)$item['doc_id'], $item['res_name']);
 		} else {
 			throw new InvalidArgumentException("Unexpected table ID: $item[table_id]");
 		}
