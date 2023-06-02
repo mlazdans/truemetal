@@ -20,6 +20,7 @@ trait ViewResTypeTrait {
 	var ?string $res_intro;
 	var ?string $res_data;
 	var ?string $res_data_compiled;
+	var ?string $res_route;
 	var ?int $res_votes;
 	var ?int $res_votes_plus_count;
 	var ?int $res_votes_minus_count;
@@ -29,7 +30,7 @@ trait ViewResTypeTrait {
 	var ?string $res_comment_last_date;
 	var ?string $l_hash;
 
-	function __construct(?int $res_id = null, ?int $res_resid = null, ?int $table_id = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null) {
+	function __construct(?int $res_id = null, ?int $res_resid = null, ?int $table_id = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null) {
 		if(isset($res_id))$this->res_id = $res_id;
 		if(isset($res_resid))$this->res_resid = $res_resid;
 		if(isset($table_id))$this->table_id = $table_id;
@@ -43,6 +44,7 @@ trait ViewResTypeTrait {
 		if(isset($res_intro))$this->res_intro = $res_intro;
 		if(isset($res_data))$this->res_data = $res_data;
 		if(isset($res_data_compiled))$this->res_data_compiled = $res_data_compiled;
+		if(isset($res_route))$this->res_route = $res_route;
 		if(isset($res_votes))$this->res_votes = $res_votes;
 		if(isset($res_votes_plus_count))$this->res_votes_plus_count = $res_votes_plus_count;
 		if(isset($res_votes_minus_count))$this->res_votes_minus_count = $res_votes_minus_count;
