@@ -123,12 +123,12 @@ function forum_add_theme(MainModule $template, Template $T, ViewResForumType $fo
 				$U = new ResType(res_id:$res_id, res_route:$new->Route());
 				if($U->update()){
 					header("Location: $U->res_route");
-		return true;
+					return true;
 				}
 			}
-	}
+		}
 
-	return false;
+		return false;
 	});
 }
 
@@ -393,9 +393,8 @@ function forum_det(
 		}
 
 		if(!$error_msg) {
-			if($c_id = Res::user_add_comment($forum->res_id, $data['c_data']))
+			if(Res::user_add_comment($forum->res_id, $data['c_data']))
 			{
-				header("Location: ".$forum->Route().'#comment'.$c_id);
 				return null;
 			} else {
 				$error_msg[] = "Neizdevās pievienot komentāru";
@@ -1468,9 +1467,8 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 		if(empty($error_msg)){
 			$res_id = (int)$galdata->res_id;
 			$data = post('data');
-			if($c_id = Res::user_add_comment($res_id, $data['c_data']))
+			if(Res::user_add_comment($res_id, $data['c_data']))
 			{
-				header("Location: ".$galdata->res_route.'#comment'.$c_id);
 				return null;
 			} else {
 				$error_msg[] = "Never pievienot komentāru";
@@ -1805,9 +1803,8 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 		}
 
 		if(!$error_msg){
-			if($c_id = Res::user_add_comment($art->res_id, $data['c_data']))
+			if(Res::user_add_comment($art->res_id, $data['c_data']))
 			{
-				header("Location: ".$art->Route().'#comment'.$c_id);
 				return null;
 			} else {
 				$error_msg[] = "Neizdevās pievienot komentāru";

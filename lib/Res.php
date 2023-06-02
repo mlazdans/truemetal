@@ -59,7 +59,7 @@ class Res
 
 	# TODO: varbūt vajadzētu kaut kā apvienot daudzās vietas, kur šis tiek izsaukt, jo
 	# patlaban datu validācija notiek katrā izsaukšanas vietā
-	static function user_add_comment(int $res_id, string $c_data): ?int
+	static function user_add_comment(int $res_id, string $c_data): bool
 	{
 		$R = static::prepare_with_user(
 			res_resid: $res_id,
@@ -68,11 +68,21 @@ class Res
 		);
 
 		return DB::withNewTrans(function() use ($R){
-			if($res_id = $R->insert()){
-				return (new CommentType(
-					res_id: $res_id
-				))->insert();
+			if($new_res_id = $R->insert()){
+				if($c_id = (new CommentType(
+					res_id: $new_res_id
+				))->insert()) {
+					if($new = ViewResCommentEntity::getById($c_id)){
+						$U = new ResType(res_id:$new_res_id, res_route:$new->Route());
+						if($U->update()){
+							header("Location: $U->res_route");
+							return true;
+						}
+					}
+				};
 			}
+
+			return false;
 		});
 	}
 
