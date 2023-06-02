@@ -1333,9 +1333,9 @@ function gallery_thumbs_list(MainModule $template, int $gal_id): ?Template
 	$tpr = 5;
 	$c = 0;
 
-	$F = (new ResGDFilter(res_resid: $gal->res_id))->orderBy("res_name");
+	$F = (new ResGdFilter(res_resid: $gal->res_id))->orderBy("res_name");
 
-	$data = (new ViewResGDEntity)->getAll($F);
+	$data = (new ViewResGdEntity)->getAll($F);
 
 	$thumb_count = count($data);
 	foreach($data as $thumb)
@@ -1423,7 +1423,7 @@ function gallery_image(int $gd_id, string $gal_type): void
 		$jpeg = cache_read($hash);
 	} else {
 		// $data = $GD->load(['gd_id'=>$gd_id, 'load_images'=>true]);
-		$data = ViewResGDDataEntity::getById($gd_id);
+		$data = ViewResGdDataEntity::getById($gd_id);
 		$jpeg = $gal_type == 'image' ? $data->gd_data : $data->gd_thumb;
 
 		if($CACHE_ENABLE && $jpeg)
@@ -1442,7 +1442,7 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 
 	// $GD = new GalleryData;
 
-	if(!($galdata = ViewResGDEntity::getById($gd_id))){
+	if(!($galdata = ViewResGdEntity::getById($gd_id))){
 		$template->not_found();
 		return null;
 	}

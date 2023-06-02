@@ -28,7 +28,7 @@ class GalleryData
 		return "/gallery/view/$gd_id";
 	}
 
-	public static function hasNewComments(ViewResGDType $item)
+	public static function hasNewComments(ViewResGdType $item)
 	{
 		return Res::hasNewComments($item->res_id, $item->res_comment_last_date);
 	}

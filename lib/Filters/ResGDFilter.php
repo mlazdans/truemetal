@@ -2,7 +2,7 @@
 
 use dqdp\SQL\Select;
 
-class ResGDFilter extends ResFilter
+class ResGdFilter extends ResFilter
 {
 	function __construct(
 		// NOTE                            : keep sync with ResFilter
