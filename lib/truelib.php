@@ -287,6 +287,25 @@ function forum_pages(
 	$T->set_var('next_page_id', ($page_id < $total_pages) ? $page_id + 1 : $page_id);
 }
 
+function set_res(Template $T, ViewResType&ResourceTypeInterface $res, string $hl){
+	$T->set_var('res_date', proc_date($res->res_entered));
+	$T->set_var('res_date_short', proc_date_short($res->res_entered));
+	$T->set_var('res_votes', format_vote($res->res_votes));
+	$T->set_var('comment_vote_class', comment_vote_class($res->res_votes));
+	$T->set_var('res_route', $res->Route());
+	$T->set_var_if($res->res_name && $hl, 'res_name', hl($res->res_name, $hl));
+
+	if(User::logged()){
+		$T->enable('BLOCK_vote_control');
+	}
+
+	if(User::logged() && $res->l_hash){
+		$T->enable('BLOCK_profile_link');
+	} else {
+		$T->disable('BLOCK_profile_link');
+	}
+}
+
 function forum_det(
 	MainModule $template,
 	ViewResForumType $forum,
@@ -295,13 +314,9 @@ function forum_det(
 ): ?Template
 {
 	$T = $template->add_file('forum/det.tpl');
-
 	$T->set_array($forum);
-	$T->set_var('res_date', proc_date($forum->res_entered));
-	$T->set_var('res_votes', format_vote($forum->res_votes));
-	$T->set_var('res_route', $forum->Route());
-	$T->set_var('comment_vote_class', comment_vote_class($forum->res_votes));
-	$T->set_var_if($forum->res_name && $hl, 'res_name', hl($forum->res_name, $hl));
+
+	set_res($T, $forum, $hl);
 
 	$res_data = $forum->res_data_compiled;
 	if($forum->forum_display == Forum::DISPLAY_DATA){
@@ -313,16 +328,6 @@ function forum_det(
 	}
 
 	$T->set_var('res_data_compiled', $res_data);
-
-	if(User::logged()){
-		$T->enable('BLOCK_vote_control');
-	}
-
-	if(User::logged() && $forum->l_hash){
-		$T->enable('BLOCK_profile_link');
-	} else {
-		$T->disable('BLOCK_profile_link');
-	}
 
 	$C = $template->add_file('comments.tpl');
 
@@ -1786,6 +1791,7 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 	$C = $template->add_file('comments.tpl');
 
 	$error_msg = [];
+	# TODO: generalize
 	if($action == 'add_comment')
 	{
 		if(!User::logged()){
@@ -1827,7 +1833,8 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 	// $art_title .= (isset($art['art_name']) ? " - ".$art['art_name'] : "");
 
 	$T->set_array($art);
-	$T->set_var('res_date_f', proc_date($art->res_entered));
+
+	set_res($T, $art, $hl);
 
 	$T->set_var_if($art->res_intro && $hl, 'res_intro', hl($art->res_intro, $hl));
 	$T->set_var_if($art->res_data && $hl, 'res_data', hl($art->res_data, $hl));
