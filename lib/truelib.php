@@ -1922,9 +1922,6 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 		}
 	}
 
-	// if(!$art_id)
-	$T->set_var('block_middle_class', 'light');
-
 	$c = 0;
 	foreach($articles as $item)
 	{
