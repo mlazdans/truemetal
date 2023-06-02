@@ -11,6 +11,6 @@ $CONS_START = microtime(true);
 register_shutdown_function(function(){
 	global $CONS_START;
 
-	printf("\nMem usage: %s MB\n", number_format(memory_get_peak_usage(true)/1024/1204, 2));
-	printf("Finished in: %s sec\n", number_format(microtime(true) - $CONS_START, 2));
+	fprintf(STDERR, "\nMem usage: %s MB\n", number_format(memory_get_peak_usage(true)/1024/1204, 2));
+	fprintf(STDERR,"Finished in: %s sec\n", number_format(microtime(true) - $CONS_START, 2));
 });
