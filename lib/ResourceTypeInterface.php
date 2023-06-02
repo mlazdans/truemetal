@@ -2,5 +2,5 @@
 
 interface ResourceTypeInterface
 {
-	function Route(): ?string;
+	function Route(): string;
 }

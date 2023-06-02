@@ -1,3 +1,5 @@
+mysql -uroot truemetal < %~dp0%FUNC_urlize.sql
+
 mysql -uroot truemetal < %~dp0%PROC_res_meta_update_childs.sql
 mysql -uroot truemetal < %~dp0%PROC_res_meta_update_votes.sql
 mysql -uroot truemetal < %~dp0%PROC_res_meta_update.sql
