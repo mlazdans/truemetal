@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class ViewResGDEntity extends AbstractResEntity
+class ViewResGdEntity extends AbstractResEntity
 {
 	use ViewResGdEntityTrait;
 
