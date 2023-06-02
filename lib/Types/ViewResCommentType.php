@@ -5,6 +5,6 @@ class ViewResCommentType extends ViewResType implements ResourceTypeInterface {
 
 	function Route(): string
 	{
-		return $this->parent_res_route.'#'.$this->c_id;
+		return $this->parent_res_route.'#comment'.$this->c_id;
 	}
 }
