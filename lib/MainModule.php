@@ -77,10 +77,13 @@ class MainModule
 		}
 
 		$sys_end_time = microtime(true);
-		$rendered = 'Rendered in: '.number_format(($sys_end_time - $sys_start_time), 4, '.', '').' sec';
+
+		$mem_usage = sprintf("Mem usage: %s MB\n", number_format(memory_get_peak_usage(true)/1024/1204, 2));
+		$rendered = sprintf("Rendered in: %s sec\n", number_format(($sys_end_time - $sys_start_time), 4, '.', ''));
+
 		if($i_am_admin)
 		{
-			$finished = "<div>$rendered</div>";
+			$finished = "<div><pre>$mem_usage$rendered</pre></div>";
 		} else {
 			$finished = "<!-- $rendered -->";
 		}
