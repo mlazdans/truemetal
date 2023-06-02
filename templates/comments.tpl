@@ -27,7 +27,7 @@
 			<!-- END BLOCK_profile_link -->
 
 			<div class="unselectable">
-				<a href="/resroute/{res_id}/">[#{comment_nr}]</a>
+				<a href="{res_route}">[#{comment_nr}]</a>
 			</div>
 		</div>
 	</div>

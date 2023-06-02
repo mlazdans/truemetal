@@ -684,13 +684,11 @@ function private_profile(MainModule $template): ?Template
 				$res_data = mb_substr($res_data, 0, 70).'...';
 			}
 
-			$res_href = "/resroute/{$item->res_id}/";
-
 			$BLOCK_truecomment_item
 			->set_var('res_votes_plus_count', $item->res_votes_plus_count)
 			->set_var('res_votes_minus_count', $item->res_votes_minus_count)
 			->set_var('res_data', specialchars($res_data))
-			->set_var('res_href', $res_href)
+			->set_var('res_href', $item->res_route)
 			->parse(TMPL_APPEND);
 
 			//$template->disable('BLOCK_truecomment_header');
@@ -1542,7 +1540,7 @@ function admin_comment_list(
 	{
 		$C->set_array($item, 'BLOCK_comment_item');
 
-		$C->set_var('c_origin_href', "/resroute/$item->res_id/");
+		$C->set_var('c_origin_href', $item->res_route);
 		$C->set_var('c_origin_name', "#comment$item->c_id");
 
 		if($item->res_visible)
@@ -1661,7 +1659,7 @@ function attend(MainModule $template, int $res_id, ?string $off = null): ?TrueRe
 	if($json){
 		return new JsonResponse(["OK"=>true]);
 	} else {
-		header("Location: /resroute/$res_id/");
+		header("Location: $item->res_route");
 		return null;
 	}
 }
@@ -1718,17 +1716,11 @@ function archive(MainModule $template): ?Template
 
 	$q = DB::Query("SELECT * FROM view_mainpage ORDER BY res_entered DESC");
 
-	# ja ir kaadi ieraksti shajaa datumaa, paraadam
-	# ja nee, tad paraadam attieciigu pazinjojumu
-	if(DB::rowCount() > 0)
-		$T->enable('BLOCK_archive_items');
-	else
-		$T->enable('BLOCK_no_archive');
-
 	$old_date = '';
 	// $formatter = new IntlDateFormatter("lv", IntlDateFormatter::SHORT, IntlDateFormatter::NONE);
 	$menesi = menesi();
 
+	$count = 0;
 	while($item = DB::Fetch($q))
 	{
 		$ts = strtotime($item['res_entered']);
@@ -1740,7 +1732,6 @@ function archive(MainModule $template): ?Template
 		} else {
 			$T->disable('BLOCK_archive_sep');
 		}
-
 
 		if($old_date != $date)
 		{
@@ -1754,8 +1745,15 @@ function archive(MainModule $template): ?Template
 		}
 
 		$T->set_var('res_name', specialchars($item['res_name']));
-		$T->set_var('res_route', '/resroute/'.$item['res_id']);
+		$T->set_var('res_route', $item['res_route']);
 		$T->parse_block('BLOCK_archive_items', TMPL_APPEND);
+		$count++;
+	}
+
+	if($count){
+		$T->enable('BLOCK_archive_items');
+	} else {
+		$T->enable('BLOCK_no_archive');
 	}
 
 	return $T;

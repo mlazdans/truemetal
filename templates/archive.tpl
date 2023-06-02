@@ -1,6 +1,6 @@
 <div class="TD-cat">Arhīvs</div>
 
-<!-- BEGIN BLOCK_archive_items disabled -->
+<!-- BEGIN BLOCK_archive_items -->
 	<!-- BEGIN BLOCK_archive_sep disabled -->
 	<div class="List-sep"></div>
 	<!-- END BLOCK_archive_sep -->
