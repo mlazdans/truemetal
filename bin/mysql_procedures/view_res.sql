@@ -2,7 +2,7 @@ CREATE OR REPLACE VIEW view_res AS
 SELECT
 res.res_id,
 res.res_resid,
-res.table_id,
+res.res_kind,
 res.login_id,
 res.res_entered,
 res.res_nickname,

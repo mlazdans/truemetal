@@ -108,7 +108,7 @@ function forum_add_theme(MainModule $template, Template $T, ViewResForumType $fo
 
 	$R = Res::prepare_with_user(
 		res_resid: $forum->res_id,
-		table_id: ResKind::FORUM,
+		res_kind: ResKind::FORUM,
 		res_name: $post_data['forum_name'],
 		res_data: $post_data['forum_data'],
 	);
@@ -363,7 +363,7 @@ function forum_det(
 
 	# TODO: izdomāt, kā returnot konkrēta res objektu, nevis array
 	# TODO: apsvērt res_route glabāt DB
-	// $tree = get_res_tree($forum->res_id, $forum->table_id);
+	// $tree = get_res_tree($forum->res_id, $forum->res_kind);
 
 	Res::markAsSeen($forum->res_id);
 
@@ -1927,7 +1927,7 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 
 		$item['res_date'] = date('d.m.Y', strtotime($item['res_entered']));
 
-		if($item['table_id'] == ResKind::FORUM)
+		if($item['res_kind'] == ResKind::FORUM)
 		{
 			if($item['type_id']){
 				$intro = mb_substr($item['res_data'], 0, 300);
@@ -1950,9 +1950,9 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 					$item['res_data'] = '';
 				}
 			}
-		} elseif($item['table_id'] == ResKind::ARTICLE){
+		} elseif($item['res_kind'] == ResKind::ARTICLE){
 		} else {
-			throw new InvalidArgumentException("Unexpected table ID: $item[table_id]");
+			throw new InvalidArgumentException("Unexpected table ID: $item[res_kind]");
 		}
 
 		if($item['res_data'])
@@ -1967,7 +1967,7 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 		$T->set_array($item, 'BLOCK_article');
 
 		# XXX: fix module_id
-		if($item['table_id'] == ResKind::FORUM)
+		if($item['res_kind'] == ResKind::FORUM)
 		{
 			$T->set_var('module_id', "forum", 'BLOCK_article');
 		} else {
@@ -2089,9 +2089,9 @@ function comment_vote_class(?int $res_votes): string
 	}
 }
 
-function load_specific_res(int $res_id, int $table_id): ?ResourceTypeInterface
+function load_specific_res(int $res_id, int $res_kind): ?ResourceTypeInterface
 {
-	switch($table_id)
+	switch($res_kind)
 	{
 		case ResKind::ARTICLE:
 			return ViewResArticleEntity::getByResId($res_id);
@@ -2105,29 +2105,29 @@ function load_specific_res(int $res_id, int $table_id): ?ResourceTypeInterface
 			new TODO("Get GalleryData");
 	}
 
-	throw new InvalidArgumentException("Table unknown: $table_id");
+	throw new InvalidArgumentException("Table unknown: $res_kind");
 }
 
 function load_res(int $res_id): ?ResourceTypeInterface
 {
 	if($res = ResEntity::get($res_id))
 	{
-		return load_specific_res($res->res_id, $res->table_id);
+		return load_specific_res($res->res_id, $res->res_kind);
 	}
 
 	return null;
 }
 
-function get_res_tree(?int $res_id = null, ?int $table_id = null): ?array
+function get_res_tree(?int $res_id = null, ?int $res_kind = null): ?array
 {
 	if(is_null($res_id)){
 		return null;
 	}
 
-	$f = $table_id ? load_specific_res($res_id, $table_id) : load_res($res_id);
+	$f = $res_kind ? load_specific_res($res_id, $res_kind) : load_res($res_id);
 
 	if($f){
-		return [$f, get_res_tree($f->res_resid, $table_id)];
+		return [$f, get_res_tree($f->res_resid, $res_kind)];
 	}
 
 	return null;
@@ -2270,7 +2270,7 @@ function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
 			$item = $doc['attrs'];
 			$item['doc_module_name'] = $DOC_SOURCES[$item['doc_source_id']]['name'];
 
-			if($r = load_specific_res((int)$item['res_id'], (int)$item['table_id'])){
+			if($r = load_specific_res((int)$item['res_id'], (int)$item['res_kind'])){
 				$item['res_route'] =  $r->Route()."?hl=".urlencode($search_q);
 			} else {
 				trigger_error("No res for search item:".printrr($item), E_USER_WARNING);

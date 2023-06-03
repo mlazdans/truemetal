@@ -8,7 +8,7 @@ trait ViewDocumentsTypeTrait {
 	use PropertyInitTrait;
 
 	var int $doc_id;
-	var int $table_id;
+	var int $res_kind;
 	var int $res_id;
 	var ?int $res_resid;
 	var ?int $doc_source_id;
@@ -20,9 +20,9 @@ trait ViewDocumentsTypeTrait {
 	var ?int $doc_comment_last_date;
 	var ?int $doc_entered;
 
-	function __construct(?int $doc_id = null, ?int $table_id = null, ?int $res_id = null, ?int $res_resid = null, ?int $doc_source_id = null, ?string $doc_name = null, ?string $res_name = null, ?string $doc_content = null, ?string $doc_content_with_comments = null, ?int $doc_comment_count = null, ?int $doc_comment_last_date = null, ?int $doc_entered = null) {
+	function __construct(?int $doc_id = null, ?int $res_kind = null, ?int $res_id = null, ?int $res_resid = null, ?int $doc_source_id = null, ?string $doc_name = null, ?string $res_name = null, ?string $doc_content = null, ?string $doc_content_with_comments = null, ?int $doc_comment_count = null, ?int $doc_comment_last_date = null, ?int $doc_entered = null) {
 		if(isset($doc_id))$this->doc_id = $doc_id;
-		if(isset($table_id))$this->table_id = $table_id;
+		if(isset($res_kind))$this->res_kind = $res_kind;
 		if(isset($res_id))$this->res_id = $res_id;
 		if(isset($res_resid))$this->res_resid = $res_resid;
 		if(isset($doc_source_id))$this->doc_source_id = $doc_source_id;

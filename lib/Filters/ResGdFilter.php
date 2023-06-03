@@ -8,7 +8,7 @@ class ResGdFilter extends ResFilter
 		// NOTE                            : keep sync with ResFilter
 		public ?int $res_id                = null,
 		public null|int|false $res_resid   = null, // false: WHERE res_resid IS NULL
-		public ?int $table_id              = null,
+		public ?int $res_kind              = null,
 		public ?int $login_id              = null,
 		public null|int|false $res_visible = 1,
 		public ?array $ips                 = null,

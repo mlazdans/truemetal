@@ -36,7 +36,7 @@ class Res
 	# Uzstāda res objektu, par pamatu ņemot logged in useri
 	static function prepare_with_user(
 		int $res_resid = null,
-		int $table_id,
+		int $res_kind,
 		string $res_data,
 		?string $res_name = null,
 		?string $res_intro = null,
@@ -45,7 +45,7 @@ class Res
 	{
 		return new ResType(
 			res_resid: $res_resid,
-			table_id: $table_id,
+			res_kind: $res_kind,
 			login_id: User::id(),
 			res_nickname: User::get_val('l_nick'),
 			res_email: User::get_val('l_email'),
@@ -63,7 +63,7 @@ class Res
 	{
 		$R = static::prepare_with_user(
 			res_resid: $res_id,
-			table_id: ResKind::COMMENT,
+			res_kind: ResKind::COMMENT,
 			res_data: $c_data,
 		);
 

@@ -22,7 +22,7 @@ trait ViewResArticleTypeTrait {
 	var string $module_type;
 	var int $res_id;
 	var ?int $res_resid;
-	var int $table_id;
+	var int $res_kind;
 	var ?int $login_id;
 	var ?string $res_entered;
 	var ?string $res_nickname;
@@ -43,7 +43,7 @@ trait ViewResArticleTypeTrait {
 	var ?string $res_comment_last_date;
 	var ?string $l_hash;
 
-	function __construct(?int $art_id = null, ?int $art_modid = null, ?int $mod_id = null, ?int $mod_modid = null, ?string $module_id = null, ?string $module_name = null, ?string $module_descr = null, ?int $module_active = null, ?int $module_visible = null, ?int $module_pos = null, ?string $module_data = null, ?string $module_entered = null, ?string $module_type = null, ?int $res_id = null, ?int $res_resid = null, ?int $table_id = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null) {
+	function __construct(?int $art_id = null, ?int $art_modid = null, ?int $mod_id = null, ?int $mod_modid = null, ?string $module_id = null, ?string $module_name = null, ?string $module_descr = null, ?int $module_active = null, ?int $module_visible = null, ?int $module_pos = null, ?string $module_data = null, ?string $module_entered = null, ?string $module_type = null, ?int $res_id = null, ?int $res_resid = null, ?int $res_kind = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null) {
 		if(isset($art_id))$this->art_id = $art_id;
 		if(isset($art_modid))$this->art_modid = $art_modid;
 		if(isset($mod_id))$this->mod_id = $mod_id;
@@ -59,7 +59,7 @@ trait ViewResArticleTypeTrait {
 		if(isset($module_type))$this->module_type = $module_type;
 		if(isset($res_id))$this->res_id = $res_id;
 		if(isset($res_resid))$this->res_resid = $res_resid;
-		if(isset($table_id))$this->table_id = $table_id;
+		if(isset($res_kind))$this->res_kind = $res_kind;
 		if(isset($login_id))$this->login_id = $login_id;
 		if(isset($res_entered))$this->res_entered = $res_entered;
 		if(isset($res_nickname))$this->res_nickname = $res_nickname;

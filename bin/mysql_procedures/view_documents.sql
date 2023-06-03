@@ -3,7 +3,7 @@ AS
 -- Articles
 SELECT
 	res_id AS doc_id,
-	table_id,
+	res_kind,
 	res_id,
 	res_resid,
 	CASE
@@ -33,7 +33,7 @@ UNION
 -- Forum articles
 SELECT
 	res_id AS doc_id,
-	table_id,
+	res_kind,
 	res_id,
 	res_resid,
 	CASE
@@ -64,7 +64,7 @@ UNION
 -- Forum events
 SELECT
 	res_id AS doc_id,
-	table_id,
+	res_kind,
 	res_id,
 	res_resid,
 	1 AS doc_source_id, -- Ziņas
@@ -90,7 +90,7 @@ UNION
 -- Forum themes
 SELECT
 	res_id AS doc_id,
-	table_id,
+	res_kind,
 	res_id,
 	res_resid,
 	4 AS doc_source_id, -- Forums

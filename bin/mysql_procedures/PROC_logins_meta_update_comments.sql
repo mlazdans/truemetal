@@ -11,7 +11,7 @@ BEGIN
 		FROM res r
 		JOIN res_meta rm ON rm.res_id = r.res_id
 		WHERE
-			r.table_id = 3 AND
+			r.res_kind = 3 AND
 			r.res_visible = 1 AND
 			r.login_id IS NOT NULL AND
 			(p_l_id IS NULL OR r.login_id = p_l_id)

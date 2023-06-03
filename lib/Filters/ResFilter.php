@@ -9,7 +9,7 @@ class ResFilter extends AbstractFilter
 		# ja te kaut ko liek klāt, tad labāk sync ar pārējām klasēm, kas extendo šo
 		public ?int $res_id                = null,
 		public null|int|false $res_resid   = null, // false: WHERE res_resid IS NULL
-		public ?int $table_id              = null,
+		public ?int $res_kind              = null,
 		public ?int $login_id              = null,
 		public null|int|false $res_visible = 1,
 		public ?array $ips                 = null,
@@ -18,7 +18,7 @@ class ResFilter extends AbstractFilter
 
 	protected function apply_filter(Select $sql): Select
 	{
-		$this->apply_set_fields($sql, ['res_id', 'table_id', 'login_id']);
+		$this->apply_set_fields($sql, ['res_id', 'res_kind', 'login_id']);
 		$this->apply_falsed_fields($sql, ['res_visible']);
 
 		if(isset($this->res_resid))
