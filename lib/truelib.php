@@ -2270,8 +2270,8 @@ function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
 			$item = $doc['attrs'];
 			$item['doc_module_name'] = $DOC_SOURCES[$item['doc_source_id']]['name'];
 
-			if($r = load_specific_res((int)$item['res_id'], (int)$item['res_kind'])){
-				$item['res_route'] =  $r->Route()."?hl=".urlencode($search_q);
+			if($r = ResEntity::get((int)$item['res_id'])){
+				$item['res_route'] = $r->res_route."?hl=".urlencode($search_q);
 			} else {
 				trigger_error("No res for search item:".printrr($item), E_USER_WARNING);
 				$item['res_route'] = "/";
