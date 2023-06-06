@@ -10,6 +10,10 @@
 ## data source definition
 #############################################################################
 
+common {
+	datadir              = /www/truemetal.lv/site/sphinx/truemetal
+}
+
 source pages
 {
 	# data source type. mandatory, no default value
@@ -25,7 +29,7 @@ source pages
 	sql_user             = truemetal
 	sql_pass             =
 	sql_db               = truemetal
-	sql_port             = 3306 # optional, default is 3306
+	sql_port             = 3306
 
 	# UNIX socket name
 	# optional, default is empty (reuse client library defaults)
@@ -64,15 +68,6 @@ source with_comments : pages
 	sql_query            = SELECT doc_id, res_kind, res_id, res_resid, doc_source_id, doc_name, res_name, doc_content_with_comments, doc_comment_count, doc_comment_last_date, doc_entered FROM view_documents;
 }
 
-# inherited source example
-#
-# all the parameters are copied from the parent source,
-# and may then be overridden in this source definition
-#source src1throttled : src1
-#{
-#	sql_ranged_throttle			= 100
-#}
-
 #############################################################################
 ## index definition
 #############################################################################
@@ -86,7 +81,6 @@ source with_comments : pages
 index doc
 {
 	source               = pages
-	path                 = /www/truemetal.lv/site/sphinx/data/doc
 
 	min_prefix_len       = 3
 	min_word_len         = 1
@@ -139,25 +133,12 @@ index doc
 index doc_titles : doc
 {
 	source               = titles
-	path                 = /www/truemetal.lv/site/sphinx/data/doc_titles
 }
 
 index doc_with_comments : doc
 {
 	source               = with_comments
-	path                 = /www/truemetal.lv/site/sphinx/data/doc_with_comments
 }
-
-# inherited index example
-#
-# all the parameters are copied from the parent index,
-# and may then be overridden in this index definition
-#index test1stemmed : test1
-#{
-#	path			= @CONFDIR@/data/test1stemmed
-#	morphology		= stem_en
-#}
-
 
 #############################################################################
 ## indexer settings
@@ -197,15 +178,6 @@ searchd
 	# searchd TCP port number
 	# mandatory, default is 3312
 
-	# log file, searchd run info is logged here
-	# optional, default is 'searchd.log'
-	log					= /www/truemetal.lv/site/sphinx/log/searchd.log
-	binlog_path			= /www/truemetal.lv/site/sphinx/binlog
-
-	# query log file, all search queries are logged here
-	# optional, default is empty (do not log queries)
-	query_log			= /www/truemetal.lv/site/sphinx/log/query.log
-
 	# client read timeout, seconds
 	# optional, default is 5
 	read_timeout		= 5
@@ -216,7 +188,7 @@ searchd
 
 	# PID file, searchd process ID file name
 	# mandatory
-	pid_file			= /www/truemetal.lv/site/sphinx/log/searchd.pid
+	pid_file			= /www/truemetal.lv/site/sphinx/truemetal/searchd.pid
 
 	# seamless rotate, prevents rotate stalls if precaching huge datasets
 	# optional, default is 1
