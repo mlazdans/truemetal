@@ -294,7 +294,23 @@ function set_res(Template $T, ViewResType&ResourceTypeInterface $res, string $hl
 	$T->set_var('res_votes', format_vote($res->res_votes));
 	$T->set_var('comment_vote_class', comment_vote_class($res->res_votes));
 	$T->set_var('res_route', $res->res_route);
-	$T->set_var_if($res->res_name && $hl, 'res_name', hl($res->res_name, $hl));
+	$T->set_var('res_name', $res->res_name);
+	$T->set_var('res_intro', $res->res_intro);
+	$T->set_var('res_data', $res->res_data);
+	$T->set_var('res_data_compiled', $res->res_data_compiled);
+
+	if($res->res_name && $hl){
+		$T->set_var('res_name', hl($res->res_name, $hl));
+	}
+	if($res->res_intro && $hl){
+		$T->set_var('res_intro', hl($res->res_intro, $hl));
+	}
+	if($res->res_data && $hl){
+		$T->set_var('res_data', hl($res->res_data, $hl));
+	}
+	if($res->res_data_compiled && $hl){
+		$T->set_var('res_data_compiled', hl($res->res_data_compiled, $hl));
+	}
 
 	if(User::logged()){
 		$T->enable('BLOCK_vote_control');
@@ -333,37 +349,14 @@ function forum_det(
 	$C = $template->add_file('comments.tpl');
 
 	# Comments
-	$F = (new ResFilter())->orderBy(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? "res_entered DESC" : "res_entered");
-	// $params['order'] = User::get_val('l_forumsort_msg') == Forum::SORT_DESC
-	// 	? "res_entered DESC"
-	// 	: "res_entered"
-	// ;
-
 	$T->enable(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? 'BLOCK_info_sort_D': 'BLOCK_info_sort_A');
 
+	$F = (new ResFilter())->orderBy(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? "res_entered DESC" : "res_entered");
 	$comments = Res::get_comments($forum->res_id, $F);
-
-	// printr($forum_data, $params, $comments);
-	// die;
-
-	# XXX : hack, vajag rādīt pa taisno foruma ierakstu
-	// if(($forum_data['forum_display'] == Forum::DISPLAY_DATA) && !empty($comments[0]))
-	// {
-	// 	# Ja sakārtots dilstoši, tad jāaiztiek ir pēdējais komments
-	// 	if(User::get_val('l_forumsort_msg') == Forum::SORT_DESC)
-	// 	{
-	// 		array_unshift($comments, array_pop($comments));
-	// 	}
-	// 	$comments[0]['res_data_compiled'] = $forum_data['res_data'];
-	// }
 
 	comment_list($C, $comments, $hl);
 
 	// $forum->set_forum_path($T, $forum_id);
-
-	# TODO: izdomāt, kā returnot konkrēta res objektu, nevis array
-	# TODO: apsvērt res_route glabāt DB
-	// $tree = get_res_tree($forum->res_id, $forum->res_kind);
 
 	Res::markAsSeen($forum->res_id);
 
@@ -1760,7 +1753,6 @@ function archive(MainModule $template): ?Template
 
 function article(MainModule $template, int $art_id, string $hl, ?string $article_route = null): ?Template
 {
-	# TODO: vote, profile, etc
 	if(!($art = ViewResArticleEntity::getById($art_id))){
 		$template->not_found();
 		return null;
@@ -1768,10 +1760,9 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 
 	$action = post('action');
 
-	# NOTE: redirektējam uz jaunajām adresēm, pēc gada (2011-04-30) varēs noņemt
 	if($article_route && !str_ends_with($art->res_route, "/$article_route"))
 	{
-		header("Location: $art->res_route", true, 301);
+		redirectp_wqs($art->res_route);
 		return null;
 	}
 
@@ -1826,10 +1817,6 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 	$T->set_array($art);
 
 	set_res($T, $art, $hl);
-
-	$T->set_var_if($art->res_intro && $hl, 'res_intro', hl($art->res_intro, $hl));
-	$T->set_var_if($art->res_data && $hl, 'res_data', hl($art->res_data, $hl));
-	$T->set_var_if($art->res_name && $hl, 'res_name', hl($art->res_name, $hl));
 
 	return $T;
 }

@@ -29,10 +29,9 @@ if($forum_route)
 			return null;
 		}
 
-		# TODO: append query_string? ?hl=
 		if($forum_route && !str_ends_with($forum_data->res_route, "/$forum_route"))
 		{
-			header("Location: $forum_data->res_route", true, 301);
+			redirectp_wqs($forum_data->res_route);
 			return null;
 		}
 
