@@ -175,6 +175,9 @@ searchd
 	listen				= 127.0.0.1:3313
 	listen				= 127.0.0.1:9306:mysql41
 
+	query_log_format	= plain
+	query_log_min_msec	= 0
+
 	# searchd TCP port number
 	# mandatory, default is 3312
 
