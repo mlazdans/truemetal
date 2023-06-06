@@ -61,6 +61,7 @@ function save_forum(ViewResForumType $OLD)
 	$Res              = ResType::initFromDirty(post('res'));
 	$Res->res_id      = $OLD->res_id;
 	$Res->res_visible = (int)isset($Res->res_visible);
+	$Res->res_route   = Forum::RouteFromStr($OLD->forum_id, $Res->res_name);
 
 	$Forum                     = ForumType::initFromDirty(post('forum'));
 	$Forum->forum_id           = $OLD->forum_id;
@@ -138,7 +139,6 @@ function open_forum(AdminModule $template, int $forum_id): ?Template
 	foreach(Forum::$types as $type_id=>$type_name){
 		$T->set_var('type_id', $type_id);
 		$T->set_var('type_name', $type_name);
-		$T->set_var('type_id_selected', '');
 		$T->set_var('type_id_selected', $type_id == $forum->type_id ? 'selected' : '');
 		$T->parse_block('BLOCK_forum_type_list', TMPL_APPEND);
 	}
