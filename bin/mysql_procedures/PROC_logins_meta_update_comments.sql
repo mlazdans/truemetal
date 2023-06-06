@@ -9,7 +9,6 @@ BEGIN
 			r.login_id AS login_id,
 			COUNT(*) AS comment_count
 		FROM res r
-		JOIN res_meta rm ON rm.res_id = r.res_id
 		WHERE
 			r.res_kind = 3 AND
 			r.res_visible = 1 AND
