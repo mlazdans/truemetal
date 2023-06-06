@@ -12,3 +12,6 @@ Ieeja no 18:00, bez maksas.
 *) notestēt res_name (u.c. laukus) ar htmlspecialchars, ieskaitot hl()
 
 *) Atdalīt: Pasākumi, Interviews, Reviews no Forums
+
+*) Bildes profilā varētu kādu min-width/height (un kā background?), jo dažas ir mikro:
+https://truemetal.lv/user/profile/431befd3/
