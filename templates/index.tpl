@@ -55,6 +55,8 @@
 		if(!User.disableYoutube){
 			Truemetal.initYouTube();
 		}
+		Truemetal.highlightSelectedComment();
+		$(window).on('hashchange', Truemetal.highlightSelectedComment);
 	});
 </script>
 {tmpl_finished}

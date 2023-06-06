@@ -313,5 +313,14 @@ var Truemetal = {
 				include_comments.checked = !e.checked;
 			}
 		}
+	},
+	highlightSelectedComment(){
+		const hash = $(location).prop('hash');
+		const m = hash.match(/#comment(\d+)/);
+		if(m && (m.length === 2)){
+			const id = m[1];
+			$('.Comment').removeClass('Comment-selected');
+			$('#comment' + id).addClass('Comment-selected');
+		}
 	}
 };

@@ -447,6 +447,9 @@ label > input {
 .Comment {
 	margin-bottom: 1em;
 }
+.Comment-selected {
+	border: 0.1em solid #BB0000;
+}
 
 .profile-header {
 	display: flex;
