@@ -30,8 +30,8 @@ function res_route_dump(AbstractResEntity $E, ResFilter $F){
 
 res_route_dump(new ViewResArticleEntity, $F);
 res_route_dump(new ViewResForumEntity, $F);
-res_route_dump(new ViewResCommentEntity, $F);
 res_route_dump(new ViewResGalleryEntity, $F);
 res_route_dump(new ViewResGdEntity, $F);
+// res_route_dump(new ViewResCommentEntity, $F);
 
 printf("COMMIT;\n");

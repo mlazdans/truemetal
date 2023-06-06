@@ -3,6 +3,7 @@
 -- 3) import_procedures.bat
 -- 4) php.exe res_route_update.php > res_upd.sql
 -- 5) mysql -uroot truemetal < res_upd.sql
+-- 6)  res_route_update.php ar commentiem, jo tiem vajag parent vispirms
 -- 6) apply 02.sql
 -- 7) adjust shpinx
 
