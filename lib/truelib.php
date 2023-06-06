@@ -1769,14 +1769,10 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 	$action = post('action');
 
 	# NOTE: redirektējam uz jaunajām adresēm, pēc gada (2011-04-30) varēs noņemt
-	if($article_route)
+	if($article_route && !str_ends_with($art->res_route, "/$article_route"))
 	{
-		$article_real_route = $art->res_route;
-		if(!str_ends_with($article_real_route, "/$article_route"))
-		{
-			header("Location: $article_real_route", true, 301);
-			return null;
-		}
+		header("Location: $art->res_route", true, 301);
+		return null;
 	}
 
 	$T = $template->add_file('article.tpl');
