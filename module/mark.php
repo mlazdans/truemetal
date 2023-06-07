@@ -1,13 +1,6 @@
 <?php declare(strict_types = 1);
 
-# TODO: 'viewed_before' vajadzētu būt sessiju root un tapt pārsauktam par marked_before vai ko tādu!!
-$_SESSION['res']['viewed_before'] = time();
-$_SESSION['res']['viewed_date'] = array();
-$_SESSION['forums']['viewed_date'] = array();
-
-# Remove historic entries
-unset($_SESSION['res']['viewed']);
-unset($_SESSION['forums']['viewed']);
-unset($_SESSION['forums']['viewed_before']);
+$_SESSION['res_seen_ts'] = array();
+$_SESSION['res_marked_seen_ts'] = time();
 
 header("Location: /");

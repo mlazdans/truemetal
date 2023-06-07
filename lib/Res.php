@@ -2,8 +2,7 @@
 
 class Res
 {
-	# TODO: pārsaukt par ResSeen vai ko tādu
-	static function hasNewComments(int $res_id, ?string $date = null): bool
+	static function is_marked_since(int $res_id, ?string $date = null): bool
 	{
 		if(!User::logged()){
 			return false;
@@ -13,23 +12,25 @@ class Res
 			return false;
 		}
 
-		# TODO: pārkonvertēt datumus jau uz timestamp!!!
-		if(isset($_SESSION['res']['viewed_date'][$res_id])){
-			return (strtotime($date) > strtotime($_SESSION['res']['viewed_date'][$res_id]));
+		if(($ts = strtotime($date)) === false){
+			return false;
 		}
 
-		if(isset($_SESSION['res']['viewed_before'])){
-			return ($_SESSION['res']['viewed_before'] < strtotime($date));
+		if(isset($_SESSION['res_seen_ts'][$res_id])){
+			return $ts > $_SESSION['res_seen_ts'][$res_id];
+		}
+
+		if(isset($_SESSION['res_marked_seen_ts'])){
+			return $ts > $_SESSION['res_marked_seen_ts'];
 		}
 
 		return false;
 	}
 
-	# TODO: saglabāt tikai time stamp. Pirms tam jāpārkonvertē arī sessijās
-	static function markAsSeen(int $res_id): void
+	static function mark_as_seen(int $res_id): void
 	{
 		if(User::logged()){
-			$_SESSION['res']['viewed_date'][$res_id] = date('Y-m-d H:i:s');
+			$_SESSION['res_seen_ts'][$res_id] = time();
 		}
 	}
 

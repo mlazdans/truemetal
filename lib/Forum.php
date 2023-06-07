@@ -120,48 +120,18 @@ class Forum
 	// 	return true;
 	// }
 
-	public static function hasNewComments(ViewResForumType $item)
+	public static function has_new_comments(ViewResForumType $item)
 	{
-		return Res::hasNewComments($item->res_id, $item->res_comment_last_date);
+		return Res::is_marked_since($item->res_id, $item->res_comment_last_date);
 	}
 
-	public static function hasNewThemes(ViewResForumType $item)
+	public static function has_new_themes(ViewResForumType $item)
 	{
-		if(!User::logged()){
-			return false;
-		}
-
-		if(empty($item->res_child_last_date)){
-			return false;
-		}
-
-		if(isset($_SESSION['forums']['viewed_date'][$item->forum_id])){
-			return (strtotime($item->res_child_last_date) > strtotime($_SESSION['forums']['viewed_date'][$item->forum_id]));
-		}
-
-		if(isset($_SESSION['res']['viewed_before'])){
-			return ($_SESSION['res']['viewed_before'] < strtotime($item->res_child_last_date));
-		}
-
-		// Šķiet šis 'viewed' ir kaut kāds vecs artifakts
-		// if(isset($_SESSION['forums']['viewed'][$item->forum_id]))
-		// 	return ($item->res_child_count > $_SESSION['forums']['viewed'][$item->forum_id]);
-
-		return false;
+		return Res::is_marked_since($item->res_id, $item->res_child_last_date);
 	}
 
 	static function RouteFromStr(int $forum_id, string $forum_name): string
 	{
 		return "/forum/$forum_id-".urlize($forum_name);
-	}
-
-	# TODO: izpētīt vai var apvienot ar $_SESSION['res']['viewed_date'][$res_id]
-	static function markThemeCount(ViewResForumType $item)
-	{
-		if(!User::logged()){
-			return false;
-		}
-
-		$_SESSION['forums']['viewed_date'][$item->forum_id] = date('Y-m-d H:i:s');
 	}
 }

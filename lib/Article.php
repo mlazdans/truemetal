@@ -2,9 +2,9 @@
 
 class Article
 {
-	public static function hasNewComments(ViewResArticleType $item)
+	public static function has_new_comments(ViewResArticleType $item)
 	{
-		return Res::hasNewComments($item->res_id, $item->res_comment_last_date);
+		return Res::is_marked_since($item->res_id, $item->res_comment_last_date);
 	}
 
 	function del($art_id)

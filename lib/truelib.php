@@ -141,10 +141,7 @@ function forum_themes(
 	int $pages_visible_to_sides,
 ): ?Template
 {
-	if(User::logged())
-	{
-		Forum::markThemeCount($forum);
-	}
+	Res::mark_as_seen($forum->res_id);
 
 	$T = $template->add_file('forum/theme.tpl');
 	$T->set_array($forum);
@@ -200,7 +197,7 @@ function forum_themes(
 	$BLOCK_forum = $T->get_block('BLOCK_forum');
 	foreach($items as $item)
 	{
-		$BLOCK_forum->enable_if(Forum::hasNewComments($item), 'BLOCK_comments_new');
+		$BLOCK_forum->enable_if(Forum::has_new_comments($item), 'BLOCK_comments_new');
 
 		$BLOCK_forum->set_array(specialchars($item));
 		$BLOCK_forum->set_var('res_route', $item->res_route);
@@ -358,7 +355,7 @@ function forum_det(
 
 	// $forum->set_forum_path($T, $forum_id);
 
-	Res::markAsSeen($forum->res_id);
+	Res::mark_as_seen($forum->res_id);
 
 	if($forum->forum_closed)
 	{
@@ -1128,7 +1125,7 @@ function forum_root(MainModule $template): Template
 	$T->enable('BLOCK_forum');
 	foreach($forum_data as $item)
 	{
-		$T->enable_if(Forum::hasNewThemes($item), 'BLOCK_comments_new');
+		$T->enable_if(Forum::has_new_themes($item), 'BLOCK_comments_new');
 		$T->set_array($item);
 		$T->set_var('forum_date', proc_date($item->res_entered));
 		$T->parse_block('BLOCK_forum', TMPL_APPEND);
@@ -1206,7 +1203,7 @@ function whatsnew(MainModule $template): ?Template
 		$R = new_template('forum/recent.tpl');
 		foreach($data as $item)
 		{
-			$R->enable_if(Forum::hasNewComments($item), 'BLOCK_forum_r_comments_new');
+			$R->enable_if(Forum::has_new_comments($item), 'BLOCK_forum_r_comments_new');
 			$R->set_var('res_name', specialchars($item->res_name));
 			$R->set_var('res_comment_count', $item->res_comment_count);
 			$R->set_var('res_route', $item->res_route);
@@ -1225,7 +1222,7 @@ function whatsnew(MainModule $template): ?Template
 		$R = new_template('right/comment_recent.tpl');
 		foreach($data as $item)
 		{
-			$R->enable_if(Article::hasNewComments($item), 'BLOCK_comment_r_comments_new');
+			$R->enable_if(Article::has_new_comments($item), 'BLOCK_comment_r_comments_new');
 
 			$R->set_var('res_name', specialchars($item->res_name));
 			$R->set_var('res_comment_count', $item->res_comment_count);
@@ -1350,7 +1347,7 @@ function gallery_thumbs_list(MainModule $template, int $gal_id): ?Template
 
 		$T->set_var('res_votes', format_vote($thumb->res_votes));
 
-		$T->enable_if(GalleryData::hasNewComments($thumb), 'BLOCK_comments_new');
+		$T->enable_if(GalleryData::has_new_comments($thumb), 'BLOCK_comments_new');
 
 		$T->parse_block('BLOCK_thumb', TMPL_APPEND);
 	}
@@ -1441,8 +1438,7 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 	// $gal = $gallery->load($galdata->gal_id);
 	$gal = ViewResGalleryEntity::getByResId($galdata->res_resid);
 
-	# Komenti
-	Res::markAsSeen($galdata->res_id);
+	Res::mark_as_seen($galdata->res_id);
 
 	$T = $template->add_file('gallery.tpl');
 	$C = new_template('comments.tpl');
@@ -1804,7 +1800,7 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 		$C->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
 	}
 
-	Res::markAsSeen($art->res_id);
+	Res::mark_as_seen($art->res_id);
 
 	$comments = Res::get_comments($art->res_id);
 
@@ -1845,6 +1841,7 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 
 	$T = $template->add_file('article-list.tpl');
 
+	# TODO: ViewMainpageEntity
 	$sql = (new Select)->From('view_mainpage')
 		->OrderBy("res_entered DESC")
 		->Rows($art_per_page)
@@ -1945,7 +1942,7 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 			$T->disable('BLOCK_art_cont');
 		}
 
-		$T->enable_if(Res::hasNewComments($item['res_id'], $item['res_entered']), 'BLOCK_comments_new');
+		$T->enable_if(Res::is_marked_since($item['res_id'], $item['res_comment_last_date']), 'BLOCK_comments_new');
 
 		$T->set_array($item, 'BLOCK_article');
 

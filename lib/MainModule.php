@@ -215,7 +215,7 @@ class MainModule
 			$TThemes = $this->add_file('forum/recent.tpl');
 			foreach($data as $item)
 			{
-				$TThemes->enable_if(Forum::hasNewComments($item), 'BLOCK_forum_r_comments_new');
+				$TThemes->enable_if(Forum::has_new_comments($item), 'BLOCK_forum_r_comments_new');
 				$TThemes->set_var('res_name', specialchars($item->res_name));
 				$TThemes->set_var('res_comment_count', $item->res_comment_count);
 				$TThemes->set_var('res_route', $item->res_route);
@@ -263,7 +263,7 @@ class MainModule
 
 		foreach($data as $item)
 		{
-			$T->enable_if(Article::hasNewComments($item), 'BLOCK_comment_r_comments_new');
+			$T->enable_if(Article::has_new_comments($item), 'BLOCK_comment_r_comments_new');
 
 			$T->set_var('res_name',  specialchars($item->res_name));
 			$T->set_var('res_comment_count', $item->res_comment_count);
