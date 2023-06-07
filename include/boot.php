@@ -20,7 +20,7 @@ $sys_encoding          = 'utf-8';
 $sys_domain            = (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost');
 $sys_script_version    = 1;
 $sys_banned            = [];
-$sys_admins            = [];
+$sys_devs              = [];
 $sys_module_map        = [];
 $sys_include_paths     = [];
 $sys_nosess_modules    = ['css', 'jsload', 'apc', 'info'];
@@ -33,8 +33,7 @@ $today                 = date("d.m.Y");
 require_once($sys_root.'/include/config.php');
 
 # XXX: tad jebkurš mudaks, palaižot no cli, tagad ir admins?!
-$i_am_admin = (php_sapi_name() == 'cli') || in_array($ip, $sys_admins);
-$sys_debug = ($i_am_admin ? true : false);
+$sys_debug = (php_sapi_name() == 'cli') || in_array($ip, $sys_devs);
 $DQDP_DEBUG = $sys_debug;
 
 ini_set('display_errors', (bool)$sys_debug);

@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-if(!$i_am_admin)
+if(!$sys_debug)
 {
 	return;
 }

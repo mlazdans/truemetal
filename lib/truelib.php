@@ -7,9 +7,9 @@ use dqdp\TODO;
 
 function tm_shutdown()
 {
-	global $i_am_admin;
+	global $sys_debug;
 
-	if($i_am_admin)
+	if($sys_debug)
 	{
 		$is_html = 0;
 		$headers = headers_list();

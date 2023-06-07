@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 $CACHE_ENABLE = true;
-if($i_am_admin){
+if($sys_debug){
 	// $CACHE_ENABLE = false;
 }
 

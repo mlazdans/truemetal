@@ -22,7 +22,7 @@ if(!$sys_debug)
 	header("Expires: ".gmdate("D, d M Y H:i:s", time() + $expires) . " GMT");
 }
 
-$SCRIPTS = $i_am_admin ? $sys_admin_js : $sys_js;
+$SCRIPTS = ($sys_debug || User::is_admin()) ? $sys_admin_js : $sys_js;
 
 foreach($SCRIPTS as $js){
 	$path = join_paths($sys_root, "js", "$js.js");

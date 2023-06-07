@@ -15,7 +15,7 @@ define('FORUM_MAXWORDSIZE', 36);
 define('FORUM_MAXWORDS', 1600);
 define('FORUM_MAXLINES', 50);
 
-$sys_admins = [ '127.0.0.1' ];
+$sys_devs = [ '127.0.0.1' ];
 $sys_include_paths = [
 	$sys_root,
 	$sys_root.DIRECTORY_SEPARATOR.'lib',

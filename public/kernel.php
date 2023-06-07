@@ -56,7 +56,7 @@ $_GET = _GET();
 header('Content-Type: text/html; charset='.$sys_encoding);
 header('X-Powered-By: TRUEMETAL');
 
-if($i_am_admin)
+if($sys_debug)
 {
 	if(!in_array($sys_module_id, $sys_nosess_modules)){
 		require_once('include/session_handler.php');

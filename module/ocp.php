@@ -29,7 +29,7 @@ File list filter
 
 */
 
-if(!$i_am_admin)
+if(!$sys_debug)
 	return;
 
 $time=time();

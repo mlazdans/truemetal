@@ -2,7 +2,7 @@
 
 use Jfcherng\Diff\DiffHelper;
 
-if(!$i_am_admin){
+if(!User::is_admin()){
 	return;
 }
 
