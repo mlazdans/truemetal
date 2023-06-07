@@ -15,15 +15,18 @@ $template->set_title($_pointer['_data_']['module_name']??'');
 
 $T = $template->add_file('login.tpl');
 
+# TODO: rate limit
 if(isset($_POST['data']))
 {
 	$my_login = new Logins;
 	$data = post('data');
 	if($login_data = $my_login->login($data['login']??"", $data['password']??""))
 	{
-		session_write_close();
-		$newSession = session_id($login_data->l_sess_id);
-		session_start();
+		if(!empty($login_data->l_sess_id)){
+			session_write_close();
+			$newSession = session_id($login_data->l_sess_id);
+			session_start();
+		}
 
 		User::data($login_data);
 
