@@ -34,7 +34,4 @@
 <div class="List-item">
 	<a href="/user/profile/" title="Lietotāja profils">Tavs profils</a>
 </div>
-<div class="List-item">
-	<a href="/mark/" title="Iezīmēt visus komentārus kā izlasītus">Mark all as read</a>
-</div>
 <!-- END BLOCK_login_data -->

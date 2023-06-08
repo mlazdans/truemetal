@@ -485,7 +485,7 @@ function set_profile(Template $T, LoginsType $login, $is_private = false)
 
 	$T->set_var("l_forumsort_themes_$login->l_forumsort_themes", ' checked="checked"');
 	$T->set_var("l_forumsort_msg_$login->l_forumsort_msg", ' checked="checked"');
-	$T->set_var('l_disable_youtube_checked', $login->l_disable_youtube ? ' checked="checked"' : "");
+	$T->set_var('l_disable_youtube', $login->l_disable_youtube ? ' checked="checked"' : "");
 	$T->set_var('l_emailvisible', $login->l_emailvisible ? ' checked="checked"' : "");
 
 	if(file_exists($pic_localpath) && file_exists($tpic_localpath))
@@ -623,7 +623,7 @@ function private_profile(MainModule $template): ?Template
 			header("Location: $module_root/");
 			return null;
 		}
-		$login_data = LoginsType::initFrom($post_data, User::data());
+		$login_data = LoginsType::initFromDirty($post_data, User::data());
 	} else {
 		$login_data = LoginsType::initFrom(User::data());
 	}
@@ -865,10 +865,7 @@ function change_pw(MainModule $template): ?Template
 	}
 
 	if($error_msgs){
-		foreach($error_fields as $k){
-			$T->set_var('error_'.$k, ' class="error-form"');
-		}
-
+		set_error_fields($T, $error_msgs);
 		$template->error($error_msgs);
 	}
 

@@ -258,7 +258,7 @@ function image_load(&$image, $file)
 			return false;
 		}
 	} else {
-		$image_load_error = 'Nezināms fails!';
+		$image_load_error = 'Nesaprotams faila formāts!';
 		return false;
 	}
 

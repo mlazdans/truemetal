@@ -132,6 +132,8 @@ input[type=button] {
 	border-left: 1px solid white;
 	border-right: 1px solid #220000;
 	border-bottom: 1px solid #220000;
+	line-height: inherit;
+	display: inline-block;
 }
 .button:active,
 button:active,
@@ -456,8 +458,8 @@ label > input {
 	/* margin-bottom: 1px; */
 	background-color: #660000;
 }
-.profile-header .user-info {
-}
+/* .profile-header .user-info {
+} */
 .profile-header .controls {
 	margin-left: auto;
 }
