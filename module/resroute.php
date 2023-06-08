@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-# TODO: vispār izvākt šo te moduli
+# TODO: kaut kad vispār izvākt šo te moduli
 $res_id = (int)array_shift($sys_parameters);
 $moved = false;
 

@@ -5,7 +5,7 @@ if(!$sys_debug)
 	return;
 }
 
-# TODO: mkdir sphinx/data, sphinx/log sphinx/binlog
+# mkdir sphinx/data, sphinx/log sphinx/binlog
 
 // Fix mysql dump
 // Linux iespējams vajag single-quote

@@ -12,7 +12,6 @@ if(in_array($action, ['delete_multiple', 'activate_multiple', 'deactivate_multip
 	$logins = new Logins;
 	if($logins->process_action($_POST, $action)){
 		redirect_referer();
-		// header("Location: $module_root/");
 	}
 
 	return;
@@ -29,9 +28,6 @@ if($action == 'save')
 
 	return;
 }
-
-// XXX: ja post tukšs
-$action = get('action');
 
 if($l_id)
 {
