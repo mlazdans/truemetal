@@ -63,7 +63,8 @@ class User
 		return $ip;
 	}
 
-	static function is_admin(): bool {
+	static function is_admin(): bool
+	{
 		return User::id() === 3;
 	}
 }

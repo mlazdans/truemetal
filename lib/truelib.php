@@ -471,55 +471,6 @@ function get_attendees(int $res_id): ViewAttendCollection {
 	return ViewAttendEntity::getByResId($res_id);
 }
 
-// TODO: izvākt is_private
-function set_profile(Template $T, LoginsType $login, $is_private = false)
-{
-	global $sys_user_root;
-
-	// $login['l_forumsort_themes'] = isset($login['l_forumsort_themes']) ? $login['l_forumsort_themes'] : Forum::SORT_LASTCOMMENT;
-	// $login['l_forumsort_msg'] = isset($login['l_forumsort_msg']) ? $login['l_forumsort_msg'] : Forum::SORT_ASC;
-	$pic_localpath = $sys_user_root."/pic/$login->l_id.jpg";
-	$tpic_localpath = $sys_user_root."/pic/thumb/$login->l_id.jpg";
-
-	$T->set_except(['l_password', 'l_sessiondata'], $login);
-
-	$T->set_var("l_forumsort_themes_$login->l_forumsort_themes", ' checked="checked"');
-	$T->set_var("l_forumsort_msg_$login->l_forumsort_msg", ' checked="checked"');
-	$T->set_var('l_disable_youtube', $login->l_disable_youtube ? ' checked="checked"' : "");
-	$T->set_var('l_emailvisible', $login->l_emailvisible ? ' checked="checked"' : "");
-
-	if(file_exists($pic_localpath) && file_exists($tpic_localpath))
-	{
-		$T->set_var('thumb_path', "/user/thumb/$login->l_hash/");
-		$T->enable('BLOCK_picture');
-		if($is_private){
-			$T->enable('BLOCK_picture_del');
-		}
-	} else {
-		$T->enable('BLOCK_nopicture');
-	}
-
-	$formatter = new IntlDateFormatter("lv", IntlDateFormatter::MEDIUM, IntlDateFormatter::NONE);
-	$days = floor((time() - strtotime($login->l_lastaccess)) / (3600 * 24));
-
-	if(!$days){
-		$l_lastaccess_f = "šodien";
-	} elseif($days == 1){
-		$l_lastaccess_f = "vakar";
-	} elseif($days == 2){
-		$l_lastaccess_f = "aizvakar";
-	} elseif($days == 3){
-		$l_lastaccess_f = "pirms trim dienām";
-	} elseif($days < 365){
-		$l_lastaccess_f = "pirms $days ".($days % 10 == 1 ? "dienas" : "dienām");
-	} else {
-		$l_lastaccess_f = $formatter->format(strtotime($login->l_lastaccess));
-	}
-
-	$T->set_var('l_lastaccess_f', $l_lastaccess_f);
-	$T->set_var('l_entered_f', $formatter->format(strtotime($login->l_entered)));
-}
-
 function public_profile(MainModule $template, string $l_hash): ?Template
 {
 	$action = post('action');
@@ -530,28 +481,28 @@ function public_profile(MainModule $template, string $l_hash): ?Template
 		return null;
 	}
 
-	if(!($login_data = Logins::load_by_login_hash($l_hash, true))){
+	if(!($L = Logins::load_by_login_hash($l_hash, true))){
 		$template->not_found();
 		return null;
 	}
 
 	$T = $template->add_file('user/profile/user.tpl');
 
-	if(!$login_data->l_active){
+	if(!$L->l_active){
 		$T->set_var('is_blocked', ' (bloķēts)');
 	}
 
 	# Disable comments
 	if(
 		($action == 'disable_comments') &&
-		(User::id() != $login_data->l_id)
+		(User::id() != $L->l_id)
 		)
 	{
 		if(isset($_POST['disable_comments']))
 		{
-			$ret = CommentDisabled::disable(User::id(), $login_data->l_id);
+			$ret = CommentDisabled::disable(User::id(), $L->l_id);
 		} else {
-			$ret = CommentDisabled::enable(User::id(), $login_data->l_id);
+			$ret = CommentDisabled::enable(User::id(), $L->l_id);
 		}
 
 		if($ret)
@@ -564,27 +515,53 @@ function public_profile(MainModule $template, string $l_hash): ?Template
 		}
 	}
 
-	if(CommentDisabled::get(User::id(), $login_data->l_id))
+	if(CommentDisabled::get(User::id(), $L->l_id))
 	{
-		$T->set_var('disable_comments_checked', ' checked="checked"');
-	} else {
-		$T->set_var('disable_comments_checked', '');
+		$T->set_var('disable_comments_1', ' checked="checked"');
 	}
 
-	if(User::id() != $login_data->l_id)
+	if(User::id() != $L->l_id)
 	{
 		$T->enable('BLOCK_disable_comments');
 	}
 
-	$template->set_title(" - $login_data->l_nick");
-	if($login_data->l_emailvisible)
+	$template->set_title(" - $L->l_nick");
+	if($L->l_emailvisible)
 	{
 		$T->enable('BLOCK_public_email');
 	} else {
 		$T->enable('BLOCK_public_email_invisible');
 	}
 
-	set_profile($T, $login_data);
+	$T->set_except(['l_password', 'l_sessiondata'], $L);
+
+	if(user_thumb_exists($L->l_id) && user_image_exists($L->l_id))
+	{
+		$T->set_var('thumb_path', "/user/thumb/$L->l_hash/");
+		$T->enable('BLOCK_picture');
+	} else {
+		$T->enable('BLOCK_nopicture');
+	}
+
+	$formatter = new IntlDateFormatter("lv", IntlDateFormatter::MEDIUM, IntlDateFormatter::NONE);
+	$days = floor((time() - strtotime($L->l_lastaccess)) / (3600 * 24));
+
+	if(!$days){
+		$l_lastaccess_f = "šodien";
+	} elseif($days == 1){
+		$l_lastaccess_f = "vakar";
+	} elseif($days == 2){
+		$l_lastaccess_f = "aizvakar";
+	} elseif($days == 3){
+		$l_lastaccess_f = "pirms trim dienām";
+	} elseif($days < 365){
+		$l_lastaccess_f = "pirms $days ".($days % 10 == 1 ? "dienas" : "dienām");
+	} else {
+		$l_lastaccess_f = $formatter->format(strtotime($L->l_lastaccess));
+	}
+
+	$T->set_var('l_lastaccess_f', $l_lastaccess_f);
+	$T->set_var('l_entered_f', $formatter->format(strtotime($L->l_entered)));
 
 	return $T;
 }
@@ -623,13 +600,14 @@ function private_profile(MainModule $template): ?Template
 			header("Location: $module_root/");
 			return null;
 		}
-		$login_data = LoginsType::initFromDirty($post_data, User::data());
+		$L = LoginsType::initFromDirty($post_data, User::data());
 	} else {
-		$login_data = LoginsType::initFrom(User::data());
+		$L = LoginsType::initFrom(User::data());
 	}
 
 	$T = $template->add_file('user/profile/private.tpl');
 
+	# TODO: get rid off, kad implementēs imager
 	$set_vars = array(
 		'user_pic_w'=>$user_pic_w,
 		'user_pic_h'=>$user_pic_h,
@@ -639,7 +617,21 @@ function private_profile(MainModule $template): ?Template
 
 	$T->set_array($set_vars);
 
-	set_profile($T, $login_data, true);
+	$T->set_var("l_forumsort_themes_$L->l_forumsort_themes", ' checked="checked"');
+	$T->set_var("l_forumsort_msg_$L->l_forumsort_msg", ' checked="checked"');
+	$T->set_var("l_disable_youtube_$L->l_disable_youtube", ' checked="checked"');
+	$T->set_var("l_emailvisible_$L->l_emailvisible", ' checked="checked"');
+
+	$T->set_except(['l_password', 'l_sessiondata'], $L);
+
+	if(user_thumb_exists($L->l_id) && user_image_exists($L->l_id))
+	{
+		$T->set_var('thumb_path', "/user/thumb/$L->l_hash/");
+		$T->enable('BLOCK_picture');
+		$T->enable('BLOCK_picture_del');
+	} else {
+		$T->enable('BLOCK_nopicture');
+	}
 
 	$F = (new ResCommentFilter(
 		login_id:User::id()
@@ -2297,4 +2289,18 @@ function insert_comment_theme_merge(int $forum_res_id, int $comment_res_id, int 
 	$sql = "INSERT INTO res_merge (forum_res_id, comment_res_id, ignored) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE ignored=VALUES(ignored)";
 
 	return DB::Execute($sql, $forum_res_id, $comment_res_id, $ignored);
+}
+
+function user_thumb_exists(int $l_id): bool
+{
+	global $sys_user_root;
+
+	return file_exists(join_paths($sys_user_root, "pic", "thumb", $l_id.".jpg"));
+}
+
+function user_image_exists(int $l_id): bool
+{
+	global $sys_user_root;
+
+	return file_exists(join_paths($sys_user_root, "pic", $l_id.".jpg"));
 }

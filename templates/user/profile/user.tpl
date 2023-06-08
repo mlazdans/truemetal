@@ -42,15 +42,12 @@
 <form method="post" action="/user/profile/{l_hash}/">
 <input type="hidden" name="action" value="disable_comments">
 <div class="List-item">
-	<label for="disable_comments">
-		<label><input
-			type="checkbox"
-			name="disable_comments"
-			onclick="this.form.submit()"
-			{disable_comments_checked}
-		>Nerādīt šī lietotāja komentārus</label>
-	</label>
-	<!-- <input type="submit" value="OK"> -->
+	<label><input
+		type="checkbox"
+		name="disable_comments"
+		onclick="this.form.submit()"
+		{disable_comments_1}
+	>Nerādīt šī lietotāja komentārus</label>
 </div>
 </form>
 <!-- END BLOCK_disable_comments -->

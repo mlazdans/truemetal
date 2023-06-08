@@ -12,7 +12,7 @@
 	<td style="text-align: right;"><b>E-pasts:</b></td>
 	<td colspan="2">
 		{l_email}
-		<label><input type="checkbox" value="1" name="data[l_emailvisible]"{l_emailvisible}>redzams citiem</label>
+		<label><input type="checkbox" value="1" name="data[l_emailvisible]"{l_emailvisible_1}>redzams citiem</label>
 	</td>
 </tr>
 <tr>
@@ -40,7 +40,7 @@
 <tr>
 	<td></td>
 	<td colspan="2">
-		<label><input type="checkbox" value="1"" name="data[l_disable_youtube]"{l_disable_youtube}> nerādīt Youtube video</label>
+		<label><input type="checkbox" value="1" name="data[l_disable_youtube]"{l_disable_youtube_1}> nerādīt Youtube video</label>
 	</td>
 </tr>
 </table>
