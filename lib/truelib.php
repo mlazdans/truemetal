@@ -1172,6 +1172,26 @@ function user_image(string $l_hash, bool $thumb = false, string $suffix = "")
 	}
 }
 
+function set_recent_comments(ViewResForumCollection|ViewResArticleCollection $data): ?Template
+{
+	if(!$data->count())
+	{
+		return null;
+	}
+
+	$R = new_template('comments_recent.tpl');
+	foreach($data as $item)
+	{
+		$R->enable_if(Res::is_marked_since($item->res_id, $item->res_comment_last_date), 'BLOCK_comments_new');
+		$R->set_var('res_name', specialchars($item->res_name));
+		$R->set_var('res_comment_count', $item->res_comment_count);
+		$R->set_var('res_route', $item->res_route);
+		$R->parse_block('BLOCK_comments', TMPL_APPEND);
+	}
+
+	return $R;
+}
+
 function whatsnew(MainModule $template): ?Template
 {
 	$T = $template->add_file('whatsnew.tpl');
@@ -1184,41 +1204,16 @@ function whatsnew(MainModule $template): ?Template
 
 	# Forum
 	$F = (new ResForumFilter(forum_allow_childs: 0))->rows(50)->orderBy('res_comment_last_date DESC');
-
-	$data = (new ViewResForumEntity)->getAll($F);
-
-	if($data->count())
-	{
-		$R = new_template('forum/recent.tpl');
-		foreach($data as $item)
-		{
-			$R->enable_if(Forum::has_new_comments($item), 'BLOCK_forum_r_comments_new');
-			$R->set_var('res_name', specialchars($item->res_name));
-			$R->set_var('res_comment_count', $item->res_comment_count);
-			$R->set_var('res_route', $item->res_route);
-			$R->parse_block('BLOCK_forum_r_items', TMPL_APPEND);
-		}
-		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_forum');
+	if($R = set_recent_comments((new ViewResForumEntity)->getAll($F))){
+		$R->disable('BLOCK_more');
+		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_comments');
 	}
 
 	# Articles
 	$F = (new ResArticleFilter)->rows(50)->orderBy('res_comment_last_date DESC');
-
-	$data = (new ViewResArticleEntity)->getAll($F);
-
-	if($data->count())
-	{
-		$R = new_template('right/comment_recent.tpl');
-		foreach($data as $item)
-		{
-			$R->enable_if(Article::has_new_comments($item), 'BLOCK_comment_r_comments_new');
-
-			$R->set_var('res_name', specialchars($item->res_name));
-			$R->set_var('res_comment_count', $item->res_comment_count);
-			$R->set_var('res_route', $item->res_route);
-			$R->parse_block('BLOCK_comment_r_items', TMPL_APPEND);
-		}
-		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_comments');
+	if($R = set_recent_comments((new ViewResArticleEntity)->getAll($F))){
+		$R->disable('BLOCK_more');
+		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_forum');
 	}
 
 	return $T;

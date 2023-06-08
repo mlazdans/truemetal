@@ -207,26 +207,8 @@ class MainModule
 		// "fields"=>array('forum.forum_id', 'res.res_name', 'forum.res_id', 'res_meta.res_comment_last_date', 'res_meta.res_comment_count'),
 
 		$F = (new ResForumFilter(forum_allow_childs: 0))->rows(10)->orderBy("COALESCE(res_comment_last_date, res_entered) DESC");
-
-		$data = (new ViewResForumEntity)->getAll($F);
-
-		if($data->count())
-		{
-			$TThemes = $this->add_file('forum/recent.tpl');
-			foreach($data as $item)
-			{
-				$TThemes->enable_if(Forum::has_new_comments($item), 'BLOCK_forum_r_comments_new');
-				$TThemes->set_var('res_name', specialchars($item->res_name));
-				$TThemes->set_var('res_comment_count', $item->res_comment_count);
-				$TThemes->set_var('res_route', $item->res_route);
-				$TThemes->parse_block('BLOCK_forum_r_items', TMPL_APPEND);
-			}
-
-			$TThemes->enable('BLOCK_forum_r_more');
-			return $this->add_right_item('Forums', $TThemes->parse());
-			// $TThemes->parse_block('FILE_r_forum');
-			// $TThemes->set_var('right_item_data', $TThemes->get_parsed_content('FILE_r_forum'), 'BLOCK_right_item');
-			// $TThemes->parse_block('BLOCK_right_item', TMPL_APPEND);
+		if($R = set_recent_comments((new ViewResForumEntity)->getAll($F))){
+			return $this->add_right_item('Forums', $R->parse());
 		}
 
 		return $this;
@@ -256,24 +238,9 @@ class MainModule
 	function set_recent_comments($limit = 10)
 	{
 		$F = (new ResArticleFilter())->orderBy('res_comment_last_date DESC')->rows($limit);
-
-		$data = (new ViewResArticleEntity)->getAll($F);
-
-		$T = $this->add_file('right/comment_recent.tpl');
-
-		foreach($data as $item)
-		{
-			$T->enable_if(Article::has_new_comments($item), 'BLOCK_comment_r_comments_new');
-
-			$T->set_var('res_name',  specialchars($item->res_name));
-			$T->set_var('res_comment_count', $item->res_comment_count);
-			$T->set_var('res_route', $item->res_route);
-			$T->parse_block('BLOCK_comment_r_items', TMPL_APPEND);
+		if($R = set_recent_comments((new ViewResArticleEntity)->getAll($F))){
+			return $this->add_right_item("Komentāri", $R->parse());
 		}
-
-		$T->enable('BLOCK_comment_r_more');
-
-		return $this->add_right_item("Komentāri", $T->parse());
 	}
 
 	function set_banner_top()
