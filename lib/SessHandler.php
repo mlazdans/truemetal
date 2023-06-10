@@ -38,7 +38,7 @@ class SessHandler implements SessionHandlerInterface
 		{
 			User::data($sess);
 
-			return $sess->l_sessiondata;
+			return $sess->l_sessiondata??"";
 		}
 
 		return "";
