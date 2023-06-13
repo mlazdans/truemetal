@@ -5,7 +5,7 @@
 </div>
 <!-- END BLOCK_not_logged -->
 
-<!-- BEGIN BLOCK_comment_form disabled -->
+<!-- BEGIN BLOCK_comment_add_form disabled -->
 <form action="#comment_form" method="post" id="comment_form">
 <input type="hidden" name="action" value="add_comment">
 <table width="100%" cellpadding="2" cellspacing="0">
@@ -49,4 +49,4 @@
 		<li>Tirgojoties obligāti jānorāda cena</li>
 	</ul>
 </div>
-<!-- END BLOCK_comment_form -->
+<!-- END BLOCK_comment_add_form -->

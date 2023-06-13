@@ -361,7 +361,7 @@ function forum_det(
 		$T->disable('BLOCK_add_comment');
 		$T->enable('BLOCK_forum_closed');
 	} else {
-		$F = comment_form();
+		$F = comment_add_form();
 		$T->enable('BLOCK_add_comment');
 
 		if($action == 'add_comment')
@@ -377,7 +377,7 @@ function forum_det(
 	}
 
 	if(isset($F)){
-		$T->set_var('comments_form', $F->parse());
+		$T->set_var('comment_add_form', $F->parse());
 	}
 
 	$T->set_var('forum_comments', $C->parse());
@@ -391,12 +391,12 @@ function forum_det(
 	return $T;
 }
 
-function comment_form(): Template
+function comment_add_form(): Template
 {
-	$F = new_template('comments_form.tpl');
+	$F = new_template('comment_add_form.tpl');
 	if(User::logged())
 	{
-		$F->enable('BLOCK_comment_form');
+		$F->enable('BLOCK_comment_add_form');
 	} else {
 		$F->enable('BLOCK_not_logged');
 	}
@@ -406,7 +406,7 @@ function comment_form(): Template
 
 function comment_list(ViewResCommentCollection $comments, string $hl): Template
 {
-	$F = comment_form();
+	$F = comment_add_form();
 	$C = new_template('comments.tpl');
 
 	if(User::logged())
@@ -466,7 +466,7 @@ function comment_list(ViewResCommentCollection $comments, string $hl): Template
 		$BLOCK_comment->parse(TMPL_APPEND);
 	}
 
-	$C->set_var('comments_form', $F->parse());
+	$C->set_var('comment_add_form', $F->parse());
 
 	return $C;
 }
@@ -1436,14 +1436,14 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 		}
 	}
 
-	$F = comment_form();
+	$F = comment_add_form();
 	if($error_msg)
 	{
 		$F->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
 	}
 
 	$T->set_var('gallery_comments', $C->parse());
-	$T->set_var('comments_form', $F->parse());
+	$T->set_var('comment_add_form', $F->parse());
 
 	# ja skataas pa vienai
 	$T->enable('BLOCK_image');
@@ -1744,7 +1744,7 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 		}
 	}
 
-	$F = comment_form();
+	$F = comment_add_form();
 	if($error_msg) {
 		$F->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
 	}
@@ -1756,7 +1756,7 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 	set_res($T, $art, $hl);
 
 	$T->set_var('article_comments', $C->parse());
-	$T->set_var('comments_form', $F->parse());
+	$T->set_var('comment_add_form', $F->parse());
 
 	return $T;
 }

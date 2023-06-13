@@ -49,4 +49,4 @@
 <div class="TD-content">{article_comments}</div>
 
 <div class="TD-cat">Pievienot komentāru</div>
-<div class="TD-content">{comments_form}</div>
+<div class="TD-content">{comment_add_form}</div>
