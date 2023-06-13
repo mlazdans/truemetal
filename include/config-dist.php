@@ -13,7 +13,6 @@ $sys_script_version = 1;
 
 define('FORUM_MAXWORDSIZE', 36);
 define('FORUM_MAXWORDS', 1600);
-define('FORUM_MAXLINES', 50);
 
 $sys_devs = [ '127.0.0.1' ];
 $sys_include_paths = [
