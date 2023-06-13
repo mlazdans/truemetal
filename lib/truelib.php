@@ -343,78 +343,76 @@ function forum_det(
 
 	$T->set_var('res_data_compiled', $res_data);
 
-	$C = $template->add_file('comments.tpl');
-
 	# Comments
 	$T->enable(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? 'BLOCK_info_sort_D': 'BLOCK_info_sort_A');
 
-	$F = (new ResFilter())->orderBy(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? "res_entered DESC" : "res_entered");
-	$comments = Res::get_comments($forum->res_id, $F);
+	$Filter = (new ResFilter())->orderBy(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? "res_entered DESC" : "res_entered");
+	$comments = Res::get_comments($forum->res_id, $Filter);
 
-	comment_list($C, $comments, $hl);
+	$C = comment_list($comments, $hl);
 
 	// $forum->set_forum_path($T, $forum_id);
 
 	Res::mark_as_seen($forum->res_id);
 
+	$error_msg = [];
 	if($forum->forum_closed)
 	{
-		$C->disable('BLOCK_addcomment');
+		$T->disable('BLOCK_add_comment');
 		$T->enable('BLOCK_forum_closed');
-	}
+	} else {
+		$F = comment_form();
+		$T->enable('BLOCK_add_comment');
 
-	$error_msg = [];
-	if($action == 'add_comment'){
-		if(!User::logged()){
-			$template->not_logged();
-			return null;
-		}
-
-		if($forum->forum_closed)
+		if($action == 'add_comment')
 		{
-			$error_msg[] = "Tēma slēgta";
-		}
-
-		$data = post('data');
-		$C->set_array(specialchars($data));
-
-		if(empty($data['c_data'])){
-			$error_msg[] = "Kaut kas jau jāieraksta";
-		}
-
-		if(!$error_msg) {
-			if(Res::user_add_comment($forum->res_id, $data['c_data']))
-			{
+			if(add_comment($template, $C, $forum->res_id, post('res_data'), $error_msg)){
 				return null;
-			} else {
-				$error_msg[] = "Neizdevās pievienot komentāru";
 			}
 		}
 	}
 
-	if($error_msg) {
-		$C->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
+	if($error_msg){
+		$F->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
 	}
 
-	$T->set_block_string($C->parse(), 'BLOCK_forum_comments');
+	if(isset($F)){
+		$T->set_var('comments_form', $F->parse());
+	}
+
+	$T->set_var('forum_comments', $C->parse());
 
 	# Attendees
 	if(User::logged() && ($forum->type_id === Forum::TYPE_EVENT) && ($A = attendees($template, $forum)))
 	{
-		$T->set_block_string($A->parse(), 'BLOCK_attend');
+		$T->set_var('forum_attend', $A->parse());
 	}
 
 	return $T;
 }
 
-function comment_list(Template $C, ViewResCommentCollection $comments, string $hl): void
+function comment_form(): Template
 {
+	$F = new_template('comments_form.tpl');
 	if(User::logged())
 	{
-		$C->enable('BLOCK_comment_form');
+		$F->enable('BLOCK_comment_form');
+	} else {
+		$F->enable('BLOCK_not_logged');
+	}
+
+	return $F;
+}
+
+function comment_list(ViewResCommentCollection $comments, string $hl): Template
+{
+	$F = comment_form();
+	$C = new_template('comments.tpl');
+
+	if(User::logged())
+	{
 		$disabled_users = CommentDisabled::get(User::id());
 	} else {
-		$C->enable('BLOCK_notloggedin');
 		$disabled_users = array();
 	}
 
@@ -422,7 +420,7 @@ function comment_list(Template $C, ViewResCommentCollection $comments, string $h
 	{
 		$BLOCK_comment = $C->enable('BLOCK_comment');
 	} else {
-		$C->enable('BLOCK_nocomment');
+		$C->enable('BLOCK_no_comments');
 	}
 
 	$comment_nr = 0;
@@ -432,8 +430,10 @@ function comment_list(Template $C, ViewResCommentCollection $comments, string $h
 		$comment_nr++;
 
 		# balsošana
-		if(User::logged() && $BLOCK_comment->block_exists('BLOCK_comment_vote')){
+		// if(User::logged() && $BLOCK_comment->block_exists('BLOCK_comment_vote')){
+		if(User::logged()){
 			$BLOCK_comment->enable('BLOCK_comment_vote');
+			// $BLOCK_comment->enable('BLOCK_comment_edit');
 		}
 
 		$BLOCK_comment->set_array($item);
@@ -465,6 +465,10 @@ function comment_list(Template $C, ViewResCommentCollection $comments, string $h
 
 		$BLOCK_comment->parse(TMPL_APPEND);
 	}
+
+	$C->set_var('comments_form', $F->parse());
+
+	return $C;
 }
 
 function get_attendees(int $res_id): ViewAttendCollection {
@@ -1239,17 +1243,10 @@ function user_comments(MainModule $template, string $l_hash, string $hl): ?Templ
 		$T->set_var('is_blocked', ' (bloķēts)');
 	}
 
-	$C = new_template('comments.tpl');
-
 	$F = (new ResCommentFilter(login_id: $login_data->l_id))->rows(100)->orderBy("res_entered DESC");
-
 	$comments = (new ViewResCommentEntity)->getAll($F);
 
-	comment_list($C, $comments, $hl);
-
-	$C->disable('BLOCK_addcomment');
-
-	$T->set_block_string($C->parse(), 'BLOCK_user_comments_list');
+	$T->set_var('user_comments', comment_list($comments, $hl)->parse());
 
 	return $T;
 }
@@ -1425,41 +1422,28 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 	Res::mark_as_seen($galdata->res_id);
 
 	$T = $template->add_file('gallery.tpl');
-	$C = new_template('comments.tpl');
+
+	$F = (new ResFilter())->orderBy(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? "res_entered DESC" : "res_entered");
+	$comments = Res::get_comments($galdata->res_id, $F);
+
+	$C = comment_list($comments, "");
 
 	$error_msg = [];
 	if($action == 'add_comment')
 	{
-		$data = post('data');
-		$C->set_array(specialchars($data));
-
-		if(empty($data['c_data'])){
-			$error_msg[] = "Kaut kas jau jāieraksta";
-		}
-
-		if(empty($error_msg)){
-			$res_id = (int)$galdata->res_id;
-			$data = post('data');
-			if(Res::user_add_comment($res_id, $data['c_data']))
-			{
-				return null;
-			} else {
-				$error_msg[] = "Never pievienot komentāru";
-			}
+		if(add_comment($template, $C, $galdata->res_id, post('res_data'), $error_msg)){
+			return null;
 		}
 	}
 
+	$F = comment_form();
 	if($error_msg)
 	{
-		$C->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
+		$F->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
 	}
 
-	$F = (new ResFilter())->orderBy(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? "res_entered DESC" : "res_entered");
-
-	$comments = Res::get_comments($galdata->res_id, $F);
-
-	comment_list($C, $comments, "");
-	$T->set_block_string($C->parse(), 'BLOCK_gallery_comments');
+	$T->set_var('gallery_comments', $C->parse());
+	$T->set_var('comments_form', $F->parse());
 
 	# ja skataas pa vienai
 	$T->enable('BLOCK_image');
@@ -1505,7 +1489,7 @@ function admin_comment_list(
 	{
 		$C->enable('BLOCK_comments');
 	} else {
-		$C->enable('BLOCK_nocomments');
+		$C->enable('BLOCK_no_comments');
 	}
 
 	foreach($comments as $item)
@@ -1738,65 +1722,41 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 		return null;
 	}
 
-	$action = post('action');
-
 	if($article_route && !str_ends_with($art->res_route, "/$article_route"))
 	{
 		redirectp_wqs($art->res_route);
 		return null;
 	}
 
-	$T = $template->add_file('article.tpl');
-
-	# Comments
-	$T->enable('BLOCK_article_comments_head');
-
-	$C = $template->add_file('comments.tpl');
-
-	$error_msg = [];
-	# TODO: generalize
-	if($action == 'add_comment')
-	{
-		if(!User::logged()){
-			$template->not_logged();
-			return null;
-		}
-
-		$data = post('data');
-		$C->set_array(specialchars($data));
-
-		if(empty($data['c_data'])){
-			$error_msg[] = "Kaut kas jau jāieraksta";
-		}
-
-		if(!$error_msg){
-			if(Res::user_add_comment($art->res_id, $data['c_data']))
-			{
-				return null;
-			} else {
-				$error_msg[] = "Neizdevās pievienot komentāru";
-			}
-		}
-	}
-	#
-
-	if($error_msg) {
-		$C->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
-	}
-
 	Res::mark_as_seen($art->res_id);
 
+	$T = $template->add_file('article.tpl');
+
 	$comments = Res::get_comments($art->res_id);
+	$C = comment_list($comments, $hl);
 
-	comment_list($C, $comments, $hl);
+	$error_msg = [];
+	$action = post('action');
+	if($action == 'add_comment')
+	{
+		if(add_comment($template, $C, $art->res_id, post('res_data'), $error_msg)){
+			return null;
+		}
+	}
 
-	$T->set_block_string($C->parse(), 'BLOCK_article_comments');
+	$F = comment_form();
+	if($error_msg) {
+		$F->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
+	}
 
 	// $art_title .= (isset($art['art_name']) ? " - ".$art['art_name'] : "");
 
 	$T->set_array($art);
 
 	set_res($T, $art, $hl);
+
+	$T->set_var('article_comments', $C->parse());
+	$T->set_var('comments_form', $F->parse());
 
 	return $T;
 }
@@ -2298,4 +2258,27 @@ function user_image_exists(int $l_id): bool
 	global $sys_user_root;
 
 	return file_exists(join_paths($sys_user_root, "pic", $l_id.".jpg"));
+}
+
+function add_comment(MainModule $template, Template $C, int $res_id, string $res_data, array &$error_msg): bool
+{
+	if(!User::logged()){
+		$template->not_logged();
+		return false;
+	}
+
+	$C->set_var('res_data', htmlspecialchars($res_data));
+
+	if(empty($res_data)){
+		$error_msg[] = "Kaut kas jau jāieraksta";
+	} else {
+		if(Res::user_add_comment($res_id, $res_data))
+		{
+			return true;
+		} else {
+			$error_msg[] = "Neizdevās pievienot komentāru";
+		}
+	}
+
+	return false;
 }

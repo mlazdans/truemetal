@@ -58,8 +58,6 @@ class Res
 		);
 	}
 
-	# TODO: varbūt vajadzētu kaut kā apvienot daudzās vietas, kur šis tiek izsaukt, jo
-	# patlaban datu validācija notiek katrā izsaukšanas vietā
 	static function user_add_comment(int $res_id, string $res_data): bool
 	{
 		$R = static::prepare_with_user(

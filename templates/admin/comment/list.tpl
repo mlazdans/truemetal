@@ -1,7 +1,7 @@
-<!-- BEGIN BLOCK_nocomments disabled -->
+<!-- BEGIN BLOCK_no_comments disabled -->
 <div class="TD-cat">Komentāri</div>
 <div>Nav neviena komentāra</div>
-<!-- END BLOCK_nocomments -->
+<!-- END BLOCK_no_comments -->
 
 <!-- BEGIN BLOCK_comments disabled -->
 <form action="" method="post" id="comments">

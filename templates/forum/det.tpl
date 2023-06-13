@@ -1,7 +1,8 @@
 <div class="TD-cat">{res_name}</div>
 <div class="TD-content">
 
-<!-- BEGIN BLOCK_attend --><!-- END BLOCK_attend -->
+{forum_attend}
+
 <div class="profile-header">
 	<div class="user-info">
 		<div class="nick">{res_nickname},</div>
@@ -40,10 +41,6 @@
 <div class="error">{error_msg}</div>
 <!-- END BLOCK_forum_error -->
 
-<!-- <div class="TD-cat" id="theme-comments-{forum_id}">
-	Komentāri
-</div> -->
-
 <div class="List-item">
 	<!-- BEGIN BLOCK_info_sort_A disabled -->
 	Komentāri sakārtoti pēc to ievadīšanas datuma
@@ -56,14 +53,17 @@
 
 <div class="List-sep"></div>
 
-<div class="TD-content">
-<!-- BEGIN BLOCK_forum_comments --><!-- END BLOCK_forum_comments -->
-</div>
+<div class="TD-content">{forum_comments}</div>
 
 <!-- BEGIN BLOCK_forum_closed disabled -->
 <div class="Info">
 	Tēma slēgta
 </div>
 <!-- END BLOCK_forum_closed -->
+
+<!-- BEGIN BLOCK_add_comment -->
+<div class="TD-cat">Pievienot komentāru</div>
+<div class="TD-content">{comments_form}</div>
+<!-- END BLOCK_add_comment -->
 
 </div>

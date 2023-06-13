@@ -78,10 +78,11 @@
 <div style="text-align: center;"><a href="/gallery/view/{gd_nextid}/#pic-holder"><img src="{image_path}" alt="Nākamā" width="500"></a></div>
 <div style="text-align: center;">{gd_descr}</div>
 
-<div class="TD-cat">
-	Komentāri
-</div>
-<!-- BEGIN BLOCK_gallery_comments --><!-- END BLOCK_gallery_comments -->
+<div class="TD-cat">Komentāri</div>
+<div class="TD-content">{gallery_comments}</div>
+
+<div class="TD-cat">Pievienot komentāru</div>
+<div class="TD-content">{comments_form}</div>
 
 <!-- END BLOCK_image -->
 
