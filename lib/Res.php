@@ -60,12 +60,12 @@ class Res
 
 	# TODO: varbūt vajadzētu kaut kā apvienot daudzās vietas, kur šis tiek izsaukt, jo
 	# patlaban datu validācija notiek katrā izsaukšanas vietā
-	static function user_add_comment(int $res_id, string $c_data): bool
+	static function user_add_comment(int $res_id, string $res_data): bool
 	{
 		$R = static::prepare_with_user(
 			res_resid: $res_id,
 			res_kind: ResKind::COMMENT,
-			res_data: $c_data,
+			res_data: $res_data,
 		);
 
 		return DB::withNewTrans(function() use ($R){
