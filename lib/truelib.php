@@ -429,11 +429,16 @@ function comment_list(ViewResCommentCollection $comments, string $hl): Template
 	{
 		$comment_nr++;
 
-		# balsošana
-		// if(User::logged() && $BLOCK_comment->block_exists('BLOCK_comment_vote')){
 		if(User::logged()){
 			$BLOCK_comment->enable('BLOCK_comment_vote');
-			// $BLOCK_comment->enable('BLOCK_comment_edit');
+			if(User::is_admin()){
+				$BLOCK_comment->enable('BLOCK_comment_debug');
+				$BLOCK_comment->enable('BLOCK_comment_edit');
+			} else {
+				if(User::can_edit_comment($item)){
+					$BLOCK_comment->enable('BLOCK_comment_edit');
+				}
+			}
 		}
 
 		$BLOCK_comment->set_array($item);
@@ -2277,6 +2282,35 @@ function add_comment(MainModule $template, Template $C, int $res_id, string $res
 			return true;
 		} else {
 			$error_msg[] = "Neizdevās pievienot komentāru";
+		}
+	}
+
+	return false;
+}
+
+function update_comment(MainModule $template, Template $C, int $res_id, string $res_data, array &$error_msg): bool
+{
+	if(!User::logged()){
+		$template->not_logged();
+		return false;
+	}
+
+	$C->set_var('res_data', htmlspecialchars($res_data));
+
+	if(empty($res_data)){
+		$error_msg[] = "Kaut kas jau jāieraksta";
+	} else {
+		$Res = new ResType(
+			res_id: $res_id,
+			res_data: $res_data,
+			res_data_compiled: parse_text_data($res_data),
+		);
+
+		if($Res->update())
+		{
+			return true;
+		} else {
+			$error_msg[] = "Neizdevās saglabāt komentāru";
 		}
 	}
 

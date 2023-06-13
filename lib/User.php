@@ -67,4 +67,11 @@ class User
 	{
 		return User::id() === 3;
 	}
+
+	static function can_edit_comment(ViewResCommentType $C){
+		return User::is_admin() || (
+			($C->login_id == User::id()) &&
+			(time() - strtotime($C->res_entered) < 600)
+		);
+	}
 }

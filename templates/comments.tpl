@@ -13,6 +13,12 @@
 			</div>
 			<!-- END BLOCK_comment_edit -->
 
+			<!-- BEGIN BLOCK_comment_debug disabled -->
+			<div class="unselectable">
+				<a href="/res/debug/{res_id}/">[debug]</a>
+			</div>
+			<!-- END BLOCK_comment_debug -->
+
 			<div class="vote unselectable {comment_vote_class}" id="votes-{res_id}" title="+{res_votes_plus_count} - {res_votes_minus_count}">
 				{res_votes}
 			</div>
