@@ -1,0 +1,4 @@
+#!/bin/sh
+
+/www/truemetal.lv/site/sphinx/indexer
+php8.2 /www/truemetal.lv/site/bin/update_logins_meta.php
