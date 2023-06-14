@@ -26,3 +26,6 @@ ALTER TABLE forum ADD CONSTRAINT forum_allow_childs_check CHECK (forum_allow_chi
 ALTER TABLE forum ADD CONSTRAINT forum_closed_check CHECK (forum_closed IN (0,1));
 ALTER TABLE forum ADD CONSTRAINT forum_display_check CHECK (forum_display IN (0,1));
 ALTER TABLE forum ADD CONSTRAINT type_id_check CHECK (type_id IN (0,1));
+
+-- RES
+ALTER TABLE res ADD CONSTRAINT res_visible_check CHECK (res_visible IN (0,1));
