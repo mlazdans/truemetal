@@ -31,7 +31,7 @@ $sys_parameters = (function(): array {
 	}
 
 	# Šeit mums vajag dekodēt un arī pārrakstīt QUERY_STRING ērtākai izmantošanai
-	if(isset($parts[1]))$_SERVER["QUERY_STRING"] = urldec($parts[1]);
+	$_SERVER["QUERY_STRING"] = isset($parts[1]) ? urldec($parts[1]) : "";
 
 	return $sys_parameters??[];
 })();
