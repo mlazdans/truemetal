@@ -203,10 +203,12 @@ class MainModule
 
 	function set_recent_forum()
 	{
-		# TODO: fields
-		// "fields"=>array('forum.forum_id', 'res.res_name', 'forum.res_id', 'res_meta.res_comment_last_date', 'res_meta.res_comment_count'),
+		$F = (new ResForumFilter(forum_allow_childs: 0))
+		->rows(10)
+		->orderBy("COALESCE(res_comment_last_date, res_entered) DESC")
+		->fields('forum_id', 'res_name', 'res_id', 'res_comment_last_date', 'res_comment_count', 'res_route')
+		;
 
-		$F = (new ResForumFilter(forum_allow_childs: 0))->rows(10)->orderBy("COALESCE(res_comment_last_date, res_entered) DESC");
 		if($R = set_recent_comments((new ViewResForumEntity)->getAll($F))){
 			return $this->add_right_item('Forums', $R->parse());
 		}
@@ -316,10 +318,10 @@ class MainModule
 
 	function set_events()
 	{
-		# TODO: fields
-		// 	"fields"=>array('forum.forum_id', 'res.res_name', 'forum.event_startdate', 'forum.res_id'),
-
-		$F = (new ResForumFilter(actual_events: true))->orderBy('event_startdate');
+		$F = (new ResForumFilter(actual_events: true))
+		->orderBy('event_startdate')
+		->fields('forum_id', 'res_name', 'event_startdate', 'res_id', 'res_route')
+		;
 
 		$data = (new ViewResForumEntity())->getAll($F);
 
