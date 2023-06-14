@@ -30,7 +30,6 @@ $ip                    = (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR
 # Config
 require_once($sys_root.'/include/config.php');
 
-# XXX: tad jebkurš mudaks, palaižot no cli, tagad ir admins?!
 $sys_debug = (php_sapi_name() == 'cli') || in_array($ip, $sys_devs);
 $DQDP_DEBUG = $sys_debug;
 
