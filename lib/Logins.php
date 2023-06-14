@@ -216,7 +216,6 @@ class Logins
 		return false;
 	}
 
-	# TODO: configā
 	static function codes_timeout(): int {
 		return 900; // 15 min
 	}
