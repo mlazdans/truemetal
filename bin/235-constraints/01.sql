@@ -1,7 +1,7 @@
 -- LOGINS
 ALTER TABLE logins CHANGE l_disable_youtube l_disable_youtube TINYINT UNSIGNED NOT NULL DEFAULT 0;
 
-UPDATE logins SET l_forumsort_themes = 'T' WHERE l_forumsort_themes = '';
+UPDATE logins SET l_forumsort_themes = 'T' WHERE l_forumsort_themes != 'C';
 UPDATE logins SET l_forumsort_themes = '0' WHERE l_forumsort_themes = 'T';
 UPDATE logins SET l_forumsort_themes = '1' WHERE l_forumsort_themes = 'C';
 ALTER TABLE logins CHANGE l_forumsort_themes l_forumsort_themes TINYINT UNSIGNED NOT NULL DEFAULT 0;
