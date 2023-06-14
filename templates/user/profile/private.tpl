@@ -22,19 +22,19 @@
 <tr>
 	<td style="text-align: right;"><b>Foruma tēmas kārtot pēc:</b></td>
 	<td>
-		<label><input type="radio" name="data[l_forumsort_themes]" value="T"{l_forumsort_themes_T}> tēmu datumiem</label>
+		<label><input type="radio" name="data[l_forumsort_themes]" value="0"{l_forumsort_themes_0}> tēmu datumiem</label>
 	</td>
 	<td>
-		<label><input type="radio" name="data[l_forumsort_themes]" value="C"{l_forumsort_themes_C}> jaunākā komentāra</label>
+		<label><input type="radio" name="data[l_forumsort_themes]" value="1"{l_forumsort_themes_1}> jaunākā komentāra</label>
 	</td>
 </tr>
 <tr>
 	<td style="text-align: right;"><b>Komentārus kārtot:</b></td>
 	<td>
-		<label><input type="radio" name="data[l_forumsort_msg]" value="A"{l_forumsort_msg_A}> pēc datuma augoši</label>
+		<label><input type="radio" name="data[l_forumsort_msg]" value="0"{l_forumsort_msg_0}> pēc datuma augoši</label>
 	</td>
 	<td>
-		<label><input type="radio" name="data[l_forumsort_msg]" value="D"{l_forumsort_msg_D}> pēc datuma dilstoši</label>
+		<label><input type="radio" name="data[l_forumsort_msg]" value="1"{l_forumsort_msg_1}> pēc datuma dilstoši</label>
 	</td>
 </tr>
 <tr>

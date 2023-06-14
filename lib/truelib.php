@@ -1926,12 +1926,11 @@ function update_profile(MainModule $template, array $data): bool
 		l_disable_youtube: empty($data['l_disable_youtube']) ? 0 : 1,
 	);
 
-	# TODO: constrain in DB?
 	if(in_array($data['l_forumsort_themes'], [Forum::SORT_THEME, Forum::SORT_LASTCOMMENT])){
-		$upd->l_forumsort_themes = $data['l_forumsort_themes'];
+		$upd->l_forumsort_themes = (int)$data['l_forumsort_themes'];
 	}
 	if(in_array($data['l_forumsort_msg'], [Forum::SORT_DESC, Forum::SORT_ASC])){
-		$upd->l_forumsort_msg = $data['l_forumsort_msg'];
+		$upd->l_forumsort_msg = (int)$data['l_forumsort_msg'];
 	}
 
 	if(!$upd->update())

@@ -5,15 +5,16 @@ use dqdp\TODO;
 class Forum
 {
 	const DISPLAY_DATACOMPILED = 0;
-	const DISPLAY_DATA = 1;
+	const DISPLAY_DATA         = 1;
 
-	const SORT_THEME = 'T';
-	const SORT_LASTCOMMENT = 'C';
-	const SORT_DESC = 'D';
-	const SORT_ASC = 'A';
+	const SORT_THEME           = 0;
+	const SORT_LASTCOMMENT     = 1;
 
-	const TYPE_STD = 0;
-	const TYPE_EVENT = 1;
+	const SORT_ASC             = 0;
+	const SORT_DESC            = 1;
+
+	const TYPE_STD             = 0;
+	const TYPE_EVENT           = 1;
 
 	static array $types = [
 		self::TYPE_STD=>'Forums',
