@@ -67,55 +67,25 @@
 
 <div class="Forum-sep"></div>
 
+<!-- BEGIN BLOCK_not_logged disabled -->
+<div class="Info">
+	Pievienot jaunu tēmu var tikai reģistrēti lietotāji, tapēc, ielogojies vai <a href="/register/">reģistrējies</a>!
+</div>
+<!-- END BLOCK_not_logged -->
+
+<!-- BEGIN BLOCK_logged disabled -->
 <div class="TD-cat">
 	Pievienot jaunu tēmu
 </div>
 <div class="List-item">
 	Ņem vērā - stulbs tēmas nosaukums garantē tēmas izdzēšanu un daudz mīnusus!
 </div>
-
-<!-- BEGIN BLOCK_notloggedin disabled -->
-<div class="Info">
-	Pievienot jaunu tēmu var tikai reģistrēti lietotāji, tapēc, ielogojies vai <a href="/register/">reģistrējies</a>!
-</div>
-<!-- END BLOCK_notloggedin -->
-
-<!-- BEGIN BLOCK_loggedin disabled -->
-<a name="add_theme"></a>
-<form action="#add_theme" method="post">
-
 <!-- BEGIN BLOCK_forumdata_bazar disabled -->
 <div class="List-item">
 	Tirgus sadaļā tēmas veidot var sākt, ja reģistrējies vismaz 10 dienas VAI (plusi-mīnusi) >= 10.
 </div>
 <!-- END BLOCK_forumdata_bazar -->
-
-<!-- BEGIN BLOCK_forum_error disabled -->
-<div class="error">{error_msg}</div>
-<!-- END BLOCK_forum_error -->
-
-<table class="Forum-Theme-form" cellpadding="2" cellspacing="1">
-<tr>
-	<td align="right">
-		<input type="hidden" name="action" value="add_theme">
-		Segvārds:
-	</td>
-	<td style="width: 100%;">{USER_l_nick}</td>
-</tr>
-<tr>
-	<td style="white-space: nowrap;" align="right"{error_forum_name}>Jauna tēma:</td>
-	<td><input style="width: 95%;" type="text" name="data[forum_name]" maxlength="64" size="64" value="{forum_name}"></td>
-</tr>
-<tr>
-	<td align="right" valign="top"{error_forum_data}>Ziņa:</td>
-	<td><textarea style="width: 95%;" name="data[forum_data]" cols="50" rows="10">{forum_data}</textarea></td>
-</tr>
-<tr>
-	<td align="right">&nbsp;</td>
-	<td><input type="submit" value="Pievienot"></td>
-</tr>
-</table>
-</form>
-<!-- END BLOCK_loggedin -->
+{forum_add_theme_form}
+<!-- END BLOCK_logged -->
 
 </div>

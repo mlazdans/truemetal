@@ -100,7 +100,7 @@ function forum_add_theme(MainModule $template, Template $T, ViewResForumType $fo
 
 	set_error_fields($T, $error_fields);
 
-	$T->set_array(specialchars($post_data), 'BLOCK_loggedin');
+	$T->set_array(specialchars($post_data));
 
 	if($error_msg){
 		return false;
@@ -144,6 +144,8 @@ function forum_themes(
 	Res::mark_as_seen($forum->res_id);
 
 	$T = $template->add_file('forum/theme.tpl');
+	$F = $template->add_file('forum_add_theme_form.tpl');
+
 	$T->set_array($forum);
 
 	$T->set_var('current_theme_name', specialchars($forum->res_name));
@@ -153,39 +155,26 @@ function forum_themes(
 		$T->enable('BLOCK_forumdata_bazar');
 	}
 
-	// $forum = new Forum;
-
 	if($action == 'add_theme')
 	{
-		if(forum_add_theme($template, $T, $forum, post('data')))
+		if(forum_add_theme($template, $F, $forum, post('data')))
 		{
 			return null;
 		}
-	} else {
-		# TODO: kaut kā stulbi. Name collision
-		$T->set_var('forum_name', '', 'BLOCK_loggedin');
-		$T->set_var('forum_data', '', 'BLOCK_loggedin');
 	}
 
-	if(User::logged())
-	{
-		$T->enable('BLOCK_loggedin');
-	} else {
-		$T->enable('BLOCK_notloggedin');
-	}
-
-	$F = (new ResForumFilter(res_resid: $forum->res_id))->page($page_id, $fpp);
+	$Filter = (new ResForumFilter(res_resid: $forum->res_id))->page($page_id, $fpp);
 
 	if(User::get_val('l_forumsort_themes') == Forum::SORT_LASTCOMMENT)
 	{
-		$F->orderBy("COALESCE(res_comment_last_date, res_entered) DESC");
+		$Filter->orderBy("COALESCE(res_comment_last_date, res_entered) DESC");
 		$T->enable('BLOCK_info_sort_C');
 	} else {
-		$F->orderBy("res_entered DESC");
+		$Filter->orderBy("res_entered DESC");
 		$T->enable('BLOCK_info_sort_T');
 	}
 
-	$items = (new ViewResForumEntity)->getAll($F);
+	$items = (new ViewResForumEntity)->getAll($Filter);
 
 	if($items)
 	{
@@ -210,6 +199,14 @@ function forum_themes(
 	forum_pages($page_id, $forum_count, $fpp, $pages_visible_to_sides, $T);
 
 	// $forum->set_forum_path($T, $forum_id);
+
+	if(User::logged())
+	{
+		$T->set_var('forum_add_theme_form', $F->parse());
+		$T->enable('BLOCK_logged');
+	} else {
+		$T->enable('BLOCK_not_logged');
+	}
 
 	return $T;
 }
