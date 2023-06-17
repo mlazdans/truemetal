@@ -29,7 +29,7 @@
 </tr>
 <tr>
 	<td></td>
-	<td><input type="submit" value=" Pieprasīt jaunu paroli "></td>
+	<td><input type="submit" value=" Pieprasīt jaunu paroli " class="DisableOnSubmit"></td>
 </tr>
 </table>
 </form>

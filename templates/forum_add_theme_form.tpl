@@ -23,7 +23,7 @@
 </tr>
 <tr>
 	<td align="right">&nbsp;</td>
-	<td><input type="submit" value="Pievienot"></td>
+	<td><input type="submit" value=" Pievienot " class="DisableOnSubmit"></td>
 </tr>
 </table>
 </form>

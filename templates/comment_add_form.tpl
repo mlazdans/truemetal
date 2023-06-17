@@ -28,7 +28,7 @@
 </tr>
 <tr>
 	<td colspan="2" style="padding-left: 16px; padding-right: 16px;">
-		<input type="submit" value=" Pievienot ">
+		<input type="submit" value=" Pievienot " class="DisableOnSubmit">
 	</td>
 </tr>
 </table>

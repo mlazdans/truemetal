@@ -53,7 +53,7 @@
 	</td>
 </tr>
 <tr>
-	<td colspan="3"><input type="submit" value=" Reģistrēties "></td>
+	<td colspan="3"><input type="submit" value=" Reģistrēties " class="DisableOnSubmit"></td>
 </tr>
 </table>
 </form>

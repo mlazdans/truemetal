@@ -322,5 +322,13 @@ var Truemetal = {
 			$('.Comment').removeClass('Comment-selected');
 			$('#comment' + id).addClass('Comment-selected');
 		}
+	},
+	disableOnSubmit(){
+		$(".DisableOnSubmit").each((_i, el) => {
+			$(el.form).on("submit", e => {
+				console.log($(this));
+				$(el).prop("disabled", true);
+			});
+		});
 	}
 };

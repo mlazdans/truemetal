@@ -21,7 +21,7 @@
 </tr>
 <tr>
 	<td colspan="2" style="padding-left: 16px; padding-right: 16px;">
-		<input type="submit" value=" Saglabāt ">
+		<input type="submit" value=" Saglabāt " class="DisableOnSubmit">
 		<a href="{res_route}" class="button"> Atcelt </a>
 	</td>
 </tr>

@@ -56,6 +56,7 @@
 			Truemetal.initYouTube();
 		}
 		Truemetal.highlightSelectedComment();
+		Truemetal.disableOnSubmit();
 		$(window).on('hashchange', Truemetal.highlightSelectedComment);
 	});
 </script>
