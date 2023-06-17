@@ -13,44 +13,20 @@ if($action == 'logoff')
 $template = new MainModule($sys_module_id);
 $template->set_title($_pointer['_data_']['module_name']??'');
 
-$T = $template->add_file('login.tpl');
-
 # TODO: rate limit
 if(isset($_POST['data']))
 {
-	$my_login = new Logins;
 	$data = post('data');
-	if($login_data = $my_login->login($data['login']??"", $data['password']??""))
+	if(login($data['login']??"", $data['password']??""))
 	{
-		if(!empty($login_data->l_sess_id)){
-			session_write_close();
-			$newSession = session_id($login_data->l_sess_id);
-			session_start();
-		}
-
-		User::data($login_data);
-
-		$referer = empty($data['referer']) ? false : $data['referer'];
-		if(
-			empty($data['referer']) ||
-			(strpos($referer, "/register/") !== false) ||
-			(strpos($referer, "/login/") !== false) ||
-			(strpos($referer, "/forgot/") !== false)
-			)
-		{
-			header("Location: /user/profile/");
-		} else {
-			header("Location: $referer");
-		}
-
 		return;
 	} else {
+		$T = $template->add_file('login.tpl');
 		$T->enable('BLOCK_login_err');
 		$T->set_var('error_msg', 'Nepareizs login vai parole!');
-		$T->set_array($data);
-		User::data(null);
+		$T->set_array(specialchars($data));
 	}
 }
 
 $template->set_right_defaults();
-$template->out($T);
+$template->out($T??null);

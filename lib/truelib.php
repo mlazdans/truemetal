@@ -2312,3 +2312,35 @@ function update_comment(MainModule $template, Template $C, int $res_id, string $
 
 	return false;
 }
+
+function login(string $login_or_email, string $passw): ?LoginsType
+{
+	if($login_data = (new Logins)->login($login_or_email, $passw))
+	{
+		if(!empty($login_data->l_sess_id)){
+			session_write_close();
+			session_id($login_data->l_sess_id);
+			session_start();
+		}
+
+		User::data($login_data);
+
+		$referer = empty($data['referer']) ? false : $data['referer'];
+		if(
+			empty($data['referer']) ||
+			(strpos($referer, "/register/") !== false) ||
+			(strpos($referer, "/login/") !== false) ||
+			(strpos($referer, "/forgot/") !== false)
+			)
+		{
+			header("Location: /user/profile/");
+		} else {
+			header("Location: $referer");
+		}
+
+		return $login_data;
+	} else {
+		User::data(null);
+		return null;
+	}
+}
