@@ -56,6 +56,7 @@ $_GET = _GET();
 header('Content-Type: text/html; charset='.$sys_encoding);
 header('X-Powered-By: TRUEMETAL');
 
+# TODO: apvienot vienā blokā
 if($sys_debug)
 {
 	if(!in_array($sys_module_id, $sys_nosess_modules)){
