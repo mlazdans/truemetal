@@ -206,7 +206,7 @@ class MainModule
 		$F = (new ResForumFilter(forum_allow_childs: 0))
 		->rows(10)
 		->orderBy("COALESCE(res_comment_last_date, res_entered) DESC")
-		->fields('forum_id', 'res_name', 'res_id', 'res_comment_last_date', 'res_comment_count', 'res_route')
+		->fields('forum_id', 'res_name', 'res_id', 'res_comment_last_date', 'res_comment_count', 'res_route', 'res_entered')
 		;
 
 		if($R = set_recent_comments((new ViewResForumEntity)->getAll($F))){

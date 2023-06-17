@@ -123,12 +123,12 @@ class Forum
 
 	public static function has_new_comments(ViewResForumType $item)
 	{
-		return Res::is_marked_since($item->res_id, $item->res_comment_last_date);
+		return Res::not_seen($item->res_id, $item->res_comment_last_date??$item->res_entered);
 	}
 
 	public static function has_new_themes(ViewResForumType $item)
 	{
-		return Res::is_marked_since($item->res_id, $item->res_child_last_date);
+		return Res::not_seen($item->res_id, $item->res_child_last_date??$item->res_entered);
 	}
 
 	static function RouteFromStr(int $forum_id, string $forum_name): string

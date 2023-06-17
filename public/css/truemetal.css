@@ -453,7 +453,15 @@ label > input {
 	background: #220000;
 }
 
-.Comment-new {
+span.Comment-count {
+	display: inline-block;
+	text-decoration: none !important;
+	/* font-weight: bold; */
+}
+.Comment-count-old {
+	color: white;
+}
+.Comment-count-new {
 	color: red;
 }
 .Comment {

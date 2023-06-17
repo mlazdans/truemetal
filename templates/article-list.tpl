@@ -4,7 +4,7 @@
 	<div class="res-name"><a href="{res_route}">{res_name}</a></div>
 	<div class="res-comments-link">
 		<a href="{res_route}#art-comments-{doc_id}">Komentāri</a>
-		<span<!-- BEGIN BLOCK_comments_new disabled --> class="Comment-new"<!-- END BLOCK_comments_new -->>({res_comment_count})</span>
+		<span class="{comment_class}">({res_comment_count})</span>
 	</div>
 </div>
 

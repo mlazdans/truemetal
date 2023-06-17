@@ -3,6 +3,7 @@
 class User
 {
 	static private ?LoginsType $_LOGIN = null;
+	static private ?int $entered_ts = null;
 
 	static function data(?LoginsType $data = null): ?LoginsType
 	{
@@ -11,6 +12,10 @@ class User
 		}
 
 		return static::$_LOGIN;
+	}
+
+	static function entered_ts(): int {
+		return static::$entered_ts??(static::$entered_ts = strtotime(static::data()->l_entered));
 	}
 
 	static function logged(): bool

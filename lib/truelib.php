@@ -186,7 +186,7 @@ function forum_themes(
 	$BLOCK_forum = $T->get_block('BLOCK_forum');
 	foreach($items as $item)
 	{
-		$BLOCK_forum->enable_if(Forum::has_new_comments($item), 'BLOCK_comments_new');
+		$BLOCK_forum->set_var('comment_class', Forum::has_new_comments($item) ? "Comment-count-new" : "Comment-count-old");
 
 		$BLOCK_forum->set_array(specialchars($item));
 		$BLOCK_forum->set_var('res_route', $item->res_route);
@@ -1120,7 +1120,8 @@ function forum_root(MainModule $template): Template
 	$T->enable('BLOCK_forum');
 	foreach($forum_data as $item)
 	{
-		$T->enable_if(Forum::has_new_themes($item), 'BLOCK_comments_new');
+		$T->set_var('comment_class', Forum::has_new_comments($item) ? "Comment-count-new" : "Comment-count-old");
+
 		$T->set_array($item);
 		$T->set_var('forum_date', proc_date($item->res_entered));
 		$T->parse_block('BLOCK_forum', TMPL_APPEND);
@@ -1188,7 +1189,7 @@ function set_recent_comments(ViewResForumCollection|ViewResArticleCollection $da
 	$R = new_template('comments_recent.tpl');
 	foreach($data as $item)
 	{
-		$R->enable_if(Res::is_marked_since($item->res_id, $item->res_comment_last_date), 'BLOCK_comments_new');
+		$R->set_var('comment_class', Res::not_seen($item->res_id, $item->res_comment_last_date??$item->res_entered) ? "Comment-count-new" : "Comment-count-old");
 		$R->set_var('res_name', specialchars($item->res_name));
 		$R->set_var('res_comment_count', $item->res_comment_count);
 		$R->set_var('res_route', $item->res_route);
@@ -1329,8 +1330,7 @@ function gallery_thumbs_list(MainModule $template, int $gal_id): ?Template
 		}
 
 		$T->set_var('res_votes', format_vote($thumb->res_votes));
-
-		$T->enable_if(GalleryData::has_new_comments($thumb), 'BLOCK_comments_new');
+		$T->set_var('comment_class', GalleryData::has_new_comments($thumb) ? "Comment-count-new" : "Comment-count-old");
 
 		$T->parse_block('BLOCK_thumb', TMPL_APPEND);
 	}
@@ -1888,7 +1888,7 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 			$T->disable('BLOCK_art_cont');
 		}
 
-		$T->enable_if(Res::is_marked_since($item['res_id'], $item['res_comment_last_date']), 'BLOCK_comments_new');
+		$T->set_var('comment_class', Res::not_seen($item['res_id'], $item['res_comment_last_date']??$item['res_entered']) ? "Comment-count-new" : "Comment-count-old");
 
 		$T->set_array($item, 'BLOCK_article');
 

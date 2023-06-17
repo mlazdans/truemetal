@@ -30,7 +30,7 @@
 		<div class="unselectable" style="display: inline-block;position: relative;left:0;padding:0; margin: 0 2px;">
 			<div class="List-item" style="text-align: left;">
 				<div class="vote {comment_vote_class} vote-value" style="display: inline-block;text-align: center; padding:0; border:none;">{res_votes}</div>
-				Kom. (<div class="<!-- BEGIN BLOCK_comments_new disabled -->Comment-new<!-- END BLOCK_comments_new -->" style="display: inline-block;">{res_comment_count}</div>)
+				Kom. (<div class="{comment_class}" style="display: inline-block;">{res_comment_count}</div>)
 			</div>
 			<a href="/gallery/view/{gd_id}/#pic-holder"><img src="{thumb_path}" alt="" class="img-thumb" width="120"></a>
 		</div>

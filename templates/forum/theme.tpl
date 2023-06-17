@@ -37,7 +37,7 @@
 	<td class="Forum-Theme-name">
 		<a href="{res_route}" title="Datums: {res_date}"><b>{res_name}</b></a>
 	</td>
-	<td class="Forum-Theme-childcount<!-- BEGIN BLOCK_comments_new disabled --> Comment-new<!-- END BLOCK_comments_new -->">
+	<td class="Forum-Theme-childcount Comment-count {comment_class}">
 		{res_comment_count}
 	</td>
 	<td class="Forum-Theme-username">

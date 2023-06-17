@@ -2,29 +2,29 @@
 
 class Res
 {
-	static function is_marked_since(int $res_id, ?string $date = null): bool
+	static function not_seen(int $res_id, ?string $date = null): bool
 	{
 		if(!User::logged()){
-			return false;
+			return true;
 		}
 
 		if(empty($date)){
-			return false;
+			return true;
 		}
 
-		if(($ts = strtotime($date)) === false){
-			return false;
+		if(($date_ts = strtotime($date)) === false){
+			return true;
 		}
 
 		if(isset($_SESSION['res_seen_ts'][$res_id])){
-			return $ts > $_SESSION['res_seen_ts'][$res_id];
+			return $date_ts > $_SESSION['res_seen_ts'][$res_id];
 		}
 
 		if(isset($_SESSION['res_marked_seen_ts'])){
-			return $ts > $_SESSION['res_marked_seen_ts'];
+			return $date_ts > $_SESSION['res_marked_seen_ts'];
 		}
 
-		return false;
+		return $date_ts > strtotime(User::data()->l_entered);
 	}
 
 	static function mark_as_seen(int $res_id): void
