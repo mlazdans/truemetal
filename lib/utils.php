@@ -265,30 +265,6 @@ function image_load(&$image, $file)
 	return $type;
 }
 
-# TODO: vecais search - get rid off
-function search_to_sql_legacy($q, $fields)
-{
-	$words = explode(' ', $q);
-	if(!is_array($fields))
-		$fields = array($fields);
-
-	$match = '';
-	foreach($words as $word)
-	{
-		$tmp = '';
-		foreach($fields as $field)
-			if($field)
-				$tmp .= "$field REGEXP '".addslashes(preg_quote($word))."' OR ";
-		$tmp = substr($tmp, 0, -4);
-		if($tmp)
-			$match .= "($tmp) AND ";
-	}
-	$match = substr($match, 0, -5);
-	if($match)
-		return "($match)";
-	//$match = ",(module_name REGEXP '$q' OR module_data REGEXP '$q') score";
-}
-
 function save_upload(string $id, string $save_path): bool
 {
 	return empty($_FILES[$id]) ? false : move_uploaded_file($_FILES[$id]['tmp_name'], $save_path);

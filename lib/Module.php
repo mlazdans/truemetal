@@ -248,47 +248,6 @@ class Module
 		return $ret;
 	} // process_action
 
-	private function load_tree2(int $mod_modid = 0, $q = '', $registrated = false)
-	{
-		$sql_add = array(
-			"module_active = '".MOD_ACTIVE."'",
-			);
-
-		if(!$mod_modid){
-			$sql_add[] = "mod_modid IS NULL";
-		} else {
-			$sql_add[] = "mod_modid = $mod_modid";
-		}
-
-		$match = '';
-		if($q)
-			$match = ', '.search_to_sql_legacy($q, array('module_name', 'module_data')).' score';
-
-
-		$sql = "SELECT m.*$match FROM `modules` m";
-		if($sql_add)
-			$sql .= " WHERE ".join(" AND ", $sql_add);
-		$sql .= " ORDER BY module_pos";
-
-		$ret = array();
-		$data = DB::Execute($sql);
-		foreach($data as $item) {
-			$ret[$item['module_id']] = $this->load_tree($item['mod_id'], $q, ($registrated ? $registrated : $item['module_type']));
-			$ret[$item['module_id']]['_data_'] = $item;
-			$ret[$item['module_id']]['_data_']['registrated'] = $registrated;
-		}
-
-		return $ret;
-	} // load_tree
-
-	function search($q)
-	{
-		$data = $this->load_tree(0, $q);
-		//$this->unset_bad($data);
-
-		return $data;
-	}
-
 	/* meklee peec id */
 	function find($mod_id)
 	{

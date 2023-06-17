@@ -1892,7 +1892,6 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 
 		$T->set_array($item, 'BLOCK_article');
 
-		# XXX: fix module_id
 		if($item['res_kind'] == ResKind::FORUM)
 		{
 			$T->set_var('module_id', "forum", 'BLOCK_article');
