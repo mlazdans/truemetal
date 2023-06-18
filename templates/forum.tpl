@@ -1,23 +1,13 @@
 <div class="TD-cat">Forums</div>
 <div class="TD-content">
-	<table class="Forums" cellpadding="2" cellspacing="0">
-	<tr>
-		<td class="Forum-cat">Forums</td>
-		<td class="Forum-cat">Tēmas</td>
-	</tr>
 	<!-- BEGIN BLOCK_forum disabled -->
-	<tr>
-		<td class="Forum-cat Forum-Theme-name Forum-Theme-0"><a href="{res_route}" title="Datums: {forum_date}"><b>{res_name}</b></a></td>
-		<td class="Forum-cat Forum-Theme-childcount Forum-Theme-0 Comment-count {comment_class}">{res_child_count}</td>
-	</tr>
-	<tr>
-		<td colspan="2" class="Forum-descr">{res_data_compiled}</td>
-	</tr>
-	<tr>
-		<td colspan="2" class="Forum-sep"></td>
-	</tr>
+	<div class="forum-root">
+		<div class="forum-root-name"><a href="{res_route}">{res_name}</a></div>
+		<div class="forum-root-theme-count"><span class="Comment-count {comment_class}">{res_child_count}</span> {themes_dsk}</div>
+	</div>
+	<div class="forum-root-data">{res_data_compiled}</div>
+	<div class="List-sep"></div>
 	<!-- END BLOCK_forum -->
-	</table>
 
 	<!-- BEGIN BLOCK_noforum disabled -->
 	<div class="List-item">

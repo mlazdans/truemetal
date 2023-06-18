@@ -183,14 +183,22 @@ function forum_themes(
 		$T->enable('BLOCK_noforum');
 	}
 
-	$BLOCK_forum = $T->get_block('BLOCK_forum');
+	$BLOCK_forum = $T->get_block('BLOCK_forum_themes');
 	foreach($items as $item)
 	{
 		$BLOCK_forum->set_var('comment_class', Forum::has_new_comments($item) ? "Comment-count-new" : "Comment-count-old");
 
 		$BLOCK_forum->set_array(specialchars($item));
 		$BLOCK_forum->set_var('res_route', $item->res_route);
-		$BLOCK_forum->set_var('res_date', proc_date($item->res_entered));
+		$BLOCK_forum->set_var('res_date', proc_date($item->res_entered, true));
+		$BLOCK_forum->set_var('res_comment_last_date', $item->res_comment_last_date ? proc_date($item->res_comment_last_date, true) : "-");
+		if($item->l_hash){
+			$BLOCK_forum->enable('BLOCK_profile_link');
+			$BLOCK_forum->disable('BLOCK_noprofile');
+		} else {
+			$BLOCK_forum->disable('BLOCK_profile_link');
+			$BLOCK_forum->enable('BLOCK_noprofile');
+		}
 		$BLOCK_forum->parse(TMPL_APPEND);
 	}
 
@@ -1121,9 +1129,11 @@ function forum_root(MainModule $template): Template
 	foreach($forum_data as $item)
 	{
 		$T->set_var('comment_class', Forum::has_new_comments($item) ? "Comment-count-new" : "Comment-count-old");
-
-		$T->set_array($item);
-		$T->set_var('forum_date', proc_date($item->res_entered));
+		$T->set_var('res_child_count', $item->res_child_count);
+		$T->set_var('themes_dsk', dsk($item->res_child_count, "tēma", "tēmas"));
+		$T->set_var('res_route', $item->res_route);
+		$T->set_var('res_name', specialchars($item->res_name));
+		$T->set_var('res_data_compiled', $item->res_data_compiled);
 		$T->parse_block('BLOCK_forum', TMPL_APPEND);
 	}
 

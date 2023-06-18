@@ -1,19 +1,13 @@
-<div class="TD-cat">{current_theme_name}</div>
+<div class="TD-cat">Forums / {current_theme_name}</div>
 <div class="TD-content">
 
 <!-- BEGIN BLOCK_is_pages disabled -->
-<div class="Forum-cat" style="margin-bottom: 0;">
+<div class="Forum-cat" style="margin-bottom: 0; display: flex;">
 	<!-- BEGIN BLOCK_page_prev -->
-	<div class="Forum-Page-prev">
-		<a href="{current_theme_route}/page/{prev_page_id}/"><img src="/img/left.png" alt="Pa kreisi"></a>
+	<div>
+		<a href="{current_theme_route}/page/{prev_page_id}/"><img src="/img/left.png" alt="Vienu lapu atpakaļ"></a>
 	</div>
 	<!-- END BLOCK_page_prev -->
-
-	<!-- BEGIN BLOCK_page_next -->
-	<div class="Forum-Page-next">
-		<a href="{current_theme_route}/page/{next_page_id}/"><img src="/img/right.png" alt="Pa labi"></a>
-	</div>
-	<!-- END BLOCK_page_next -->
 
 	<div class="Forum-Pager">
 	<!-- BEGIN BLOCK_page -->{page_seperator}
@@ -22,31 +16,15 @@
 		<!-- END BLOCK_page_switcher -->
 	<!-- END BLOCK_page -->
 	</div>
+
+	<!-- BEGIN BLOCK_page_next -->
+	<div>
+		<a href="{current_theme_route}/page/{next_page_id}/"><img src="/img/right.png" alt="Vienu lapu uz priekšu"></a>
+	</div>
+	<!-- END BLOCK_page_next -->
+
 </div>
 <!-- END BLOCK_is_pages -->
-
-<!-- BEGIN BLOCK_forum_themes disabled -->
-<table class="Forum-Theme" cellpadding="2" cellspacing="1">
-<tr>
-	<td class="Forum-cat">Tēma</td>
-	<td class="Forum-cat">Kom.</td>
-	<td class="Forum-cat">Uzsāka</td>
-</tr>
-<!-- BEGIN BLOCK_forum -->
-<tr>
-	<td class="Forum-Theme-name">
-		<a href="{res_route}" title="Datums: {res_date}"><b>{res_name}</b></a>
-	</td>
-	<td class="Forum-Theme-childcount Comment-count {comment_class}">
-		{res_comment_count}
-	</td>
-	<td class="Forum-Theme-username">
-		{res_nickname}
-	</td>
-</tr>
-<!-- END BLOCK_forum -->
-</table>
-<!-- END BLOCK_forum_themes -->
 
 <!-- BEGIN BLOCK_info_sort_T disabled -->
 <div class="List-item">
@@ -59,13 +37,31 @@
 </div>
 <!-- END BLOCK_info_sort_C -->
 
+<!-- BEGIN BLOCK_forum_themes disabled -->
+<div class="forum-theme">
+	<div class="forum-theme-main">
+		<div class="forum-theme-name"><a href="{res_route}"><b>{res_name}</b></a></div>
+		<div class="forum-theme-comment-count {comment_class}">({res_comment_count})</div>
+		<div class="forum-theme-last-comment-date">{res_comment_last_date}</div>
+	</div>
+	<div class="forum-theme-info">
+		<!-- BEGIN BLOCK_profile_link disabled -->
+		<a href="/user/profile/{l_hash}/" class="ProfilePopup" data-hash="{l_hash}" style="color: white;">{res_nickname}</a>, {res_date}
+		<!-- END BLOCK_profile_link -->
+		<!-- BEGIN BLOCK_noprofile disabled -->
+		{res_nickname}, {res_date}
+		<!-- END BLOCK_noprofile -->
+	</div>
+</div>
+<!-- END BLOCK_forum_themes -->
+
 <!-- BEGIN BLOCK_noforum disabled -->
 <div class="List-item">
 	Pagaidām forumam nav nevienas tēmas!
 </div>
 <!-- END BLOCK_noforum -->
 
-<div class="Forum-sep"></div>
+<div class="List-sep"></div>
 
 <!-- BEGIN BLOCK_not_logged disabled -->
 <div class="Info">
