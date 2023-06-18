@@ -2322,7 +2322,7 @@ function update_comment(MainModule $template, Template $C, int $res_id, string $
 	return false;
 }
 
-function login(string $login_or_email, string $passw): ?LoginsType
+function login(string $login_or_email, string $passw, string $referer): ?LoginsType
 {
 	if($login_data = (new Logins)->login($login_or_email, $passw))
 	{
@@ -2334,9 +2334,8 @@ function login(string $login_or_email, string $passw): ?LoginsType
 
 		User::data($login_data);
 
-		$referer = empty($data['referer']) ? false : $data['referer'];
 		if(
-			empty($data['referer']) ||
+			empty($referer) ||
 			(strpos($referer, "/register/") !== false) ||
 			(strpos($referer, "/login/") !== false) ||
 			(strpos($referer, "/forgot/") !== false)

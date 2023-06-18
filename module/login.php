@@ -17,7 +17,7 @@ $template->set_title($_pointer['_data_']['module_name']??'');
 if(isset($_POST['data']))
 {
 	$data = post('data');
-	if(login($data['login']??"", $data['password']??""))
+	if(login($data['login']??"", $data['password']??"", $data['referer']??""))
 	{
 		return;
 	} else {
