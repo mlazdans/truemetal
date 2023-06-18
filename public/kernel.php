@@ -56,29 +56,12 @@ $_GET = _GET();
 header('Content-Type: text/html; charset='.$sys_encoding);
 header('X-Powered-By: TRUEMETAL');
 
-# TODO: apvienot vienā blokā
 if($sys_debug)
 {
-	if(!in_array($sys_module_id, $sys_nosess_modules)){
-		require_once('include/session_handler.php');
-	}
-
-	if(file_exists("$sys_root/module/$sys_module_id.php")) {
-		include("$sys_root/module/$sys_module_id.php");
-	} else {
-		include("$sys_root/module/$sys_default_module.php");
-	}
+	include("includer.php");
 } else {
 	try {
-		if(!in_array($sys_module_id, $sys_nosess_modules)){
-			require_once('include/session_handler.php');
-		}
-
-		if(file_exists("$sys_root/module/$sys_module_id.php")) {
-			include("$sys_root/module/$sys_module_id.php");
-		} else {
-			include("$sys_root/module/$sys_default_module.php");
-		}
+		include("includer.php");
 	} catch(PDOException $e){
 		$template = new MainModule("error");
 		$template->error("Datubāzes kļūda. Ielogota un tiks apskatīta.");
