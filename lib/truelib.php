@@ -1130,7 +1130,7 @@ function forum_root(MainModule $template): Template
 	{
 		$T->set_var('comment_class', Forum::has_new_comments($item) ? "Comment-count-new" : "Comment-count-old");
 		$T->set_var('res_child_count', $item->res_child_count);
-		$T->set_var('themes_dsk', dsk($item->res_child_count, "tēma", "tēmas"));
+		// $T->set_var('themes_dsk', dsk($item->res_child_count, "tēma", "tēmas"));
 		$T->set_var('res_route', $item->res_route);
 		$T->set_var('res_name', specialchars($item->res_name));
 		$T->set_var('res_data_compiled', $item->res_data_compiled);

@@ -3,7 +3,7 @@
 	<!-- BEGIN BLOCK_forum disabled -->
 	<div class="forum-root">
 		<div class="forum-root-name"><a href="{res_route}">{res_name}</a></div>
-		<div class="forum-root-theme-count"><span class="Comment-count {comment_class}">{res_child_count}</span> {themes_dsk}</div>
+		<div class="forum-root-theme-count Comment-count {comment_class}">{res_child_count}</div>
 	</div>
 	<div class="forum-root-data">{res_data_compiled}</div>
 	<div class="List-sep"></div>
