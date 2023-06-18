@@ -51,7 +51,7 @@ class SessHandler implements SessionHandlerInterface
 
 	function gc(int $max_lifetime): int|false
 	{
-		$period = date('Y-m-d', time() - $max_lifetime);
+		$period = date('Y-m-d H:i:s', time() - $max_lifetime);
 
 		DB::Execute("UPDATE logins SET l_sess_id = NULL, l_logedin = 0 WHERE l_lastaccess < ?", $period);
 
