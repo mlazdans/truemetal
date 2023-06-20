@@ -13,6 +13,8 @@ if($action == 'logoff')
 $template = new MainModule($sys_module_id);
 $template->set_title($_pointer['_data_']['module_name']??'');
 
+$T = $template->add_file('login.tpl');
+
 # TODO: rate limit
 if(isset($_POST['data']))
 {
@@ -21,7 +23,6 @@ if(isset($_POST['data']))
 	{
 		return;
 	} else {
-		$T = $template->add_file('login.tpl');
 		$T->enable('BLOCK_login_err');
 		$T->set_var('error_msg', 'Nepareizs login vai parole!');
 		$T->set_array(specialchars($data));
