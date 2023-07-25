@@ -1552,7 +1552,7 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 
 	if(User::id() == $res->login_id)
 	{
-		$template->msg(htmlspecialchars($value == 'up' ? ":)" : ">:)"));
+		$template->msg(specialchars($value == 'up' ? ":)" : ">:)"));
 		return null;
 	}
 
@@ -1574,8 +1574,20 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 		return null;
 	}
 
+	$timeout = 5;
+	$sql = "INSERT INTO res_vote (
+		res_id, login_id, rv_value, rv_userip
+	) VALUES (
+		?, ?, ?, ?
+	) ON DUPLICATE KEY UPDATE
+		rv_value = CASE WHEN TIMESTAMPDIFF(MINUTE, rv_entered, CURRENT_TIMESTAMP) < $timeout THEN
+			CASE WHEN VALUES(rv_value) <=> rv_value THEN 0 ELSE VALUES(rv_value) END
+		ELSE rv_value END,
+		rv_userip = CASE WHEN TIMESTAMPDIFF(MINUTE, rv_entered, CURRENT_TIMESTAMP) < $timeout THEN VALUES(rv_userip) ELSE rv_userip END
+	";
+
 	$inserted = DB::Execute(
-		"INSERT IGNORE INTO res_vote (res_id, login_id, rv_value, rv_userip) VALUES (?, ?, ?, ?)",
+		$sql,
 		$res->res_id,
 		User::id(),
 		$value == 'up' ? 1 : -1,
