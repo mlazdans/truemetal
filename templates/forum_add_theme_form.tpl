@@ -1,5 +1,8 @@
 <a name="add_theme"></a>
 <form action="#add_theme" method="post">
+<!-- BEGIN BLOCK_ignore_forum_name_strlen disabled -->
+<input type="hidden" name="data[ignore_forum_name_strlen]" value="1">
+<!-- END BLOCK_ignore_forum_name_strlen -->
 
 <!-- BEGIN BLOCK_forum_error disabled -->
 <div class="error">{error_msg}</div>
@@ -15,7 +18,7 @@
 </tr>
 <tr>
 	<td style="white-space: nowrap;" align="right"{error_forum_name}>Jauna tēma:</td>
-	<td><input style="width: 95%;" type="text" name="data[forum_name]" maxlength="64" size="64" value="{forum_name}"></td>
+	<td><input style="width: 95%;" type="text" name="data[forum_name]" maxlength="255" size="64" value="{forum_name}"></td>
 </tr>
 <tr>
 	<td align="right" valign="top"{error_forum_data}>Ziņa:</td>

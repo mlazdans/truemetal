@@ -73,11 +73,19 @@ function forum_add_theme(MainModule $template, Template $T, ViewResForumType $fo
 		return false;
 	}
 
+	$ignore_forum_name_strlen = !empty($post_data['ignore_forum_name_strlen']);
+
 	$error_msg = $error_fields = [];
 	if(empty($post_data['forum_name']))
 	{
 		$error_msg[] = "Nav norādīts tēmas nosaukums";
 		$error_fields[] = 'forum_name';
+	}
+
+	if(!$ignore_forum_name_strlen && (strlen($post_data['forum_name']) > 255)){
+		$error_msg[] = specialchars("Tēmas nosaukums par garu! Spied 'Pievienot', lai ignorētu");
+		$error_fields[] = 'forum_name';
+		$T->enable('BLOCK_ignore_forum_name_strlen');
 	}
 
 	if(empty($post_data['forum_data']))
