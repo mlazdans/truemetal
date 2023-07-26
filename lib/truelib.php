@@ -2204,7 +2204,7 @@ function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
 	$search_msg = [];
 	if($res === false){
 		$template->error("Meklētāja kļūda. Ļoti iespējams nekorekta vai nepabeigta meklēšanas izteiksme ar simboliem: ()-!");
-		user_error($spx->GetLastError(), E_USER_WARNING);
+		user_error($spx->GetLastError().": $search_q", E_USER_WARNING);
 		return $T;
 	} elseif($res['total_found'] == 0) {
 		$search_msg[] = "Nekas netika atrasts";
