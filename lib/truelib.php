@@ -1208,7 +1208,13 @@ function set_recent_comments(ViewResForumCollection|ViewResArticleCollection $da
 	foreach($data as $item)
 	{
 		$R->set_var('comment_class', Res::not_seen($item->res_id, $item->res_comment_last_date??$item->res_entered) ? "Comment-count-new" : "Comment-count-old");
-		$R->set_var('res_name', specialchars($item->res_name));
+		$res_name = $item->res_name;
+		if(mb_strlen($res_name) > 100){
+			$res_name = mb_substr($item->res_name, 0, 97).'...';
+		} else {
+			$res_name = $item->res_name;
+		}
+		$R->set_var('res_name', specialchars($res_name));
 		$R->set_var('res_comment_count', $item->res_comment_count);
 		$R->set_var('res_route', $item->res_route);
 		$R->parse_block('BLOCK_comments', TMPL_APPEND);
