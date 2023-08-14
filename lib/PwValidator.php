@@ -1,9 +1,4 @@
 <?php declare(strict_types = 1);
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
 
 class PwValidatorResult
 {
