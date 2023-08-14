@@ -1237,14 +1237,14 @@ function whatsnew(MainModule $template): ?Template
 	$F = (new ResForumFilter(forum_allow_childs: 0))->rows(50)->orderBy('res_comment_last_date DESC');
 	if($R = set_recent_comments((new ViewResForumEntity)->getAll($F))){
 		$R->disable('BLOCK_more');
-		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_comments');
+		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_forum');
 	}
 
 	# Articles
 	$F = (new ResArticleFilter)->rows(50)->orderBy('res_comment_last_date DESC');
 	if($R = set_recent_comments((new ViewResArticleEntity)->getAll($F))){
 		$R->disable('BLOCK_more');
-		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_forum');
+		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_comments');
 	}
 
 	return $T;
