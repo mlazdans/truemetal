@@ -79,4 +79,8 @@ class User
 			(time() - strtotime($C->res_entered) < 600)
 		);
 	}
+
+	static function can_debug_res(ViewResType $R){
+		return User::is_admin();
+	}
 }

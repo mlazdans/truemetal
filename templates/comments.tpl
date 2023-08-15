@@ -15,7 +15,7 @@
 
 			<!-- BEGIN BLOCK_comment_debug disabled -->
 			<div class="unselectable">
-				<a href="/res/debug/{res_id}/">[debug]</a>
+				<a href="/resdebug/{res_id}/">[debug]</a>
 			</div>
 			<!-- END BLOCK_comment_debug -->
 
