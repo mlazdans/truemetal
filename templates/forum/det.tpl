@@ -29,7 +29,7 @@
 		</div>
 		<!-- END BLOCK_profile_link -->
 		<div class="unselectable">
-			<a href="{res_route}">[#]</a>
+			<a href="{res_route}">[##]</a>
 		</div>
 	</div>
 </div>
