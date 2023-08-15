@@ -16,7 +16,7 @@ function comment_edit(MainModule $template, int $c_id): ?Template
 		return null;
 	}
 
-	if(!User::can_edit_comment($Comment)){
+	if(!User::can_edit_res($Comment)){
 		$template->forbidden("Nav tiesību labot");
 		return null;
 	}

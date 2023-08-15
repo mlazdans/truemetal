@@ -446,7 +446,7 @@ function comment_list(ViewResCommentCollection $comments, string $hl): Template
 			$BLOCK_comment->enable('BLOCK_comment_vote');
 		}
 
-		if(User::can_edit_comment($item)){
+		if(User::can_edit_res($item)){
 			$BLOCK_comment->enable('BLOCK_comment_edit');
 		}
 
