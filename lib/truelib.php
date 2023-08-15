@@ -444,14 +444,14 @@ function comment_list(ViewResCommentCollection $comments, string $hl): Template
 
 		if(User::logged()){
 			$BLOCK_comment->enable('BLOCK_comment_vote');
-			if(User::is_admin()){
-				$BLOCK_comment->enable('BLOCK_comment_debug');
-				$BLOCK_comment->enable('BLOCK_comment_edit');
-			} else {
-				if(User::can_edit_comment($item)){
-					$BLOCK_comment->enable('BLOCK_comment_edit');
-				}
-			}
+		}
+
+		if(User::can_edit_comment($item)){
+			$BLOCK_comment->enable('BLOCK_comment_edit');
+		}
+
+		if(User::can_debug_res($item)){
+			$BLOCK_comment->enable('BLOCK_comment_debug');
 		}
 
 		$BLOCK_comment->set_array($item);
