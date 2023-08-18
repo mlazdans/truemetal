@@ -81,7 +81,7 @@ class MainModule
 		$mem_usage = sprintf("Mem usage: %s MB\n", number_format(memory_get_peak_usage(true)/1024/1204, 2));
 		$rendered = sprintf("Rendered in: %s sec\n", number_format(($sys_end_time - $sys_start_time), 4, '.', ''));
 
-		if($sys_debug)
+		if(User::is_admin())
 		{
 			$finished = "<div><pre>$mem_usage$rendered</pre></div>";
 		} else {
