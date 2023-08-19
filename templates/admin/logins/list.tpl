@@ -37,8 +37,8 @@ Nav neviena logina
 	<td class="TD-cat">ID</td>
 	<td class="TD-cat">Logins</td>
 	<td class="TD-cat">Segvārds</td>
-	<td class="TD-cat"><a href="?{q_sort_votes}">Reitings</a></td>
-	<td class="TD-cat">Lietderība</td>
+	<td class="TD-cat"><a href="?{q_sort_votes}">Votes</a></td>
+	<td class="TD-cat"><a href="?{q_sort_rating}">Reitings</a></td>
 	<td class="TD-cat"><a href="?{q_sort_comment_count}">Komentāri</a></td>
 	<td class="TD-cat">E-pasts</td>
 	<td class="TD-cat" title="Aktīvs">Akt</td>
@@ -60,7 +60,7 @@ Nav neviena logina
 	</td>
 	<td class="{l_color_class}">{l_nick}</td>
 	<td class="{l_color_class} nowrap">{votes}({votes_plus}-{votes_minus})</td>
-	<td class="{l_color_class}">{votes_perc}%</td>
+	<td class="{l_color_class}">{rating}%</td>
 	<td class="{l_color_class}">{comment_count}</td>
 	<td class="{l_color_class}">
 		<a href="mailto:{l_email}">{l_email}</a>

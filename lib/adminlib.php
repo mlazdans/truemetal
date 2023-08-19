@@ -16,17 +16,17 @@ function admin_logins_list(AdminModule $template): ?Template
 		$sort = substr($sort, 0, -4);
 	}
 
-	$sortables = ["votes", "comment_count", "l_entered", "l_lastaccess"];
+	$sortables = ["rating", "votes", "comment_count", "l_entered", "l_lastaccess"];
+
+	if(($sort_f_k = array_search($sort, $sortables)) !== false){
+		$sort_f = $sortables[$sort_f_k];
+	} else {
+		$sort_f = null;
+	}
 
 	$template->set_title('Admin :: logini :: saraksts');
 
 	$T = $template->add_file("admin/logins/list.tpl");
-
-	$sort_f = $sort;
-
-	if($sort == 'votes'){
-		$sort_f = "votes_plus - votes_minus";
-	}
 
 	$F = (new LoginsFilter(
 		l_active:false,
@@ -95,16 +95,6 @@ function admin_logins_list(AdminModule $template): ?Template
 	foreach($logins as $item)
 	{
 		$T->set_array(specialchars($item));
-
-		// if(is_null($item->l_lastaccess)){
-		// 	$T->set_var('l_lastaccess', "<i>-nekad-</i>");
-		// }
-		$T->set_var('votes', $item->votes_plus - $item->votes_minus);
-		if($item->votes_plus + $item->votes_minus != 0){
-			$T->set_var('votes_perc', number_format(($item->votes_plus / ($item->votes_plus + $item->votes_minus)) * 100, 2, '.', ''));
-		} else {
-			$T->set_var('votes_perc', 0);
-		}
 
 		$T->set_var('logins_nr', ++$logins_count);
 
