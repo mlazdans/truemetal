@@ -2,7 +2,7 @@
 <div class="Comment" id="comment{c_id}">
 	<div class="profile-header">
 		<div class="user-info">
-			<div class="nick">{res_nickname},</div>
+			<div class="nick">{res_nickname},&nbsp;</div>
 			<div class="date">{res_date}</div>
 		</div>
 
