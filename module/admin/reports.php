@@ -24,14 +24,12 @@ if($report == 'ip')
 		$C = new_template("admin/comment/list.tpl");
 		$T->set_var('ips', $data);
 
-		$comments = (new ResComment)->get(array(
-			'ips'=>$ips,
-			'c_visible'=>Res::STATE_ALL,
-			'order'=>'c_entered DESC',
-			'limit'=>1000,
-		));
+		$CF = (new ResCommentFilter(
+			ips:$ips,
+			res_visible:false,
+		))->rows(1000)->orderBy("res_entered DESC");
 
-		admin_comment_list($C, $comments);
+		admin_comment_list($C, (new ViewResCommentEntity)->getAll($CF));
 		$T->set_block_string($C->parse(), 'BLOCK_report_comments');
 	}
 }
