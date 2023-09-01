@@ -97,6 +97,7 @@ function admin_logins_list(AdminModule $template): ?Template
 		$T->set_array(specialchars($item));
 
 		$T->set_var('logins_nr', ++$logins_count);
+		$T->set_var('rating', $item->rating ? "$item->rating%" : "");
 
 		$T->set_var('l_color_class', 'box-normal');
 		if(!$item->l_active)
