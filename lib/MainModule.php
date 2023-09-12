@@ -183,10 +183,10 @@ class MainModule
 			$TLogin_form->set_var('login_nick', User::get_val('l_nick'));
 		} else {
 			$referer = $_SERVER["REQUEST_URI"];
-			if(!empty($_SERVER["QUERY_STRING"])){
-				$referer .= "?".$_SERVER["QUERY_STRING"];
-			}
-			$TLogin_form->set_var("referer", $referer);
+			// if(!empty($_SERVER["QUERY_STRING"])){
+			// 	$referer .= "?".$_SERVER["QUERY_STRING"];
+			// }
+			$TLogin_form->set_var("referer", specialchars($referer));
 			$TLogin_form->enable('BLOCK_login_form');
 		}
 
