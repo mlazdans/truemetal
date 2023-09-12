@@ -54,13 +54,11 @@ Nav neviena logina
 		<input type="checkbox" name="l_checked{logins_nr}">
 	</td>
 	<td class="{l_color_class}">{logins_nr}</td>
-	<td class="{l_color_class}">{l_id}</td>
-	<td class="{l_color_class}">
-		<a href="{module_root}/{l_id}/" style="font-weight: bold;">{l_login}</a>
-	</td>
+	<td class="{l_color_class}"><a href="{module_root}/{l_id}/" style="font-weight: bold;">{l_id}</a></td>
+	<td class="{l_color_class}">{l_login}</td>
 	<td class="{l_color_class}">{l_nick}</td>
 	<td class="{l_color_class} nowrap">{votes}({votes_plus}-{votes_minus})</td>
-	<td class="{l_color_class}">{rating}%</td>
+	<td class="{l_color_class}">{rating}</td>
 	<td class="{l_color_class}">{comment_count}</td>
 	<td class="{l_color_class}">
 		<a href="mailto:{l_email}">{l_email}</a>
