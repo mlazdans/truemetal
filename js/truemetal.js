@@ -137,34 +137,41 @@ var Truemetal = {
 		});
 	},
 	wrapYouTube: function(el){
-		var videoId = Truemetal.getUrlVars($(el).attr("href")).v;
-		var q = '';
-		var t = '';
+		// https://youtu.be/DB_8sxghxis?si=d3KWhERDBtiweVGH&t=23
+		// https://www.youtube.com/watch?v=DB_8sxghxis&t=12
 
-		// short youtu.be
-		if(!videoId && el.hostname.match(/youtu.be$/i)){
-			var parts = $(el).attr("href").split('/');
-			var qparts = parts[parts.length - 1].split('?');
+		const url = new URL($(el).attr("href"));
+		let videoId;
+		let time = 0;
 
-			videoId = qparts[0];
+		if(url.searchParams.has('v')){
+			videoId = url.searchParams.get('v');
+		} else {
+			let pathParts = url.pathname.split("/");
+			if(pathParts.length > 0){
+				videoId = pathParts[1];
+			}
+		}
 
-			if(qparts.length > 1){
-				q = qparts[1].split("=")[1];
-				var m = q.split("m")[0];
-				var s = q.split("m")[1].split('s')[0];
-				var t = m * 60 + s * 1;
+		if(url.searchParams.has('t')){
+			let t = url.searchParams.get('t');
+			if(m = t.match(/([\d]+)m([\d]+)s/)){
+				console.log("match ms", t, m);
+				time += parseInt(m[1]) * 60 + parseInt(m[2]);
+			} else if(m = t.match(/([\d]+)m/)){
+				console.log("match m", t, m);
+				time += parseInt(m[1]) * 60;
+			} else if(m = t.match(/([\d]+)s/)){
+				console.log("match s", t, m);
+				time += parseInt(m[1]);
 			}
 		}
 
 		if(videoId){
-			// $(el).attr("id", "yt-" + videoId);
 			let wrap = $('<div class="yt" style="background-image: url(https://img.youtube.com/vi/' + videoId + '/mqdefault.jpg")"></div>');
-			// $(el).html('<img src="https://img.youtube.com/vi/' + videoId + '/mqdefault.jpg" />');
 
 			$(wrap).on('click', function () {
-				//$(div).html('<embed src="https://www.youtube.com/v/' + videoId + '?version=3&autoplay=1' + (t ? '&start=' + t : '') + '" type="application/x-shockwave-flash" width="480" height="395" allowscriptaccess="always" wmode="transparent"></embed>');
-				//$(div).html('<embed src="https://www.youtube.com/v/' + videoId + '?version=3&autoplay=1' + (t ? '&start=' + t : '') + '" type="application/x-shockwave-flash" style="width: 90%; height: 500px;" allowscriptaccess="always" wmode="transparent"></embed>');
-				$(this).replaceWith('<div class="yt"><iframe src="https://www.youtube.com/embed/' + videoId + '?&autoplay=1' + (t ? '&start=' + t : '') + '" frameborder="0" allowfullscreen style="width: 100%; height: 30vh"></iframe></div>');
+				$(this).replaceWith('<div class="yt"><iframe src="https://www.youtube.com/embed/' + videoId + '?&autoplay=1' + (time ? '&start=' + time : '') + '" frameborder="0" allowfullscreen style="width: 100%; height: 30vh"></iframe></div>');
 
 				return false;
 			});
