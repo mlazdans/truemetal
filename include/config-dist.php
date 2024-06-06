@@ -1,12 +1,14 @@
 <?php declare(strict_types = 1);
 
-$f = (require '../vendor/autoload.php');
+$f = (require $sys_root.DIRECTORY_SEPARATOR.'vendor/autoload.php');
 $f->addPsr4("", $sys_root.DIRECTORY_SEPARATOR.'lib');
 $f->addPsr4("", $sys_root.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'Types');
 $f->addPsr4("", $sys_root.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'Entity');
 $f->addPsr4("", $sys_root.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'Filters');
+$f->addPsr4("", $sys_root.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'Templates');
 $f->addPsr4("", $sys_root.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'gen'.DIRECTORY_SEPARATOR.'Traits');
 $f->addPsr4("", $sys_root.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'gen'.DIRECTORY_SEPARATOR.'Types');
+$f->addPsr4("", $sys_root.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'gen'.DIRECTORY_SEPARATOR.'Entity');
 $f->addPsr4("dqdp\\", "/www/dqdp8/dqdp");
 
 $sys_script_version = 1;
