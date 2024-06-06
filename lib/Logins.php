@@ -9,7 +9,7 @@ class Logins
 
 	static function load_single(LoginsFilter $F): ?LoginsType
 	{
-		$data = (new LoginsEntity)->getAll($F);
+		$data = (new LoginsEntity)->get_all($F);
 
 		assert($data->count() <= 1);
 
@@ -23,7 +23,7 @@ class Logins
 
 	static function load(LoginsFilter $F): LoginsCollection
 	{
-		return (new LoginsEntity)->getAll($F);
+		return (new LoginsEntity)->get_all($F);
 	}
 
 	static function load_by_email(string $email, bool $ignore_disabled = false)
@@ -86,7 +86,7 @@ class Logins
 
 	static function get_active(): LoginsCollection
 	{
-		return (new LoginsEntity)->getAll(new LoginsFilter(get_actitve_sessions: true));
+		return (new LoginsEntity)->get_all(new LoginsFilter(get_actitve_sessions: true));
 	}
 
 	static function delete_image(): bool

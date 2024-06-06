@@ -71,7 +71,7 @@ class Res
 				if($c_id = (new CommentType(
 					res_id: $new_res_id
 				))->insert()) {
-					if($new = ViewResCommentEntity::getById($c_id)){
+					if($new = ViewResCommentEntity::get_by_id($c_id)){
 						$U = new ResType(res_id:$new_res_id, res_route:$new->Route());
 						if($U->update()){
 							header("Location: $U->res_route");
@@ -93,7 +93,7 @@ class Res
 			$F->OrderBy('res_entered');
 		}
 
-		return (new ViewResCommentEntity())->getAll($F);
+		return (new ViewResCommentEntity())->get_all($F);
 	}
 
 }
