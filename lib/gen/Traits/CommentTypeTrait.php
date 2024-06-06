@@ -4,13 +4,15 @@
 
 use dqdp\PropertyInitTrait;
 
-trait CommentTypeTrait {
+trait CommentTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $c_id;
 	var ?int $res_id;
 
-	function __construct(?int $c_id = null, ?int $res_id = null) {
+	function __construct(?int $c_id = null, ?int $res_id = null)
+	{
 		if(isset($c_id))$this->c_id = $c_id;
 		if(isset($res_id))$this->res_id = $res_id;
 	}
