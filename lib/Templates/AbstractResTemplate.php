@@ -20,4 +20,6 @@ abstract class AbstractResTemplate extends AbstractTemplate
 	public ?string $l_hash = null;
 	public bool $vote_control_enabled = false;
 	public bool $profile_link_enabled = false;
+	public bool $can_edit_res = false;
+	public bool $can_debug_res = false;
 }

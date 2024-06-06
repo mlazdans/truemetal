@@ -2,8 +2,8 @@
 
 class CommentTemplate extends AbstractResTemplate
 {
-	public ?int $comment_nr = null;
-	public ?int $c_id = null;
+	public int $comment_nr = 0;
+	public int $c_id;
 	public ?string $hl = "";
 
 	public bool $can_edit_res = false;
@@ -25,15 +25,6 @@ class CommentTemplate extends AbstractResTemplate
 			$c_disabled_user_class = ' disabled';
 			$this->res_data_compiled = '-neredzams komentārs-';
 		}
-
-		// set_res($this, $this, $hl);
-		// $BLOCK_comment->set_var('res_nickname', specialchars($this->res_nickname));
-		// $BLOCK_comment->set_var('res_date', proc_date($this->res_entered));
-		// $BLOCK_comment->set_var('res_votes', format_vote($this->res_votes));
-		// $BLOCK_comment->set_var('comment_vote_class', comment_vote_class($this->res_votes));
-		// $this->set_var('comment_add_form', $F->parse());
-		// return $C;
-
 		?>
 		<div class="Comment" id="comment<?=$this->c_id ?>">
 			<div class="profile-header">
