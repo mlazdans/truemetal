@@ -4,7 +4,8 @@
 
 use dqdp\PropertyInitTrait;
 
-trait ViewAttendTypeTrait {
+trait ViewAttendTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $l_id;
@@ -14,7 +15,8 @@ trait ViewAttendTypeTrait {
 	var string $l_nick;
 	var ?string $l_hash;
 
-	function __construct(?int $l_id = null, ?int $res_id = null, ?int $a_attended = null, ?string $a_entered = null, ?string $l_nick = null, ?string $l_hash = null) {
+	function __construct(?int $l_id = null, ?int $res_id = null, ?int $a_attended = null, ?string $a_entered = null, ?string $l_nick = null, ?string $l_hash = null)
+	{
 		if(isset($l_id))$this->l_id = $l_id;
 		if(isset($res_id))$this->res_id = $res_id;
 		if(isset($a_attended))$this->a_attended = $a_attended;
@@ -30,4 +32,5 @@ trait ViewAttendTypeTrait {
 	function insert(): mixed {
 		return (new ViewAttendEntity)->insert($this);
 	}
+
 }

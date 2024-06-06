@@ -4,32 +4,25 @@
 
 use dqdp\DBA\AbstractFilter;
 
-trait ViewResCommentEntityTrait {
-	function __construct(){
-		parent::__construct();
-	}
-
-	function getTableName(): ?string {
+trait ViewResCommentEntityTrait
+{
+	function get_table_name(): string {
 		return 'view_res_comment';
 	}
 
-	function getProcName(): ?string {
+	function get_pk(): string|array|null {
+		return 'c_id';
+	}
+
+	function get_gen(): ?string {
 		return null;
 	}
 
-	function getPK(): string|array|null {
-		return null;
+	static function get(int $ID, ?AbstractFilter $DF = null): ?ViewResCommentType {
+		return (new static)->get_single((new ViewResCommentFilter(c_id: $ID))->merge($DF));
 	}
 
-	function getGen(): ?string {
-		return null;
-	}
-
-	function getProcArgs(): ?array {
-		return null;
-	}
-
-	function getAll(?AbstractFilter $filters = null): ViewResCommentCollection {
+	function get_all(?AbstractFilter $filters = null): ViewResCommentCollection {
 		$col = new ViewResCommentCollection;
 		if($q = $this->query($filters)){
 			while($r = $this->fetch($q)){
@@ -41,7 +34,6 @@ trait ViewResCommentEntityTrait {
 	}
 
 	function fetch($q): ?ViewResCommentType {
-		// return ViewResCommentType::fromDBObject(parent::fetch($q));
 		if($data = parent::fetch($q)){
 			return ViewResCommentType::initFrom($data);
 		} else {
@@ -49,41 +41,15 @@ trait ViewResCommentEntityTrait {
 		}
 	}
 
-	// private function savePreprocessor(array|object $DATA, \Closure $f): mixed {
-	// 	if($DATA instanceof ViewResCommentType){
-	// 		if(method_exists($this, "beforeSave")){
-	// 			if($PROC_DATA = $this->beforeSave($DATA)){
-	// 				return $f($PROC_DATA);
-	// 			} else {
-	// 				return null;
-	// 			}
-	// 		} else {
-	// 			return $f($DATA);
-	// 		}
-	// 	} else {
-	// 		throw new InvalidTypeException($DATA);
-	// 	}
-	// }
-
 	function save(array|object $DATA): mixed {
-		// return $this->savePreprocessor($DATA, function(array|object $DATA){
-		// 	return parent::save(ViewResCommentType::toDBObject($DATA));
-		// });
 		return parent::save($DATA);
 	}
 
 	function insert(array|object $DATA): mixed {
-		// return $this->savePreprocessor($DATA, function(array|object $DATA){
-		// 	return parent::insert(ViewResCommentType::toDBObject($DATA));
-		// });
 		return parent::insert($DATA);
 	}
 
 	function update(int|string|array $ID, array|object $DATA): bool {
 		return parent::update($ID, $DATA);
-
-		// return $this->savePreprocessor($DATA, function(array|object $DATA) use ($ID) {
-		// 	return parent::update($ID, ViewResCommentType::toDBObject($DATA));
-		// }) ?? false;
 	}
 }

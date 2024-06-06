@@ -4,7 +4,8 @@
 
 use dqdp\PropertyInitTrait;
 
-trait ViewResCommentTypeTrait {
+trait ViewResCommentTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $c_id;
@@ -32,7 +33,8 @@ trait ViewResCommentTypeTrait {
 	var ?string $res_comment_last_date;
 	var ?string $l_hash;
 
-	function __construct(?int $c_id = null, ?string $parent_res_route = null, ?int $res_id = null, ?int $res_resid = null, ?int $res_kind = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null) {
+	function __construct(?int $c_id = null, ?string $parent_res_route = null, ?int $res_id = null, ?int $res_resid = null, ?int $res_kind = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null)
+	{
 		if(isset($c_id))$this->c_id = $c_id;
 		if(isset($parent_res_route))$this->parent_res_route = $parent_res_route;
 		if(isset($res_id))$this->res_id = $res_id;
@@ -65,5 +67,13 @@ trait ViewResCommentTypeTrait {
 
 	function insert(): mixed {
 		return (new ViewResCommentEntity)->insert($this);
+	}
+
+	function delete(): bool {
+		return (new ViewResCommentEntity)->delete($this->c_id);
+	}
+
+	function update(): bool {
+		return (new ViewResCommentEntity)->update($this->c_id, $this);
 	}
 }

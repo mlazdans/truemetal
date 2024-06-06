@@ -5,6 +5,6 @@ class ViewResArticleType extends ViewResType implements ResourceTypeInterface {
 
 	function Route(): string
 	{
-		return Article::RouteFromStr($this->module_id, $this->art_id, $this->res_name);
+		return Article::get_route($this->module_id, $this->art_id, $this->res_name);
 	}
 }

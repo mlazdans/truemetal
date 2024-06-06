@@ -10,8 +10,8 @@ abstract class AbstractResEntity extends Entity
 	// abstract function load(): Collection;
 	// abstract function load_single(): ?DataObject;
 	// abstract function load_by_id(int $id): ?DataObject;
-	abstract static function getById(int $id, bool $ignore_disabled = false);
-	abstract static function getByResId(int $res_id, bool $ignore_disabled = false);
+	abstract static function get_by_id(int $id, bool $ignore_disabled = false);
+	abstract static function get_by_res_id(int $res_id, bool $ignore_disabled = false);
 
 	// function load_by_res_id(int $res_id): ?DataObject
 	// {

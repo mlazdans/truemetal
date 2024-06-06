@@ -4,7 +4,8 @@
 
 use dqdp\PropertyInitTrait;
 
-trait LoginsTypeTrait {
+trait LoginsTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $l_id;
@@ -32,7 +33,8 @@ trait LoginsTypeTrait {
 	var ?string $rating;
 	var ?int $votes;
 
-	function __construct(?int $l_id = null, ?string $l_hash = null, ?string $l_login = null, ?string $l_nick = null, ?string $l_password = null, ?string $l_email = null, ?int $l_active = null, ?int $l_accepted = null, ?string $l_entered = null, ?string $l_userip = null, ?int $l_emailvisible = null, ?string $l_sess_id = null, ?string $l_sess_ip = null, ?string $l_sessiondata = null, ?string $l_lastaccess = null, ?int $l_logedin = null, ?int $l_forumsort_themes = null, ?int $l_forumsort_msg = null, ?int $l_disable_youtube = null, ?int $votes_plus = null, ?int $votes_minus = null, ?int $comment_count = null, ?string $rating = null, ?int $votes = null) {
+	function __construct(?int $l_id = null, ?string $l_hash = null, ?string $l_login = null, ?string $l_nick = null, ?string $l_password = null, ?string $l_email = null, ?int $l_active = null, ?int $l_accepted = null, ?string $l_entered = null, ?string $l_userip = null, ?int $l_emailvisible = null, ?string $l_sess_id = null, ?string $l_sess_ip = null, ?string $l_sessiondata = null, ?string $l_lastaccess = null, ?int $l_logedin = null, ?int $l_forumsort_themes = null, ?int $l_forumsort_msg = null, ?int $l_disable_youtube = null, ?int $votes_plus = null, ?int $votes_minus = null, ?int $comment_count = null, ?string $rating = null, ?int $votes = null)
+	{
 		if(isset($l_id))$this->l_id = $l_id;
 		if(isset($l_hash))$this->l_hash = $l_hash;
 		if(isset($l_login))$this->l_login = $l_login;
