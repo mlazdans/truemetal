@@ -151,6 +151,7 @@ function forum_themes(
 	Res::mark_as_seen($forum->res_id);
 
 	$T = new ForumThemeListTemplate;
+	$T->is_logged = User::logged();
 	$T->pages_visible_to_sides = $pages_visible_to_sides;
 	$T->items_per_page = $items_per_page;
 	$T->page_id = $page_id;
@@ -168,7 +169,9 @@ function forum_themes(
 
 	$T->themes = (new ViewResForumEntity)->get_all($Filter);
 	$T->form = new ThemeEditFormTemplate;
+	if($T->is_logged){
 	$T->form->nick_name = User::nick();
+	}
 
 	if($forum->forum_id == 107488){
 		$T->is_bazaar= true;
