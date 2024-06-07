@@ -268,7 +268,9 @@ function forum_det(
 	} else {
 		$T->CommentFormT = new CommentAddFormTemplate;
 		$T->CommentFormT->is_logged = User::logged();
+		if($T->CommentFormT->is_logged) {
 		$T->CommentFormT->l_nick = specialchars(User::data()->l_nick);
+		}
 
 		if($action == 'add_comment')
 		{
