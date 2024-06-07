@@ -4,32 +4,25 @@
 
 use dqdp\DBA\AbstractFilter;
 
-trait ViewResArticleEntityTrait {
-	function __construct(){
-		parent::__construct();
-	}
-
-	function getTableName(): ?string {
+trait ViewResArticleEntityTrait
+{
+	function get_table_name(): string {
 		return 'view_res_article';
 	}
 
-	function getProcName(): ?string {
+	function get_pk(): string|array|null {
+		return 'art_id';
+	}
+
+	function get_gen(): ?string {
 		return null;
 	}
 
-	function getPK(): string|array|null {
-		return null;
+	static function get(int $ID, ?AbstractFilter $DF = null): ?ViewResArticleType {
+		return (new static)->get_single((new ViewResArticleFilter(art_id: $ID))->merge($DF));
 	}
 
-	function getGen(): ?string {
-		return null;
-	}
-
-	function getProcArgs(): ?array {
-		return null;
-	}
-
-	function getAll(?AbstractFilter $filters = null): ViewResArticleCollection {
+	function get_all(?AbstractFilter $filters = null): ViewResArticleCollection {
 		$col = new ViewResArticleCollection;
 		if($q = $this->query($filters)){
 			while($r = $this->fetch($q)){
@@ -41,7 +34,6 @@ trait ViewResArticleEntityTrait {
 	}
 
 	function fetch($q): ?ViewResArticleType {
-		// return ViewResArticleType::fromDBObject(parent::fetch($q));
 		if($data = parent::fetch($q)){
 			return ViewResArticleType::initFrom($data);
 		} else {
@@ -49,41 +41,15 @@ trait ViewResArticleEntityTrait {
 		}
 	}
 
-	// private function savePreprocessor(array|object $DATA, \Closure $f): mixed {
-	// 	if($DATA instanceof ViewResArticleType){
-	// 		if(method_exists($this, "beforeSave")){
-	// 			if($PROC_DATA = $this->beforeSave($DATA)){
-	// 				return $f($PROC_DATA);
-	// 			} else {
-	// 				return null;
-	// 			}
-	// 		} else {
-	// 			return $f($DATA);
-	// 		}
-	// 	} else {
-	// 		throw new InvalidTypeException($DATA);
-	// 	}
-	// }
-
 	function save(array|object $DATA): mixed {
-		// return $this->savePreprocessor($DATA, function(array|object $DATA){
-		// 	return parent::save(ViewResArticleType::toDBObject($DATA));
-		// });
 		return parent::save($DATA);
 	}
 
 	function insert(array|object $DATA): mixed {
-		// return $this->savePreprocessor($DATA, function(array|object $DATA){
-		// 	return parent::insert(ViewResArticleType::toDBObject($DATA));
-		// });
 		return parent::insert($DATA);
 	}
 
 	function update(int|string|array $ID, array|object $DATA): bool {
 		return parent::update($ID, $DATA);
-
-		// return $this->savePreprocessor($DATA, function(array|object $DATA) use ($ID) {
-		// 	return parent::update($ID, ViewResArticleType::toDBObject($DATA));
-		// }) ?? false;
 	}
 }

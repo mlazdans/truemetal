@@ -4,7 +4,8 @@
 
 use dqdp\PropertyInitTrait;
 
-trait ViewResArticleTypeTrait {
+trait ViewResArticleTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $art_id;
@@ -43,7 +44,8 @@ trait ViewResArticleTypeTrait {
 	var ?string $res_comment_last_date;
 	var ?string $l_hash;
 
-	function __construct(?int $art_id = null, ?int $art_modid = null, ?int $mod_id = null, ?int $mod_modid = null, ?string $module_id = null, ?string $module_name = null, ?string $module_descr = null, ?int $module_active = null, ?int $module_visible = null, ?int $module_pos = null, ?string $module_data = null, ?string $module_entered = null, ?string $module_type = null, ?int $res_id = null, ?int $res_resid = null, ?int $res_kind = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null) {
+	function __construct(?int $art_id = null, ?int $art_modid = null, ?int $mod_id = null, ?int $mod_modid = null, ?string $module_id = null, ?string $module_name = null, ?string $module_descr = null, ?int $module_active = null, ?int $module_visible = null, ?int $module_pos = null, ?string $module_data = null, ?string $module_entered = null, ?string $module_type = null, ?int $res_id = null, ?int $res_resid = null, ?int $res_kind = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null)
+	{
 		if(isset($art_id))$this->art_id = $art_id;
 		if(isset($art_modid))$this->art_modid = $art_modid;
 		if(isset($mod_id))$this->mod_id = $mod_id;
@@ -87,5 +89,13 @@ trait ViewResArticleTypeTrait {
 
 	function insert(): mixed {
 		return (new ViewResArticleEntity)->insert($this);
+	}
+
+	function delete(): bool {
+		return (new ViewResArticleEntity)->delete($this->art_id);
+	}
+
+	function update(): bool {
+		return (new ViewResArticleEntity)->update($this->art_id, $this);
 	}
 }
