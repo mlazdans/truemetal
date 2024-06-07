@@ -1,6 +1,7 @@
 <?php declare(strict_types = 1);
 
-$template = new MainModule('whatsnew');
+$template = new MainTemplate;
+$template->MiddleBlock = get_whatsnew_template($template);
 $template->set_title('Kas jauns');
 $template->set_right_defaults();
-$template->out(whatsnew($template));
+$template->print();

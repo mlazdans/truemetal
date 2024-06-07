@@ -94,17 +94,6 @@ class MainTemplate extends AbstractTemplate
 		$this->set_recent_comments();
 	}
 
-	function set_recent_comments($limit = 10)
-	{
-		$F = (new ResArticleFilter())->orderBy('res_comment_last_date DESC')->rows($limit);
-		if($data = (new ViewResArticleEntity)->get_all($F)){
-			$T = new CommentsRecentTemplate;
-			$T->data = $data;
-			$T->name = "Komentāri";
-			$this->RightBlock->add_item($T);
-		}
-	}
-
 	function set_jubilars(): void
 	{
 		$jubs = (new ViewJubilarsEntity)->get_all();
@@ -162,6 +151,17 @@ class MainTemplate extends AbstractTemplate
 			$T = new CommentsRecentTemplate;
 			$T->data = $data;
 			$T->name = "Forums";
+			$this->RightBlock->add_item($T);
+		}
+	}
+
+	function set_recent_comments($limit = 10)
+	{
+		$F = (new ResArticleFilter())->orderBy('res_comment_last_date DESC')->rows($limit);
+		if($data = (new ViewResArticleEntity)->get_all($F)){
+			$T = new CommentsRecentTemplate;
+			$T->data = $data;
+			$T->name = "Komentāri";
 			$this->RightBlock->add_item($T);
 		}
 	}

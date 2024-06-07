@@ -2,7 +2,7 @@
 
 class CommentsRecentTemplate extends RightItemAbstractTemplate
 {
-	public bool $show_more = false;
+	public bool $show_more = true;
 	public ViewResForumCollection|ViewResArticleCollection $data;
 
 	protected function out(): void

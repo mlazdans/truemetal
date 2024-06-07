@@ -982,31 +982,31 @@ function user_image(string $l_hash, bool $thumb = false, string $suffix = "")
 	}
 }
 
-function whatsnew(MainModule $template): ?Template
+function get_whatsnew_template(MainTemplate $template): ?WhatsnewTemplate
 {
-	$T = $template->add_file('whatsnew.tpl');
-
 	if(!User::logged())
 	{
 		$template->not_logged();
 		return null;
 	}
 
+	$W = new WhatsnewTemplate;
+
 	# Forum
 	$F = (new ResForumFilter(forum_allow_childs: 0))->rows(50)->orderBy('res_comment_last_date DESC');
-	if($R = set_recent_comments((new ViewResForumEntity)->getAll($F))){
-		$R->disable('BLOCK_more');
-		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_forum');
-	}
+	$T = new CommentsRecentTemplate;
+	$T->data = (new ViewResForumEntity)->get_all($F);
+	$T->show_more = false;
+	$W->ForumRecent = $T;
 
 	# Articles
 	$F = (new ResArticleFilter)->rows(50)->orderBy('res_comment_last_date DESC');
-	if($R = set_recent_comments((new ViewResArticleEntity)->getAll($F))){
-		$R->disable('BLOCK_more');
-		$T->set_block_string($R->parse(), 'BLOCK_whatsnew_comments');
-	}
+	$T = new CommentsRecentTemplate;
+	$T->data = (new ViewResArticleEntity)->get_all($F);
+	$T->show_more = false;
+	$W->CommentsRecent = $T;
 
-	return $T;
+	return $W;
 }
 
 function user_comments(MainModule $template, string $l_hash, string $hl): ?Template
