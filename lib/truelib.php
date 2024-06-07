@@ -2041,14 +2041,12 @@ function add_comment(MainTemplate $template, int $res_id, string $res_data, arra
 	return false;
 }
 
-function update_comment(MainModule $template, Template $C, int $res_id, string $res_data, array &$error_msg): bool
+function update_comment(MainTemplate $template, int $res_id, string $res_data, array &$error_msg): bool
 {
 	if(!User::logged()){
 		$template->not_logged();
 		return false;
 	}
-
-	$C->set_var('res_data', htmlspecialchars($res_data));
 
 	if(empty($res_data)){
 		$error_msg[] = "Kaut kas jau jāieraksta";
