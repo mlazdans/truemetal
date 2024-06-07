@@ -90,7 +90,6 @@ class MainTemplate extends AbstractTemplate
 		$this->set_search();
 		$this->set_jubilars();
 		$this->set_recent_comments();
-		// $this->set_recent_reviews();
 	}
 
 	function set_recent_comments($limit = 10)
