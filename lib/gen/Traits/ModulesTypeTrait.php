@@ -4,7 +4,8 @@
 
 use dqdp\PropertyInitTrait;
 
-trait ModulesTypeTrait {
+trait ModulesTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $mod_id;
@@ -19,7 +20,8 @@ trait ModulesTypeTrait {
 	var string $module_entered;
 	var string $module_type;
 
-	function __construct(?int $mod_id = null, ?int $mod_modid = null, ?string $module_id = null, ?string $module_name = null, ?string $module_descr = null, ?int $module_active = null, ?int $module_visible = null, ?int $module_pos = null, ?string $module_data = null, ?string $module_entered = null, ?string $module_type = null) {
+	function __construct(?int $mod_id = null, ?int $mod_modid = null, ?string $module_id = null, ?string $module_name = null, ?string $module_descr = null, ?int $module_active = null, ?int $module_visible = null, ?int $module_pos = null, ?string $module_data = null, ?string $module_entered = null, ?string $module_type = null)
+	{
 		if(isset($mod_id))$this->mod_id = $mod_id;
 		if(isset($mod_modid))$this->mod_modid = $mod_modid;
 		if(isset($module_id))$this->module_id = $module_id;

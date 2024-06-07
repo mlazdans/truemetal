@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-use dqdp\SQL\Select;
+# TODO: cleanup
 
 // define('MOD_ALL', -1);
 // define('MOD_NONE', -2);
@@ -15,52 +15,6 @@ class Module
 {
 	var $data = array();
 	var $error_msg;
-
-	static function load(array $params)
-	{
-		$sql = (new Select)->From("modules");
-
-		if(isset($params['mod_id'])){
-			$sql->Where(["mod_id = ?", $params['mod_id']]);
-		}
-
-		if(isset($params['module_id'])){
-			$sql->Where(["module_id = ?", $params['module_id']]);
-		}
-
-		if(falsed($params, 'modules.mod_modid'))
-		{
-			$sql->Where("modules.mod_modid = NULL");
-		} elseif(!empty($params['mod_modid'])){
-			$sql->Where(["modules.mod_modid = ?", $params['mod_modid']]);
-		}
-
-		if(defaulted($params, 'module_active'))
-		{
-			$sql->Where("modules.module_active = 1");
-		} elseif(!ignored($params, 'module_active')){
-			$sql->Where(["modules.module_active = ?", $params['module_active']]);
-		}
-
-		if(defaulted($params, 'module_visible'))
-		{
-			$sql->Where("modules.module_visible = 1");
-		} elseif(!ignored($params, 'module_visible')){
-			$sql->Where(["modules.module_visible = ?", $params['module_visible']]);
-		}
-
-		$sql->OrderBy("modules.mod_modid, modules.module_pos");
-
-		if(
-			isset($params['mod_id']) ||
-			(isset($params['module_id']) && isset($params['mod_modid']))
-			)
-		{
-			return DB::ExecuteSingle($sql);
-		} else {
-			return DB::Execute($sql);
-		}
-	}
 
 	static function get_tree(?int $mod_modid, array $params = []): array  {
 		if($mod_modid){
