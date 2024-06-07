@@ -86,11 +86,23 @@ class MainTemplate extends AbstractTemplate
 		$this->set_events();
 		$this->set_recent_forum();
 		$this->set_online();
-		// $this->set_login();
+		$this->set_login();
 		$this->set_search();
 		// $this->set_jubilars();
 		// $this->set_recent_comments();
 		// $this->set_recent_reviews();
+	}
+
+	function set_login(): void
+	{
+		$T = new LoginFormTemplate;
+		$T->login_nick = User::get_val('l_nick');
+		if($T->is_logged = User::logged()) {
+			$T->referer = $_SERVER["REQUEST_URI"];
+		}
+		$T->name = $T->is_logged ? "Login" : "Pieslēgties";
+
+		$this->RightBlock->add_item($T);
 	}
 
 	function set_online()
