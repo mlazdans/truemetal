@@ -185,8 +185,6 @@ function forum_themes(
 		}
 	}
 
-	$T->is_logged = User::logged();
-
 	return $T;
 }
 
