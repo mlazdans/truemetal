@@ -81,6 +81,45 @@ class MainTemplate extends AbstractTemplate
 		return $this;
 	}
 
+	function set_right_defaults()
+	{
+		$this->set_events();
+		// $this->set_recent_forum();
+		// $this->set_online();
+		// $this->set_login();
+		$this->set_search();
+		// $this->set_jubilars();
+		// $this->set_recent_comments();
+		// $this->set_recent_reviews();
+	}
+
+	function set_search($search_q = ''): void
+	{
+		$T = new SearchFormTemplate();
+		$T->search_q = $search_q;
+
+		$this->RightBlock->addItem($T);
+	}
+
+	function set_events(): void
+	{
+		$F = (new ResForumFilter(actual_events: true))
+		->orderBy('event_startdate')
+		->fields('forum_id', 'res_name', 'event_startdate', 'res_id', 'res_route')
+		;
+
+		$data = (new ViewResForumEntity())->get_all($F);
+
+		if(!$data->count()){
+			return;
+		}
+
+		$TEvents = new EventsTemplate;
+		$TEvents->items = $data;
+
+		$this->RightBlock->addItem($TEvents);
+	}
+
 	protected function out(): void
 	{ ?>
 <!DOCTYPE html>
