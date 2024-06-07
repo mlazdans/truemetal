@@ -1,5 +1,7 @@
 <?php declare(strict_types = 1);
 
+use dqdp\DBA\Types\None;
+
 spl_autoload_register();
 
 # TODO: mainot galerijām/foruma/commention utt login_id, trigerī nomainās arī res tabulā
@@ -44,6 +46,8 @@ ini_set('include_path', join(PATH_SEPARATOR, $include_path));
 
 mb_regex_encoding($sys_encoding);
 mb_internal_encoding($sys_encoding);
+
+const nil = new None;
 
 require_once('stdlib.php');
 require_once('lib/truelib.php');
