@@ -3,7 +3,7 @@
 abstract class AbstractTemplate
 {
 	public bool $enabled = true;
-	protected ?string $buffer = null;
+	private ?string $buffer = null;
 
 	// function parse(): string
 	// {

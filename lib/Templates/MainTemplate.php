@@ -85,12 +85,29 @@ class MainTemplate extends AbstractTemplate
 	{
 		$this->set_events();
 		$this->set_recent_forum();
-		// $this->set_online();
+		$this->set_online();
 		// $this->set_login();
 		$this->set_search();
 		// $this->set_jubilars();
 		// $this->set_recent_comments();
 		// $this->set_recent_reviews();
+	}
+
+	function set_online()
+	{
+		$active_sessions = Logins::get_active();
+		$online_count = $active_sessions->count();
+
+		if(!$online_count) {
+			return;
+		}
+
+		$T = new OnlineTemplate;
+		$T->is_logged = User::logged();
+		$T->active_sessions = $active_sessions;
+		$T->name = "Online [$online_count]";
+
+		$this->RightBlock->add_item($T);
 	}
 
 	function set_recent_forum(): void
@@ -105,7 +122,7 @@ class MainTemplate extends AbstractTemplate
 			$T = new CommentsRecentTemplate;
 			$T->data = $data;
 			$T->name = "Forums";
-			$this->RightBlock->addItem($T);
+			$this->RightBlock->add_item($T);
 		}
 	}
 
@@ -114,7 +131,7 @@ class MainTemplate extends AbstractTemplate
 		$T = new SearchFormTemplate();
 		$T->search_q = $search_q;
 
-		$this->RightBlock->addItem($T);
+		$this->RightBlock->add_item($T);
 	}
 
 	function set_events(): void
@@ -133,7 +150,7 @@ class MainTemplate extends AbstractTemplate
 		$TEvents = new EventsTemplate;
 		$TEvents->items = $data;
 
-		$this->RightBlock->addItem($TEvents);
+		$this->RightBlock->add_item($TEvents);
 	}
 
 	protected function out(): void

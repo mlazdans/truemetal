@@ -3,9 +3,9 @@
 class RightTemplate extends AbstractTemplate
 {
 	/** @var RightItemAbstractTemplate[] $items */
-	protected $items = [];
+	private $items = [];
 
-	function addItem(RightItemAbstractTemplate $item): void
+	function add_item(RightItemAbstractTemplate $item): void
 	{
 		$this->items[] = $item;
 	}
