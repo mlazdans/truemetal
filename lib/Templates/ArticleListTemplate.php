@@ -51,7 +51,7 @@ class ArticleListTemplate extends AbstractTemplate
 			<div class="res-date"><?=$res_date ?></div>
 			<div class="res-name"><a href="<?=$item->res_route ?>"><?=$item->res_name ?></a></div>
 			<div class="res-comments-link">
-				<a href="{res_route}#art-comments-{doc_id}">Komentāri
+				<a href="<?=$item->res_route ?>#art-comments-<?=$item->doc_id ?>">Komentāri
 				<span class="Comment-count <?=$comment_class ?>">(<?=$item->res_comment_count ?>)</span></a>
 			</div>
 		</div>
@@ -61,7 +61,7 @@ class ArticleListTemplate extends AbstractTemplate
 				<?=$item->res_intro ?>
 				<? if($item->res_data) { ?>
 				<div>
-					<a href="{res_route}">..tālāk..</a>
+					<a href="<?=$item->res_route ?>">..tālāk..</a>
 				</div>
 				<? } ?>
 			</div>
