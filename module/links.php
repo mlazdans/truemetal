@@ -1,6 +1,7 @@
 <?php declare(strict_types = 1);
 
-$template = new MainModule($sys_module_id);
+$template = new MainTemplate();
 $template->set_title('Linki');
 $template->set_right_defaults();
-$template->out($template->add_file('links.tpl'));
+$template->MiddleBlock = new LinksTemplate;
+$template->print();
