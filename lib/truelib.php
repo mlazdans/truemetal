@@ -187,110 +187,43 @@ function forum_themes(
 	return $T;
 }
 
-function forum_pages(
-	int $page_id,
-	int $forum_count,
-	int $fpp,
-	int $pages_visible_to_sides,
-	Template $T,
-)
+function set_res(AbstractResTemplate $T, ViewResType&ResourceTypeInterface $res, string $hl = null)
 {
-	$total_pages = ceil($forum_count / $fpp);
-
-	# uzstaadam pages
-	if($total_pages > 1)
-	{
-		$_pvs = $pages_visible_to_sides;
-		$sep_count = 0;
-		$visible_pages = $_pvs + (
-			$page_id > $_pvs ? ($total_pages - $page_id > $_pvs ? 0 : $_pvs - ($total_pages - $page_id))
-			: $_pvs - $page_id + 1
-		);
-
-		$side_sep = 1 + (
-			$page_id > $_pvs ? ($total_pages - $page_id > $_pvs ? 0 : 1)
-			: 1
-		);
-
-		$T->enable('BLOCK_is_pages');
-		$BLOCK_page = $T->get_block('BLOCK_page');
-		for($p = 1; $p <= $total_pages; $p++)
-		{
-			$p_id = ($total_pages > 10) && ($p < 10) ? "0$p" : $p;
-			$BLOCK_page->set_var('p_id', $p_id);
-			$BLOCK_page->set_var('page_id', $p);
-
-			// if($p_id > 1){
-			// 	$ps = $BLOCK_page->get_block('BLOCK_page_switcher');
-			// 	printr($ps->dump());
-			// 	printr($ps->get_var('p_id'));
-			// 	// printr($BLOCK_page->get_block('BLOCK_page_switcher'));
-			// 	die;
-			// }
-
-			# atziimee, tekoshu page
-			if($p == $page_id)
-			{
-				$BLOCK_page->set_var('page_style', ' style="color: #00AC00;"');
-			} else {
-				$BLOCK_page->set_var('page_style', '');
-			}
-
-			# skippo pa nevajadziigaas pages
-			if(abs($p - $page_id) > $visible_pages)
-			{
-				$sep_count++;
-				$BLOCK_page->set_var('page_seperator', (abs($p - $page_id) > $visible_pages) && (abs($p - $page_id) - $visible_pages <= $side_sep) ? '[..]' : '');
-				$BLOCK_page->disable('BLOCK_page_switcher');
-			} else {
-				$BLOCK_page->enable('BLOCK_page_switcher');
-				$BLOCK_page->set_var('page_seperator', '');
-			}
-
-			$BLOCK_page->parse(TMPL_APPEND);
-		}
-	}
-
-	# prev
-	$T->set_var('prev_page_id', ($page_id > 1) ? $page_id - 1 : $page_id);
-
-	# next
-	$T->set_var('next_page_id', ($page_id < $total_pages) ? $page_id + 1 : $page_id);
-}
-
-function set_res(Template $T, ViewResType&ResourceTypeInterface $res, string $hl){
-	$T->set_var('res_date', proc_date($res->res_entered));
-	$T->set_var('res_date_short', proc_date_short($res->res_entered));
-	$T->set_var('res_votes', format_vote($res->res_votes));
-	$T->set_var('comment_vote_class', comment_vote_class($res->res_votes));
-	$T->set_var('res_route', $res->res_route);
-	$T->set_var('res_name', $res->res_name);
-	$T->set_var('res_intro', $res->res_intro);
-	$T->set_var('res_data', $res->res_data);
-	$T->set_var('res_data_compiled', $res->res_data_compiled);
+	$T->res_id = $res->res_id;
+	$T->res_date = proc_date($res->res_entered);
+	$T->res_date_short = proc_date_short($res->res_entered);
+	$T->res_votes = format_vote($res->res_votes);
+	$T->comment_vote_class = comment_vote_class($res->res_votes);
+	$T->res_route = $res->res_route;
+	$T->res_name = specialchars($res->res_name);
+	$T->res_intro = $res->res_intro;
+	$T->res_data = $res->res_data;
+	$T->res_data_compiled = $res->res_data_compiled;
+	$T->res_nickname = specialchars($res->res_nickname);
+	$T->res_votes_plus_count = $res->res_votes_plus_count;
+	$T->res_votes_minus_count = $res->res_votes_minus_count;
+	$T->l_hash = $res->l_hash;
+	$T->res_child_count = $res->res_child_count;
+	$T->res_comment_count = $res->res_comment_count;
+	$T->res_comment_last_date = $res->res_comment_last_date;
 
 	if($res->res_name && $hl){
-		$T->set_var('res_name', hl($res->res_name, $hl));
+		$T->res_name = hl($res->res_name, $hl);
 	}
 	if($res->res_intro && $hl){
-		$T->set_var('res_intro', hl($res->res_intro, $hl));
+		$T->res_intro = hl($res->res_intro, $hl);
 	}
 	if($res->res_data && $hl){
-		$T->set_var('res_data', hl($res->res_data, $hl));
+		$T->res_data = hl($res->res_data, $hl);
 	}
 	if($res->res_data_compiled && $hl){
-		$T->set_var('res_data_compiled', hl($res->res_data_compiled, $hl));
+		$T->res_data_compiled = hl($res->res_data_compiled, $hl);
 	}
 
-	if(User::logged()){
-		$T->enable('BLOCK_vote_control');
-	}
-
-	if(User::logged() && $res->l_hash){
-		$T->enable('BLOCK_profile_link');
-	} else {
-		$T->disable('BLOCK_profile_link');
-	}
+	$T->vote_control_enabled = User::logged();
+	$T->profile_link_enabled = User::logged() && $res->l_hash;
+	$T->can_edit_res = User::can_edit_res($res);
+	$T->can_debug_res = User::can_debug_res($res);
 }
 
 function forum_det(
