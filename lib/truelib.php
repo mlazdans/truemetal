@@ -1040,7 +1040,7 @@ function gallery_thumbs_list(MainModule $template, int $gal_id): ?Template
 
 	// $F = (new ResGalleryFilter(gal_id: $gal_id))->orderBy("res_entered DESC, gg_date DESC");
 
-	$gal = (new ViewResGalleryEntity)->getById($gal_id);
+	$gal = (new ViewResGalleryEntity)->get_by_id($gal_id);
 
 	if(!$gal){
 		$template->not_found();
@@ -1173,7 +1173,7 @@ function gallery_image(int $gd_id, string $gal_type): void
 		$jpeg = cache_read($hash);
 	} else {
 		// $data = $GD->load(['gd_id'=>$gd_id, 'load_images'=>true]);
-		$data = ViewResGdDataEntity::getById($gd_id);
+		$data = ViewResGdDataEntity::get_by_id($gd_id);
 		$jpeg = $gal_type == 'image' ? $data->gd_data : $data->gd_thumb;
 
 		if($CACHE_ENABLE && $jpeg)
@@ -1192,14 +1192,14 @@ function gallery_view(MainModule $template, int $gd_id): ?Template
 
 	// $GD = new GalleryData;
 
-	if(!($galdata = ViewResGdEntity::getById($gd_id))){
+	if(!($galdata = ViewResGdEntity::get_by_id($gd_id))){
 		$template->not_found();
 		return null;
 	}
 
 	// $gallery = new Gallery;
 	// $gal = $gallery->load($galdata->gal_id);
-	$gal = ViewResGalleryEntity::getByResId($galdata->res_resid);
+	$gal = ViewResGalleryEntity::get_by_res_id($galdata->res_resid);
 
 	Res::mark_as_seen($galdata->res_id);
 
@@ -1356,7 +1356,7 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 		$ip
 	);
 
-	if(!$inserted || !($new_data = ViewResEntity::getById($res_id)))
+	if(!$inserted || !($new_data = ViewResEntity::get_by_id($res_id)))
 	{
 		$template->error("Datubāzes kļūda");
 		return null;
@@ -1476,7 +1476,7 @@ function archive(MainModule $template): ?Template
 
 function article(MainModule $template, int $art_id, string $hl, ?string $article_route = null): ?Template
 {
-	if(!($art = ViewResArticleEntity::getById($art_id))){
+	if(!($art = ViewResArticleEntity::get_by_id($art_id))){
 		$template->not_found();
 		return null;
 	}
@@ -1775,11 +1775,11 @@ function load_specific_res(int $res_id, int $res_kind): ?ResourceTypeInterface
 	switch($res_kind)
 	{
 		case ResKind::ARTICLE:
-			return ViewResArticleEntity::getByResId($res_id);
+			return ViewResArticleEntity::get_by_res_id($res_id);
 		case ResKind::FORUM:
-			return ViewResForumEntity::getByResId($res_id);
+			return ViewResForumEntity::get_by_res_id($res_id);
 		case ResKind::COMMENT:
-			return ViewResCommentEntity::getByResId($res_id);
+			return ViewResCommentEntity::get_by_res_id($res_id);
 		case ResKind::GALLERY:
 			new TODO("Get Gallery");
 		case ResKind::GALLERY_DATA:
