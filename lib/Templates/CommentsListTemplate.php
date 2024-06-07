@@ -15,7 +15,7 @@ class CommentsListTemplate extends AbstractTemplate
 		}
 	}
 
-	function out(): void
+	protected function out(): void
 	{
 		if($this->Comments->count()){
 			$C = new CommentTemplate;

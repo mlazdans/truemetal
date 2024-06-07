@@ -8,7 +8,7 @@ class ThemeEditFormTemplate extends AbstractTemplate
 	public ?string $error_msg = null;
 	public bool $ignore_forum_name_strlen = false;
 
-	function out(): void
+	protected function out(): void
 	{ ?>
 		<a name="add_theme"></a>
 		<form action="#add_theme" method="post">

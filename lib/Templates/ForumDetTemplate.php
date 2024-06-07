@@ -4,17 +4,22 @@ class ForumDetTemplate extends AbstractResTemplate
 {
 	public ?CommentAddFormTemplate $CommentFormT = null;
 	public ?CommentsListTemplate $CommentListT = null;
+	public ?AttendTemplate $AttendT = null;
 	public bool $is_closed = false;
 	public bool $is_sorted_A = false;
 	public bool $is_sorted_D = false;
 	public string $error_msg = "";
 
-	function out(): void
+	protected function out(): void
 	{ ?>
 		<div class="TD-cat"><?=$this->res_name ?></div>
 		<div class="TD-content">
 
-		ATTENDEES
+		<?
+		if($this->AttendT) {
+			$this->AttendT->print();
+		}
+		?>
 
 		<div class="profile-header">
 			<div class="user-info">

@@ -7,7 +7,7 @@ class CommentAddFormTemplate extends AbstractTemplate
 	public ?string $res_data = null;
 	public bool $is_logged = false;
 
-	function out(): void
+	protected function out(): void
 	{
 		if($this->is_logged)
 		{

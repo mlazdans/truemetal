@@ -68,30 +68,9 @@ class ArticleListTemplate extends AbstractTemplate
 		</div><?
 	}
 
-	function out(): void {
+	protected function out(): void {
 		foreach($this->articles as $item){
 			$this->mainpage($item);
 		}
-	}
-
-	function page() { ?>
-		<!-- BEGIN BLOCK_article_page disabled -->
-		<div class="TD-cat" style="display: flex;">
-			<!-- BEGIN BLOCK_article_page_prev disabled -->
-			<div>
-				<img src="/img/left.png" alt="Vecāki ieraksti" style="vertical-align: middle;" width="16" height="16">
-				<a class="caption" href="{page}">vecāki ieraksti</a>
-			</div>
-			<!-- END BLOCK_article_page_prev -->
-
-			<!-- BEGIN BLOCK_article_page_next disabled -->
-			<div style="margin-left: auto;">
-				<a class="caption" href="{page}">jaunāki ieraksti</a>
-				<img src="/img/right.png" alt="Jaunāki ieraksti" style="vertical-align: middle;" width="16" height="16">
-			</div>
-			<!-- END BLOCK_article_page_next -->
-			<div>&nbsp;</div>
-		</div>
-		<!-- END BLOCK_article_page --><?
 	}
 }

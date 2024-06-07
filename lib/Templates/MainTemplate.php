@@ -29,14 +29,14 @@ class MainTemplate extends AbstractTemplate
 
 	function error(string|array $msg)
 	{
-		$this->ErrorBlock->enable()->msg = $msg;
+		$this->ErrorBlock->set_enabled()->msg = $msg;
 
 		return $this;
 	}
 
 	function msg(string|array $msg)
 	{
-		$this->MsgBlock->enable()->msg = $msg;
+		$this->MsgBlock->set_enabled()->msg = $msg;
 
 		return $this;
 	}

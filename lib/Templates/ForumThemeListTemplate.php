@@ -67,7 +67,7 @@ class ForumThemeListTemplate extends AbstractResTemplate
 	 <?
 	}
 
-	function out(): void
+	protected function out(): void
 	{ ?>
 		<div class="TD-cat">Forums / <?=$this->res_name ?></div>
 		<div class="TD-content">

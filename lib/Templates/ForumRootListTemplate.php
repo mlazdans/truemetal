@@ -4,7 +4,7 @@ class ForumRootListTemplate extends AbstractTemplate
 {
 	public ViewResForumCollection $forums;
 
-	function out(): void
+	protected function out(): void
 	{ ?>
 		<div class="TD-cat">Forums</div>
 		<div class="TD-content"><?

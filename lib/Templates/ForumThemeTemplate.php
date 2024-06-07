@@ -4,7 +4,7 @@ class ForumThemeTemplate extends AbstractResTemplate
 {
 	public string $comment_class;
 
-	function out(): void
+	protected function out(): void
 	{ ?>
 		<div class="forum-theme">
 			<div class="forum-theme-main">

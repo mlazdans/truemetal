@@ -4,7 +4,7 @@ class ViewAttendEntity extends Entity
 {
 	use ViewAttendEntityTrait;
 
-	static function getByResId(int $res_id, ?ViewAttendFilter $F = new ViewAttendFilter): ViewAttendCollection
+	static function get_by_res_id(int $res_id, ?ViewAttendFilter $F = new ViewAttendFilter): ViewAttendCollection
 	{
 		if(!$F->getOrderBy()){
 			$F->orderBy('a_entered');
@@ -12,6 +12,6 @@ class ViewAttendEntity extends Entity
 
 		$F->res_id = $res_id;
 
-		return (new static)->getAll($F);
+		return (new static)->get_all($F);
 	}
 }

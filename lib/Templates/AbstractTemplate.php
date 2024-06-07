@@ -37,12 +37,12 @@ abstract class AbstractTemplate
 		return $this;
 	}
 
-	function set_disabled(): self
+	function set_disabled()
 	{
 		$this->enabled = false;
 
 		return $this;
 	}
 
-	abstract protected function out(): void;
+	protected abstract function out(): void;
 }

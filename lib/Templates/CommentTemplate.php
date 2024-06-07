@@ -11,7 +11,7 @@ class CommentTemplate extends AbstractResTemplate
 	public bool $vote_control_enabled = false;
 	public bool $profile_link_enabled = false;
 
-	function out(): void
+	protected function out(): void
 	{
 		$hl = $this->hl;
 		// $BLOCK_comment->set_array($item);

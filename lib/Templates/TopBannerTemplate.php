@@ -7,8 +7,9 @@ class TopBannerTemplate extends AbstractTemplate
 	var string $banner_height = '';
 	var string $banner_alt    = '';
 
-	function out(): void { ?>
-<a href="<?=$this->banner_href ?>"><img src="/img/<?=$this->banner_img ?>" width="<?=$this->banner_img ?>" height="<?=$this->banner_height ?>" alt="<?=$this->banner_alt ?>"></a>
-<?
+	protected function out(): void
+	{ ?>
+		<a href="<?=$this->banner_href ?>"><img src="/img/<?=$this->banner_img ?>" width="<?=$this->banner_img ?>" height="<?=$this->banner_height ?>" alt="<?=$this->banner_alt ?>"></a>
+	<?
 	}
 }

@@ -4,7 +4,7 @@ class ForumRootTemplate extends AbstractResTemplate
 {
 	public string $comment_class;
 
-	function out(): void
+	protected function out(): void
 	{ ?>
 		<div class="forum-root">
 			<div class="forum-root-name"><a href="<?=$this->res_route ?>"><?=$this->res_name ?></a></div>
