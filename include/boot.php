@@ -23,7 +23,8 @@ $sys_banned            = [];
 $sys_devs              = [];
 $sys_module_map        = [];
 $sys_include_paths     = [];
-$sys_nosess_modules    = ['css'];
+$sys_no_sess_modules   = ['css', 'jsload'];
+$sys_no_db_modules     = ['css', 'jsload'];
 $sys_mail              = $_SERVER['SERVER_ADMIN']??ini_get('sendmail_from') or ($sys_mail = 'nobody@localhost');
 $ip                    = (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1');
 

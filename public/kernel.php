@@ -13,8 +13,6 @@ if(isset($sys_banned[$ip]))
 	return;
 }
 
-require_once('include/dbconnect.php');
-
 # Dabūjam parametrus no mod_rewrite
 if(!isset($_SERVER["SERVER_PROTOCOL"]))$_SERVER["SERVER_PROTOCOL"] = "HTTP/1.0";
 if(!isset($_SERVER["REQUEST_URI"]))$_SERVER["REQUEST_URI"] = "";
