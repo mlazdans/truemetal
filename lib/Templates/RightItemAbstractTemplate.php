@@ -2,5 +2,5 @@
 
 abstract class RightItemAbstractTemplate extends AbstractTemplate
 {
-	public string $name = '';
+	public string $name;
 }
