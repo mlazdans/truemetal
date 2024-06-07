@@ -227,14 +227,13 @@ function set_res(AbstractResTemplate $T, ViewResType&ResourceTypeInterface $res,
 }
 
 function forum_det(
-	MainModule $template,
+	MainTemplate $template,
 	ViewResForumType $forum,
 	string $action,
 	string $hl,
-): ?Template
+): ?ForumDetTemplate
 {
-	$T = $template->add_file('forum/det.tpl');
-	$T->set_array($forum);
+	$T = new ForumDetTemplate;
 
 	set_res($T, $forum, $hl);
 
@@ -247,143 +246,52 @@ function forum_det(
 		$res_data = hl($res_data, $hl);
 	}
 
-	$T->set_var('res_data_compiled', $res_data);
+	$T->res_data_compiled = $res_data;
 
 	# Comments
-	$T->enable(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? 'BLOCK_info_sort_D': 'BLOCK_info_sort_A');
+	if(User::get_val('l_forumsort_msg') == Forum::SORT_DESC){
+		$T->is_sorted_D = true;
+	} else {
+		$T->is_sorted_A = true;
+	}
 
 	$Filter = (new ResFilter())->orderBy(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? "res_entered DESC" : "res_entered");
 	$comments = Res::get_comments($forum->res_id, $Filter);
-
-	$C = comment_list($comments, $hl);
 
 	// $forum->set_forum_path($T, $forum_id);
 
 	Res::mark_as_seen($forum->res_id);
 
-	$error_msg = [];
 	if($forum->forum_closed)
 	{
-		$T->disable('BLOCK_add_comment');
-		$T->enable('BLOCK_forum_closed');
+		$T->is_closed = true;
 	} else {
-		$F = comment_add_form();
-		$T->enable('BLOCK_add_comment');
+		$T->CommentFormT = new CommentAddFormTemplate;
+		$T->CommentFormT->is_logged = User::logged();
+		$T->CommentFormT->l_nick = specialchars(User::data()->l_nick);
 
 		if($action == 'add_comment')
 		{
-			if(add_comment($template, $C, $forum->res_id, post('res_data'), $error_msg)){
+			$error_msg = [];
+			if(add_comment($template, $forum->res_id, post('res_data'), $error_msg)){
 				return null;
-			}
+			} else {
+				$T->CommentFormT->res_data = specialchars(post('res_data'));
+				$T->CommentFormT->error_msg = join("<br>", $error_msg);
+	}
 		}
 	}
 
-	if($error_msg){
-		$F->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
-	}
-
-	if(isset($F)){
-		$T->set_var('comment_add_form', $F->parse());
-	}
-
-	$T->set_var('forum_comments', $C->parse());
+	$T->CommentListT = new CommentsListTemplate;
+	$T->CommentListT->Comments = $comments;
 
 	# Attendees
-	if(User::logged() && ($forum->type_id === Forum::TYPE_EVENT) && ($A = attendees($template, $forum)))
+	if(User::logged() && ($forum->type_id === Forum::TYPE_EVENT))
 	{
-		$T->set_var('forum_attend', $A->parse());
+		$T->AttendT = attendees_view($forum);
 	}
 
 	return $T;
-}
-
-function comment_add_form(): Template
-{
-	$F = new_template('comment_add_form.tpl');
-	if(User::logged())
-	{
-		$F->enable('BLOCK_comment_add_form');
-	} else {
-		$F->enable('BLOCK_not_logged');
-	}
-
-	return $F;
-}
-
-function comment_list(ViewResCommentCollection $comments, string $hl): Template
-{
-	$F = comment_add_form();
-	$C = new_template('comments.tpl');
-
-	if(User::logged())
-	{
-		$disabled_users = CommentDisabled::get(User::id());
-	} else {
-		$disabled_users = array();
-	}
-
-	if($comments->count())
-	{
-		$BLOCK_comment = $C->enable('BLOCK_comment');
-	} else {
-		$C->enable('BLOCK_no_comments');
-	}
-
-	$comment_nr = 0;
-
-	foreach($comments as $item)
-	{
-		$comment_nr++;
-
-		if(User::logged()){
-			$BLOCK_comment->enable('BLOCK_comment_vote');
-		}
-
-		if(User::can_edit_res($item)){
-			$BLOCK_comment->enable('BLOCK_comment_edit');
-		}
-
-		if(User::can_debug_res($item)){
-			$BLOCK_comment->enable('BLOCK_comment_debug');
-		}
-
-		$BLOCK_comment->set_array($item);
-
-		if($item->res_data_compiled && $hl){
-			$BLOCK_comment->set_var('res_data_compiled', hl($item->res_data_compiled, $hl));
-		}
-
-		if(empty($disabled_users[$item->login_id])){
-			$BLOCK_comment->set_var('c_disabled_user_class', '');
-		} else {
-			$BLOCK_comment->set_var('c_disabled_user_class', ' disabled');
-			$BLOCK_comment->set_var('res_data_compiled', '-neredzams komentārs-');
-		}
-
-		$BLOCK_comment->set_var('res_nickname', specialchars($item->res_nickname));
-		$BLOCK_comment->set_var('res_date', proc_date($item->res_entered));
-		$BLOCK_comment->set_var('res_votes', format_vote($item->res_votes));
-		$BLOCK_comment->set_var('comment_vote_class', comment_vote_class($item->res_votes));
-
-		if(User::logged() && $item->l_hash){
-			$BLOCK_comment->set_var('l_hash', $item->l_hash);
-			$BLOCK_comment->enable('BLOCK_profile_link');
-		} else {
-			$BLOCK_comment->disable('BLOCK_profile_link');
-		}
-
-		$BLOCK_comment->set_var('comment_nr', $comment_nr);
-
-		$BLOCK_comment->parse(TMPL_APPEND);
-	}
-
-	$C->set_var('comment_add_form', $F->parse());
-
-	return $C;
-}
-
-function get_attendees(int $res_id): ViewAttendCollection {
-	return ViewAttendEntity::getByResId($res_id);
 }
 
 function public_profile(MainModule $template, string $l_hash): ?Template
