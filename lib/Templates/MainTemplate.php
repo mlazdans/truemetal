@@ -8,6 +8,7 @@ class MainTemplate extends AbstractTemplate
 	public string $tmpl_finished      = '';
 	public int    $script_version     = 0;
 	public bool   $disable_youtube    = false;
+	public float  $sys_start_time     = 0;
 
 	public ?AbstractTemplate  $MiddleBlock = null;
 	public ?TopBannerTemplate $BannerBlock = null;
@@ -17,8 +18,9 @@ class MainTemplate extends AbstractTemplate
 
 	function __construct()
 	{
-		global $sys_script_version;
+		global $sys_script_version, $sys_start_time;
 
+		$this->sys_start_time = $sys_start_time;
 		$this->script_version = $sys_script_version;
 		$this->disable_youtube = !empty(User::get_val('l_disable_youtube'));
 
@@ -192,7 +194,14 @@ class MainTemplate extends AbstractTemplate
 	}
 
 	protected function out(): void
-	{ ?>
+	{
+		$sys_end_time = microtime(true);
+		$mem_usage = sprintf("Mem usage: %s MB\n", number_format(memory_get_peak_usage(true)/1024/1204, 2));
+		$rendered = sprintf("Rendered in: %s sec\n", number_format(($sys_end_time - $this->sys_start_time), 4, '.', ''));
+		$finished = "<div><pre>$mem_usage$rendered</pre></div>";
+		$this->tmpl_finished = $finished;
+
+		?>
 <!DOCTYPE html>
 <html lang="lv">
 <head>
