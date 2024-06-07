@@ -4,16 +4,18 @@
 
 use dqdp\PropertyInitTrait;
 
-trait ViewJubilarsTypeTrait {
+trait ViewJubilarsTypeTrait
+{
 	use PropertyInitTrait;
 
-	var ?int $entered_stamp;
+	var ?string $entered_stamp;
 	var ?int $age;
 	var int $l_id;
 	var string $l_nick;
 	var ?string $l_hash;
 
-	function __construct(?int $entered_stamp = null, ?int $age = null, ?int $l_id = null, ?string $l_nick = null, ?string $l_hash = null) {
+	function __construct(?string $entered_stamp = null, ?int $age = null, ?int $l_id = null, ?string $l_nick = null, ?string $l_hash = null)
+	{
 		if(isset($entered_stamp))$this->entered_stamp = $entered_stamp;
 		if(isset($age))$this->age = $age;
 		if(isset($l_id))$this->l_id = $l_id;
@@ -28,4 +30,5 @@ trait ViewJubilarsTypeTrait {
 	function insert(): mixed {
 		return (new ViewJubilarsEntity)->insert($this);
 	}
+
 }

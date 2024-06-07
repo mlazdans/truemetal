@@ -4,32 +4,21 @@
 
 use dqdp\DBA\AbstractFilter;
 
-trait ViewJubilarsEntityTrait {
-	function __construct(){
-		parent::__construct();
-	}
-
-	function getTableName(): ?string {
+trait ViewJubilarsEntityTrait
+{
+	function get_table_name(): string {
 		return 'view_jubilars';
 	}
 
-	function getProcName(): ?string {
+	function get_pk(): string|array|null {
 		return null;
 	}
 
-	function getPK(): string|array|null {
+	function get_gen(): ?string {
 		return null;
 	}
 
-	function getGen(): ?string {
-		return null;
-	}
-
-	function getProcArgs(): ?array {
-		return null;
-	}
-
-	function getAll(?AbstractFilter $filters = null): ViewJubilarsCollection {
+	function get_all(?AbstractFilter $filters = null): ViewJubilarsCollection {
 		$col = new ViewJubilarsCollection;
 		if($q = $this->query($filters)){
 			while($r = $this->fetch($q)){
@@ -41,7 +30,6 @@ trait ViewJubilarsEntityTrait {
 	}
 
 	function fetch($q): ?ViewJubilarsType {
-		// return ViewJubilarsType::fromDBObject(parent::fetch($q));
 		if($data = parent::fetch($q)){
 			return ViewJubilarsType::initFrom($data);
 		} else {
@@ -49,41 +37,15 @@ trait ViewJubilarsEntityTrait {
 		}
 	}
 
-	// private function savePreprocessor(array|object $DATA, \Closure $f): mixed {
-	// 	if($DATA instanceof ViewJubilarsType){
-	// 		if(method_exists($this, "beforeSave")){
-	// 			if($PROC_DATA = $this->beforeSave($DATA)){
-	// 				return $f($PROC_DATA);
-	// 			} else {
-	// 				return null;
-	// 			}
-	// 		} else {
-	// 			return $f($DATA);
-	// 		}
-	// 	} else {
-	// 		throw new InvalidTypeException($DATA);
-	// 	}
-	// }
-
 	function save(array|object $DATA): mixed {
-		// return $this->savePreprocessor($DATA, function(array|object $DATA){
-		// 	return parent::save(ViewJubilarsType::toDBObject($DATA));
-		// });
 		return parent::save($DATA);
 	}
 
 	function insert(array|object $DATA): mixed {
-		// return $this->savePreprocessor($DATA, function(array|object $DATA){
-		// 	return parent::insert(ViewJubilarsType::toDBObject($DATA));
-		// });
 		return parent::insert($DATA);
 	}
 
 	function update(int|string|array $ID, array|object $DATA): bool {
 		return parent::update($ID, $DATA);
-
-		// return $this->savePreprocessor($DATA, function(array|object $DATA) use ($ID) {
-		// 	return parent::update($ID, ViewJubilarsType::toDBObject($DATA));
-		// }) ?? false;
 	}
 }

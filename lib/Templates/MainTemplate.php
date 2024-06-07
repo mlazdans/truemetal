@@ -88,9 +88,25 @@ class MainTemplate extends AbstractTemplate
 		$this->set_online();
 		$this->set_login();
 		$this->set_search();
-		// $this->set_jubilars();
+		$this->set_jubilars();
 		// $this->set_recent_comments();
 		// $this->set_recent_reviews();
+	}
+
+	function set_jubilars(): void
+	{
+		$jubs = (new ViewJubilarsEntity)->get_all();
+
+		if(!$jubs->count()){
+			return;
+		}
+
+		$T = new JubilarsTemplate;
+		$T->name = "Jubilāri";
+		$T->is_logged = User::logged();
+		$T->data = $jubs;
+
+		$this->RightBlock->add_item($T);
 	}
 
 	function set_login(): void
