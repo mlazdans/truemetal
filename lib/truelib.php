@@ -57,7 +57,7 @@ function new_template(string $file_name): ?Template {
 	return new Template($sys_template_root.DIRECTORY_SEPARATOR.$file_name);
 }
 
-function forum_add_theme(MainModule $template, Template $T, ViewResForumType $forum, array $post_data): bool
+function forum_add_theme(MainTemplate $template, ThemeEditFormTemplate $T, ViewResForumType $forum, array $post_data): bool
 {
 	global $ip;
 
@@ -85,7 +85,7 @@ function forum_add_theme(MainModule $template, Template $T, ViewResForumType $fo
 	if(!$ignore_forum_name_strlen && (strlen($post_data['forum_name']) > 255)){
 		$error_msg[] = specialchars("Tēmas nosaukums par garu! Spied 'Pievienot', lai ignorētu");
 		$error_fields[] = 'forum_name';
-		$T->enable('BLOCK_ignore_forum_name_strlen');
+		$T->ignore_forum_name_strlen = true;
 	}
 
 	if(empty($post_data['forum_data']))
@@ -103,12 +103,12 @@ function forum_add_theme(MainModule $template, Template $T, ViewResForumType $fo
 	}
 
 	if($error_msg){
-		$T->enable('BLOCK_forum_error')->set_var('error_msg', join("<br>", $error_msg));
+		$T->error_msg = join("<br>", $error_msg);
 	}
 
-	set_error_fields($T, $error_fields);
-
-	$T->set_array(specialchars($post_data));
+	// set_error_fields($T, $error_fields);
+	$T->name = specialchars($post_data['forum_name']);
+	$T->data = specialchars($post_data['forum_data']);
 
 	if($error_msg){
 		return false;
@@ -127,7 +127,7 @@ function forum_add_theme(MainModule $template, Template $T, ViewResForumType $fo
 				res_id: $res_id,
 				forum_allow_childs: 0
 			))->insert()){
-				$new = ViewResForumEntity::getById($forum_id);
+				$new = ViewResForumEntity::get_by_id($forum_id);
 				$U = new ResType(res_id:$res_id, res_route:$new->Route());
 				if($U->update()){
 					header("Location: $U->res_route");
@@ -141,88 +141,49 @@ function forum_add_theme(MainModule $template, Template $T, ViewResForumType $fo
 }
 
 function forum_themes(
-	MainModule $template,
+	MainTemplate $template,
 	ViewResForumType $forum,
 	string $action,
-	int $fpp,
+	int $items_per_page,
 	int $page_id,
 	int $pages_visible_to_sides,
-): ?Template
+): ?ForumThemeListTemplate
 {
 	Res::mark_as_seen($forum->res_id);
 
-	$T = $template->add_file('forum/theme.tpl');
-	$F = $template->add_file('forum_add_theme_form.tpl');
+	$T = new ForumThemeListTemplate;
+	$T->pages_visible_to_sides = $pages_visible_to_sides;
+	$T->items_per_page = $items_per_page;
+	$T->page_id = $page_id;
+	set_res($T, $forum);
 
-	$T->set_array($forum);
+	$Filter = (new ResForumFilter(res_resid: $forum->res_id))->page($page_id, $items_per_page);
+	if(User::get_val('l_forumsort_themes') == Forum::SORT_LASTCOMMENT)
+	{
+		$Filter->orderBy("COALESCE(res_comment_last_date, res_entered) DESC");
+		$T->is_sorted_C = true;
+	} else {
+		$Filter->orderBy("res_entered DESC");
+		$T->is_sorted_T = true;
+	}
 
-	$T->set_var('current_theme_name', specialchars($forum->res_name));
-	$T->set_var('current_theme_route', $forum->res_route);
+	$T->themes = (new ViewResForumEntity)->get_all($Filter);
+	$T->form = new ThemeEditFormTemplate;
+	$T->form->nick_name = User::nick();
 
 	if($forum->forum_id == 107488){
-		$T->enable('BLOCK_forumdata_bazar');
+		$T->is_bazaar= true;
 	}
 
 	if($action == 'add_theme')
 	{
-		if(forum_add_theme($template, $F, $forum, post('data')))
+		if(forum_add_theme($template, $T->form, $forum, post('data')))
 		{
 			return null;
 		}
 	}
 
-	$Filter = (new ResForumFilter(res_resid: $forum->res_id))->page($page_id, $fpp);
-
-	if(User::get_val('l_forumsort_themes') == Forum::SORT_LASTCOMMENT)
-	{
-		$Filter->orderBy("COALESCE(res_comment_last_date, res_entered) DESC");
-		$T->enable('BLOCK_info_sort_C');
-	} else {
-		$Filter->orderBy("res_entered DESC");
-		$T->enable('BLOCK_info_sort_T');
-	}
-
-	$items = (new ViewResForumEntity)->getAll($Filter);
-
-	if($items)
-	{
-		$T->enable('BLOCK_forum_themes');
-	} else {
-		$T->enable('BLOCK_noforum');
-	}
-
-	$BLOCK_forum = $T->get_block('BLOCK_forum_themes');
-	foreach($items as $item)
-	{
-		$BLOCK_forum->set_var('comment_class', Forum::has_new_comments($item) ? "Comment-count-new" : "Comment-count-old");
-
-		$BLOCK_forum->set_array(specialchars($item));
-		$BLOCK_forum->set_var('res_route', $item->res_route);
-		$BLOCK_forum->set_var('res_date', proc_date($item->res_entered, true));
-		$BLOCK_forum->set_var('res_comment_last_date', $item->res_comment_last_date ? proc_date($item->res_comment_last_date, true) : "-");
-		if($item->l_hash){
-			$BLOCK_forum->enable('BLOCK_profile_link');
-			$BLOCK_forum->disable('BLOCK_noprofile');
-		} else {
-			$BLOCK_forum->disable('BLOCK_profile_link');
-			$BLOCK_forum->enable('BLOCK_noprofile');
-		}
-		$BLOCK_forum->parse(TMPL_APPEND);
-	}
-
-	$forum_count = $forum->res_child_count;
-
-	forum_pages($page_id, $forum_count, $fpp, $pages_visible_to_sides, $T);
-
-	// $forum->set_forum_path($T, $forum_id);
-
-	if(User::logged())
-	{
-		$T->set_var('forum_add_theme_form', $F->parse());
-		$T->enable('BLOCK_logged');
-	} else {
-		$T->enable('BLOCK_not_logged');
-	}
+	$T->is_logged = User::logged();
 
 	return $T;
 }
@@ -1112,38 +1073,19 @@ function register(MainModule $template, array $sys_parameters = []): ?Template
 	return $T;
 }
 
-function set_error_fields(TemplateBlock $T, array $fields){
-	foreach($fields as $k)
-	{
-		$T->set_var('error_'.$k, ' class="error-form"');
-	}
-}
+// function set_error_fields(TemplateBlock $T, array $fields){
+// 	foreach($fields as $k)
+// 	{
+// 		$T->set_var('error_'.$k, ' class="error-form"');
+// 	}
+// }
 
-function forum_root(MainModule $template): Template
+function forum_root(): ForumRootListTemplate
 {
 	$F = (new ResForumFilter(res_resid: false))->orderBy("forum_id ASC");
 
-	$forum_data = (new ViewResForumEntity)->getAll($F);
-
-	$T = $template->add_file('forum.tpl');
-
-	if(empty($forum_data))
-	{
-		$T->enable('BLOCK_noforum');
-		return $T;
-	}
-
-	$T->enable('BLOCK_forum');
-	foreach($forum_data as $item)
-	{
-		$T->set_var('comment_class', Forum::has_new_comments($item) ? "Comment-count-new" : "Comment-count-old");
-		$T->set_var('res_child_count', $item->res_child_count);
-		// $T->set_var('themes_dsk', dsk($item->res_child_count, "tēma", "tēmas"));
-		$T->set_var('res_route', $item->res_route);
-		$T->set_var('res_name', specialchars($item->res_name));
-		$T->set_var('res_data_compiled', $item->res_data_compiled);
-		$T->parse_block('BLOCK_forum', TMPL_APPEND);
-	}
+	$T = new ForumRootListTemplate;
+	$T->forums = (new ViewResForumEntity)->get_all($F);
 
 	return $T;
 }

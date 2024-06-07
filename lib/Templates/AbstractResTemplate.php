@@ -6,6 +6,8 @@ abstract class AbstractResTemplate extends AbstractTemplate
 	public ?int $login_id = null;
 	public ?int $res_votes_plus_count = null;
 	public ?int $res_votes_minus_count = null;
+	public ?int $res_child_count = null;
+	public ?int $res_comment_count = null;
 	public ?string $res_date = null;
 	public ?string $res_entered = null;
 	public ?string $res_date_short = null;
@@ -18,6 +20,7 @@ abstract class AbstractResTemplate extends AbstractTemplate
 	public ?string $res_data = null;
 	public ?string $res_data_compiled = null;
 	public ?string $l_hash = null;
+	public ?string $res_comment_last_date = null;
 	public bool $vote_control_enabled = false;
 	public bool $profile_link_enabled = false;
 	public bool $can_edit_res = false;

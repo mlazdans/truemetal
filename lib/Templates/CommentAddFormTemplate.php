@@ -5,10 +5,11 @@ class CommentAddFormTemplate extends AbstractTemplate
 	public ?string $error_msg = null;
 	public ?string $l_nick = null;
 	public ?string $res_data = null;
+	public bool $is_logged = false;
 
 	function out(): void
 	{
-		if(User::logged())
+		if($this->is_logged)
 		{
 			$this->form();
 		} else {

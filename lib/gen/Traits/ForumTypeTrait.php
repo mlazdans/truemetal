@@ -4,7 +4,8 @@
 
 use dqdp\PropertyInitTrait;
 
-trait ForumTypeTrait {
+trait ForumTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $forum_id;
@@ -16,7 +17,8 @@ trait ForumTypeTrait {
 	var int $type_id;
 	var ?string $event_startdate;
 
-	function __construct(?int $forum_id = null, ?int $res_id = null, ?int $forum_modid = null, ?int $forum_allow_childs = null, ?int $forum_closed = null, ?int $forum_display = null, ?int $type_id = null, ?string $event_startdate = null) {
+	function __construct(?int $forum_id = null, ?int $res_id = null, ?int $forum_modid = null, ?int $forum_allow_childs = null, ?int $forum_closed = null, ?int $forum_display = null, ?int $type_id = null, ?string $event_startdate = null)
+	{
 		if(isset($forum_id))$this->forum_id = $forum_id;
 		if(isset($res_id))$this->res_id = $res_id;
 		if(isset($forum_modid))$this->forum_modid = $forum_modid;
