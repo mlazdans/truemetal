@@ -2,7 +2,6 @@
 
 use dqdp\SQL\Select;
 use dqdp\Template;
-use dqdp\TemplateBlock;
 use dqdp\TODO;
 
 function tm_shutdown()
@@ -1558,7 +1557,7 @@ function vote(MainModule $template, string $value, int $res_id): ?TrueResponseIn
 	}
 }
 
-function attend(MainModule $template, int $res_id, ?string $off = null): ?TrueResponseInterface
+function attend(MainTemplate $template, int $res_id, ?string $off = null): ?TrueResponseInterface
 {
 	$json = isset($_GET['json']);
 
@@ -1569,7 +1568,7 @@ function attend(MainModule $template, int $res_id, ?string $off = null): ?TrueRe
 	}
 
 	# TODO: kādreiz atdalīt pasākumus savā klasē
-	if(!($item = ViewResForumEntity::getByResId($res_id)))
+	if(!($item = ViewResForumEntity::get_by_res_id($res_id)))
 	{
 		$template->not_found();
 		return null;
@@ -1600,48 +1599,13 @@ function attend(MainModule $template, int $res_id, ?string $off = null): ?TrueRe
 	}
 }
 
-function attendees(MainModule $template, ViewResForumType $forum): ?Template
+function attendees_view(ViewResForumType $forum): AttendTemplate
 {
-	$T = $template->add_file('forum/attend.tpl');
-
-	if(!User::logged())
-	{
-		$template->not_logged();
-		return null;
-	}
-
-	if($forum->type_id !== Forum::TYPE_EVENT)
-	{
-		$template->forbidden("Nav pasākums");
-		return null;
-	}
-
-	$me_attended = false;
-	$T->set_var('res_id', $forum->res_id);
-
-	$data = get_attendees($forum->res_id);
-
-	if($c = count($data))
-	{
-		$BLOCK_attend_list = $T->enable('BLOCK_attend_list');
-		foreach($data as $k=>$item){
-			if($item->a_attended && (User::id() == $item->l_id)){
-				$me_attended = true;
-			}
-			$BLOCK_attend_list->set_array($item);
-			$BLOCK_attend_list->set_var('l_nick_sep', ($k+1 < $c ? ', ' : ''));
-			if(!$item->a_attended){
-				$BLOCK_attend_list->set_var('l_nick', "<strike>$item->l_nick</strike>");
-			}
-
-			$BLOCK_attend_list->parse(TMPL_APPEND);
-		}
-	}
-
-	$ts = strtotime(date('d.m.Y', strtotime($forum->event_startdate))) + 24 * 3600;
-	if(time() < $ts){
-		$T->enable('BLOCK_attend_'.($me_attended ? 'off' : 'on'));
-	}
+	$T = new AttendTemplate;
+	$T->l_id = User::id();
+	$T->res_id = $forum->res_id;
+	$T->attendees = ViewAttendEntity::get_by_res_id($forum->res_id);
+	$T->event_startdate = $forum->event_startdate;
 
 	return $T;
 }

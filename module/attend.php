@@ -5,15 +5,26 @@ $res_id = (int)array_shift($sys_parameters);
 $off = array_shift($sys_parameters);
 $get = isset($_GET['get']);
 
-$template = new MainModule('attend');
+$template = new MainTemplate();
 
-if($get){
-	if($forum = ViewResForumEntity::getByResId($res_id))
+if(!User::logged()){
+	$template->forbidden();
+	$template->print();
+	return;
+}
+
+if($get)
+{
+	if($forum = ViewResForumEntity::get_by_res_id($res_id))
 	{
-		$T = attendees($template, $forum);
+		$T = attendees_view($forum);
+		$T->print();
+	} else {
+		$template->not_found();
+		$template->print();
 	}
-	$template->out($T??null);
 } else {
+	attend($template, $res_id, $off);
 	$template->set_right_defaults();
-	$template->out(attend($template, $res_id, $off));
+	$template->print();
 }
