@@ -550,7 +550,7 @@ function change_email(MainTemplate $template): ?EmailChangeTemplate
 	}
 }
 
-function change_pw(MainModule $template): ?Template
+function change_pw(MainTemplate $template): ?PwchTemplate
 {
 	if(!User::logged())
 	{
@@ -558,29 +558,29 @@ function change_pw(MainModule $template): ?Template
 		return null;
 	}
 
-	$T = $template->add_file('user/pwch.tpl');
+	$data = post('data');
 
-	if(!isset($_POST['data']))
-	{
+	$T = new PwchTemplate;
+	$T->old_password = $data['old_password'] ?? "";
+	$T->l_password = $data['l_password'] ?? "";
+	$T->l_password2 = $data['l_password'] ?? "";
+
+	if(!isset($_POST['data'])) {
 		return $T;
 	}
 
-	$data = $_POST['data'];
-	$T->set_array($data);
-
-	$error_fields = $error_msgs = [];
-
+	$error_msgs = [];
 	if(empty($data['old_password'])){
 		$error_msgs[] = 'Nav ievadīta vecā parole';
-		$error_fields[] = 'old_password';
+		// $error_fields[] = 'old_password';
 	} else {
 		if(Logins::auth(User::email(), $_POST['data']['old_password'])){
 			if(!pw_validate($data['l_password'], $data['l_password2'], $error_msgs)){
-				$error_fields[] = 'l_password';
+				// $error_fields[] = 'l_password';
 			}
 		} else {
 			$error_msgs[] = 'Vecā parole nav pareiza';
-			$error_fields[] = 'old_password';
+			// $error_fields[] = 'old_password';
 		}
 	}
 
@@ -594,16 +594,18 @@ function change_pw(MainModule $template): ?Template
 	}
 
 	if($error_msgs){
-		set_error_fields($T, $error_msgs);
+		// $T->hide_passw_manager = true;
+		// set_error_fields($T, $error_msgs);
 		$template->error($error_msgs);
 	}
 
 	return $T;
 }
 
-function forgot(MainModule $template): ?Template {
-	$T = $template->add_file('forgot.tpl');
-	$T->enable('BLOCK_forgot_form');
+function forgot(MainTemplate $template): ?ForgotTemplate
+{
+	$T = new ForgotTemplate;
+	$T->forgot_form_enabled = true;
 
 	if(!isset($_POST['data']))
 	{
@@ -611,7 +613,9 @@ function forgot(MainModule $template): ?Template {
 	}
 
 	$data = $_POST['data'];
-	$T->set_array($data);
+	$T->l_login = $data['l_login'] ?? "";
+	$T->l_email = $data['l_email'] ?? "";
+	// $T->l_nick =
 
 	if(empty($data['l_email']) && empty($data['l_login']))
 	{
@@ -635,9 +639,9 @@ function forgot(MainModule $template): ?Template {
 			try {
 				if(Logins::send_forgot_code($L->l_email, $forgot_code))
 				{
-					$T->set_var('l_email', $L->l_email);
-					$T->enable('BLOCK_forgot_ok');
-					$T->disable('BLOCK_forgot_form');
+					$T->l_email = $L->l_email;
+					$T->is_ok = true;
+					$T->forgot_form_enabled = false;
 				} else {
 					$error_msg[] = "Nevar nosūtīt kodu uz $L->l_email";
 				}
@@ -657,9 +661,9 @@ function forgot(MainModule $template): ?Template {
 	return $T;
 }
 
-function forgot_accept(MainModule $template, string $code): ?Template
+function forgot_accept(MainTemplate $template, string $code): ?ForgotTemplate
 {
-	$T = $template->add_file('forgot.tpl');
+	$T = new ForgotTemplate;
 
 	if($code == 'ok')
 	{
@@ -671,7 +675,7 @@ function forgot_accept(MainModule $template, string $code): ?Template
 
 	if(!$forgot_data)
 	{
-		$T->enable('BLOCK_forgot_code_error');
+		$T->is_error = true;
 		return $T;
 	}
 
@@ -683,8 +687,11 @@ function forgot_accept(MainModule $template, string $code): ?Template
 		return $T;
 	}
 
-	$T->enable('BLOCK_forgot_pwch_form');
-	$T->set_except(['l_password', 'l_sessiondata'], $L);
+	$T->forgot_pwch_form_enabled = true;
+	$T->l_email = $L->l_email;
+	$T->l_login = $L->l_login;
+	$T->l_nick = $L->l_nick;
+	$T->l_email = $L->l_email;
 
 	if(!isset($_POST['data']))
 	{
@@ -693,7 +700,7 @@ function forgot_accept(MainModule $template, string $code): ?Template
 
 	$data = $_POST['data'];
 	$error_msg = [];
-	pw_validate($data['l_password']??"", $data['l_password2']??"", $error_msg);
+	pw_validate($data['l_password'] ?? "", $data['l_password2'] ?? "", $error_msg);
 
 	if($error_msg){
 		$template->error($error_msg);
@@ -712,7 +719,8 @@ function forgot_accept(MainModule $template, string $code): ?Template
 		}
 	}
 
-	$T->set_array($data);
+	$T->l_password = $data['l_password'] ?? "";
+	$T->l_password2 = $data['l_password2'] ?? "";
 
 	return $T;
 }

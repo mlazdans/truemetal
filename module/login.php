@@ -10,10 +10,10 @@ if($action == 'logoff')
 	}
 }
 
-$template = new MainModule($sys_module_id);
+$template = new MainTemplate($sys_module_id);
 $template->set_title($_pointer['_data_']['module_name']??'');
 
-$T = $template->add_file('login.tpl');
+$T = new LoginTemplate;
 
 # TODO: rate limit
 if(isset($_POST['data']))
@@ -23,11 +23,13 @@ if(isset($_POST['data']))
 	{
 		return;
 	} else {
-		$T->enable('BLOCK_login_err');
-		$T->set_var('error_msg', 'Nepareizs login vai parole!');
-		$T->set_array(specialchars($data));
+		$T->error_msg = 'Nepareizs login vai parole!';
+		$T->login = $data['login'] ?? '';
+		$T->password = $data['password'] ?? '';
+		$T->referer = $data['referer'] ?? '';
 	}
 }
 
 $template->set_right_defaults();
-$template->out($T??null);
+$template->MiddleBlock = $T;
+$template->print();

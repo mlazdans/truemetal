@@ -2,7 +2,7 @@
 
 $action = array_shift($sys_parameters);
 
-$template = new MainModule($sys_module_id);
+$template = new MainTemplate($sys_module_id);
 $template->set_title("Aizmirsu paroli");
 
 if($action == 'accept') {
@@ -13,4 +13,5 @@ if($action == 'accept') {
 }
 
 $template->set_right_defaults();
-$template->out($T??null);
+$template->MiddleBlock = $T;
+$template->print();

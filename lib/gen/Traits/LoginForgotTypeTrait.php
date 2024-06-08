@@ -4,7 +4,8 @@
 
 use dqdp\PropertyInitTrait;
 
-trait LoginForgotTypeTrait {
+trait LoginForgotTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $f_id;
@@ -13,7 +14,8 @@ trait LoginForgotTypeTrait {
 	var string $f_entered;
 	var int $f_sent;
 
-	function __construct(?int $f_id = null, ?string $f_email = null, ?string $f_code = null, ?string $f_entered = null, ?int $f_sent = null) {
+	function __construct(?int $f_id = null, ?string $f_email = null, ?string $f_code = null, ?string $f_entered = null, ?int $f_sent = null)
+	{
 		if(isset($f_id))$this->f_id = $f_id;
 		if(isset($f_email))$this->f_email = $f_email;
 		if(isset($f_code))$this->f_code = $f_code;
