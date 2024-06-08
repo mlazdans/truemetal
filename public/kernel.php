@@ -35,24 +35,19 @@ $sys_parameters = (function(): array {
 })();
 
 $sys_module_id = array_shift($sys_parameters);
-
-if(!$sys_module_id && $sys_default_module)
-{
-	$sys_module_id = $sys_default_module;
-}
-
 if(file_exists("$sys_root/module/$sys_module_id.php"))
 {
 } elseif(isset($sys_module_map[$sys_module_id])) {
 	$sys_module_id = $sys_module_map[$sys_module_id];
 }
 
-$module_root = "/$sys_module_id";
+$module_root = "/".($sys_module_id ? $sys_module_id : $sys_default_module);
 
 $_GET = _GET();
 
-header('Content-Type: text/html; charset='.$sys_encoding);
-header('X-Powered-By: TRUEMETAL');
+// header('Content-Type: text/html; charset='.$sys_encoding);
+// header('Content-Type: text/plain; charset='.$sys_encoding);
+// header('X-Powered-By: TRUEMETAL');
 
 if($sys_debug)
 {
@@ -61,19 +56,19 @@ if($sys_debug)
 	try {
 		include("includer.php");
 	} catch(PDOException $e){
-		$template = new MainModule("error");
+		$template = new MainTemplate;
 		$template->error("Datubāzes kļūda. Ielogota un tiks apskatīta.");
-		$template->out(null);
+		$template->print();
 		throw $e;
 	} catch(Throwable $e) {
-		$template = new MainModule("error");
+		$template = new MainTemplate;
 		$template->error("True Kļūda. Ielogota un tiks apskatīta.");
 		$template->set_right_defaults();
 		try {
 			$template->set_right_defaults();
 		} catch(Throwable $e) {
 		}
-		$template->out(null);
+		$template->print();
 		throw $e;
 	}
 }
