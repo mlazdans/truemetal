@@ -2,8 +2,6 @@
 
 class ForumDetTemplate extends AbstractResTemplate
 {
-	public ?CommentAddFormTemplate $CommentFormT = null;
-	public ?CommentsListTemplate $CommentListT = null;
 	public ?AttendTemplate $AttendT = null;
 	public bool $is_closed = false;
 	public bool $is_sorted_A = false;
@@ -42,9 +40,9 @@ class ForumDetTemplate extends AbstractResTemplate
 				<? } ?>
 
 				<? if($this->profile_link_enabled) { ?>
-				<div class="unselectable">
-					<a href="/user/profile/<?=$this->l_hash ?>/" class="ProfilePopup" data-hash="<?=$this->l_hash ?>">[Profils]</a>
-				</div>
+					<div class="unselectable">
+						<a href="/user/profile/<?=$this->l_hash ?>/" class="ProfilePopup" data-hash="<?=$this->l_hash ?>">[Profils]</a>
+					</div>
 				<? } ?>
 
 				<div class="unselectable">

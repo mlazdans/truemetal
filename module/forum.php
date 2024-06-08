@@ -1,6 +1,7 @@
-<?php
+<?php declare(strict_types = 1);
 
-$template = new MainModule($sys_module_id);
+$template = new MainTemplate;
+
 $forum_descr = $forum_title = 'Forums';
 
 $hl = get("hl");
@@ -19,11 +20,11 @@ if(empty($page_id)){
 
 if($forum_route)
 {
-	$forum_data = (function(MainModule $template, string $forum_route): ?ViewResForumType
+	$forum_data = (function(MainTemplate $template, string $forum_route): ?ViewResForumType
 	{
 		$forum_id = (int)$forum_route;
 
-		if(!($forum_data = ViewResForumEntity::getById($forum_id)))
+		if(!($forum_data = ViewResForumEntity::get_by_id($forum_id)))
 		{
 			$template->not_found();
 			return null;
@@ -59,10 +60,10 @@ if($forum_route)
 		}
 	}
 } else {
-	$T = forum_root($template);
+	$T = forum_root();
 }
 
-$template->Index->set_var("menu_active_forum", "_over");
+// $template->Index->set_var("menu_active_forum", "_over");
 
 $template->set_title($forum_title);
 $template->set_descr($forum_descr);
@@ -74,4 +75,5 @@ $template->set_login();
 $template->set_search();
 $template->set_jubilars();
 
-$template->out($T??null);
+$template->MiddleBlock = $T;
+$template->print();

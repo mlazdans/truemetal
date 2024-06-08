@@ -169,7 +169,7 @@ function forum_themes(
 	$T->themes = (new ViewResForumEntity)->get_all($Filter);
 	$T->form = new ThemeEditFormTemplate;
 	if($T->is_logged){
-	$T->form->nick_name = User::nick();
+		$T->form->nick_name = User::nick();
 	}
 
 	if($forum->forum_id == 107488){
@@ -255,9 +255,6 @@ function forum_det(
 		$T->is_sorted_A = true;
 	}
 
-	$Filter = (new ResFilter())->orderBy(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? "res_entered DESC" : "res_entered");
-	$comments = Res::get_comments($forum->res_id, $Filter);
-
 	// $forum->set_forum_path($T, $forum_id);
 
 	Res::mark_as_seen($forum->res_id);
@@ -269,7 +266,7 @@ function forum_det(
 		$T->CommentFormT = new CommentAddFormTemplate;
 		$T->CommentFormT->is_logged = User::logged();
 		if($T->CommentFormT->is_logged) {
-		$T->CommentFormT->l_nick = specialchars(User::data()->l_nick);
+			$T->CommentFormT->l_nick = specialchars(User::data()->l_nick);
 		}
 
 		if($action == 'add_comment')
@@ -280,12 +277,14 @@ function forum_det(
 			} else {
 				$T->CommentFormT->res_data = specialchars(post('res_data'));
 				$T->CommentFormT->error_msg = join("<br>", $error_msg);
-	}
+			}
 		}
 	}
 
+	$Filter = (new ResFilter())->orderBy(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? "res_entered DESC" : "res_entered");
 	$T->CommentListT = new CommentsListTemplate;
-	$T->CommentListT->Comments = $comments;
+	$T->CommentListT->Comments = Res::get_comments($forum->res_id, $Filter);
+	$T->CommentListT->hl = $hl;
 
 	# Attendees
 	if(User::logged() && ($forum->type_id === Forum::TYPE_EVENT))
