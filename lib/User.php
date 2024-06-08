@@ -4,6 +4,7 @@ class User
 {
 	static private ?LoginsType $_LOGIN = null;
 	static private ?int $entered_ts = null;
+	static private ?array $disabled_users = null; // TODO: type
 
 	static function data(?LoginsType $data = null): ?LoginsType
 	{
@@ -82,5 +83,23 @@ class User
 
 	static function can_debug_res(ViewResType $R){
 		return User::is_admin();
+	}
+
+	static function in_disabled(int $login_id): bool
+	{
+		if(User::logged())
+		{
+			if(!isset(self::$disabled_users)) {
+				if($data = CommentDisabled::get(User::id())){
+					self::$disabled_users = $data;
+				} else {
+					self::$disabled_users = [];
+				}
+			}
+
+			return !empty(self::$disabled_users[$login_id]);
+		}
+
+		return false;
 	}
 }

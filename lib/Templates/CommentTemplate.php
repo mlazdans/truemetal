@@ -21,7 +21,7 @@ class CommentTemplate extends AbstractResTemplate
 		}
 
 		$c_disabled_user_class = '';
-		if(!empty($disabled_users[$this->login_id])){
+		if(User::in_disabled($this->login_id)){
 			$c_disabled_user_class = ' disabled';
 			$this->res_data_compiled = '-neredzams komentārs-';
 		}

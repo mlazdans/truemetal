@@ -203,6 +203,7 @@ function set_res(AbstractResTemplate $T, ViewResType&ResourceTypeInterface $res,
 	$T->res_votes_plus_count = $res->res_votes_plus_count;
 	$T->res_votes_minus_count = $res->res_votes_minus_count;
 	$T->l_hash = $res->l_hash;
+	$T->login_id = $res->login_id;
 	$T->res_child_count = $res->res_child_count;
 	$T->res_comment_count = $res->res_comment_count;
 	$T->res_comment_last_date = $res->res_comment_last_date;
@@ -346,7 +347,7 @@ function public_profile(MainTemplate $template, string $l_hash): ?UserProfilePub
 	$T->l_entered = $L->l_entered;
 	$T->comment_count = $L->comment_count;
 
-	if(CommentDisabled::get(User::id(), $L->l_id)){
+	if(User::in_disabled($L->l_id)){
 		$T->is_comments_disabled = true;
 	}
 
