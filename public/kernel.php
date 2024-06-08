@@ -45,10 +45,6 @@ $module_root = "/".($sys_module_id ? $sys_module_id : $sys_default_module);
 
 $_GET = _GET();
 
-// header('Content-Type: text/html; charset='.$sys_encoding);
-// header('Content-Type: text/plain; charset='.$sys_encoding);
-// header('X-Powered-By: TRUEMETAL');
-
 if($sys_debug)
 {
 	include("includer.php");
