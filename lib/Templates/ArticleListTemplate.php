@@ -2,9 +2,14 @@
 
 class ArticleListTemplate extends AbstractTemplate
 {
+	public string $module_root;
+	public int $total_count;
+	public int $total_pages;
+	public int $items_per_page;
+	public int $current_page;
 	public ViewMainpageCollection $articles;
 
-	function mainpage(ViewMainpageType $item)
+	private function mainpage(ViewMainpageType $item)
 	{
 		$res_date = date('d.m.Y', strtotime($item->res_entered));
 		$comment_class = Res::not_seen($item->res_id, $item->res_comment_last_date??$item->res_entered) ? "Comment-count-new" : "Comment-count-old";
@@ -68,9 +73,33 @@ class ArticleListTemplate extends AbstractTemplate
 		</div><?
 	}
 
-	protected function out(): void {
+	private function paginator(): void
+	{ ?>
+		<div class="TD-cat" style="display: flex;">
+			<? if($this->current_page > 1) { ?>
+			<div>
+				<img src="/img/left.png" alt="Vecāki ieraksti" style="vertical-align: middle;" width="16" height="16">
+				<a class="caption" href="<?=$this->module_root ?>/page/<?=($this->current_page - 1) ?>/">vecāki ieraksti</a>
+			</div>
+			<? } ?>
+
+			<? if($this->current_page < $this->total_pages) { ?>
+			<div style="margin-left: auto;">
+				<a class="caption" href="<?=$this->module_root ?>/page/<?=($this->current_page + 1) ?>/">jaunāki ieraksti</a>
+				<img src="/img/right.png" alt="Jaunāki ieraksti" style="vertical-align: middle;" width="16" height="16">
+			</div>
+			<? } ?>
+			<!-- END BLOCK_article_page_next -->
+			<div>&nbsp;</div>
+		</div>
+		 <?
+	}
+
+	protected function out(): void
+	{
 		foreach($this->articles as $item){
 			$this->mainpage($item);
 		}
+		$this->paginator();
 	}
 }

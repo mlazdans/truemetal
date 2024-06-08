@@ -4,32 +4,25 @@
 
 use dqdp\DBA\AbstractFilter;
 
-trait ArticleEntityTrait {
-	function __construct(){
-		parent::__construct();
-	}
-
-	function getTableName(): ?string {
+trait ArticleEntityTrait
+{
+	function get_table_name(): string {
 		return 'article';
 	}
 
-	function getProcName(): ?string {
-		return null;
-	}
-
-	function getPK(): string|array|null {
+	function get_pk(): string|array|null {
 		return 'art_id';
 	}
 
-	function getGen(): ?string {
+	function get_gen(): ?string {
 		return null;
 	}
 
-	function getProcArgs(): ?array {
-		return null;
+	static function get(int $ID, ?AbstractFilter $DF = null): ?ArticleType {
+		return (new static)->get_single((new ArticleFilter(art_id: $ID))->merge($DF));
 	}
 
-	function getAll(?AbstractFilter $filters = null): ArticleCollection {
+	function get_all(?AbstractFilter $filters = null): ArticleCollection {
 		$col = new ArticleCollection;
 		if($q = $this->query($filters)){
 			while($r = $this->fetch($q)){
@@ -40,12 +33,7 @@ trait ArticleEntityTrait {
 		return $col;
 	}
 
-	static function get(int $ID, ?AbstractFilter $DF = null): ?ArticleType {
-		return (new static)->getSingle((new ArticleFilter(art_id: $ID))->merge($DF));
-	}
-
 	function fetch($q): ?ArticleType {
-		// return ArticleType::fromDBObject(parent::fetch($q));
 		if($data = parent::fetch($q)){
 			return ArticleType::initFrom($data);
 		} else {
@@ -53,41 +41,15 @@ trait ArticleEntityTrait {
 		}
 	}
 
-	// private function savePreprocessor(array|object $DATA, \Closure $f): mixed {
-	// 	if($DATA instanceof ArticleType){
-	// 		if(method_exists($this, "beforeSave")){
-	// 			if($PROC_DATA = $this->beforeSave($DATA)){
-	// 				return $f($PROC_DATA);
-	// 			} else {
-	// 				return null;
-	// 			}
-	// 		} else {
-	// 			return $f($DATA);
-	// 		}
-	// 	} else {
-	// 		throw new InvalidTypeException($DATA);
-	// 	}
-	// }
-
 	function save(array|object $DATA): mixed {
-		// return $this->savePreprocessor($DATA, function(array|object $DATA){
-		// 	return parent::save(ArticleType::toDBObject($DATA));
-		// });
 		return parent::save($DATA);
 	}
 
 	function insert(array|object $DATA): mixed {
-		// return $this->savePreprocessor($DATA, function(array|object $DATA){
-		// 	return parent::insert(ArticleType::toDBObject($DATA));
-		// });
 		return parent::insert($DATA);
 	}
 
 	function update(int|string|array $ID, array|object $DATA): bool {
 		return parent::update($ID, $DATA);
-
-		// return $this->savePreprocessor($DATA, function(array|object $DATA) use ($ID) {
-		// 	return parent::update($ID, ArticleType::toDBObject($DATA));
-		// }) ?? false;
 	}
 }

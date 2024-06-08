@@ -1,6 +1,5 @@
 <?php declare(strict_types = 1);
 
-use dqdp\SQL\Select;
 use dqdp\Template;
 use dqdp\TODO;
 
@@ -1477,7 +1476,7 @@ function archive(MainModule $template): ?Template
 	return $T;
 }
 
-function article(MainModule $template, int $art_id, string $hl, ?string $article_route = null): ?Template
+function article(MainTemplate $template, int $art_id, string $hl, ?string $article_route = null): ?ArticleTemplate
 {
 	if(!($art = ViewResArticleEntity::get_by_id($art_id))){
 		$template->not_found();
@@ -1492,175 +1491,81 @@ function article(MainModule $template, int $art_id, string $hl, ?string $article
 
 	Res::mark_as_seen($art->res_id);
 
-	$T = $template->add_file('article.tpl');
+	$T = new ArticleTemplate;
+	set_res($T, $art, $hl);
 
-	$comments = Res::get_comments($art->res_id);
-	$C = comment_list($comments, $hl);
+	$T->art_id = $art_id;
+
+	$T->CommentListT = new CommentsListTemplate;
+	$T->CommentListT->Comments = Res::get_comments($art->res_id);
+	$T->hl = $hl;
+
+	$T->CommentFormT = new CommentAddFormTemplate;
+	$T->CommentFormT->is_logged = User::logged();
+	if($T->CommentFormT->is_logged) {
+		$T->CommentFormT->l_nick = specialchars(User::data()->l_nick);
+	}
 
 	$error_msg = [];
 	$action = post('action');
+
 	if($action == 'add_comment')
 	{
-		if(add_comment($template, $C, $art->res_id, post('res_data'), $error_msg)){
+		$error_msg = [];
+		if(add_comment($template, $art->res_id, post('res_data'), $error_msg)){
 			return null;
-		}
+		} else {
+			$T->CommentFormT->res_data = specialchars(post('res_data'));
+			$T->CommentFormT->error_msg = join("<br>", $error_msg);
+	}
 	}
 
-	$F = comment_add_form();
-	if($error_msg) {
-		$F->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
-	}
-
-	// $art_title .= (isset($art['art_name']) ? " - ".$art['art_name'] : "");
-
-	$T->set_array($art);
-
-	set_res($T, $art, $hl);
-
-	$T->set_var('article_comments', $C->parse());
-	$T->set_var('comment_add_form', $F->parse());
+	$template->set_title($art->res_name);
 
 	return $T;
 }
 
-function article_list(MainModule $template, int $page, int $art_per_page)
+function mainpage(MainTemplate $template, int $page, int $items_per_page): ArticleListTemplate
 {
 	global $sys_module_id, $module_root;
 
+	$T = new ArticleListTemplate;
+
 	# TODO: cache, meta tabulā varbūt? view_mainpage vispār vajadzētu pārģenerēt tikai pēc vajadzības
-	$sql = (new Select('COUNT(*) AS cc'))->From('view_mainpage');
-	if($sys_module_id != 'article'){
-		$sql->Where(['module_id = ?', $sys_module_id]);
-	}
+	// $sql = (new Select('COUNT(*) AS cc'))->From('view_mainpage');
 
-	$cc = DB::ExecuteSingle($sql);
-	$tc = (int)$cc['cc'];
+	// $cc = DB::ExecuteSingle($sql);
+	// $tc = (int)$cc['cc'];
 
-	$tp = (int)ceil($tc / $art_per_page);
-	$art_align = $tc % $art_per_page;
+	// if($sys_module_id != 'article'){
+	// 	$sql->Where(['module_id = ?', $sys_module_id]);
+	// }
+
+	$F = (new ViewMainpageFilter)->rows($items_per_page);
+
+	$A = new ViewMainpageEntity;
+	$tc = $A->count($F);
+
+	$tp = (int)ceil($tc / $items_per_page);
+	$art_align = $tc % $items_per_page;
 
 	if(($page < 0) || ($page >= $tp))
 	{
 		header("Location: $module_root/");
-		return;
-	}
-
-	$T = $template->add_file('article-list.tpl');
-
-	# TODO: ViewMainpageEntity
-	$sql = (new Select)->From('view_mainpage')
-		->OrderBy("res_entered DESC")
-		->Rows($art_per_page)
-	;
-
-	// if($page){
-	// 	$sql->Page($page, $art_per_page);
-	// } else {
-	// 	$sql->Rows($art_per_page);
-	// }
-
-	// if($page)
-	// 	$limit = (($tp - $page - 1) * $art_per_page + $art_align).",$art_per_page";
-	// else
-	// 	$limit = $art_per_page;
-
-	if($page){
-		$limit = (($tp - $page - 1) * $art_per_page + $art_align);
-		$sql->Offset($limit);
-	}
-
-	if($sys_module_id != 'article'){
-		$sql->Where(['module_id = ?', $sys_module_id]);
-	}
-
-	// $sql .= " ORDER BY res_entered DESC";
-	// $sql .= " LIMIT $limit";
-
-	if(!($articles = DB::Execute($sql))){
-		$template->not_found();
 		return null;
 	}
 
-	# Pages
-	if($tc)
-	{
-		$T->enable('BLOCK_article_page');
-
-		if($page)
-		{
-			if($page == $tp){
-				$T->enable('BLOCK_article_page_next');
-				$T->set_var('page', '', 'BLOCK_article_page_next');
-			} else if($page < $tp){
-				$T->enable('BLOCK_article_page_next');
-				$T->set_var('page', "$module_root/page/".($page + 1)."/", 'BLOCK_article_page_next');
+	if($page){
+		$limit = (($tp - $page - 1) * $items_per_page + $art_align);
+		$F->Offset($limit);
 			}
 
-			if($page > 1){
-				$T->enable('BLOCK_article_page_prev');
-				$T->set_var('page', "$module_root/page/".($page - 1)."/", 'BLOCK_article_page_prev');
-			}
-		} else {
-			$T->enable('BLOCK_article_page_prev');
-			$T->set_var('page', "$module_root/page/".($tp - 1)."/", 'BLOCK_article_page_prev');
-		}
-	}
-
-	$c = 0;
-	foreach($articles as $item)
-	{
-		++$c;
-
-		$item['res_date'] = date('d.m.Y', strtotime($item['res_entered']));
-
-		if($item['res_kind'] == ResKind::FORUM)
-		{
-			if($item['type_id']){
-				$intro = mb_substr($item['res_data'], 0, 300);
-				$intro = specialchars($intro);
-				if(mb_strlen($item['res_data']) > 300){
-					$intro .= "...";
-				}
-				$item['res_intro'] = $intro;
-				$item['res_data'] = '';
-			} else {
-				$data_parts = preg_split("/<hr(\s+)?\/?>/", $item['res_data']);
-
-				if(isset($data_parts[0]))
-					$item['res_intro'] = $data_parts[0];
-
-				if(isset($data_parts[1]))
-				{
-					$item['res_data'] = $data_parts[1];
-				} else {
-					$item['res_data'] = '';
-				}
-			}
-		} elseif($item['res_kind'] == ResKind::ARTICLE){
-		} else {
-			throw new InvalidArgumentException("Unexpected table ID: $item[res_kind]");
-		}
-
-		if($item['res_data'])
-		{
-			$T->enable('BLOCK_art_cont');
-		} else {
-			$T->disable('BLOCK_art_cont');
-		}
-
-		$T->set_var('comment_class', Res::not_seen($item['res_id'], $item['res_comment_last_date']??$item['res_entered']) ? "Comment-count-new" : "Comment-count-old");
-
-		$T->set_array($item, 'BLOCK_article');
-
-		if($item['res_kind'] == ResKind::FORUM)
-		{
-			$T->set_var('module_id', "forum", 'BLOCK_article');
-		} else {
-			$T->set_var('module_id', $item['module_id'], 'BLOCK_article');
-		}
-
-		$T->parse_block('BLOCK_article', TMPL_APPEND);
-	}
+	$T->articles = $A->get_all($F);
+	$T->total_count = $tc;
+	$T->total_pages = $tp;
+	$T->items_per_page = $items_per_page;
+	$T->current_page = $page ? $page : $tp;
+	$T->module_root = $module_root;
 
 	return $T;
 }

@@ -4,14 +4,16 @@
 
 use dqdp\PropertyInitTrait;
 
-trait ArticleTypeTrait {
+trait ArticleTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $art_id;
 	var ?int $res_id;
 	var int $art_modid;
 
-	function __construct(?int $art_id = null, ?int $res_id = null, ?int $art_modid = null) {
+	function __construct(?int $art_id = null, ?int $res_id = null, ?int $art_modid = null)
+	{
 		if(isset($art_id))$this->art_id = $art_id;
 		if(isset($res_id))$this->res_id = $res_id;
 		if(isset($art_modid))$this->art_modid = $art_modid;

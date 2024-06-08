@@ -13,6 +13,8 @@ class ViewMainpageFilter extends AbstractFilter
 	{
 		$this->apply_set_fields($sql, ['res_id']);
 
+		$this->orderBy("res_entered DESC");
+
 		return $sql;
 	}
 }
