@@ -24,8 +24,8 @@ trait ForumEntityTrait
 
 	function get_all(?AbstractFilter $filters = null): ForumCollection {
 		$col = new ForumCollection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -33,8 +33,8 @@ trait ForumEntityTrait
 		return $col;
 	}
 
-	function fetch($q): ?ForumType {
-		if($data = parent::fetch($q)){
+	function fetch(): ?ForumType {
+		if($data = parent::fetch($this->Q)){
 			return ForumType::initFrom($data);
 		} else {
 			return null;

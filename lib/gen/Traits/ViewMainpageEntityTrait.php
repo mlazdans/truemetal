@@ -24,8 +24,8 @@ trait ViewMainpageEntityTrait
 
 	function get_all(?AbstractFilter $filters = null): ViewMainpageCollection {
 		$col = new ViewMainpageCollection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -33,8 +33,8 @@ trait ViewMainpageEntityTrait
 		return $col;
 	}
 
-	function fetch($q): ?ViewMainpageType {
-		if($data = parent::fetch($q)){
+	function fetch(): ?ViewMainpageType {
+		if($data = parent::fetch($this->Q)){
 			return ViewMainpageType::initFrom($data);
 		} else {
 			return null;

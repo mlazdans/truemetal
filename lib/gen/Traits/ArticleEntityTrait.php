@@ -24,8 +24,8 @@ trait ArticleEntityTrait
 
 	function get_all(?AbstractFilter $filters = null): ArticleCollection {
 		$col = new ArticleCollection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -33,8 +33,8 @@ trait ArticleEntityTrait
 		return $col;
 	}
 
-	function fetch($q): ?ArticleType {
-		if($data = parent::fetch($q)){
+	function fetch(): ?ArticleType {
+		if($data = parent::fetch($this->Q)){
 			return ArticleType::initFrom($data);
 		} else {
 			return null;

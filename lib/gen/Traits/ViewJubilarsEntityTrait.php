@@ -20,8 +20,8 @@ trait ViewJubilarsEntityTrait
 
 	function get_all(?AbstractFilter $filters = null): ViewJubilarsCollection {
 		$col = new ViewJubilarsCollection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -29,8 +29,8 @@ trait ViewJubilarsEntityTrait
 		return $col;
 	}
 
-	function fetch($q): ?ViewJubilarsType {
-		if($data = parent::fetch($q)){
+	function fetch(): ?ViewJubilarsType {
+		if($data = parent::fetch($this->Q)){
 			return ViewJubilarsType::initFrom($data);
 		} else {
 			return null;

@@ -24,8 +24,8 @@ trait ViewResArticleEntityTrait
 
 	function get_all(?AbstractFilter $filters = null): ViewResArticleCollection {
 		$col = new ViewResArticleCollection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -33,8 +33,8 @@ trait ViewResArticleEntityTrait
 		return $col;
 	}
 
-	function fetch($q): ?ViewResArticleType {
-		if($data = parent::fetch($q)){
+	function fetch(): ?ViewResArticleType {
+		if($data = parent::fetch($this->Q)){
 			return ViewResArticleType::initFrom($data);
 		} else {
 			return null;

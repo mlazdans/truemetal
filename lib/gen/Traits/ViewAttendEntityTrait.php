@@ -20,8 +20,8 @@ trait ViewAttendEntityTrait
 
 	function get_all(?AbstractFilter $filters = null): ViewAttendCollection {
 		$col = new ViewAttendCollection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -29,8 +29,8 @@ trait ViewAttendEntityTrait
 		return $col;
 	}
 
-	function fetch($q): ?ViewAttendType {
-		if($data = parent::fetch($q)){
+	function fetch(): ?ViewAttendType {
+		if($data = parent::fetch($this->Q)){
 			return ViewAttendType::initFrom($data);
 		} else {
 			return null;

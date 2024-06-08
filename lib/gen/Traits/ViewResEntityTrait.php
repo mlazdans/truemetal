@@ -24,8 +24,8 @@ trait ViewResEntityTrait
 
 	function get_all(?AbstractFilter $filters = null): ViewResCollection {
 		$col = new ViewResCollection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -33,8 +33,8 @@ trait ViewResEntityTrait
 		return $col;
 	}
 
-	function fetch($q): ?ViewResType {
-		if($data = parent::fetch($q)){
+	function fetch(): ?ViewResType {
+		if($data = parent::fetch($this->Q)){
 			return ViewResType::initFrom($data);
 		} else {
 			return null;

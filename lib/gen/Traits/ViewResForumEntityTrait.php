@@ -24,8 +24,8 @@ trait ViewResForumEntityTrait
 
 	function get_all(?AbstractFilter $filters = null): ViewResForumCollection {
 		$col = new ViewResForumCollection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -33,8 +33,8 @@ trait ViewResForumEntityTrait
 		return $col;
 	}
 
-	function fetch($q): ?ViewResForumType {
-		if($data = parent::fetch($q)){
+	function fetch(): ?ViewResForumType {
+		if($data = parent::fetch($this->Q)){
 			return ViewResForumType::initFrom($data);
 		} else {
 			return null;

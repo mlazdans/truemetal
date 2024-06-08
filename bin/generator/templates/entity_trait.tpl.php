@@ -42,8 +42,8 @@ trait {ClassName}EntityTrait
 
 	function get_all(?AbstractFilter $filters = null): {ClassName}Collection {
 		$col = new {ClassName}Collection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -51,8 +51,8 @@ trait {ClassName}EntityTrait
 		return $col;
 	}
 
-	function fetch($q): ?{ClassName}Type {
-		if($data = parent::fetch($q)){
+	function fetch(): ?{ClassName}Type {
+		if($data = parent::fetch($this->Q)){
 			return {ClassName}Type::initFrom($data);
 		} else {
 			return null;

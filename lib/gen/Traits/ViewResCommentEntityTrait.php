@@ -24,8 +24,8 @@ trait ViewResCommentEntityTrait
 
 	function get_all(?AbstractFilter $filters = null): ViewResCommentCollection {
 		$col = new ViewResCommentCollection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -33,8 +33,8 @@ trait ViewResCommentEntityTrait
 		return $col;
 	}
 
-	function fetch($q): ?ViewResCommentType {
-		if($data = parent::fetch($q)){
+	function fetch(): ?ViewResCommentType {
+		if($data = parent::fetch($this->Q)){
 			return ViewResCommentType::initFrom($data);
 		} else {
 			return null;

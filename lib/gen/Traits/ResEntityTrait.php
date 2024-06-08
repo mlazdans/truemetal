@@ -24,8 +24,8 @@ trait ResEntityTrait
 
 	function get_all(?AbstractFilter $filters = null): ResCollection {
 		$col = new ResCollection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -33,8 +33,8 @@ trait ResEntityTrait
 		return $col;
 	}
 
-	function fetch($q): ?ResType {
-		if($data = parent::fetch($q)){
+	function fetch(): ?ResType {
+		if($data = parent::fetch($this->Q)){
 			return ResType::initFrom($data);
 		} else {
 			return null;

@@ -24,8 +24,8 @@ trait ModulesEntityTrait
 
 	function get_all(?AbstractFilter $filters = null): ModulesCollection {
 		$col = new ModulesCollection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -33,8 +33,8 @@ trait ModulesEntityTrait
 		return $col;
 	}
 
-	function fetch($q): ?ModulesType {
-		if($data = parent::fetch($q)){
+	function fetch(): ?ModulesType {
+		if($data = parent::fetch($this->Q)){
 			return ModulesType::initFrom($data);
 		} else {
 			return null;

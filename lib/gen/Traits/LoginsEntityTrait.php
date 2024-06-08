@@ -24,8 +24,8 @@ trait LoginsEntityTrait
 
 	function get_all(?AbstractFilter $filters = null): LoginsCollection {
 		$col = new LoginsCollection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -33,8 +33,8 @@ trait LoginsEntityTrait
 		return $col;
 	}
 
-	function fetch($q): ?LoginsType {
-		if($data = parent::fetch($q)){
+	function fetch(): ?LoginsType {
+		if($data = parent::fetch($this->Q)){
 			return LoginsType::initFrom($data);
 		} else {
 			return null;

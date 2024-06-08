@@ -24,8 +24,8 @@ trait CommentEntityTrait
 
 	function get_all(?AbstractFilter $filters = null): CommentCollection {
 		$col = new CommentCollection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -33,8 +33,8 @@ trait CommentEntityTrait
 		return $col;
 	}
 
-	function fetch($q): ?CommentType {
-		if($data = parent::fetch($q)){
+	function fetch(): ?CommentType {
+		if($data = parent::fetch($this->Q)){
 			return CommentType::initFrom($data);
 		} else {
 			return null;
