@@ -9,7 +9,7 @@ $DOC_SOURCES = [
 
 $section = array_shift($sys_parameters);
 
-$template = new MainModule('search');
+$template = new MainTemplate();
 $template->set_descr("Metāliskais meklētājs");
 
 if($section == 'log'){
@@ -24,4 +24,5 @@ if($section == 'log'){
 }
 
 $template->set_right_defaults();
-$template->out($T);
+$template->MiddleBlock = $T;
+$template->print();

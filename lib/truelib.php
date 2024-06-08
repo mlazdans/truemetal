@@ -1713,7 +1713,7 @@ function tm_search(SearchParams $params)
 }
 
 
-function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
+function search(MainTemplate $template, array $DOC_SOURCES, array &$err_msg)
 {
 	$spx_limit = 250;
 
@@ -1744,31 +1744,20 @@ function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
 
 	$template->set_title("Meklēšana: ".specialchars($search_q));
 
-	$T = $template->add_file("search.tpl");
+	$T = new SearchTemplate;
 
-	$T->set_var("include_comments_checked", $include_comments ? " checked" : "");
-	$T->set_var("only_titles_checked", $only_titles ? " checked" : "");
-
-	foreach($DOC_SOURCES as $id=>$sect){
-		$T->set_var('source_id', $id);
-		$T->set_var('source_name', $sect['name']);
-		if(empty($checked_sources) || in_array($id, $checked_sources)){
-			$T->set_var('source_checked', ' checked');
-		} else {
-			$T->set_var('source_checked', '');
-		}
-		$T->parse_block('BLOCK_search_sources', TMPL_APPEND);
-	}
-
-	$T->set_var("doc_count", 0, 'BLOCK_search');
-	$T->set_var('search_q', specialchars($search_q));
+	$T->include_comments_checked = $include_comments;
+	$T->only_titles_checked = $only_titles;
+	$T->DOC_SOURCES = $DOC_SOURCES;
+	$T->checked_sources = $checked_sources;
+	$T->search_q = $search_q;
 
 	// if($search_q && (mb_strlen($search_q) < 3)){
 	// 	$err_msg[] = "Jāievada vismaz 3 simbolus";
 	// }
 
 	if(!$search_q){
-		$T->enable('BLOCK_search_help');
+		$T->show_help = true;
 		return $T;
 	}
 
@@ -1789,12 +1778,15 @@ function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
 		limit:$spx_limit
 	);
 
-	# Log
-	if($do_log){
-		$sql = "INSERT INTO search_log (login_id, sl_q, sl_ip) VALUES (?,?,?)";
-		DB::Execute($sql, User::id(), $search_q, User::ip());
+	if($do_log) {
+		$item = new SearchLogType;
+		$item->login_id = User::id();
+		$item->sl_q = $search_q;
+		$item->sl_ip = User::ip();
+		$item->save();
 	}
 
+	# TODO: res atsevišķā tipā!!
 	list($res, $spx) = tm_search($params);
 
 	$search_msg = [];
@@ -1810,57 +1802,23 @@ function search(MainModule $template, array $DOC_SOURCES, array &$err_msg)
 		$search_msg[] = "Uzmanību: atrasti ".$res['total_found']." rezultāti, rādam $spx_limit";
 	}
 
-	$T->enable('BLOCK_search');
-
-	if(!empty($res['matches']))
-	{
-		$T->set_var("doc_count", $res['total_found'], 'BLOCK_search');
-		$T->enable('BLOCK_search_item');
-		foreach($res['matches'] as $doc){
-			$item = $doc['attrs'];
-			$item['doc_module_name'] = $DOC_SOURCES[$item['doc_source_id']]['name'];
-
-			if($r = ResEntity::get((int)$item['res_id'])){
-				$item['res_route'] = $r->res_route."?hl=".urlencode($search_q);
-			} else {
-				trigger_error("No res for search item:".printrr($item), E_USER_WARNING);
-				$item['res_route'] = "/";
-			}
-
-			$item['doc_date'] = date('d.m.Y', $item['doc_entered']);
-			$T->set_array($item, 'BLOCK_search_item');
-			$T->parse_block('BLOCK_search_item', TMPL_APPEND);
-		}
-	}
-
 	if($search_msg){
-		$T->enable('BLOCK_search_msg')->set_var('search_msg', join("<br/>\n", $search_msg));
+		$T->search_msg = join("<br/>\n", $search_msg);
 	}
+
+	$T->res = $res;
 
 	return $T;
 }
 
-function search_log(MainModule $template): ?Template
+function search_log(MainTemplate $template): ?SearchLogTemplate
 {
 	$template->set_title("Ko mēs meklējam");
 
-	$T = $template->add_file('search/log.tpl');
+	$F = (new SearchLogFilter)->orderBy('sl_id DESC')->rows(200)->fields('sl_q')->distinct();
 
-	$sql = "SELECT DISTINCT sl_q FROM `search_log` ORDER BY `sl_id` DESC LIMIT 0,200";
-	if(!($q = DB::Query($sql)))
-	{
-		$template->error("Datubāzes kļūda");
-		return null;
-	}
-
-	$B = $T->enable('BLOCK_search_log');
-
-	while($r = DB::Fetch($q))
-	{
-		$B->set_array(specialchars($r));
-		$B->set_var('sl_q_encoded', urlencode($r['sl_q']));
-		$B->parse(TMPL_APPEND);
-	}
+	$T = new SearchLogTemplate;
+	$T->data = (new SearchLogEntity)->get_all($F);
 
 	return $T;
 }

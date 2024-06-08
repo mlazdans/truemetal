@@ -4,7 +4,8 @@
 
 use dqdp\PropertyInitTrait;
 
-trait SearchLogTypeTrait {
+trait SearchLogTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $sl_id;
@@ -13,7 +14,8 @@ trait SearchLogTypeTrait {
 	var string $sl_ip;
 	var string $sl_entered;
 
-	function __construct(?int $sl_id = null, ?int $login_id = null, ?string $sl_q = null, ?string $sl_ip = null, ?string $sl_entered = null) {
+	function __construct(?int $sl_id = null, ?int $login_id = null, ?string $sl_q = null, ?string $sl_ip = null, ?string $sl_entered = null)
+	{
 		if(isset($sl_id))$this->sl_id = $sl_id;
 		if(isset($login_id))$this->login_id = $login_id;
 		if(isset($sl_q))$this->sl_q = $sl_q;
