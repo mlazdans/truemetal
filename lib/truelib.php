@@ -29,13 +29,9 @@ function tm_shutdown()
 	}
 }
 
-function pw_validate(string $p1, string $p2, array &$error_msg): bool {
-	if($p1 != $p2){
-		$error_msg[] = 'Paroles nesakrīt!';
-		return false;
-	}
-
-	$resut = PwValidator::validate($p1);
+function pw_validate(string $passw, array &$error_msg): bool
+{
+	$resut = PwValidator::validate($passw);
 
 	if(PwValidator::valid_pass($resut)){
 		return true;
@@ -563,7 +559,6 @@ function change_pw(MainTemplate $template): ?PwchTemplate
 	$T = new PwchTemplate;
 	$T->old_password = $data['old_password'] ?? "";
 	$T->l_password = $data['l_password'] ?? "";
-	$T->l_password2 = $data['l_password'] ?? "";
 
 	if(!isset($_POST['data'])) {
 		return $T;
@@ -575,7 +570,7 @@ function change_pw(MainTemplate $template): ?PwchTemplate
 		// $error_fields[] = 'old_password';
 	} else {
 		if(Logins::auth(User::email(), $_POST['data']['old_password'])){
-			if(!pw_validate($data['l_password'], $data['l_password2'], $error_msgs)){
+			if(!pw_validate($data['l_password'], $error_msgs)){
 				// $error_fields[] = 'l_password';
 			}
 		} else {
@@ -700,7 +695,7 @@ function forgot_accept(MainTemplate $template, string $code): ?ForgotTemplate
 
 	$data = $_POST['data'];
 	$error_msg = [];
-	pw_validate($data['l_password'] ?? "", $data['l_password2'] ?? "", $error_msg);
+	pw_validate($data['l_password'] ?? "", $error_msg);
 
 	if($error_msg){
 		$template->error($error_msg);
@@ -720,7 +715,6 @@ function forgot_accept(MainTemplate $template, string $code): ?ForgotTemplate
 	}
 
 	$T->l_password = $data['l_password'] ?? "";
-	$T->l_password2 = $data['l_password2'] ?? "";
 
 	return $T;
 }

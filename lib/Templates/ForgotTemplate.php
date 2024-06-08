@@ -6,7 +6,6 @@ class ForgotTemplate extends AbstractTemplate
 	public ?string $l_login = null;
 	public ?string $l_nick = null;
 	public ?string $l_password = null;
-	public ?string $l_password2 = null;
 	public bool $forgot_form_enabled = false;
 	public bool $forgot_pwch_form_enabled = false;
 	public bool $is_error = false;
@@ -56,10 +55,6 @@ class ForgotTemplate extends AbstractTemplate
 			<td align="right">Parole:</td>
 			<td><input type="password" name="data[l_password]" value="<?=specialchars($this->l_password) ?>" autocomplete="new-password"></td>
 			<td></td>
-		</tr>
-		<tr>
-			<td align="right">Parole 2x:</td>
-			<td colspan="2"><input type="password" name="data[l_password2]" value="<?=specialchars($this->l_password2) ?>" autocomplete="new-password"></td>
 		</tr>
 		<tr>
 			<td></td>

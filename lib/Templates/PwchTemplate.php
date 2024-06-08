@@ -5,7 +5,6 @@ class PwchTemplate extends AbstractTemplate
 	// public bool $hide_passw_manager = false;
 	public string $old_password;
 	public string $l_password;
-	public string $l_password2;
 
 	protected function out(): void
 	{ ?>
@@ -22,10 +21,6 @@ class PwchTemplate extends AbstractTemplate
 			<td align="right">Jaunā parole:</td>
 			<td><input type="password" name="data[l_password]" value="<?=specialchars($this->l_password) ?>" autocomplete="new-password"></td>
 			<td></td>
-		</tr>
-		<tr>
-			<td align="right">Jaunā parole 2x:</td>
-			<td colspan="2"><input type="password" name="data[l_password2]" value="<?=specialchars($this->l_password2) ?>" autocomplete="new-password"></td>
 		</tr>
 		<tr>
 			<td></td>
