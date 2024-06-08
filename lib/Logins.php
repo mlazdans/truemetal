@@ -5,6 +5,10 @@ use dqdp\TODO;
 
 class Logins
 {
+	const PASSW_STATUS_NONE  = 0;
+	const PASSW_STATUS_DICT  = 1;
+	const PASSW_STATUS_BRUTE = 2;
+
 	var $error_msg = [];
 
 	static function load_single(LoginsFilter $F): ?LoginsType

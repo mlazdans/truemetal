@@ -390,10 +390,8 @@ function public_profile(MainModule $template, string $l_hash): ?Template
 	return $T;
 }
 
-function private_profile(MainModule $template): ?Template
+function private_profile(MainTemplate $template): ?UserProfilePrivateTemplate
 {
-	global $user_pic_w, $user_pic_h, $user_pic_tw, $user_pic_th;
-
 	$module_root = "/user/profile";
 
 	if(!User::logged())
@@ -429,101 +427,46 @@ function private_profile(MainModule $template): ?Template
 		$L = LoginsType::initFrom(User::data());
 	}
 
-	$T = $template->add_file('user/profile/private.tpl');
+	$T = new UserProfilePrivateTemplate;
 
-	# TODO: get rid off, kad implementēs imager
-	$set_vars = array(
-		'user_pic_w'=>$user_pic_w,
-		'user_pic_h'=>$user_pic_h,
-		'user_pic_tw'=>$user_pic_tw,
-		'user_pic_th'=>$user_pic_th
-	);
+	$T->l_email = $L->l_email;
+	$T->l_hash = $L->l_hash;
+	$T->l_nick = $L->l_nick;
+	$T->is_emailvisible = (bool)$L->l_emailvisible;
+	$T->is_themes_sorted_by_newest_comment = (bool)$L->l_forumsort_themes;
+	$T->is_comments_sorted_by_latest_date = !(bool)$L->l_forumsort_msg;
+	$T->is_youtube_disabled = (bool)$L->l_disable_youtube;
 
-	$T->set_array($set_vars);
-
-	$T->set_var("l_forumsort_themes_$L->l_forumsort_themes", ' checked="checked"');
-	$T->set_var("l_forumsort_msg_$L->l_forumsort_msg", ' checked="checked"');
-	$T->set_var("l_disable_youtube_$L->l_disable_youtube", ' checked="checked"');
-	$T->set_var("l_emailvisible_$L->l_emailvisible", ' checked="checked"');
-
-	$T->set_except(['l_password', 'l_sessiondata'], $L);
-
-	if(user_thumb_exists($L->l_id) && user_image_exists($L->l_id))
-	{
-		$T->set_var('thumb_path', "/user/thumb/$L->l_hash/");
-		$T->enable('BLOCK_picture');
-		$T->enable('BLOCK_picture_del');
-	} else {
-		$T->enable('BLOCK_nopicture');
+	if(user_thumb_exists($L->l_id) && user_image_exists($L->l_id)) {
+		$T->thumb_path = "/user/thumb/$L->l_hash/";
 	}
 
 	$F = (new ResCommentFilter(
 		login_id:User::id()
 	))->rows(10);
 
-	$top_comments[0] = (new ViewResEntity)->getAll($F->orderBy('res_votes_plus_count DESC'));
-	$top_comments[1] = (new ViewResEntity)->getAll($F->orderBy('res_votes_minus_count DESC'));
-
-	if(count($top_comments[0]) || count($top_comments[1])){
-		$T->enable('BLOCK_truecomments');
-	}
-
-	foreach($top_comments as $r=>$data)
-	{
-		if (!$data->count()){
-			continue;
-		}
-
-		if($r == 0){
-			$T->set_var('truecomment_msg', 'Visvairāk plusotie ieraksti:');
-		} elseif($r == 1){
-			$T->set_var('truecomment_msg', 'Visvairāk mīnusotie ieraksti:');
-		} else {
-			assert(false, "unreachable");
-		}
-
-		$BLOCK_truecomment_item = $T->get_block('BLOCK_truecomment_item');
-		foreach($data as $item)
-		{
-			$res_data = $item->res_data;
-			if(mb_strlen($res_data) > 70){
-				$res_data = mb_substr($res_data, 0, 70).'...';
-			}
-
-			$BLOCK_truecomment_item
-			->set_var('res_votes_plus_count', $item->res_votes_plus_count)
-			->set_var('res_votes_minus_count', $item->res_votes_minus_count)
-			->set_var('res_data', specialchars($res_data))
-			->set_var('res_href', $item->res_route)
-			->parse(TMPL_APPEND);
-
-			//$template->disable('BLOCK_truecomment_header');
-		}
-		$T->parse_block('BLOCK_truecomments', TMPL_APPEND);
-	}
+	$T->TopRatedRes = (new ViewResEntity)->get_all($F->orderBy('res_votes_plus_count DESC'));
+	$T->LessRatedRes = (new ViewResEntity)->get_all($F->orderBy('res_votes_minus_count DESC'));
 
 	// Passw status
-	$sql = sprintf("SELECT bp.*
-	FROM logins l
-	JOIN bad_pass bp ON bp.pass_hash = l.l_password
-	WHERE l.l_id = %d", User::id());
+	$sql = sprintf("SELECT bp.* FROM logins l
+		JOIN bad_pass bp ON bp.pass_hash = l.l_password
+		WHERE l.l_id = %d",
+		User::id()
+	);
 
-	if($data = DB::ExecuteSingle($sql)){
-		$T->set_var('bad_pass_class', 'blink');
-		$T->set_var('bad_pass_style', 'color: red');
+	if($data = DB::ExecuteSingle($sql))
+	{
 		if($data['is_dict'] && $data['is_brute']){
-			$msg = "Apsveicam! Tava parole ir gan paroļu vārdnīcā gan viegli atlaužama! Nomaini!";
+			$T->passw_status = Logins::PASSW_STATUS_DICT || Logins::PASSW_STATUS_BRUTE;
 		} elseif($data['is_dict']) {
-			$msg = "Tava parole ir paroļu vārdnīcā! Nomaini!";
+			$T->passw_status = Logins::PASSW_STATUS_DICT;
 		} elseif($data['is_brute']) {
-			$msg = "Tava parole ir viegli atlaužama! Nomaini!";
+			$T->passw_status = Logins::PASSW_STATUS_BRUTE;
 		}
 	} else {
-		$T->set_var('bad_pass_style', 'color: #00a400');
-		$msg = "Apsveicam! Tava parole nav paroļu vārdnīcā vai viegli atlaužama!";
+		$T->passw_status = Logins::PASSW_STATUS_NONE;
 	}
-
-	$T->set_var('bad_pass_msg', $msg);
 
 	return $T;
 }
@@ -1529,7 +1472,7 @@ function mainpage(MainTemplate $template, int $page, int $items_per_page): Artic
 	return $T;
 }
 
-function update_profile(MainModule $template, array $data): bool
+function update_profile(MainTemplate $template, array $data): bool
 {
 	global $sys_user_root, $user_pic_w, $user_pic_h, $user_pic_tw, $user_pic_th;
 

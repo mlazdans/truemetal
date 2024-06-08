@@ -2,7 +2,7 @@
 
 $l_hash = array_shift($sys_parameters);
 
-$template = new MainModule($sys_module_id);
+$template = new MainTemplate;
 $template->set_title('Profils');
 
 if($l_hash)
@@ -13,4 +13,5 @@ if($l_hash)
 }
 
 $template->set_right_defaults();
-$template->out($T);
+$template->MiddleBlock = $T;
+$template->print();
