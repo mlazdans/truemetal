@@ -736,17 +736,16 @@ function register(MainTemplate $template, array $sys_parameters = []): ?Abstract
 	$T = new RegisterTemplate;
 	if($action == 'ok')
 	{
-		$T->enable('BLOCK_register_ok');
+		$T->show_register_ok = true;
 		return $T;
 	}
 
-	$T->enable('BLOCK_register_form');
+	$T->show_register_form = true;
 
-	$T->set_var('exp1', rand(0, 100000));
-	$T->set_var('exp2', rand(0, 100000));
+	$T->exp1 =rand(0, 100000);
+	$T->exp2 = rand(0, 100000);
 
-	if(!isset($_POST['data']))
-	{
+	if(!isset($_POST['data'])){
 		return $T;
 	}
 
@@ -766,21 +765,24 @@ function register(MainTemplate $template, array $sys_parameters = []): ?Abstract
 		}
 	}
 
+	$T->l_nick = $data['l_nick'] ?? "";
+	$T->l_password = $data['l_password'] ?? "";
+	$T->l_email = $data['l_email'] ?? "";
+
+	if($error_field) {
+		$template->error("Nav aizpildīti visi obligātie lauki");
+		set_error_fields($T, $error_field);
+		return $T;
+	}
+
 	if($exp1 + $exp2 != $exp_val){
 		$error_msg[] = 'Spam check fail';
 	}
 
 	$data['l_email'] = strtolower($data['l_email']);
 
-	if(empty($data['l_password'])){
-		$error_msg[] = 'Nav ievadīta parole';
+	if(!pw_validate($data['l_password'], $error_msg)){
 		$error_field[] = 'l_password';
-		$error_field[] = 'l_password2';
-	} else {
-		if(!pw_validate($data['l_password'], $data['l_password2'], $error_msg)){
-			$error_field[] = 'l_password';
-			$error_field[] = 'l_password2';
-		}
 	}
 
 	if(!is_valid_email($data['l_email'])) {
@@ -800,7 +802,8 @@ function register(MainTemplate $template, array $sys_parameters = []): ?Abstract
 
 	if(!$error_msg && !$error_field)
 	{
-		if(Logins::register($data)){
+		if(Logins::register($data))
+		{
 			try {
 				email($sys_mail, '[truemetal] jauns lietotajs', "$data[l_email] ($data[l_nick])\n\nIP:$_SERVER[REMOTE_ADDR]");
 			} catch (Exception $e) {
@@ -812,10 +815,7 @@ function register(MainTemplate $template, array $sys_parameters = []): ?Abstract
 		}
 	}
 
-	$T->set_array(specialchars($data));
-
-	if($error_msg)
-	{
+	if($error_msg) {
 		$template->error($error_msg);
 	}
 
@@ -824,12 +824,12 @@ function register(MainTemplate $template, array $sys_parameters = []): ?Abstract
 	return $T;
 }
 
-// function set_error_fields(TemplateBlock $T, array $fields){
-// 	foreach($fields as $k)
-// 	{
-// 		$T->set_var('error_'.$k, ' class="error-form"');
-// 	}
-// }
+function set_error_fields(AbstractTemplate $T, array $fields): void
+{
+	foreach($fields as $k) {
+		$T->{'error_'.$k} = ' class="error-form"';
+	}
+}
 
 function forum_root(): ForumRootListTemplate
 {
