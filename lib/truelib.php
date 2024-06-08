@@ -314,11 +314,13 @@ function public_profile(MainTemplate $template, string $l_hash): ?UserProfilePub
 	}
 
 	# Disable comments
-	if(
-		($action == 'disable_comments') &&
-		(User::id() != $L->l_id)
-		)
+	if($action == 'disable_comments')
 	{
+		if(User::id() == $L->l_id){
+			$template->error("🤣");
+			return null;
+		}
+
 		if(isset($_POST['disable_comments']))
 		{
 			$ret = CommentDisabled::disable(User::id(), $L->l_id);
@@ -326,14 +328,11 @@ function public_profile(MainTemplate $template, string $l_hash): ?UserProfilePub
 			$ret = CommentDisabled::enable(User::id(), $L->l_id);
 		}
 
-		if($ret)
-		{
-			if(isset($_SERVER['HTTP_REFERER']))
-				redirect($_SERVER['HTTP_REFERER']);
-			else
-				redirect();
-			return null;
+		if($ret) {
+			redirect($_SERVER['HTTP_REFERER'] ?? null);
 		}
+
+		return null;
 	}
 
 	$T = new UserProfilePublicTemplate;
