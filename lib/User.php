@@ -85,9 +85,9 @@ class User
 		return User::is_admin();
 	}
 
-	static function in_disabled(int $login_id): bool
+	static function in_disabled(?int $login_id): bool
 	{
-		if(User::logged())
+		if($login_id && User::logged())
 		{
 			if(!isset(self::$disabled_users)) {
 				if($data = CommentDisabled::get(User::id())){
