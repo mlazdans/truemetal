@@ -12,6 +12,16 @@ if($l_hash)
 	$T = private_profile($template);
 }
 
-$template->set_right_defaults();
-$template->MiddleBlock = $T;
-$template->print();
+# TODO: abstract out
+if(isset($_GET['json'])){
+	header('Content-Type: text/javascript; charset='.$sys_encoding);
+
+	$jsonData = new StdClass;
+	$jsonData->title = "[ TRUEMETAL ".specialchars($template->get_title())." ]";
+	$jsonData->html = $T->parse();
+	print json_encode($jsonData);
+} else {
+	$template->set_right_defaults();
+	$template->MiddleBlock = $T;
+	$template->print();
+}

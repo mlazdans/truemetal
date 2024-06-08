@@ -295,8 +295,10 @@ function forum_det(
 	return $T;
 }
 
-function public_profile(MainModule $template, string $l_hash): ?Template
+function public_profile(MainTemplate $template, string $l_hash): ?UserProfilePublicTemplate
 {
+	global $user_pic_tw;
+
 	$action = post('action');
 
 	if(!User::logged())
@@ -308,12 +310,6 @@ function public_profile(MainModule $template, string $l_hash): ?Template
 	if(!($L = Logins::load_by_login_hash($l_hash, true))){
 		$template->not_found();
 		return null;
-	}
-
-	$T = $template->add_file('user/profile/user.tpl');
-
-	if(!$L->l_active){
-		$T->set_var('is_blocked', ' (bloķēts)');
 	}
 
 	# Disable comments
@@ -339,53 +335,30 @@ function public_profile(MainModule $template, string $l_hash): ?Template
 		}
 	}
 
-	if(CommentDisabled::get(User::id(), $L->l_id))
-	{
-		$T->set_var('disable_comments_1', ' checked="checked"');
+	$T = new UserProfilePublicTemplate;
+	$T->user_pic_tw = $user_pic_tw;
+	$T->is_blocked = !$L->l_active;
+	$T->is_public_email = (bool)$L->l_emailvisible;
+	$T->l_hash = $L->l_hash;
+	$T->l_email = $L->l_email;
+	$T->l_nick = $L->l_nick;
+	$T->l_lastaccess = $L->l_lastaccess;
+	$T->l_entered = $L->l_entered;
+	$T->comment_count = $L->comment_count;
+
+	if(CommentDisabled::get(User::id(), $L->l_id)){
+		$T->is_comments_disabled = true;
 	}
 
-	if(User::id() != $L->l_id)
-	{
-		$T->enable('BLOCK_disable_comments');
+	if(User::id() == $L->l_id){
+		$T->show_disable_comments_form = false;
 	}
 
-	$template->set_title(" - $L->l_nick");
-	if($L->l_emailvisible)
-	{
-		$T->enable('BLOCK_public_email');
-	} else {
-		$T->enable('BLOCK_public_email_invisible');
+	if(user_thumb_exists($L->l_id) && user_image_exists($L->l_id)) {
+		$T->thumb_path = "/user/thumb/$L->l_hash/";
 	}
 
-	$T->set_except(['l_password', 'l_sessiondata'], $L);
-
-	if(user_thumb_exists($L->l_id) && user_image_exists($L->l_id))
-	{
-		$T->set_var('thumb_path', "/user/thumb/$L->l_hash/");
-		$T->enable('BLOCK_picture');
-	} else {
-		$T->enable('BLOCK_nopicture');
-	}
-
-	$formatter = new IntlDateFormatter("lv", IntlDateFormatter::MEDIUM, IntlDateFormatter::NONE);
-	$days = floor((time() - strtotime($L->l_lastaccess)) / (3600 * 24));
-
-	if(!$days){
-		$l_lastaccess_f = "šodien";
-	} elseif($days == 1){
-		$l_lastaccess_f = "vakar";
-	} elseif($days == 2){
-		$l_lastaccess_f = "aizvakar";
-	} elseif($days == 3){
-		$l_lastaccess_f = "pirms trim dienām";
-	} elseif($days < 365){
-		$l_lastaccess_f = "pirms $days ".($days % 10 == 1 ? "dienas" : "dienām");
-	} else {
-		$l_lastaccess_f = $formatter->format(strtotime($L->l_lastaccess));
-	}
-
-	$T->set_var('l_lastaccess_f', $l_lastaccess_f);
-	$T->set_var('l_entered_f', $formatter->format(strtotime($L->l_entered)));
+	$template->set_title(specialchars($L->l_nick));
 
 	return $T;
 }
