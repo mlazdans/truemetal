@@ -6,21 +6,29 @@ abstract class AbstractTemplate
 	// private ?string $buffer = null;
 	private ?string $out_function = null;
 
-	// function parse(): string
-	// {
-	// 	if(is_null($this->buffer)){
-	// 		ob_start();
-	// 		$this->print();
-	// 		if(($buffer = ob_get_clean()) === false){
-	// 			# TODO: error?
-	// 			$this->buffer = "";
-	// 		} else {
-	// 			$this->buffer = $buffer;
-	// 		}
-	// 	}
+	function parse(): ?string
+	{
+		ob_start();
+		$this->print();
+		if(($buffer = ob_get_clean()) === false){
+			return null;
+		} else {
+			return $buffer;
+		}
 
-	// 	return $this->buffer;
-	// }
+		// if(is_null($this->buffer)){
+		// 	ob_start();
+		// 	$this->print();
+		// 	if(($buffer = ob_get_clean()) === false){
+		// 		# TODO: error?
+		// 		$this->buffer = "";
+		// 	} else {
+		// 		$this->buffer = $buffer;
+		// 	}
+		// }
+
+		// return $this->buffer;
+	}
 
 	function set_out(string $func): static
 	{
