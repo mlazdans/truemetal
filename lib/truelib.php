@@ -1426,51 +1426,13 @@ function attendees_view(ViewResForumType $forum): AttendTemplate
 	return $T;
 }
 
-function archive(MainModule $template): ?Template
+function archive(): ?ArchiveTemplate
 {
-	$T = $template->add_file('archive.tpl');
+	$T = new ArchiveTemplate;
 
-	$q = DB::Query("SELECT * FROM view_mainpage ORDER BY res_entered DESC");
-
-	$old_date = '';
-	// $formatter = new IntlDateFormatter("lv", IntlDateFormatter::SHORT, IntlDateFormatter::NONE);
-	$menesi = menesi();
-
-	$count = 0;
-	while($item = DB::Fetch($q))
-	{
-		$ts = strtotime($item['res_entered']);
-
-		$date = date('Ym', $ts);
-		if($old_date && ($old_date != $date))
-		{
-			$T->enable('BLOCK_archive_sep');
-		} else {
-			$T->disable('BLOCK_archive_sep');
-		}
-
-		if($old_date != $date)
-		{
-			$res_date = date("Y", $ts).". gada ".mb_strtolower($menesi[date("m", $ts)]);
-			$T->enable('BLOCK_archive_date');
-			$T->set_var('res_date', $res_date);
-			$T->parse_block('BLOCK_archive_date');
-			$old_date = $date;
-		} else {
-			$T->disable('BLOCK_archive_date');
-		}
-
-		$T->set_var('res_name', specialchars($item['res_name']));
-		$T->set_var('res_route', $item['res_route']);
-		$T->parse_block('BLOCK_archive_items', TMPL_APPEND);
-		$count++;
-	}
-
-	if($count){
-		$T->enable('BLOCK_archive_items');
-	} else {
-		$T->enable('BLOCK_no_archive');
-	}
+	$MP = new ViewMainpageEntity;
+	$MP->query();
+	$T->MP = $MP;
 
 	return $T;
 }
