@@ -2,5 +2,5 @@
 
 interface TrueResponseInterface
 {
-	function out();
+	function print();
 }

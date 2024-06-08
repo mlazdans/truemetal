@@ -1296,7 +1296,7 @@ function admin_comment_list(
 	}
 }
 
-function vote(MainModule $template, string $value, int $res_id): ?TrueResponseInterface
+function vote(MainTemplate $template, string $value, int $res_id): ?TrueResponseInterface
 {
 	global $ip;
 

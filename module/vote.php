@@ -3,5 +3,8 @@
 $value = array_shift($sys_parameters);
 $res_id = (int)array_shift($sys_parameters);
 
-$template = new MainModule('vote');
-$template->out(vote($template, $value, $res_id));
+$template = new MainTemplate();
+if($T = vote($template, $value, $res_id)){
+	$T->print();
+	return;
+}

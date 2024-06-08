@@ -2,11 +2,10 @@
 
 class JsonResponse implements TrueResponseInterface
 {
-	function __construct(private mixed $data)
-	{
+	function __construct(private mixed $data) {
 	}
 
-	function out()
+	function print()
 	{
 		header('Content-Type: text/javascript; charset=utf-8');
 		print json_encode($this->data);
