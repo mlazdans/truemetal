@@ -84,6 +84,7 @@ $G->save_type_trait();
 $G->save_collection();
 $G->save_entity_trait($DBA);
 $G->save_entity();
+$G->save_filter();
 
 // $saveDummyType = function() use ($Namespace, $ClassName, $FieldMap, $Debug) {
 // 	global $OutputFolder;
