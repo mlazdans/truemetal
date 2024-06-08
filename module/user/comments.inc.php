@@ -3,7 +3,7 @@
 $hl = get("hl");
 $l_hash = array_shift($sys_parameters)??"";
 
-$template = new MainModule($sys_module_id);
+$template = new MainTemplate();
 $template->set_right_defaults();
-$template->out(user_comments($template, $l_hash, $hl));
-
+$template->MiddleBlock = user_comments($template, $l_hash, $hl);
+$template->print();

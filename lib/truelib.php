@@ -923,7 +923,7 @@ function get_whatsnew_template(MainTemplate $template): ?WhatsnewTemplate
 	return $W;
 }
 
-function user_comments(MainModule $template, string $l_hash, string $hl): ?Template
+function user_comments(MainTemplate $template, string $l_hash, string $hl): ?UserCommentsTemplate
 {
 	if(!User::logged())
 	{
@@ -937,16 +937,15 @@ function user_comments(MainModule $template, string $l_hash, string $hl): ?Templ
 		return null;
 	}
 
-	$T = $template->add_file('user/comments.tpl');
-	$T->set_var('l_nick', $login_data->l_nick);
-	if(!$login_data->l_active){
-		$T->set_var('is_blocked', ' (bloķēts)');
-	}
+	$T = new UserCommentsTemplate;
+	$T->l_nick = $login_data->l_nick;
+	$T->is_blocked = !$login_data->l_active;
 
 	$F = (new ResCommentFilter(login_id: $login_data->l_id))->rows(100)->orderBy("res_entered DESC");
-	$comments = (new ViewResCommentEntity)->getAll($F);
 
-	$T->set_var('user_comments', comment_list($comments, $hl)->parse());
+	$T->CommentListT = new CommentsListTemplate;
+	$T->CommentListT->Comments = (new ViewResCommentEntity)->get_all($F);
+	$T->CommentListT->hl = $hl;
 
 	return $T;
 }
