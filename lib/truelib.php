@@ -1516,7 +1516,7 @@ function article(MainTemplate $template, int $art_id, string $hl, ?string $artic
 		} else {
 			$T->CommentFormT->res_data = specialchars(post('res_data'));
 			$T->CommentFormT->error_msg = join("<br>", $error_msg);
-	}
+		}
 	}
 
 	$template->set_title($art->res_name);
@@ -1557,7 +1557,7 @@ function mainpage(MainTemplate $template, int $page, int $items_per_page): Artic
 	if($page){
 		$limit = (($tp - $page - 1) * $items_per_page + $art_align);
 		$F->Offset($limit);
-			}
+	}
 
 	$T->articles = $A->get_all($F);
 	$T->total_count = $tc;
