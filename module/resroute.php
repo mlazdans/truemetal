@@ -20,8 +20,8 @@ if($res && ($location = $res->Route()))
 		redirect($location);
 	}
 } else {
-	$template = new MainModule("resroute");
+	$template = new MainTemplate("resroute");
 	$template->not_found();
 	$template->set_right_defaults();
-	$template->out(null);
+	$template->print();
 }
