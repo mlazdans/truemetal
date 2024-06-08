@@ -2,8 +2,7 @@
 
 class ArchiveTemplate extends AbstractTemplate
 {
-	# Eksperiments ar vnk fetch() bez papildus buferiem
-	public ViewMainpageEntity $MP;
+	public ViewMainpageCollection $data;
 
 	protected function out(): void
 	{ ?>
@@ -14,7 +13,7 @@ class ArchiveTemplate extends AbstractTemplate
 		// $formatter = new IntlDateFormatter("lv", IntlDateFormatter::SHORT, IntlDateFormatter::NONE);
 		$menesi = menesi();
 		$count = 0;
-		while($item = $this->MP->fetch())
+		foreach($this->data as $item)
 		{
 			$ts = strtotime($item->res_entered);
 			$date = date('Ym', $ts);

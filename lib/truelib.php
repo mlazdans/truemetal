@@ -1430,9 +1430,7 @@ function archive(): ?ArchiveTemplate
 {
 	$T = new ArchiveTemplate;
 
-	$MP = new ViewMainpageEntity;
-	$MP->query();
-	$T->MP = $MP;
+	$T->data = (new ViewMainpageEntity)->get_all();
 
 	return $T;
 }
