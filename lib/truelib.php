@@ -1778,14 +1778,6 @@ function search(MainTemplate $template, array $DOC_SOURCES, array &$err_msg)
 		limit:$spx_limit
 	);
 
-	if($do_log) {
-		$item = new SearchLogType;
-		$item->login_id = User::id();
-		$item->sl_q = $search_q;
-		$item->sl_ip = User::ip();
-		$item->save();
-	}
-
 	# TODO: res atsevišķā tipā!!
 	list($res, $spx) = tm_search($params);
 
@@ -1807,6 +1799,14 @@ function search(MainTemplate $template, array $DOC_SOURCES, array &$err_msg)
 	}
 
 	$T->res = $res;
+
+	if($do_log) {
+		$item = new SearchLogType;
+		$item->login_id = User::id();
+		$item->sl_q = $search_q;
+		$item->sl_ip = User::ip();
+		$item->save();
+	}
 
 	return $T;
 }
