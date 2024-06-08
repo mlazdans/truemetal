@@ -206,7 +206,7 @@ class MainTemplate extends AbstractTemplate
 <html lang="lv">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>[ TRUEMETAL <?=specialchars($this->title) ?> ]</title>
+<title>[ TRUEMETAL<?=($this->title ? " - ".specialchars($this->title) : "") ?> ]</title>
 <meta name="verify-v1" content="1T6p5COcolqsK65q0I6uXdMjPuPskp2jyWjFMTOW/LY=">
 <meta name="description" content="<?=specialchars(trim($this->meta_descr)) ?>">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
