@@ -4,7 +4,8 @@
 
 use dqdp\PropertyInitTrait;
 
-trait LoginAcceptTypeTrait {
+trait LoginAcceptTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $la_id;
@@ -15,7 +16,8 @@ trait LoginAcceptTypeTrait {
 	var ?string $la_accepted;
 	var int $la_sent;
 
-	function __construct(?int $la_id = null, ?string $la_email = null, ?string $la_new_email = null, ?string $la_code = null, ?string $la_entered = null, ?string $la_accepted = null, ?int $la_sent = null) {
+	function __construct(?int $la_id = null, ?string $la_email = null, ?string $la_new_email = null, ?string $la_code = null, ?string $la_entered = null, ?string $la_accepted = null, ?int $la_sent = null)
+	{
 		if(isset($la_id))$this->la_id = $la_id;
 		if(isset($la_email))$this->la_email = $la_email;
 		if(isset($la_new_email))$this->la_new_email = $la_new_email;

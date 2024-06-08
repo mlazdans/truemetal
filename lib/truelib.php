@@ -466,7 +466,7 @@ function email(string $to, string $subj, string $msg, array $attachments = array
 	return emailex($params);
 }
 
-function change_email(MainModule $template): ?Template
+function change_email(MainTemplate $template): ?EmailChangeTemplate
 {
 	if(!User::logged())
 	{
@@ -476,11 +476,10 @@ function change_email(MainModule $template): ?Template
 
 	$old_email = trim(User::email());
 
-	$T = $template->add_file('user/emailch.tpl');
-	$T->set_var('old_email', specialchars($old_email));
+	$T = new EmailChangeTemplate;
+	$T->old_email = $old_email;
 
-	if(!isset($_POST['data']))
-	{
+	if(!isset($_POST['data'])) {
 		return $T;
 	}
 
@@ -496,10 +495,10 @@ function change_email(MainModule $template): ?Template
 			$error_msg[] = "Jaunais e-pasts nav jauns";
 		} else {
 			if(!is_valid_email($new_email)) {
-				$error_msg[] = 'Nekorekta e-pasta adrese!';
+				$error_msg[] = "Nekorekta e-pasta adrese: $new_email";
 			} else {
 				if(Logins::email_exists($new_email)){
-					$error_msg[] = 'Šāda e-pasta adrese jau eksistē';
+					$error_msg[] = "Šāda e-pasta adrese jau eksistē: $new_email";
 				}
 			}
 		}
@@ -542,12 +541,10 @@ function change_email(MainModule $template): ?Template
 
 	if($result)
 	{
-		$template->msg("Uz $new_email tika nosūtīts apstiprināšanas kods.");
+		$template->msg(specialchars("Uz <$new_email> tika nosūtīts apstiprināšanas kods."));
 		return null;
 	} else {
-		$T->set_var('error_new_email', ' class="error-form"');
-		$T->set_var('new_email', specialchars($new_email));
-
+		$T->new_email = $new_email;
 		$template->error($error_msg);
 		return $T;
 	}
@@ -721,28 +718,23 @@ function forgot_accept(MainModule $template, string $code): ?Template
 }
 
 # TODO: pārbaudīt lauku garumus
-function register(MainModule $template, array $sys_parameters = []): ?Template
+function register(MainTemplate $template, array $sys_parameters = []): ?AbstractTemplate
 {
 	global $sys_mail;
 
-	$T = $template->add_file('register.tpl');
-
 	$action = array_shift($sys_parameters)??"";
 
-	if($action == 'ok')
-	{
-		$T->enable('BLOCK_register_ok');
+	if($action == 'accept') {
+		$T = new CodeAcceptTemplate;
+		$code = array_shift($sys_parameters)??"";
+		$T->accept_ok = Logins::accept_login($code);
 		return $T;
 	}
 
-	if($action == 'accept') {
-		$code = array_shift($sys_parameters)??"";
-		if(Logins::accept_login($code))
-		{
-			$T->enable('BLOCK_accept_ok');
-		} else {
-			$T->enable('BLOCK_accept_error');
-		}
+	$T = new RegisterTemplate;
+	if($action == 'ok')
+	{
+		$T->enable('BLOCK_register_ok');
 		return $T;
 	}
 

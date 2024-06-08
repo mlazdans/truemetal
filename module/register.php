@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-$template = new MainModule($sys_module_id, 'index.tpl');
+$template = new MainTemplate($sys_module_id, 'index.tpl');
 $template->set_title("Reģistrācija");
 $template->set_right_defaults();
 
@@ -13,4 +13,5 @@ if(User::blacklisted())
 	$T = register($template, $sys_parameters);
 }
 
-$template->out($T??null);
+$template->MiddleBlock = $T;
+$template->print();
