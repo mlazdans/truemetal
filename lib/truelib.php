@@ -226,7 +226,6 @@ function set_res(AbstractResTemplate $T, ViewResType&ResourceTypeInterface $res,
 function forum_det(
 	MainTemplate $template,
 	ViewResForumType $forum,
-	string $action,
 	string $hl,
 ): ?ForumDetTemplate
 {
@@ -260,28 +259,11 @@ function forum_det(
 	{
 		$T->is_closed = true;
 	} else {
-		$T->CommentFormT = new CommentAddFormTemplate;
-		$T->CommentFormT->is_logged = User::logged();
-		if($T->CommentFormT->is_logged) {
-			$T->CommentFormT->l_nick = specialchars(User::data()->l_nick);
-		}
-
-		if($action == 'add_comment')
-		{
-			$error_msg = [];
-			if(add_comment($template, $forum->res_id, post('res_data'), $error_msg)){
-				return null;
-			} else {
-				$T->CommentFormT->res_data = specialchars(post('res_data'));
-				$T->CommentFormT->error_msg = join("<br>", $error_msg);
-			}
-		}
+		$T->CommentFormT = create_and_process_comments_form($template, $forum->res_id);
 	}
 
 	$Filter = (new ResFilter())->orderBy(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? "res_entered DESC" : "res_entered");
-	$T->CommentListT = new CommentsListTemplate;
-	$T->CommentListT->Comments = Res::get_comments($forum->res_id, $Filter);
-	$T->CommentListT->hl = $hl;
+	$T->CommentListT = create_comments_template(Res::get_comments($forum->res_id, $Filter), $hl);
 
 	# Attendees
 	if(User::logged() && ($forum->type_id === Forum::TYPE_EVENT))
@@ -291,6 +273,38 @@ function forum_det(
 
 	return $T;
 }
+
+function create_and_process_comments_form(MainTemplate $template, int $res_id): ?CommentAddFormTemplate
+{
+	$T = new CommentAddFormTemplate;
+	$T->is_logged = User::logged();
+	if($T->is_logged) {
+		$T->l_nick = specialchars(User::data()->l_nick);
+	}
+
+	if(post('action') == 'add_comment')
+	{
+		$error_msg = [];
+		if(add_comment($template, $res_id, post('res_data'), $error_msg)){
+			return null;
+		} else {
+			$T->res_data = specialchars(post('res_data'));
+			$T->error_msg = join("<br>", $error_msg);
+		}
+	}
+
+	return $T;
+}
+
+function create_comments_template(ViewResCommentCollection $comments, ?string $hl = null): CommentsListTemplate
+{
+	$T = new CommentsListTemplate;
+	$T->Comments = $comments;
+	$T->hl = $hl;
+
+	return $T;
+}
+
 
 function public_profile(MainTemplate $template, string $l_hash): ?UserProfilePublicTemplate
 {
@@ -936,10 +950,7 @@ function user_comments(MainTemplate $template, string $l_hash, string $hl): ?Use
 	$T->is_blocked = !$login_data->l_active;
 
 	$F = (new ResCommentFilter(login_id: $login_data->l_id))->rows(100)->orderBy("res_entered DESC");
-
-	$T->CommentListT = new CommentsListTemplate;
-	$T->CommentListT->Comments = (new ViewResCommentEntity)->get_all($F);
-	$T->CommentListT->hl = $hl;
+	$T->CommentListT = create_comments_template((new ViewResCommentEntity)->get_all($F), $hl);
 
 	return $T;
 }
@@ -1038,29 +1049,9 @@ function gallery_view_image(MainTemplate $template, int $gd_id): ?GalleryImageTe
 	$F = (new ResFilter())->orderBy(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? "res_entered DESC" : "res_entered");
 
 	# TODO: f-ijā -> ###
-	$T->CommentListT = new CommentsListTemplate;
-	$T->CommentListT->Comments = Res::get_comments($image->res_id, $F);
-	// $T->hl = $hl;
 
-	$T->CommentFormT = new CommentAddFormTemplate;
-	$T->CommentFormT->is_logged = User::logged();
-	if($T->CommentFormT->is_logged) {
-		$T->CommentFormT->l_nick = specialchars(User::data()->l_nick);
-	}
-
-	$action = post('action');
-
-	if($action == 'add_comment')
-	{
-		$error_msg = [];
-		if(add_comment($template, $image->res_id, post('res_data'), $error_msg)){
-			return null;
-		} else {
-			$T->CommentFormT->res_data = specialchars(post('res_data'));
-			$T->CommentFormT->error_msg = join("<br>", $error_msg);
-		}
-	}
-	###
+	$T->CommentListT = create_comments_template(Res::get_comments($image->res_id, $F));
+	$T->CommentFormT = create_and_process_comments_form($template, $image->res_id);
 
 	return $T;
 }
@@ -1257,30 +1248,8 @@ function article(MainTemplate $template, int $art_id, string $hl, ?string $artic
 
 	$T->art_id = $art_id;
 
-	# TODO: in function -> ###
-	$T->CommentListT = new CommentsListTemplate;
-	$T->CommentListT->Comments = Res::get_comments($art->res_id);
-	$T->hl = $hl;
-
-	$T->CommentFormT = new CommentAddFormTemplate;
-	$T->CommentFormT->is_logged = User::logged();
-	if($T->CommentFormT->is_logged) {
-		$T->CommentFormT->l_nick = specialchars(User::data()->l_nick);
-	}
-
-	$action = post('action');
-
-	if($action == 'add_comment')
-	{
-		$error_msg = [];
-		if(add_comment($template, $art->res_id, post('res_data'), $error_msg)){
-			return null;
-		} else {
-			$T->CommentFormT->res_data = specialchars(post('res_data'));
-			$T->CommentFormT->error_msg = join("<br>", $error_msg);
-		}
-	}
-	###
+	$T->CommentListT = create_comments_template(Res::get_comments($art->res_id), $hl);
+	$T->CommentFormT = create_and_process_comments_form($template, $art->res_id, $hl);
 
 	$template->set_title($art->res_name);
 

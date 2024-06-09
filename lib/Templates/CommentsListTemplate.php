@@ -3,7 +3,7 @@
 class CommentsListTemplate extends AbstractTemplate
 {
 	public ViewResCommentCollection $Comments;
-	public string $hl = "";
+	public ?string $hl = null;
 
 	protected function out(): void
 	{

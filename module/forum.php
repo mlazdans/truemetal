@@ -56,7 +56,7 @@ if($forum_route)
 
 			$T = forum_themes($template, $forum_data, $action, $fpp, $page_id, $pages_visible_to_sides);
 		} else {
-			$T = forum_det($template, $forum_data, $action, $hl);
+			$T = forum_det($template, $forum_data, $hl);
 		}
 	}
 } else {
