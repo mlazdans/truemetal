@@ -1,6 +1,14 @@
 <?php declare(strict_types = 1);
 
-# TODO: kaut kad vispār izvākt šo te moduli
+$template = new MainTemplate();
+
+if(!User::is_admin()){
+	$template->forbidden();
+	$template->set_right_defaults();
+	$template->print();
+	return;
+}
+
 $res_id = (int)array_shift($sys_parameters);
 $moved = false;
 
@@ -20,7 +28,6 @@ if($res && ($location = $res->Route()))
 		redirect($location);
 	}
 } else {
-	$template = new MainTemplate("resroute");
 	$template->not_found();
 	$template->set_right_defaults();
 	$template->print();
