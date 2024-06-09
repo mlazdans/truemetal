@@ -25,7 +25,7 @@
 	if($art_id){
 		$T = article($template, $art_id, $hl, $article_route);
 	} elseif($sys_module_id == 'article' || empty($sys_module_id)){
-		$T = mainpage($template, $page, $art_per_page);
+		$T = mainpage($page, $art_per_page);
 	} else {
 		$T = article_list($template, $page, $hl);
 	}

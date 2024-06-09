@@ -1047,9 +1047,6 @@ function gallery_view_image(MainTemplate $template, int $gd_id): ?GalleryImageTe
 	$T->gal = ViewResGalleryEntity::get_by_res_id($image->res_resid);
 
 	$F = (new ResFilter())->orderBy(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? "res_entered DESC" : "res_entered");
-
-	# TODO: f-ijā -> ###
-
 	$T->CommentListT = create_comments_template(Res::get_comments($image->res_id, $F));
 	$T->CommentFormT = create_and_process_comments_form($template, $image->res_id);
 
@@ -1256,9 +1253,9 @@ function article(MainTemplate $template, int $art_id, string $hl, ?string $artic
 	return $T;
 }
 
-function mainpage(MainTemplate $template, int $page, int $items_per_page): ArticleListTemplate
+function mainpage(int $page, int $items_per_page): ArticleListTemplate
 {
-	global $sys_module_id, $module_root;
+	global $module_root;
 
 	$T = new ArticleListTemplate;
 
