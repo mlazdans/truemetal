@@ -944,7 +944,7 @@ function user_comments(MainTemplate $template, string $l_hash, string $hl): ?Use
 	return $T;
 }
 
-function gallery_thumbs_list(MainModule $template, int $gal_id): ?Template
+function gallery_thumbs_list(MainTemplate $template, int $gal_id): ?GalleryThumbsTemplate
 {
 	global $CACHE_ENABLE;
 
@@ -958,81 +958,30 @@ function gallery_thumbs_list(MainModule $template, int $gal_id): ?Template
 	}
 
 	// $GD = new GalleryData;
-	$T = $template->add_file('gallery.tpl');
-
-	// # ja skataas bildi, nocheko vai attieciigaa galerija ir pieejama
-	// if($gal_id == 'view' && $gd_id)
-	// {
-	// 	$galdata = $GD->load($gd_id);
-	// 	if(!isset($galdata['gal_id'])) {
-	// 		header("Location: /");
-	// 		exit;
-	// 	}
-	// 	$gal = $gallery->load($galdata['gal_id']);
-	// } else {
-	// 	$gal = $gallery->load($gal_id);
-	// }
+	$T = new GalleryThumbsTemplate;
+	$T->gal = $gal;
 
 	$gal_name = "";
 	if($gal->gal_ggid)
 		$gal_name .= "$gal->gg_name / ";
 	$gal_name .= "$gal->res_name";
 
-	$T->set_var('gal_name', $gal_name);
-	$T->set_var('gal_id', $gal->gal_id);
+	$T->gal_name = $gal_name;
 	$template->set_title('Galerija '.$gal_name);
 
-	if($gal->gal_ggid){
-		$T->set_var('gal_jump_id', "gg_".$gal->gal_ggid);
-	} else {
-		$T->set_var('gal_jump_id', "gal_".$gal->gal_id);
-	}
-
-	$T->enable('BLOCK_thumb_list');
-
-	# ielasam thumbus
-	$tpr = 5;
-	$c = 0;
 
 	$F = (new ResGdFilter(res_resid: $gal->res_id))->orderBy("res_name");
-
-	$data = (new ViewResGdEntity)->getAll($F);
-
-	$thumb_count = count($data);
-	foreach($data as $thumb)
-	{
-		++$c;
-		if($c % $tpr == 1)
-			$T->enable('BLOCK_tr1');
-		else
-			$T->disable('BLOCK_tr1');
-		if(($c % $tpr == 0) || ($c == $thumb_count))
-			$T->enable('BLOCK_tr2');
-		else
-			$T->disable('BLOCK_tr2');
-
-		$T->set_array($thumb, 'BLOCK_thumb');
-
-		if($CACHE_ENABLE && ($hash = cache_hash($thumb->gd_id."thumb.jpg")) && cache_exists($hash)){
-			$T->set_var('thumb_path', cache_http_path($hash), 'BLOCK_thumb');
-		} else {
-			$T->set_var('thumb_path', "/gallery/thumb/$thumb->gd_id/", 'BLOCK_thumb');
-		}
-
-		$T->set_var('res_votes', format_vote($thumb->res_votes));
-		$T->set_var('comment_class', GalleryData::has_new_comments($thumb) ? "Comment-count-new" : "Comment-count-old");
-
-		$T->parse_block('BLOCK_thumb', TMPL_APPEND);
-	}
+	$T->thumbs = (new ViewResGdEntity)->get_all($F);
+	$T->is_cache_enabled = $CACHE_ENABLE;
 
 	return $T;
 }
 
-function gallery_root(MainModule $template): ?Template
+function gallery_root(MainTemplate $template): ?GalleryRootTemplate
 {
 	$F = (new ResGalleryFilter(res_resid: false))->orderBy("res_entered DESC, gg_date DESC");
 
-	$data = (new ViewResGalleryEntity)->getAll($F);
+	$data = (new ViewResGalleryEntity)->get_all($F);
 
 	if(!$data)
 	{
@@ -1040,33 +989,8 @@ function gallery_root(MainModule $template): ?Template
 		return null;
 	}
 
-	$T = $template->add_file('gallery.tpl');
-
-	$T->enable('BLOCK_gallery_list');
-
-	$data2 = array();
-	foreach($data as $gal) {
-		$k = empty($gal->gal_ggid) ? "e-".$gal->gal_id : $gal->gal_ggid;
-		$data2[$k][] = $gal;
-	}
-
-	foreach($data2 as $data)
-	{
-		$T->set_array($data[0], 'BLOCK_gallery_list');
-		if($data[0]->gal_ggid){
-			$T->set_var('gg_name', $data[0]->gg_name, 'BLOCK_gallery_group');
-			$T->set_var('gal_jump_id', "gg_".$data[0]->gg_id, 'BLOCK_gallery_group');
-		} else {
-			$T->set_var('gg_name', $data[0]->res_name, 'BLOCK_gallery_group');
-			$T->set_var('gal_jump_id', "gal_".$data[0]->gal_id, 'BLOCK_gallery_group');
-		}
-
-		foreach($data as $gal){
-			$T->set_array($gal, 'BLOCK_gallery_data');
-			$T->parse_block('BLOCK_gallery_data', TMPL_APPEND);
-		}
-		$T->parse_block('BLOCK_gallery_list', TMPL_APPEND);
-	}
+	$T = new GalleryRootTemplate;
+	$T->data = $data;
 
 	return $T;
 }
@@ -1094,80 +1018,49 @@ function gallery_image(int $gd_id, string $gal_type): void
 	print $jpeg;
 }
 
-function gallery_view(MainModule $template, int $gd_id): ?Template
+function gallery_view_image(MainTemplate $template, int $gd_id): ?GalleryImageTemplate
 {
 	global $CACHE_ENABLE;
 
-	$action = post('action');
-
-	// $GD = new GalleryData;
-
-	if(!($galdata = ViewResGdEntity::get_by_id($gd_id))){
+	if(!($image = ViewResGdEntity::get_by_id($gd_id))){
 		$template->not_found();
 		return null;
 	}
 
-	// $gallery = new Gallery;
-	// $gal = $gallery->load($galdata->gal_id);
-	$gal = ViewResGalleryEntity::get_by_res_id($galdata->res_resid);
+	Res::mark_as_seen($image->res_id);
 
-	Res::mark_as_seen($galdata->res_id);
-
-	$T = $template->add_file('gallery.tpl');
+	$T = new GalleryImageTemplate;
+	set_res($T, $image);
+	$T->is_cache_enabled = $CACHE_ENABLE;
+	$T->image = $image;
+	$T->gal = ViewResGalleryEntity::get_by_res_id($image->res_resid);
 
 	$F = (new ResFilter())->orderBy(User::get_val('l_forumsort_msg') == Forum::SORT_DESC ? "res_entered DESC" : "res_entered");
-	$comments = Res::get_comments($galdata->res_id, $F);
 
-	$C = comment_list($comments, "");
+	# TODO: f-ijā -> ###
+	$T->CommentListT = new CommentsListTemplate;
+	$T->CommentListT->Comments = Res::get_comments($image->res_id, $F);
+	// $T->hl = $hl;
 
-	$error_msg = [];
+	$T->CommentFormT = new CommentAddFormTemplate;
+	$T->CommentFormT->is_logged = User::logged();
+	if($T->CommentFormT->is_logged) {
+		$T->CommentFormT->l_nick = specialchars(User::data()->l_nick);
+	}
+
+	$action = post('action');
+
 	if($action == 'add_comment')
 	{
-		if(add_comment($template, $C, $galdata->res_id, post('res_data'), $error_msg)){
+		$error_msg = [];
+		if(add_comment($template, $image->res_id, post('res_data'), $error_msg)){
 			return null;
+		} else {
+			$T->CommentFormT->res_data = specialchars(post('res_data'));
+			$T->CommentFormT->error_msg = join("<br>", $error_msg);
 		}
 	}
-
-	$F = comment_add_form();
-	if($error_msg)
-	{
-		$F->enable('BLOCK_comment_error')->set_var('error_msg', join("<br>", $error_msg));
-	}
-
-	$T->set_var('gallery_comments', $C->parse());
-	$T->set_var('comment_add_form', $F->parse());
-
-	# ja skataas pa vienai
-	$T->enable('BLOCK_image');
-
-	if($CACHE_ENABLE && ($hash = cache_hash($gd_id."image.jpg")) && cache_exists($hash)){
-		$T->set_var('image_path', cache_http_path($hash), 'BLOCK_image');
-	} else {
-		$T->set_var('image_path', "/gallery/image/$gd_id/", 'BLOCK_image');
-	}
-
-	# nechekojam, vai ir veel bildes
-	$next_id = GalleryData::get_next_data($gal->res_id, $gd_id);
-	$T->set_var('gd_nextid', $next_id ? $next_id : $gd_id, 'BLOCK_image');
-
-	$T->set_array($galdata);
-	$T->set_var('gal_jump_id', "gg_".$gal->gal_ggid);
-	$T->set_var('gal_id', $gal->gal_id);
-
-	if(User::logged() && $galdata->l_hash){
-		$T->set_var('l_hash', $galdata->l_hash);
-		$T->enable('BLOCK_profile_link');
-	} else {
-		$T->disable('BLOCK_profile_link');
-	}
-
-	if(User::logged()){
-		$T->enable('BLOCK_comment_vote');
-	}
-
-	$T->set_var('res_date', proc_date($galdata->res_entered));
-	$T->set_var('res_votes', format_vote($galdata->res_votes));
-	$T->set_var('comment_vote_class', comment_vote_class($galdata->res_votes));
+	###
 
 	return $T;
 }
@@ -1364,6 +1257,7 @@ function article(MainTemplate $template, int $art_id, string $hl, ?string $artic
 
 	$T->art_id = $art_id;
 
+	# TODO: in function -> ###
 	$T->CommentListT = new CommentsListTemplate;
 	$T->CommentListT->Comments = Res::get_comments($art->res_id);
 	$T->hl = $hl;
@@ -1374,7 +1268,6 @@ function article(MainTemplate $template, int $art_id, string $hl, ?string $artic
 		$T->CommentFormT->l_nick = specialchars(User::data()->l_nick);
 	}
 
-	$error_msg = [];
 	$action = post('action');
 
 	if($action == 'add_comment')
@@ -1387,6 +1280,7 @@ function article(MainTemplate $template, int $art_id, string $hl, ?string $artic
 			$T->CommentFormT->error_msg = join("<br>", $error_msg);
 		}
 	}
+	###
 
 	$template->set_title($art->res_name);
 

@@ -5,13 +5,13 @@ if($sys_debug){
 	// $CACHE_ENABLE = false;
 }
 
-$template = new MainModule($sys_module_id);
+$template = new MainTemplate();
 $template->set_title('Galerijas');
 
 if(!User::logged()){
 	$template->not_logged();
 	$template->set_right_defaults();
-	$template->out(null);
+	$template->print();
 	return;
 }
 
@@ -37,7 +37,7 @@ if(($gal_id == 'thumbs') && $gd_id){
 	return;
 } else {
 	if($gal_id == 'view'){
-		$T = gallery_view($template, $gd_id);
+		$T = gallery_view_image($template, $gd_id);
 	} elseif($gal_id){
 		$T = gallery_thumbs_list($template, (int)$gal_id);
 	} else {
@@ -46,4 +46,5 @@ if(($gal_id == 'thumbs') && $gd_id){
 }
 
 $template->set_right_defaults();
-$template->out($T??null);
+$template->MiddleBlock = $T;
+$template->print();

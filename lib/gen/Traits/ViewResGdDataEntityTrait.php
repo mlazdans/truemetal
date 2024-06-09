@@ -4,35 +4,28 @@
 
 use dqdp\DBA\AbstractFilter;
 
-trait ViewResGdDataEntityTrait {
-	function __construct(){
-		parent::__construct();
-	}
-
-	function getTableName(): ?string {
+trait ViewResGdDataEntityTrait
+{
+	function get_table_name(): string {
 		return 'view_res_gd_data';
 	}
 
-	function getProcName(): ?string {
+	function get_pk(): string|array|null {
+		return 'res_id';
+	}
+
+	function get_gen(): ?string {
 		return null;
 	}
 
-	function getPK(): string|array|null {
-		return null;
+	static function get(int $ID, ?AbstractFilter $DF = null): ?ViewResGdDataType {
+		return (new static)->get_single((new ViewResGdDataFilter(res_id: $ID))->merge($DF));
 	}
 
-	function getGen(): ?string {
-		return null;
-	}
-
-	function getProcArgs(): ?array {
-		return null;
-	}
-
-	function getAll(?AbstractFilter $filters = null): ViewResGdDataCollection {
+	function get_all(?AbstractFilter $filters = null): ViewResGdDataCollection {
 		$col = new ViewResGdDataCollection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -40,50 +33,23 @@ trait ViewResGdDataEntityTrait {
 		return $col;
 	}
 
-	function fetch($q): ?ViewResGdDataType {
-		// return ViewResGdDataType::fromDBObject(parent::fetch($q));
-		if($data = parent::fetch($q)){
+	function fetch(): ?ViewResGdDataType {
+		if($data = parent::fetch($this->Q)){
 			return ViewResGdDataType::initFrom($data);
 		} else {
 			return null;
 		}
 	}
 
-	// private function savePreprocessor(array|object $DATA, \Closure $f): mixed {
-	// 	if($DATA instanceof ViewResGdDataType){
-	// 		if(method_exists($this, "beforeSave")){
-	// 			if($PROC_DATA = $this->beforeSave($DATA)){
-	// 				return $f($PROC_DATA);
-	// 			} else {
-	// 				return null;
-	// 			}
-	// 		} else {
-	// 			return $f($DATA);
-	// 		}
-	// 	} else {
-	// 		throw new InvalidTypeException($DATA);
-	// 	}
-	// }
-
 	function save(array|object $DATA): mixed {
-		// return $this->savePreprocessor($DATA, function(array|object $DATA){
-		// 	return parent::save(ViewResGdDataType::toDBObject($DATA));
-		// });
 		return parent::save($DATA);
 	}
 
 	function insert(array|object $DATA): mixed {
-		// return $this->savePreprocessor($DATA, function(array|object $DATA){
-		// 	return parent::insert(ViewResGdDataType::toDBObject($DATA));
-		// });
 		return parent::insert($DATA);
 	}
 
 	function update(int|string|array $ID, array|object $DATA): bool {
 		return parent::update($ID, $DATA);
-
-		// return $this->savePreprocessor($DATA, function(array|object $DATA) use ($ID) {
-		// 	return parent::update($ID, ViewResGdDataType::toDBObject($DATA));
-		// }) ?? false;
 	}
 }

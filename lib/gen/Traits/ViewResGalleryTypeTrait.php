@@ -4,7 +4,8 @@
 
 use dqdp\PropertyInitTrait;
 
-trait ViewResGalleryTypeTrait {
+trait ViewResGalleryTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $gal_id;
@@ -37,7 +38,8 @@ trait ViewResGalleryTypeTrait {
 	var ?string $res_comment_last_date;
 	var ?string $l_hash;
 
-	function __construct(?int $gal_id = null, ?int $gal_ggid = null, ?int $gg_id = null, ?string $gg_name = null, ?string $gg_data = null, ?string $gg_date = null, ?string $gg_entered = null, ?int $res_id = null, ?int $res_resid = null, ?int $res_kind = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null) {
+	function __construct(?int $gal_id = null, ?int $gal_ggid = null, ?int $gg_id = null, ?string $gg_name = null, ?string $gg_data = null, ?string $gg_date = null, ?string $gg_entered = null, ?int $res_id = null, ?int $res_resid = null, ?int $res_kind = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null)
+	{
 		if(isset($gal_id))$this->gal_id = $gal_id;
 		if(isset($gal_ggid))$this->gal_ggid = $gal_ggid;
 		if(isset($gg_id))$this->gg_id = $gg_id;
@@ -75,5 +77,13 @@ trait ViewResGalleryTypeTrait {
 
 	function insert(): mixed {
 		return (new ViewResGalleryEntity)->insert($this);
+	}
+
+	function delete(): bool {
+		return (new ViewResGalleryEntity)->delete($this->gal_id);
+	}
+
+	function update(): bool {
+		return (new ViewResGalleryEntity)->update($this->gal_id, $this);
 	}
 }

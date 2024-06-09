@@ -4,35 +4,28 @@
 
 use dqdp\DBA\AbstractFilter;
 
-trait ViewResGalleryEntityTrait {
-	function __construct(){
-		parent::__construct();
-	}
-
-	function getTableName(): ?string {
+trait ViewResGalleryEntityTrait
+{
+	function get_table_name(): string {
 		return 'view_res_gallery';
 	}
 
-	function getProcName(): ?string {
+	function get_pk(): string|array|null {
+		return 'gal_id';
+	}
+
+	function get_gen(): ?string {
 		return null;
 	}
 
-	function getPK(): string|array|null {
-		return null;
+	static function get(int $ID, ?AbstractFilter $DF = null): ?ViewResGalleryType {
+		return (new static)->get_single((new ViewResGalleryFilter(gal_id: $ID))->merge($DF));
 	}
 
-	function getGen(): ?string {
-		return null;
-	}
-
-	function getProcArgs(): ?array {
-		return null;
-	}
-
-	function getAll(?AbstractFilter $filters = null): ViewResGalleryCollection {
+	function get_all(?AbstractFilter $filters = null): ViewResGalleryCollection {
 		$col = new ViewResGalleryCollection;
-		if($q = $this->query($filters)){
-			while($r = $this->fetch($q)){
+		if($this->query($filters)){
+			while($r = $this->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -40,50 +33,23 @@ trait ViewResGalleryEntityTrait {
 		return $col;
 	}
 
-	function fetch($q): ?ViewResGalleryType {
-		// return ViewResGalleryType::fromDBObject(parent::fetch($q));
-		if($data = parent::fetch($q)){
+	function fetch(): ?ViewResGalleryType {
+		if($data = parent::fetch($this->Q)){
 			return ViewResGalleryType::initFrom($data);
 		} else {
 			return null;
 		}
 	}
 
-	// private function savePreprocessor(array|object $DATA, \Closure $f): mixed {
-	// 	if($DATA instanceof ViewResGalleryType){
-	// 		if(method_exists($this, "beforeSave")){
-	// 			if($PROC_DATA = $this->beforeSave($DATA)){
-	// 				return $f($PROC_DATA);
-	// 			} else {
-	// 				return null;
-	// 			}
-	// 		} else {
-	// 			return $f($DATA);
-	// 		}
-	// 	} else {
-	// 		throw new InvalidTypeException($DATA);
-	// 	}
-	// }
-
 	function save(array|object $DATA): mixed {
-		// return $this->savePreprocessor($DATA, function(array|object $DATA){
-		// 	return parent::save(ViewResGalleryType::toDBObject($DATA));
-		// });
 		return parent::save($DATA);
 	}
 
 	function insert(array|object $DATA): mixed {
-		// return $this->savePreprocessor($DATA, function(array|object $DATA){
-		// 	return parent::insert(ViewResGalleryType::toDBObject($DATA));
-		// });
 		return parent::insert($DATA);
 	}
 
 	function update(int|string|array $ID, array|object $DATA): bool {
 		return parent::update($ID, $DATA);
-
-		// return $this->savePreprocessor($DATA, function(array|object $DATA) use ($ID) {
-		// 	return parent::update($ID, ViewResGalleryType::toDBObject($DATA));
-		// }) ?? false;
 	}
 }

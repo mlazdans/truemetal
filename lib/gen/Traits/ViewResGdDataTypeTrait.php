@@ -4,7 +4,8 @@
 
 use dqdp\PropertyInitTrait;
 
-trait ViewResGdDataTypeTrait {
+trait ViewResGdDataTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $gd_id;
@@ -34,7 +35,8 @@ trait ViewResGdDataTypeTrait {
 	var ?string $res_comment_last_date;
 	var ?string $l_hash;
 
-	function __construct(?int $gd_id = null, ?string $gd_mime = null, ?string $gd_data = null, ?string $gd_thumb = null, ?int $res_id = null, ?int $res_resid = null, ?int $res_kind = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null) {
+	function __construct(?int $gd_id = null, ?string $gd_mime = null, ?string $gd_data = null, ?string $gd_thumb = null, ?int $res_id = null, ?int $res_resid = null, ?int $res_kind = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null)
+	{
 		if(isset($gd_id))$this->gd_id = $gd_id;
 		if(isset($gd_mime))$this->gd_mime = $gd_mime;
 		if(isset($gd_data))$this->gd_data = $gd_data;
@@ -69,5 +71,13 @@ trait ViewResGdDataTypeTrait {
 
 	function insert(): mixed {
 		return (new ViewResGdDataEntity)->insert($this);
+	}
+
+	function delete(): bool {
+		return (new ViewResGdDataEntity)->delete($this->res_id);
+	}
+
+	function update(): bool {
+		return (new ViewResGdDataEntity)->update($this->res_id, $this);
 	}
 }

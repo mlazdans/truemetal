@@ -4,7 +4,8 @@
 
 use dqdp\PropertyInitTrait;
 
-trait ViewResGdTypeTrait {
+trait ViewResGdTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $gd_id;
@@ -32,7 +33,8 @@ trait ViewResGdTypeTrait {
 	var ?string $res_comment_last_date;
 	var ?string $l_hash;
 
-	function __construct(?int $gd_id = null, ?string $gd_mime = null, ?int $res_id = null, ?int $res_resid = null, ?int $res_kind = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null) {
+	function __construct(?int $gd_id = null, ?string $gd_mime = null, ?int $res_id = null, ?int $res_resid = null, ?int $res_kind = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null)
+	{
 		if(isset($gd_id))$this->gd_id = $gd_id;
 		if(isset($gd_mime))$this->gd_mime = $gd_mime;
 		if(isset($res_id))$this->res_id = $res_id;
@@ -65,5 +67,13 @@ trait ViewResGdTypeTrait {
 
 	function insert(): mixed {
 		return (new ViewResGdEntity)->insert($this);
+	}
+
+	function delete(): bool {
+		return (new ViewResGdEntity)->delete($this->gd_id);
+	}
+
+	function update(): bool {
+		return (new ViewResGdEntity)->update($this->gd_id, $this);
 	}
 }

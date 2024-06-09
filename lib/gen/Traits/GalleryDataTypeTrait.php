@@ -4,7 +4,8 @@
 
 use dqdp\PropertyInitTrait;
 
-trait GalleryDataTypeTrait {
+trait GalleryDataTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $gd_id;
@@ -13,7 +14,8 @@ trait GalleryDataTypeTrait {
 	var string $gd_data;
 	var string $gd_thumb;
 
-	function __construct(?int $gd_id = null, ?int $res_id = null, ?string $gd_mime = null, ?string $gd_data = null, ?string $gd_thumb = null) {
+	function __construct(?int $gd_id = null, ?int $res_id = null, ?string $gd_mime = null, ?string $gd_data = null, ?string $gd_thumb = null)
+	{
 		if(isset($gd_id))$this->gd_id = $gd_id;
 		if(isset($res_id))$this->res_id = $res_id;
 		if(isset($gd_mime))$this->gd_mime = $gd_mime;
