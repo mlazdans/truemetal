@@ -4,13 +4,15 @@
 
 use dqdp\PropertyInitTrait;
 
-trait CommentDisabledTypeTrait {
+trait CommentDisabledTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $login_id;
 	var int $disable_login_id;
 
-	function __construct(?int $login_id = null, ?int $disable_login_id = null) {
+	function __construct(?int $login_id = null, ?int $disable_login_id = null)
+	{
 		if(isset($login_id))$this->login_id = $login_id;
 		if(isset($disable_login_id))$this->disable_login_id = $disable_login_id;
 	}

@@ -319,9 +319,9 @@ function public_profile(MainTemplate $template, string $l_hash): ?UserProfilePub
 
 		if(isset($_POST['disable_comments']))
 		{
-			$ret = CommentDisabled::disable(User::id(), $L->l_id);
+			$ret = CommentDisabledEntity::disable(User::id(), $L->l_id);
 		} else {
-			$ret = CommentDisabled::enable(User::id(), $L->l_id);
+			$ret = CommentDisabledEntity::enable(User::id(), $L->l_id);
 		}
 
 		if($ret) {

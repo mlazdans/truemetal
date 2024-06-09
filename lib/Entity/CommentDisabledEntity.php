@@ -1,24 +1,8 @@
 <?php declare(strict_types = 1);
 
-use dqdp\SQL\Select;
-
-class CommentDisabled
+class CommentDisabledEntity extends Entity
 {
-	public static function get(int $login_id, ?int $disable_login_id = null): array
-	{
-		$sql = (new Select)->From('comment_disabled')->Where(['login_id = ?', $login_id]);
-		if($disable_login_id)
-		{
-			$sql->Where(['disable_login_id = ?', $disable_login_id]);
-		}
-
-		$q = DB::Query($sql);
-		while($item = DB::Fetch($q)){
-			$ret[$item['disable_login_id']] = true;
-		}
-
-		return $ret??[];
-	}
+	use CommentDisabledEntityTrait;
 
 	public static function disable(int $login_id, int $disable_login_id): bool
 	{

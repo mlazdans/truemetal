@@ -3,8 +3,8 @@
 class User
 {
 	static private ?LoginsType $_LOGIN = null;
+	static private ?array $disabled_users = null;
 	static private ?int $entered_ts = null;
-	static private ?array $disabled_users = null; // TODO: type
 
 	static function data(?LoginsType $data = null): ?LoginsType
 	{
@@ -15,7 +15,8 @@ class User
 		return static::$_LOGIN;
 	}
 
-	static function entered_ts(): int {
+	static function entered_ts(): int
+	{
 		return static::$entered_ts??(static::$entered_ts = strtotime(static::data()->l_entered));
 	}
 
@@ -74,14 +75,16 @@ class User
 		return User::id() === 3;
 	}
 
-	static function can_edit_res(ViewResType $C){
+	static function can_edit_res(ViewResType $C): bool
+	{
 		return User::is_admin() || (
 			($C->login_id == User::id()) &&
 			(time() - strtotime($C->res_entered) < 600)
 		);
 	}
 
-	static function can_debug_res(ViewResType $R){
+	static function can_debug_res(): bool
+	{
 		return User::is_admin();
 	}
 
@@ -90,14 +93,15 @@ class User
 		if($login_id && User::logged())
 		{
 			if(!isset(self::$disabled_users)) {
-				if($data = CommentDisabled::get(User::id())){
-					self::$disabled_users = $data;
-				} else {
-					self::$disabled_users = [];
+				self::$disabled_users = [];
+				if($data = (new CommentDisabledEntity)->get_all(new CommentDisabledFilter(login_id: User::id()))){
+					foreach($data as $item){
+						self::$disabled_users[$item->disable_login_id] = true;
+					}
 				}
 			}
 
-			return !empty(self::$disabled_users[$login_id]);
+			return isset(self::$disabled_users[$login_id]);
 		}
 
 		return false;
