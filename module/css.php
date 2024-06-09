@@ -15,7 +15,7 @@ if(isset($_SERVER['HTTP_ACCEPT_ENCODING']) && substr_count($_SERVER['HTTP_ACCEPT
 	ini_set('zlib.output_compression', 1);
 }
 
-if(!$sys_debug)
+// if(!$sys_debug)
 {
 	$expires = (7 * 24 * 3600);
 	header("Cache-Control: max-age=$expires");
