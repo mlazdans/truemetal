@@ -4,7 +4,6 @@ class MainTemplate extends AbstractTemplate
 {
 	public string $title              = '';
 	public string $meta_descr         = '';
-	public string $msg                = '';
 	public string $tmpl_finished      = '';
 	public int    $script_version     = 0;
 	public bool   $disable_youtube    = false;
@@ -13,8 +12,9 @@ class MainTemplate extends AbstractTemplate
 	public ?AbstractTemplate  $MiddleBlock = null;
 	public ?TopBannerTemplate $BannerBlock = null;
 	public RightTemplate      $RightBlock;
-	public ErrorTemplate      $ErrorBlock;
-	public MsgTemplate        $MsgBlock;
+
+	private array $msg       = [];
+	private array $error_msg = [];
 
 	function __construct()
 	{
@@ -25,58 +25,65 @@ class MainTemplate extends AbstractTemplate
 		$this->disable_youtube = !empty(User::get_val('l_disable_youtube'));
 
 		$this->RightBlock = new RightTemplate;
-		$this->ErrorBlock = new ErrorTemplate;
-		$this->MsgBlock = new MsgTemplate;
+		$this->set_descr("Metāls Latvijā");
 	}
 
-	function error(string|array $msg)
+	function error(string|array $msg): static
 	{
-		$this->ErrorBlock->set_enabled()->msg = $msg;
+		if(is_array($msg)){
+			$this->error_msg = array_merge($this->error_msg, $msg);
+		} else {
+			$this->error_msg[] = $msg;
+		}
 
 		return $this;
 	}
 
-	function msg(string|array $msg)
+	function msg(string|array $msg): static
 	{
-		$this->MsgBlock->set_enabled()->msg = $msg;
+		if(is_array($msg)){
+			$this->msg = array_merge($this->msg, $msg);
+		} else {
+			$this->msg[] = $msg;
+		}
 
 		return $this;
 	}
 
-	function not_logged(string|array $msg = "Pieeja tikai reģistrētiem lietotājiem!")
+	function not_logged(string|array $msg = "Pieeja tikai reģistrētiem lietotājiem!"): static
 	{
 		$this->msg($msg);
 		header403($msg);
 		return $this;
 	}
 
-	function forbidden(string|array $msg = "Pieeja liegta!")
+	function forbidden(string|array $msg = "Pieeja liegta!"): static
 	{
 		$this->error($msg);
 		header403($msg);
 		return $this;
 	}
 
-	function not_found(string $msg = "Resurss nav atrasts vai ir bloķēts!")
+	function not_found(string $msg = "Resurss nav atrasts vai ir bloķēts!"): static
 	{
 		$this->msg($msg);
 		header404($msg);
 		return $this;
 	}
 
-	function set_title(string $title)
+	function set_title(string $title): static
 	{
 		$this->title = $title;
 
 		return $this;
 	}
 
-	function get_title()
+	function get_title(): string
 	{
 		return $this->title;
 	}
 
-	function set_descr(string $descr)
+	function set_descr(string $descr): static
 	{
 		$this->meta_descr = $descr;
 
@@ -122,7 +129,7 @@ class MainTemplate extends AbstractTemplate
 		$this->RightBlock->add_item($T);
 	}
 
-	function set_online()
+	function set_online(): void
 	{
 		$active_sessions = Logins::get_active();
 		$online_count = $active_sessions->count();
@@ -195,8 +202,15 @@ class MainTemplate extends AbstractTemplate
 
 	protected function container(): void
 	{
-		$this->ErrorBlock->print();
-		$this->MsgBlock->print();
+		if($this->error_msg) { ?>
+			<div class="TD-cat">Kļūda:</div>
+			<div class="Info error-form"><?=(is_array($this->msg) ? join("<br>", $this->msg) : $this->msg) ?></div><?
+		}
+
+		if($this->msg) { ?>
+			<div class="Info"><?=join("<br>", $this->msg) ?></div><?
+		}
+
 		if($this->MiddleBlock)$this->MiddleBlock->print();
 	}
 
