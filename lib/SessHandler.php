@@ -33,7 +33,6 @@ class SessHandler implements SessionHandlerInterface
 
 	public function read(string $id): string|false
 	{
-		# TODO: ip check
 		if($sess = Logins::load_by_sess_id($id))
 		{
 			User::data($sess);

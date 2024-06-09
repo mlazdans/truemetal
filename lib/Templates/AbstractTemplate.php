@@ -3,7 +3,6 @@
 abstract class AbstractTemplate
 {
 	public bool $enabled = true;
-	// private ?string $buffer = null;
 	private ?string $out_function = null;
 
 	function parse(): ?string
@@ -15,19 +14,6 @@ abstract class AbstractTemplate
 		} else {
 			return $buffer;
 		}
-
-		// if(is_null($this->buffer)){
-		// 	ob_start();
-		// 	$this->print();
-		// 	if(($buffer = ob_get_clean()) === false){
-		// 		# TODO: error?
-		// 		$this->buffer = "";
-		// 	} else {
-		// 		$this->buffer = $buffer;
-		// 	}
-		// }
-
-		// return $this->buffer;
 	}
 
 	function set_out(string $func): static
@@ -40,7 +26,7 @@ abstract class AbstractTemplate
 	function print(): static
 	{
 		if($this->enabled){
-			if($this->out_function) {
+			if($this->out_function){
 				$this->{$this->out_function}();
 			} else {
 				$this->out();
