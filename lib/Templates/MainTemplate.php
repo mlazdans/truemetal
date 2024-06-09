@@ -193,6 +193,13 @@ class MainTemplate extends AbstractTemplate
 		$this->RightBlock->add_item($TEvents);
 	}
 
+	protected function container(): void
+	{
+		$this->ErrorBlock->print();
+		$this->MsgBlock->print();
+		if($this->MiddleBlock)$this->MiddleBlock->print();
+	}
+
 	protected function out(): void
 	{
 		global $sys_encoding;
@@ -230,13 +237,7 @@ class MainTemplate extends AbstractTemplate
 	</div>
 	<div class="banner"><? if($this->BannerBlock)$this->BannerBlock->print() ?></div>
 	<div class="content">
-		<div id="main">
-		<!-- BEGIN BLOCK_container -->
-			<? $this->ErrorBlock->print() ?>
-			<? $this->MsgBlock->print() ?>
-			<? if($this->MiddleBlock)$this->MiddleBlock->print() ?>
-		<!-- END BLOCK_container -->
-		</div>
+		<div id="main"><? $this->container() ?></div>
 	</div>
 	<div class="right"><? $this->RightBlock->print() ?></div>
 </div>
