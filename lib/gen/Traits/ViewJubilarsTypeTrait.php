@@ -8,19 +8,23 @@ trait ViewJubilarsTypeTrait
 {
 	use PropertyInitTrait;
 
-	var ?string $entered_stamp;
-	var ?int $age;
+	var ?string $l_entered;
+	var ?string $l_entered_adjusted;
 	var int $l_id;
 	var string $l_nick;
 	var ?string $l_hash;
+	var ?int $age;
+	var ?int $entered_stamp;
 
-	function __construct(?string $entered_stamp = null, ?int $age = null, ?int $l_id = null, ?string $l_nick = null, ?string $l_hash = null)
+	function __construct(?string $l_entered = null, ?string $l_entered_adjusted = null, ?int $l_id = null, ?string $l_nick = null, ?string $l_hash = null, ?int $age = null, ?int $entered_stamp = null)
 	{
-		if(isset($entered_stamp))$this->entered_stamp = $entered_stamp;
-		if(isset($age))$this->age = $age;
+		if(isset($l_entered))$this->l_entered = $l_entered;
+		if(isset($l_entered_adjusted))$this->l_entered_adjusted = $l_entered_adjusted;
 		if(isset($l_id))$this->l_id = $l_id;
 		if(isset($l_nick))$this->l_nick = $l_nick;
 		if(isset($l_hash))$this->l_hash = $l_hash;
+		if(isset($age))$this->age = $age;
+		if(isset($entered_stamp))$this->entered_stamp = $entered_stamp;
 	}
 
 	function save(): mixed {
