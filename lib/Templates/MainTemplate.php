@@ -26,6 +26,7 @@ class MainTemplate extends AbstractTemplate
 
 		$this->RightBlock = new RightTemplate;
 		$this->set_descr("Metāls Latvijā");
+		$this->set_banner_top();
 	}
 
 	function error(string|array $msg): static
@@ -198,6 +199,25 @@ class MainTemplate extends AbstractTemplate
 		$TEvents->items = $data;
 
 		$this->RightBlock->add_item($TEvents);
+	}
+
+	function set_banner_top()
+	{
+		global $sys_top_banners;
+
+		if(empty($sys_top_banners)){
+			return;
+		}
+
+		$ban_id = mt_rand(0, count($sys_top_banners) - 1);
+		$banner = $sys_top_banners[$ban_id];
+
+		$BT = new TopBannerTemplate;
+		$BT->banner_img = $banner['img'];
+		$BT->banner_alt = $banner['alt'];
+		$BT->banner_href = $banner['href'];
+
+		$this->BannerBlock = $BT;
 	}
 
 	protected function container(): void

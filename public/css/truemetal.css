@@ -352,6 +352,8 @@ label > input {
 
 #container > .banner {
 	grid-area: b;
+	margin-top: 3px;
+	margin-left: 3px;
 	/* object-fit: contain; */
 	/* background-color: green; */
 }

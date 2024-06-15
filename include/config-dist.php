@@ -44,16 +44,12 @@ $sys_mail_params = [
 ];
 $sys_default_module = 'article';
 
-$top_banners = [
-	/*
-	array(
-		'img'=>'banner_lemess2017.gif',
-		'alt'=>'ZOBENS UN LEMESS 2017',
-		'href'=>'/forum/124488-zobens-un-lemess-2017',
-		'width'=>187,
-		'height'=>121,
-	),
-	*/
+$sys_top_banners = [
+	// array(
+	// 	'img'=>'banner_lemess2017.gif',
+	// 	'alt'=>'ZOBENS UN LEMESS 2017',
+	// 	'href'=>'/forum/124488-zobens-un-lemess-2017',
+	// ),
 ];
 
 $sys_css      = [ 'truemetal', 'article', 'jquery-ui' ];
