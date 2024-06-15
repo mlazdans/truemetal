@@ -10,7 +10,7 @@ if($T = vote($template, $value, $res_id)){
 } else {
 	# TODO: abstract out
 	if(isset($_GET['json'])){
-		header('Content-Type: text/javascript; charset='.$sys_encoding);
+		header('Content-Type: text/javascript; charset=utf-8');
 
 		$template->set_out('container');
 

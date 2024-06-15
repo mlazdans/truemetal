@@ -18,7 +18,6 @@ $sys_upload_http_root  = '/data';
 
 $sys_error_reporting   = E_ALL;
 $sys_default_lang      = 'lv';
-$sys_encoding          = 'utf-8';
 $sys_domain            = (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost');
 $sys_script_version    = 1;
 $sys_banned            = [];
@@ -44,8 +43,8 @@ error_reporting($sys_error_reporting);
 $include_path = array_unique(array_merge($sys_include_paths, explode(PATH_SEPARATOR, ini_get('include_path'))));
 ini_set('include_path', join(PATH_SEPARATOR, $include_path));
 
-mb_regex_encoding($sys_encoding);
-mb_internal_encoding($sys_encoding);
+mb_regex_encoding('utf-8');
+mb_internal_encoding('utf-8');
 
 const nil = new None;
 

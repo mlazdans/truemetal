@@ -216,16 +216,14 @@ class MainTemplate extends AbstractTemplate
 
 	protected function out(): void
 	{
-		global $sys_encoding;
-
 		$sys_end_time = microtime(true);
 		$mem_usage = sprintf("Mem usage: %s MB\n", number_format(memory_get_peak_usage(true)/1024/1204, 2));
 		$rendered = sprintf("Rendered in: %s sec\n", number_format(($sys_end_time - $this->sys_start_time), 4, '.', ''));
 		$finished = "<div><pre>$mem_usage$rendered</pre></div>";
 		$this->tmpl_finished = $finished;
 
-		header('Content-Type: text/html; charset='.$sys_encoding);
-		// header('Content-Type: text/plain; charset='.$sys_encoding);
+		header('Content-Type: text/html; charset=utf-8');
+		// header('Content-Type: text/plain; charset=utf-8');
 		header('X-Powered-By: TRUEMETAL');
 
 		?>

@@ -30,6 +30,6 @@ if($action == 'search'){
 
 	$jsonData = new StdClass;
 	$jsonData->data = $items;
-	header('Content-Type: text/javascript; charset='.$sys_encoding);
+	header('Content-Type: text/javascript; charset=utf-8');
 	print json_encode($jsonData);
 }

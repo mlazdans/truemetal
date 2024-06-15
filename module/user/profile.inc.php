@@ -14,7 +14,7 @@ if($l_hash)
 
 # TODO: abstract out
 if(isset($_GET['json'])){
-	header('Content-Type: text/javascript; charset='.$sys_encoding);
+	header('Content-Type: text/javascript; charset=utf-8');
 
 	$jsonData = new StdClass;
 	$jsonData->title = "[ TRUEMETAL ".specialchars($template->get_title())." ]";
