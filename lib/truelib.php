@@ -1088,7 +1088,7 @@ function admin_comment_list(
 	}
 }
 
-function attend(MainTemplate $template, int $res_id, ?string $off = null): ?TrueResponseInterface
+function attend(MainTemplate $template, string $res_hash, ?string $off = null): ?TrueResponseInterface
 {
 	$json = isset($_GET['json']);
 
@@ -1099,7 +1099,7 @@ function attend(MainTemplate $template, int $res_id, ?string $off = null): ?True
 	}
 
 	# TODO: kādreiz atdalīt pasākumus savā klasē
-	if(!($item = ViewResForumEntity::get_by_res_id($res_id)))
+	if(!($item = ViewResForumEntity::get_by_hash($res_hash)))
 	{
 		$template->not_found();
 		return null;
@@ -1116,7 +1116,7 @@ function attend(MainTemplate $template, int $res_id, ?string $off = null): ?True
 		return null;
 	}
 
-	if(!AttendEntity::attend(User::id(), $res_id, $off == 'off' ? 0 : 1))
+	if(!AttendEntity::attend(User::id(), $item->res_id, $off == 'off' ? 0 : 1))
 	{
 		$template->error("Datubāzes kļūda");
 		return null;
@@ -1134,7 +1134,7 @@ function attendees_view(ViewResForumType $forum): AttendTemplate
 {
 	$T = new AttendTemplate;
 	$T->l_id = User::id();
-	$T->res_id = $forum->res_id;
+	$T->res_hash = $forum->res_hash;
 	$T->attendees = ViewAttendEntity::get_by_res_id($forum->res_id);
 	$T->event_startdate = $forum->event_startdate;
 

@@ -3,7 +3,7 @@
 class AttendTemplate extends AbstractTemplate
 {
 	public int $l_id;
-	public int $res_id;
+	public string $res_hash;
 	public string $event_startdate;
 	public ?ViewAttendCollection $attendees = null;
 
@@ -14,7 +14,7 @@ class AttendTemplate extends AbstractTemplate
 		$is_active = time() < $ts;
 
 		?>
-		<div class="Forum-cat" id="attendees<?=$this->res_id ?>">Solās ierasties:
+		<div class="Forum-cat" id="attendees<?=$this->res_hash ?>">Solās ierasties:
 			<? if($this->attendees) {
 				$c = $this->attendees->count();
 				$k = 0;
@@ -35,9 +35,9 @@ class AttendTemplate extends AbstractTemplate
 
 			<? if($is_active) {?>
 				<? if($me_attended) { ?>
-					<a href="/attend/<?=$this->res_id ?>/off/" class="button" onclick="Truemetal.AttendNo('<?=$this->res_id ?>'); return false;">Es tomēr nenāks!</a>
+					<a href="/attend/<?=$this->res_hash ?>/off/" class="button" onclick="Truemetal.AttendNo('<?=$this->res_hash ?>'); return false;">Es tomēr nenāks!</a>
 				<? } else { ?>
-					<a href="/attend/<?=$this->res_id ?>/" class="button" onclick="Truemetal.Attend('<?=$this->res_id ?>'); return false;">Es ar' nāks!!</a>
+					<a href="/attend/<?=$this->res_hash ?>/" class="button" onclick="Truemetal.Attend('<?=$this->res_hash ?>'); return false;">Es ar' nāks!!</a>
 				<? } ?>
 			<? } ?>
 		</div><?

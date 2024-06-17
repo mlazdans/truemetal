@@ -74,17 +74,17 @@ var Truemetal = {
 			Truemetal.checkAll(form, ref);
 		}
 	},
-	_attend_handler(res_id, req, status){
+	_attend_handler(res_hash, req, status){
 		if(req?.responseJSON?.OK){
 			$.ajax({
-				url: "/attend/" + res_id + "/?json&get",
+				url: "/attend/" + res_hash + "/?json&get",
 				dataType: 'json',
 				complete: function(req, status){
 					let data = req?.responseJSON;
 					if(data?.html === undefined){
 						return Truemetal.HandleStandardJson(req, status);
 					} else {
-						$("#attendees" + res_id).replaceWith(data.html);
+						$("#attendees" + res_hash).replaceWith(data.html);
 					}
 				}
 			});
@@ -92,21 +92,21 @@ var Truemetal = {
 			Truemetal.HandleStandardJson(req, status);
 		}
 	},
-	Attend(res_id){
+	Attend(res_hash){
 		$.ajax({
-			url: "/attend/" + res_id + "/?json",
+			url: "/attend/" + res_hash + "/?json",
 			dataType: 'json',
 			complete: function(req, status){
-				Truemetal._attend_handler(res_id, req, status);
+				Truemetal._attend_handler(res_hash, req, status);
 			}
 		});
 	},
-	AttendNo(res_id){
+	AttendNo(res_hash){
 		$.ajax({
-			url: "/attend/" + res_id + "/off/?json",
+			url: "/attend/" + res_hash + "/off/?json",
 			dataType: 'json',
 			complete: function(req, status){
-				Truemetal._attend_handler(res_id, req, status);
+				Truemetal._attend_handler(res_hash, req, status);
 			}
 		});
 	},

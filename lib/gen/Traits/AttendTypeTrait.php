@@ -4,7 +4,8 @@
 
 use dqdp\PropertyInitTrait;
 
-trait AttendTypeTrait {
+trait AttendTypeTrait
+{
 	use PropertyInitTrait;
 
 	var int $l_id;
@@ -12,7 +13,8 @@ trait AttendTypeTrait {
 	var int $a_attended;
 	var string $a_entered;
 
-	function __construct(?int $l_id = null, ?int $res_id = null, ?int $a_attended = null, ?string $a_entered = null) {
+	function __construct(?int $l_id = null, ?int $res_id = null, ?int $a_attended = null, ?string $a_entered = null)
+	{
 		if(isset($l_id))$this->l_id = $l_id;
 		if(isset($res_id))$this->res_id = $res_id;
 		if(isset($a_attended))$this->a_attended = $a_attended;

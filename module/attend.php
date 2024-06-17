@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 # TODO: kādreiz atdalīt pasākumus savā klasē
-$res_id = (int)array_shift($sys_parameters);
+$res_hash = array_shift($sys_parameters);
 $off = array_shift($sys_parameters);
 $get = isset($_GET['get']);
 
@@ -15,16 +15,28 @@ if(!User::logged()){
 
 if($get)
 {
-	if($forum = ViewResForumEntity::get_by_res_id($res_id))
+	if($forum = ViewResForumEntity::get_by_hash($res_hash))
 	{
-		$T = attendees_view($forum);
-		$T->print();
+		$template->MiddleBlock = attendees_view($forum);
+
+		# TODO: abstract out
+		header('Content-Type: text/javascript; charset=utf-8');
+
+		$template->set_out('container');
+
+		$jsonData = new StdClass;
+		$jsonData->title = "[ TRUEMETAL ".specialchars($template->get_title())." ]";
+		$jsonData->html = $template->parse();
+		print json_encode($jsonData);
 	} else {
 		$template->not_found();
 		$template->print();
 	}
 } else {
-	attend($template, $res_id, $off);
-	$template->set_right_defaults();
-	$template->print();
+	if($R = attend($template, $res_hash, $off)){
+		$R->print();
+	} else {
+		$template->set_right_defaults();
+		$template->print();
+	}
 }
