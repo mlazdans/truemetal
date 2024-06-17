@@ -13,7 +13,7 @@ class CommentsListTemplate extends AbstractTemplate
 			{
 				set_res($C, $item, $this->hl);
 				$C->c_id = $item->c_id;
-				$C->comment_nr += 1;
+				$C->res_nr += 1;
 				$C->print();
 			}
 		} else { ?>
