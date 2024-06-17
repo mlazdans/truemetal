@@ -20,8 +20,9 @@ trait ViewMainpageTypeTrait
 	var ?string $res_comment_last_date;
 	var ?string $type_id;
 	var ?string $res_route;
+	var string $res_hash;
 
-	function __construct(?string $module_id = null, ?int $res_id = null, ?int $doc_id = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_entered = null, ?int $res_kind = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $type_id = null, ?string $res_route = null)
+	function __construct(?string $module_id = null, ?int $res_id = null, ?int $doc_id = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_entered = null, ?int $res_kind = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $type_id = null, ?string $res_route = null, ?string $res_hash = null)
 	{
 		if(isset($module_id))$this->module_id = $module_id;
 		if(isset($res_id))$this->res_id = $res_id;
@@ -35,6 +36,7 @@ trait ViewMainpageTypeTrait
 		if(isset($res_comment_last_date))$this->res_comment_last_date = $res_comment_last_date;
 		if(isset($type_id))$this->type_id = $type_id;
 		if(isset($res_route))$this->res_route = $res_route;
+		if(isset($res_hash))$this->res_hash = $res_hash;
 	}
 
 	function save(): mixed {

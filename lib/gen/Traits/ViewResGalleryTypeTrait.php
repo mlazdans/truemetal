@@ -16,6 +16,7 @@ trait ViewResGalleryTypeTrait
 	var ?string $gg_date;
 	var ?string $gg_entered;
 	var int $res_id;
+	var string $res_hash;
 	var ?int $res_resid;
 	var int $res_kind;
 	var ?int $login_id;
@@ -38,7 +39,7 @@ trait ViewResGalleryTypeTrait
 	var ?string $res_comment_last_date;
 	var ?string $l_hash;
 
-	function __construct(?int $gal_id = null, ?int $gal_ggid = null, ?int $gg_id = null, ?string $gg_name = null, ?string $gg_data = null, ?string $gg_date = null, ?string $gg_entered = null, ?int $res_id = null, ?int $res_resid = null, ?int $res_kind = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null)
+	function __construct(?int $gal_id = null, ?int $gal_ggid = null, ?int $gg_id = null, ?string $gg_name = null, ?string $gg_data = null, ?string $gg_date = null, ?string $gg_entered = null, ?int $res_id = null, ?string $res_hash = null, ?int $res_resid = null, ?int $res_kind = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null, ?int $res_votes = null, ?int $res_votes_plus_count = null, ?int $res_votes_minus_count = null, ?int $res_child_count = null, ?string $res_child_last_date = null, ?int $res_comment_count = null, ?string $res_comment_last_date = null, ?string $l_hash = null)
 	{
 		if(isset($gal_id))$this->gal_id = $gal_id;
 		if(isset($gal_ggid))$this->gal_ggid = $gal_ggid;
@@ -48,6 +49,7 @@ trait ViewResGalleryTypeTrait
 		if(isset($gg_date))$this->gg_date = $gg_date;
 		if(isset($gg_entered))$this->gg_entered = $gg_entered;
 		if(isset($res_id))$this->res_id = $res_id;
+		if(isset($res_hash))$this->res_hash = $res_hash;
 		if(isset($res_resid))$this->res_resid = $res_resid;
 		if(isset($res_kind))$this->res_kind = $res_kind;
 		if(isset($login_id))$this->login_id = $login_id;

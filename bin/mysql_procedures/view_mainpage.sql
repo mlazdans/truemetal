@@ -11,7 +11,8 @@ CREATE OR REPLACE VIEW view_mainpage AS
 	rm.res_comment_count,
 	rm.res_comment_last_date,
 	NULL as type_id,
-	r.res_route
+	r.res_route,
+	r.res_hash
 FROM
 	`article` a
 JOIN `modules` m ON (a.art_modid = m.mod_id)
@@ -34,7 +35,8 @@ UNION
 	rm.res_comment_count,
 	rm.res_comment_last_date,
 	NULL as type_id,
-	r.res_route
+	r.res_route,
+	r.res_hash
 FROM
 	forum
 JOIN `modules` m ON (forum.forum_modid = m.mod_id)
@@ -57,7 +59,8 @@ UNION
 	rm.res_comment_count,
 	rm.res_comment_last_date,
 	forum.type_id,
-	r.res_route
+	r.res_route,
+	r.res_hash
 FROM
 	forum
 JOIN `res` r ON r.`res_id` = forum.`res_id`

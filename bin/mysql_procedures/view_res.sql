@@ -1,6 +1,7 @@
 CREATE OR REPLACE VIEW view_res AS
 SELECT
 res.res_id,
+res.res_hash,
 res.res_resid,
 res.res_kind,
 res.login_id,

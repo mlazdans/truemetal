@@ -186,6 +186,7 @@ function forum_themes(
 function set_res(AbstractResTemplate $T, ViewResType&ResourceTypeInterface $res, string $hl = null)
 {
 	$T->res_id = $res->res_id;
+	$T->res_hash = $res->res_hash;
 	$T->res_date = proc_date($res->res_entered);
 	$T->res_date_short = proc_date_short($res->res_entered);
 	$T->res_votes = format_vote($res->res_votes);

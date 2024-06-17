@@ -51,6 +51,13 @@ class MainTemplate extends AbstractTemplate
 		return $this;
 	}
 
+	function bad_request(string|array $msg = "Slikts pieprasījums"): static
+	{
+		$this->msg($msg);
+		header400($msg);
+		return $this;
+	}
+
 	function not_logged(string|array $msg = "Pieeja tikai reģistrētiem lietotājiem!"): static
 	{
 		$this->msg($msg);
