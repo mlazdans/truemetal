@@ -6,10 +6,6 @@ class CommentTemplate extends AbstractResTemplate
 
 	protected function out(): void
 	{
-		if($this->res_data_compiled && $this->hl){
-			$this->res_data_compiled = hl($this->res_data_compiled, $this->hl);
-		}
-
 		$c_disabled_user_class = '';
 		if($this->is_disabled){
 			$c_disabled_user_class = ' disabled';
