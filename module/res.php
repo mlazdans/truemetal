@@ -1,14 +1,9 @@
 <?php declare(strict_types = 1);
 
-function res_debug(MainTemplate $template, ?ViewResType $res): ?AbstractTemplate
+function res_debug(MainTemplate $template, ?ResourceTypeInterface $res): ?AbstractTemplate
 {
 	if(!User::logged()){
 		$template->not_logged();
-		return null;
-	}
-
-	if(empty($res)){
-		$template->not_found();
 		return null;
 	}
 
@@ -66,6 +61,34 @@ function comment_edit(MainTemplate $template, ?ViewResCommentType $Comment): ?Ab
 	return $T;
 }
 
+function res_route(MainTemplate $template, ?ResourceTypeInterface $res): ?AbstractTemplate
+{
+	if(!User::is_admin()){
+		$template->forbidden();
+		return null;
+	}
+
+	$moved = false;
+	if($redirect_res = ResRedirectEntity::get_by_from_res_id($res->res_id)){
+		$moved = true;
+		$res = load_res($redirect_res->to_res_id);
+	}
+
+	if($res && ($location = $res->Route()))
+	{
+		if($moved){
+			redirectp($location);
+		} else {
+			redirect($location);
+		}
+	} else {
+		$template->not_found();
+	}
+
+	return null;
+}
+
+
 function process_request(MainTemplate $template): ?AbstractTemplate
 {
 	global $sys_parameters;
@@ -78,19 +101,19 @@ function process_request(MainTemplate $template): ?AbstractTemplate
 		return null;
 	}
 
-	if(!($res = ViewResEntity::get_by_hash($res_hash))){
+	if(!($res = load_res_by_hash($res_hash))){
 		$template->not_found();
 		return null;
 	}
 
 	if($section == 'debug'){
 		return res_debug($template, $res);
-	}
-
-	if($section == 'edit') {
-		if($res->res_kind == ResKind::COMMENT){
-			return comment_edit($template, ViewResCommentEntity::get_by_res_id($res->res_id));
+	} elseif($section == 'edit') {
+		if($res instanceof ViewResCommentType){
+			return comment_edit($template, $res);
 		}
+	} elseif($section == 'route'){
+		return res_route($template, $res);
 	}
 
 	$template->bad_request();

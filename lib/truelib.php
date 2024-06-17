@@ -1360,6 +1360,16 @@ function load_res(int $res_id): ?ResourceTypeInterface
 	return null;
 }
 
+function load_res_by_hash(string $res_hash): ?ResourceTypeInterface
+{
+	if($res = ViewResEntity::get_by_hash($res_hash))
+	{
+		return load_specific_res($res->res_id, $res->res_kind);
+	}
+
+	return null;
+}
+
 function get_res_tree(?int $res_id = null, ?int $res_kind = null): ?array
 {
 	if(is_null($res_id)){
