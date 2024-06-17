@@ -17,7 +17,6 @@ if(empty($page_id)){
 	$page_id = 1;
 }
 
-
 if($forum_route)
 {
 	$forum_data = (function(MainTemplate $template, string $forum_route): ?ViewResForumType

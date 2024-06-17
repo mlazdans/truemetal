@@ -88,7 +88,6 @@ function res_route(MainTemplate $template, ?ResourceTypeInterface $res): ?Abstra
 	return null;
 }
 
-
 function process_request(MainTemplate $template): ?AbstractTemplate
 {
 	global $sys_parameters;

@@ -299,7 +299,6 @@ class CodeGen
 					return join(", ", $ret??[]);
 				})();
 
-
 				$t->set_var('ConstrArgsStr', $ConstrArgsStr);
 			} else {
 				$f = $this->field_map[$this->PK];

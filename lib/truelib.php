@@ -307,7 +307,6 @@ function create_comments_template(ViewResCommentCollection $comments, ?string $h
 	return $T;
 }
 
-
 function public_profile(MainTemplate $template, string $l_hash): ?UserProfilePublicTemplate
 {
 	global $user_pic_tw;
@@ -982,7 +981,6 @@ function gallery_thumbs_list(MainTemplate $template, int $gal_id): ?GalleryThumb
 	$T->gal_name = $gal_name;
 	$template->set_title('Galerija '.$gal_name);
 
-
 	$F = (new ResGdFilter(res_resid: $gal->res_id))->orderBy("res_name");
 	$T->thumbs = (new ViewResGdEntity)->get_all($F);
 	$T->is_cache_enabled = $CACHE_ENABLE;
@@ -1413,7 +1411,6 @@ function tm_search(SearchParams $params)
 		$spx
 	];
 }
-
 
 function search(MainTemplate $template, array $DOC_SOURCES, array &$err_msg)
 {

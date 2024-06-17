@@ -77,7 +77,6 @@ function vote(MainTemplate $template, string $value, string $res_hash): ?TrueRes
 	}
 }
 
-
 $template = new MainTemplate();
 
 $value = array_shift($sys_parameters);

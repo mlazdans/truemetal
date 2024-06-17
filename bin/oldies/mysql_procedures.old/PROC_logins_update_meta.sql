@@ -44,5 +44,3 @@ BEGIN
 END $$
 
 DELIMITER ;
-
-

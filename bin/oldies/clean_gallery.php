@@ -31,8 +31,7 @@ $tidy_config = array(
 	'merge-spans' => false,
 	//'merge-divs' => true,
 	//'merge-spans' => true,
-	);
-
+);
 
 function gal_clean($data)
 {

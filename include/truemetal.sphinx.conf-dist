@@ -38,7 +38,6 @@ source pages
 	#
 	# sql_sock				= /tmp/mysql.sock
 
-
 	# MySQL specific client connection flags
 	# optional, default is 0
 	#
@@ -124,7 +123,6 @@ index doc
 	#
 	# html_index_attrs		= img=alt,title; a=title;
 
-
 	# what HTML elements contents to strip
 	# optional, default is empty (do not strip element contents)
 	#
@@ -155,7 +153,6 @@ indexer
 	# optional, default is 0 (unlimited)
 	#
 	# max_iops			= 40
-
 
 	# maximum IO call size, bytes (for I/O throttling)
 	# optional, default is 0 (unlimited)

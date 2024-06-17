@@ -94,11 +94,6 @@ while($r = $db->FetchObject($q))
 	}
 }
 
-
-
-
-
-
 ### Article ###################################################################
 $sql = "SELECT * FROM `article_comments_lv_old` ORDER BY `ac_id`";
 $q = $db->Query($sql);

@@ -26,7 +26,6 @@ hr {
 	border: 0;
 }
 
-
 .img-thumb {
 	border: 1px dotted #660000;
 }
@@ -91,7 +90,6 @@ P {
 .TD-current {
 	background-color: #000000;
 }
-
 
 dl, dt { padding:0; margin: 0; }
 dt {
@@ -299,7 +297,6 @@ label > input {
 	/* background-color: #660000; */
 	font-style: italic;
 }
-
 
 /******************/
 #container {
