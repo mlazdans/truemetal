@@ -59,10 +59,10 @@ abstract class AbstractResTemplate extends AbstractTemplate
 
 			<? if($this->vote_control_enabled) { ?>
 				<div class="unselectable">
-					<a href="/vote/up/<?=$this->res_hash ?>/" class="SendVote" data-res_hash="<?=$this->res_hash ?>" data-vote="up">[&plus;]</a>
+					<a href="/res/vote/<?=$this->res_hash ?>/up/" class="SendVote" data-res_hash="<?=$this->res_hash ?>" data-vote="up">[&plus;]</a>
 				</div>
 				<div class="unselectable">
-					<a href="/vote/down/<?=$this->res_hash ?>/" class="SendVote" data-res_hash="<?=$this->res_hash ?>" data-vote="down">[&ndash;]</a>
+					<a href="/res/vote/<?=$this->res_hash ?>/down/" class="SendVote" data-res_hash="<?=$this->res_hash ?>" data-vote="down">[&ndash;]</a>
 				</div>
 			<? } ?>
 

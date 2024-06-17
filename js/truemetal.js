@@ -77,7 +77,7 @@ var Truemetal = {
 	_attend_handler(res_hash, req, status){
 		if(req?.responseJSON?.OK){
 			$.ajax({
-				url: "/attend/" + res_hash + "/?json&get",
+				url: "/res/attend/" + res_hash + "/?json",
 				dataType: 'json',
 				complete: function(req, status){
 					let data = req?.responseJSON;
@@ -94,7 +94,7 @@ var Truemetal = {
 	},
 	Attend(res_hash){
 		$.ajax({
-			url: "/attend/" + res_hash + "/?json",
+			url: "/res/attend/" + res_hash + "/yes/?json",
 			dataType: 'json',
 			complete: function(req, status){
 				Truemetal._attend_handler(res_hash, req, status);
@@ -103,7 +103,7 @@ var Truemetal = {
 	},
 	AttendNo(res_hash){
 		$.ajax({
-			url: "/attend/" + res_hash + "/off/?json",
+			url: "/res/attend/" + res_hash + "/no/?json",
 			dataType: 'json',
 			complete: function(req, status){
 				Truemetal._attend_handler(res_hash, req, status);
@@ -116,7 +116,7 @@ var Truemetal = {
 		$(voteXpath).addClass('loading2');
 
 		$.ajax({
-			url: "/vote/" + value + "/" + res_hash + "/?json",
+			url: "/res/vote/" + res_hash + "/" + value + "/?json",
 			dataType: 'json',
 			complete: function(req, status){
 				$(voteXpath).removeClass('loading2');

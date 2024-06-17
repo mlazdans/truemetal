@@ -35,9 +35,9 @@ class AttendTemplate extends AbstractTemplate
 
 			<? if($is_active) {?>
 				<? if($me_attended) { ?>
-					<a href="/attend/<?=$this->res_hash ?>/off/" class="button" onclick="Truemetal.AttendNo('<?=$this->res_hash ?>'); return false;">Es tomēr nenāks!</a>
+					<a href="/res/attend/<?=$this->res_hash ?>/no/" class="button" onclick="Truemetal.AttendNo('<?=$this->res_hash ?>'); return false;">Es tomēr nenāks!</a>
 				<? } else { ?>
-					<a href="/attend/<?=$this->res_hash ?>/" class="button" onclick="Truemetal.Attend('<?=$this->res_hash ?>'); return false;">Es ar' nāks!!</a>
+					<a href="/res/attend/<?=$this->res_hash ?>/yes/" class="button" onclick="Truemetal.Attend('<?=$this->res_hash ?>'); return false;">Es ar' nāks!!</a>
 				<? } ?>
 			<? } ?>
 		</div><?

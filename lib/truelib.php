@@ -1086,7 +1086,7 @@ function admin_comment_list(
 	}
 }
 
-function attend(MainTemplate $template, string $res_hash, ?string $off = null): ?TrueResponseInterface
+function attend(MainTemplate $template, ViewResForumType $item, ?string $yesno = null): ?TrueResponseInterface
 {
 	$json = isset($_GET['json']);
 
@@ -1097,12 +1097,6 @@ function attend(MainTemplate $template, string $res_hash, ?string $off = null): 
 	}
 
 	# TODO: kādreiz atdalīt pasākumus savā klasē
-	if(!($item = ViewResForumEntity::get_by_hash($res_hash)))
-	{
-		$template->not_found();
-		return null;
-	}
-
 	if($item->type_id !== Forum::TYPE_EVENT)
 	{
 		$template->forbidden("Nav pasākums");
@@ -1114,7 +1108,7 @@ function attend(MainTemplate $template, string $res_hash, ?string $off = null): 
 		return null;
 	}
 
-	if(!AttendEntity::attend(User::id(), $item->res_id, $off == 'off' ? 0 : 1))
+	if(!AttendEntity::attend(User::id(), $item->res_id, $yesno == 'no' ? 0 : 1))
 	{
 		$template->error("Datubāzes kļūda");
 		return null;
