@@ -110,13 +110,13 @@ var Truemetal = {
 			}
 		});
 	},
-	Vote(res_id, value){
-		const voteXpath = "#votes-" + res_id;
+	Vote(res_hash, value){
+		const voteXpath = "#votes-" + res_hash;
 
 		$(voteXpath).addClass('loading2');
 
 		$.ajax({
-			url: "/vote/" + value + "/" + res_id + "/?json",
+			url: "/vote/" + value + "/" + res_hash + "/?json",
 			dataType: 'json',
 			complete: function(req, status){
 				$(voteXpath).removeClass('loading2');
@@ -267,10 +267,10 @@ var Truemetal = {
 			}
 		});
 		$(truemetal).on("click", ".SendVote", function() {
-			let res_id = this?.dataset?.res_id;
+			let res_hash = this?.dataset?.res_hash;
 			let vote = this?.dataset?.vote;
-			if(res_id && vote){
-				Truemetal.Vote(res_id, vote);
+			if(res_hash && vote){
+				Truemetal.Vote(res_hash, vote);
 				return false;
 			}
 		});
