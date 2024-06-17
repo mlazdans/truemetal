@@ -1,9 +1,9 @@
 <?php declare(strict_types = 1);
 
-class ViewResCommentType extends ViewResType implements ResourceTypeInterface {
+class ViewResCommentType extends AbstractViewResType {
 	use ViewResCommentTypeTrait;
 
-	function Route(): string
+	function route(): string
 	{
 		return $this->parent_res_route.'#comment'.$this->c_id;
 	}

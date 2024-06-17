@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-function vote(MainTemplate $template, ?ResourceTypeInterface $res, string $value): ?TrueResponseInterface
+function vote(MainTemplate $template, AbstractViewResType $res, string $value): ?TrueResponseInterface
 {
 	global $ip;
 
@@ -36,20 +36,8 @@ function vote(MainTemplate $template, ?ResourceTypeInterface $res, string $value
 		return null;
 	}
 
-	$timeout = 5;
-	$sql = "INSERT INTO res_vote (
-		res_id, login_id, rv_value, rv_userip
-	) VALUES (
-		?, ?, ?, ?
-	) ON DUPLICATE KEY UPDATE
-		rv_value = CASE WHEN TIMESTAMPDIFF(MINUTE, rv_entered, CURRENT_TIMESTAMP) < $timeout THEN
-			CASE WHEN VALUES(rv_value) <=> rv_value THEN 0 ELSE VALUES(rv_value) END
-		ELSE rv_value END,
-		rv_userip = CASE WHEN TIMESTAMPDIFF(MINUTE, rv_entered, CURRENT_TIMESTAMP) < $timeout THEN VALUES(rv_userip) ELSE rv_userip END
-	";
-
-	$inserted = DB::Execute(
-		$sql,
+	$inserted = ResVoteEntity::vote_with_timeout(
+		5,
 		$res->res_id,
 		User::id(),
 		$value == 'up' ? 1 : -1,
@@ -72,7 +60,7 @@ function vote(MainTemplate $template, ?ResourceTypeInterface $res, string $value
 	}
 }
 
-function res_debug(MainTemplate $template, ?ResourceTypeInterface $res): ?AbstractTemplate
+function res_debug(MainTemplate $template, ?AbstractViewResType $res): ?AbstractTemplate
 {
 	if(!User::logged()){
 		$template->not_logged();
@@ -133,7 +121,7 @@ function comment_edit(MainTemplate $template, ?ViewResCommentType $Comment): ?Ab
 	return $T;
 }
 
-function res_route(MainTemplate $template, ?ResourceTypeInterface $res): ?AbstractTemplate
+function res_route(MainTemplate $template, ?AbstractViewResType $res): ?AbstractTemplate
 {
 	if(!User::is_admin()){
 		$template->forbidden();
@@ -146,7 +134,7 @@ function res_route(MainTemplate $template, ?ResourceTypeInterface $res): ?Abstra
 		$res = load_res($redirect_res->to_res_id);
 	}
 
-	if($res && ($location = $res->Route()))
+	if($res && ($location = $res->route()))
 	{
 		if($moved){
 			redirectp($location);

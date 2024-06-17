@@ -183,7 +183,7 @@ function forum_themes(
 	return $T;
 }
 
-function set_res(AbstractResTemplate $T, ViewResType&ResourceTypeInterface $res, string $hl = null)
+function set_res(AbstractResTemplate $T, AbstractViewResType $res, string $hl = null)
 {
 	$T->res_id = $res->res_id;
 	$T->res_hash = $res->res_hash;
@@ -1323,7 +1323,7 @@ function comment_vote_class(?int $res_votes): string
 	}
 }
 
-function load_specific_res(int $res_id, int $res_kind): ?ResourceTypeInterface
+function load_specific_res(int $res_id, int $res_kind): ?AbstractViewResType
 {
 	switch($res_kind)
 	{
@@ -1342,7 +1342,7 @@ function load_specific_res(int $res_id, int $res_kind): ?ResourceTypeInterface
 	throw new InvalidArgumentException("Table unknown: $res_kind");
 }
 
-function load_res(int $res_id): ?ResourceTypeInterface
+function load_res(int $res_id): ?AbstractViewResType
 {
 	if($res = ResEntity::get($res_id))
 	{
@@ -1352,7 +1352,7 @@ function load_res(int $res_id): ?ResourceTypeInterface
 	return null;
 }
 
-function load_res_by_hash(string $res_hash): ?ResourceTypeInterface
+function load_res_by_hash(string $res_hash): ?AbstractViewResType
 {
 	if($res = ViewResEntity::get_by_hash($res_hash))
 	{
