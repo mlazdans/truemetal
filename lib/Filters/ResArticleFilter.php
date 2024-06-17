@@ -7,6 +7,7 @@ class ResArticleFilter extends ResFilter
 	function __construct(
 		# keep sync with ResFilter
 		public ?int $res_id                = null,
+		public ?string $res_hash           = null,
 		public null|int|false $res_resid   = null, // false: WHERE res_resid IS NULL
 		public ?int $res_kind              = null,
 		public ?int $login_id              = null,

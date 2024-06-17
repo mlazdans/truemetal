@@ -22,4 +22,11 @@ class ViewResCommentEntity extends AbstractResEntity
 		return (new static)->get_single($F);
 	}
 
+	static function get_by_hash(string $hash, bool $ignore_disabled = false, ?ResCommentFilter $F = new ResCommentFilter): ?ViewResCommentType
+	{
+		$F->res_hash = $hash;
+		if($ignore_disabled)$F->res_visible = false;
+
+		return (new static)->get_single($F);
+	}
 }

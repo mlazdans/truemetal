@@ -21,4 +21,12 @@ class ViewResForumEntity extends AbstractResEntity
 
 		return (new static)->get_single($F);
 	}
+
+	static function get_by_hash(string $hash, bool $ignore_disabled = false, ?ResForumFilter $F = new ResForumFilter): ?ViewResForumType
+	{
+		$F->res_hash = $hash;
+		if($ignore_disabled)$F->res_visible = false;
+
+		return (new static)->get_single($F);
+	}
 }

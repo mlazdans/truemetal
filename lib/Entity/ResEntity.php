@@ -24,7 +24,7 @@ class ResEntity extends Entity
 
 		assert($visible == 0 || $visible == 1);
 
-		$sql = (new Update($this->getTableName()))->Set("res_visible = $visible" )->WhereIn("res_id", $res_id);
+		$sql = (new Update($this->get_table_name()))->Set("res_visible = $visible" )->WhereIn("res_id", $res_id);
 
 		return $this->get_trans()->query($sql);
 	}

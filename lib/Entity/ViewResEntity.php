@@ -19,4 +19,11 @@ class ViewResEntity extends AbstractResEntity
 		return static::get_by_id($res_id, $ignore_disabled, $F);
 	}
 
+	static function get_by_hash(string $hash, bool $ignore_disabled = false, ?ResFilter $F = new ResFilter): ?ViewResType
+	{
+		$F->res_hash = $hash;
+		if($ignore_disabled)$F->res_visible = false;
+
+		return (new static)->get_single($F);
+	}
 }
