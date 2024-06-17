@@ -25,6 +25,7 @@ abstract class AbstractResTemplate extends AbstractTemplate
 	public bool $profile_link_enabled = false;
 	public bool $can_edit_res = false;
 	public bool $can_debug_res = false;
+	public bool $is_disabled = false;
 	public ?CommentsListTemplate $CommentListT = null;
 	public ?CommentAddFormTemplate $CommentFormT = null;
 }

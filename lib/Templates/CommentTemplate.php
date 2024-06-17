@@ -6,11 +6,6 @@ class CommentTemplate extends AbstractResTemplate
 	public int $c_id;
 	public ?string $hl = "";
 
-	public bool $can_edit_res = false;
-	public bool $can_debug_res = false;
-	public bool $vote_control_enabled = false;
-	public bool $profile_link_enabled = false;
-
 	protected function out(): void
 	{
 		$hl = $this->hl;
@@ -21,7 +16,7 @@ class CommentTemplate extends AbstractResTemplate
 		}
 
 		$c_disabled_user_class = '';
-		if(User::in_disabled($this->login_id)){
+		if($this->is_disabled){
 			$c_disabled_user_class = ' disabled';
 			$this->res_data_compiled = '-neredzams komentārs-';
 		}
@@ -34,13 +29,13 @@ class CommentTemplate extends AbstractResTemplate
 				</div>
 
 				<div class="controls">
-					<? if($this->can_edit_res){ ?>
+					<? if($this->can_edit_res) { ?>
 						<div class="unselectable">
 							<a href="/comment/edit/<?=$this->c_id ?>/">[labot]</a>
 						</div>
 					<? } ?>
 
-					<? if($this->can_debug_res){ ?>
+					<? if($this->can_debug_res) { ?>
 						<div class="unselectable">
 							<a href="/resdebug/<?=$this->res_id ?>/">[debug]</a>
 						</div>

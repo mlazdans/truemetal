@@ -221,6 +221,7 @@ function set_res(AbstractResTemplate $T, ViewResType&ResourceTypeInterface $res,
 	$T->profile_link_enabled = User::logged() && $res->l_hash;
 	$T->can_edit_res = User::can_edit_res($res);
 	$T->can_debug_res = User::can_debug_res($res);
+	$T->is_disabled = User::in_disabled($res->login_id);
 }
 
 function forum_det(
