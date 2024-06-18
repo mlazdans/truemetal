@@ -7,11 +7,12 @@ class ViewMainpageFilter extends AbstractFilter
 {
 	function __construct(
 		public ?int $res_id                = null,
+		public ?string $module_id          = null,
 	) {}
 
 	protected function apply_filter(Select $sql): Select
 	{
-		$this->apply_set_fields($sql, ['res_id']);
+		$this->apply_set_fields($sql, ['res_id', 'module_id']);
 
 		$this->orderBy("res_entered DESC");
 

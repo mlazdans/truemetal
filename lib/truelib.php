@@ -1172,7 +1172,7 @@ function article(MainTemplate $template, int $art_id, string $hl, ?string $artic
 
 function mainpage(int $page, int $items_per_page): ArticleListTemplate
 {
-	global $module_root;
+	global $module_root, $sys_module_id;
 
 	$T = new ArticleListTemplate;
 
@@ -1182,11 +1182,13 @@ function mainpage(int $page, int $items_per_page): ArticleListTemplate
 	// $cc = DB::ExecuteSingle($sql);
 	// $tc = (int)$cc['cc'];
 
-	// if($sys_module_id != 'article'){
-	// 	$sql->Where(['module_id = ?', $sys_module_id]);
-	// }
-
 	$F = (new ViewMainpageFilter)->rows($items_per_page);
+
+	if($sys_module_id != 'article'){
+		$F->module_id = $sys_module_id;
+		// $sql->Where(['module_id = ?', $sys_module_id]);
+	}
+
 
 	$A = new ViewMainpageEntity;
 	$tc = $A->count($F);
