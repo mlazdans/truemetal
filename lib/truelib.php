@@ -122,7 +122,7 @@ function forum_add_theme(MainTemplate $template, ThemeEditFormTemplate $T, ViewR
 				forum_allow_childs: 0
 			))->insert()){
 				$new = ViewResForumEntity::get_by_id($forum_id);
-				$U = new ResType(res_id:$res_id, res_route:$new->Route());
+				$U = new ResType(res_id:$res_id, res_route:create_res_route($new));
 				if($U->update()){
 					header("Location: $U->res_route");
 					return true;
@@ -183,7 +183,7 @@ function forum_themes(
 	return $T;
 }
 
-function set_res(AbstractResTemplate $T, AbstractViewResType $res, string $hl = null)
+function set_res(AbstractResTemplate $T, ViewResType $res, string $hl = null)
 {
 	$T->res_id = $res->res_id;
 	$T->res_hash = $res->res_hash;
@@ -1325,8 +1325,15 @@ function comment_vote_class(?int $res_votes): string
 	}
 }
 
-function load_specific_res(int $res_id, int $res_kind): ?AbstractViewResType
+function load_specific_vres(null|ViewResFilter|ViewResType|ResType $F): ?object
 {
+	if(!$F) {
+		return null;
+	}
+
+	$res_id = $F->res_id;
+	$res_kind = $F->res_kind;
+
 	switch($res_kind)
 	{
 		case ResKind::ARTICLE:
@@ -1344,40 +1351,30 @@ function load_specific_res(int $res_id, int $res_kind): ?AbstractViewResType
 	throw new InvalidArgumentException("Table unknown: $res_kind");
 }
 
-function load_res(int $res_id): ?AbstractViewResType
+function load_vres_by_id(int $res_id): ?object
 {
-	if($res = ResEntity::get($res_id))
-	{
-		return load_specific_res($res->res_id, $res->res_kind);
-	}
-
-	return null;
+	return load_specific_vres(ViewResEntity::get_by_id($res_id));
 }
 
-function load_res_by_hash(string $res_hash): ?AbstractViewResType
+function load_vres_by_hash(string $res_hash): ?object
 {
-	if($res = ViewResEntity::get_by_hash($res_hash))
-	{
-		return load_specific_res($res->res_id, $res->res_kind);
-	}
-
-	return null;
+	return load_specific_vres(ViewResEntity::get_by_hash($res_hash));
 }
 
-function get_res_tree(?int $res_id = null, ?int $res_kind = null): ?array
-{
-	if(is_null($res_id)){
-		return null;
-	}
+// function get_res_tree(?int $res_id = null, ?int $res_kind = null): ?array
+// {
+// 	if(is_null($res_id)){
+// 		return null;
+// 	}
 
-	$f = $res_kind ? load_specific_res($res_id, $res_kind) : load_res($res_id);
+// 	$f = $res_kind ? load_specific_res($res_id, $res_kind) : load_res($res_id);
 
-	if($f){
-		return [$f, get_res_tree($f->res_resid, $res_kind)];
-	}
+// 	if($f){
+// 		return [$f, get_res_tree($f->res_resid, $res_kind)];
+// 	}
 
-	return null;
-}
+// 	return null;
+// }
 
 function tm_search(SearchParams $params)
 {
@@ -1616,4 +1613,33 @@ function login(string $login_or_email, string $passw, string $referer): ?LoginsT
 		User::data(null);
 		return null;
 	}
+}
+
+function create_res_route(object $res): ?string
+{
+	if($res instanceof ViewResArticleType){
+		return Article::get_route($res->module_id, $res->art_id, $res->res_name);
+	}
+
+	if($res instanceof ViewResCommentType){
+		return $res->parent_res_route.'#comment'.$res->c_id;
+	}
+
+	if($res instanceof ViewResForumType){
+		return Forum::RouteFromStr($res->forum_id, $res->res_name);
+	}
+
+	if($res instanceof ViewResGalleryType){
+		return Gallery::RouteFromStr($res->gal_id);
+	}
+
+	if($res instanceof ViewResGdDataType){
+		return GalleryData::RouteFromStr($res->gd_id);
+	}
+
+	if($res instanceof ViewResGdType){
+		return GalleryData::RouteFromStr($res->gd_id);
+	}
+
+	return null;
 }

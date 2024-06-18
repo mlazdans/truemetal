@@ -1,10 +1,6 @@
 <?php declare(strict_types = 1);
 
-class ViewResGdDataType extends AbstractViewResType {
+class ViewResGdDataType extends ViewResType
+{
 	use ViewResGdDataTypeTrait;
-
-	function route(): string
-	{
-		return GalleryData::RouteFromStr($this->gd_id);
-	}
 }

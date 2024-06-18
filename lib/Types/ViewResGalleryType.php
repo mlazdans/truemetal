@@ -1,10 +1,6 @@
 <?php declare(strict_types = 1);
 
-class ViewResGalleryType extends AbstractViewResType {
+class ViewResGalleryType extends ViewResType
+{
 	use ViewResGalleryTypeTrait;
-
-	function route(): string
-	{
-		return Gallery::RouteFromStr($this->gal_id);
-	}
 }

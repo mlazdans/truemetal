@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-function vote(MainTemplate $template, AbstractViewResType $res, string $value): ?TrueResponseInterface
+function vote(MainTemplate $template, ViewResType $res, string $value): ?TrueResponseInterface
 {
 	global $ip;
 
@@ -60,7 +60,7 @@ function vote(MainTemplate $template, AbstractViewResType $res, string $value): 
 	}
 }
 
-function res_debug(MainTemplate $template, AbstractViewResType $res): ?AbstractTemplate
+function res_debug(MainTemplate $template, ViewResType $res): ?AbstractTemplate
 {
 	if(!User::logged()){
 		$template->not_logged();
@@ -116,26 +116,16 @@ function comment_edit(MainTemplate $template, ViewResCommentType $Comment): ?Abs
 	return $T;
 }
 
-function res_route(MainTemplate $template, AbstractViewResType $res): ?AbstractTemplate
+function res_route(MainTemplate $template, ViewResType $res): ?AbstractTemplate
 {
 	if(!User::is_admin()){
 		$template->forbidden();
 		return null;
 	}
 
-	$moved = false;
-	if($redirect_res = ResRedirectEntity::get_by_from_res_id($res->res_id)){
-		$moved = true;
-		$res = load_res($redirect_res->to_res_id);
-	}
-
-	if($res && ($location = $res->route()))
+	if($res && $res->res_route)
 	{
-		if($moved){
-			redirectp($location);
-		} else {
-			redirect($location);
-		}
+		redirect($res->res_route);
 	} else {
 		$template->not_found();
 	}
@@ -214,7 +204,7 @@ function process_request(MainTemplate $template): null|AbstractTemplate|TrueResp
 		return null;
 	}
 
-	if(!($res = load_res_by_hash($res_hash))){
+	if(!($res = load_vres_by_hash($res_hash))){
 		$template->not_found();
 		return null;
 	}
