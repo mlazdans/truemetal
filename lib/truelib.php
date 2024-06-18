@@ -1170,7 +1170,7 @@ function article(MainTemplate $template, int $art_id, string $hl, ?string $artic
 	return $T;
 }
 
-function mainpage(int $page, int $items_per_page): ArticleListTemplate
+function mainpage(int $page, int $items_per_page): ?ArticleListTemplate
 {
 	global $module_root, $sys_module_id;
 
