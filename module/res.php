@@ -143,6 +143,65 @@ function res_route(MainTemplate $template, AbstractViewResType $res): ?AbstractT
 	return null;
 }
 
+function forum_edit(MainTemplate $template, ViewResForumType $Forum): ?AbstractTemplate
+{
+	if(!User::logged()){
+		$template->not_logged();
+		return null;
+	}
+
+	if(!User::can_edit_res($Forum)){
+		$template->forbidden("Nav tiesību labot");
+		return null;
+	}
+
+	$action = post('action');
+	$error_msg = [];
+
+	$T = new ForumEditFormTemplate;
+	$T->l_nick = User::nick();
+
+	if($action == 'update_forum')
+	{
+		$res_data = post('res_data');
+		$res_name = post('res_name');
+		if(empty($res_data))$error_msg[] = "Kaut kas jau jāieraksta";
+		if(empty($res_name))$error_msg[] = "Kaut kas jau jāieraksta";
+
+		if(!$error_msg){
+			$Res = new ResType(
+				res_id: $Forum->res_id,
+				res_data: $res_data,
+				res_name: $res_name,
+				res_data_compiled: parse_text_data($res_data),
+			);
+
+			if($Res->update())
+			{
+				redirect($Forum->res_route);
+				return null;
+			} else {
+				$error_msg[] = "Neizdevās saglabāt komentāru";
+			}
+		}
+
+		$T->res_data = $res_data;
+		$T->res_name = $res_name;
+	} else {
+		$T->res_data = $Forum->res_data;
+		$T->res_name = $Forum->res_name;
+	}
+
+	$T->res_route = $Forum->res_route;
+
+	if($error_msg)
+	{
+		$T->error_msg = join("<br>", $error_msg);
+	}
+
+	return $T;
+}
+
 function process_request(MainTemplate $template): null|AbstractTemplate|TrueResponseInterface
 {
 	global $sys_parameters;
@@ -165,6 +224,12 @@ function process_request(MainTemplate $template): null|AbstractTemplate|TrueResp
 	} elseif($section == 'edit') {
 		if($res instanceof ViewResCommentType){
 			return comment_edit($template, $res);
+		}
+		if($res instanceof ViewResForumType){
+			if($res->type_id == Forum::TYPE_EVENT){
+			} elseif($res->type_id == Forum::TYPE_STD){
+				return forum_edit($template, $res);
+			}
 		}
 	} elseif($section == 'route'){
 		return res_route($template, $res);
