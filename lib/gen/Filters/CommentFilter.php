@@ -7,12 +7,12 @@ use dqdp\SQL\Select;
 
 class CommentFilter extends AbstractFilter
 {
-	function __construct(public ?int $c_id = null) {
+	function __construct(public ?int $c_id = null, public ?int $res_id = null) {
 	}
 
 	protected function apply_filter(Select $sql): Select
 	{
-		$this->apply_set_fields($sql, ['c_id']);
+		$this->apply_set_fields($sql, ['c_id', 'res_id']);
 		return $sql;
 	}
 }

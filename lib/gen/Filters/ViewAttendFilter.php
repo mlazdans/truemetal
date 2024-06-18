@@ -7,11 +7,12 @@ use dqdp\SQL\Select;
 
 class ViewAttendFilter extends AbstractFilter
 {
-	function __construct() {
+	function __construct(public ?int $l_id = null, public ?int $res_id = null, public ?int $a_attended = null, public ?string $a_entered = null, public ?string $l_nick = null, public ?string $l_hash = null) {
 	}
 
 	protected function apply_filter(Select $sql): Select
 	{
+		$this->apply_set_fields($sql, ['l_id', 'res_id', 'a_attended', 'a_entered', 'l_nick', 'l_hash']);
 		return $sql;
 	}
 }

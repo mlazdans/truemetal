@@ -281,33 +281,14 @@ class CodeGen
 		$t->set_var('Namespace', $this->get_namespace_str());
 		$t->set_var('ClassName', $this->class_name);
 
-		if($this->PK){
-
-			if(is_array($this->PK)){
-				$FieldsStr = (function(): string {
-					foreach($this->PK as $f){
-						$ret[] = $this->field_map[$f]->name;
-					}
-					return "'".join("', '", $ret??[])."'";
-				})();
-
-				$ConstrArgsStr = (function(): string {
-					foreach($this->PK as $f){
-						$f = $this->field_map[$f];
-						$ret[] = "public ?$f->php_type \$$f->name = null";
-					}
-					return join(", ", $ret??[]);
-				})();
-
-				$t->set_var('ConstrArgsStr', $ConstrArgsStr);
-			} else {
-				$f = $this->field_map[$this->PK];
-				$FieldsStr = "'$f->name'";
-				$ConstrArgsStr = "public ?$f->php_type \$$f->name = null";
-			}
-		} else {
-			$ConstrArgsStr = $FieldsStr = "";
+		foreach($this->field_map as $f)
+		{
+			$constrArgs[] = "public ?$f->php_type \$$f->name = null";
+			$fieldArgs[] = $f->name;
 		}
+
+		$ConstrArgsStr = join(", ", $constrArgs ?? []);
+		$FieldsStr = "'".join("', '", $fieldArgs ?? [])."'";
 
 		$t->set_var('ConstrArgsStr', $ConstrArgsStr);
 		if($FieldsStr) {

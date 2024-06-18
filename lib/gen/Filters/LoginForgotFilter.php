@@ -7,12 +7,12 @@ use dqdp\SQL\Select;
 
 class LoginForgotFilter extends AbstractFilter
 {
-	function __construct(public ?int $f_id = null) {
+	function __construct(public ?int $f_id = null, public ?string $f_email = null, public ?string $f_code = null, public ?string $f_entered = null, public ?int $f_sent = null) {
 	}
 
 	protected function apply_filter(Select $sql): Select
 	{
-		$this->apply_set_fields($sql, ['f_id']);
+		$this->apply_set_fields($sql, ['f_id', 'f_email', 'f_code', 'f_entered', 'f_sent']);
 		return $sql;
 	}
 }

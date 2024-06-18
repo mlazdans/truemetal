@@ -7,12 +7,12 @@ use dqdp\SQL\Select;
 
 class ModulesFilter extends AbstractFilter
 {
-	function __construct(public ?int $mod_id = null) {
+	function __construct(public ?int $mod_id = null, public ?int $mod_modid = null, public ?string $module_id = null, public ?string $module_name = null, public ?string $module_descr = null, public ?int $module_active = null, public ?int $module_visible = null, public ?int $module_pos = null, public ?string $module_data = null, public ?string $module_entered = null, public ?string $module_type = null) {
 	}
 
 	protected function apply_filter(Select $sql): Select
 	{
-		$this->apply_set_fields($sql, ['mod_id']);
+		$this->apply_set_fields($sql, ['mod_id', 'mod_modid', 'module_id', 'module_name', 'module_descr', 'module_active', 'module_visible', 'module_pos', 'module_data', 'module_entered', 'module_type']);
 		return $sql;
 	}
 }

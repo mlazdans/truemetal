@@ -7,12 +7,12 @@ use dqdp\SQL\Select;
 
 class SearchLogFilter extends AbstractFilter
 {
-	function __construct(public ?int $sl_id = null) {
+	function __construct(public ?int $sl_id = null, public ?int $login_id = null, public ?string $sl_q = null, public ?string $sl_ip = null, public ?string $sl_entered = null) {
 	}
 
 	protected function apply_filter(Select $sql): Select
 	{
-		$this->apply_set_fields($sql, ['sl_id']);
+		$this->apply_set_fields($sql, ['sl_id', 'login_id', 'sl_q', 'sl_ip', 'sl_entered']);
 		return $sql;
 	}
 }

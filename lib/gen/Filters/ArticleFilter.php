@@ -7,12 +7,12 @@ use dqdp\SQL\Select;
 
 class ArticleFilter extends AbstractFilter
 {
-	function __construct(public ?int $art_id = null) {
+	function __construct(public ?int $art_id = null, public ?int $res_id = null, public ?int $art_modid = null) {
 	}
 
 	protected function apply_filter(Select $sql): Select
 	{
-		$this->apply_set_fields($sql, ['art_id']);
+		$this->apply_set_fields($sql, ['art_id', 'res_id', 'art_modid']);
 		return $sql;
 	}
 }

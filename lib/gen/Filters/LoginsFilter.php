@@ -7,12 +7,12 @@ use dqdp\SQL\Select;
 
 class LoginsFilter extends AbstractFilter
 {
-	function __construct(public ?int $l_id = null) {
+	function __construct(public ?int $l_id = null, public ?string $l_hash = null, public ?string $l_login = null, public ?string $l_nick = null, public ?string $l_password = null, public ?string $l_email = null, public ?int $l_active = null, public ?int $l_accepted = null, public ?string $l_entered = null, public ?string $l_userip = null, public ?int $l_emailvisible = null, public ?string $l_sess_id = null, public ?string $l_sess_ip = null, public ?string $l_sessiondata = null, public ?string $l_lastaccess = null, public ?int $l_logedin = null, public ?int $l_forumsort_themes = null, public ?int $l_forumsort_msg = null, public ?int $l_disable_youtube = null, public ?int $votes_plus = null, public ?int $votes_minus = null, public ?int $comment_count = null, public ?string $rating = null, public ?int $votes = null) {
 	}
 
 	protected function apply_filter(Select $sql): Select
 	{
-		$this->apply_set_fields($sql, ['l_id']);
+		$this->apply_set_fields($sql, ['l_id', 'l_hash', 'l_login', 'l_nick', 'l_password', 'l_email', 'l_active', 'l_accepted', 'l_entered', 'l_userip', 'l_emailvisible', 'l_sess_id', 'l_sess_ip', 'l_sessiondata', 'l_lastaccess', 'l_logedin', 'l_forumsort_themes', 'l_forumsort_msg', 'l_disable_youtube', 'votes_plus', 'votes_minus', 'comment_count', 'rating', 'votes']);
 		return $sql;
 	}
 }

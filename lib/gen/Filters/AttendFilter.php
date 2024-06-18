@@ -7,12 +7,12 @@ use dqdp\SQL\Select;
 
 class AttendFilter extends AbstractFilter
 {
-	function __construct(public ?int $l_id = null, public ?int $res_id = null) {
+	function __construct(public ?int $l_id = null, public ?int $res_id = null, public ?int $a_attended = null, public ?string $a_entered = null) {
 	}
 
 	protected function apply_filter(Select $sql): Select
 	{
-		$this->apply_set_fields($sql, ['l_id', 'res_id']);
+		$this->apply_set_fields($sql, ['l_id', 'res_id', 'a_attended', 'a_entered']);
 		return $sql;
 	}
 }

@@ -7,12 +7,12 @@ use dqdp\SQL\Select;
 
 class GalleryFilter extends AbstractFilter
 {
-	function __construct(public ?int $gal_id = null) {
+	function __construct(public ?int $gal_id = null, public ?int $res_id = null, public ?int $gal_ggid = null) {
 	}
 
 	protected function apply_filter(Select $sql): Select
 	{
-		$this->apply_set_fields($sql, ['gal_id']);
+		$this->apply_set_fields($sql, ['gal_id', 'res_id', 'gal_ggid']);
 		return $sql;
 	}
 }

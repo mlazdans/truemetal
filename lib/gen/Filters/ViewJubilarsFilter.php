@@ -7,11 +7,12 @@ use dqdp\SQL\Select;
 
 class ViewJubilarsFilter extends AbstractFilter
 {
-	function __construct() {
+	function __construct(public ?string $l_entered = null, public ?string $l_entered_adjusted = null, public ?int $l_id = null, public ?string $l_nick = null, public ?string $l_hash = null, public ?int $age = null, public ?int $entered_stamp = null) {
 	}
 
 	protected function apply_filter(Select $sql): Select
 	{
+		$this->apply_set_fields($sql, ['l_entered', 'l_entered_adjusted', 'l_id', 'l_nick', 'l_hash', 'age', 'entered_stamp']);
 		return $sql;
 	}
 }

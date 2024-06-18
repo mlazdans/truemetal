@@ -7,12 +7,12 @@ use dqdp\SQL\Select;
 
 class ViewResGdFilter extends AbstractFilter
 {
-	function __construct(public ?int $gd_id = null) {
+	function __construct(public ?int $gd_id = null, public ?string $gd_mime = null, public ?int $res_id = null, public ?string $res_hash = null, public ?int $res_resid = null, public ?int $res_kind = null, public ?int $login_id = null, public ?string $res_entered = null, public ?string $res_nickname = null, public ?string $res_email = null, public ?string $res_ip = null, public ?int $res_visible = null, public ?string $res_name = null, public ?string $res_intro = null, public ?string $res_data = null, public ?string $res_data_compiled = null, public ?string $res_route = null, public ?int $res_votes = null, public ?int $res_votes_plus_count = null, public ?int $res_votes_minus_count = null, public ?int $res_child_count = null, public ?string $res_child_last_date = null, public ?int $res_comment_count = null, public ?string $res_comment_last_date = null, public ?string $l_hash = null) {
 	}
 
 	protected function apply_filter(Select $sql): Select
 	{
-		$this->apply_set_fields($sql, ['gd_id']);
+		$this->apply_set_fields($sql, ['gd_id', 'gd_mime', 'res_id', 'res_hash', 'res_resid', 'res_kind', 'login_id', 'res_entered', 'res_nickname', 'res_email', 'res_ip', 'res_visible', 'res_name', 'res_intro', 'res_data', 'res_data_compiled', 'res_route', 'res_votes', 'res_votes_plus_count', 'res_votes_minus_count', 'res_child_count', 'res_child_last_date', 'res_comment_count', 'res_comment_last_date', 'l_hash']);
 		return $sql;
 	}
 }

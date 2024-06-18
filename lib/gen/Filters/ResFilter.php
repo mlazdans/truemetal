@@ -7,12 +7,12 @@ use dqdp\SQL\Select;
 
 class ResFilter extends AbstractFilter
 {
-	function __construct(public ?int $res_id = null) {
+	function __construct(public ?int $res_id = null, public ?string $res_hash = null, public ?int $res_resid = null, public ?int $res_kind = null, public ?int $login_id = null, public ?string $res_entered = null, public ?string $res_nickname = null, public ?string $res_email = null, public ?string $res_ip = null, public ?int $res_visible = null, public ?string $res_name = null, public ?string $res_intro = null, public ?string $res_data = null, public ?string $res_data_compiled = null, public ?string $res_route = null) {
 	}
 
 	protected function apply_filter(Select $sql): Select
 	{
-		$this->apply_set_fields($sql, ['res_id']);
+		$this->apply_set_fields($sql, ['res_id', 'res_hash', 'res_resid', 'res_kind', 'login_id', 'res_entered', 'res_nickname', 'res_email', 'res_ip', 'res_visible', 'res_name', 'res_intro', 'res_data', 'res_data_compiled', 'res_route']);
 		return $sql;
 	}
 }

@@ -7,12 +7,12 @@ use dqdp\SQL\Select;
 
 class LoginAcceptFilter extends AbstractFilter
 {
-	function __construct(public ?int $la_id = null) {
+	function __construct(public ?int $la_id = null, public ?string $la_email = null, public ?string $la_new_email = null, public ?string $la_code = null, public ?string $la_entered = null, public ?string $la_accepted = null, public ?int $la_sent = null) {
 	}
 
 	protected function apply_filter(Select $sql): Select
 	{
-		$this->apply_set_fields($sql, ['la_id']);
+		$this->apply_set_fields($sql, ['la_id', 'la_email', 'la_new_email', 'la_code', 'la_entered', 'la_accepted', 'la_sent']);
 		return $sql;
 	}
 }

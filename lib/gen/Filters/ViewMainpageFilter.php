@@ -7,12 +7,12 @@ use dqdp\SQL\Select;
 
 class ViewMainpageFilter extends AbstractFilter
 {
-	function __construct(public ?int $res_id = null) {
+	function __construct(public ?string $module_id = null, public ?int $res_id = null, public ?int $doc_id = null, public ?string $res_name = null, public ?string $res_intro = null, public ?string $res_data = null, public ?string $res_entered = null, public ?int $res_kind = null, public ?int $res_comment_count = null, public ?string $res_comment_last_date = null, public ?string $type_id = null, public ?string $res_route = null, public ?string $res_hash = null) {
 	}
 
 	protected function apply_filter(Select $sql): Select
 	{
-		$this->apply_set_fields($sql, ['res_id']);
+		$this->apply_set_fields($sql, ['module_id', 'res_id', 'doc_id', 'res_name', 'res_intro', 'res_data', 'res_entered', 'res_kind', 'res_comment_count', 'res_comment_last_date', 'type_id', 'res_route', 'res_hash']);
 		return $sql;
 	}
 }
