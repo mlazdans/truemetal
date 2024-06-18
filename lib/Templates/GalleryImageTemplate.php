@@ -38,7 +38,6 @@ class GalleryImageTemplate extends AbstractResTemplate
 		<div class="TD-cat">Komentāri</div>
 		<div class="TD-content"><? $this->CommentListT->print() ?></div>
 
-		<div class="TD-cat">Pievienot komentāru</div>
 		<div class="TD-content"><? $this->CommentFormT->print() ?></div>
 		<?
 	}

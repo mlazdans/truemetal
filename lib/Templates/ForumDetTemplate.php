@@ -50,7 +50,6 @@ class ForumDetTemplate extends AbstractResTemplate
 		<? } ?>
 
 		<? if($this->CommentFormT) { ?>
-			<div class="TD-cat">Pievienot komentāru</div>
 			<div class="TD-content"><? $this->CommentFormT->print() ?></div>
 		<? } ?>
 

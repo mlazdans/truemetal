@@ -27,7 +27,8 @@ class CommentAddFormTemplate extends AbstractTemplate
 
 	private function form()
 	{ ?>
-		<form action="#comment_form" method="post" id="comment_form">
+		<div class="TD-cat">Pievienot komentāru</div>
+		<form action="#comment_add_form" method="post" id="comment_add_form">
 		<input type="hidden" name="action" value="add_comment">
 		<table width="100%" cellpadding="2" cellspacing="0">
 		<? if($this->error_msg) { ?>
@@ -36,7 +37,7 @@ class CommentAddFormTemplate extends AbstractTemplate
 			</tr>
 		<? } ?>
 		<tr>
-			<td align="right">Vārds:</td>
+			<td align="right">Autors:</td>
 			<td style="width: 100%"><?=$this->l_nick ?></td>
 		</tr>
 		<tr>

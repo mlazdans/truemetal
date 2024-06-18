@@ -60,7 +60,7 @@ function vote(MainTemplate $template, AbstractViewResType $res, string $value): 
 	}
 }
 
-function res_debug(MainTemplate $template, ?AbstractViewResType $res): ?AbstractTemplate
+function res_debug(MainTemplate $template, AbstractViewResType $res): ?AbstractTemplate
 {
 	if(!User::logged()){
 		$template->not_logged();
@@ -78,15 +78,10 @@ function res_debug(MainTemplate $template, ?AbstractViewResType $res): ?Abstract
 	return $T;
 }
 
-function comment_edit(MainTemplate $template, ?ViewResCommentType $Comment): ?AbstractTemplate
+function comment_edit(MainTemplate $template, ViewResCommentType $Comment): ?AbstractTemplate
 {
 	if(!User::logged()){
 		$template->not_logged();
-		return null;
-	}
-
-	if(!$Comment){
-		$template->not_found();
 		return null;
 	}
 
@@ -108,7 +103,7 @@ function comment_edit(MainTemplate $template, ?ViewResCommentType $Comment): ?Ab
 			return null;
 		}
 	} else {
-		$T->res_data = specialchars($Comment->res_data);
+		$T->res_data = $Comment->res_data;
 	}
 
 	$T->res_route = $Comment->res_route;
@@ -121,7 +116,7 @@ function comment_edit(MainTemplate $template, ?ViewResCommentType $Comment): ?Ab
 	return $T;
 }
 
-function res_route(MainTemplate $template, ?AbstractViewResType $res): ?AbstractTemplate
+function res_route(MainTemplate $template, AbstractViewResType $res): ?AbstractTemplate
 {
 	if(!User::is_admin()){
 		$template->forbidden();
