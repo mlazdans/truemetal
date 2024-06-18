@@ -1,1 +1,0 @@
-ALTER TABLE res ADD CONSTRAINT CHK_res_hash_len CHECK (LENGTH(res_hash) = 10);
