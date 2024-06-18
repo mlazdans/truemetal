@@ -6,7 +6,7 @@ require_once('include/dbconnect.php');
 
 $diff_count = 0;
 $q = DB::Query("SELECT res_id, res_name, urlize(res_name) urlized FROM res WHERE res_name IS NOT NULL");
-while($r = DB::FetchObject($q)){
+while($r = DB::fetch_object($q)){
 	$urlized = urlize($r->res_name);
 	if($r->urlized != $urlized){
 		$diff_count++;

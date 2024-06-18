@@ -18,9 +18,9 @@ class DeDup
 
 	function __construct()
 	{
-		DB::setFetchFunction(DBFetchFunction::FetchObject);
-		$this->for_p = DB::Prepare("SELECT * FROM view_res_forum WHERE res_id = ?");
-		$this->com_p = DB::Prepare("SELECT * FROM view_res_comment WHERE res_resid = ? ORDER BY res_entered ASC LIMIT 1");
+		DB::set_fetch_function(DBFetchFunction::FetchObject);
+		$this->for_p = DB::prepare("SELECT * FROM view_res_forum WHERE res_id = ?");
+		$this->com_p = DB::prepare("SELECT * FROM view_res_comment WHERE res_resid = ? ORDER BY res_entered ASC LIMIT 1");
 
 		$merge_fields = ['login_id', 'res_entered', 'res_nickname', 'res_email', 'res_ip', 'res_data', 'res_data_compiled'];
 
@@ -30,29 +30,29 @@ class DeDup
 		}
 		$fields = join(",\n", $sql_fields);
 
-		$this->upd_fres = DB::Prepare("UPDATE res fres JOIN res cres ON cres.res_id = ? SET $fields WHERE fres.res_id = ?");
-		$this->upd_votes = DB::Prepare("UPDATE res_vote SET res_id = ? WHERE res_id = ?");
-		$this->del_res = DB::Prepare("DELETE FROM res WHERE res_id = ?");
-		$this->redir_p  = DB::Prepare("INSERT INTO res_redirect (from_res_id, to_res_id) VALUES (?,?)");
+		$this->upd_fres = DB::prepare("UPDATE res fres JOIN res cres ON cres.res_id = ? SET $fields WHERE fres.res_id = ?");
+		$this->upd_votes = DB::prepare("UPDATE res_vote SET res_id = ? WHERE res_id = ?");
+		$this->del_res = DB::prepare("DELETE FROM res WHERE res_id = ?");
+		$this->redir_p  = DB::prepare("INSERT INTO res_redirect (from_res_id, to_res_id) VALUES (?,?)");
 	}
 
 	function get_first_comment(int $res_id): ?ViewResCommentType
 	{
-		return ($r = DB::ExecutePrepared($this->com_p, $res_id)) ? ViewResCommentType::initFrom($r) : null;
+		return ($r = DB::execute_prepared($this->com_p, $res_id)) ? ViewResCommentType::initFrom($r) : null;
 	}
 
 	function get_forum_res(int $res_id): ?ViewResForumType
 	{
-		return ($r = DB::ExecutePrepared($this->for_p, $res_id)) ? ViewResForumType::initFrom($r) : null;
+		return ($r = DB::execute_prepared($this->for_p, $res_id)) ? ViewResForumType::initFrom($r) : null;
 	}
 
 	function transform_comment_into_theme(int $forum_res_id, int $comment_res_id)
 	{
 		return
 			$this->res_redirect($comment_res_id, $forum_res_id) &&
-			DB::ExecutePrepared($this->upd_fres, $comment_res_id, $forum_res_id) &&
-			DB::ExecutePrepared($this->upd_votes, $forum_res_id, $comment_res_id) &&
-			DB::ExecutePrepared($this->del_res, $comment_res_id)
+			DB::execute_prepared($this->upd_fres, $comment_res_id, $forum_res_id) &&
+			DB::execute_prepared($this->upd_votes, $forum_res_id, $comment_res_id) &&
+			DB::execute_prepared($this->del_res, $comment_res_id)
 		;
 	}
 
@@ -60,14 +60,14 @@ class DeDup
 	{
 		return
 			$this->res_redirect($comment_res_id, $forum_res_id) &&
-			DB::ExecutePrepared($this->upd_votes, $forum_res_id, $comment_res_id) &&
-			DB::ExecutePrepared($this->del_res, $comment_res_id)
+			DB::execute_prepared($this->upd_votes, $forum_res_id, $comment_res_id) &&
+			DB::execute_prepared($this->del_res, $comment_res_id)
 		;
 	}
 
 	function res_redirect(int $from_res_id, int $to_res_id)
 	{
-		return DB::ExecutePrepared($this->redir_p, $from_res_id, $to_res_id);
+		return DB::execute_prepared($this->redir_p, $from_res_id, $to_res_id);
 	}
 
 }

@@ -52,7 +52,7 @@ class DeDupFirstComment extends DeDup
 					($fres->res_ip !== $comm->res_ip)
 				) {
 					// Vēsturiskās foruma tēmas, bez ievadīta komenta!
-					if(DB::ExecutePrepared($reset_p, $fres->res_id)){
+					if(DB::execute_prepared($reset_p, $fres->res_id)){
 						print "Emptied: $fres->res_id\n";
 					} else {
 						return false;
@@ -76,7 +76,7 @@ class DeDupFirstComment extends DeDup
 	function dedup_manual()
 	{
 		$q = DB::Query("SELECT * FROM res_merge WHERE ignored = 0");
-		while($r = DB::FetchObject($q))
+		while($r = DB::fetch_object($q))
 		{
 			if($this->transform_comment_into_theme($r->forum_res_id, $r->comment_res_id)){
 				print "Merged manual: $r->forum_res_id, $r->comment_res_id\n";
@@ -103,7 +103,7 @@ if(!$res){
 	exit(1);
 }
 
-$res = DB::withNewTrans(function(){
+$res = DB::with_new_trans(function(){
 	return DB::Query("CALL res_meta_update(NULL)") && DB::Query("CALL logins_meta_update(NULL)");
 });
 
@@ -112,7 +112,7 @@ if(!$res){
 	exit(1);
 }
 
-$res = DB::withNewTrans(function(){
+$res = DB::with_new_trans(function(){
 	$DD = new DeDupFirstComment();
 
 	return $DD->dedup_manual() && $DD->dedup();
@@ -127,7 +127,7 @@ if($res){
 print "\nTODO:\n";
 print "Re-create triggers!\n";
 
-$res = DB::withNewTrans(function(){
+$res = DB::with_new_trans(function(){
 	return DB::Query("CALL res_meta_update(NULL)") && DB::Query("CALL logins_meta_update(NULL)");
 });
 

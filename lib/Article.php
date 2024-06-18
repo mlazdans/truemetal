@@ -61,7 +61,7 @@ class Article
 	// 	if($sql_add)
 	// 		$sql .= " WHERE $sql_add";
 
-	// 	$data = DB::ExecuteSingle($sql);
+	// 	$data = DB::execute_single($sql);
 
 	// 	return $data['art_count'];
 	// }

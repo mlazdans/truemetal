@@ -3,7 +3,7 @@
 abstract class Entity extends \dqdp\DBA\AbstractEntity
 {
 	function __construct(){
-		$this->set_trans(DB::getDB());
+		$this->set_trans(DB::get_db());
 
 		parent::__construct();
 	}

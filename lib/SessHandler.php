@@ -54,6 +54,6 @@ class SessHandler implements SessionHandlerInterface
 
 		DB::Execute("UPDATE logins SET l_sess_id = NULL, l_logedin = 0 WHERE l_lastaccess < ?", $period);
 
-		return DB::rowCount();
+		return DB::row_count();
 	}
 }

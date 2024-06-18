@@ -27,7 +27,7 @@ function check(object $c){
 }
 
 $q = DB::Query("SELECT * FROM res WHERE res_name IS NOT NULL OR res_email IS NOT NULL OR res_nickname IS NOT NULL");
-while($c = DB::FetchObject($q)){
+while($c = DB::fetch_object($q)){
 	check($c);
 }
 

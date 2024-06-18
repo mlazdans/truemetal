@@ -80,7 +80,7 @@ class Logins
 
 	static function banned24h($ip): bool
 	{
-		$item = DB::ExecuteSingle(
+		$item = DB::execute_single(
 			"SELECT COUNT(*) banned FROM logins WHERE l_active = 0 AND l_userip = ? AND l_lastaccess > ?",
 			$ip, date('Y-m-d H:i:s', strtotime('-10 minutes'))
 		);
@@ -198,9 +198,9 @@ class Logins
 
 		$sql = "SELECT * FROM login_accept WHERE la_code = ? AND UNIX_TIMESTAMP() - UNIX_TIMESTAMP(la_entered) < ? AND la_accepted IS NULL";
 
-		if($data = DB::ExecuteSingle($sql, $code, $timeout))
+		if($data = DB::execute_single($sql, $code, $timeout))
 		{
-			return DB::withNewTrans(function() use ($data) {
+			return DB::with_new_trans(function() use ($data) {
 				$logins_update = (new Update('logins'))
 					->Set('l_accepted', 1)
 					->Where(['l_email = ?', $data['la_email']])
@@ -226,7 +226,7 @@ class Logins
 
 	static function get_forgot($code)
 	{
-		return DB::ExecuteSingle(
+		return DB::execute_single(
 			"SELECT * FROM login_forgot WHERE f_code = ? AND UNIX_TIMESTAMP() - UNIX_TIMESTAMP(f_entered) < ?",
 			 $code, static::codes_timeout()
 		);
@@ -242,7 +242,7 @@ class Logins
 			l_userip: User::ip()
 		);
 
-		$new_l_id = DB::withNewTrans(function() use ($L) {
+		$new_l_id = DB::with_new_trans(function() use ($L) {
 			global $sys_domain;
 
 			if(!($accept_code = Logins::insert_accept_code($L->l_email)))
@@ -309,7 +309,7 @@ class Logins
 			return false;
 		}
 
-		return DB::withNewTrans(function() use ($func, $data) {
+		return DB::with_new_trans(function() use ($func, $data) {
 			for($r = 1; $r <= $data['logins_count']; ++$r)
 			{
 				if(isset($data['l_checked'.$r]) && isset($data['l_id'.$r]))
@@ -424,7 +424,7 @@ GROUP BY
 		$hlen = 8;
 		do {
 			$l_hash = substr(md5uniqid(), 0, $hlen);
-			$found = DB::ExecuteSingle("SELECT l_hash FROM logins WHERE l_hash = ?", $l_hash);
+			$found = DB::execute_single("SELECT l_hash FROM logins WHERE l_hash = ?", $l_hash);
 		} while($found);
 
 		return $l_hash;

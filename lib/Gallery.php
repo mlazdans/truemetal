@@ -20,7 +20,7 @@ class Gallery
 	// 		'$data[gal_data]',  $date, $data[gal_ggid]
 	// 	)";
 
-	// 	return DB::Execute($sql) ? DB::LastID() : false;
+	// 	return DB::Execute($sql) ? DB::last_id() : false;
 	// }
 
 	// function update($gal_id, &$data, $validate = Res::ACT_VALIDATE)

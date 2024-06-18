@@ -115,7 +115,7 @@ function forum_add_theme(MainTemplate $template, ThemeEditFormTemplate $T, ViewR
 		res_data: $post_data['forum_data'],
 	);
 
-	return DB::withNewTrans(function() use ($R){
+	return DB::with_new_trans(function() use ($R){
 		if($res_id = $R->insert()){
 			if($forum_id = (new ForumType(
 				res_id: $res_id,
@@ -439,7 +439,7 @@ function private_profile(MainTemplate $template): ?UserProfilePrivateTemplate
 		User::id()
 	);
 
-	if($data = DB::ExecuteSingle($sql))
+	if($data = DB::execute_single($sql))
 	{
 		if($data['is_dict'] && $data['is_brute']){
 			$T->passw_status = Logins::PASSW_STATUS_DICT || Logins::PASSW_STATUS_BRUTE;
@@ -715,7 +715,7 @@ function forgot_accept(MainTemplate $template, string $code): ?ForgotTemplate
 	if($error_msg){
 		$template->error($error_msg);
 	} else {
-		$OK = DB::withNewTrans(function() use($L, $code, $data) {
+		$OK = DB::with_new_trans(function() use($L, $code, $data) {
 			return
 				Logins::accept($L->l_id) &&
 				Logins::remove_forgot_code($code) &&
@@ -1179,7 +1179,7 @@ function mainpage(int $page, int $items_per_page): ?ArticleListTemplate
 	# TODO: cache, meta tabulā varbūt? view_mainpage vispār vajadzētu pārģenerēt tikai pēc vajadzības
 	// $sql = (new Select('COUNT(*) AS cc'))->From('view_mainpage');
 
-	// $cc = DB::ExecuteSingle($sql);
+	// $cc = DB::execute_single($sql);
 	// $tc = (int)$cc['cc'];
 
 	$F = (new ViewMainpageFilter)->rows($items_per_page);

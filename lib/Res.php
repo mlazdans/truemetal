@@ -66,7 +66,7 @@ class Res
 			res_data: $res_data,
 		);
 
-		return DB::withNewTrans(function() use ($R){
+		return DB::with_new_trans(function() use ($R){
 			if($new_res_id = $R->insert()){
 				if($c_id = (new CommentType(
 					res_id: $new_res_id

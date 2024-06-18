@@ -56,7 +56,7 @@ class Module
 		$ret = DB::Execute($sql);
 
 		if($ret) {
-			$last_id = DB::LastID();
+			$last_id = DB::last_id();
 			$sql = "UPDATE `modules` SET ".
 				"module_pos = module_pos + 1 ".
 				"WHERE ".

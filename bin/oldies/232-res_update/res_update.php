@@ -5,7 +5,7 @@ require_once('include/dbconnect.php');
 
 ini_set('memory_limit', '512M');
 
-DB::withNewTrans(function(){
+DB::with_new_trans(function(){
 	$sql = "UPDATE res SET
 	res_nickname = ?,
 	res_email = ?,
@@ -24,11 +24,11 @@ DB::withNewTrans(function(){
 	# Forums
 	print "Forums:";
 	$q = DB::Query("SELECT * FROM forum ORDER BY forum_id");
-	while($r = DB::FetchObject($q))
+	while($r = DB::fetch_object($q))
 	{
 		unset($PARENT);
 		if($r->forum_forumid){
-			$PARENT = DB::ExecuteSingle("SELECT * FROM forum WHERE forum_id = ?", $r->forum_forumid);
+			$PARENT = DB::execute_single("SELECT * FROM forum WHERE forum_id = ?", $r->forum_forumid);
 		}
 
 		$data = [
@@ -59,7 +59,7 @@ DB::withNewTrans(function(){
 	# Articles
 	print "Articles:";
 	$q = DB::Query("SELECT * FROM article ORDER BY art_id");
-	while($r = DB::FetchObject($q)){
+	while($r = DB::fetch_object($q)){
 		$data = [
 			'BigUgga',
 			'marrtins@hackers.lv',
@@ -88,7 +88,7 @@ DB::withNewTrans(function(){
 	# Gallery
 	print "Gallery:";
 	$q = DB::Query("SELECT * FROM gallery ORDER BY gal_id");
-	while($r = DB::FetchObject($q))
+	while($r = DB::fetch_object($q))
 	{
 		$data = [
 			'BigUgga',
@@ -119,11 +119,11 @@ DB::withNewTrans(function(){
 	print "Gallery data:";
 	//`gd_id`, `res_id`, `gal_id`, `gd_filename`, `gd_visible`, `gd_mime`, `gd_data`, `gd_thumb`, `gd_descr`, `gd_entered`
 	$q = DB::Query("SELECT `res_id`, `gal_id`, `gd_filename`, `gd_visible`, `gd_descr`, `gd_entered` FROM gallery_data ORDER BY gd_id");
-	while($r = DB::FetchObject($q))
+	while($r = DB::fetch_object($q))
 	{
 		unset($PARENT);
 		if($r->gal_id){
-			$PARENT = DB::ExecuteSingle("SELECT * FROM gallery WHERE gal_id = ?", $r->gal_id);
+			$PARENT = DB::execute_single("SELECT * FROM gallery WHERE gal_id = ?", $r->gal_id);
 		}
 
 		$data = [
@@ -184,7 +184,7 @@ DB::withNewTrans(function(){
 	ORDER BY c.c_id
 	");
 
-	while($r = DB::FetchObject($q))
+	while($r = DB::fetch_object($q))
 	{
 		$data = [
 			$r->c_username,

@@ -57,7 +57,7 @@ function process_data(MainModule $template)
 		$T->set_var("item_count", ++$c);
 
 		$table_class = $merge_status = '';
-		if($status = DB::ExecuteSingle($sql, $fres->res_id, $comm->res_id))
+		if($status = DB::execute_single($sql, $fres->res_id, $comm->res_id))
 		{
 			if($status->ignored){
 				$merge_status = "ignored, ";

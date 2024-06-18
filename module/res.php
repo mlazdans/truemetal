@@ -19,7 +19,7 @@ function vote(MainTemplate $template, AbstractViewResType $res, string $value): 
 	}
 
 	# Check count 24h
-	$countCheck = DB::ExecuteSingle(
+	$countCheck = DB::execute_single(
 		"SELECT COUNT(*) cc FROM res_vote WHERE login_id = ? AND rv_entered > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 24 HOUR)",
 		User::id()
 	);

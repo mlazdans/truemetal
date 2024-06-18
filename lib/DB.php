@@ -4,8 +4,8 @@ use dqdp\DBA\driver\MySQL_PDO;
 
 enum DBFetchFunction: string
 {
-	case FetchAssoc = "FetchAssoc";
-	case FetchObject = "FetchObject";
+	case FetchAssoc = "fetch_assoc";
+	case FetchObject = "fetch_object";
 }
 
 class DB
@@ -13,24 +13,24 @@ class DB
 	private static MySQL_PDO $db;
 	private static DBFetchFunction $fetch_function = DBFetchFunction::FetchAssoc;
 
-	static function setDB(MySQL_PDO $db)
+	static function set_db(MySQL_PDO $db)
 	{
 		static::$db = $db;
 	}
 
-	static function getDB(): MySQL_PDO
+	static function get_db(): MySQL_PDO
 	{
 		return static::$db;
 	}
 
-	static function setFetchFunction(DBFetchFunction $function)
+	static function set_fetch_function(DBFetchFunction $function)
 	{
 		static::$fetch_function = $function;
 	}
 
-	static function Execute()
+	static function execute()
 	{
-		$q = static::Query(...func_get_args());
+		$q = static::query(...func_get_args());
 		while($r = static::{static::$fetch_function->value}($q)){
 			$res[] = $r;
 		}
@@ -38,9 +38,9 @@ class DB
 		return $res ?? ($q->columnCount() ? null : (bool)$q);
 	}
 
-	static function ExecuteSingle()
+	static function execute_single()
 	{
-		$q = static::Query(...func_get_args());
+		$q = static::query(...func_get_args());
 
 		if($r = static::{static::$fetch_function->value}($q))
 		{
@@ -50,39 +50,39 @@ class DB
 		return $res ?? ($q->columnCount() ? null : (bool)$q);
 	}
 
-	static function Quote($p)
+	static function quote($p)
 	{
 		return __object_map($p, function(mixed $item){
 			return static::$db->escape((string)$item);
 		});
 	}
 
-	static function LastID()
+	static function last_id()
 	{
 		return static::$db->last_insert_id();
 	}
 
-	static function Now(): string
+	static function now(): string
 	{
 		return 'CURRENT_TIMESTAMP';
 	}
 
-	static function withNewTrans(): mixed
+	static function with_new_trans(): mixed
 	{
 		return static::$db->with_new_trans(...func_get_args());
 	}
 
-	static function Query()
+	static function query()
 	{
 		return static::$db->query(...func_get_args());
 	}
 
-	static function Prepare()
+	static function prepare()
 	{
 		return static::$db->prepare(...func_get_args());
 	}
 
-	static function ExecutePrepared()
+	static function execute_prepared()
 	{
 		$q = static::$db->execute(...func_get_args());
 		if($r = static::{static::$fetch_function->value}($q))
@@ -94,22 +94,22 @@ class DB
 		// return static::$db->execute(...func_get_args());
 	}
 
-	static function Fetch($q)
+	static function fetch($q)
 	{
 		return static::{static::$fetch_function->value}($q);
 	}
 
-	static function FetchAssoc($q)
+	static function fetch_assoc($q)
 	{
 		return static::$db->fetch_assoc($q);
 	}
 
-	static function FetchObject($q)
+	static function fetch_object($q)
 	{
 		return static::$db->fetch_object($q);
 	}
 
-	static function rowCount($q = null): int {
+	static function row_count($q = null): int {
 		if($q instanceof PDOStatement)
 		{
 			return $q->rowCount();
