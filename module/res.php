@@ -205,6 +205,12 @@ function process_request(MainTemplate $template): null|AbstractTemplate|TrueResp
 	}
 
 	if(!($res = load_vres_by_hash($res_hash))){
+		if(User::is_admin() && ($res_hash === (string)(int)$res_hash)){
+			$res = load_vres_by_id((int)$res_hash);
+		}
+	}
+
+	if(!$res){
 		$template->not_found();
 		return null;
 	}
