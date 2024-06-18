@@ -65,10 +65,5 @@ class Article
 
 	// 	return $data['art_count'];
 	// }
-
-	static function get_route(string $module_id, int $art_id, string $res_name): string
-	{
-		return "/$module_id/$art_id-".urlize($res_name);
-	}
 }
 

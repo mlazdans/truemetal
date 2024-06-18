@@ -1618,7 +1618,7 @@ function login(string $login_or_email, string $passw, string $referer): ?LoginsT
 function create_res_route(object $res): ?string
 {
 	if($res instanceof ViewResArticleType){
-		return Article::get_route($res->module_id, $res->art_id, $res->res_name);
+		return "/$res->module_id/$res->art_id-".urlize($res->res_name);
 	}
 
 	if($res instanceof ViewResCommentType){
@@ -1626,19 +1626,19 @@ function create_res_route(object $res): ?string
 	}
 
 	if($res instanceof ViewResForumType){
-		return Forum::RouteFromStr($res->forum_id, $res->res_name);
+		return "/forum/$res->forum_id-".urlize($res->res_name);
 	}
 
 	if($res instanceof ViewResGalleryType){
-		return Gallery::RouteFromStr($res->gal_id);
+		return "/gallery/$res->gal_id";
 	}
 
 	if($res instanceof ViewResGdDataType){
-		return GalleryData::RouteFromStr($res->gd_id);
+		return "/gallery/view/$res->gd_id";
 	}
 
 	if($res instanceof ViewResGdType){
-		return GalleryData::RouteFromStr($res->gd_id);
+		return "/gallery/view/$res->gd_id";
 	}
 
 	return null;

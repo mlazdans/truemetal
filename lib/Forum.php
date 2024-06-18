@@ -130,9 +130,4 @@ class Forum
 	{
 		return Res::not_seen($item->res_id, $item->res_child_last_date??$item->res_entered);
 	}
-
-	static function RouteFromStr(int $forum_id, string $forum_name): string
-	{
-		return "/forum/$forum_id-".urlize($forum_name);
-	}
 }
