@@ -2,9 +2,9 @@
 
 class CommentEditFormTemplate extends AbstractTemplate
 {
-	public string $l_nick;
-	public ?string $res_data = null;
-	public ?string $res_route = null;
+	public string $res_nickname;
+	public string $res_data;
+	public string $res_route;
 	public ?string $error_msg = null;
 
 	protected function out(): void
@@ -21,7 +21,7 @@ class CommentEditFormTemplate extends AbstractTemplate
 		<? } ?>
 		<tr>
 			<td align="right">Autors:</td>
-			<td style="width: 100%"><?=specialchars($this->l_nick) ?></td>
+			<td style="width: 100%"><?=specialchars($this->res_nickname) ?></td>
 		</tr>
 		<tr>
 			<td valign="top">Ziņa:</td>

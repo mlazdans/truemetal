@@ -94,7 +94,7 @@ function comment_edit(MainTemplate $template, ViewResCommentType $Comment): ?Abs
 	$error_msg = [];
 
 	$T = new CommentEditFormTemplate;
-	$T->l_nick = User::nick();
+	$T->res_nickname = $Comment->res_nickname;
 
 	if($action == 'update_comment')
 	{
@@ -149,7 +149,7 @@ function forum_edit(MainTemplate $template, ViewResForumType $Forum): ?AbstractT
 	$error_msg = [];
 
 	$T = new ForumEditFormTemplate;
-	$T->l_nick = User::nick();
+	$T->res_nickname = $Forum->res_nickname;
 
 	if($action == 'update_forum')
 	{
