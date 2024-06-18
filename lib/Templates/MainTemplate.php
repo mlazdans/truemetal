@@ -305,4 +305,49 @@ class MainTemplate extends AbstractTemplate
 </body>
 </html><?
 	}
+
+	// private function out_old(null|Template|TrueResponseInterface $T)
+	// {
+	// 	global $sys_debug, $sys_start_time, $sys_encoding;
+
+	// 	if($T instanceof TrueResponseInterface){
+	// 		$T->out();
+	// 		return;
+	// 	}
+
+	// 	if($T instanceof Template){
+	// 		$this->Index->set_block_string($T->parse(), 'BLOCK_middle');
+	// 	}
+
+	// 	$sys_end_time = microtime(true);
+
+	// 	$mem_usage = sprintf("Mem usage: %s MB\n", number_format(memory_get_peak_usage(true)/1024/1204, 2));
+	// 	$rendered = sprintf("Rendered in: %s sec\n", number_format(($sys_end_time - $sys_start_time), 4, '.', ''));
+
+	// 	if(User::is_admin())
+	// 	{
+	// 		$finished = "<div><pre>$mem_usage$rendered</pre></div>";
+	// 	} else {
+	// 		$finished = "<!-- $rendered -->";
+	// 	}
+	// 	$this->Index->set_var('tmpl_finished', $finished);
+
+	// 	# Default json handleris atgriež middle
+	// 	if(isset($_GET['json']))
+	// 	{
+	// 		header('Content-Type: text/javascript; charset='.$sys_encoding);
+
+	// 		$jsonData = new StdClass;
+	// 		$jsonData->title = "[ TRUEMETAL ".$this->get_title()." ]";
+	// 		$jsonData->html = $this->Index->get_block('BLOCK_container')->parse();
+	// 		print json_encode($jsonData);
+	// 	} else {
+	// 		if(isset($this->TRight)){
+	// 			$this->Index->set_block_string($this->TRight->parse(), 'BLOCK_right');
+	// 		}
+	// 		print $this->Index->parse();
+	// 	}
+
+	// 	return $this;
+	// }
 }
