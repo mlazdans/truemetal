@@ -12,18 +12,17 @@ class ArticleTemplate extends AbstractResTemplate
 		</div>
 
 		<div class="TD-content">
-
-		<? $this->profile() ?>
-
-		<div class="Article-item">
-			<div class="data">
-				<div class="intro">
-				<?=$this->res_intro ?>
+			<? $this->profile() ?>
+			<div class="Article-item">
+				<div class="data">
+					<div class="intro">
+					<?=$this->res_intro ?>
+					</div>
+					<?=$this->res_data ?>
 				</div>
-				<?=$this->res_data ?>
 			</div>
 		</div>
-		</div>
+
 		<div class="TD-content"><? $this->CommentListT->print() ?></div>
 		<div class="TD-content"><? $this->CommentFormT->print() ?></div><?
 	}
