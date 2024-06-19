@@ -4,9 +4,12 @@ class CommentsListTemplate extends AbstractTemplate
 {
 	public ViewResCommentCollection $Comments;
 	public ?string $hl = null;
+	public string $title = "Komentāri";
 
 	protected function out(): void
 	{
+		?><div class="TD-cat" id="comments-list"><?=$this->title ?></div><?
+
 		if($this->Comments->count()){
 			$C = new CommentTemplate;
 			foreach($this->Comments as $item)

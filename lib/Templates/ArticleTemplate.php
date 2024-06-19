@@ -24,10 +24,7 @@ class ArticleTemplate extends AbstractResTemplate
 			</div>
 		</div>
 		</div>
-
-		<div class="TD-cat" id="art-comments-<?=$this->art_id ?>">Komentāri</div>
 		<div class="TD-content"><? $this->CommentListT->print() ?></div>
-
 		<div class="TD-content"><? $this->CommentFormT->print() ?></div><?
 	}
 }

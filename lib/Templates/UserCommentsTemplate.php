@@ -7,9 +7,8 @@ class UserCommentsTemplate extends AbstractTemplate
 	public bool $is_blocked;
 
 	protected function out(): void
-	{ ?>
-		<div class="TD-cat">Komentāri: <?=specialchars($this->l_nick) ?><?=($this->is_blocked ? ' (bloķēts)' : '') ?></div>
-		<?
+	{
+		$this->CommentListT->title = sprintf("Komentāri: %s%s", specialchars($this->l_nick), $this->is_blocked ? ' (bloķēts)' : '');
 		$this->CommentListT->print();
 	}
 }

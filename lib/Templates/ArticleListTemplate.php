@@ -14,13 +14,6 @@ class ArticleListTemplate extends AbstractTemplate
 		$res_date = date('d.m.Y', strtotime($item->res_entered));
 		$comment_class = Res::not_seen($item->res_id, $item->res_comment_last_date??$item->res_entered) ? "Comment-count-new" : "Comment-count-old";
 
-		if($item->res_kind == ResKind::FORUM)
-		{
-			$module_id = "forum";
-		} else {
-			$module_id = $item->module_id;
-		}
-
 		$item->res_entered = date('d.m.Y', strtotime($item->res_entered));
 
 		if($item->res_kind == ResKind::FORUM)
@@ -56,8 +49,10 @@ class ArticleListTemplate extends AbstractTemplate
 			<div class="res-date"><?=$res_date ?></div>
 			<div class="res-name"><a href="<?=$item->res_route ?>"><?=$item->res_name ?></a></div>
 			<div class="res-comments-link">
-				<a href="<?=$item->res_route ?>#art-comments-<?=$item->doc_id ?>">Komentāri
-				<span class="Comment-count <?=$comment_class ?>">(<?=$item->res_comment_count ?>)</span></a>
+				<a href="<?=$item->res_route ?>#comments-list">
+					Komentāri
+					<span class="Comment-count <?=$comment_class ?>">(<?=$item->res_comment_count ?>)</span>
+				</a>
 			</div>
 		</div>
 
