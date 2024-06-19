@@ -13,6 +13,7 @@ mysql -uroot truemetal < logins_trigger_BI.sql
 mysql -uroot truemetal < res_trigger_AU.sql
 mysql -uroot truemetal < res_trigger_AD.sql
 mysql -uroot truemetal < res_trigger_AI.sql
+mysql -uroot truemetal < res_trigger_BI.sql
 mysql -uroot truemetal < res_vote_trigger_AI.sql
 mysql -uroot truemetal < res_vote_trigger_AD.sql
 mysql -uroot truemetal < res_vote_trigger_AU.sql
