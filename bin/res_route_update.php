@@ -14,24 +14,33 @@ printf("START TRANSACTION;\n");
 // prepares     : command took 0:1:10.18 (70.18s total)
 // non-prepares : command took 0:0:43.97 (43.97s total)
 
-function res_route_dump(AbstractResEntity $E, ResFilter $F){
-	if(!($q = $E->query($F)))
-	{
-		throw new Error("Could not query");
-	}
+// function res_route_dump(AbstractResEntity $E, ResFilter $F){
+// 	if(!($q = $E->query($F)))
+// 	{
+// 		throw new Error("Could not query");
+// 	}
 
-	while($r = $E->fetch($q))
-	{
-		printf("UPDATE res SET res_route = '%s' WHERE res_id = %d;\n", DB::Quote($r->Route()), $r->res_id);
-		// printf("SET @res_route = '%s'; SET @res_id = %d;\n", DB::Quote($r->Route()), $r->res_id);
-		// printf("EXECUTE update_route USING @res_route, @res_id;\n");
-	}
-}
+// 	while($r = $E->fetch($q))
+// 	{
+// 		printf("UPDATE res_meta SET res_route = '%s' WHERE res_id = %d;\n", DB::quote(create_res_route($r)), $r->res_id);
+// 		// printf("SET @res_route = '%s'; SET @res_id = %d;\n", DB::Quote($r->Route()), $r->res_id);
+// 		// printf("EXECUTE update_route USING @res_route, @res_id;\n");
+// 	}
+// }
 
-res_route_dump(new ViewResArticleEntity, $F);
-res_route_dump(new ViewResForumEntity, $F);
-res_route_dump(new ViewResGalleryEntity, $F);
-res_route_dump(new ViewResGdEntity, $F);
+// res_route_dump(new ViewResArticleEntity, $F);
+// res_route_dump(new ViewResForumEntity, $F);
+// res_route_dump(new ViewResGalleryEntity, $F);
+// res_route_dump(new ViewResGdEntity, $F);
+# Comments atsevišķi, jo vispirms jāapdeito parent
 // res_route_dump(new ViewResCommentEntity, $F);
+
+$R = new ResEntity;
+$F = (new ResFilter(res_resid: false, res_visible:false))->fields('res_id');
+
+$q = $R->query($F);
+while($r = $R->fetch($q)){
+	print "CALL res_meta_update_route($r->res_id);\n";
+}
 
 printf("COMMIT;\n");
