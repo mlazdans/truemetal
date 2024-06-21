@@ -37,6 +37,8 @@ class SessHandler implements SessionHandlerInterface
 		{
 			User::data($sess);
 
+			DB::Execute("SET @CONTEXT_LOGIN_ID = ".User::id() ?? "NULL");
+
 			return $sess->l_sessiondata??"";
 		}
 
