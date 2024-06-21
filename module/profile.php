@@ -4,10 +4,13 @@ $section = array_shift($sys_parameters);
 if($section == 'user')
 {
 	$user = array_pop($sys_parameters);
-	header("Location: /user/profile/$user/", true, 301);
+	redirectp("/user/profile/$user/");
 }
 
 if($section == 'view')
 {
-	header($_SERVER["SERVER_PROTOCOL"]." 410 Removed from public eyes");
+	$template = new MainTemplate;
+	$template->gone("Removed from public eyes");
+	$template->set_right_defaults();
+	$template->print();
 }

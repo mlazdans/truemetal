@@ -72,8 +72,7 @@ class Res
 					res_id: $new_res_id
 				))->insert()) {
 					if($new = ViewResCommentEntity::get_by_id($c_id)){
-						header("Location: $new->res_route");
-						return true;
+						return redirect($new->res_route);
 					}
 				};
 			}

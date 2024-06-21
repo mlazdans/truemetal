@@ -99,8 +99,7 @@ function comment_edit(MainTemplate $template, ViewResCommentType $Comment): ?Abs
 	if($action == 'update_comment')
 	{
 		if(update_comment($template, $Comment->res_id, post('res_data'), $error_msg)){
-			redirect($Comment->res_route);
-			return null;
+			return redirectn($Comment->res_route);
 		}
 	} else {
 		$T->res_data = $Comment->res_data;
@@ -125,7 +124,7 @@ function res_route(MainTemplate $template, ViewResType $res): ?AbstractTemplate
 
 	if($res && $res->res_route)
 	{
-		redirect($res->res_route);
+		return redirectn($res->res_route);
 	} else {
 		$template->not_found();
 	}
@@ -168,8 +167,7 @@ function forum_edit(MainTemplate $template, ViewResForumType $Forum): ?AbstractT
 
 			if($Res->update())
 			{
-				redirect($Forum->res_route);
-				return null;
+				return redirectn($Forum->res_route);
 			} else {
 				$error_msg[] = "Neizdevās saglabāt komentāru";
 			}

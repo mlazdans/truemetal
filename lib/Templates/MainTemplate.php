@@ -51,6 +51,14 @@ class MainTemplate extends AbstractTemplate
 		return $this;
 	}
 
+	function gone(string|array $msg = "Gone"): static
+	{
+		$this->msg($msg);
+		header410($msg);
+		return $this;
+	}
+
+
 	function bad_request(string|array $msg = "Slikts pieprasījums"): static
 	{
 		$this->msg($msg);

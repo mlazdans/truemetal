@@ -122,8 +122,7 @@ function forum_add_theme(MainTemplate $template, ThemeEditFormTemplate $T, ViewR
 				forum_allow_childs: 0
 			))->insert()){
 				if($new = ViewResForumEntity::get_by_id($forum_id)){
-					header("Location: $new->res_route");
-					return true;
+					return redirect($new->res_route);
 				}
 			}
 		}
@@ -389,8 +388,7 @@ function private_profile(MainTemplate $template): ?UserProfilePrivateTemplate
 	{
 		if(Logins::delete_image())
 		{
-			header("Location: $module_root/");
-			return null;
+			return redirectn("$module_root/");
 		} else {
 			$template->error('Bildi neizdevās izdzēst!');
 		}
@@ -401,8 +399,7 @@ function private_profile(MainTemplate $template): ?UserProfilePrivateTemplate
 	{
 		if(update_profile($template, $post_data))
 		{
-			header("Location: $module_root/");
-			return null;
+			return redirectn("$module_root/");
 		}
 		$L = LoginsType::initFromDirty($post_data, User::data());
 	} else {
@@ -722,8 +719,7 @@ function forgot_accept(MainTemplate $template, string $code): ?ForgotTemplate
 		});
 
 		if($OK) {
-			header("Location: /forgot/accept/ok/");
-			return null;
+			return redirectn("/forgot/accept/ok/");
 		}
 	}
 
@@ -821,8 +817,7 @@ function register(MainTemplate $template, array $sys_parameters = []): ?Abstract
 				email($sys_mail, '[truemetal] jauns lietotajs', "$data[l_email] ($data[l_nick])\n\nIP:$_SERVER[REMOTE_ADDR]");
 			} catch (Exception $e) {
 			}
-			header("Location: /register/ok/");
-			return null;
+			return redirectn("/register/ok/");
 		} else {
 			$error_msg[] = "Datubāzes kļūda";
 		}
@@ -1115,8 +1110,7 @@ function attend(MainTemplate $template, ViewResForumType $item, ?string $yesno =
 	if($json){
 		return new JsonResponse(["OK"=>true]);
 	} else {
-		header("Location: $item->res_route");
-		return null;
+		return redirectn($item->res_route);
 	}
 }
 
@@ -1196,8 +1190,7 @@ function mainpage(int $page, int $items_per_page): ?ArticleListTemplate
 
 	if(($page < 0) || ($page >= $tp))
 	{
-		header("Location: $module_root/");
-		return null;
+		return redirectn("$module_root/");
 	}
 
 	if($page){
@@ -1601,9 +1594,9 @@ function login(string $login_or_email, string $passw, string $referer): ?LoginsT
 			(strpos($referer, "/forgot/") !== false)
 			)
 		{
-			header("Location: /user/profile/");
+			redirect("/user/profile/");
 		} else {
-			header("Location: $referer");
+			redirect($referer);
 		}
 
 		return $login_data;

@@ -5,8 +5,7 @@ if($action == 'logoff')
 {
 	if(Logins::logoff())
 	{
-		header("Location: /");
-		return;
+		return redirect("/");
 	}
 }
 
