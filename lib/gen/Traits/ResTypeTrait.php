@@ -22,9 +22,8 @@ trait ResTypeTrait
 	var ?string $res_intro;
 	var ?string $res_data;
 	var ?string $res_data_compiled;
-	var ?string $res_route;
 
-	function __construct(?int $res_id = null, ?string $res_hash = null, ?int $res_resid = null, ?int $res_kind = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null, ?string $res_route = null)
+	function __construct(?int $res_id = null, ?string $res_hash = null, ?int $res_resid = null, ?int $res_kind = null, ?int $login_id = null, ?string $res_entered = null, ?string $res_nickname = null, ?string $res_email = null, ?string $res_ip = null, ?int $res_visible = null, ?string $res_name = null, ?string $res_intro = null, ?string $res_data = null, ?string $res_data_compiled = null)
 	{
 		if(isset($res_id))$this->res_id = $res_id;
 		if(isset($res_hash))$this->res_hash = $res_hash;
@@ -40,7 +39,6 @@ trait ResTypeTrait
 		if(isset($res_intro))$this->res_intro = $res_intro;
 		if(isset($res_data))$this->res_data = $res_data;
 		if(isset($res_data_compiled))$this->res_data_compiled = $res_data_compiled;
-		if(isset($res_route))$this->res_route = $res_route;
 	}
 
 	function save(): mixed {

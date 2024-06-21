@@ -121,10 +121,8 @@ function forum_add_theme(MainTemplate $template, ThemeEditFormTemplate $T, ViewR
 				res_id: $res_id,
 				forum_allow_childs: 0
 			))->insert()){
-				$new = ViewResForumEntity::get_by_id($forum_id);
-				$U = new ResType(res_id:$res_id, res_route:create_res_route($new));
-				if($U->update()){
-					header("Location: $U->res_route");
+				if($new = ViewResForumEntity::get_by_id($forum_id)){
+					header("Location: $new->res_route");
 					return true;
 				}
 			}
@@ -1348,7 +1346,7 @@ function load_specific_vres(null|ViewResFilter|ViewResType|ResType $F): ?object
 			new TODO("Get GalleryData");
 	}
 
-	throw new InvalidArgumentException("Table unknown: $res_kind");
+	throw new InvalidArgumentException("Res kind unknown: $res_kind");
 }
 
 function load_vres_by_id(int $res_id): ?object
@@ -1615,31 +1613,31 @@ function login(string $login_or_email, string $passw, string $referer): ?LoginsT
 	}
 }
 
-function create_res_route(object $res): ?string
-{
-	if($res instanceof ViewResArticleType){
-		return "/$res->module_id/$res->art_id-".urlize($res->res_name);
-	}
+// function create_res_route(object $res): ?string
+// {
+// 	if($res instanceof ViewResArticleType){
+// 		return "/$res->module_id/$res->art_id-".urlize($res->res_name);
+// 	}
 
-	if($res instanceof ViewResCommentType){
-		return $res->parent_res_route.'#comment'.$res->c_id;
-	}
+// 	if($res instanceof ViewResCommentType){
+// 		return $res->parent_res_route.'#comment'.$res->c_id;
+// 	}
 
-	if($res instanceof ViewResForumType){
-		return "/forum/$res->forum_id-".urlize($res->res_name);
-	}
+// 	if($res instanceof ViewResForumType){
+// 		return "/forum/$res->forum_id-".urlize($res->res_name);
+// 	}
 
-	if($res instanceof ViewResGalleryType){
-		return "/gallery/$res->gal_id";
-	}
+// 	if($res instanceof ViewResGalleryType){
+// 		return "/gallery/$res->gal_id";
+// 	}
 
-	if($res instanceof ViewResGdDataType){
-		return "/gallery/view/$res->gd_id";
-	}
+// 	if($res instanceof ViewResGdDataType){
+// 		return "/gallery/view/$res->gd_id";
+// 	}
 
-	if($res instanceof ViewResGdType){
-		return "/gallery/view/$res->gd_id";
-	}
+// 	if($res instanceof ViewResGdType){
+// 		return "/gallery/view/$res->gd_id";
+// 	}
 
-	return null;
-}
+// 	throw new InvalidArgumentException("Unhandled resource");
+// }

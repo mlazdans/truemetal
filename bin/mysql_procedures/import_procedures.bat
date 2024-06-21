@@ -1,15 +1,26 @@
 mysql -uroot truemetal < FUNC_urlize.sql
+mysql -uroot truemetal < FUNC_article_route.sql
+mysql -uroot truemetal < FUNC_comment_route.sql
+mysql -uroot truemetal < FUNC_forum_route.sql
+mysql -uroot truemetal < FUNC_gallery_data_route.sql
+mysql -uroot truemetal < FUNC_gallery_route.sql
+mysql -uroot truemetal < FUNC_res_route.sql
 
 mysql -uroot truemetal < PROC_res_meta_update_childs.sql
 mysql -uroot truemetal < PROC_res_meta_update_votes.sql
+mysql -uroot truemetal < PROC_res_meta_update_route.sql
 mysql -uroot truemetal < PROC_res_meta_update.sql
 
 mysql -uroot truemetal < PROC_logins_meta_update_votes.sql
 mysql -uroot truemetal < PROC_logins_meta_update_comments.sql
 mysql -uroot truemetal < PROC_logins_meta_update.sql
 
+mysql -uroot truemetal < article_trigger_AI.sql
+mysql -uroot truemetal < comment_trigger_AI.sql
+mysql -uroot truemetal < forum_trigger_AI.sql
+mysql -uroot truemetal < gallery_trigger_AI.sql
+mysql -uroot truemetal < gallery_data_trigger_AI.sql
 mysql -uroot truemetal < logins_trigger_BI.sql
-
 mysql -uroot truemetal < res_trigger_AU.sql
 mysql -uroot truemetal < res_trigger_AD.sql
 mysql -uroot truemetal < res_trigger_AI.sql

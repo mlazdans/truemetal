@@ -72,11 +72,8 @@ class Res
 					res_id: $new_res_id
 				))->insert()) {
 					if($new = ViewResCommentEntity::get_by_id($c_id)){
-						$U = new ResType(res_id:$new_res_id, res_route:create_res_route($new));
-						if($U->update()){
-							header("Location: $U->res_route");
-							return true;
-						}
+						header("Location: $new->res_route");
+						return true;
 					}
 				};
 			}
