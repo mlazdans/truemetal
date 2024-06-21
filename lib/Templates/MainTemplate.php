@@ -115,6 +115,7 @@ class MainTemplate extends AbstractTemplate
 		$this->set_search();
 		$this->set_jubilars();
 		$this->set_recent_comments();
+		$this->set_misc();
 	}
 
 	function set_jubilars(): void
@@ -187,6 +188,13 @@ class MainTemplate extends AbstractTemplate
 			$T->name = "Komentāri";
 			$this->RightBlock->add_item($T);
 		}
+	}
+
+	function set_misc()
+	{
+		$T = new MiscTemplate;
+		$T->name = "Viskas";
+		$this->RightBlock->add_item($T);
 	}
 
 	function set_search($search_q = ''): void
@@ -283,10 +291,12 @@ class MainTemplate extends AbstractTemplate
 		<a href="/interviews/" class="menu-interviews"></a>
 	</div>
 	<div class="banner"><? if($this->BannerBlock)$this->BannerBlock->print() ?></div>
-	<div class="content">
+	<div class="content<?=(!$this->RightBlock->items ? " span-all" : "") ?>">
 		<div id="main"><? $this->container() ?></div>
 	</div>
-	<div class="right"><? $this->RightBlock->print() ?></div>
+	<? if($this->RightBlock->items) { ?>
+		<div class="right"><? $this->RightBlock->print() ?></div>
+	<? } ?>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>

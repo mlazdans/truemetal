@@ -73,6 +73,7 @@ $template->set_online();
 $template->set_login();
 $template->set_search();
 $template->set_jubilars();
+$template->set_misc();
 
 $template->MiddleBlock = $T;
 $template->print();
