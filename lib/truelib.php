@@ -1,6 +1,5 @@
 <?php declare(strict_types = 1);
 
-use dqdp\Template;
 use dqdp\TODO;
 
 function tm_shutdown()
@@ -45,11 +44,11 @@ function pw_validate(string $passw, array &$error_msg): bool
 	return false;
 }
 
-function new_template(string $file_name): ?Template {
-	global $sys_template_root;
+// function new_template(string $file_name): ?Template {
+// 	global $sys_template_root;
 
-	return new Template($sys_template_root.DIRECTORY_SEPARATOR.$file_name);
-}
+// 	return new Template($sys_template_root.DIRECTORY_SEPARATOR.$file_name);
+// }
 
 function forum_add_theme(MainTemplate $template, ThemeEditFormTemplate $T, ViewResForumType $forum, array $post_data): bool
 {

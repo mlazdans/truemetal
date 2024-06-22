@@ -11,7 +11,6 @@ spl_autoload_register();
 $sys_start_time        = microtime(true);
 $sys_root              = realpath(dirname(__FILE__).DIRECTORY_SEPARATOR.'..');
 $sys_public_root       = $sys_root.DIRECTORY_SEPARATOR.'public';
-$sys_template_root     = $sys_root.DIRECTORY_SEPARATOR.'templates';
 $sys_user_root         = $sys_root.DIRECTORY_SEPARATOR.'users';
 $sys_upload_root       = $sys_public_root.DIRECTORY_SEPARATOR.'data';
 $sys_upload_http_root  = '/data';
