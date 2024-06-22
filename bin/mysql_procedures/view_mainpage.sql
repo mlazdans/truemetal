@@ -11,7 +11,7 @@ CREATE OR REPLACE VIEW view_mainpage AS
 	rm.res_comment_count,
 	rm.res_comment_last_date,
 	NULL as type_id,
-	rm.res_route,
+	r.res_route,
 	r.res_hash
 FROM
 	`article` a
@@ -35,7 +35,7 @@ UNION
 	rm.res_comment_count,
 	rm.res_comment_last_date,
 	NULL as type_id,
-	rm.res_route,
+	r.res_route,
 	r.res_hash
 FROM
 	forum
@@ -59,7 +59,7 @@ UNION
 	rm.res_comment_count,
 	rm.res_comment_last_date,
 	forum.type_id,
-	rm.res_route,
+	r.res_route,
 	r.res_hash
 FROM
 	forum

@@ -8,8 +8,9 @@ mysql -uroot truemetal < FUNC_res_route.sql
 
 mysql -uroot truemetal < PROC_res_meta_update_childs.sql
 mysql -uroot truemetal < PROC_res_meta_update_votes.sql
-mysql -uroot truemetal < PROC_res_meta_update_route.sql
 mysql -uroot truemetal < PROC_res_meta_update.sql
+
+mysql -uroot truemetal < PROC_res_update_route.sql
 
 mysql -uroot truemetal < PROC_logins_meta_update_votes.sql
 mysql -uroot truemetal < PROC_logins_meta_update_comments.sql

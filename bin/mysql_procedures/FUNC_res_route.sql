@@ -50,7 +50,7 @@ BEGIN
 		FROM
 			comment
 		JOIN res ON res.res_id = comment.res_id
-		JOIN res_meta parent ON parent.res_id = res.res_resid
+		JOIN res parent ON parent.res_id = res.res_resid
 		WHERE
 			comment.res_id = @res_id;
 	END IF;

@@ -61,10 +61,10 @@ END IF;
 
 -- update res_route
 IF (NEW.res_kind <> OLD.res_kind) OR (NEW.res_id <> OLD.res_id) OR (NEW.res_resid <> OLD.res_resid) THEN
-	CALL res_meta_update_route(NEW.res_id);
+	CALL res_update_route(NEW.res_id);
 ELSEIF (NEW.res_kind = 1 OR NEW.res_kind = 2) AND NEW.res_name <> OLD.res_name THEN
 	-- Articles, Forum depends on res_name
-	CALL res_meta_update_route(NEW.res_id);
+	CALL res_update_route(NEW.res_id);
 END IF;
 
 END; $$

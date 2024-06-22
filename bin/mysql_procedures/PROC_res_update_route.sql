@@ -1,6 +1,6 @@
 DELIMITER $$
-DROP PROCEDURE IF EXISTS res_meta_update_route $$
-CREATE PROCEDURE res_meta_update_route (p_res_id INTEGER UNSIGNED)
+DROP PROCEDURE IF EXISTS res_update_route $$
+CREATE PROCEDURE res_update_route (p_res_id INTEGER UNSIGNED)
 BEGIN
 	DECLARE done INT DEFAULT FALSE;
 	DECLARE child_res_id INTEGER UNSIGNED;
@@ -9,7 +9,7 @@ BEGIN
 
 	SET max_sp_recursion_depth=10;
 
-	INSERT INTO res_meta (
+	INSERT INTO res (
 		res_id, res_route
 	) VALUES (
 		p_res_id, res_route(p_res_id)
@@ -22,7 +22,7 @@ BEGIN
 			IF done THEN
 				LEAVE read_loop;
 			END IF;
-			CALL res_meta_update_route(child_res_id);
+			CALL res_update_route(child_res_id);
 		END LOOP;
 	CLOSE childs;
 END $$
