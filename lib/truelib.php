@@ -181,18 +181,20 @@ function forum_themes(
 
 function set_res(AbstractResTemplate $T, ViewResType $res, string $hl = null)
 {
+	$T->res_visible = $res->res_visible;
 	$T->res_id = $res->res_id;
 	$T->res_hash = $res->res_hash;
+	$T->res_entered = $res->res_entered;
 	$T->res_date = proc_date($res->res_entered);
 	$T->res_date_short = proc_date_short($res->res_entered);
 	$T->res_votes = format_vote($res->res_votes);
 	$T->comment_vote_class = comment_vote_class($res->res_votes);
 	$T->res_route = $res->res_route;
-	$T->res_name = specialchars($res->res_name);
+	$T->res_name = $res->res_name;
 	$T->res_intro = $res->res_intro;
 	$T->res_data = $res->res_data;
 	$T->res_data_compiled = $res->res_data_compiled;
-	$T->res_nickname = specialchars($res->res_nickname);
+	$T->res_nickname = $res->res_nickname;
 	$T->res_votes_plus_count = $res->res_votes_plus_count;
 	$T->res_votes_minus_count = $res->res_votes_minus_count;
 	$T->l_hash = $res->l_hash;

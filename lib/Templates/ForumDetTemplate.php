@@ -10,7 +10,7 @@ class ForumDetTemplate extends AbstractResTemplate
 
 	protected function out(): void
 	{ ?>
-		<div class="TD-cat"><?=$this->res_name ?></div>
+		<div class="TD-cat"><?=specialchars($this->res_name) ?></div>
 		<div class="TD-content">
 
 		<? if($this->AttendT) {

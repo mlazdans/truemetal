@@ -7,7 +7,7 @@ class ForumRootTemplate extends AbstractResTemplate
 	protected function out(): void
 	{ ?>
 		<div class="forum-root">
-			<div class="forum-root-name"><a href="<?=$this->res_route ?>"><?=$this->res_name ?></a></div>
+			<div class="forum-root-name"><a href="<?=$this->res_route ?>"><?=specialchars($this->res_name) ?></a></div>
 			<div class="forum-root-theme-count Comment-count <?=$this->comment_class ?>"><?=$this->res_child_count ?></div>
 		</div>
 		<div class="forum-root-data"><?=$this->res_data_compiled ?></div>

@@ -8,7 +8,7 @@ class ArticleTemplate extends AbstractResTemplate
 	protected function out(): void
 	{ ?>
 		<div class="TD-cat">
-			<div class="res-name"><a class="caption" href="<?=$this->res_route ?>"><?=$this->res_name ?></a></div>
+			<div class="res-name"><a class="caption" href="<?=$this->res_route ?>"><?=specialchars($this->res_name) ?></a></div>
 		</div>
 
 		<div class="TD-content">

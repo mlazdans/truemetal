@@ -8,6 +8,7 @@ abstract class AbstractResTemplate extends AbstractTemplate
 	public ?int $res_votes_minus_count = null;
 	public ?int $res_child_count = null;
 	public ?int $res_comment_count = null;
+	public ?int $res_visible = null;
 	public int $res_nr = 0;
 	public ?string $res_hash = null;
 	public ?string $res_date = null;
@@ -36,7 +37,7 @@ abstract class AbstractResTemplate extends AbstractTemplate
 	{ ?>
 		<div class="profile-header">
 		<div class="user-info">
-			<div class="nick"><?=$this->res_nickname ?>,&nbsp;</div>
+			<div class="nick"><?=specialchars($this->res_nickname) ?>,&nbsp;</div>
 			<div class="date"><?=$this->res_date ?></div>
 		</div>
 
