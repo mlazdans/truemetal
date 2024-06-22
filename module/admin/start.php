@@ -1,10 +1,5 @@
-<?php
-// dqdp.net Web Engine v3.0
-//
-// contacts:
-// http://dqdp.net/
-// marrtins@dqdp.net
+<?php declare(strict_types = 1);
 
-$template = new AdminModule($admin_module);
+$template = new MainTemplate();
 $template->set_title('Admin :: hello');
-$template->out(null);
+$template->print();

@@ -586,3 +586,30 @@ span.Comment-count {
 .forum-theme-last-comment-date {
 	margin-left: auto;
 }
+
+/* Admin */
+table.Main {
+	width: 100%;
+	min-width: 50%;
+	border-collapse: separate;
+	border-spacing: 1px;
+}
+table.Main td {
+	padding: 3px;
+}
+table.Main td.right {
+	text-align: right;
+}
+table.Main td.nowrap {
+	white-space: nowrap;
+}
+
+table.Main td:last-child, table.Main th:last-child {
+	width: 100%;
+}
+table.Main th {
+	white-space: nowrap;
+	text-align: left;
+	background: #bbbbbb;
+	font-weight: normal;
+}

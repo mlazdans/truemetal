@@ -2,11 +2,11 @@
 
 $admins = [3];
 
-if(!(User::logged() && in_array(User::id(), $admins))){
-	$template = new MainModule("admin");
+if(!User::is_admin()){
+	$template = new MainTemplate();
 	$template->not_found();
 	$template->set_right_defaults();
-	$template->out(null);
+	$template->print();
 	return;
 }
 
