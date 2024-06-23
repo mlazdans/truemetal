@@ -8,3 +8,7 @@ ALTER TABLE `res` ADD CONSTRAINT `CHK_res_hash_len` CHECK (LENGTH(`res_hash`) = 
 ALTER TABLE `res_history` ADD `res_name` TINYTEXT NULL DEFAULT NULL AFTER `res_data_compiled`;
 ALTER TABLE `res_history` ADD `doer_login_id` INT UNSIGNED NULL DEFAULT NULL AFTER `res_id`;
 ALTER TABLE `res_history` ADD FOREIGN KEY (`doer_login_id`) REFERENCES `logins`(`l_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `res` DROP `res_route`;
+ALTER TABLE `res_meta` ADD `res_route` VARCHAR(255) NULL AFTER `res_comment_last_date`;
+ALTER TABLE `res_meta` ADD UNIQUE(`res_route`);

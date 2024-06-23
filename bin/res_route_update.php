@@ -40,7 +40,7 @@ $F = (new ResFilter(res_resid: false, res_visible:false))->fields('res_id');
 
 $q = $R->query($F);
 while($r = $R->fetch($q)){
-	print "CALL res_meta_update_route($r->res_id);\n";
+	print "CALL res_update_route($r->res_id);\n";
 }
 
 printf("COMMIT;\n");

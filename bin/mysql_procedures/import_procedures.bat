@@ -16,16 +16,13 @@ mysql -uroot truemetal < PROC_logins_meta_update_votes.sql
 mysql -uroot truemetal < PROC_logins_meta_update_comments.sql
 mysql -uroot truemetal < PROC_logins_meta_update.sql
 
-mysql -uroot truemetal < article_trigger_AI.sql
-mysql -uroot truemetal < comment_trigger_AI.sql
-mysql -uroot truemetal < forum_trigger_AI.sql
-mysql -uroot truemetal < gallery_trigger_AI.sql
-mysql -uroot truemetal < gallery_data_trigger_AI.sql
 mysql -uroot truemetal < logins_trigger_BI.sql
+
 mysql -uroot truemetal < res_trigger_AU.sql
 mysql -uroot truemetal < res_trigger_AD.sql
 mysql -uroot truemetal < res_trigger_AI.sql
 mysql -uroot truemetal < res_trigger_BI.sql
+
 mysql -uroot truemetal < res_vote_trigger_AI.sql
 mysql -uroot truemetal < res_vote_trigger_AD.sql
 mysql -uroot truemetal < res_vote_trigger_AU.sql

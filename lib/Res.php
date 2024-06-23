@@ -92,4 +92,8 @@ class Res
 		return (new ViewResCommentEntity())->get_all($F);
 	}
 
+	static function update_route(int $res_id): bool
+	{
+		return DB::query("CALL res_update_route($res_id)") ? true : false;
+	}
 }

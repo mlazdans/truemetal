@@ -9,7 +9,7 @@ BEGIN
 
 	SET max_sp_recursion_depth=10;
 
-	INSERT INTO res (
+	INSERT INTO res_meta (
 		res_id, res_route
 	) VALUES (
 		p_res_id, res_route(p_res_id)
