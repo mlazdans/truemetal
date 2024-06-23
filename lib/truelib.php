@@ -402,6 +402,7 @@ function private_profile(MainTemplate $template): ?UserProfilePrivateTemplate
 		{
 			return redirectn("$module_root/");
 		}
+		# TODO: tikai atļautie fields!!!
 		$L = LoginsType::initFromDirty($post_data, User::data());
 	} else {
 		$L = LoginsType::initFrom(User::data());
@@ -1047,38 +1048,38 @@ function gallery_view_image(MainTemplate $template, int $gd_id): ?GalleryImageTe
 	return $T;
 }
 
-function admin_comment_list(
-	Template $C,
-	ViewResCommentCollection $comments
-){
+// function admin_comment_list(
+// 	Template $C,
+// 	ViewResCommentCollection $comments
+// ){
 
-	if($comments->count())
-	{
-		$C->enable('BLOCK_comments');
-	} else {
-		$C->enable('BLOCK_no_comments');
-	}
+// 	if($comments->count())
+// 	{
+// 		$C->enable('BLOCK_comments');
+// 	} else {
+// 		$C->enable('BLOCK_no_comments');
+// 	}
 
-	foreach($comments as $item)
-	{
-		$C->set_array($item, 'BLOCK_comment_item');
+// 	foreach($comments as $item)
+// 	{
+// 		$C->set_array($item, 'BLOCK_comment_item');
 
-		$C->set_var('c_origin_href', $item->res_route);
-		$C->set_var('c_origin_name', "#comment$item->c_id");
+// 		$C->set_var('c_origin_href', $item->res_route);
+// 		$C->set_var('c_origin_name', "#comment$item->c_id");
 
-		if($item->res_visible)
-		{
-			$C->enable('BLOCK_c_visible');
-			$C->disable('BLOCK_c_invisible');
-			$C->set_var('c_color_class', 'box-normal', 'BLOCK_comment_item');
-		} else {
-			$C->enable('BLOCK_c_invisible');
-			$C->disable('BLOCK_c_visible');
-			$C->set_var('c_color_class', 'box-invisible', 'BLOCK_comment_item');
-		}
-		$C->parse_block('BLOCK_comment_item', TMPL_APPEND);
-	}
-}
+// 		if($item->res_visible)
+// 		{
+// 			$C->enable('BLOCK_c_visible');
+// 			$C->disable('BLOCK_c_invisible');
+// 			$C->set_var('c_color_class', 'box-normal', 'BLOCK_comment_item');
+// 		} else {
+// 			$C->enable('BLOCK_c_invisible');
+// 			$C->disable('BLOCK_c_visible');
+// 			$C->set_var('c_color_class', 'box-invisible', 'BLOCK_comment_item');
+// 		}
+// 		$C->parse_block('BLOCK_comment_item', TMPL_APPEND);
+// 	}
+// }
 
 function attend(MainTemplate $template, ViewResForumType $item, ?string $yesno = null): ?TrueResponseInterface
 {

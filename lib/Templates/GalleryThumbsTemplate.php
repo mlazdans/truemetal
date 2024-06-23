@@ -51,7 +51,7 @@ class GalleryThumbsTemplate extends AbstractTemplate
 					<div class="vote <?=comment_vote_class($thumb->res_votes) ?> vote-value" style="display: inline-block;text-align: center; padding:0; border:none;"><?=$res_votes ?></div>
 					Kom. (<div class="<?=$comment_class ?>" style="display: inline-block;"><?=$thumb->res_comment_count ?></div>)
 				</div>
-				<a href="/gallery/view/<?=$thumb->gd_id ?>/#pic-holder"><img src="<?=$thumb_path ?>" alt="" class="img-thumb" width="120"></a>
+				<a href="/gallery/view/<?=$thumb->gd_id ?>/"><img src="<?=$thumb_path ?>" alt="" class="img-thumb" width="120"></a>
 			</div>
 
 			<? if(($c % $tpr == 0) || ($c == $thumb_count)) { ?>

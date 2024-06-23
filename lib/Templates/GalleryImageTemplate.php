@@ -25,20 +25,17 @@ class GalleryImageTemplate extends AbstractResTemplate
 		$gal_jump_id = "gg_".$gal->gal_ggid;
 
 		?>
-		<div class="TD-cat" id="pic-holder">
+		<div class="TD-cat">
 			<a class="A-cat" href="/gallery/#<?=$gal_jump_id ?>">Galerijas</a> /
 			<a class="A-cat" href="/gallery/<?=$gal->gal_id ?>/"><?=specialchars($gal->res_name) ?></a>
 		</div>
 
 		<? $this->profile() ?>
 
-		<div style="text-align: center;"><a href="/gallery/view/<?=$gd_nextid ?>/#pic-holder"><img src="<?=$image_path ?>" alt="Nākamā" width="500"></a></div>
+		<div style="text-align: center;"><a href="/gallery/view/<?=$gd_nextid ?>/"><img src="<?=$image_path ?>" alt="Nākamā" width="500"></a></div>
 		<div style="text-align: center;"><?=$image->res_data_compiled ?></div>
 
-		<div class="TD-cat">Komentāri</div>
 		<div class="TD-content"><? $this->CommentListT->print() ?></div>
-
-		<div class="TD-content"><? $this->CommentFormT->print() ?></div>
-		<?
+		<div class="TD-content"><? $this->CommentFormT->print() ?></div><?
 	}
 }
