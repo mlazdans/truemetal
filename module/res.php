@@ -132,14 +132,14 @@ function res_route(MainTemplate $template, ViewResType $res): ?AbstractTemplate
 	return null;
 }
 
-function forum_edit(MainTemplate $template, ViewResForumType $Forum): ?AbstractTemplate
+function forum_edit(MainTemplate $template, ViewResForumType $OLD): ?AbstractTemplate
 {
 	if(!User::logged()){
 		$template->not_logged();
 		return null;
 	}
 
-	if(!User::can_edit_res($Forum)){
+	if(!User::can_edit_res($OLD)){
 		$template->forbidden("Nav tiesību labot");
 		return null;
 	}
@@ -148,7 +148,7 @@ function forum_edit(MainTemplate $template, ViewResForumType $Forum): ?AbstractT
 	$error_msg = [];
 
 	$T = new ForumEditFormTemplate;
-	$T->res_nickname = $Forum->res_nickname;
+	$T->res_nickname = $OLD->res_nickname;
 
 	if($action == 'update_forum')
 	{
@@ -158,16 +158,20 @@ function forum_edit(MainTemplate $template, ViewResForumType $Forum): ?AbstractT
 		if(empty($res_name))$error_msg[] = "Kaut kas jau jāieraksta";
 
 		if(!$error_msg){
-			$Res = new ResType(
-				res_id: $Forum->res_id,
-				res_data: $res_data,
-				res_name: $res_name,
-				res_data_compiled: parse_text_data($res_data),
-			);
+			$result = DB::with_new_trans(function() use ($OLD, $res_data, $res_name){
+				$Res = new ResType(
+					res_id: $OLD->res_id,
+					res_data: $res_data,
+					res_name: $res_name,
+					res_data_compiled: parse_text_data($res_data),
+				);
 
-			if($Res->update())
+				return $Res->update() && ($res_name !== $OLD->res_name ? Res::update_route($OLD->res_id) : true);
+			});
+
+			if($result && ($NEW = ViewResForumEntity::get($OLD->forum_id)))
 			{
-				return redirectn($Forum->res_route);
+				return redirectn($NEW->res_route);
 			} else {
 				$error_msg[] = "Neizdevās saglabāt komentāru";
 			}
@@ -176,11 +180,11 @@ function forum_edit(MainTemplate $template, ViewResForumType $Forum): ?AbstractT
 		$T->res_data = $res_data;
 		$T->res_name = $res_name;
 	} else {
-		$T->res_data = $Forum->res_data;
-		$T->res_name = $Forum->res_name;
+		$T->res_data = $OLD->res_data;
+		$T->res_name = $OLD->res_name;
 	}
 
-	$T->res_route = $Forum->res_route;
+	$T->res_route = $OLD->res_route;
 
 	if($error_msg)
 	{
