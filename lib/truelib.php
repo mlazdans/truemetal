@@ -402,10 +402,9 @@ function private_profile(MainTemplate $template): ?UserProfilePrivateTemplate
 		{
 			return redirectn("$module_root/");
 		}
-		# TODO: tikai atļautie fields!!!
-		$L = LoginsType::initFromDirty($post_data, User::data());
+		$L = LoginsType::init_from_dirty($post_data, User::data());
 	} else {
-		$L = LoginsType::initFrom(User::data());
+		$L = LoginsType::init_from(User::data());
 	}
 
 	$T = new UserProfilePrivateTemplate;

@@ -38,12 +38,12 @@ class DeDup
 
 	function get_first_comment(int $res_id): ?ViewResCommentType
 	{
-		return ($r = DB::execute_prepared($this->com_p, $res_id)) ? ViewResCommentType::initFrom($r) : null;
+		return ($r = DB::execute_prepared($this->com_p, $res_id)) ? ViewResCommentType::init_from($r) : null;
 	}
 
 	function get_forum_res(int $res_id): ?ViewResForumType
 	{
-		return ($r = DB::execute_prepared($this->for_p, $res_id)) ? ViewResForumType::initFrom($r) : null;
+		return ($r = DB::execute_prepared($this->for_p, $res_id)) ? ViewResForumType::init_from($r) : null;
 	}
 
 	function transform_comment_into_theme(int $forum_res_id, int $comment_res_id)
