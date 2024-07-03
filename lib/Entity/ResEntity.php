@@ -6,17 +6,17 @@ class ResEntity extends Entity
 {
 	use ResEntityTrait;
 
-	function show(int|array $res_id)
+	static function show(int|array $res_id): bool
 	{
-		return $this->set_visible($res_id, 1);
+		return static::set_visible($res_id, 1);
 	}
 
-	function hide(int|array $res_id)
+	static function hide(int|array $res_id): bool
 	{
-		return $this->set_visible($res_id, 0);
+		return static::set_visible($res_id, 0);
 	}
 
-	function set_visible(int|array $res_id, int $visible)
+	static function set_visible(int|array $res_id, int $visible): bool
 	{
 		if(!is_array($res_id)){
 			$res_id = [$res_id];
@@ -24,8 +24,23 @@ class ResEntity extends Entity
 
 		assert($visible == 0 || $visible == 1);
 
-		$sql = (new Update($this->get_table_name()))->Set("res_visible = $visible" )->WhereIn("res_id", $res_id);
+		$O = (new static);
 
-		return $this->get_trans()->query($sql);
+		$sql = (new Update($O->get_table_name()))->Set("res_visible = $visible" )->WhereIn("res_id", $res_id);
+
+		return $O->get_trans()->query($sql) ? true : false;
+	}
+
+	static function move(int|array $res_id, int $res_resid): bool
+	{
+		if(!is_array($res_id)){
+			$res_id = [$res_id];
+		}
+
+		$O = (new static);
+
+		$sql = (new Update($O->get_table_name()))->Set("res_resid = $res_resid" )->WhereIn("res_id", $res_id);
+
+		return $O->get_trans()->query($sql) ? true : false;
 	}
 }

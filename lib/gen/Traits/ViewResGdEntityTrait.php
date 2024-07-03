@@ -6,15 +6,15 @@ use dqdp\DBA\AbstractFilter;
 
 trait ViewResGdEntityTrait
 {
-	function get_table_name(): string {
+	static function get_table_name(): string {
 		return 'view_res_gd';
 	}
 
-	function get_pk(): string|array|null {
+	static function get_pk(): string|array|null {
 		return 'gd_id';
 	}
 
-	function get_gen(): ?string {
+	static function get_gen(): ?string {
 		return null;
 	}
 
@@ -22,10 +22,11 @@ trait ViewResGdEntityTrait
 		return (new static)->get_single((new ViewResGdFilter(gd_id: $ID))->merge($DF));
 	}
 
-	function get_all(?AbstractFilter $filters = null): ViewResGdCollection {
+	static function get_all(?AbstractFilter $filters = null): ViewResGdCollection {
 		$col = new ViewResGdCollection;
-		if($this->query($filters)){
-			while($r = $this->fetch()){
+		$O = (new static);
+		if($O->query($filters)){
+			while($r = $O->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -35,7 +36,7 @@ trait ViewResGdEntityTrait
 
 	function fetch(): ?ViewResGdType {
 		if($data = parent::fetch($this->Q)){
-			return ViewResGdType::initFrom($data);
+			return ViewResGdType::init_from($data);
 		} else {
 			return null;
 		}

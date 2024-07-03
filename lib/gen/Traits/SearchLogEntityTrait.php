@@ -6,15 +6,15 @@ use dqdp\DBA\AbstractFilter;
 
 trait SearchLogEntityTrait
 {
-	function get_table_name(): string {
+	static function get_table_name(): string {
 		return 'search_log';
 	}
 
-	function get_pk(): string|array|null {
+	static function get_pk(): string|array|null {
 		return 'sl_id';
 	}
 
-	function get_gen(): ?string {
+	static function get_gen(): ?string {
 		return null;
 	}
 
@@ -22,10 +22,11 @@ trait SearchLogEntityTrait
 		return (new static)->get_single((new SearchLogFilter(sl_id: $ID))->merge($DF));
 	}
 
-	function get_all(?AbstractFilter $filters = null): SearchLogCollection {
+	static function get_all(?AbstractFilter $filters = null): SearchLogCollection {
 		$col = new SearchLogCollection;
-		if($this->query($filters)){
-			while($r = $this->fetch()){
+		$O = (new static);
+		if($O->query($filters)){
+			while($r = $O->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -35,7 +36,7 @@ trait SearchLogEntityTrait
 
 	function fetch(): ?SearchLogType {
 		if($data = parent::fetch($this->Q)){
-			return SearchLogType::initFrom($data);
+			return SearchLogType::init_from($data);
 		} else {
 			return null;
 		}

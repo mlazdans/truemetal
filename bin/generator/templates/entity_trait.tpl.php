@@ -11,25 +11,25 @@ trait {ClassName}EntityTrait
 	function __construct({procConstrStr}){
 	}
 
-	function get_proc_name(): string {
+	static function get_proc_name(): string {
 		return $procNameStr;
 	}
 
-	function get_proc_args(): ?array {
+	static function get_proc_args(): ?array {
 		return $procArgsStr;
 	}
 	<!-- END ProcConstr -->
 
 	<!-- BEGIN RelConstr disabled -->
-	function get_table_name(): string {
+	static function get_table_name(): string {
 		return {relNameStr};
 	}
 
-	function get_pk(): string|array|null {
+	static function get_pk(): string|array|null {
 		return {PkStr};
 	}
 
-	function get_gen(): ?string {
+	static function get_gen(): ?string {
 		return {GenStr};
 	}
 	<!-- END RelConstr -->
@@ -40,10 +40,11 @@ trait {ClassName}EntityTrait
 	}
 	<!-- END Get -->
 
-	function get_all(?AbstractFilter $filters = null): {ClassName}Collection {
+	static function get_all(?AbstractFilter $filters = null): {ClassName}Collection {
 		$col = new {ClassName}Collection;
-		if($this->query($filters)){
-			while($r = $this->fetch()){
+		$O = (new static);
+		if($O->query($filters)){
+			while($r = $O->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -53,7 +54,7 @@ trait {ClassName}EntityTrait
 
 	function fetch(): ?{ClassName}Type {
 		if($data = parent::fetch($this->Q)){
-			return {ClassName}Type::initFrom($data);
+			return {ClassName}Type::init_from($data);
 		} else {
 			return null;
 		}

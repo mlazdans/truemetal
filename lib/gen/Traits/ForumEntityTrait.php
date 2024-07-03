@@ -6,15 +6,15 @@ use dqdp\DBA\AbstractFilter;
 
 trait ForumEntityTrait
 {
-	function get_table_name(): string {
+	static function get_table_name(): string {
 		return 'forum';
 	}
 
-	function get_pk(): string|array|null {
+	static function get_pk(): string|array|null {
 		return 'forum_id';
 	}
 
-	function get_gen(): ?string {
+	static function get_gen(): ?string {
 		return null;
 	}
 
@@ -22,10 +22,11 @@ trait ForumEntityTrait
 		return (new static)->get_single((new ForumFilter(forum_id: $ID))->merge($DF));
 	}
 
-	function get_all(?AbstractFilter $filters = null): ForumCollection {
+	static function get_all(?AbstractFilter $filters = null): ForumCollection {
 		$col = new ForumCollection;
-		if($this->query($filters)){
-			while($r = $this->fetch()){
+		$O = (new static);
+		if($O->query($filters)){
+			while($r = $O->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -35,7 +36,7 @@ trait ForumEntityTrait
 
 	function fetch(): ?ForumType {
 		if($data = parent::fetch($this->Q)){
-			return ForumType::initFrom($data);
+			return ForumType::init_from($data);
 		} else {
 			return null;
 		}

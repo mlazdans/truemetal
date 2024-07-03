@@ -6,15 +6,15 @@ use dqdp\DBA\AbstractFilter;
 
 trait ModulesEntityTrait
 {
-	function get_table_name(): string {
+	static function get_table_name(): string {
 		return 'modules';
 	}
 
-	function get_pk(): string|array|null {
+	static function get_pk(): string|array|null {
 		return 'mod_id';
 	}
 
-	function get_gen(): ?string {
+	static function get_gen(): ?string {
 		return null;
 	}
 
@@ -22,10 +22,11 @@ trait ModulesEntityTrait
 		return (new static)->get_single((new ModulesFilter(mod_id: $ID))->merge($DF));
 	}
 
-	function get_all(?AbstractFilter $filters = null): ModulesCollection {
+	static function get_all(?AbstractFilter $filters = null): ModulesCollection {
 		$col = new ModulesCollection;
-		if($this->query($filters)){
-			while($r = $this->fetch()){
+		$O = (new static);
+		if($O->query($filters)){
+			while($r = $O->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -35,7 +36,7 @@ trait ModulesEntityTrait
 
 	function fetch(): ?ModulesType {
 		if($data = parent::fetch($this->Q)){
-			return ModulesType::initFrom($data);
+			return ModulesType::init_from($data);
 		} else {
 			return null;
 		}

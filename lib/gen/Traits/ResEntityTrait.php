@@ -6,15 +6,15 @@ use dqdp\DBA\AbstractFilter;
 
 trait ResEntityTrait
 {
-	function get_table_name(): string {
+	static function get_table_name(): string {
 		return 'res';
 	}
 
-	function get_pk(): string|array|null {
+	static function get_pk(): string|array|null {
 		return 'res_id';
 	}
 
-	function get_gen(): ?string {
+	static function get_gen(): ?string {
 		return null;
 	}
 
@@ -22,10 +22,11 @@ trait ResEntityTrait
 		return (new static)->get_single((new ResFilter(res_id: $ID))->merge($DF));
 	}
 
-	function get_all(?AbstractFilter $filters = null): ResCollection {
+	static function get_all(?AbstractFilter $filters = null): ResCollection {
 		$col = new ResCollection;
-		if($this->query($filters)){
-			while($r = $this->fetch()){
+		$O = (new static);
+		if($O->query($filters)){
+			while($r = $O->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -35,7 +36,7 @@ trait ResEntityTrait
 
 	function fetch(): ?ResType {
 		if($data = parent::fetch($this->Q)){
-			return ResType::initFrom($data);
+			return ResType::init_from($data);
 		} else {
 			return null;
 		}

@@ -6,15 +6,15 @@ use dqdp\DBA\AbstractFilter;
 
 trait ViewResCommentEntityTrait
 {
-	function get_table_name(): string {
+	static function get_table_name(): string {
 		return 'view_res_comment';
 	}
 
-	function get_pk(): string|array|null {
+	static function get_pk(): string|array|null {
 		return 'c_id';
 	}
 
-	function get_gen(): ?string {
+	static function get_gen(): ?string {
 		return null;
 	}
 
@@ -22,10 +22,11 @@ trait ViewResCommentEntityTrait
 		return (new static)->get_single((new ViewResCommentFilter(c_id: $ID))->merge($DF));
 	}
 
-	function get_all(?AbstractFilter $filters = null): ViewResCommentCollection {
+	static function get_all(?AbstractFilter $filters = null): ViewResCommentCollection {
 		$col = new ViewResCommentCollection;
-		if($this->query($filters)){
-			while($r = $this->fetch()){
+		$O = (new static);
+		if($O->query($filters)){
+			while($r = $O->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -35,7 +36,7 @@ trait ViewResCommentEntityTrait
 
 	function fetch(): ?ViewResCommentType {
 		if($data = parent::fetch($this->Q)){
-			return ViewResCommentType::initFrom($data);
+			return ViewResCommentType::init_from($data);
 		} else {
 			return null;
 		}

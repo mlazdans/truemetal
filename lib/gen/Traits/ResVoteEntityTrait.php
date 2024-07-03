@@ -6,22 +6,23 @@ use dqdp\DBA\AbstractFilter;
 
 trait ResVoteEntityTrait
 {
-	function get_table_name(): string {
+	static function get_table_name(): string {
 		return 'res_vote';
 	}
 
-	function get_pk(): string|array|null {
+	static function get_pk(): string|array|null {
 		return null;
 	}
 
-	function get_gen(): ?string {
+	static function get_gen(): ?string {
 		return null;
 	}
 
-	function get_all(?AbstractFilter $filters = null): ResVoteCollection {
+	static function get_all(?AbstractFilter $filters = null): ResVoteCollection {
 		$col = new ResVoteCollection;
-		if($this->query($filters)){
-			while($r = $this->fetch()){
+		$O = (new static);
+		if($O->query($filters)){
+			while($r = $O->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -31,7 +32,7 @@ trait ResVoteEntityTrait
 
 	function fetch(): ?ResVoteType {
 		if($data = parent::fetch($this->Q)){
-			return ResVoteType::initFrom($data);
+			return ResVoteType::init_from($data);
 		} else {
 			return null;
 		}

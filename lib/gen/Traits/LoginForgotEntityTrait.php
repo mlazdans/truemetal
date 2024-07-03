@@ -6,15 +6,15 @@ use dqdp\DBA\AbstractFilter;
 
 trait LoginForgotEntityTrait
 {
-	function get_table_name(): string {
+	static function get_table_name(): string {
 		return 'login_forgot';
 	}
 
-	function get_pk(): string|array|null {
+	static function get_pk(): string|array|null {
 		return 'f_id';
 	}
 
-	function get_gen(): ?string {
+	static function get_gen(): ?string {
 		return null;
 	}
 
@@ -22,10 +22,11 @@ trait LoginForgotEntityTrait
 		return (new static)->get_single((new LoginForgotFilter(f_id: $ID))->merge($DF));
 	}
 
-	function get_all(?AbstractFilter $filters = null): LoginForgotCollection {
+	static function get_all(?AbstractFilter $filters = null): LoginForgotCollection {
 		$col = new LoginForgotCollection;
-		if($this->query($filters)){
-			while($r = $this->fetch()){
+		$O = (new static);
+		if($O->query($filters)){
+			while($r = $O->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -35,7 +36,7 @@ trait LoginForgotEntityTrait
 
 	function fetch(): ?LoginForgotType {
 		if($data = parent::fetch($this->Q)){
-			return LoginForgotType::initFrom($data);
+			return LoginForgotType::init_from($data);
 		} else {
 			return null;
 		}

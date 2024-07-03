@@ -6,15 +6,15 @@ use dqdp\DBA\AbstractFilter;
 
 trait AttendEntityTrait
 {
-	function get_table_name(): string {
+	static function get_table_name(): string {
 		return 'attend';
 	}
 
-	function get_pk(): string|array|null {
+	static function get_pk(): string|array|null {
 		return ['l_id','res_id'];
 	}
 
-	function get_gen(): ?string {
+	static function get_gen(): ?string {
 		return null;
 	}
 
@@ -22,10 +22,11 @@ trait AttendEntityTrait
 		return (new static)->get_single((new AttendFilter(l_id: $ID['l_id'], res_id: $ID['res_id']))->merge($DF));
 	}
 
-	function get_all(?AbstractFilter $filters = null): AttendCollection {
+	static function get_all(?AbstractFilter $filters = null): AttendCollection {
 		$col = new AttendCollection;
-		if($this->query($filters)){
-			while($r = $this->fetch()){
+		$O = (new static);
+		if($O->query($filters)){
+			while($r = $O->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -35,7 +36,7 @@ trait AttendEntityTrait
 
 	function fetch(): ?AttendType {
 		if($data = parent::fetch($this->Q)){
-			return AttendType::initFrom($data);
+			return AttendType::init_from($data);
 		} else {
 			return null;
 		}

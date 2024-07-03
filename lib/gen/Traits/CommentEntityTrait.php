@@ -6,15 +6,15 @@ use dqdp\DBA\AbstractFilter;
 
 trait CommentEntityTrait
 {
-	function get_table_name(): string {
+	static function get_table_name(): string {
 		return 'comment';
 	}
 
-	function get_pk(): string|array|null {
+	static function get_pk(): string|array|null {
 		return 'c_id';
 	}
 
-	function get_gen(): ?string {
+	static function get_gen(): ?string {
 		return null;
 	}
 
@@ -22,10 +22,11 @@ trait CommentEntityTrait
 		return (new static)->get_single((new CommentFilter(c_id: $ID))->merge($DF));
 	}
 
-	function get_all(?AbstractFilter $filters = null): CommentCollection {
+	static function get_all(?AbstractFilter $filters = null): CommentCollection {
 		$col = new CommentCollection;
-		if($this->query($filters)){
-			while($r = $this->fetch()){
+		$O = (new static);
+		if($O->query($filters)){
+			while($r = $O->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -35,7 +36,7 @@ trait CommentEntityTrait
 
 	function fetch(): ?CommentType {
 		if($data = parent::fetch($this->Q)){
-			return CommentType::initFrom($data);
+			return CommentType::init_from($data);
 		} else {
 			return null;
 		}

@@ -6,22 +6,23 @@ use dqdp\DBA\AbstractFilter;
 
 trait ViewJubilarsEntityTrait
 {
-	function get_table_name(): string {
+	static function get_table_name(): string {
 		return 'view_jubilars';
 	}
 
-	function get_pk(): string|array|null {
+	static function get_pk(): string|array|null {
 		return null;
 	}
 
-	function get_gen(): ?string {
+	static function get_gen(): ?string {
 		return null;
 	}
 
-	function get_all(?AbstractFilter $filters = null): ViewJubilarsCollection {
+	static function get_all(?AbstractFilter $filters = null): ViewJubilarsCollection {
 		$col = new ViewJubilarsCollection;
-		if($this->query($filters)){
-			while($r = $this->fetch()){
+		$O = (new static);
+		if($O->query($filters)){
+			while($r = $O->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -31,7 +32,7 @@ trait ViewJubilarsEntityTrait
 
 	function fetch(): ?ViewJubilarsType {
 		if($data = parent::fetch($this->Q)){
-			return ViewJubilarsType::initFrom($data);
+			return ViewJubilarsType::init_from($data);
 		} else {
 			return null;
 		}

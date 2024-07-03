@@ -6,15 +6,15 @@ use dqdp\DBA\AbstractFilter;
 
 trait LoginsEntityTrait
 {
-	function get_table_name(): string {
+	static function get_table_name(): string {
 		return 'logins';
 	}
 
-	function get_pk(): string|array|null {
+	static function get_pk(): string|array|null {
 		return 'l_id';
 	}
 
-	function get_gen(): ?string {
+	static function get_gen(): ?string {
 		return null;
 	}
 
@@ -22,10 +22,11 @@ trait LoginsEntityTrait
 		return (new static)->get_single((new LoginsFilter(l_id: $ID))->merge($DF));
 	}
 
-	function get_all(?AbstractFilter $filters = null): LoginsCollection {
+	static function get_all(?AbstractFilter $filters = null): LoginsCollection {
 		$col = new LoginsCollection;
-		if($this->query($filters)){
-			while($r = $this->fetch()){
+		$O = (new static);
+		if($O->query($filters)){
+			while($r = $O->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -35,7 +36,7 @@ trait LoginsEntityTrait
 
 	function fetch(): ?LoginsType {
 		if($data = parent::fetch($this->Q)){
-			return LoginsType::initFrom($data);
+			return LoginsType::init_from($data);
 		} else {
 			return null;
 		}

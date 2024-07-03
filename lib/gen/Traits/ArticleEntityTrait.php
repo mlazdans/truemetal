@@ -6,15 +6,15 @@ use dqdp\DBA\AbstractFilter;
 
 trait ArticleEntityTrait
 {
-	function get_table_name(): string {
+	static function get_table_name(): string {
 		return 'article';
 	}
 
-	function get_pk(): string|array|null {
+	static function get_pk(): string|array|null {
 		return 'art_id';
 	}
 
-	function get_gen(): ?string {
+	static function get_gen(): ?string {
 		return null;
 	}
 
@@ -22,10 +22,11 @@ trait ArticleEntityTrait
 		return (new static)->get_single((new ArticleFilter(art_id: $ID))->merge($DF));
 	}
 
-	function get_all(?AbstractFilter $filters = null): ArticleCollection {
+	static function get_all(?AbstractFilter $filters = null): ArticleCollection {
 		$col = new ArticleCollection;
-		if($this->query($filters)){
-			while($r = $this->fetch()){
+		$O = (new static);
+		if($O->query($filters)){
+			while($r = $O->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -35,7 +36,7 @@ trait ArticleEntityTrait
 
 	function fetch(): ?ArticleType {
 		if($data = parent::fetch($this->Q)){
-			return ArticleType::initFrom($data);
+			return ArticleType::init_from($data);
 		} else {
 			return null;
 		}

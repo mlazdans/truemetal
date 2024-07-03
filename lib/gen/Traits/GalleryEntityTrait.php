@@ -6,15 +6,15 @@ use dqdp\DBA\AbstractFilter;
 
 trait GalleryEntityTrait
 {
-	function get_table_name(): string {
+	static function get_table_name(): string {
 		return 'gallery';
 	}
 
-	function get_pk(): string|array|null {
+	static function get_pk(): string|array|null {
 		return 'gal_id';
 	}
 
-	function get_gen(): ?string {
+	static function get_gen(): ?string {
 		return null;
 	}
 
@@ -22,10 +22,11 @@ trait GalleryEntityTrait
 		return (new static)->get_single((new GalleryFilter(gal_id: $ID))->merge($DF));
 	}
 
-	function get_all(?AbstractFilter $filters = null): GalleryCollection {
+	static function get_all(?AbstractFilter $filters = null): GalleryCollection {
 		$col = new GalleryCollection;
-		if($this->query($filters)){
-			while($r = $this->fetch()){
+		$O = (new static);
+		if($O->query($filters)){
+			while($r = $O->fetch()){
 				$col[] = $r;
 			}
 		}
@@ -35,7 +36,7 @@ trait GalleryEntityTrait
 
 	function fetch(): ?GalleryType {
 		if($data = parent::fetch($this->Q)){
-			return GalleryType::initFrom($data);
+			return GalleryType::init_from($data);
 		} else {
 			return null;
 		}
