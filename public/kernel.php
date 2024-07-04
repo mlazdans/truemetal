@@ -23,6 +23,10 @@ $sys_parameters = (function(): array {
 		$path_segment = rawurldec($parts[0]);
 		foreach(explode('/', $path_segment) as $k=>$v){
 			if($v = trim($v)){
+				if(strpos($v, '..') === 0){
+					header400();
+					die;
+				}
 				$sys_parameters[$k] = $v;
 			}
 		}
