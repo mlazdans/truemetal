@@ -1,11 +1,7 @@
 <?php declare(strict_types = 1);
 
-class ForumEditFormTemplate extends AbstractTemplate
+class ForumEditFormTemplate extends AbstractResTemplate
 {
-	public string $res_nickname;
-	public string $res_data;
-	public string $res_name;
-	public string $res_route;
 	public ?string $error_msg = null;
 
 	protected function out(): void

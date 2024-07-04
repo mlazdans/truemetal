@@ -9,6 +9,7 @@ abstract class AbstractResTemplate extends AbstractTemplate
 	public ?int $res_child_count = null;
 	public ?int $res_comment_count = null;
 	public ?int $res_visible = null;
+	public ?int $res_kind = null;
 	public int $res_nr = 0;
 	public ?string $res_hash = null;
 	public ?string $res_date = null;
@@ -24,12 +25,15 @@ abstract class AbstractResTemplate extends AbstractTemplate
 	public ?string $res_data_compiled = null;
 	public ?string $l_hash = null;
 	public ?string $res_comment_last_date = null;
+	public ?string $res_email = null;
+	public ?string $res_ip = null;
 	public ?string $hl = "";
 	public bool $vote_control_enabled = false;
 	public bool $profile_link_enabled = false;
 	public bool $can_edit_res = false;
 	public bool $can_debug_res = false;
 	public bool $is_disabled = false;
+	public bool $is_admin = false;
 	public ?CommentsListTemplate $CommentListT = null;
 	public ?CommentAddFormTemplate $CommentFormT = null;
 
@@ -42,6 +46,12 @@ abstract class AbstractResTemplate extends AbstractTemplate
 		</div>
 
 		<div class="controls">
+			<? if($this->is_admin) { ?>
+				<div class="unselectable">
+					<a href="/admin/res/edit/<?=$this->res_id ?>/">[admin]</a>
+				</div>
+			<? } ?>
+
 			<? if($this->can_edit_res) { ?>
 				<div class="unselectable">
 					<a href="/res/edit/<?=$this->res_hash ?>/">[labot]</a>
