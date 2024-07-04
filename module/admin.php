@@ -1,7 +1,5 @@
 <?php declare(strict_types = 1);
 
-$admins = [3];
-
 if(!User::is_admin()){
 	$template = new MainTemplate();
 	$template->not_found();
