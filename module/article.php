@@ -25,7 +25,7 @@
 	if($art_id){
 		$T = article($template, $art_id, $hl, $article_route);
 	} else {
-		$T = mainpage($page, $art_per_page);
+		$T = mainpage($template, $page, $art_per_page);
 	}
 
 	$template->MiddleBlock = $T;

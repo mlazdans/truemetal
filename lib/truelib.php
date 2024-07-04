@@ -1163,7 +1163,7 @@ function article(MainTemplate $template, int $art_id, string $hl, ?string $artic
 	return $T;
 }
 
-function mainpage(int $page, int $items_per_page): ?ArticleListTemplate
+function mainpage(MainTemplate $template, int $page, int $items_per_page): ?ArticleListTemplate
 {
 	global $module_root, $sys_module_id;
 
@@ -1186,12 +1186,18 @@ function mainpage(int $page, int $items_per_page): ?ArticleListTemplate
 	$A = new ViewMainpageEntity;
 	$tc = $A->count($F);
 
+	if(!$tc){
+		$template->not_found();
+		return null;
+	}
+
 	$tp = (int)ceil($tc / $items_per_page);
 	$art_align = $tc % $items_per_page;
 
 	if(($page < 0) || ($page >= $tp))
 	{
-		return redirectn("$module_root/");
+		$template->bad_request();
+		return null;
 	}
 
 	if($page){

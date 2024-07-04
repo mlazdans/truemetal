@@ -78,13 +78,14 @@ class ArticleListTemplate extends AbstractTemplate
 			</div>
 			<? } ?>
 
-			<? if($this->current_page < $this->total_pages) { ?>
 			<div style="margin-left: auto;">
-				<a class="caption" href="<?=$this->module_root ?>/page/<?=($this->current_page + 1) ?>/">jaunāki ieraksti</a>
+				<? if($this->current_page + 1 < $this->total_pages) { ?>
+					<a class="caption" href="<?=$this->module_root ?>/page/<?=($this->current_page + 1) ?>/">jaunāki ieraksti</a>
+				<? } elseif($this->current_page + 1 == $this->total_pages) { ?>
+					<a class="caption" href="<?=$this->module_root ?>/">jaunāki ieraksti</a>
+				<? } ?>
 				<img src="/img/right.png" alt="Jaunāki ieraksti" style="vertical-align: middle;" width="16" height="16">
 			</div>
-			<? } ?>
-			<!-- END BLOCK_article_page_next -->
 			<div>&nbsp;</div>
 		</div>
 		 <?
