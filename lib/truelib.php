@@ -1327,7 +1327,7 @@ function comment_vote_class(?int $res_votes): string
 	}
 }
 
-function load_specific_vres(null|ViewResFilter|ViewResType|ResType $F): ?object
+function load_specific_vres(null|ViewResFilter|ViewResType|ResType $F, bool $ignore_disabled = false): ?object
 {
 	if(!$F) {
 		return null;
@@ -1339,11 +1339,11 @@ function load_specific_vres(null|ViewResFilter|ViewResType|ResType $F): ?object
 	switch($res_kind)
 	{
 		case ResKind::ARTICLE:
-			return ViewResArticleEntity::get_by_res_id($res_id);
+			return ViewResArticleEntity::get_by_res_id($res_id, $ignore_disabled);
 		case ResKind::FORUM:
-			return ViewResForumEntity::get_by_res_id($res_id);
+			return ViewResForumEntity::get_by_res_id($res_id, $ignore_disabled);
 		case ResKind::COMMENT:
-			return ViewResCommentEntity::get_by_res_id($res_id);
+			return ViewResCommentEntity::get_by_res_id($res_id, $ignore_disabled);
 		case ResKind::GALLERY:
 			new TODO("Get Gallery");
 		case ResKind::GALLERY_DATA:
@@ -1353,14 +1353,14 @@ function load_specific_vres(null|ViewResFilter|ViewResType|ResType $F): ?object
 	throw new InvalidArgumentException("Res kind unknown: $res_kind");
 }
 
-function load_vres_by_id(int $res_id): ?object
+function load_vres_by_id(int $res_id, bool $ignore_disabled = false): ?object
 {
-	return load_specific_vres(ViewResEntity::get_by_id($res_id));
+	return load_specific_vres(ViewResEntity::get_by_id($res_id, $ignore_disabled), $ignore_disabled);
 }
 
-function load_vres_by_hash(string $res_hash): ?object
+function load_vres_by_hash(string $res_hash, bool $ignore_disabled = false): ?object
 {
-	return load_specific_vres(ViewResEntity::get_by_hash($res_hash));
+	return load_specific_vres(ViewResEntity::get_by_hash($res_hash, $ignore_disabled), $ignore_disabled);
 }
 
 // function get_res_tree(?int $res_id = null, ?int $res_kind = null): ?array
