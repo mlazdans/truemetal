@@ -202,6 +202,9 @@ function set_res(AbstractResTemplate $T, ViewResType $res, string $hl = null)
 	$T->res_child_count = $res->res_child_count;
 	$T->res_comment_count = $res->res_comment_count;
 	$T->res_comment_last_date = $res->res_comment_last_date;
+	$T->res_ip = $res->res_ip;
+	$T->res_email = $res->res_email;
+	$T->res_kind = $res->res_kind;
 
 	if($res->res_name && $hl){
 		$T->res_name = hl($res->res_name, $hl);
@@ -221,6 +224,7 @@ function set_res(AbstractResTemplate $T, ViewResType $res, string $hl = null)
 	$T->can_edit_res = User::can_edit_res($res);
 	$T->can_debug_res = User::can_debug_res($res);
 	$T->is_disabled = User::in_disabled($res->login_id);
+	$T->is_admin = User::is_admin();
 }
 
 function forum_det(
