@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class ForumThemeTemplate extends AbstractResTemplate
+class ForumThemeTemplate extends ResTemplate
 {
 	public string $comment_class;
 

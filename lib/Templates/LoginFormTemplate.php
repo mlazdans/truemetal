@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class LoginFormTemplate extends RightItemAbstractTemplate
+class LoginFormTemplate extends RightItemTemplate
 {
 	public ?string $referer = null;
 	public ?string $login_nick = null;

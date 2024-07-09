@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class LogoTemplate extends AbstractTemplate
+class LogoTemplate extends Template
 {
 	protected function out(): void
 	{ ?>

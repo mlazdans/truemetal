@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class ViewimageTemplate extends AbstractTemplate
+class ViewimageTemplate extends Template
 {
 	public ?string $pic_path = null;
 	public ?string $l_nick = null;

@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class CommentAddFormTemplate extends AbstractTemplate
+class CommentAddFormTemplate extends Template
 {
 	public ?string $error_msg = null;
 	public ?string $l_nick = null;

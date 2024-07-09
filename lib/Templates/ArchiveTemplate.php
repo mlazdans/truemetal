@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class ArchiveTemplate extends AbstractTemplate
+class ArchiveTemplate extends Template
 {
 	public ViewMainpageCollection $data;
 

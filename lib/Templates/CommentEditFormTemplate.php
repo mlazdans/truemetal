@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class CommentEditFormTemplate extends AbstractTemplate
+class CommentEditFormTemplate extends Template
 {
 	public string $res_nickname;
 	public string $res_data;

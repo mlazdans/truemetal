@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class ForumDetTemplate extends AbstractResTemplate
+class ForumDetTemplate extends ResTemplate
 {
 	public ?AttendTemplate $AttendT = null;
 	public bool $is_closed = false;

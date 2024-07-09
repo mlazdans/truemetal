@@ -60,7 +60,7 @@ function vote(MainTemplate $template, ViewResType $res, string $value): ?TrueRes
 	}
 }
 
-function res_debug(MainTemplate $template, ViewResType $res): ?AbstractTemplate
+function res_debug(MainTemplate $template, ViewResType $res): ?Template
 {
 	if(!User::logged()){
 		$template->not_logged();
@@ -78,7 +78,7 @@ function res_debug(MainTemplate $template, ViewResType $res): ?AbstractTemplate
 	return $T;
 }
 
-function comment_edit(MainTemplate $template, ViewResCommentType $Comment): ?AbstractTemplate
+function comment_edit(MainTemplate $template, ViewResCommentType $Comment): ?Template
 {
 	if(!User::logged()){
 		$template->not_logged();
@@ -115,7 +115,7 @@ function comment_edit(MainTemplate $template, ViewResCommentType $Comment): ?Abs
 	return $T;
 }
 
-function res_route(MainTemplate $template, ViewResType $res): ?AbstractTemplate
+function res_route(MainTemplate $template, ViewResType $res): ?Template
 {
 	if(!User::is_admin()){
 		$template->forbidden();
@@ -132,7 +132,7 @@ function res_route(MainTemplate $template, ViewResType $res): ?AbstractTemplate
 	return null;
 }
 
-function forum_edit(MainTemplate $template, ViewResForumType $OLD): ?AbstractTemplate
+function forum_edit(MainTemplate $template, ViewResForumType $OLD): ?Template
 {
 	if(!User::logged()){
 		$template->not_logged();
@@ -194,7 +194,7 @@ function forum_edit(MainTemplate $template, ViewResForumType $OLD): ?AbstractTem
 	return $T;
 }
 
-function process_request(MainTemplate $template): null|AbstractTemplate|TrueResponseInterface
+function process_request(MainTemplate $template): null|Template|TrueResponseInterface
 {
 	global $sys_parameters;
 

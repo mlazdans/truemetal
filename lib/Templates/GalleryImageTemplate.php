@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class GalleryImageTemplate extends AbstractResTemplate
+class GalleryImageTemplate extends ResTemplate
 {
 	public ViewResGdType $image;
 	public ViewResGalleryType $gal;

@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class LoginTemplate extends AbstractTemplate
+class LoginTemplate extends Template
 {
 	public ?string $error_msg = null;
 	public ?string $login = null;

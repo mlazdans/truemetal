@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class SearchFormTemplate extends RightItemAbstractTemplate
+class SearchFormTemplate extends RightItemTemplate
 {
 	public string $search_q = '';
 

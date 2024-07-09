@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class ArticleListTemplate extends AbstractTemplate
+class ArticleListTemplate extends Template
 {
 	public string $module_root;
 	public int $total_count;

@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class CommentTemplate extends AbstractResTemplate
+class CommentTemplate extends ResTemplate
 {
 	public int $c_id;
 

@@ -1,7 +1,9 @@
 <?php declare(strict_types = 1);
 
-abstract class AbstractResTemplate extends AbstractTemplate
+trait ResTemplateTrait
 {
+	use TemplateTrait;
+
 	public ?int $res_id = null;
 	public ?int $login_id = null;
 	public ?int $res_votes_plus_count = null;

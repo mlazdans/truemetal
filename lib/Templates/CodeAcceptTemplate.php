@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class CodeAcceptTemplate extends AbstractTemplate
+class CodeAcceptTemplate extends Template
 {
 	public bool $accept_ok;
 

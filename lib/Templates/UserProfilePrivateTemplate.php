@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class UserProfilePrivateTemplate extends AbstractTemplate
+class UserProfilePrivateTemplate extends Template
 {
 	public ?ViewResCollection $TopRatedRes = null;
 	public ?ViewResCollection $LessRatedRes = null;

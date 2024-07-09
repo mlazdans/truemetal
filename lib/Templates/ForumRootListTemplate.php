@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class ForumRootListTemplate extends AbstractTemplate
+class ForumRootListTemplate extends Template
 {
 	public ViewResForumCollection $forums;
 

@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class GalleryRootTemplate extends AbstractTemplate
+class GalleryRootTemplate extends Template
 {
 	public ?ViewResGalleryCollection $data = null;
 

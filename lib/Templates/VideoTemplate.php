@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class VideoTemplate extends AbstractTemplate
+class VideoTemplate extends Template
 {
 	protected function out(): void
 	{ ?>

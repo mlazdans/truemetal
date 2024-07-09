@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class CommentsListTemplate extends AbstractTemplate
+class CommentsListTemplate extends Template
 {
 	public ViewResCommentCollection $Comments;
 	public ?string $hl = null;

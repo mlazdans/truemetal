@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class ArticleTemplate extends AbstractResTemplate
+class ArticleTemplate extends ResTemplate
 {
 	public ?int $art_id = null;
 	public ?string $hl = null;

@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class PwchTemplate extends AbstractTemplate
+class PwchTemplate extends Template
 {
 	// public bool $hide_passw_manager = false;
 	public string $old_password;

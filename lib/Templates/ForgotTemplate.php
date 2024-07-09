@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class ForgotTemplate extends AbstractTemplate
+class ForgotTemplate extends Template
 {
 	public ?string $l_email = null;
 	public ?string $l_login = null;

@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class EmailChangeTemplate extends AbstractTemplate
+class EmailChangeTemplate extends Template
 {
 	public string $old_email;
 	public string $new_email = "";

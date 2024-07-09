@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class WhatsnewTemplate extends AbstractTemplate
+class WhatsnewTemplate extends Template
 {
 	public CommentsRecentTemplate $ForumRecent;
 	public CommentsRecentTemplate $CommentsRecent;

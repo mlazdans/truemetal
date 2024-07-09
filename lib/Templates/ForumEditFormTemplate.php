@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class ForumEditFormTemplate extends AbstractResTemplate
+class ForumEditFormTemplate extends ResTemplate
 {
 	public ?string $error_msg = null;
 

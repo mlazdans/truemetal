@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class CommentsRecentTemplate extends RightItemAbstractTemplate
+class CommentsRecentTemplate extends RightItemTemplate
 {
 	public bool $show_more = true;
 	public ViewResForumCollection|ViewResArticleCollection $data;

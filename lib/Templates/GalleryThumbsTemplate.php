@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class GalleryThumbsTemplate extends AbstractTemplate
+class GalleryThumbsTemplate extends Template
 {
 	public ViewResGalleryType $gal;
 	public ViewResGdCollection $thumbs;

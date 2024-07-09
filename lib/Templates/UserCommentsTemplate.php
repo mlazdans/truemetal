@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class UserCommentsTemplate extends AbstractTemplate
+class UserCommentsTemplate extends Template
 {
 	public CommentsListTemplate $CommentListT;
 	public string $l_nick;

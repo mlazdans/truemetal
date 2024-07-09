@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class MainTemplate extends AbstractTemplate
+class MainTemplate extends Template
 {
 	public string $title              = '';
 	public string $meta_descr         = '';
@@ -9,7 +9,7 @@ class MainTemplate extends AbstractTemplate
 	public bool   $disable_youtube    = false;
 	public float  $sys_start_time     = 0;
 
-	public ?AbstractTemplate  $MiddleBlock = null;
+	public ?Template     $MiddleBlock = null;
 	public ?TopBannerTemplate $BannerBlock = null;
 	public RightTemplate      $RightBlock;
 
@@ -192,9 +192,7 @@ class MainTemplate extends AbstractTemplate
 
 	function set_misc()
 	{
-		$T = new MiscTemplate;
-		$T->name = "Viskas";
-		$this->RightBlock->add_item($T);
+		$this->RightBlock->add_item(new MiscTemplate);
 	}
 
 	function set_search($search_q = ''): void

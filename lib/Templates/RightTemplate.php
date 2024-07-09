@@ -1,11 +1,12 @@
 <?php declare(strict_types = 1);
 
-class RightTemplate extends AbstractTemplate
+class RightTemplate extends Template
 {
-	/** @var RightItemAbstractTemplate[] $items */
+
+	/** @var RightItemTemplate[] $items */
 	public $items = [];
 
-	function add_item(RightItemAbstractTemplate $item): void
+	function add_item(RightItemTemplate $item): void
 	{
 		$this->items[] = $item;
 	}

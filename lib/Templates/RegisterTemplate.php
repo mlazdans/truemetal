@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class RegisterTemplate extends AbstractTemplate
+class RegisterTemplate extends Template
 {
 	public bool $show_register_form = false;
 	public bool $show_register_ok = false;

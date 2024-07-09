@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class ForumThemeListTemplate extends AbstractResTemplate
+class ForumThemeListTemplate extends ResTemplate
 {
 	public ViewResForumCollection $themes;
 	public ?ThemeEditFormTemplate $form = null;

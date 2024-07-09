@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class AttendTemplate extends AbstractTemplate
+class AttendTemplate extends Template
 {
 	public int $l_id;
 	public string $res_hash;

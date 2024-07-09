@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class TopBannerTemplate extends AbstractTemplate
+class TopBannerTemplate extends Template
 {
 	var string $banner_href = '';
 	var string $banner_img  = '';

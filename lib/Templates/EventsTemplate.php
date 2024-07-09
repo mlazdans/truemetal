@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class EventsTemplate extends RightItemAbstractTemplate
+class EventsTemplate extends RightItemTemplate
 {
 	public ViewResForumCollection $items;
 	public string $search_q = '';

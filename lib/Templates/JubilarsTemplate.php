@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class JubilarsTemplate extends RightItemAbstractTemplate
+class JubilarsTemplate extends RightItemTemplate
 {
 	public ViewJubilarsCollection $data;
 	public bool $is_logged = false;

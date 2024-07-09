@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class OnlineTemplate extends RightItemAbstractTemplate
+class OnlineTemplate extends RightItemTemplate
 {
 	public LoginsCollection $active_sessions;
 	public bool $is_logged = false;

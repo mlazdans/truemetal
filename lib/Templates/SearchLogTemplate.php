@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class SearchLogTemplate extends AbstractTemplate
+class SearchLogTemplate extends Template
 {
 	public SearchLogCollection $data;
 

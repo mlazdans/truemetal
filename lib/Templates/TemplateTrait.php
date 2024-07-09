@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-abstract class AbstractTemplate
+trait TemplateTrait
 {
 	public bool $enabled = true;
 	private ?string $out_function = null;

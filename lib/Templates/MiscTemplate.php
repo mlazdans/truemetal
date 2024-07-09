@@ -1,7 +1,9 @@
 <?php declare(strict_types = 1);
 
-class MiscTemplate extends RightItemAbstractTemplate
+class MiscTemplate extends RightItemTemplate
 {
+	public string $name = "Viskas";
+
 	protected function out(): void
 	{ ?>
 		<div class="TD-content">

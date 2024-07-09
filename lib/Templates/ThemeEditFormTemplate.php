@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class ThemeEditFormTemplate extends AbstractTemplate
+class ThemeEditFormTemplate extends Template
 {
 	public string $nick_name;
 	public ?string $name = null;

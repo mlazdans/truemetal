@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class UserProfilePublicTemplate extends AbstractTemplate
+class UserProfilePublicTemplate extends Template
 {
 	public string $l_hash;
 	public string $l_email;
