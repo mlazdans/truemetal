@@ -5,6 +5,7 @@ CREATE PROCEDURE logins_meta_update_votes (p_l_id INTEGER UNSIGNED)
 BEGIN
 	UPDATE logins l
 	LEFT JOIN (
+		-- TODO: limitēt tikai tiem, kam ir izmaiņas
 		SELECT
 			r.login_id AS login_id,
 			SUM(rm.res_votes_plus_count) AS votes_plus,

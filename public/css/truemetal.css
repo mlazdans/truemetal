@@ -430,9 +430,11 @@ span.Comment-count {
 	/* margin-bottom: 1px; */
 	background-color: #660000;
 }
-/* .profile-header .user-info {
-} */
+.profile-header .user-info {
+	display: flex;
+}
 .profile-header .controls {
+	display: flex;
 	margin-left: auto;
 }
 
