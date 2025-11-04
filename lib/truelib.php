@@ -1892,12 +1892,26 @@ function article_list(MainModule $template, int $page, int $art_per_page)
 		if($item['res_kind'] == ResKind::FORUM)
 		{
 			if($item['type_id']){
-				$intro = mb_substr($item['res_data'], 0, 300);
-				$intro = specialchars($intro);
-				if(mb_strlen($item['res_data']) > 300){
-					$intro .= "...";
+				$data = strip_tags($item['res_data']);
+				$tok = strtok($data, " \r\n\t");
+
+				$intro = [];
+				$len = 0;
+				while(($tok !== false) && ($len < 512)) {
+					if(preg_match("/^https?:\/\/(.*)/i", $tok, $m)){
+						[$url, $url_name] = $m;
+						if(strlen($url_name) > 40)$url_name = mb_substr($url_name, 0, 40);
+						$intro[] = sprintf('<a href="%s">%s</a>', $url, $url_name);
+						$len += strlen($url_name);
+					} else {
+						$intro[] = $tok;
+						$len += strlen($tok);
+					}
+
+					$tok = strtok(" \r\n\t");
 				}
-				$item['res_intro'] = $intro;
+
+				$item['res_intro'] = join(" ", $intro);
 				$item['res_data'] = '';
 			} else {
 				$data_parts = preg_split("/<hr(\s+)?\/?>/", $item['res_data']);
