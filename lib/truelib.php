@@ -2035,6 +2035,8 @@ function format_vote(?int $res_votes): string
 		return "+$res_votes";
 	} elseif($res_votes < 0) {
 		return "$res_votes";
+	} else {
+		return ""; // unreachable
 	}
 }
 
@@ -2046,6 +2048,8 @@ function comment_vote_class(?int $res_votes): string
 		return "vote-plus";
 	} elseif($res_votes < 0) {
 		return "vote-minus";
+	} else {
+		return ""; // unreachable
 	}
 }
 
