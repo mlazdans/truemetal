@@ -152,7 +152,7 @@ function forum_themes(
 	Res::mark_as_seen($forum->res_id);
 
 	$T = $template->add_file('forum/theme.tpl');
-	$F = $template->add_file('forum_add_theme_form.tpl');
+	$F = $template->add_file('forum/theme_edit_form.tpl');
 
 	$T->set_array($forum);
 
